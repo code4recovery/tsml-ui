@@ -3,117 +3,12 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-		<meta name="description" content="Meeting list">
-		<link rel="stylesheet" href="/assets/css/app.css">
-		<link rel="canonical" href="https://react.test">
+		<link rel="stylesheet" href="/compiled/style.css">
 		<title>Meetings</title>
 	</head>
 	<body>
-		<div class="container">
-			<h1 class="mt-4">Meetings</h1>
-			<div class="row mt-3">
-				<div class="col-sm-6 col-lg-2 mb-3">
-					<div class="input-group">
-						<input type="search" class="form-control" placeholder="Search" aria-label="Search">
-						<div class="input-group-append">
-							<button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
-							<div class="dropdown-menu dropdown-menu-right">
-								<a class="dropdown-item active bg-secondary" href="#">Search</a>
-								<a class="dropdown-item" href="#">Near Me</a>
-								<a class="dropdown-item" href="#">Near Location</a>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="col-sm-6 col-lg-2 mb-3">
-					<div class="dropdown">
-						<button class="btn btn-outline-secondary w-100 dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							Everywhere
-						</button>
-						<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-							<a class="dropdown-item active bg-secondary" href="#">Everywhere</a>
-							<div class="dropdown-divider"></div>
-							<a class="dropdown-item" href="#">Campbell</a>
-							<a class="dropdown-item" href="#">Cupertino</a>
-							<a class="dropdown-item" href="#">Mountain View</a>
-							<a class="dropdown-item" href="#">Palo Alto</a>
-							<a class="dropdown-item" href="#">Saratoga</a>
-						</div>
-					</div>
-				</div>
-				<div class="col-sm-6 col-lg-2 mb-3">
-					<div class="dropdown">
-						<button class="btn btn-outline-secondary w-100 dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							Any Day
-						</button>
-						<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-							<a class="dropdown-item active bg-secondary" href="#">Any Day</a>
-							<div class="dropdown-divider"></div>
-							<a class="dropdown-item" href="#">Sunday</a>
-							<a class="dropdown-item" href="#">Monday</a>
-							<a class="dropdown-item" href="#">Tuesday</a>
-							<a class="dropdown-item" href="#">Wednesday</a>
-							<a class="dropdown-item" href="#">Thursday</a>
-							<a class="dropdown-item" href="#">Friday</a>
-							<a class="dropdown-item" href="#">Saturday</a>
-						</div>
-					</div>
-				</div>
-				<div class="col-sm-6 col-lg-2 mb-3">
-					<div class="dropdown">
-						<button class="btn btn-outline-secondary w-100 dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							Any Time
-						</button>
-						<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-							<a class="dropdown-item active bg-secondary" href="#">Any Time</a>
-							<div class="dropdown-divider"></div>
-							<a class="dropdown-item" href="#">Morning</a>
-							<a class="dropdown-item" href="#">Midday</a>
-							<a class="dropdown-item" href="#">Evening</a>
-							<a class="dropdown-item" href="#">Night</a>
-						</div>
-					</div>
-				</div>
-				<div class="col-sm-6 col-lg-2 mb-3">
-					<div class="dropdown">
-						<button class="btn btn-outline-secondary w-100 dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							Any Type
-						</button>
-						<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-							<a class="dropdown-item active bg-secondary" href="#">Any Type</a>
-							<div class="dropdown-divider"></div>
-							<a class="dropdown-item" href="#">Big Book</a>
-							<a class="dropdown-item" href="#">Closed</a>
-							<a class="dropdown-item" href="#">LGBTQ</a>
-							<a class="dropdown-item" href="#">Men</a>
-							<a class="dropdown-item" href="#">Open</a>
-							<a class="dropdown-item" href="#">Women</a>
-						</div>
-					</div>
-				</div>
-				<div class="col-sm-6 col-lg-2 mb-3">
-					<div class="btn-group w-100" role="group" aria-label="Basic example">
-						<button type="button" class="btn btn-outline-secondary w-100 active">List</button>
-						<button type="button" class="btn btn-outline-secondary w-100">Map</button>
-					</div>
-				</div>					
-			</div>
-
-			<table class="table table-striped mt-2">
-				<thead>
-					<tr class="d-none d-sm-table-row">
-						<th class="time">Time</th>
-						<th class="name">Name</th>
-						<th class="location">Location</th>
-						<th class="address">Address</th>
-						<th class="region">Region</th>
-					</tr>
-				</thead>
-				<tbody id="table-body">
-				</tbody>
-			</table>
-		</div>
-		<script src="/assets/js/app.js"></script>
-		<script src="/assets/js/react.js"></script>
+		<div class="container" id="app"></div>
+		<script src="/compiled/app.js"></script>
+		<script src="/compiled/react.js"></script>
 	</body>
 </html>
