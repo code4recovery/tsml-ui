@@ -16,6 +16,7 @@
         "bootstrap": "^4.0.0",
         "classnames": "^2.2.6",
         "cross-env": "^5.1",
+        "deepmerge": "^2.1.1",
         "jquery": "^3.2",
         "laravel-mix": "^2.0",
         "lodash": "^4.17.4",
