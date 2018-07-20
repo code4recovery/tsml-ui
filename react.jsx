@@ -1,99 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import classNames from 'classnames/bind';
-import merge from 'deepmerge';
-
-//override these with window.config
-export const defaults = merge({
-	days: ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'],
-	google_maps_key: null, //enable maps using google
-	json: null, //path to JSON file (required)
-	mapbox_key: null, //enable maps using mapbox
-	strings: {
-		address: 'Address',
-		any_day: 'Any Day',
-		any_time: 'Any Time',
-		any_type: 'Any Type',
-		evening: 'Evening',
-		everywhere: 'Everywhere',
-		friday: 'Friday',
-		in: 'in', //todo find way to do this with string pattern
-		list: 'List',
-		location: 'Location',
-		map: 'Map',
-		meetings: 'Meetings',
-		midday: 'Midday',
-		monday: 'Monday',
-		morning: 'Morning',
-		near_location: 'Near Location',
-		near_me: 'Near Me',
-		night: 'Night',
-		region: 'Region',
-		saturday: 'Saturday',
-		search: 'Search',
-		sunday: 'Sunday',
-		thursday: 'Thursday',
-		time: 'Time',
-		tuesday: 'Tuesday',
-		types: {
-			'11': '11th Step Meditation',
-			'12x12': '12 Steps & 12 Traditions,',
-			'ASBI': 'As Bill Sees It',
-			'BA': 'Babysitting Available',
-			'B': 'Big Book',
-			'H': 'Birthday',
-			'BRK': 'Breakfast',
-			'CAN': 'Candlelight',
-			'CF': 'Child-Friendly',
-			'C': 'Closed',
-			'AL-AN': 'Concurrent with Al-Anon',
-			'AL': 'Concurrent with Alateen',
-			'XT': 'Cross Talk Permitted',
-			'DR': 'Daily Reflections',
-			'DB': 'Digital Basket',
-			'D': 'Discussion',
-			'DD': 'Dual Diagnosis',
-			'EN': 'English',
-			'FF': 'Fragrance Free',
-			'FR': 'French',
-			'G': 'Gay',
-			'GR': 'Grapevine',
-			'NDG': 'Indigenous',
-			'ITA': 'Italian',
-			'JA': 'Japanese',
-			'KOR': 'Korean',
-			'L': 'Lesbian',
-			'LIT': 'Literature',
-			'LS': 'Living Sober',
-			'LGBTQ': 'LGBTQ',
-			'MED': 'Meditation',
-			'M': 'Men',
-			'N': 'Native American',
-			'BE': 'Newcomer',
-			'NS': 'Non-Smoking',
-			'O': 'Open',
-			'POC': 'People of Color',
-			'POL': 'Polish',
-			'POR': 'Portuguese',
-			'P': 'Professionals',
-			'PUN': 'Punjabi',
-			'RUS': 'Russian',
-			'A': 'Secular',
-			'ASL': 'Sign Language',
-			'SM': 'Smoking Permitted',
-			'S': 'Spanish',
-			'SP': 'Speaker',
-			'ST': 'Step Meeting',
-			'TR': 'Tradition Study',
-			'T': 'Transgender',
-			'X': 'Wheelchair Access',
-			'XB': 'Wheelchair-Accessible Bathroom',
-			'W': 'Women',
-			'Y': 'Young People',
-		},
-		wednesday: 'Wednesday',
-	},
-}, window.config);
+import settings from './settings';
 
 class App extends Component {
 	constructor() {
@@ -112,28 +20,36 @@ class App extends Component {
 				center: null,
 			},
 			regions: [],
+			types: [],
 		};
 		this.setFilters = this.setFilters.bind(this);
 	}
 
 	componentDidMount() {
-		fetch(defaults.json)
+		fetch(settings.json)
 			.then(res => res.json())
-			.then((result) => {
+			.then(result => {
 				let regions = [];
+				let types = [];
 				for (let i = 0; i < result.length; i++) {
 					if (regions.indexOf(result[i].region) == -1) {
 						regions.push(result[i].region);
 					}
-					regions.sort();
+					for (let j = 0; j < result[i].types.length; j++) {
+						if (types.indexOf(result[i].types[j]) == -1) {
+							types.push(result[i].types[j]);
+						}
+					}
 				}
+				regions.sort();
+				console.log(types);
 				this.setState({
 					isLoaded: true,
 					meetings: result,
 					regions: regions,
+					types: types,
 				});
-			},
-			(error) => {
+			}, error => {
 				this.setState({
 					isLoaded: true,
 				});
@@ -148,32 +64,41 @@ class App extends Component {
 		return(
 			<div>
 				<Title filters={this.state.filters} regions={this.state.regions}/>
-				<Controls filters={this.state.filters} setFilters={this.setFilters} regions={this.state.regions}/>
+				<Controls filters={this.state.filters} setFilters={this.setFilters} regions={this.state.regions} types={this.state.types}/>
 				<Table filters={this.state.filters} meetings={this.state.meetings} regions={this.state.regions}/>
 			</div>
 		);
 	}
 }
 
-function Title(props) {
-	let title = [defaults.strings.meetings];
-	if (props.filters) {
-		if (props.filters.day !== null) {
-			title.unshift(defaults.strings[defaults.days[props.filters.day]]);
+class Title extends Component {
+	render() {
+		let title = [settings.strings.meetings];
+		if (this.props.filters) {
+			if (this.props.filters.day !== null) {
+				title.unshift(settings.strings[settings.days[this.props.filters.day]]);
+			}
+			if (this.props.filters.region !== null) {
+				title.push(settings.strings.in);
+				title.push(this.props.regions[this.props.filters.region]);
+			}
 		}
-		if (props.filters.region !== null) {
-			title.push(defaults.strings.in);
-			title.push(props.regions[props.filters.region]);
-		}
+		title = title.join(' ');
+		document.title = title;
+		return(
+			<h1 className="d-none d-sm-block mt-4">{title}</h1>
+		);
 	}
-	title = title.join(' ');
-	document.title = title;
-	return(
-		<h1 className="d-none d-sm-block mt-4">{title}</h1>
-	);
 }
 
 class Controls extends Component {
+
+	constructor() {
+		super();
+		this.state = { 
+			current_view: settings.view
+		};
+	}
 
 	setFilter(e, filter, value) {
 		e.preventDefault();
@@ -181,10 +106,15 @@ class Controls extends Component {
 		this.props.setFilters(this.props.filters);
 	}
 
+	setView(e, view) {
+		e.preventDefault();
+		this.setState({ current_view: view });
+	}
+
 	render() {
 
 		//build region dropdown
-		const region_label = this.props.filters.region == null ? defaults.strings.everywhere : this.props.regions[this.props.filters.region];
+		const region_label = this.props.filters.region == null ? settings.strings.everywhere : this.props.regions[this.props.filters.region];
 		const region_options = this.props.regions.map((region, index) => 
 			<a key={index} className={classNames('dropdown-item', {
 				'active bg-secondary': (this.props.filters.region == index)
@@ -192,28 +122,34 @@ class Controls extends Component {
 		);
 
 		//build day dropdown
-		const day_label = this.props.filters.day == null ? defaults.strings.any_day : defaults.strings[defaults.days[this.props.filters.day]];
-		const day_options = defaults.days.map((day, index) => 
+		const day_label = this.props.filters.day == null ? settings.strings.any_day : settings.strings[settings.days[this.props.filters.day]];
+		const day_options = settings.days.map((day, index) => 
 			<a key={index} className={classNames('dropdown-item', {
 				'active bg-secondary': (this.props.filters.day == index)
-			})} href="#" onClick={(e) => this.setFilter(e, 'day', index)}>{defaults.strings[day]}</a>
+			})} href="#" onClick={(e) => this.setFilter(e, 'day', index)}>{settings.strings[day]}</a>
 		);
 
 		//build time dropdown
 
 		//build type dropdown
+		const types_label = this.props.filters.types.length ? settings.strings.any_type : this.props.filters.types.join(' + ');
+		const types_options = this.props.types.map((type, index) => 
+			<a key={index} className={classNames('dropdown-item', {
+				'active bg-secondary': (this.props.filters.type == type)
+			})} href="#" onClick={(e) => this.setFilter(e, 'types', index)}>{settings.strings.types[type]}</a>
+		);
 
 		return(
 			<div className="row mt-4">
 				<div className="col-sm-6 col-lg-2 mb-3">
 					<div className="input-group">
-						<input type="search" className="form-control" placeholder={defaults.strings.search} aria-label={defaults.strings.search}/>
+						<input type="search" className="form-control" placeholder={settings.strings.search} aria-label={settings.strings.search}/>
 						<div className="input-group-append">
 							<button className="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
 							<div className="dropdown-menu dropdown-menu-right">
-								<a className="dropdown-item active bg-secondary" href="#">{defaults.strings.search}</a>
-								<a className="dropdown-item" href="#">{defaults.strings.near_me}</a>
-								<a className="dropdown-item" href="#">{defaults.strings.near_location}</a>
+								<a className="dropdown-item active bg-secondary" href="#">{settings.strings.search}</a>
+								<a className="dropdown-item" href="#">{settings.strings.near_me}</a>
+								<a className="dropdown-item" href="#">{settings.strings.near_location}</a>
 							</div>
 						</div>
 					</div>
@@ -224,7 +160,7 @@ class Controls extends Component {
 							{region_label}
 						</button>
 						<div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-							<a className={classNames('dropdown-item', { 'active bg-secondary': this.props.filters.region == null })} href="#">{defaults.strings.everywhere}</a>
+							<a className={classNames('dropdown-item', { 'active bg-secondary': this.props.filters.region == null })} onClick={(e) => this.setFilter(e, 'region', null)} href="#">{settings.strings.everywhere}</a>
 							<div className="dropdown-divider"></div>
 							{region_options}
 						</div>
@@ -245,39 +181,34 @@ class Controls extends Component {
 				<div className="col-sm-6 col-lg-2 mb-3">
 					<div className="dropdown">
 						<button className="btn btn-outline-secondary w-100 dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							{defaults.strings.any_time}
+							{settings.strings.any_time}
 						</button>
 						<div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-							<a className="dropdown-item active bg-secondary" href="#">{defaults.strings.any_time}</a>
+							<a className="dropdown-item active bg-secondary" href="#">{settings.strings.any_time}</a>
 							<div className="dropdown-divider"></div>
-							<a className="dropdown-item" href="#">{defaults.strings.morning}</a>
-							<a className="dropdown-item" href="#">{defaults.strings.midday}</a>
-							<a className="dropdown-item" href="#">{defaults.strings.evening}</a>
-							<a className="dropdown-item" href="#">{defaults.strings.night}</a>
+							<a className="dropdown-item" href="#">{settings.strings.morning}</a>
+							<a className="dropdown-item" href="#">{settings.strings.midday}</a>
+							<a className="dropdown-item" href="#">{settings.strings.evening}</a>
+							<a className="dropdown-item" href="#">{settings.strings.night}</a>
 						</div>
 					</div>
 				</div>
 				<div className="col-sm-6 col-lg-2 mb-3">
 					<div className="dropdown">
 						<button className="btn btn-outline-secondary w-100 dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							{defaults.strings.any_type}
+							{types_label}
 						</button>
 						<div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-							<a className="dropdown-item active bg-secondary" href="#">{defaults.strings.any_type}</a>
+							<a className="dropdown-item active bg-secondary" href="#">{settings.strings.any_type}</a>
 							<div className="dropdown-divider"></div>
-							<a className="dropdown-item" href="#">Big Book</a>
-							<a className="dropdown-item" href="#">Closed</a>
-							<a className="dropdown-item" href="#">LGBTQ</a>
-							<a className="dropdown-item" href="#">Men</a>
-							<a className="dropdown-item" href="#">Open</a>
-							<a className="dropdown-item" href="#">Women</a>
+							{types_options}
 						</div>
 					</div>
 				</div>
 				<div className="col-sm-6 col-lg-2 mb-3">
 					<div className="btn-group w-100" role="group" aria-label="Basic example">
-						<button type="button" className="btn btn-outline-secondary w-100 active">{defaults.strings.list}</button>
-						<button type="button" className="btn btn-outline-secondary w-100">{defaults.strings.map}</button>
+						<button type="button" className={classNames('btn btn-outline-secondary w-100', { active: this.state.current_view == 'list' })} onClick={(e) => this.setView(e, 'list')}>{settings.strings.list}</button>
+						<button type="button" className={classNames('btn btn-outline-secondary w-100', { active: this.state.current_view == 'map' })} onClick={(e) => this.setView(e, 'map')}>{settings.strings.map}</button>
 					</div>
 				</div>
 			</div>
@@ -313,11 +244,11 @@ function Table(props) {
 		<table className="table table-striped mt-3">
 			<thead>
 				<tr className="d-none d-sm-table-row">
-					<th className="time">{defaults.strings.time}</th>
-					<th className="name">{defaults.strings.name}</th>
-					<th className="location">{defaults.strings.location}</th>
-					<th className="address">{defaults.strings.address}</th>
-					<th className="region">{defaults.strings.region}</th>
+					<th className="time">{settings.strings.time}</th>
+					<th className="name">{settings.strings.name}</th>
+					<th className="location">{settings.strings.location}</th>
+					<th className="address">{settings.strings.address}</th>
+					<th className="region">{settings.strings.region}</th>
 				</tr>
 			</thead>
 			<tbody>
