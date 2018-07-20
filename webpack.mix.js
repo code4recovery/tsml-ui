@@ -11,12 +11,12 @@ let mix = require('laravel-mix');
  |
  */
 
-mix.react('react.jsx', 'public')
+mix.react('src/react.jsx', 'public')
 .scripts([
 	'node_modules/jquery/dist/jquery.slim.js',
 	'node_modules/bootstrap/dist/js/bootstrap.bundle.js',
 ], 'public/app.js')
-.sass('style.scss', 'public')
+.sass('src/style.scss', 'public')
 .options({
 	processCssUrls: false
 });
