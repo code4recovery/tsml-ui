@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom';
 import classNames from 'classnames/bind';
 import settings from './settings';
 
+export const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+
 class App extends Component {
 	constructor() {
 		super();
@@ -76,7 +78,7 @@ class Title extends Component {
 		let title = [settings.strings.meetings];
 		if (this.props.filters) {
 			if (this.props.filters.day !== null) {
-				title.unshift(settings.strings[settings.days[this.props.filters.day]]);
+				title.unshift(settings.strings[days[this.props.filters.day]]);
 			}
 			if (this.props.filters.region !== null) {
 				title.push(settings.strings.in);
@@ -96,7 +98,7 @@ class Controls extends Component {
 	constructor() {
 		super();
 		this.state = { 
-			current_view: settings.view
+			current_view: settings.defaults.view
 		};
 	}
 
@@ -122,8 +124,8 @@ class Controls extends Component {
 		);
 
 		//build day dropdown
-		const day_label = this.props.filters.day == null ? settings.strings.any_day : settings.strings[settings.days[this.props.filters.day]];
-		const day_options = settings.days.map((day, index) => 
+		const day_label = this.props.filters.day == null ? settings.strings.any_day : settings.strings[days[this.props.filters.day]];
+		const day_options = days.map((day, index) => 
 			<a key={index} className={classNames('dropdown-item', {
 				'active bg-secondary': (this.props.filters.day == index)
 			})} href="#" onClick={(e) => this.setFilter(e, 'day', index)}>{settings.strings[day]}</a>
@@ -258,4 +260,4 @@ function Table(props) {
 	);
 }
  
-ReactDOM.render(<App/>, document.getElementById('app'));
+ReactDOM.render(<App/>, document.getElementById(settings.element_id));
