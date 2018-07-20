@@ -4,16 +4,14 @@ import classNames from 'classnames/bind';
 import settings from './settings';
 
 export const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+export const times = ['morning', 'midday', 'evening', 'night'];
 
 class App extends Component {
 	constructor() {
 		super();
-		const d = new Date();
 		this.state = { 
-			isLoaded: false,
-			meetings: [],
 			filters: {
-				day: d.getDay(),
+				day: settings.defaults.today ? new Date().getDay() : null,
 				types: [],
 				region: null,
 				district: null,
@@ -21,8 +19,13 @@ class App extends Component {
 				query: null,
 				center: null,
 			},
-			regions: [],
-			types: [],
+			indexes: {
+				days: [],
+				regions: [],
+				times: [],
+				types: [],
+			},
+			meetings: [],
 		};
 		this.setFilters = this.setFilters.bind(this);
 	}
@@ -31,30 +34,25 @@ class App extends Component {
 		fetch(settings.json)
 			.then(res => res.json())
 			.then(result => {
-				let regions = [];
-				let types = [];
+				let indexes = this.state.indexes;
+				//build index arrays for dropdowns
 				for (let i = 0; i < result.length; i++) {
-					if (regions.indexOf(result[i].region) == -1) {
-						regions.push(result[i].region);
+					if (indexes.regions.indexOf(result[i].region) == -1) {
+						indexes.regions.push(result[i].region);
 					}
 					for (let j = 0; j < result[i].types.length; j++) {
-						if (types.indexOf(result[i].types[j]) == -1) {
-							types.push(result[i].types[j]);
+						if (indexes.types.indexOf(result[i].types[j]) == -1) {
+							indexes.types.push(result[i].types[j]);
 						}
 					}
 				}
-				regions.sort();
-				console.log(types);
+				indexes.regions.sort();
 				this.setState({
-					isLoaded: true,
+					indexes: indexes,
 					meetings: result,
-					regions: regions,
-					types: types,
 				});
 			}, error => {
-				this.setState({
-					isLoaded: true,
-				});
+				//todo add alert component, show error here
 			});
 	}
 
@@ -65,9 +63,9 @@ class App extends Component {
 	render() {
 		return(
 			<div>
-				<Title filters={this.state.filters} regions={this.state.regions}/>
-				<Controls filters={this.state.filters} setFilters={this.setFilters} regions={this.state.regions} types={this.state.types}/>
-				<Table filters={this.state.filters} meetings={this.state.meetings} regions={this.state.regions}/>
+				<Title filters={this.state.filters} indexes={this.state.indexes}/>
+				<Controls filters={this.state.filters} indexes={this.state.indexes} setFilters={this.setFilters}/>
+				<Table filters={this.state.filters} indexes={this.state.indexes} meetings={this.state.meetings}/>
 			</div>
 		);
 	}
@@ -82,7 +80,7 @@ class Title extends Component {
 			}
 			if (this.props.filters.region !== null) {
 				title.push(settings.strings.in);
-				title.push(this.props.regions[this.props.filters.region]);
+				title.push(this.props.indexes.regions[this.props.filters.region]);
 			}
 		}
 		title = title.join(' ');
@@ -116,11 +114,14 @@ class Controls extends Component {
 	render() {
 
 		//build region dropdown
-		const region_label = this.props.filters.region == null ? settings.strings.everywhere : this.props.regions[this.props.filters.region];
-		const region_options = this.props.regions.map((region, index) => 
-			<a key={index} className={classNames('dropdown-item', {
+		const region_label = this.props.filters.region == null ? settings.strings.everywhere : this.props.indexes.regions[this.props.filters.region];
+		const region_options = this.props.indexes.regions.map((region, index) => 
+			<a key={index} className={classNames('dropdown-item d-flex justify-content-between align-items-center', {
 				'active bg-secondary': (this.props.filters.region == index)
-			})} href="#" onClick={(e) => this.setFilter(e, 'region', index)}>{region}</a>
+			})} href="#" onClick={(e) => this.setFilter(e, 'region', index)}>
+				<span>{region}</span>
+				<span className="badge badge-light ml-3">9</span>
+			</a>
 		);
 
 		//build day dropdown
@@ -134,8 +135,8 @@ class Controls extends Component {
 		//build time dropdown
 
 		//build type dropdown
-		const types_label = this.props.filters.types.length ? settings.strings.any_type : this.props.filters.types.join(' + ');
-		const types_options = this.props.types.map((type, index) => 
+		const types_label = this.props.filters.types.length ? this.props.filters.types.join(' + ') : settings.strings.any_type;
+		const types_options = this.props.indexes.types.map((type, index) => 
 			<a key={index} className={classNames('dropdown-item', {
 				'active bg-secondary': (this.props.filters.type == type)
 			})} href="#" onClick={(e) => this.setFilter(e, 'types', index)}>{settings.strings.types[type]}</a>
@@ -218,46 +219,50 @@ class Controls extends Component {
 	}
 }
 
-function Table(props) {
-
-	const rows = props.meetings.map((meeting) => {
-		if (props.filters.day !== null) {
-			if (props.filters.day != meeting.day) return;
+class Table extends Component {
+	getValue(meeting, key) {
+		if (key == 'address') {
+			const address = meeting.formatted_address.split(', ');
+			return address.length ? address[0] : '';
+		} else if (key == 'name') {
+			return(
+				<a href={meeting.url}>{meeting.name}</a>
+			);
+		} else if (key == 'time') {
+			return meeting.time_formatted;
 		}
-		if (props.filters.region !== null) {
-			if (props.regions[props.filters.region] != meeting.region) return;
-		}
-		meeting.address = meeting.formatted_address.split(', ');
-		meeting.address = meeting.address.length ? meeting.address[0] : '';
+		return meeting[key];
+	}
+	render() {
 		return(
-			<tr key={meeting.id}>
-				<td className="d-block d-sm-table-cell time">{meeting.time_formatted}</td>
-				<td className="d-block d-sm-table-cell name">
-					<a href={meeting.url}>{meeting.name}</a>
-				</td>
-				<td className="d-block d-sm-table-cell location">{meeting.location}</td>
-				<td className="d-block d-sm-table-cell address">{meeting.address}</td>
-				<td className="d-block d-sm-table-cell region">{meeting.region}</td>
-			</tr>
-		)
-	});
-
-	return(
-		<table className="table table-striped mt-3">
-			<thead>
-				<tr className="d-none d-sm-table-row">
-					<th className="time">{settings.strings.time}</th>
-					<th className="name">{settings.strings.name}</th>
-					<th className="location">{settings.strings.location}</th>
-					<th className="address">{settings.strings.address}</th>
-					<th className="region">{settings.strings.region}</th>
-				</tr>
-			</thead>
-			<tbody>
-				{rows}
-			</tbody>
-		</table>
-	);
+			<table className="table table-striped mt-3">
+				<thead>
+					<tr className="d-none d-sm-table-row">
+						{settings.defaults.columns.map(column => 
+							<th key={column} className={column}>{settings.strings[column]}</th>
+						)}
+					</tr>
+				</thead>
+				<tbody>
+					{this.props.meetings.map((meeting) => {
+						if (this.props.filters.day !== null) {
+							if (this.props.filters.day != meeting.day) return;
+						}
+						if (this.props.filters.region !== null) {
+							if (this.props.indexes.regions[this.props.filters.region] != meeting.region) return;
+						}
+						return(
+							<tr key={meeting.id}>
+								{settings.defaults.columns.map(column => 
+									<td key={meeting.id+column} className={classNames('d-block d-sm-table-cell', column)}>{this.getValue(meeting, column)}</td>
+								)}
+							</tr>
+						)
+					})}
+				</tbody>
+			</table>
+		);
+	}
 }
  
 ReactDOM.render(<App/>, document.getElementById(settings.element_id));

@@ -3,6 +3,8 @@ import merge from 'deepmerge';
 //override these on your page with window.config
 const settings = merge({
 	defaults: {
+		columns: ['time', 'name', 'location', 'address', 'region'], //can be reordered
+		today: true, //start with today's meetings, vs any day
 		view: 'list', //start in list or map view
 	},
 	element_id: 'app', //the id of the HTML container element

@@ -1,12 +1,18 @@
 # Website Meeting Finder 2.0
 
-With only a [Meeting Guide format JSON file](https://github.com/meeting-guide/spec), developers will soon be able to 
-have the same meeting finder found in the [12 Step Meeting List](https://github.com/meeting-guide/12-step-meeting-list)
-WordPress plugin on any website platform.
+With only a [Meeting Guide format JSON file](https://github.com/meeting-guide/spec), developers will soon be able to have the same meeting finder found in the [12 Step Meeting List](https://github.com/meeting-guide/12-step-meeting-list) WordPress plugin on any website platform. 
+
+Advantanges:
+
+* better performance for end users
+* less strain on server (client-side processing)
+* supports any web platform
+* wider pool of possible contributors (not just WordPress webmasters)
+* simplifies WordPress plugin (separation of concerns)
 
 ## Installation
 
-You don't need to download anything. Simply add the following code to your web page:
+You don't need to download anything. Simply add the following code to your page:
 
 1. In your `<head>` add:
 
