@@ -4,10 +4,6 @@ With only a [Meeting Guide format JSON file](https://github.com/meeting-guide/sp
 have the same meeting finder found in the [12 Step Meeting List](https://github.com/meeting-guide/12-step-meeting-list)
 WordPress plugin on any website platform.
 
-## Technology
-
-This project makes use of the [React JavaScript library](https://reactjs.org/) and the [Bootstrap component library](http://getbootstrap.com/).
-
 ## Installation
 
 You don't need to download anything. Simply add the following code to your web page:
@@ -16,22 +12,23 @@ You don't need to download anything. Simply add the following code to your web p
 
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-		<link rel="stylesheet" href="https://react.meetingguide.org/compiled/style.css">
+		<link rel="stylesheet" href="https://react.meetingguide.org/style.css">
 
 
 1. In your `<body>` add:
 			
-		<div class="app"></div>
+		<div id="app"></div>
 		<script>
 			window.config = {
 				json: '/path/to/meetings.json',
 			}
 		</script>
-		<script src="https://react.meetingguide.org/compiled/react.js"></script>
+		<script src="https://react.meetingguide.org/react.js"></script>
 
 1. Customize `path/to/meetings.json` in the code above to point to your local JSON file.
 
 ## Configuration
+
 See [settings.jsx](settings.jsx) for other options that can be included in your `window.config` object. You can customize many of the behaviors and all of the text strings that the app uses.
 
 ## FAQ
@@ -55,3 +52,11 @@ See [settings.jsx](settings.jsx) for other options that can be included in your 
 			},
 		}
 	}
+
+## Contributing
+
+Pull requests are welcome. To get started, download this repository, do an `npm install`, and point your web root at the `public` folder.
+
+This project uses the [React JavaScript library](https://reactjs.org/) and the [Bootstrap component library](http://getbootstrap.com/).
+
+While developing, run the `npm run watch` terminal command to compile assets as you edit them. When you're ready to commit, run `npm run prod` to minify them.
