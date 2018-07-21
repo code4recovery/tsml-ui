@@ -18,6 +18,7 @@ class App extends Component {
 				radius: null,
 				query: null,
 				center: null,
+				time: null,
 			},
 			indexes: {
 				days: [],
@@ -34,19 +35,91 @@ class App extends Component {
 		fetch(settings.json)
 			.then(res => res.json())
 			.then(result => {
-				let indexes = this.state.indexes;
+				let indexes = {
+					days: {},
+					regions: {},
+					times: {},
+					types: [],
+				}
 				//build index arrays for dropdowns
 				for (let i = 0; i < result.length; i++) {
-					if (indexes.regions.indexOf(result[i].region) == -1) {
-						indexes.regions.push(result[i].region);
+
+					//for readability
+					let meeting = result[i];
+
+					//build region index
+					if (meeting.region in indexes.regions === false) {
+						indexes.regions[meeting.region] = {
+							key: meeting.region_id,
+							name: meeting.region,
+							slugs: [],
+						};
 					}
-					for (let j = 0; j < result[i].types.length; j++) {
-						if (indexes.types.indexOf(result[i].types[j]) == -1) {
-							indexes.types.push(result[i].types[j]);
+					indexes.regions[meeting.region].slugs.push(meeting.slug);
+
+					//build day index
+					if (meeting.day in indexes.days === false) {
+						indexes.days[meeting.day] = {
+							key: meeting.day,
+							name: settings.strings[days[meeting.day]],
+							slugs: [],
+						}
+					}
+					indexes.days[meeting.day].slugs.push(meeting.slug);
+
+					//build time index (can be multiple)
+					let timeParts = meeting.time.split(':');
+					meeting.minutes = (parseInt(timeParts[0]) * 60) + parseInt(timeParts[1]);
+					meeting.times = [];
+					if (meeting.minutes >= 240 && meeting.minutes < 720) { //4am–12pm
+						meeting.times.push(0);
+					}
+					if (meeting.minutes >= 660 && meeting.minutes < 1020) { //11am–5pm
+						meeting.times.push(1);
+					}
+					if (meeting.minutes >= 960 && meeting.minutes < 1260) { //4–9pm
+						meeting.times.push(2);
+					}
+					if (meeting.minutes >= 1200 || meeting.minutes < 300) { //8pm–5am
+						meeting.times.push(3);
+					}
+					for (let j = 0; j < meeting.times.length; j++) {
+						if (meeting.times[j] in indexes.times === false) {
+							indexes.times[meeting.times[j]] = {
+								key: times[meeting.times[j]],
+								name: settings.strings[times[meeting.times[j]]],
+								slugs: [],
+							}
+						}
+						indexes.times[meeting.times[j]].slugs.push(meeting.slug);
+					}
+
+					//build type index
+					for (let j = 0; j < meeting.types.length; j++) {
+						if (indexes.types.indexOf(meeting.types[j]) == -1) {
+							indexes.types.push(meeting.types[j]);
 						}
 					}
 				}
-				indexes.regions.sort();
+
+				//sort regions
+				indexes.regions = Object.values(indexes.regions);
+				indexes.regions.sort((a, b) => { 
+					return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
+				});
+
+				//sort days
+				indexes.days = Object.values(indexes.days);
+				indexes.days.sort((a, b) => {
+					return a.key - b.key;
+				});
+
+				//sort times
+				indexes.times = Object.values(indexes.times);
+				indexes.times.sort((a, b) => { 
+					return days.indexOf(a.key) - days.indexOf(b.day);
+				});
+
 				this.setState({
 					indexes: indexes,
 					meetings: result,
@@ -75,12 +148,15 @@ class Title extends Component {
 	render() {
 		let title = [settings.strings.meetings];
 		if (this.props.filters) {
-			if (this.props.filters.day !== null) {
-				title.unshift(settings.strings[days[this.props.filters.day]]);
+			if (this.props.indexes.times.length && this.props.filters.time !== null) {
+				title.unshift(this.props.indexes.times.find(x => x.key == this.props.filters.time).name);
 			}
-			if (this.props.filters.region !== null) {
+			if (this.props.indexes.days.length && this.props.filters.day !== null) {
+				title.unshift(this.props.indexes.days.find(x => x.key == this.props.filters.day).name);
+			}
+			if (this.props.indexes.regions.length && this.props.filters.region !== null) {
 				title.push(settings.strings.in);
-				title.push(this.props.indexes.regions[this.props.filters.region]);
+				title.push(this.props.indexes.regions.find(x => x.key == this.props.filters.region).name);
 			}
 		}
 		title = title.join(' ');
@@ -114,25 +190,37 @@ class Controls extends Component {
 	render() {
 
 		//build region dropdown
-		const region_label = this.props.filters.region == null ? settings.strings.everywhere : this.props.indexes.regions[this.props.filters.region];
-		const region_options = this.props.indexes.regions.map((region, index) => 
-			<a key={index} className={classNames('dropdown-item d-flex justify-content-between align-items-center', {
-				'active bg-secondary': (this.props.filters.region == index)
-			})} href="#" onClick={(e) => this.setFilter(e, 'region', index)}>
-				<span>{region}</span>
-				<span className="badge badge-light ml-3">9</span>
+		const region_label = this.props.filters.region == null ? settings.strings.everywhere : this.props.indexes.regions.find(x => x.key == this.props.filters.region).name;
+		const region_options = this.props.indexes.regions.map(region => 
+			<a key={region.key} className={classNames('dropdown-item d-flex justify-content-between align-items-center', {
+				'active bg-secondary': (this.props.filters.region == region.key)
+			})} href="#" onClick={(e) => this.setFilter(e, 'region', region.key)}>
+				<span>{region.name}</span>
+				<span className="badge badge-light ml-3">{region.slugs.length}</span>
 			</a>
 		);
 
 		//build day dropdown
 		const day_label = this.props.filters.day == null ? settings.strings.any_day : settings.strings[days[this.props.filters.day]];
-		const day_options = days.map((day, index) => 
-			<a key={index} className={classNames('dropdown-item', {
-				'active bg-secondary': (this.props.filters.day == index)
-			})} href="#" onClick={(e) => this.setFilter(e, 'day', index)}>{settings.strings[day]}</a>
+		const day_options = this.props.indexes.days.map(day => 
+			<a key={day.key} className={classNames('dropdown-item d-flex justify-content-between align-items-center', {
+				'active bg-secondary': (this.props.filters.day == day.key)
+			})} href="#" onClick={(e) => this.setFilter(e, 'day', day.key)}>
+				<span>{day.name}</span>
+				<span className="badge badge-light ml-3">{day.slugs.length}</span>
+			</a>
 		);
 
 		//build time dropdown
+		const time_label = this.props.filters.time == null ? settings.strings.any_time : settings.strings[this.props.filters.time];
+		const time_options = this.props.indexes.times.map(time => 
+			<a key={time.key} className={classNames('dropdown-item d-flex justify-content-between align-items-center', {
+				'active bg-secondary': (this.props.filters.time == time.key)
+			})} href="#" onClick={(e) => this.setFilter(e, 'time', time.key)}>
+				<span>{time.name}</span>
+				<span className="badge badge-light ml-3">{time.slugs.length}</span>
+			</a>
+		);
 
 		//build type dropdown
 		const types_label = this.props.filters.types.length ? this.props.filters.types.join(' + ') : settings.strings.any_type;
@@ -175,7 +263,7 @@ class Controls extends Component {
 							{day_label}
 						</button>
 						<div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-							<a className={classNames('dropdown-item', { 'active bg-secondary': this.props.filters.day == null })} onClick={(e) => this.setFilter(e, 'day', null)} href="#">Any Day</a>
+							<a className={classNames('dropdown-item', { 'active bg-secondary': this.props.filters.day == null })} onClick={(e) => this.setFilter(e, 'day', null)} href="#">{settings.strings.any_day}</a>
 							<div className="dropdown-divider"></div>
 							{day_options}
 						</div>
@@ -184,15 +272,12 @@ class Controls extends Component {
 				<div className="col-sm-6 col-lg-2 mb-3">
 					<div className="dropdown">
 						<button className="btn btn-outline-secondary w-100 dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							{settings.strings.any_time}
+							{time_label}
 						</button>
 						<div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-							<a className="dropdown-item active bg-secondary" href="#">{settings.strings.any_time}</a>
+							<a className={classNames('dropdown-item', { 'active bg-secondary': this.props.filters.time == null })} onClick={(e) => this.setFilter(e, 'time', null)} href="#">{settings.strings.any_time}</a>
 							<div className="dropdown-divider"></div>
-							<a className="dropdown-item" href="#">{settings.strings.morning}</a>
-							<a className="dropdown-item" href="#">{settings.strings.midday}</a>
-							<a className="dropdown-item" href="#">{settings.strings.evening}</a>
-							<a className="dropdown-item" href="#">{settings.strings.night}</a>
+							{time_options}
 						</div>
 					</div>
 				</div>
@@ -246,15 +331,18 @@ class Table extends Component {
 				<tbody>
 					{this.props.meetings.map((meeting) => {
 						if (this.props.filters.day !== null) {
-							if (this.props.filters.day != meeting.day) return;
+							if (this.props.indexes.days.find(x => x.key == this.props.filters.day).slugs.indexOf(meeting.slug) == -1) return;
 						}
 						if (this.props.filters.region !== null) {
-							if (this.props.indexes.regions[this.props.filters.region] != meeting.region) return;
+							if (this.props.indexes.regions.find(x => x.key == this.props.filters.region).slugs.indexOf(meeting.slug) == -1) return;
+						}
+						if (this.props.filters.time !== null) {
+							if (this.props.indexes.times.find(x => x.key == this.props.filters.time).slugs.indexOf(meeting.slug) == -1) return;
 						}
 						return(
-							<tr key={meeting.id}>
+							<tr key={meeting.slug}>
 								{settings.defaults.columns.map(column => 
-									<td key={meeting.id+column} className={classNames('d-block d-sm-table-cell', column)}>{this.getValue(meeting, column)}</td>
+									<td key={[meeting.slug, column].join('-')} className={classNames('d-block d-sm-table-cell', column)}>{this.getValue(meeting, column)}</td>
 								)}
 							</tr>
 						)
