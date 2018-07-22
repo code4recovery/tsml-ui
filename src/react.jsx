@@ -172,72 +172,55 @@ class Controls extends Component {
 	constructor() {
 		super();
 		this.state = { 
-			current_view: settings.defaults.view
+			dropdown: null,
+			view: settings.defaults.view,
 		};
+		this.closeDropdown = this.closeDropdown.bind(this);
 	}
 
+	componentDidMount() {
+		document.body.addEventListener('click', this.closeDropdown);
+	}
+
+	componentWillUnmount() {
+		document.body.removeEventListener('click', this.closeDropdown);
+	}
+
+	//close current dropdown (for body click handler)
+	closeDropdown(e) {
+		if (e.srcElement.classList.contains('dropdown-toggle')) return;
+		this.setDropdown(null);
+	}
+
+	//toggle dropdown
+	setDropdown(which) {
+		this.setState({
+			dropdown: this.state.dropdown == which ? null : which
+		});
+	}
+
+	//set filter: pass it up to parent
 	setFilter(e, filter, value) {
 		e.preventDefault();
 		this.props.filters[filter] = value;
 		this.props.setFilters(this.props.filters);
 	}
 
+	//toggle list/map view
 	setView(e, view) {
 		e.preventDefault();
-		this.setState({ current_view: view });
+		this.setState({ view: view });
 	}
 
 	render() {
-
-		//build region dropdown
-		const region_label = this.props.filters.region == null ? settings.strings.everywhere : this.props.indexes.regions.find(x => x.key == this.props.filters.region).name;
-		const region_options = this.props.indexes.regions.map(region => 
-			<a key={region.key} className={classNames('dropdown-item d-flex justify-content-between align-items-center', {
-				'active bg-secondary': (this.props.filters.region == region.key)
-			})} href="#" onClick={(e) => this.setFilter(e, 'region', region.key)}>
-				<span>{region.name}</span>
-				<span className="badge badge-light ml-3">{region.slugs.length}</span>
-			</a>
-		);
-
-		//build day dropdown
-		const day_label = this.props.filters.day == null ? settings.strings.any_day : settings.strings[days[this.props.filters.day]];
-		const day_options = this.props.indexes.days.map(day => 
-			<a key={day.key} className={classNames('dropdown-item d-flex justify-content-between align-items-center', {
-				'active bg-secondary': (this.props.filters.day == day.key)
-			})} href="#" onClick={(e) => this.setFilter(e, 'day', day.key)}>
-				<span>{day.name}</span>
-				<span className="badge badge-light ml-3">{day.slugs.length}</span>
-			</a>
-		);
-
-		//build time dropdown
-		const time_label = this.props.filters.time == null ? settings.strings.any_time : settings.strings[this.props.filters.time];
-		const time_options = this.props.indexes.times.map(time => 
-			<a key={time.key} className={classNames('dropdown-item d-flex justify-content-between align-items-center', {
-				'active bg-secondary': (this.props.filters.time == time.key)
-			})} href="#" onClick={(e) => this.setFilter(e, 'time', time.key)}>
-				<span>{time.name}</span>
-				<span className="badge badge-light ml-3">{time.slugs.length}</span>
-			</a>
-		);
-
-		//build type dropdown
-		const types_label = this.props.filters.types.length ? this.props.filters.types.join(' + ') : settings.strings.any_type;
-		const types_options = this.props.indexes.types.map((type, index) => 
-			<a key={index} className={classNames('dropdown-item', {
-				'active bg-secondary': (this.props.filters.type == type)
-			})} href="#" onClick={(e) => this.setFilter(e, 'types', index)}>{settings.strings.types[type]}</a>
-		);
-
 		return(
 			<div className="row mt-4">
 				<div className="col-sm-6 col-lg-2 mb-3">
 					<div className="input-group">
 						<input type="search" className="form-control" placeholder={settings.strings.search} aria-label={settings.strings.search}/>
 						<div className="input-group-append">
-							<button className="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
-							<div className="dropdown-menu dropdown-menu-right">
+							<button className="btn btn-outline-secondary dropdown-toggle" onClick={e => this.setDropdown('search')} aria-haspopup="true" aria-expanded="false"></button>
+							<div className={classNames('dropdown-menu dropdown-menu-right', { show: (this.state.dropdown == 'search') })}>
 								<a className="dropdown-item active bg-secondary" href="#">{settings.strings.search}</a>
 								<a className="dropdown-item" href="#">{settings.strings.near_me}</a>
 								<a className="dropdown-item" href="#">{settings.strings.near_location}</a>
@@ -247,56 +230,83 @@ class Controls extends Component {
 				</div>
 				<div className="col-sm-6 col-lg-2 mb-3">
 					<div className="dropdown">
-						<button className="btn btn-outline-secondary w-100 dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							{region_label}
+						<button className="btn btn-outline-secondary w-100 dropdown-toggle" onClick={e => this.setDropdown('region')} id="region-dropdown" aria-haspopup="true" aria-expanded="false">
+							{this.props.filters.region == null ? settings.strings.everywhere : this.props.indexes.regions.find(x => x.key == this.props.filters.region).name}
 						</button>
-						<div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-							<a className={classNames('dropdown-item', { 'active bg-secondary': this.props.filters.region == null })} onClick={(e) => this.setFilter(e, 'region', null)} href="#">{settings.strings.everywhere}</a>
+						<div className={classNames('dropdown-menu', { show: (this.state.dropdown == 'region') })} aria-labelledby="region-dropdown">
+							<a className={classNames('dropdown-item', { 'active bg-secondary': this.props.filters.region == null })} onClick={e => this.setFilter(e, 'region', null)} href="#">{settings.strings.everywhere}</a>
 							<div className="dropdown-divider"></div>
-							{region_options}
+							{this.props.indexes.regions.map(region => 
+								<a key={region.key} className={classNames('dropdown-item d-flex justify-content-between align-items-center', {
+									'active bg-secondary': (this.props.filters.region == region.key)
+								})} href="#" onClick={e => this.setFilter(e, 'region', region.key)}>
+									<span>{region.name}</span>
+									<span className="badge badge-light ml-3">{region.slugs.length}</span>
+								</a>
+							)}
 						</div>
 					</div>
 				</div>
 				<div className="col-sm-6 col-lg-2 mb-3">
 					<div className="dropdown">
-						<button className="btn btn-outline-secondary w-100 dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							{day_label}
+						<button className="btn btn-outline-secondary w-100 dropdown-toggle" onClick={e => this.setDropdown('day')} id="day-dropdown" aria-haspopup="true" aria-expanded="false">
+							{this.props.filters.day == null ? settings.strings.any_day : settings.strings[days[this.props.filters.day]]}
 						</button>
-						<div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-							<a className={classNames('dropdown-item', { 'active bg-secondary': this.props.filters.day == null })} onClick={(e) => this.setFilter(e, 'day', null)} href="#">{settings.strings.any_day}</a>
+						<div className={classNames('dropdown-menu', { show: (this.state.dropdown == 'day') })} aria-labelledby="day-dropdown">
+							<a className={classNames('dropdown-item', { 'active bg-secondary': this.props.filters.day == null })} onClick={e => this.setFilter(e, 'day', null)} href="#">{settings.strings.any_day}</a>
 							<div className="dropdown-divider"></div>
-							{day_options}
+							{this.props.indexes.days.map(day => 
+								<a key={day.key} className={classNames('dropdown-item d-flex justify-content-between align-items-center', {
+									'active bg-secondary': (this.props.filters.day == day.key)
+								})} href="#" onClick={e => this.setFilter(e, 'day', day.key)}>
+									<span>{day.name}</span>
+									<span className="badge badge-light ml-3">{day.slugs.length}</span>
+								</a>
+							)}
 						</div>
 					</div>
 				</div>
 				<div className="col-sm-6 col-lg-2 mb-3">
 					<div className="dropdown">
-						<button className="btn btn-outline-secondary w-100 dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							{time_label}
+						<button className="btn btn-outline-secondary w-100 dropdown-toggle" onClick={e => this.setDropdown('time')} id="time-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							{this.props.filters.time == null ? settings.strings.any_time : settings.strings[this.props.filters.time]}
 						</button>
-						<div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-							<a className={classNames('dropdown-item', { 'active bg-secondary': this.props.filters.time == null })} onClick={(e) => this.setFilter(e, 'time', null)} href="#">{settings.strings.any_time}</a>
+						<div className={classNames('dropdown-menu', { show: (this.state.dropdown == 'time') })} aria-labelledby="time-dropdown">
+							<a className={classNames('dropdown-item', { 'active bg-secondary': this.props.filters.time == null })} onClick={e => this.setFilter(e, 'time', null)} href="#">{settings.strings.any_time}</a>
 							<div className="dropdown-divider"></div>
-							{time_options}
+							{this.props.indexes.times.map(time => 
+								<a key={time.key} className={classNames('dropdown-item d-flex justify-content-between align-items-center', {
+									'active bg-secondary': (this.props.filters.time == time.key)
+								})} href="#" onClick={e => this.setFilter(e, 'time', time.key)}>
+									<span>{time.name}</span>
+									<span className="badge badge-light ml-3">{time.slugs.length}</span>
+								</a>
+							)}
 						</div>
 					</div>
 				</div>
 				<div className="col-sm-6 col-lg-2 mb-3">
 					<div className="dropdown">
-						<button className="btn btn-outline-secondary w-100 dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							{types_label}
+						<button className="btn btn-outline-secondary w-100 dropdown-toggle" onClick={e => this.setDropdown('type')} id="type-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							{this.props.filters.types.length ? this.props.filters.types.join(' + ') : settings.strings.any_type}
 						</button>
-						<div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-							<a className="dropdown-item active bg-secondary" href="#">{settings.strings.any_type}</a>
+						<div className={classNames('dropdown-menu', { show: (this.state.dropdown == 'type') })} aria-labelledby="type-dropdown">
+							<a className="dropdown-item active bg-secondary" href="#">
+								{settings.strings.any_type}
+							</a>
 							<div className="dropdown-divider"></div>
-							{types_options}
+							{this.props.indexes.types.map((type, index) => 
+								<a key={index} className={classNames('dropdown-item', {
+									'active bg-secondary': (this.props.filters.type == type)
+								})} href="#" onClick={e => this.setFilter(e, 'types', index)}>{settings.strings.types[type]}</a>
+							)}
 						</div>
 					</div>
 				</div>
 				<div className="col-sm-6 col-lg-2 mb-3">
 					<div className="btn-group w-100" role="group" aria-label="Basic example">
-						<button type="button" className={classNames('btn btn-outline-secondary w-100', { active: this.state.current_view == 'list' })} onClick={(e) => this.setView(e, 'list')}>{settings.strings.list}</button>
-						<button type="button" className={classNames('btn btn-outline-secondary w-100', { active: this.state.current_view == 'map' })} onClick={(e) => this.setView(e, 'map')}>{settings.strings.map}</button>
+						<button type="button" className={classNames('btn btn-outline-secondary w-100', { active: this.state.view == 'list' })} onClick={e => this.setView(e, 'list')}>{settings.strings.list}</button>
+						<button type="button" className={classNames('btn btn-outline-secondary w-100', { active: this.state.view == 'map' })} onClick={e => this.setView(e, 'map')}>{settings.strings.map}</button>
 					</div>
 				</div>
 			</div>
