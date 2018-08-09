@@ -4,10 +4,10 @@ With only a [Meeting Guide format JSON file](https://github.com/meeting-guide/sp
 
 Advantanges:
 
-* better performance for end users
-* less strain on server (client-side processing)
+* better performance for users
+* less strain on servers
 * supports any web platform
-* wider pool of possible contributors (not just WordPress webmasters)
+* wider pool of potential contributors (not just WordPress webmasters)
 * simplifies WordPress plugin (separation of concerns)
 
 ## Installation

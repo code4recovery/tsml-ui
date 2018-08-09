@@ -5,20 +5,20 @@ import settings from './settings';
 
 export const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
 export const times = ['morning', 'midday', 'evening', 'night'];
-
+export const filters = ['regions', 'days', 'times', 'types'];
 class App extends Component {
 	constructor() {
 		super();
 		this.state = { 
 			filters: {
-				day: settings.defaults.today ? new Date().getDay() : null,
-				types: [],
-				region: null,
-				district: null,
-				radius: null,
-				query: null,
 				center: null,
-				time: null,
+				days: settings.defaults.today ? [new Date().getDay().toString()] : [],
+				districts: [],
+				query: null,
+				radius: null,
+				regions: [],
+				times: [],
+				types: [],
 			},
 			indexes: {
 				days: [],
@@ -32,16 +32,20 @@ class App extends Component {
 	}
 
 	componentDidMount() {
+		//fetch json data file and build indexes
 		fetch(settings.json)
 			.then(res => res.json())
 			.then(result => {
+
+				//indexes start as objects, will be converted to arrays
 				let indexes = {
 					days: {},
 					regions: {},
 					times: {},
-					types: [],
+					types: {},
 				}
-				//build index arrays for dropdowns
+
+				//build index objects for dropdowns
 				for (let i = 0; i < result.length; i++) {
 
 					//for readability
@@ -94,30 +98,41 @@ class App extends Component {
 						indexes.times[meeting.times[j]].slugs.push(meeting.slug);
 					}
 
-					//build type index
+					//build type index (can be multiple)
 					for (let j = 0; j < meeting.types.length; j++) {
-						if (indexes.types.indexOf(meeting.types[j]) == -1) {
-							indexes.types.push(meeting.types[j]);
+						if (meeting.types[j] in indexes.types === false) {
+							indexes.types[meeting.types[j]] = {
+								key: meeting.types[j],
+								name: settings.strings.types[meeting.types[j]],
+								slugs: [],
+							}
 						}
+						indexes.types[meeting.types[j]].slugs.push(meeting.slug);
 					}
 				}
 
-				//sort regions
+				//convert regions to array and sort by name
 				indexes.regions = Object.values(indexes.regions);
 				indexes.regions.sort((a, b) => { 
 					return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
 				});
 
-				//sort days
+				//convert days to array and sort by ordinal
 				indexes.days = Object.values(indexes.days);
 				indexes.days.sort((a, b) => {
 					return a.key - b.key;
 				});
 
-				//sort times
+				//convert times to array and sort by ordinal
 				indexes.times = Object.values(indexes.times);
 				indexes.times.sort((a, b) => { 
-					return days.indexOf(a.key) - days.indexOf(b.day);
+					return times.indexOf(a.key) - times.indexOf(b.key);
+				});
+
+				//convert types to array and sort by name
+				indexes.types = Object.values(indexes.types);
+				indexes.types.sort((a, b) => { 
+					return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
 				});
 
 				this.setState({
@@ -148,15 +163,26 @@ class Title extends Component {
 	render() {
 		let title = [settings.strings.meetings];
 		if (this.props.filters) {
-			if (this.props.indexes.times.length && this.props.filters.time !== null) {
-				title.unshift(this.props.indexes.times.find(x => x.key == this.props.filters.time).name);
+			if (this.props.indexes.types.length && this.props.filters.types.length) {
+				title.unshift(this.props.filters.types.map(x => {
+					return this.props.indexes.types.find(y => y.key == x).name;
+				}).join(' + '));
 			}
-			if (this.props.indexes.days.length && this.props.filters.day !== null) {
-				title.unshift(this.props.indexes.days.find(x => x.key == this.props.filters.day).name);
+			if (this.props.indexes.times.length && this.props.filters.times.length) {
+				title.unshift(this.props.filters.times.map(x => {
+					return this.props.indexes.times.find(y => y.key == x).name;
+				}).join(' + '));
 			}
-			if (this.props.indexes.regions.length && this.props.filters.region !== null) {
+			if (this.props.indexes.days.length && this.props.filters.days.length) {
+				title.unshift(this.props.filters.days.map(x => {
+					return this.props.indexes.days.find(y => y.key == x).name;
+				}).join(' + '));
+			}
+			if (this.props.indexes.regions.length && this.props.filters.regions.length) {
 				title.push(settings.strings.in);
-				title.push(this.props.indexes.regions.find(x => x.key == this.props.filters.region).name);
+				title.push(this.props.filters.regions.map(x => {
+					return this.props.indexes.regions.find(y => y.key == x).name;
+				}).join(' + '));
 			}
 		}
 		title = title.join(' ');
@@ -178,21 +204,23 @@ class Controls extends Component {
 		this.closeDropdown = this.closeDropdown.bind(this);
 	}
 
+	//add click listener for dropdowns (in lieu of including bootstrap js + jquery)
 	componentDidMount() {
 		document.body.addEventListener('click', this.closeDropdown);
 	}
 
+	//remove click listener for dropdowns (in lieu of including bootstrap js + jquery)
 	componentWillUnmount() {
 		document.body.removeEventListener('click', this.closeDropdown);
 	}
 
-	//close current dropdown (for body click handler)
+	//close current dropdown (on body click)
 	closeDropdown(e) {
 		if (e.srcElement.classList.contains('dropdown-toggle')) return;
 		this.setDropdown(null);
 	}
 
-	//toggle dropdown
+	//open or close dropdown
 	setDropdown(which) {
 		this.setState({
 			dropdown: this.state.dropdown == which ? null : which
@@ -202,7 +230,30 @@ class Controls extends Component {
 	//set filter: pass it up to parent
 	setFilter(e, filter, value) {
 		e.preventDefault();
-		this.props.filters[filter] = value;
+		e.stopPropagation();
+
+		//add or remove from filters
+		if (value) {
+			if (e.metaKey) {
+				const index = this.props.filters[filter].indexOf(value);
+				if (index == -1) {
+					this.props.filters[filter].push(value);
+				} else {
+					this.props.filters[filter].splice(index, 1);
+				}
+			} else {
+				this.props.filters[filter] = [value];
+			}
+		} else {
+			this.props.filters[filter] = [];
+		}
+
+		//sort filters
+		this.props.filters[filter].sort((a, b) => {
+			return this.props.indexes[filter].findIndex(x => a == x.key) - this.props.indexes[filter].findIndex(x => b == x.key);
+		});
+
+		//pass it up to app controller
 		this.props.setFilters(this.props.filters);
 	}
 
@@ -228,81 +279,31 @@ class Controls extends Component {
 						</div>
 					</div>
 				</div>
-				<div className="col-sm-6 col-lg-2 mb-3">
+				{filters.map(filter =>
+				<div className="col-sm-6 col-lg-2 mb-3" key={filter}>
 					<div className="dropdown">
-						<button className="btn btn-outline-secondary w-100 dropdown-toggle" onClick={e => this.setDropdown('region')} id="region-dropdown" aria-haspopup="true" aria-expanded="false">
-							{this.props.filters.region == null ? settings.strings.everywhere : this.props.indexes.regions.find(x => x.key == this.props.filters.region).name}
+						<button className="btn btn-outline-secondary w-100 dropdown-toggle" onClick={e => this.setDropdown(filter)} id="{filter}-dropdown" aria-haspopup="true" aria-expanded="false">
+							{this.props.filters[filter].length && this.props.indexes[filter].length ? this.props.filters[filter].map(x => {
+								return this.props.indexes[filter].find(y => y.key == x).name;
+							}).join(' + ') : settings.strings[filter + '_any']}
 						</button>
-						<div className={classNames('dropdown-menu', { show: (this.state.dropdown == 'region') })} aria-labelledby="region-dropdown">
-							<a className={classNames('dropdown-item', { 'active bg-secondary': this.props.filters.region == null })} onClick={e => this.setFilter(e, 'region', null)} href="#">{settings.strings.everywhere}</a>
-							<div className="dropdown-divider"></div>
-							{this.props.indexes.regions.map(region => 
-								<a key={region.key} className={classNames('dropdown-item d-flex justify-content-between align-items-center', {
-									'active bg-secondary': (this.props.filters.region == region.key)
-								})} href="#" onClick={e => this.setFilter(e, 'region', region.key)}>
-									<span>{region.name}</span>
-									<span className="badge badge-light ml-3">{region.slugs.length}</span>
-								</a>
-							)}
-						</div>
-					</div>
-				</div>
-				<div className="col-sm-6 col-lg-2 mb-3">
-					<div className="dropdown">
-						<button className="btn btn-outline-secondary w-100 dropdown-toggle" onClick={e => this.setDropdown('day')} id="day-dropdown" aria-haspopup="true" aria-expanded="false">
-							{this.props.filters.day == null ? settings.strings.any_day : settings.strings[days[this.props.filters.day]]}
-						</button>
-						<div className={classNames('dropdown-menu', { show: (this.state.dropdown == 'day') })} aria-labelledby="day-dropdown">
-							<a className={classNames('dropdown-item', { 'active bg-secondary': this.props.filters.day == null })} onClick={e => this.setFilter(e, 'day', null)} href="#">{settings.strings.any_day}</a>
-							<div className="dropdown-divider"></div>
-							{this.props.indexes.days.map(day => 
-								<a key={day.key} className={classNames('dropdown-item d-flex justify-content-between align-items-center', {
-									'active bg-secondary': (this.props.filters.day == day.key)
-								})} href="#" onClick={e => this.setFilter(e, 'day', day.key)}>
-									<span>{day.name}</span>
-									<span className="badge badge-light ml-3">{day.slugs.length}</span>
-								</a>
-							)}
-						</div>
-					</div>
-				</div>
-				<div className="col-sm-6 col-lg-2 mb-3">
-					<div className="dropdown">
-						<button className="btn btn-outline-secondary w-100 dropdown-toggle" onClick={e => this.setDropdown('time')} id="time-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							{this.props.filters.time == null ? settings.strings.any_time : settings.strings[this.props.filters.time]}
-						</button>
-						<div className={classNames('dropdown-menu', { show: (this.state.dropdown == 'time') })} aria-labelledby="time-dropdown">
-							<a className={classNames('dropdown-item', { 'active bg-secondary': this.props.filters.time == null })} onClick={e => this.setFilter(e, 'time', null)} href="#">{settings.strings.any_time}</a>
-							<div className="dropdown-divider"></div>
-							{this.props.indexes.times.map(time => 
-								<a key={time.key} className={classNames('dropdown-item d-flex justify-content-between align-items-center', {
-									'active bg-secondary': (this.props.filters.time == time.key)
-								})} href="#" onClick={e => this.setFilter(e, 'time', time.key)}>
-									<span>{time.name}</span>
-									<span className="badge badge-light ml-3">{time.slugs.length}</span>
-								</a>
-							)}
-						</div>
-					</div>
-				</div>
-				<div className="col-sm-6 col-lg-2 mb-3">
-					<div className="dropdown">
-						<button className="btn btn-outline-secondary w-100 dropdown-toggle" onClick={e => this.setDropdown('type')} id="type-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							{this.props.filters.types.length ? this.props.filters.types.join(' + ') : settings.strings.any_type}
-						</button>
-						<div className={classNames('dropdown-menu', { show: (this.state.dropdown == 'type') })} aria-labelledby="type-dropdown">
-							<a className="dropdown-item active bg-secondary" href="#">
-								{settings.strings.any_type}
+						<div className={classNames('dropdown-menu', { show: (this.state.dropdown == filter) })} aria-labelledby="{filter}-dropdown">
+							<a className={classNames('dropdown-item', { 'active bg-secondary': !this.props.filters[filter].length })} onClick={e => this.setFilter(e, filter, null)} href="#">
+								{settings.strings[filter + '_any']}
 							</a>
 							<div className="dropdown-divider"></div>
-							{this.props.indexes.types.map((type, index) => 
-								<a key={index} className={classNames('dropdown-item', {
-									'active bg-secondary': (this.props.filters.type == type)
-								})} href="#" onClick={e => this.setFilter(e, 'types', index)}>{settings.strings.types[type]}</a>
+							{this.props.indexes[filter].map(x => 
+								<a key={x.key} className={classNames('dropdown-item d-flex justify-content-between align-items-center', {
+									'active bg-secondary': (this.props.filters[filter].indexOf(x.key) !== -1)
+								})} href="#" onClick={e => this.setFilter(e, filter, x.key)}>
+									<span>{x.name}</span>
+									<span className="badge badge-light ml-3">{x.slugs.length}</span>
+								</a>
 							)}
 						</div>
 					</div>
 				</div>
+				)}
 				<div className="col-sm-6 col-lg-2 mb-3">
 					<div className="btn-group w-100" role="group" aria-label="Basic example">
 						<button type="button" className={classNames('btn btn-outline-secondary w-100', { active: this.state.view == 'list' })} onClick={e => this.setView(e, 'list')}>{settings.strings.list}</button>
@@ -328,7 +329,40 @@ class Table extends Component {
 		}
 		return meeting[key];
 	}
+
+	//get common matches
+	getCommonElements(arrays) {
+		var currentValues = {};
+		var commonValues = {};
+		if (!arrays.length) return [];
+		for (var i = arrays[0].length - 1; i >=0; i--){//Iterating backwards for efficiency
+			currentValues[arrays[0][i]] = 1; //Doesn't really matter what we set it to
+		}
+		for (var i = arrays.length-1; i>0; i--){
+			var currentArray = arrays[i];
+			for (var j = currentArray.length-1; j >=0; j--){
+				if (currentArray[j] in currentValues){
+					commonValues[currentArray[j]] = 1; //Once again, the `1` doesn't matter
+				}
+			}
+			currentValues = commonValues;
+			commonValues = {};
+		}
+		return Object.keys(currentValues);
+	}
+
 	render() {
+		let matches = [];
+		for (let i = 0; i < filters.length; i++) {
+			let filter = filters[i];
+			if (this.props.filters[filter].length && this.props.indexes[filter].length) {
+				matches.push([].concat.apply([], this.props.filters[filter].map(x => {
+					return this.props.indexes[filter].find(y => y.key == x).slugs;
+				})));
+			}
+		}
+		matches = this.getCommonElements(matches);
+
 		return(
 			<table className="table table-striped mt-3">
 				<thead>
@@ -339,16 +373,8 @@ class Table extends Component {
 					</tr>
 				</thead>
 				<tbody>
-					{this.props.meetings.map((meeting) => {
-						if (this.props.filters.day !== null) {
-							if (this.props.indexes.days.find(x => x.key == this.props.filters.day).slugs.indexOf(meeting.slug) == -1) return;
-						}
-						if (this.props.filters.region !== null) {
-							if (this.props.indexes.regions.find(x => x.key == this.props.filters.region).slugs.indexOf(meeting.slug) == -1) return;
-						}
-						if (this.props.filters.time !== null) {
-							if (this.props.indexes.times.find(x => x.key == this.props.filters.time).slugs.indexOf(meeting.slug) == -1) return;
-						}
+					{this.props.meetings.map(meeting => {
+						if (matches.indexOf(meeting.slug) == -1) return;
 						return(
 							<tr key={meeting.slug}>
 								{settings.defaults.columns.map(column => 
