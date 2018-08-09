@@ -15,11 +15,8 @@ const settings = merge({
 	},
 	strings: {
 		address: 'Address',
-		any_day: 'Any Day',
-		any_time: 'Any Time',
-		any_type: 'Any Type',
+		days_any: 'Any Day',
 		evening: 'Evening',
-		everywhere: 'Everywhere',
 		friday: 'Friday',
 		in: 'in', //todo find way to do this with string pattern
 		list: 'List',
@@ -34,11 +31,13 @@ const settings = merge({
 		near_me: 'Near Me',
 		night: 'Night',
 		region: 'Region',
+		regions_any: 'Everywhere',
 		saturday: 'Saturday',
 		search: 'Search',
 		sunday: 'Sunday',
 		thursday: 'Thursday',
 		time: 'Time',
+		times_any: 'Any Time',
 		tuesday: 'Tuesday',
 		types: {
 			'11': '11th Step Meditation',
@@ -96,6 +95,7 @@ const settings = merge({
 			W: 'Women',
 			Y: 'Young People',
 		},
+		types_any: 'Any Type',
 		wednesday: 'Wednesday',
 	},
 }, window.config);
