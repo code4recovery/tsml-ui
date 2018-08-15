@@ -7,7 +7,9 @@ const settings = merge({
 		today: true, //start with today's meetings, vs any day
 		view: 'list', //start in list or map view
 	},
+	days: ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'],
 	element_id: 'app', //the id of the HTML container element
+	filters: ['regions', 'days', 'times', 'types'],
 	json: '/meetings.json', //path to JSON file (required)
 	keys: {
 		google: null, //enable google maps
@@ -30,6 +32,7 @@ const settings = merge({
 		near_location: 'Near Location',
 		near_me: 'Near Me',
 		night: 'Night',
+		no_results: 'No meetings were found matching the selected criteria.',
 		region: 'Region',
 		regions_any: 'Everywhere',
 		saturday: 'Saturday',
@@ -98,6 +101,7 @@ const settings = merge({
 		types_any: 'Any Type',
 		wednesday: 'Wednesday',
 	},
+	times: ['morning', 'midday', 'evening', 'night'],
 }, window.config);
 
 export default settings;
