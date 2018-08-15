@@ -11,7 +11,7 @@ let mix = require('laravel-mix');
  |
  */
 
-mix.react('src/react.jsx', 'public')
+mix.react('src/app.jsx', 'public')
 .sass('src/style.scss', 'public')
 .options({
 	processCssUrls: false
