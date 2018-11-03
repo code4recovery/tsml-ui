@@ -102,6 +102,7 @@ const settings = merge({
 		},
 		types_any: 'Any Type',
 		wednesday: 'Wednesday',
+		with: 'with',
 	},
 	times: ['morning', 'midday', 'evening', 'night'],
 }, window.config);
