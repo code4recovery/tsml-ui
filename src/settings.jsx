@@ -4,6 +4,7 @@ import merge from 'deepmerge';
 const settings = merge({
 	defaults: {
 		columns: ['time', 'name', 'location', 'address', 'region'], //can be reordered
+		mode: 'search', //start in keyword search mode
 		today: true, //start with today's meetings, vs any day
 		view: 'list', //start in list or map view
 	},
@@ -15,6 +16,7 @@ const settings = merge({
 		google: null, //enable google maps
 		mapbox: null, //enable mapbox maps
 	},
+	modes: ['search', 'near_location'],
 	strings: {
 		address: 'Address',
 		days_any: 'Any Day',

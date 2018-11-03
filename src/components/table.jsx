@@ -20,7 +20,7 @@ export default class Table extends Component {
 
 	render() {
 
-		const hide: boolean = this.props.filteredMeetings.length == 0;
+		const hide: boolean = (this.props.filteredMeetings.length == 0) || (this.props.state.view != 'list');
 
 		return(
 			<table className={classNames('table table-striped mt-3', { 'd-none': hide })}>
@@ -32,12 +32,14 @@ export default class Table extends Component {
 					</tr>
 				</thead>
 				<tbody>
-					{this.props.meetings.map(meeting => {
+					{this.props.state.meetings.map(meeting => {
 						if (this.props.filteredMeetings.indexOf(meeting.slug) == -1) return;
 						return(
 							<tr key={meeting.slug}>
 								{settings.defaults.columns.map(column => 
-									<td key={[meeting.slug, column].join('-')} className={classNames('d-block d-sm-table-cell', column)}>{this.getValue(meeting, column)}</td>
+									<td key={[meeting.slug, column].join('-')} className={classNames('d-block d-sm-table-cell', column)}>
+										{this.getValue(meeting, column)}
+									</td>
 								)}
 							</tr>
 						)
