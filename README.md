@@ -1,14 +1,21 @@
 # Website Meeting Finder 2.0
 
-With only a [Meeting Guide format JSON file](https://github.com/meeting-guide/spec), developers will soon be able to have the same meeting finder found in the [12 Step Meeting List](https://github.com/meeting-guide/12-step-meeting-list) WordPress plugin on any website platform. 
+With only a [Meeting Guide format JSON file](https://github.com/meeting-guide/spec), developers can soon have the same meeting finder found in the [12 Step Meeting List](https://github.com/meeting-guide/12-step-meeting-list) WordPress plugin on any website platform. 
 
 Advantanges:
 
-* better performance for users
+* faster performance for users
 * less strain on servers
 * supports any web platform
-* wider pool of potential contributors (not just WordPress webmasters)
+* easily embedded into any layout
+* wider pool of potential project contributors (not just WordPress webmasters)
 * simplifies WordPress plugin (separation of concerns)
+* enables the much-requested meetings shortcode
+
+Open questions:
+
+* what will the impact be on SEO?
+* how to handle email transport?
 
 ## Installation
 
@@ -35,9 +42,9 @@ You don't need to download anything. Simply add the following code to your page:
 
 ## Configuration
 
-See [settings.jsx](settings.jsx) for other options that can be included in your `window.config` object. You can customize many of the behaviors and all of the text strings that the app uses.
+See [settings.jsx](settings.jsx) for other options that can be included in your `window.config` object. You can customize many of the behaviors and all of the text strings that the app uses. Only include the values you wish to override.
 
-## FAQ
+Here are some examples:
 
 ### Change the column heading "Region" to "City"
 
@@ -58,11 +65,13 @@ See [settings.jsx](settings.jsx) for other options that can be included in your 
 			},
 		}
 	}
+	
+A full list of meeting types can be found on the [Meeting Guide format spec page](https://github.com/meeting-guide/spec). These can be overridden by specifying the code and preferred nomenclature as demonstrated above.
 
 ## Contributing
 
-Pull requests are welcome. To get started, download this repository, do an `npm install`, and point your web root at the `public` folder.
+Pull requests are welcome. To get started, clone this repository, do an `npm install`, and point your web root at the `public` folder.
 
 This project uses the [React JavaScript library](https://reactjs.org/) and the [Bootstrap component library](http://getbootstrap.com/).
 
-While developing, run the `npm run watch` terminal command to compile assets as you edit them. When you're ready to commit, run `npm run prod` to minify them.
+While developing, run the `npm run watch` terminal command to compile assets as you edit them. When you're ready to commit, run `npm run prod` to minify them for production.

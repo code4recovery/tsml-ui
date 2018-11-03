@@ -12,13 +12,14 @@ class App extends Component {
 	constructor() {
 		super();
 		this.state = { 
-			filters: {
+			input: {
 				center: null,
 				days: settings.defaults.today ? [new Date().getDay().toString()] : [],
 				districts: [],
 				query: null,
 				radius: null,
 				regions: [],
+				search: '',
 				times: [],
 				types: [],
 			},
@@ -122,6 +123,9 @@ class App extends Component {
 						}
 						indexes.types[meeting.types[j]].slugs.push(meeting.slug);
 					}
+
+					//build search string
+					result[i].search = [meeting.name, meeting.location, meeting.location_notes, meeting.notes, meeting.formatted_address].join(' ').toLowerCase();
 				}
 
 				//convert regions to array and sort by name
@@ -147,6 +151,8 @@ class App extends Component {
 				indexes.types.sort((a, b) => { 
 					return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
 				});
+
+				//todo filter out unused meetings properties to have a leaner memory footprint
 
 				this.setState({
 					indexes: indexes,
@@ -192,23 +198,35 @@ class App extends Component {
 		//run filteres on meetings
 		let filteredMeetings = [];
 		let filterFound = false;
+
+		//filter by region, day, time, and type
 		for (let i = 0; i < settings.filters.length; i++) {
 			let filter = settings.filters[i];
-			if (this.state.filters[filter].length && this.state.indexes[filter].length) {
+			if (this.state.input[filter].length && this.state.indexes[filter].length) {
 				filterFound = true;
-				filteredMeetings.push([].concat.apply([], this.state.filters[filter].map(x => {
+				filteredMeetings.push([].concat.apply([], this.state.input[filter].map(x => {
 					return this.state.indexes[filter].find(y => y.key == x).slugs;
 				})));
 			}
 		}
-		if (filterFound) {
-			filteredMeetings = this.getCommonElements(filteredMeetings);
-		} else {
-			filteredMeetings = this.state.meetings.map(meeting => meeting.slug);
+
+		//keyword search
+		if (this.state.input.search.length) {
+			filterFound = true;
+			let needle = this.state.input.search.toLowerCase();
+			let matches = this.state.meetings.filter(function(meeting){
+				return meeting.search.search(needle) !== -1;
+			});
+			filteredMeetings.push([].concat.apply([], matches.map(meeting => meeting.slug)));
 		}
+
+		//do the filtering, if necessary
+		filteredMeetings = filterFound 
+			? this.getCommonElements(filteredMeetings) //get intersection of slug arrays
+			: this.state.meetings.map(meeting => meeting.slug); //get everything
 		
 		return(
-			<div>
+			<div className="container-fluid">
 				<Title state={this.state}/>
 				<Controls state={this.state} setAppState={this.setAppState}/>
 				<Alert state={this.state} setFilters={this.setFilters} filteredMeetings={filteredMeetings}/>
