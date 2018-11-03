@@ -2,13 +2,11 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import classNames from 'classnames/bind';
 
-import settings from './settings';
-
-//import components
 import Alert from './components/alert';
 import Controls from './components/controls';
-import Title from './components/title';
 import Table from './components/table';
+import Title from './components/title';
+import settings from './settings';
 
 class App extends Component {
 	constructor() {
@@ -31,8 +29,19 @@ class App extends Component {
 				types: [],
 			},
 			meetings: [],
+			mode: settings.defaults.mode,
+			view: settings.defaults.view
 		};
+
+		//check query string
+
+		//near me mode enabled on https
+		if (window.location.protocol == 'https:') {
+			settings.modes.push('near_me');
+		}
+
 		this.setFilters = this.setFilters.bind(this);
+		this.setAppState = this.setAppState.bind(this);
 	}
 
 	componentDidMount() {
@@ -148,8 +157,13 @@ class App extends Component {
 			});
 	}
 
+	//todo remove
 	setFilters(filters) {
-		this.setState({filters: filters});
+		this.setState({ filters: filters });
+	}
+
+	setAppState(key, value) {
+		this.setState({ [key]: value });		
 	}
 
 	//get common matches between arrays (for meeting filtering)
@@ -195,10 +209,10 @@ class App extends Component {
 		
 		return(
 			<div>
-				<Title filters={this.state.filters} indexes={this.state.indexes}/>
-				<Controls filters={this.state.filters} indexes={this.state.indexes} setFilters={this.setFilters}/>
-				<Alert filters={this.state.filters} setFilters={this.setFilters} meetings={this.state.meetings} filteredMeetings={filteredMeetings}/>
-				<Table filters={this.state.filters} indexes={this.state.indexes} meetings={this.state.meetings} filteredMeetings={filteredMeetings}/>
+				<Title state={this.state}/>
+				<Controls state={this.state} setAppState={this.setAppState}/>
+				<Alert state={this.state} setFilters={this.setFilters} filteredMeetings={filteredMeetings}/>
+				<Table state={this.state} filteredMeetings={filteredMeetings}/>
 			</div>
 		);
 	}

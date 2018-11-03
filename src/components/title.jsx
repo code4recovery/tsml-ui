@@ -5,26 +5,26 @@ import settings from '../settings';
 export default class Title extends Component {
 	render() {
 		let title = [settings.strings.meetings];
-		if (this.props.filters) {
-			if (this.props.indexes.types.length && this.props.filters.types.length) {
-				title.unshift(this.props.filters.types.map(x => {
-					return this.props.indexes.types.find(y => y.key == x).name;
+		if (this.props.state.filters) {
+			if (this.props.state.indexes.types.length && this.props.state.filters.types.length) {
+				title.unshift(this.props.state.filters.types.map(x => {
+					return this.props.state.indexes.types.find(y => y.key == x).name;
 				}).join(' + '));
 			}
-			if (this.props.indexes.times.length && this.props.filters.times.length) {
-				title.unshift(this.props.filters.times.map(x => {
-					return this.props.indexes.times.find(y => y.key == x).name;
+			if (this.props.state.indexes.times.length && this.props.state.filters.times.length) {
+				title.unshift(this.props.state.filters.times.map(x => {
+					return this.props.state.indexes.times.find(y => y.key == x).name;
 				}).join(' + '));
 			}
-			if (this.props.indexes.days.length && this.props.filters.days.length) {
-				title.unshift(this.props.filters.days.map(x => {
-					return this.props.indexes.days.find(y => y.key == x).name;
+			if (this.props.state.indexes.days.length && this.props.state.filters.days.length) {
+				title.unshift(this.props.state.filters.days.map(x => {
+					return this.props.state.indexes.days.find(y => y.key == x).name;
 				}).join(' + '));
 			}
-			if (this.props.indexes.regions.length && this.props.filters.regions.length) {
+			if (this.props.state.indexes.regions.length && this.props.state.filters.regions.length) {
 				title.push(settings.strings.in);
-				title.push(this.props.filters.regions.map(x => {
-					return this.props.indexes.regions.find(y => y.key == x).name;
+				title.push(this.props.state.filters.regions.map(x => {
+					return this.props.state.indexes.regions.find(y => y.key == x).name;
 				}).join(' + '));
 			}
 		}
