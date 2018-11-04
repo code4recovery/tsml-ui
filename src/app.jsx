@@ -7,6 +7,7 @@ import merge from 'deepmerge';
 
 import Alert from './components/alert';
 import Controls from './components/controls';
+import Map from './components/map';
 import Table from './components/table';
 import Title from './components/title';
 import settings from './settings';
@@ -19,20 +20,20 @@ class App extends Component {
 		this.state = { 
 			input: {
 				center: null,
-				days: [],
-				districts: [],
+				day: [],
+				district: [],
 				query: null,
 				radius: null,
-				regions: [],
+				region: [],
 				search: '',
-				times: [],
-				types: [],
+				time: [],
+				type: [],
 			},
 			indexes: {
-				days: [],
-				regions: [],
-				times: [],
-				types: [],
+				day: [],
+				region: [],
+				time: [],
+				type: [],
 			},
 			meetings: [],
 			mode: settings.defaults.mode,
@@ -41,19 +42,19 @@ class App extends Component {
 
 		//check query string
 		let querystring = qs.parse(location.search);
-		if (querystring.days) {
-			this.state.input.days = querystring.days.split(settings.query_separator);
+		if (querystring.day) {
+			this.state.input.day = querystring.day.split(settings.query_separator);
 		} else if (settings.defaults.today) {
-			this.state.input.days.push(new Date().getDay().toString());
+			this.state.input.day.push(new Date().getDay().toString());
 		}
-		if (querystring.types) {
-			this.state.input.types = querystring.types.split(settings.query_separator);
+		if (querystring.type) {
+			this.state.input.type = querystring.type.split(settings.query_separator);
 		}		
-		if (querystring.times) {
-			this.state.input.times = querystring.times.split(settings.query_separator);
+		if (querystring.time) {
+			this.state.input.time = querystring.time.split(settings.query_separator);
 		}		
-		if (querystring.regions) {
-			this.state.input.regions = querystring.regions.split(settings.query_separator);
+		if (querystring.region) {
+			this.state.input.region = querystring.region.split(settings.query_separator);
 		}		
 		if (querystring.search) {
 			this.state.input.search = querystring.search;
@@ -82,10 +83,10 @@ class App extends Component {
 
 				//indexes start as objects, will be converted to arrays
 				let indexes = {
-					days: {},
-					regions: {},
-					times: {},
-					types: {},
+					day: {},
+					region: {},
+					time: {},
+					type: {},
 				}
 
 				//build index objects for dropdowns
@@ -95,24 +96,24 @@ class App extends Component {
 					let meeting = result[i];
 
 					//build region index
-					if (meeting.region in indexes.regions === false) {
-						indexes.regions[meeting.region] = {
+					if (meeting.region in indexes.region === false) {
+						indexes.region[meeting.region] = {
 							key: meeting.region_id,
 							name: meeting.region,
 							slugs: [],
 						};
 					}
-					indexes.regions[meeting.region].slugs.push(meeting.slug);
+					indexes.region[meeting.region].slugs.push(meeting.slug);
 
 					//build day index
-					if (meeting.day in indexes.days === false) {
-						indexes.days[meeting.day] = {
+					if (meeting.day in indexes.day === false) {
+						indexes.day[meeting.day] = {
 							key: meeting.day,
 							name: settings.strings[settings.days[meeting.day]],
 							slugs: [],
 						}
 					}
-					indexes.days[meeting.day].slugs.push(meeting.slug);
+					indexes.day[meeting.day].slugs.push(meeting.slug);
 
 					//build time index (can be multiple)
 					let timeParts = meeting.time.split(':');
@@ -131,53 +132,53 @@ class App extends Component {
 						meeting.times.push(3);
 					}
 					for (let j = 0; j < meeting.times.length; j++) {
-						if (meeting.times[j] in indexes.times === false) {
-							indexes.times[meeting.times[j]] = {
+						if (meeting.times[j] in indexes.time === false) {
+							indexes.time[meeting.times[j]] = {
 								key: settings.times[meeting.times[j]],
 								name: settings.strings[settings.times[meeting.times[j]]],
 								slugs: [],
 							}
 						}
-						indexes.times[meeting.times[j]].slugs.push(meeting.slug);
+						indexes.time[meeting.times[j]].slugs.push(meeting.slug);
 					}
 
 					//build type index (can be multiple)
 					for (let j = 0; j < meeting.types.length; j++) {
-						if (meeting.types[j] in indexes.types === false) {
-							indexes.types[meeting.types[j]] = {
+						if (meeting.types[j] in indexes.type === false) {
+							indexes.type[meeting.types[j]] = {
 								key: meeting.types[j],
 								name: settings.strings.types[meeting.types[j]],
 								slugs: [],
 							}
 						}
-						indexes.types[meeting.types[j]].slugs.push(meeting.slug);
+						indexes.type[meeting.types[j]].slugs.push(meeting.slug);
 					}
 
 					//build search string
 					result[i].search = [meeting.name, meeting.location, meeting.location_notes, meeting.notes, meeting.formatted_address].join(' ').toLowerCase();
 				}
 
-				//convert regions to array and sort by name
-				indexes.regions = Object.values(indexes.regions);
-				indexes.regions.sort((a, b) => { 
+				//convert region to array and sort by name
+				indexes.region = Object.values(indexes.region);
+				indexes.region.sort((a, b) => { 
 					return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
 				});
 
-				//convert days to array and sort by ordinal
-				indexes.days = Object.values(indexes.days);
-				indexes.days.sort((a, b) => {
+				//convert day to array and sort by ordinal
+				indexes.day = Object.values(indexes.day);
+				indexes.day.sort((a, b) => {
 					return a.key - b.key;
 				});
 
-				//convert times to array and sort by ordinal
-				indexes.times = Object.values(indexes.times);
-				indexes.times.sort((a, b) => { 
+				//convert time to array and sort by ordinal
+				indexes.time = Object.values(indexes.time);
+				indexes.time.sort((a, b) => { 
 					return settings.times.indexOf(a.key) - settings.times.indexOf(b.key);
 				});
 
-				//convert types to array and sort by name
-				indexes.types = Object.values(indexes.types);
-				indexes.types.sort((a, b) => { 
+				//convert type to array and sort by name
+				indexes.type = Object.values(indexes.type);
+				indexes.type.sort((a, b) => { 
 					return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
 				});
 
@@ -261,11 +262,11 @@ class App extends Component {
 
 		//create a query string with only values in use
 		query = qs.stringify(merge(merge(qs.parse(location.search), { 
-			days: undefined,
+			day: undefined,
 			mode: undefined,
-			regions: undefined,
+			region: undefined,
 			search: undefined,
-			times: undefined,
+			time: undefined,
 			view: undefined,
 		}), query));
 
@@ -286,6 +287,7 @@ class App extends Component {
 				<Controls state={this.state} setAppState={this.setAppState}/>
 				<Alert state={this.state} setFilters={this.setFilters} filteredSlugs={filteredSlugs}/>
 				<Table state={this.state} filteredSlugs={filteredSlugs}/>
+				<Map state={this.state} filteredSlugs={filteredSlugs}/>
 			</div>
 		);
 	}

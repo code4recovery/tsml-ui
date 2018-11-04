@@ -13,7 +13,9 @@ export default class Table extends Component {
 				<a href={meeting.url}>{meeting.name}</a>
 			);
 		} else if (key == 'time') {
-			return meeting.time_formatted;
+			return(
+				<time className="text-nowrap">{meeting.time_formatted}</time>
+			);
 		}
 		return meeting[key];
 	}
