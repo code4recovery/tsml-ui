@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+
 import classNames from 'classnames/bind';
+import * as qs from 'query-string';
+import merge from 'deepmerge';
 
 import Alert from './components/alert';
 import Controls from './components/controls';
@@ -11,10 +14,12 @@ import settings from './settings';
 class App extends Component {
 	constructor() {
 		super();
+
+		//initialize state
 		this.state = { 
 			input: {
 				center: null,
-				days: settings.defaults.today ? [new Date().getDay().toString()] : [],
+				days: [],
 				districts: [],
 				query: null,
 				radius: null,
@@ -35,10 +40,34 @@ class App extends Component {
 		};
 
 		//check query string
+		let querystring = qs.parse(location.search);
+		if (querystring.days) {
+			this.state.input.days = querystring.days.split(settings.query_separator);
+		} else if (settings.defaults.today) {
+			this.state.input.days.push(new Date().getDay().toString());
+		}
+		if (querystring.types) {
+			this.state.input.types = querystring.types.split(settings.query_separator);
+		}		
+		if (querystring.times) {
+			this.state.input.times = querystring.times.split(settings.query_separator);
+		}		
+		if (querystring.regions) {
+			this.state.input.regions = querystring.regions.split(settings.query_separator);
+		}		
+		if (querystring.search) {
+			this.state.input.search = querystring.search;
+		}
+		if (querystring.mode) {
+			this.state.mode = querystring.mode;
+		}
+		if (querystring.view) {
+			this.state.view = querystring.view;
+		}
 
 		//near me mode enabled on https
 		if (window.location.protocol == 'https:') {
-			settings.modes.push('near_me');
+			settings.modes.push('me');
 		}
 
 		this.setFilters = this.setFilters.bind(this);
@@ -196,15 +225,17 @@ class App extends Component {
 	render() {
 
 		//run filteres on meetings
-		let filteredMeetings = [];
+		let filteredSlugs = [];
 		let filterFound = false;
+		let query = {};
 
 		//filter by region, day, time, and type
 		for (let i = 0; i < settings.filters.length; i++) {
 			let filter = settings.filters[i];
 			if (this.state.input[filter].length && this.state.indexes[filter].length) {
 				filterFound = true;
-				filteredMeetings.push([].concat.apply([], this.state.input[filter].map(x => {
+				query[filter] = this.state.input[filter].join(settings.query_separator);
+				filteredSlugs.push([].concat.apply([], this.state.input[filter].map(x => {
 					return this.state.indexes[filter].find(y => y.key == x).slugs;
 				})));
 			}
@@ -213,24 +244,48 @@ class App extends Component {
 		//keyword search
 		if (this.state.input.search.length) {
 			filterFound = true;
+			query['search'] = this.state.input.search;
 			let needle = this.state.input.search.toLowerCase();
 			let matches = this.state.meetings.filter(function(meeting){
 				return meeting.search.search(needle) !== -1;
 			});
-			filteredMeetings.push([].concat.apply([], matches.map(meeting => meeting.slug)));
+			filteredSlugs.push([].concat.apply([], matches.map(meeting => meeting.slug)));
 		}
 
+		//set mode property
+		if (this.state.mode != 'search') query.mode = this.state.mode;
+
+		//set map property if set
+		if (this.state.view == 'map') query.view = 'map';
+		
+
+		//create a query string with only values in use
+		query = qs.stringify(merge(merge(qs.parse(location.search), { 
+			days: undefined,
+			mode: undefined,
+			regions: undefined,
+			search: undefined,
+			times: undefined,
+			view: undefined,
+		}), query));
+
+		//un-url-encode the separator
+		query = query.split(encodeURIComponent(settings.query_separator)).join(settings.query_separator);
+
+		//set the query string with html5
+		window.history.pushState('', '', query.length ? '?' + query : query);
+
 		//do the filtering, if necessary
-		filteredMeetings = filterFound 
-			? this.getCommonElements(filteredMeetings) //get intersection of slug arrays
+		filteredSlugs = filterFound 
+			? this.getCommonElements(filteredSlugs) //get intersection of slug arrays
 			: this.state.meetings.map(meeting => meeting.slug); //get everything
 		
 		return(
 			<div className="container-fluid">
 				<Title state={this.state}/>
 				<Controls state={this.state} setAppState={this.setAppState}/>
-				<Alert state={this.state} setFilters={this.setFilters} filteredMeetings={filteredMeetings}/>
-				<Table state={this.state} filteredMeetings={filteredMeetings}/>
+				<Alert state={this.state} setFilters={this.setFilters} filteredSlugs={filteredSlugs}/>
+				<Table state={this.state} filteredSlugs={filteredSlugs}/>
 			</div>
 		);
 	}
