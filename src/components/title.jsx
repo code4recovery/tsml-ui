@@ -6,25 +6,25 @@ export default class Title extends Component {
 	render() {
 		let title = [settings.strings.meetings];
 		if (this.props.state.input) {
-			if (this.props.state.indexes.types.length && this.props.state.input.types.length) {
-				title.unshift(this.props.state.input.types.map(x => {
-					return this.props.state.indexes.types.find(y => y.key == x).name;
+			if (this.props.state.indexes.type.length && this.props.state.input.type.length) {
+				title.unshift(this.props.state.input.type.map(x => {
+					return this.props.state.indexes.type.find(y => y.key == x).name;
 				}).join(' + '));
 			}
-			if (this.props.state.indexes.times.length && this.props.state.input.times.length) {
-				title.unshift(this.props.state.input.times.map(x => {
-					return this.props.state.indexes.times.find(y => y.key == x).name;
+			if (this.props.state.indexes.time.length && this.props.state.input.time.length) {
+				title.unshift(this.props.state.input.time.map(x => {
+					return this.props.state.indexes.time.find(y => y.key == x).name;
 				}).join(' + '));
 			}
-			if (this.props.state.indexes.days.length && this.props.state.input.days.length) {
-				title.unshift(this.props.state.input.days.map(x => {
-					return this.props.state.indexes.days.find(y => y.key == x).name;
+			if (this.props.state.indexes.day.length && this.props.state.input.day.length) {
+				title.unshift(this.props.state.input.day.map(x => {
+					return this.props.state.indexes.day.find(y => y.key == x).name;
 				}).join(' + '));
 			}
-			if (this.props.state.indexes.regions.length && this.props.state.input.regions.length) {
+			if (this.props.state.indexes.region.length && this.props.state.input.region.length) {
 				title.push(settings.strings.in);
-				title.push(this.props.state.input.regions.map(x => {
-					return this.props.state.indexes.regions.find(y => y.key == x).name;
+				title.push(this.props.state.input.region.map(x => {
+					return this.props.state.indexes.region.find(y => y.key == x).name;
 				}).join(' + '));
 			}
 			if (this.props.state.input.search.length) {

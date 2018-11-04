@@ -10,7 +10,7 @@ const settings = merge({
 	},
 	days: ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'],
 	element_id: 'app', //the id of the HTML container element
-	filters: ['regions', 'days', 'times', 'types'],
+	filters: ['region', 'day', 'time', 'type'],
 	json: '/meetings.json', //path to JSON file (required)
 	keys: {
 		google: null, //enable google maps
@@ -20,7 +20,7 @@ const settings = merge({
 	query_separator: '+',
 	strings: {
 		address: 'Address',
-		days_any: 'Any Day',
+		day_any: 'Any Day',
 		evening: 'Evening',
 		friday: 'Friday',
 		in: 'in', //todo find way to do this with string pattern
@@ -40,13 +40,14 @@ const settings = merge({
 		night: 'Night',
 		no_results: 'No meetings were found matching the selected criteria.',
 		region: 'Region',
-		regions_any: 'Everywhere',
+		region_any: 'Everywhere',
 		saturday: 'Saturday',
 		sunday: 'Sunday',
 		thursday: 'Thursday',
 		time: 'Time',
-		times_any: 'Any Time',
+		time_any: 'Any Time',
 		tuesday: 'Tuesday',
+		type_any: 'Any Type',
 		types: {
 			'11': '11th Step Meditation',
 			'12x12': '12 Steps & 12 Traditions,',
@@ -103,7 +104,6 @@ const settings = merge({
 			W: 'Women',
 			Y: 'Young People',
 		},
-		types_any: 'Any Type',
 		wednesday: 'Wednesday',
 		with: 'with',
 	},

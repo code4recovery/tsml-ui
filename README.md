@@ -12,11 +12,6 @@ Advantanges:
 * simplifies WordPress plugin (separation of concerns)
 * enables the much-requested meetings shortcode
 
-Open questions:
-
-* what will the impact be on SEO?
-* how to handle email transport?
-
 ## Installation
 
 You don't need to download anything. Simply add the following code to your page:
@@ -67,6 +62,43 @@ Here are some examples:
 	}
 	
 A full list of meeting types can be found on the [Meeting Guide format spec page](https://github.com/meeting-guide/spec). These can be overridden by specifying the code and preferred nomenclature as demonstrated above.
+
+## To Do
+
+- [ ] Error message when no data specified, or error loading data
+- [ ] Mapbox support
+- [ ] Near location mode with geocoding
+- [ ] Near me mode
+- [ ] Hide map and proximity features if no coordinates in data
+- [ ] Hide times if no times in data
+- [ ] Hide regions if no regions in data
+- [ ] Hide types if no types in data
+- [ ] Hierarchical regions support
+- [ ] Test to make sure CSS doesn't interfere with overall site layout
+- [ ] Display day in list when Any Day
+- [ ] Day query string: don't automatically specify day, support for `any` value
+- [ ] Inside page
+- [ ] Mobile list view
+
+### Nice to have
+
+- [ ] Google Maps support
+- [ ] Slugs (eg `sun`) in query string instead of day IDs
+- [ ] Slugs (eg `mountain-view`) in query string instead of region IDs
+- [ ] Select multiple dropdown items on mobile
+- [ ] Query string key prefix setting
+- [ ] Internationalization option for title string
+- [ ] Error when no results that allows condition clearing
+- [ ] Reduce memory by forgetting unneeded meeting data, eg URLs
+- [ ] Display group names and Venmo links on inside page
+- [ ] Feedback form on inside page
+
+### Questions
+
+- [ ] What will the impact be on SEO?
+- [ ] How to handle email transport?
+- [ ] Is there a way to combine the CSS and JS into a single request?
+- [ ] Possible to do a custom tag? eg `<meetings data="/path/to/meetings"></meetings>`
 
 ## Contributing
 
