@@ -77,7 +77,7 @@ export default class Controls extends Component {
 
 	setMode(e, mode) {
 		e.preventDefault();
-		if (mode != 'near_me') {
+		if (mode != 'me') {
 			//set settimeout to wait for disabled to clear
 			setTimeout(function() {
 				this.searchInput.current.focus();
@@ -102,9 +102,9 @@ export default class Controls extends Component {
 							onChange={this.search}
 							value={this.props.state.input.search}
 							ref={this.searchInput} 
-							placeholder={settings.strings[this.props.state.mode]} 
-							aria-label={settings.strings[this.props.state.mode]} 
-							disabled={this.props.state.mode == 'near_me'}
+							placeholder={settings.strings.modes[this.props.state.mode]} 
+							aria-label={settings.strings.modes[this.props.state.mode]} 
+							disabled={this.props.state.mode == 'me'}
 							spellCheck="false"
 							/>
 						<div className="input-group-append">
@@ -118,7 +118,7 @@ export default class Controls extends Component {
 								<a key={x} className={classNames('dropdown-item d-flex justify-content-between align-items-center', {
 									'active bg-secondary': (this.props.state.mode == x)
 								})} href="#" onClick={e => this.setMode(e, x)}>
-								{settings.strings[x]}
+								{settings.strings.modes[x]}
 								</a>
 							)}
 							</div>

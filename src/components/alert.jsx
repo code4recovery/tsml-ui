@@ -18,7 +18,7 @@ export default class Alert extends Component {
 	}
 
 	render() {
-		const hide: boolean = this.props.state.meetings.length == 0 || this.props.filteredMeetings.length > 0;
+		const hide: boolean = this.props.state.meetings.length == 0 || this.props.filteredSlugs.length > 0;
 		return(
 			<div className={classNames('alert alert-warning mt-3', { 'd-none': hide })}>
 				{settings.strings.no_results}

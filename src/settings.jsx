@@ -16,7 +16,8 @@ const settings = merge({
 		google: null, //enable google maps
 		mapbox: null, //enable mapbox maps
 	},
-	modes: ['search', 'near_location'],
+	modes: ['search', 'location'],
+	query_separator: '+',
 	strings: {
 		address: 'Address',
 		days_any: 'Any Day',
@@ -31,14 +32,16 @@ const settings = merge({
 		monday: 'Monday',
 		morning: 'Morning',
 		name: 'Name',
-		near_location: 'Near Location',
-		near_me: 'Near Me',
+		modes: {
+			location: 'Near Location',
+			me: 'Near Me',
+			search: 'Search',
+		},
 		night: 'Night',
 		no_results: 'No meetings were found matching the selected criteria.',
 		region: 'Region',
 		regions_any: 'Everywhere',
 		saturday: 'Saturday',
-		search: 'Search',
 		sunday: 'Sunday',
 		thursday: 'Thursday',
 		time: 'Time',
