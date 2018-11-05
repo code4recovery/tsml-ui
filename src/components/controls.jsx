@@ -75,10 +75,15 @@ export default class Controls extends Component {
 		this.props.setAppState('input', this.props.state.input);
 	}
 
+	//set search mode dropdown
 	setMode(e, mode) {
 		e.preventDefault();
-		if (mode != 'me') {
-			//set settimeout to wait for disabled to clear
+		if (mode == 'me') {
+			//clear search value
+			this.props.state.input.search = '';
+			this.props.setAppState('input', this.props.state.input);
+		} else {			
+			//focus after waiting for disabled to clear
 			setTimeout(function() {
 				this.searchInput.current.focus();
 			}.bind(this), 100);
@@ -103,16 +108,11 @@ export default class Controls extends Component {
 							value={this.props.state.input.search}
 							ref={this.searchInput} 
 							placeholder={settings.strings.modes[this.props.state.mode]} 
-							aria-label={settings.strings.modes[this.props.state.mode]} 
 							disabled={this.props.state.mode == 'me'}
 							spellCheck="false"
 							/>
 						<div className="input-group-append">
-							<button 
-								className="btn btn-outline-secondary dropdown-toggle" 
-								onClick={e => this.setDropdown('search')} 
-								aria-haspopup="true" 
-								aria-expanded="false"></button>
+							<button className="btn btn-outline-secondary dropdown-toggle" onClick={e => this.setDropdown('search')}></button>
 							<div className={classNames('dropdown-menu dropdown-menu-right', { show: (this.state.dropdown == 'search') })}>
 							{settings.modes.map(x => 
 								<a key={x} className={classNames('dropdown-item d-flex justify-content-between align-items-center', {
@@ -128,12 +128,12 @@ export default class Controls extends Component {
 				{settings.filters.map(filter =>
 				<div className="col-sm-6 col-lg-2 mt-3" key={filter}>
 					<div className="dropdown">
-						<button className="btn btn-outline-secondary w-100 dropdown-toggle" onClick={e => this.setDropdown(filter)} id="{filter}-dropdown" aria-haspopup="true" aria-expanded="false">
+						<button className="btn btn-outline-secondary w-100 dropdown-toggle" onClick={e => this.setDropdown(filter)}>
 							{this.props.state.input[filter].length && this.props.state.indexes[filter].length ? this.props.state.input[filter].map(x => {
 								return this.props.state.indexes[filter].find(y => y.key == x).name;
 							}).join(' + ') : settings.strings[filter + '_any']}
 						</button>
-						<div className={classNames('dropdown-menu', { show: (this.state.dropdown == filter) })} aria-labelledby="{filter}-dropdown">
+						<div className={classNames('dropdown-menu', { show: (this.state.dropdown == filter) })}>
 							<a className={classNames('dropdown-item', { 'active bg-secondary': !this.props.state.input[filter].length })} onClick={e => this.setFilter(e, filter, null)} href="#">
 								{settings.strings[filter + '_any']}
 							</a>
@@ -151,7 +151,7 @@ export default class Controls extends Component {
 				</div>
 				)}
 				<div className="col-sm-6 col-lg-2 mt-3">
-					<div className="btn-group w-100" role="group" aria-label="Basic example">
+					<div className="btn-group w-100" role="group">
 						<button type="button" className={classNames('btn btn-outline-secondary w-100', { active: this.props.state.view == 'list' })} onClick={e => this.setView(e, 'list')}>{settings.strings.list}</button>
 						<button type="button" className={classNames('btn btn-outline-secondary w-100', { active: this.props.state.view == 'map' })} onClick={e => this.setView(e, 'map')}>{settings.strings.map}</button>
 					</div>

@@ -25,7 +25,7 @@ export default class Table extends Component {
 		const hide: boolean = (this.props.filteredSlugs.length == 0) || (this.props.state.view != 'list');
 
 		return(
-			<table className={classNames('table table-striped mt-3', { 'd-none': hide })}>
+			<table className={classNames('table table-striped my-3', { 'd-none': hide })}>
 				<thead>
 					<tr className="d-none d-sm-table-row">
 						{settings.defaults.columns.map(column => 

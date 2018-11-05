@@ -25,35 +25,26 @@ You don't need to download anything. Simply add the following code to your page:
 
 1. In your `<body>` add:
 			
-		<div id="app"></div>
-		<script>
-			window.config = {
-				json: '/path/to/meetings.json',
-			}
-		</script>
-		<script src="https://react.meetingguide.org/react.js"></script>
+		<meetings src="/path/to/meetings.json"></meetings>
+		<script src="https://react.meetingguide.org/react.js" async></script>
 
-1. Customize `path/to/meetings.json` in the code above to point to your local JSON file.
+1. Edit `/path/to/meetings.json` in the code above to point to your JSON file.
 
 ## Configuration
 
-See [settings.jsx](settings.jsx) for other options that can be included in your `window.config` object. You can customize many of the behaviors and all of the text strings that the app uses. Only include the values you wish to override.
+See [settings.jsx](settings.jsx) for options that can be set by defining a `window.config` object. You can customize many of the behaviors and all of the text strings that the app uses. Only include the values you wish to override.
 
-Here are some examples:
-
-### Change the column heading "Region" to "City"
+### Change the column heading “Region” to “City”
 
 	window.config = {
-		...
 		strings: {
 			region: 'City',
 		}
 	}
 
-### Change "Newcomer" meeting type to "Beginner"
+### Change “Newcomer” meeting type to “Beginner”
 
 	window.config = {
-		...
 		strings: {
 			types: {
 				BE: 'Beginner',
@@ -97,13 +88,12 @@ A full list of meeting types can be found on the [Meeting Guide format spec page
 
 - [ ] What will the impact be on SEO?
 - [ ] How to handle email transport?
-- [ ] Is there a way to combine the CSS and JS into a single request?
-- [ ] Possible to do a custom tag? eg `<meetings data="/path/to/meetings"></meetings>`
+- [x] Possible to do a custom tag? eg `<meetings data="/path/to/meetings"></meetings>`
 
 ## Contributing
 
 Pull requests are welcome. To get started, clone this repository, do an `npm install`, and point your web root at the `public` folder.
 
-This project uses the [React JavaScript library](https://reactjs.org/) and the [Bootstrap component library](http://getbootstrap.com/).
+This project uses [React JS](https://reactjs.org/) and [Bootstrap CSS](http://getbootstrap.com/).
 
-While developing, run the `npm run watch` terminal command to compile assets as you edit them. When you're ready to commit, run `npm run prod` to minify them for production.
+While developing, run the `npm run watch` terminal command to compile assets as you edit them. When you're ready to commit, run `npm run prod` to prepare them for production.

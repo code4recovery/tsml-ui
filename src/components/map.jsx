@@ -9,7 +9,7 @@ export default class Map extends Component {
 		const hide: boolean = (this.props.filteredSlugs.length == 0) || (this.props.state.view != 'map');
 
 		return(
-			<div id="map" className={classNames('border rounded bg-light mt-3', { 'd-none': hide })}></div>
+			<div id="map" className={classNames('border rounded bg-light my-3', { 'd-none': hide })}></div>
 		);
 	}
 }

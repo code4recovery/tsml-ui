@@ -9,9 +9,7 @@ const settings = merge({
 		view: 'list', //start in list or map view
 	},
 	days: ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'],
-	element_id: 'app', //the id of the HTML container element
 	filters: ['region', 'day', 'time', 'type'],
-	json: '/meetings.json', //path to JSON file (required)
 	keys: {
 		google: null, //enable google maps
 		mapbox: null, //enable mapbox maps
