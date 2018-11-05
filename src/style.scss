@@ -36,6 +36,7 @@
 @import "node_modules/bootstrap/scss/print";
 
 //controls
+html, body { height: 100%; } //height needs to be 100% for click handler to register
 .dropdown-menu { min-width: 100%; }
 .dropdown button { overflow: hidden; }
 

@@ -9,14 +9,6 @@ export default class Alert extends Component {
 		super();
 	}
 
-	setFilter(e, filter, value) {
-		e.preventDefault();
-		e.stopPropagation();
-
-		//pass it up to app controller
-		this.props.setFilters(this.props.filters);
-	}
-
 	render() {
 		const hide: boolean = this.props.state.meetings.length == 0 || this.props.filteredSlugs.length > 0;
 		return(

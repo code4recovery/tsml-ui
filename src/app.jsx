@@ -12,12 +12,18 @@ import Table from './components/table';
 import Title from './components/title';
 import settings from './settings';
 
+//locate <meetings> element
+let element = document.getElementsByTagName('meetings');
+if (!element.length) alert('Could not find a <meetings> element in your HTML');
+element = element[0];
+
 class App extends Component {
 	constructor() {
 		super();
 
 		//initialize state
-		this.state = { 
+		this.state = {
+			error: null,
 			input: {
 				center: null,
 				day: [],
@@ -71,13 +77,17 @@ class App extends Component {
 			settings.modes.push('me');
 		}
 
-		this.setFilters = this.setFilters.bind(this);
+		//need to bind this for the function to access
 		this.setAppState = this.setAppState.bind(this);
 	}
 
 	componentDidMount() {
+
+		//if this is empty it'll be reported in fetch()s error handler
+		const json = element.getAttribute('src');
+
 		//fetch json data file and build indexes
-		fetch(settings.json)
+		fetch(json)
 			.then(res => res.json())
 			.then(result => {
 
@@ -189,15 +199,15 @@ class App extends Component {
 					meetings: result,
 				});
 			}, error => {
-				//todo add alert component, show error here
+				if (!json) {
+					alert('no json');
+				} else {
+					alert('bad json');
+				}
 			});
 	}
 
-	//todo remove
-	setFilters(filters) {
-		this.setState({ filters: filters });
-	}
-
+	//function for components to set global state
 	setAppState(key, value) {
 		this.setState({ [key]: value });		
 	}
@@ -285,12 +295,12 @@ class App extends Component {
 			<div className="container-fluid">
 				<Title state={this.state}/>
 				<Controls state={this.state} setAppState={this.setAppState}/>
-				<Alert state={this.state} setFilters={this.setFilters} filteredSlugs={filteredSlugs}/>
+				<Alert state={this.state} filteredSlugs={filteredSlugs}/>
 				<Table state={this.state} filteredSlugs={filteredSlugs}/>
 				<Map state={this.state} filteredSlugs={filteredSlugs}/>
 			</div>
 		);
 	}
 }
- 
-ReactDOM.render(<App/>, document.getElementById(settings.element_id));
+
+ReactDOM.render(<App/>, element);

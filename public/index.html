@@ -7,15 +7,14 @@
 		<title>AA Meetings</title>
 	</head>
 	<body>
-		<div id="app"></div>
+		<meetings src="/data.json"></meetings>
 		<script>
 			window.config = {
-				json: '/data.json',
 				strings: {
 					meetings: 'AA Meetings',
 				},
 			}
 		</script>
-		<script src="/app.js"></script>
+		<script src="/app.js" async></script>
 	</body>
 </html>

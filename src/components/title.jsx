@@ -35,7 +35,7 @@ export default class Title extends Component {
 		title = title.join(' ');
 		document.title = title;
 		return(
-			<h1 className="d-none d-sm-block mt-3 mb-0">{title}</h1>
+			<h1 className="d-none d-sm-block pt-3 m-0">{title}</h1>
 		);
 	}
 }
