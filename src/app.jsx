@@ -292,7 +292,7 @@ class App extends Component {
 			: this.state.meetings.map(meeting => meeting.slug); //get everything
 		
 		return(
-			<div className="container-fluid">
+			<div className="container-fluid py-3 d-flex flex-column">
 				<Title state={this.state}/>
 				<Controls state={this.state} setAppState={this.setAppState}/>
 				<Alert state={this.state} filteredSlugs={filteredSlugs}/>
