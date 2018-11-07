@@ -101,7 +101,7 @@ export default class Controls extends Component {
 		return(
 			<div className="row d-print-none">
 				<div className="col-sm-6 col-lg-2">
-					<div className="input-group mt-3">
+					<div className="input-group mb-3">
 						<input type="search" 
 							className="form-control" 
 							onChange={this.search}
@@ -126,7 +126,7 @@ export default class Controls extends Component {
 					</div>
 				</div>
 				{settings.filters.map(filter =>
-				<div className="col-sm-6 col-lg-2 mt-3" key={filter}>
+				<div className="col-sm-6 col-lg-2 mb-3" key={filter}>
 					<div className="dropdown">
 						<button className="btn btn-outline-secondary w-100 dropdown-toggle" onClick={e => this.setDropdown(filter)}>
 							{this.props.state.input[filter].length && this.props.state.indexes[filter].length ? this.props.state.input[filter].map(x => {
@@ -150,7 +150,7 @@ export default class Controls extends Component {
 					</div>
 				</div>
 				)}
-				<div className="col-sm-6 col-lg-2 mt-3">
+				<div className="col-sm-6 col-lg-2 mb-3">
 					<div className="btn-group w-100" role="group">
 						<button type="button" className={classNames('btn btn-outline-secondary w-100', { active: this.props.state.view == 'list' })} onClick={e => this.setView(e, 'list')}>{settings.strings.list}</button>
 						<button type="button" className={classNames('btn btn-outline-secondary w-100', { active: this.props.state.view == 'map' })} onClick={e => this.setView(e, 'map')}>{settings.strings.map}</button>

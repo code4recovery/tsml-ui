@@ -35,10 +35,15 @@
 @import "node_modules/bootstrap/scss/utilities";
 @import "node_modules/bootstrap/scss/print";
 
-//controls
-html, body { height: 100%; } //height needs to be 100% for click handler to register
-.dropdown-menu { min-width: 100%; }
-.dropdown button { overflow: hidden; }
+//height needs to be 100% for click handler to register
+html, body { height: 100%; }
 
-//map
-#map { height: 550px; } //todo figure out how to make 100% of available space
+.container-fluid {
+	//dropdown control fixes
+	.dropdown-menu { min-width: 100%; }
+	.dropdown button { overflow: hidden; }
+
+	//map should fill at least 500, but up to entire space
+	min-height: 100%;
+	#map { min-height: 500px; }
+}
