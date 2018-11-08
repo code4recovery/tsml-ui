@@ -43,6 +43,10 @@ html, body { height: 100%; }
 	.dropdown-menu { min-width: 100%; }
 	.dropdown button { overflow: hidden; }
 
+	input[type=search]::-webkit-search-cancel-button {
+		-webkit-appearance: searchfield-cancel-button;
+	}
+
 	//map should fill at least 500, but up to entire space
 	min-height: 100%;
 	#map { min-height: 500px; }
