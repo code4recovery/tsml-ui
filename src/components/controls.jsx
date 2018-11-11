@@ -33,7 +33,7 @@ export default class Controls extends Component {
 
 	//keyword search
 	search(e) {
-		if (this.props.state.mode != 'search') return;
+		if (this.props.state.input.mode != 'search') return;
 		this.props.state.input.search = e.target.value;
 		this.props.setAppState('input', this.props.state.input);
 	}
@@ -81,20 +81,21 @@ export default class Controls extends Component {
 		if (mode == 'me') {
 			//clear search value
 			this.props.state.input.search = '';
-			this.props.setAppState('input', this.props.state.input);
 		} else {			
 			//focus after waiting for disabled to clear
 			setTimeout(function() {
 				this.searchInput.current.focus();
 			}.bind(this), 100);
 		}
-		this.props.setAppState('mode', mode);
+		this.props.state.input.mode = mode;
+		this.props.setAppState('input', this.props.state.input);
 	}
 
 	//toggle list/map view
 	setView(e, view) {
 		e.preventDefault();
-		this.props.setAppState('view', view);
+		this.props.state.input.view = view;
+		this.props.setAppState('input', this.props.state.input);
 	}
 
 	render() {
@@ -107,8 +108,8 @@ export default class Controls extends Component {
 							onChange={this.search}
 							value={this.props.state.input.search}
 							ref={this.searchInput} 
-							placeholder={settings.strings.modes[this.props.state.mode]} 
-							disabled={this.props.state.mode == 'me'}
+							placeholder={settings.strings.modes[this.props.state.input.mode]} 
+							disabled={this.props.state.input.mode == 'me'}
 							spellCheck="false"
 							/>
 						<div className="input-group-append">
@@ -116,7 +117,7 @@ export default class Controls extends Component {
 							<div className={classNames('dropdown-menu dropdown-menu-right', { show: (this.state.dropdown == 'search') })}>
 							{settings.modes.map(x => 
 								<a key={x} className={classNames('dropdown-item d-flex justify-content-between align-items-center', {
-									'active bg-secondary': (this.props.state.mode == x)
+									'active bg-secondary': (this.props.state.input.mode == x)
 								})} href="#" onClick={e => this.setMode(e, x)}>
 								{settings.strings.modes[x]}
 								</a>
@@ -152,8 +153,8 @@ export default class Controls extends Component {
 				)}
 				<div className="col-sm-6 col-lg-2 mb-3">
 					<div className="btn-group w-100" role="group">
-						<button type="button" className={classNames('btn btn-outline-secondary w-100', { active: this.props.state.view == 'list' })} onClick={e => this.setView(e, 'list')}>{settings.strings.list}</button>
-						<button type="button" className={classNames('btn btn-outline-secondary w-100', { active: this.props.state.view == 'map' })} onClick={e => this.setView(e, 'map')}>{settings.strings.map}</button>
+						<button type="button" className={classNames('btn btn-outline-secondary w-100', { active: this.props.state.input.view == 'list' })} onClick={e => this.setView(e, 'list')}>{settings.strings.list}</button>
+						<button type="button" className={classNames('btn btn-outline-secondary w-100', { active: this.props.state.input.view == 'map' })} onClick={e => this.setView(e, 'map')}>{settings.strings.map}</button>
 					</div>
 				</div>
 			</div>

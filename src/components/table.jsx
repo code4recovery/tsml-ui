@@ -14,7 +14,12 @@ export default class Table extends Component {
 			);
 		} else if (key == 'time') {
 			return(
-				<time className="text-nowrap">{meeting.time_formatted}</time>
+				<time className="text-nowrap">
+					<span className={classNames('mr-1', {'d-none': this.props.state.input.day.length == 1})}>
+						{settings.strings[settings.days[meeting.day]]}
+					</span>
+					{meeting.time_formatted}
+				</time>
 			);
 		}
 		return meeting[key];
@@ -22,7 +27,7 @@ export default class Table extends Component {
 
 	render() {
 
-		const hide: boolean = (this.props.filteredSlugs.length == 0) || (this.props.state.view != 'list');
+		const hide: boolean = (this.props.filteredSlugs.length == 0) || (this.props.state.input.view != 'list');
 
 		return(
 			<table className={classNames('table table-striped flex-grow-1', { 'd-none': hide })}>

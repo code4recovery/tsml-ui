@@ -14,7 +14,7 @@ import settings from './settings';
 
 //locate <meetings> element
 let element = document.getElementsByTagName('meetings');
-if (!element.length) alert('Could not find a <meetings> element in your HTML');
+if (!element.length) console.error('Could not find a <meetings> element in your HTML');
 element = element[0];
 
 class App extends Component {
@@ -23,17 +23,20 @@ class App extends Component {
 
 		//initialize state
 		this.state = {
+			alert: null,
 			error: null,
 			input: {
 				center: null,
 				day: [],
 				district: [],
+				mode: settings.defaults.mode,
 				query: null,
 				radius: null,
 				region: [],
 				search: '',
 				time: [],
 				type: [],
+				view: settings.defaults.view,
 			},
 			indexes: {
 				day: [],
@@ -41,43 +44,24 @@ class App extends Component {
 				time: [],
 				type: [],
 			},
+			loading: true,
 			meetings: [],
-			mode: settings.defaults.mode,
-			view: settings.defaults.view
 		};
 
-		//check query string
+		//load input from query string
 		let querystring = qs.parse(location.search);
-		if (querystring.day) {
-			this.state.input.day = querystring.day.split(settings.query_separator);
-		} else if (settings.defaults.today) {
-			this.state.input.day.push(new Date().getDay().toString());
+		for (let i = 0; i < settings.filters.length; i++) {
+			if (querystring[settings.filters[i]]) {
+				this.state.input[settings.filters[i]] = querystring[settings.filters[i]].split('/');
+			}
 		}
-		if (querystring.type) {
-			this.state.input.type = querystring.type.split(settings.query_separator);
-		}		
-		if (querystring.time) {
-			this.state.input.time = querystring.time.split(settings.query_separator);
-		}		
-		if (querystring.region) {
-			this.state.input.region = querystring.region.split(settings.query_separator);
-		}		
-		if (querystring.search) {
-			this.state.input.search = querystring.search;
-		}
-		if (querystring.mode) {
-			this.state.mode = querystring.mode;
-		}
-		if (querystring.view) {
-			this.state.view = querystring.view;
+		for (let i = 0; i < settings.params.length; i++) {
+			if (querystring[settings.params[i]]) {
+				this.state.input[settings.params[i]] = querystring[settings.params[i]];
+			}
 		}
 
-		//near me mode enabled on https
-		if (window.location.protocol == 'https:') {
-			settings.modes.push('me');
-		}
-
-		//need to bind this for the function to access
+		//need to bind this for the function to access `this`
 		this.setAppState = this.setAppState.bind(this);
 	}
 
@@ -88,9 +72,10 @@ class App extends Component {
 
 		//fetch json data file and build indexes
 		fetch(json)
-			.then(res => res.json())
 			.then(result => {
-
+				//todo google docs support
+				return result.json();
+			}).then(result => {
 				//indexes start as objects, will be converted to arrays
 				let indexes = {
 					day: {},
@@ -192,18 +177,27 @@ class App extends Component {
 					return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
 				});
 
+				//todo check if data contains geo
+
+				//near me mode enabled on https
+				if (window.location.protocol == 'https:') {
+					settings.modes.push('me');
+				}
+
+
 				//todo filter out unused meetings properties to have a leaner memory footprint
 
 				this.setState({
 					indexes: indexes,
 					meetings: result,
+					loading: false,
 				});
 			}, error => {
-				if (!json) {
-					alert('no json');
-				} else {
-					alert('bad json');
-				}
+				console.error('JSON fetch error: ' + error);
+				this.setState({
+					error: json ? 'bad_data' : 'no_data',
+					loading: false,
+				});
 			});
 	}
 
@@ -245,7 +239,7 @@ class App extends Component {
 			let filter = settings.filters[i];
 			if (this.state.input[filter].length && this.state.indexes[filter].length) {
 				filterFound = true;
-				query[filter] = this.state.input[filter].join(settings.query_separator);
+				query[filter] = this.state.input[filter].join('/');
 				filteredSlugs.push([].concat.apply([], this.state.input[filter].map(x => {
 					return this.state.indexes[filter].find(y => y.key == x).slugs;
 				})));
@@ -264,12 +258,11 @@ class App extends Component {
 		}
 
 		//set mode property
-		if (this.state.mode != 'search') query.mode = this.state.mode;
+		if (this.state.input.mode != settings.defaults.mode) query.mode = this.state.input.mode;
 
 		//set map property if set
-		if (this.state.view == 'map') query.view = 'map';
+		if (this.state.input.view != settings.defaults.view) query.view = this.state.input.view;
 		
-
 		//create a query string with only values in use
 		query = qs.stringify(merge(merge(qs.parse(location.search), { 
 			day: undefined,
@@ -277,19 +270,23 @@ class App extends Component {
 			region: undefined,
 			search: undefined,
 			time: undefined,
+			type: undefined,
 			view: undefined,
 		}), query));
 
 		//un-url-encode the separator
-		query = query.split(encodeURIComponent(settings.query_separator)).join(settings.query_separator);
+		query = query.split(encodeURIComponent('/')).join('/');
 
 		//set the query string with html5
-		window.history.pushState('', '', query.length ? '?' + query : query);
+		window.history.pushState('', '', query.length ? '?' + query : window.location.pathname);
 
 		//do the filtering, if necessary
 		filteredSlugs = filterFound 
 			? this.getCommonElements(filteredSlugs) //get intersection of slug arrays
 			: this.state.meetings.map(meeting => meeting.slug); //get everything
+
+		//show alert
+		this.state.alert = filteredSlugs.length ? null : 'no_results';
 		
 		return(
 			<div className="container-fluid py-3 d-flex flex-column">

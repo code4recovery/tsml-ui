@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import classNames from 'classnames/bind';
 
 import settings from '../settings';
 
@@ -35,7 +36,7 @@ export default class Title extends Component {
 		title = title.join(' ');
 		document.title = title;
 		return(
-			<h1 className="d-none">{title}</h1>
+			<h1 className={classNames({ 'd-none': !settings.defaults.title })}>{title}</h1>
 		);
 	}
 }
