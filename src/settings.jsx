@@ -5,7 +5,8 @@ const settings = merge({
 	defaults: {
 		columns: ['time', 'name', 'location', 'address', 'region'], //can be reordered
 		mode: 'search', //start in keyword search mode
-		today: true, //start with today's meetings, vs any day
+		title: false, //display the title h1
+		today: true, //start with today's meetings, false = any day
 		view: 'list', //start in list or map view
 	},
 	days: ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'],
@@ -15,9 +16,14 @@ const settings = merge({
 		mapbox: null, //enable mapbox maps
 	},
 	modes: ['search', 'location'],
-	query_separator: '+',
+	params: ['search', 'mode', 'view'], //utility array
 	strings: {
 		address: 'Address',
+		alerts: {
+			bad_data: 'An error was encountered loading the data source.',
+			no_data: 'A data source parameter must be specified.',
+			no_results: 'No meetings were found matching the selected criteria.',
+		},
 		day_any: 'Any Day',
 		evening: 'Evening',
 		friday: 'Friday',
@@ -36,7 +42,6 @@ const settings = merge({
 			search: 'Search',
 		},
 		night: 'Night',
-		no_results: 'No meetings were found matching the selected criteria.',
 		region: 'Region',
 		region_any: 'Everywhere',
 		saturday: 'Saturday',

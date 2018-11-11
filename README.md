@@ -32,7 +32,7 @@ You don't need to download anything. Simply add the following code to your page:
 
 ## Configuration
 
-See [settings.jsx](settings.jsx) for options that can be set by defining a `window.config` object. You can customize many of the behaviors and all of the text strings that the app uses. Only include the values you wish to override.
+See [src/settings.jsx](settings.jsx) for options that can be set by defining a `window.config` object. You can customize many of the behaviors and all of the text strings that the app uses. Only include the values you wish to override.
 
 ### Change the column heading “Region” to “City”
 
@@ -56,20 +56,21 @@ A full list of meeting types can be found on the [Meeting Guide format spec page
 
 ## To Do
 
-- [ ] Error message when no data specified, or error loading data
-- [ ] Mapbox support
-- [ ] Near location mode with geocoding
-- [ ] Near me mode
+- [x] Error message when no data specified, or error loading data
+- [x] Display day in list when multiple
+- [ ] Day query string: don't automatically specify day, support for `any` value
 - [ ] Hide map and proximity features if no coordinates in data
 - [ ] Hide times if no times in data
 - [ ] Hide regions if no regions in data
 - [ ] Hide types if no types in data
+- [ ] Mapbox support
+- [ ] Near location mode with geocoding
+- [ ] Near me mode
 - [ ] Hierarchical regions support
 - [ ] Test to make sure CSS doesn't interfere with overall site layout
-- [ ] Display day in list when Any Day
-- [ ] Day query string: don't automatically specify day, support for `any` value
 - [ ] Inside page
 - [ ] Mobile list view
+- [ ] Google Docs support
 
 ### Nice to have
 
@@ -83,12 +84,13 @@ A full list of meeting types can be found on the [Meeting Guide format spec page
 - [ ] Reduce memory by forgetting unneeded meeting data, eg URLs
 - [ ] Display group names and Venmo links on inside page
 - [ ] Feedback form on inside page
+- [ ] Remove any settings from settings.jsx that should not be overridden
 
 ### Questions
 
-- [ ] What will the impact be on SEO?
-- [ ] How to handle email transport?
 - [x] Possible to do a custom tag? eg `<meetings data="/path/to/meetings"></meetings>`
+- [x] How to handle email transport?
+- [ ] What will the impact be on SEO?
 
 ## Contributing
 
