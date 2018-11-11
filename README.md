@@ -59,21 +59,19 @@ A full list of meeting types can be found on the [Meeting Guide format spec page
 - [x] Error message when no data specified, or error loading data
 - [x] Display day in list when multiple
 - [ ] Day query string: don't automatically specify day, support for `any` value
-- [ ] Hide map and proximity features if no coordinates in data
-- [ ] Hide times if no times in data
-- [ ] Hide regions if no regions in data
-- [ ] Hide types if no types in data
+- [x] Hide map and proximity features if no coordinates in data
+- [x] Hide filters if not present in data
 - [ ] Mapbox support
 - [ ] Near location mode with geocoding
 - [ ] Near me mode
-- [ ] Hierarchical regions support
-- [ ] Test to make sure CSS doesn't interfere with overall site layout
+- [x] Isolate CSS so it doesn't interfere with overall site layout
 - [ ] Inside page
-- [ ] Mobile list view
+- [x] Mobile list view
 - [ ] Google Docs support
 
 ### Nice to have
 
+- [ ] Hierarchical regions support
 - [ ] Google Maps support
 - [ ] Slugs (eg `sun`) in query string instead of day IDs
 - [ ] Slugs (eg `mountain-view`) in query string instead of region IDs

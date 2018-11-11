@@ -15,7 +15,7 @@ const settings = merge({
 		google: null, //enable google maps
 		mapbox: null, //enable mapbox maps
 	},
-	modes: ['search', 'location'],
+	modes: ['search'], //location and me will be appended if capable
 	params: ['search', 'mode', 'view'], //utility array
 	strings: {
 		address: 'Address',

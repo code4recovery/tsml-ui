@@ -24,6 +24,15 @@ class App extends Component {
 		//initialize state
 		this.state = {
 			alert: null,
+			capabilities: {
+				coordinates: false,
+				day: false,
+				geolocation: false,
+				map: false,
+				region: false,
+				time: false,
+				type: false,
+			},
 			error: null,
 			input: {
 				center: null,
@@ -84,6 +93,9 @@ class App extends Component {
 					type: {},
 				}
 
+				//get a copy of the array
+				let capabilities = this.state.capabilities;
+
 				//build index objects for dropdowns
 				for (let i = 0; i < result.length; i++) {
 
@@ -91,62 +103,79 @@ class App extends Component {
 					let meeting = result[i];
 
 					//build region index
-					if (meeting.region in indexes.region === false) {
-						indexes.region[meeting.region] = {
-							key: meeting.region_id,
-							name: meeting.region,
-							slugs: [],
-						};
+					if (meeting.region) {
+						capabilities.region = true;
+						if (meeting.region in indexes.region === false) {
+							indexes.region[meeting.region] = {
+								key: meeting.region_id,
+								name: meeting.region,
+								slugs: [],
+							};
+						}
+						indexes.region[meeting.region].slugs.push(meeting.slug);
 					}
-					indexes.region[meeting.region].slugs.push(meeting.slug);
 
 					//build day index
-					if (meeting.day in indexes.day === false) {
-						indexes.day[meeting.day] = {
-							key: meeting.day,
-							name: settings.strings[settings.days[meeting.day]],
-							slugs: [],
-						}
-					}
-					indexes.day[meeting.day].slugs.push(meeting.slug);
-
-					//build time index (can be multiple)
-					let timeParts = meeting.time.split(':');
-					meeting.minutes = (parseInt(timeParts[0]) * 60) + parseInt(timeParts[1]);
-					meeting.times = [];
-					if (meeting.minutes >= 240 && meeting.minutes < 720) { //4am–12pm
-						meeting.times.push(0);
-					}
-					if (meeting.minutes >= 660 && meeting.minutes < 1020) { //11am–5pm
-						meeting.times.push(1);
-					}
-					if (meeting.minutes >= 960 && meeting.minutes < 1260) { //4–9pm
-						meeting.times.push(2);
-					}
-					if (meeting.minutes >= 1200 || meeting.minutes < 300) { //8pm–5am
-						meeting.times.push(3);
-					}
-					for (let j = 0; j < meeting.times.length; j++) {
-						if (meeting.times[j] in indexes.time === false) {
-							indexes.time[meeting.times[j]] = {
-								key: settings.times[meeting.times[j]],
-								name: settings.strings[settings.times[meeting.times[j]]],
+					if (meeting.day) {
+						capabilities.day = true;
+						if (meeting.day in indexes.day === false) {
+							indexes.day[meeting.day] = {
+								key: meeting.day,
+								name: settings.strings[settings.days[meeting.day]],
 								slugs: [],
 							}
 						}
-						indexes.time[meeting.times[j]].slugs.push(meeting.slug);
+						indexes.day[meeting.day].slugs.push(meeting.slug);
+					}
+
+					//build time index (can be multiple)
+					if (meeting.time) {
+						capabilities.time = true;
+						let timeParts = meeting.time.split(':');
+						meeting.minutes = (parseInt(timeParts[0]) * 60) + parseInt(timeParts[1]);
+						meeting.times = [];
+						if (meeting.minutes >= 240 && meeting.minutes < 720) { //4am–12pm
+							meeting.times.push(0);
+						}
+						if (meeting.minutes >= 660 && meeting.minutes < 1020) { //11am–5pm
+							meeting.times.push(1);
+						}
+						if (meeting.minutes >= 960 && meeting.minutes < 1260) { //4–9pm
+							meeting.times.push(2);
+						}
+						if (meeting.minutes >= 1200 || meeting.minutes < 300) { //8pm–5am
+							meeting.times.push(3);
+						}
+						for (let j = 0; j < meeting.times.length; j++) {
+							if (meeting.times[j] in indexes.time === false) {
+								indexes.time[meeting.times[j]] = {
+									key: settings.times[meeting.times[j]],
+									name: settings.strings[settings.times[meeting.times[j]]],
+									slugs: [],
+								}
+							}
+							indexes.time[meeting.times[j]].slugs.push(meeting.slug);
+						}
 					}
 
 					//build type index (can be multiple)
-					for (let j = 0; j < meeting.types.length; j++) {
-						if (meeting.types[j] in indexes.type === false) {
-							indexes.type[meeting.types[j]] = {
-								key: meeting.types[j],
-								name: settings.strings.types[meeting.types[j]],
-								slugs: [],
+					if (meeting.types) {
+						capabilities.type = true;
+						for (let j = 0; j < meeting.types.length; j++) {
+							if (meeting.types[j] in indexes.type === false) {
+								indexes.type[meeting.types[j]] = {
+									key: meeting.types[j],
+									name: settings.strings.types[meeting.types[j]],
+									slugs: [],
+								}
 							}
+							indexes.type[meeting.types[j]].slugs.push(meeting.slug);
 						}
-						indexes.type[meeting.types[j]].slugs.push(meeting.slug);
+					}
+
+					//build index of map pins
+					if (meeting.latitude && meeting.latitude) {
+						capabilities.coordinates = true;
 					}
 
 					//build search string
@@ -177,17 +206,22 @@ class App extends Component {
 					return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
 				});
 
-				//todo check if data contains geo
-
 				//near me mode enabled on https
-				if (window.location.protocol == 'https:') {
-					settings.modes.push('me');
+				if (capabilities.coordinates) {
+					settings.modes.push('location');
+					if (window.location.protocol == 'https:') {
+						capabilities.geolocation = true;
+						settings.modes.push('me');
+					}
+					if (settings.keys.mapbox) {
+						capabilities.map = true;
+					}
 				}
-
 
 				//todo filter out unused meetings properties to have a leaner memory footprint
 
 				this.setState({
+					capabilities: capabilities,
 					indexes: indexes,
 					meetings: result,
 					loading: false,

@@ -1,53 +1,97 @@
-//import only what we need from bootstrap
-@import "node_modules/bootstrap/scss/functions";
-@import "node_modules/bootstrap/scss/variables";
-@import "node_modules/bootstrap/scss/mixins";
-//@import "node_modules/bootstrap/scss/root";
-@import "node_modules/bootstrap/scss/reboot";
-@import "node_modules/bootstrap/scss/type";
-//@import "node_modules/bootstrap/scss/images";
-//@import "node_modules/bootstrap/scss/code";
-@import "node_modules/bootstrap/scss/grid";
-@import "node_modules/bootstrap/scss/tables";
-@import "node_modules/bootstrap/scss/forms";
-@import "node_modules/bootstrap/scss/buttons";
-//@import "node_modules/bootstrap/scss/transitions";
-@import "node_modules/bootstrap/scss/dropdown";
-@import "node_modules/bootstrap/scss/button-group";
-@import "node_modules/bootstrap/scss/input-group";
-//@import "node_modules/bootstrap/scss/custom-forms";
-//@import "node_modules/bootstrap/scss/nav";
-//@import "node_modules/bootstrap/scss/navbar";
-//@import "node_modules/bootstrap/scss/card";
-//@import "node_modules/bootstrap/scss/breadcrumb";
-//@import "node_modules/bootstrap/scss/pagination";
-@import "node_modules/bootstrap/scss/badge";
-//@import "node_modules/bootstrap/scss/jumbotron";
-@import "node_modules/bootstrap/scss/alert";
-//@import "node_modules/bootstrap/scss/progress";
-//@import "node_modules/bootstrap/scss/media";
-//@import "node_modules/bootstrap/scss/list-group";
-//@import "node_modules/bootstrap/scss/close";
-//@import "node_modules/bootstrap/scss/modal";
-//@import "node_modules/bootstrap/scss/tooltip";
-//@import "node_modules/bootstrap/scss/popover";
-//@import "node_modules/bootstrap/scss/carousel";
-@import "node_modules/bootstrap/scss/utilities";
-@import "node_modules/bootstrap/scss/print";
+//only two global styles this applies
+html, body { 
+	height: 100%; //height needs to be 100% for dropdown blur handler to register
+	margin: 0; //this is a little opinionated...
+}
 
-//height needs to be 100% for click handler to register
-html, body { height: 100%; }
+//"namespaced" css -- should not interfere with presentation outside the <meetings> element
+meetings {
 
-.container-fluid {
-	//dropdown control fixes
-	.dropdown-menu { min-width: 100%; }
-	.dropdown button { overflow: hidden; }
+	//import only what we need from bootstrap
+	@import "node_modules/bootstrap/scss/functions";
+	@import "node_modules/bootstrap/scss/variables";
+	@import "node_modules/bootstrap/scss/mixins";
+	//@import "node_modules/bootstrap/scss/root";
+	@import "node_modules/bootstrap/scss/reboot";
+	@import "node_modules/bootstrap/scss/type";
+	//@import "node_modules/bootstrap/scss/images";
+	//@import "node_modules/bootstrap/scss/code";
+	@import "node_modules/bootstrap/scss/grid";
+	@import "node_modules/bootstrap/scss/tables";
+	@import "node_modules/bootstrap/scss/forms";
+	@import "node_modules/bootstrap/scss/buttons";
+	//@import "node_modules/bootstrap/scss/transitions";
+	@import "node_modules/bootstrap/scss/dropdown";
+	@import "node_modules/bootstrap/scss/button-group";
+	@import "node_modules/bootstrap/scss/input-group";
+	//@import "node_modules/bootstrap/scss/custom-forms";
+	//@import "node_modules/bootstrap/scss/nav";
+	//@import "node_modules/bootstrap/scss/navbar";
+	//@import "node_modules/bootstrap/scss/card";
+	//@import "node_modules/bootstrap/scss/breadcrumb";
+	//@import "node_modules/bootstrap/scss/pagination";
+	@import "node_modules/bootstrap/scss/badge";
+	//@import "node_modules/bootstrap/scss/jumbotron";
+	@import "node_modules/bootstrap/scss/alert";
+	//@import "node_modules/bootstrap/scss/progress";
+	//@import "node_modules/bootstrap/scss/media";
+	//@import "node_modules/bootstrap/scss/list-group";
+	//@import "node_modules/bootstrap/scss/close";
+	//@import "node_modules/bootstrap/scss/modal";
+	//@import "node_modules/bootstrap/scss/tooltip";
+	//@import "node_modules/bootstrap/scss/popover";
+	//@import "node_modules/bootstrap/scss/carousel";
+	@import "node_modules/bootstrap/scss/utilities";
+	@import "node_modules/bootstrap/scss/print";
 
-	input[type=search]::-webkit-search-cancel-button {
-		-webkit-appearance: searchfield-cancel-button;
+	//bootstrap reboot styles for html
+	font-family: sans-serif; // 2
+	line-height: 1.15; // 3
+	-webkit-text-size-adjust: 100%; // 4
+	-ms-text-size-adjust: 100%; // 4
+	-ms-overflow-style: scrollbar; // 5
+	-webkit-tap-highlight-color: rgba($black, 0); // 6
+
+	//bootstrap reboot styles for body
+	margin: 0; // 1
+	font-family: $font-family-base;
+	font-size: $font-size-base;
+	font-weight: $font-weight-base;
+	line-height: $line-height-base;
+	color: $body-color;
+	text-align: left; // 3
+	background-color: $body-bg; // 2
+
+	.container-fluid {
+		//dropdown control fixes
+		.dropdown-menu { min-width: 100%; }
+		.dropdown button { overflow: hidden; }
+
+		input[type=search]::-webkit-search-cancel-button {
+			-webkit-appearance: searchfield-cancel-button;
+		}
+
+		//map should fill at least 500, but up to entire space
+		min-height: 100%;
+		#map { min-height: 500px; }
+
+		table {
+			@include media-breakpoint-down(sm) {
+				tr {
+					border-top: 1px solid $table-border-color;
+					padding: $table-cell-padding-sm;
+					position: relative;
+					td {
+						border: 0;
+						padding: 0 0 0 6rem;
+						&.time { 
+							position: absolute; 
+							left: $table-cell-padding-sm * 2;
+							padding-left: 0;
+						}
+					}
+				}
+			}
+		}
 	}
-
-	//map should fill at least 500, but up to entire space
-	min-height: 100%;
-	#map { min-height: 500px; }
 }
