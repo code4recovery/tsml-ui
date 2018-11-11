@@ -15,7 +15,7 @@ export default class Table extends Component {
 		} else if (key == 'time') {
 			return(
 				<time className="text-nowrap">
-					<span className={classNames('mr-1', {'d-none': this.props.state.input.day.length == 1})}>
+					<span className={classNames('mr-1 d-block d-sm-inline', {'d-none': this.props.state.input.day.length == 1})}>
 						{settings.strings[settings.days[meeting.day]]}
 					</span>
 					{meeting.time_formatted}
@@ -42,7 +42,7 @@ export default class Table extends Component {
 					{this.props.state.meetings.map(meeting => {
 						if (this.props.filteredSlugs.indexOf(meeting.slug) == -1) return;
 						return(
-							<tr key={meeting.slug}>
+							<tr className="d-block d-sm-table-row" key={meeting.slug}>
 								{settings.defaults.columns.map(column => 
 									<td key={[meeting.slug, column].join('-')} className={classNames('d-block d-sm-table-cell', column)}>
 										{this.getValue(meeting, column)}
