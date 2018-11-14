@@ -36,7 +36,9 @@ export default class Title extends Component {
 		title = title.join(' ');
 		document.title = title;
 		return(
-			<h1 className={classNames({ 'd-none': !settings.defaults.title })}>{title}</h1>
+			<h1 className={classNames('font-weight-light', { 
+				'd-none': !settings.defaults.title || this.props.state.input.meeting || this.props.state.loading
+			})}>{title}</h1>
 		);
 	}
 }

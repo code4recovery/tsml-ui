@@ -24,6 +24,7 @@ const settings = merge({
 			no_data: 'A data source parameter must be specified.',
 			no_results: 'No meetings were found matching the selected criteria.',
 		},
+		back_to_meetings: 'Back to Meetings',
 		day_any: 'Any Day',
 		evening: 'Evening',
 		friday: 'Friday',

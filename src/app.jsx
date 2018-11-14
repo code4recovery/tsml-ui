@@ -8,6 +8,7 @@ import merge from 'deepmerge';
 import Alert from './components/alert';
 import Controls from './components/controls';
 import Map from './components/map';
+import Meeting from './components/meeting';
 import Table from './components/table';
 import Title from './components/title';
 import settings from './settings';
@@ -38,6 +39,7 @@ class App extends Component {
 				center: null,
 				day: [],
 				district: [],
+				meeting: null,
 				mode: settings.defaults.mode,
 				query: null,
 				radius: null,
@@ -68,6 +70,9 @@ class App extends Component {
 			if (querystring[settings.params[i]]) {
 				this.state.input[settings.params[i]] = querystring[settings.params[i]];
 			}
+		}
+		if (querystring.meeting) {
+			this.state.input.meeting = querystring.meeting;
 		}
 
 		//need to bind this for the function to access `this`
@@ -173,6 +178,10 @@ class App extends Component {
 						}
 					}
 
+					if (meeting.slug) {
+						meeting.url = null;
+					}
+
 					//build index of map pins
 					if (meeting.latitude && meeting.latitude) {
 						capabilities.coordinates = true;
@@ -263,72 +272,81 @@ class App extends Component {
 
 	render() {
 
-		//run filteres on meetings
 		let filteredSlugs = [];
-		let filterFound = false;
-		let query = {};
 
-		//filter by region, day, time, and type
-		for (let i = 0; i < settings.filters.length; i++) {
-			let filter = settings.filters[i];
-			if (this.state.input[filter].length && this.state.indexes[filter].length) {
-				filterFound = true;
-				query[filter] = this.state.input[filter].join('/');
-				filteredSlugs.push([].concat.apply([], this.state.input[filter].map(x => {
-					return this.state.indexes[filter].find(y => y.key == x).slugs;
-				})));
+		if (!this.state.loading) {
+
+			//run filters on meetings
+			let filterFound = false;
+			let query = {};
+
+			//filter by region, day, time, and type
+			for (let i = 0; i < settings.filters.length; i++) {
+				let filter = settings.filters[i];
+				if (this.state.input[filter].length && this.state.indexes[filter].length) {
+					filterFound = true;
+					query[filter] = this.state.input[filter].join('/');
+					filteredSlugs.push([].concat.apply([], this.state.input[filter].map(x => {
+						return this.state.indexes[filter].find(y => y.key == x).slugs;
+					})));
+				}
 			}
+
+			//keyword search
+			if (this.state.input.search.length) {
+				filterFound = true;
+				query['search'] = this.state.input.search;
+				let needle = this.state.input.search.toLowerCase();
+				let matches = this.state.meetings.filter(function(meeting){
+					return meeting.search.search(needle) !== -1;
+				});
+				filteredSlugs.push([].concat.apply([], matches.map(meeting => meeting.slug)));
+			}
+
+			//set mode property
+			if (this.state.input.mode != settings.defaults.mode) query.mode = this.state.input.mode;
+
+			//set map property if set
+			if (this.state.input.view != settings.defaults.view) query.view = this.state.input.view;
+			
+			//set inside page property if set
+			if (this.state.input.meeting) query.meeting = this.state.input.meeting;
+			
+			//create a query string with only values in use
+			query = qs.stringify(merge(merge(qs.parse(location.search), { 
+				day: undefined,
+				mode: undefined,
+				region: undefined,
+				search: undefined,
+				meeting: undefined,
+				time: undefined,
+				type: undefined,
+				view: undefined,
+			}), query));
+
+			//un-url-encode the separator
+			query = query.split(encodeURIComponent('/')).join('/');
+
+			//set the query string with html5
+			window.history.pushState('', '', query.length ? '?' + query : window.location.pathname);
+
+			//do the filtering, if necessary
+			filteredSlugs = filterFound 
+				? this.getCommonElements(filteredSlugs) //get intersection of slug arrays
+				: this.state.meetings.map(meeting => meeting.slug); //get everything
+
+			//show alert
+			this.state.alert = filteredSlugs.length ? null : 'no_results';
 		}
 
-		//keyword search
-		if (this.state.input.search.length) {
-			filterFound = true;
-			query['search'] = this.state.input.search;
-			let needle = this.state.input.search.toLowerCase();
-			let matches = this.state.meetings.filter(function(meeting){
-				return meeting.search.search(needle) !== -1;
-			});
-			filteredSlugs.push([].concat.apply([], matches.map(meeting => meeting.slug)));
-		}
-
-		//set mode property
-		if (this.state.input.mode != settings.defaults.mode) query.mode = this.state.input.mode;
-
-		//set map property if set
-		if (this.state.input.view != settings.defaults.view) query.view = this.state.input.view;
-		
-		//create a query string with only values in use
-		query = qs.stringify(merge(merge(qs.parse(location.search), { 
-			day: undefined,
-			mode: undefined,
-			region: undefined,
-			search: undefined,
-			time: undefined,
-			type: undefined,
-			view: undefined,
-		}), query));
-
-		//un-url-encode the separator
-		query = query.split(encodeURIComponent('/')).join('/');
-
-		//set the query string with html5
-		window.history.pushState('', '', query.length ? '?' + query : window.location.pathname);
-
-		//do the filtering, if necessary
-		filteredSlugs = filterFound 
-			? this.getCommonElements(filteredSlugs) //get intersection of slug arrays
-			: this.state.meetings.map(meeting => meeting.slug); //get everything
-
-		//show alert
-		this.state.alert = filteredSlugs.length ? null : 'no_results';
-		
 		return(
 			<div className="container-fluid py-3 d-flex flex-column">
 				<Title state={this.state}/>
 				<Controls state={this.state} setAppState={this.setAppState}/>
 				<Alert state={this.state} filteredSlugs={filteredSlugs}/>
-				<Table state={this.state} filteredSlugs={filteredSlugs}/>
+				<Table state={this.state} setAppState={this.setAppState} filteredSlugs={filteredSlugs}/>
 				<Map state={this.state} filteredSlugs={filteredSlugs}/>
+				<Meeting state={this.state} setAppState={this.setAppState}/>
 			</div>
 		);
 	}
