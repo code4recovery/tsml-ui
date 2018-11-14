@@ -100,7 +100,9 @@ export default class Controls extends Component {
 
 	render() {
 		return(
-			<div className={classNames('row d-print-none', {'d-none': this.props.state.loading})}>
+			<div className={classNames('row d-print-none', {
+				'd-none': this.props.state.loading || this.props.state.input.meeting
+			})}>
 				<div className="col-sm-6 col-lg">
 					<div className="input-group mb-3">
 						<input type="search" 
@@ -134,7 +136,7 @@ export default class Controls extends Component {
 								return this.props.state.indexes[filter].find(y => y.key == x).name;
 							}).join(' + ') : settings.strings[filter + '_any']}
 						</button>
-						<div className={classNames('dropdown-menu', { show: (this.state.dropdown == filter) })}>
+						<div className={classNames('dropdown-menu', { show: (this.state.dropdown == filter), 'dropdown-menu-right': (filter == 'type') && !this.props.state.capabilities.map })}>
 							<a className={classNames('dropdown-item', { 'active bg-secondary': !this.props.state.input[filter].length })} onClick={e => this.setFilter(e, filter, null)} href="#">
 								{settings.strings[filter + '_any']}
 							</a>
