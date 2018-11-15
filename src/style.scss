@@ -63,6 +63,8 @@ meetings {
 	background-color: $body-bg; // 2
 
 	.container-fluid {
+		min-height: 100%;
+
 		//dropdown control fixes
 		.dropdown-menu { min-width: 100%; }
 		.dropdown button { overflow: hidden; }
@@ -71,9 +73,8 @@ meetings {
 			-webkit-appearance: searchfield-cancel-button;
 		}
 
-		//map should fill at least 500, but up to entire space
-		min-height: 100%;
-		#map { min-height: 500px; }
+		//maps should fill at least 500, but up to entire space
+		.map { min-height: 500px; }
 
 		.table-wrapper {
 			margin: 0 -1rem -1rem -1rem;

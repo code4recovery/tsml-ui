@@ -61,11 +61,11 @@ A full list of meeting types can be found on the [Meeting Guide format spec page
 - [ ] Day query string: don't automatically specify day, support for `any` value
 - [x] Hide map and proximity features if no coordinates in data
 - [x] Hide filters if not present in data
+- [x] Inside page
 - [ ] Mapbox support
 - [ ] Near location mode with geocoding
 - [ ] Near me mode
 - [x] Isolate CSS so it doesn't interfere with overall site layout
-- [ ] Inside page
 - [x] Mobile list view
 - [ ] Google Docs support
 

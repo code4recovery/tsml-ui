@@ -6,7 +6,7 @@ import settings from '../settings';
 export default class Map extends Component {
 	render() {
 		return(
-			<div id="map" className={classNames('border rounded bg-light flex-grow-1', { 
+			<div id="map" className={classNames('border rounded bg-light flex-grow-1 map', { 
 				'd-none': (this.props.filteredSlugs.length == 0) || (this.props.state.input.view != 'map') || this.props.state.input.meeting
 			})}></div>
 		);
