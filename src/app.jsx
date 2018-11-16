@@ -11,7 +11,7 @@ import Map from './components/map';
 import Meeting from './components/meeting';
 import Table from './components/table';
 import Title from './components/title';
-import settings from './settings';
+import { settings, strings } from './settings';
 
 //locate <meetings> element
 let element = document.getElementsByTagName('meetings');
@@ -126,7 +126,7 @@ class App extends Component {
 						if (meeting.day in indexes.day === false) {
 							indexes.day[meeting.day] = {
 								key: meeting.day,
-								name: settings.strings[settings.days[meeting.day]],
+								name: strings[settings.days[meeting.day]],
 								slugs: [],
 							}
 						}
@@ -155,7 +155,7 @@ class App extends Component {
 							if (meeting.times[j] in indexes.time === false) {
 								indexes.time[meeting.times[j]] = {
 									key: settings.times[meeting.times[j]],
-									name: settings.strings[settings.times[meeting.times[j]]],
+									name: strings[settings.times[meeting.times[j]]],
 									slugs: [],
 								}
 							}
@@ -170,7 +170,7 @@ class App extends Component {
 							if (meeting.types[j] in indexes.type === false) {
 								indexes.type[meeting.types[j]] = {
 									key: meeting.types[j],
-									name: settings.strings.types[meeting.types[j]],
+									name: strings.types[meeting.types[j]],
 									slugs: [],
 								}
 							}

@@ -38,19 +38,23 @@ See [src/settings.jsx](settings.jsx) for options that can be set by defining a `
 
 	window.config = {
 		strings: {
-			region: 'City',
-		}
-	}
+			en: {
+				region: 'City',
+			},
+		},
+	};
 
 ### Change “Newcomer” meeting type to “Beginner”
 
 	window.config = {
 		strings: {
-			types: {
-				BE: 'Beginner',
+			en: {
+				types: {
+					BE: 'Beginner',
+				},				
 			},
-		}
-	}
+		},
+	};
 	
 A full list of meeting types can be found on the [Meeting Guide format spec page](https://github.com/meeting-guide/spec). These can be overridden by specifying the code and preferred nomenclature as demonstrated above.
 
@@ -58,27 +62,29 @@ A full list of meeting types can be found on the [Meeting Guide format spec page
 
 - [x] Error message when no data specified, or error loading data
 - [x] Display day in list when multiple
-- [ ] Day query string: don't automatically specify day, support for `any` value
 - [x] Hide map and proximity features if no coordinates in data
 - [x] Hide filters if not present in data
 - [x] Inside page
+- [x] Isolate CSS so it doesn't interfere with overall site layout
+- [x] Mobile list view
+- [x] Multilingual support
 - [ ] Mapbox support
 - [ ] Near location mode with geocoding
 - [ ] Near me mode
-- [x] Isolate CSS so it doesn't interfere with overall site layout
-- [x] Mobile list view
 - [ ] Google Docs support
+- [ ] Day query string: don't automatically specify day, support for `any` value
 
 ### Nice to have
 
+- [ ] Better internationalization for title
+- [ ] Sortable columns
 - [ ] Hierarchical regions support
 - [ ] Google Maps support
 - [ ] Slugs (eg `sun`) in query string instead of day IDs
 - [ ] Slugs (eg `mountain-view`) in query string instead of region IDs
 - [ ] Select multiple dropdown items on mobile
 - [ ] Query string key prefix setting
-- [ ] Internationalization option for title string
-- [ ] Error when no results that allows condition clearing
+- [ ] Condition clearing in no results alert
 - [ ] Reduce memory by forgetting unneeded meeting data, eg URLs
 - [ ] Display group names and Venmo links on inside page
 - [ ] Feedback form on inside page

@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import classNames from 'classnames/bind';
 
-import settings from '../settings';
+import { settings, strings } from '../settings';
 
 export default class Title extends Component {
 	render() {
-		let title = [settings.strings.meetings];
+		let title = [strings.meetings];
 		if (this.props.state.input) {
 			if (this.props.state.indexes.type.length && this.props.state.input.type.length) {
 				title.unshift(this.props.state.input.type.map(x => {
@@ -23,13 +23,13 @@ export default class Title extends Component {
 				}).join(' + '));
 			}
 			if (this.props.state.indexes.region.length && this.props.state.input.region.length) {
-				title.push(settings.strings.in);
+				title.push(strings.in);
 				title.push(this.props.state.input.region.map(x => {
 					return this.props.state.indexes.region.find(y => y.key == x).name;
 				}).join(' + '));
 			}
 			if (this.props.state.input.search.length) {
-				title.push(settings.strings.with);
+				title.push(strings.with);
 				title.push('‘' + this.props.state.input.search + '’');
 			}
 		}
