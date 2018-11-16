@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import classNames from 'classnames/bind';
 
-import settings from '../settings';
+import { settings, strings } from '../settings';
 
 export default class Table extends Component {
 	getValue(meeting, key) {
@@ -19,7 +19,7 @@ export default class Table extends Component {
 						'd-none': this.props.state.input.day.length == 1,
 						'd-sm-inline': this.props.state.input.day.length != 1,
 					})}>
-						{settings.strings[settings.days[meeting.day]]}
+						{strings[settings.days[meeting.day]]}
 					</div>
 					{meeting.time_formatted}
 				</time>
@@ -44,7 +44,7 @@ export default class Table extends Component {
 					<thead>
 						<tr className="d-none d-sm-table-row">
 							{settings.defaults.columns.map(column => 
-								<th key={column} className={column}>{settings.strings[column]}</th>
+								<th key={column} className={column}>{strings[column]}</th>
 							)}
 						</tr>
 					</thead>

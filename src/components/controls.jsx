@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import classNames from 'classnames/bind';
 
-import settings from '../settings';
+import { settings, strings } from '../settings';
 
 export default class Controls extends Component {
 
@@ -110,7 +110,7 @@ export default class Controls extends Component {
 							onChange={this.search}
 							value={this.props.state.input.search}
 							ref={this.searchInput} 
-							placeholder={settings.strings.modes[this.props.state.input.mode]} 
+							placeholder={strings.modes[this.props.state.input.mode]} 
 							disabled={this.props.state.input.mode == 'me'}
 							spellCheck="false"
 							/>
@@ -121,7 +121,7 @@ export default class Controls extends Component {
 								<a key={x} className={classNames('dropdown-item d-flex justify-content-between align-items-center', {
 									'active bg-secondary': (this.props.state.input.mode == x)
 								})} href="#" onClick={e => this.setMode(e, x)}>
-								{settings.strings.modes[x]}
+								{strings.modes[x]}
 								</a>
 							)}
 							</div>
@@ -134,11 +134,11 @@ export default class Controls extends Component {
 						<button className="btn btn-outline-secondary w-100 dropdown-toggle" onClick={e => this.setDropdown(filter)}>
 							{this.props.state.input[filter].length && this.props.state.indexes[filter].length ? this.props.state.input[filter].map(x => {
 								return this.props.state.indexes[filter].find(y => y.key == x).name;
-							}).join(' + ') : settings.strings[filter + '_any']}
+							}).join(' + ') : strings[filter + '_any']}
 						</button>
 						<div className={classNames('dropdown-menu', { show: (this.state.dropdown == filter), 'dropdown-menu-right': (filter == 'type') && !this.props.state.capabilities.map })}>
 							<a className={classNames('dropdown-item', { 'active bg-secondary': !this.props.state.input[filter].length })} onClick={e => this.setFilter(e, filter, null)} href="#">
-								{settings.strings[filter + '_any']}
+								{strings[filter + '_any']}
 							</a>
 							<div className="dropdown-divider"></div>
 							{this.props.state.indexes[filter].map(x => 
@@ -155,8 +155,8 @@ export default class Controls extends Component {
 				)}
 				<div className={classNames('col-sm-6 col-lg mb-3', {'d-none': !this.props.state.capabilities.map})}>
 					<div className="btn-group w-100" role="group">
-						<button type="button" className={classNames('btn btn-outline-secondary w-100', { active: this.props.state.input.view == 'list' })} onClick={e => this.setView(e, 'list')}>{settings.strings.list}</button>
-						<button type="button" className={classNames('btn btn-outline-secondary w-100', { active: this.props.state.input.view == 'map' })} onClick={e => this.setView(e, 'map')}>{settings.strings.map}</button>
+						<button type="button" className={classNames('btn btn-outline-secondary w-100', { active: this.props.state.input.view == 'list' })} onClick={e => this.setView(e, 'list')}>{strings.list}</button>
+						<button type="button" className={classNames('btn btn-outline-secondary w-100', { active: this.props.state.input.view == 'map' })} onClick={e => this.setView(e, 'map')}>{strings.map}</button>
 					</div>
 				</div>
 			</div>

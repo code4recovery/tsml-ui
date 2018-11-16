@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import classNames from 'classnames/bind';
 
-import settings from '../settings';
+import { settings, strings } from '../settings';
 
 export default class Meeting extends Component {
 
@@ -33,7 +33,7 @@ export default class Meeting extends Component {
 			})}>
 				<div className="col py-3">
 					<h1 className="font-weight-light">
-						<a href={window.location.pathname} onClick={event=>this.goBack(event)}>{settings.strings.meetings}</a>
+						<a href={window.location.pathname} onClick={event=>this.goBack(event)}>{strings.meetings}</a>
 						<span className="mx-1">&rarr;</span>
 						{meeting.name}
 					</h1>
@@ -43,11 +43,11 @@ export default class Meeting extends Component {
 							<ul className="list-group">
 								<li className="list-group-item">
 									<h5>Meeting Information</h5>
-									<p className="mb-1">{settings.strings[settings.days[meeting.day]]}, {meeting.time_formatted}</p>
+									<p className="mb-1">{strings[settings.days[meeting.day]]}, {meeting.time_formatted}</p>
 									<ul className={{ 'd-none': !meeting.types || !meeting.types.length }}>
 										{meeting.types ? meeting.types.map(type => {
 											return(
-												<li key={type}>{settings.strings.types[type]}</li>
+												<li key={type}>{strings.types[type]}</li>
 											);
 										}) : ''}
 									</ul>

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import classNames from 'classnames/bind';
 
-import settings from '../settings';
+import { settings, strings } from '../settings';
 
 export default class Alert extends Component {
 
