@@ -76,23 +76,20 @@ meetings {
 		//maps should fill at least 500, but up to entire space
 		.map { min-height: 500px; }
 
-		.table-wrapper {
-			margin: 0 -1rem -1rem -1rem;
-			table {
-				tr th:first-child, td:first-child { padding-left: 1rem; }
-				@include media-breakpoint-down(xs) {
-					tr {
-						border-top: 1px solid $table-border-color;
-						padding: .5rem 1rem;
-						position: relative;
-						td {
-							border: 0;
-							padding: 0 0 0 7rem;
-							&.time { 
-								position: absolute; 
-								left: 1rem;
-								padding-left: 0;
-							}
+		table {
+			tr th:first-child, td:first-child { padding-left: 1rem; }
+			@include media-breakpoint-down(xs) {
+				tr {
+					border-top: 1px solid $table-border-color;
+					padding: .5rem 1rem;
+					position: relative;
+					td {
+						border: 0;
+						padding: 0 0 0 7rem;
+						&.time { 
+							position: absolute; 
+							left: 1rem;
+							padding-left: 0;
 						}
 					}
 				}
