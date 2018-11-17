@@ -92,7 +92,7 @@ A full list of meeting types can be found on the [Meeting Guide format spec page
 
 ### Questions
 
-- [x] Possible to do a custom tag? eg `<meetings data="/path/to/meetings"></meetings>`
+- [x] Possible to do a custom tag? eg `<meetings src="/path/to/meetings"></meetings>`
 - [x] How to handle email transport?
 - [ ] What will the impact be on SEO?
 
