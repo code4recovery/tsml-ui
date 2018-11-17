@@ -37,33 +37,31 @@ export default class Table extends Component {
 	render() {
 
 		return(
-			<div class="row">
-				<table className={classNames('table table-striped flex-grow-1 my-0', { 
-					'd-none': (this.props.filteredSlugs.length == 0) || (this.props.state.input.view != 'list') || this.props.state.input.meeting
-				})}>
-					<thead>
-						<tr className="d-none d-sm-table-row">
-							{settings.defaults.columns.map(column => 
-								<th key={column} className={column}>{strings[column]}</th>
-							)}
-						</tr>
-					</thead>
-					<tbody>
-						{this.props.state.meetings.map(meeting => {
-							if (this.props.filteredSlugs.indexOf(meeting.slug) == -1) return;
-							return(
-								<tr className="d-block d-sm-table-row" key={meeting.slug}>
-									{settings.defaults.columns.map(column => 
-										<td key={[meeting.slug, column].join('-')} className={classNames('d-block d-sm-table-cell', column)}>
-											{this.getValue(meeting, column)}
-										</td>
-									)}
-								</tr>
-							)
-						})}
-					</tbody>
-				</table>
-			</div>
+			<table className={classNames('table table-striped flex-grow-1 my-0', { 
+				'd-none': (this.props.filteredSlugs.length == 0) || (this.props.state.input.view != 'list') || this.props.state.input.meeting
+			})}>
+				<thead>
+					<tr className="d-none d-sm-table-row">
+						{settings.defaults.columns.map(column => 
+							<th key={column} className={column}>{strings[column]}</th>
+						)}
+					</tr>
+				</thead>
+				<tbody>
+					{this.props.state.meetings.map(meeting => {
+						if (this.props.filteredSlugs.indexOf(meeting.slug) == -1) return;
+						return(
+							<tr className="d-block d-sm-table-row" key={meeting.slug}>
+								{settings.defaults.columns.map(column => 
+									<td key={[meeting.slug, column].join('-')} className={classNames('d-block d-sm-table-cell', column)}>
+										{this.getValue(meeting, column)}
+									</td>
+								)}
+							</tr>
+						)
+					})}
+				</tbody>
+			</table>
 		);
 	}
 }
