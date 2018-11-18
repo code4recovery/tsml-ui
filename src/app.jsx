@@ -62,8 +62,13 @@ class App extends Component {
 		//load input from query string
 		let querystring = qs.parse(location.search);
 		for (let i = 0; i < settings.filters.length; i++) {
-			if (querystring[settings.filters[i]]) {
-				this.state.input[settings.filters[i]] = querystring[settings.filters[i]].split('/');
+			let filter = settings.filters[i];
+			if (querystring[filter]) {
+				if (filter == 'day' && querystring.day == 'any') {
+					this.state.input.day = [];
+				} else {
+					this.state.input[filter] = querystring[filter].split('/');
+				}
 			}
 		}
 		for (let i = 0; i < settings.params.length; i++) {
@@ -73,6 +78,11 @@ class App extends Component {
 		}
 		if (querystring.meeting) {
 			this.state.input.meeting = querystring.meeting;
+		}
+
+		//today mode
+		if (!querystring.day && settings.defaults.today) {
+			this.state.input.day.push(new Date().getDay());
 		}
 
 		//need to bind this for the function to access `this`
@@ -279,17 +289,29 @@ class App extends Component {
 			//run filters on meetings
 			let filterFound = false;
 			let query = {};
+			const existingQuery = qs.parse(location.search);
 
 			//filter by region, day, time, and type
 			for (let i = 0; i < settings.filters.length; i++) {
 				let filter = settings.filters[i];
 				if (this.state.input[filter].length && this.state.indexes[filter].length) {
 					filterFound = true;
-					query[filter] = this.state.input[filter].join('/');
 					filteredSlugs.push([].concat.apply([], this.state.input[filter].map(x => {
 						return this.state.indexes[filter].find(y => y.key == x).slugs;
 					})));
+					if (filter != 'day') {
+						query[filter] = this.state.input[filter].join('/');
+					}
 				}
+			}
+
+			//decide whether to set day in the query string (todo refactor)
+			if (this.state.input.day.length && this.state.indexes.day.length) {
+				if (!settings.defaults.today || existingQuery.search || existingQuery.day || existingQuery.region || existingQuery.district || existingQuery.time || existingQuery.type || this.state.input.day.length > 1 || this.state.input.day[0] != new Date().getDay()) {
+					query.day = this.state.input.day.join('/');
+				}
+			} else if (settings.defaults.today) {
+				query.day = 'any';
 			}
 
 			//keyword search
@@ -313,7 +335,7 @@ class App extends Component {
 			if (this.state.input.meeting) query.meeting = this.state.input.meeting;
 			
 			//create a query string with only values in use
-			query = qs.stringify(merge(merge(qs.parse(location.search), { 
+			query = qs.stringify(merge(merge(existingQuery, { 
 				day: undefined,
 				mode: undefined,
 				region: undefined,
