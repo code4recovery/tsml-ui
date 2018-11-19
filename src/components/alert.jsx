@@ -12,9 +12,9 @@ export default class Alert extends Component {
 	render() {
 		let message = null;
 		if (this.props.state.error) {
-			message = settings.strings.alerts[this.props.state.error];
+			message = strings.alerts[this.props.state.error];
 		} else if (this.props.state.alert) {
-			message = settings.strings.alerts[this.props.state.alert];
+			message = strings.alerts[this.props.state.alert];
 		}
 		return(
 			<div className={classNames('alert', { 
