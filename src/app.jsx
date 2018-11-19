@@ -146,8 +146,8 @@ class App extends Component {
 					//build time index (can be multiple)
 					if (meeting.time) {
 						capabilities.time = true;
-						let timeParts = meeting.time.split(':');
-						meeting.minutes = (parseInt(timeParts[0]) * 60) + parseInt(timeParts[1]);
+						let [ hours, minutes ] = meeting.time.split(':');
+						meeting.minutes = (parseInt(hours) * 60) + parseInt(minutes);
 						meeting.times = [];
 						if (meeting.minutes >= 240 && meeting.minutes < 720) { //4am–12pm
 							meeting.times.push(0);
@@ -171,6 +171,9 @@ class App extends Component {
 							}
 							indexes.time[meeting.times[j]].slugs.push(meeting.slug);
 						}
+
+						meeting.time_formatted = this.formatTime(meeting.time);
+						meeting.end_time_formatted = this.formatTime(meeting.end_time);
 					}
 
 					//build type index (can be multiple)
@@ -254,9 +257,21 @@ class App extends Component {
 			});
 	}
 
-	//function for components to set global state
-	setAppState(key, value) {
-		this.setState({ [key]: value });		
+	//quick format time function
+	formatTime(time) {
+		if (time == null || time.length == 0) return null;
+		let [ hours, minutes ] = time.split(':');
+		let ampm = 'am';
+		hours = parseInt(hours);
+		if (hours == 0) {
+			hours = 12;
+		} else if (hours > 11) {
+			if (hours == 12 && minutes == '00') return 'Noon'; 
+			if (hours == 23 && minutes == '59') return 'Mid';
+			ampm = 'pm';
+			if (hours > 12) hours -= 12;
+		}
+		return hours + ':' + minutes + ' ' + ampm;
 	}
 
 	//get common matches between arrays (for meeting filtering)
@@ -278,6 +293,11 @@ class App extends Component {
 			commonValues = {};
 		}
 		return Object.keys(currentValues);
+	}
+
+	//function for components to set global state
+	setAppState(key, value) {
+		this.setState({ [key]: value });		
 	}
 
 	render() {
