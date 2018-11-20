@@ -69,10 +69,12 @@ A full list of meeting types can be found on the [Meeting Guide format spec page
 - [x] Mobile list view
 - [x] Multilingual support
 - [x] Day query string: don't automatically specify day, support for `any` value
-- [ ] Mapbox support
+- [ ] Mapbox
 - [ ] Near location mode with geocoding
 - [ ] Near me mode
 - [ ] Google Docs support
+- [ ] Scroll issue on inside page
+- [ ] Upcoming time filter
 
 ### Nice to have
 
