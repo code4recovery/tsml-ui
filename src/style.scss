@@ -75,13 +75,15 @@ meetings {
 
 		//maps should fill at least 500, but up to entire space
 		.map { 
-			.mapboxgl-popup-content {
+			min-height: 500px; 
+			.popup {
 				font-family: $font-family-base;
 				font-size: $font-size-base;
 				font-weight: $font-weight-base;
 				line-height: $line-height-base;
+				max-width: 85%;
+				width: 320px;
 			}
-			min-height: 500px; 
 		}
 
 		table {

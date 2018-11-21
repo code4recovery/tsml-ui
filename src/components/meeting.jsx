@@ -95,7 +95,7 @@ export default class Meeting extends Component {
 							</Marker>
 							<Popup
 								coordinates={[meeting.longitude, meeting.latitude]}
-								className="col-sm-7 col-md-6 col-lg-5"
+								className="popup"
 								offset={{ bottom: [0, -40] }}
 								>
 								<h3 className="font-weight-light">{meeting.location}</h3>
