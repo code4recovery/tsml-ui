@@ -16,6 +16,7 @@ export const settings = merge({
 		mapbox: null, //enable mapbox maps
 	},
 	language: 'en',
+	mapbox_style: 'mapbox://styles/mapbox/streets-v9',
 	modes: ['search'], //location and me will be appended if capable
 	params: ['search', 'mode', 'view'], //utility array
 	strings: {

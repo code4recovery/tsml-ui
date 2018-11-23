@@ -5,10 +5,6 @@ import { settings, strings } from '../settings';
 
 export default class Alert extends Component {
 
-	constructor() {
-		super();
-	}
-
 	render() {
 		let message = null;
 		if (this.props.state.error) {

@@ -5,26 +5,68 @@ import ReactMapboxGl, { Marker, Popup, ZoomControl } from 'react-mapbox-gl';
 import { settings, strings } from '../settings';
 
 export default class Map extends Component {
+	constructor() {
+		super();
+		this.MapBox = false;
+		//this.zoom = [11];
+		this.fitBoundsOptions = {duration: 0, padding: 100};
+	}
+
 	render() {
 		const hide = (this.props.filteredSlugs.length == 0) || (this.props.state.input.view != 'map') || this.props.state.input.meeting;
-		let MapBox = false;
 		let bounds = {};
 		let locations = {};
 		let locations_keys = [];
-		if (settings.keys.mapbox && !hide) {
+		let MapBox = false;
 
-			//instantiate map with proper bounds
-			MapBox = ReactMapboxGl({
-				accessToken: settings.keys.mapbox,
+		/* todo try json 
+		let geoJSON = {
+			type: 'FeatureCollection',
+			features: [
+				{
+					type: "Feature",
+					properties: {
+						description: '<strong>Make it Mount Pleasant</strong><p><a href="http://www.mtpleasantdc.com/makeitmtpleasant" target="_blank" title="Opens in a new window">Make it Mount Pleasant</a> is a handmade and vintage market and afternoon of live entertainment and kids activities. 12:00-6:00 p.m.</p>',
+						icon: 'theatre'
+					},
+					geometry: {
+						type: 'Point',
+						coordinates: [-77.038659, 38.931567]
+					},
+				},
+			]
+		}; */
+
+		if (!hide && settings.keys.mapbox) {
+			if (!this.MapBox) {
+				this.MapBox = ReactMapboxGl({
+					accessToken: settings.keys.mapbox,
+					maxZoom: 18,
+					minZoom: 8,
+				});
+			}
+			MapBox = this.MapBox;
+		}
+
+		if (MapBox && !hide) {
+
+			//filter & sort locations so southern pins are in front
+			let meetings = this.props.state.meetings.filter(meeting => {
+				return (this.props.filteredSlugs.indexOf(meeting.slug) != -1);
+			});
+			meetings.sort((a, b) => {
+				return b.latitude - a.latitude;
 			});
 
 			//loop through again because ideally it'd be sorted and have fewer keys
-			for (let i = 0; i < this.props.state.meetings.length; i++) {
-				let meeting = this.props.state.meetings[i];
-				
+			for (let i = 0; i < meetings.length; i++) {
+				let meeting = meetings[i];
+
 				//build index of map pins
 				if (meeting.latitude && meeting.latitude) {
-					let coords = meeting.latitude.toString() + ',' + meeting.latitude.toString();
+					let coords = meeting.longitude + ',' + meeting.latitude;
+					meeting.latitude = parseFloat(meeting.latitude);
+					meeting.longitude = parseFloat(meeting.longitude);
 					if (locations_keys.indexOf(coords) == -1) {
 						locations_keys.push(coords);
 						locations[coords] = {
@@ -32,9 +74,6 @@ export default class Map extends Component {
 							formatted_address: meeting.formatted_address,
 							//probably a directions link here
 							meetings: [],
-							coords: coords,
-							latitude: meeting.latitude,
-							longitude: meeting.longitude,
 						}
 					}
 
@@ -48,7 +87,7 @@ export default class Map extends Component {
 			}
 		}
 
-		locations = Object.values(locations);
+		let center = [(parseFloat(bounds.west) + parseFloat(bounds.east)) / 2, (parseFloat(bounds.north) + parseFloat(bounds.south)) / 2];
 
 		return(
 			<div className={classNames('border rounded bg-light flex-grow-1', { 
@@ -57,17 +96,19 @@ export default class Map extends Component {
 			})}>
 				{ MapBox && bounds &&
 				<MapBox
-					style="mapbox://styles/mapbox/streets-v9"
-					center={[0, 0]}
+					style={settings.mapbox_style}
+					center={center}
 					zoom={[14]}
 					fitBounds={[[bounds.west, bounds.south], [bounds.east, bounds.north]]}
-					fitBoundsOptions={{duration: 0, padding: 100}}
+					fitBoundsOptions={this.fitBoundsOptions}
+					flyToOptions={this.fitBoundsOptions}
 					className="map flex-grow-1">
-					{ locations && locations.map(location => {
+					{ locations && locations_keys.map(coords => {
+						let location = locations[coords];
 						return(
 							<Marker
-								key={location.coords}
-								coordinates={[location.longitude, location.latitude]}
+								key={coords}
+								coordinates={coords.split(',')}
 								anchor="bottom"
 								title={location.name}
 								style={{
@@ -78,7 +119,7 @@ export default class Map extends Component {
 							</Marker>
 						);
 					})}
-					<ZoomControl className="d-none d-md-flex"/>
+					<ZoomControl zoomDiff={1.25} className="d-none d-md-flex"/>
 				</MapBox>
 				}
 			</div>
