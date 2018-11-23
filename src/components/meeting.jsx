@@ -24,9 +24,14 @@ export default class Meeting extends Component {
 			for (let i = 0; i < this.props.state.meetings.length; i++) {
 				if (this.props.state.meetings[i].slug == this.props.state.input.meeting) {
 					meeting = this.props.state.meetings[i];
+
+					//set page title
+					document.title = meeting.name;
 				}
 			}
 		}
+
+
 
 		let MapBox = false;
 
@@ -86,12 +91,13 @@ export default class Meeting extends Component {
 							className="border rounded bg-light h-100 map">
 							<Marker
 								coordinates={[meeting.longitude, meeting.latitude]}
-								anchor="bottom">
-								<div title={meeting.location} style={{
+								anchor="bottom"
+								title={meeting.location}
+								style={{
 									width: '26px',
 									height: '38.4px',
 									backgroundImage: 'url(data:image/svg+xml;base64,' + window.btoa('<?xml version="1.0" encoding="utf-8"?><svg viewBox="-1.1 -1.086 43.182 63.273" xmlns="http://www.w3.org/2000/svg"><path fill="#f76458" stroke="#b3382c" stroke-width="3" d="M20.5,0.5 c11.046,0,20,8.656,20,19.333c0,10.677-12.059,21.939-20,38.667c-5.619-14.433-20-27.989-20-38.667C0.5,9.156,9.454,0.5,20.5,0.5z"/></svg>') + ')',
-								}}></div>
+								}}>
 							</Marker>
 							<Popup
 								coordinates={[meeting.longitude, meeting.latitude]}
