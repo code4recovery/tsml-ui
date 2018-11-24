@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import classNames from 'classnames/bind';
-import ReactMapboxGl, { Marker, Popup, ZoomControl } from 'react-mapbox-gl';
 
 import { settings, strings } from '../settings';
 
@@ -39,11 +38,11 @@ export default class Map extends Component {
 
 		if (!hide && settings.keys.mapbox) {
 			if (!this.MapBox) {
-				this.MapBox = ReactMapboxGl({
+				/*this.MapBox = ReactMapboxGl({
 					accessToken: settings.keys.mapbox,
 					maxZoom: 18,
 					minZoom: 8,
-				});
+				});*/
 			}
 			MapBox = this.MapBox;
 		}

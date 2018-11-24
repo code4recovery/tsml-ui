@@ -23,7 +23,8 @@
         "query-string": "^6.2.0",
         "react": "^16.6.3",
         "react-dom": "^16.6.3",
-        "react-mapbox-gl": "^4.0.2"
+        "react-map-gl": "^4.0.2",
+        "viewport-mercator-project": "^6.0.0"
     },
     "dependencies": {}
 }
