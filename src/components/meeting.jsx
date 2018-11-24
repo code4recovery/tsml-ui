@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import classNames from 'classnames/bind';
-import ReactMapboxGl, { Marker, Popup, ZoomControl } from 'react-mapbox-gl';
+import ReactMapGL, { Marker, NavigationControl, Popup } from 'react-map-gl';
 
 import { settings, strings } from '../settings';
 
@@ -8,6 +8,12 @@ export default class Meeting extends Component {
 
 	constructor() {
 		super();
+		this.state = {
+			popup: true,
+			viewport: null,
+			meeting: null,
+		};
+		this.updateViewport = this.updateViewport.bind(this)
 	}
 
 	goBack(event) {
@@ -16,14 +22,28 @@ export default class Meeting extends Component {
 		this.props.setAppState('input', this.props.state.input);
 	}	
 
+	updateViewport(viewport) {
+		this.setState({ viewport: viewport });
+	}
+
 	render() {
 
 		let meeting = {};
 
+		//fetch meeting data from array
 		if (this.props.state.input.meeting) {
 			for (let i = 0; i < this.props.state.meetings.length; i++) {
 				if (this.props.state.meetings[i].slug == this.props.state.input.meeting) {
-					meeting = this.props.state.meetings[i];
+					this.state.meeting = this.props.state.meetings[i];
+
+					this.state.meeting.latitude = parseFloat(this.state.meeting.latitude);
+					this.state.meeting.longitude = parseFloat(this.state.meeting.longitude);
+
+					if (!this.state.viewport) this.state.viewport = {
+						latitude: this.state.meeting.latitude,
+						longitude: this.state.meeting.longitude,
+						zoom: 14,
+					};
 
 					//set page title
 					document.title = meeting.name;
@@ -31,25 +51,12 @@ export default class Meeting extends Component {
 			}
 		}
 
-
-
-		let MapBox = false;
-
-		if (settings.keys.mapbox && meeting.latitude && meeting.longitude) {
-			MapBox = ReactMapboxGl({
-				accessToken: settings.keys.mapbox,
-			});
-		}
-
-		return(
-			<div className={classNames('flex-column flex-grow-1', {
-				'd-flex': this.props.state.input.meeting,
-				'd-none': !this.props.state.input.meeting,
-			})}>
+		return this.state.meeting && (
+			<div className="flex-column flex-grow-1 d-flex">
 				<h1 className="font-weight-light">
 					<a href={window.location.pathname} onClick={event=>this.goBack(event)}>{strings.meetings}</a>
 					<span className="mx-1">&rarr;</span>
-					{meeting.name}
+					{this.state.meeting.name}
 				</h1>
 				<div className="row flex-grow-1">
 					<div className={classNames('mb-3', {'col-md-4 mb-md-0': this.props.state.capabilities.map})}>
@@ -58,11 +65,11 @@ export default class Meeting extends Component {
 							<div className="list-group-item">
 								<h5>Meeting Information</h5>
 								<p className="my-0 mt-1">
-									{strings[settings.days[meeting.day]]}, {meeting.time_formatted}
-									{ meeting.end_time ? ' – ' + meeting.end_time_formatted : '' }
+									{strings[settings.days[this.state.meeting.day]]}, {this.state.meeting.time_formatted}
+									{ this.state.meeting.end_time ? ' – ' + this.state.meeting.end_time_formatted : '' }
 								</p>
-								<ul className={classNames('my-0 mt-1', { 'd-none': (!meeting.types || !meeting.types.length) })}>
-									{meeting.types ? meeting.types.map(type => {
+								<ul className={classNames('my-0 mt-1', { 'd-none': (!this.state.meeting.types || !this.state.meeting.types.length) })}>
+									{this.state.meeting.types ? this.state.meeting.types.map(type => {
 										return(
 											<li key={type}>{strings.types[type]}</li>
 										);
@@ -70,8 +77,8 @@ export default class Meeting extends Component {
 								</ul>
 							</div>
 							<div className="list-group-item">
-								<h5>{meeting.location}</h5>
-								<p className="my-0 mt-1">{meeting.formatted_address}</p>
+								<h5>{this.state.meeting.location}</h5>
+								<p className="my-0 mt-1">{this.state.meeting.formatted_address}</p>
 								<p className="my-0 mt-1">Other meetings at this address:</p>
 								<ol className="my-0 mt-1">
 									<li>One Day at a Time</li>
@@ -82,35 +89,44 @@ export default class Meeting extends Component {
 							</div>
 						</div>
 					</div>
-					<div className={classNames('col-md-8', {'d-none': !this.props.state.capabilities.map})}>
-						{ MapBox &&
-						<MapBox
-							style="mapbox://styles/mapbox/streets-v9"
-							center={[meeting.longitude, parseFloat(meeting.latitude) + .0035]}
-							zoom={[14]}
-							className="border rounded bg-light h-100 map">
+					<div className={classNames('col-md-8 map', {'d-none': !this.props.state.capabilities.map})}>
+
+						{this.state.viewport && this.state.meeting.latitude && <ReactMapGL
+							className="rounded border bg-light"
+							{...this.state.viewport}
+							mapboxApiAccessToken={settings.keys.mapbox}
+							mapStyle={settings.mapbox_style}
+							onViewportChange={this.updateViewport}
+							width="100%"
+							height="100%"
+						>
 							<Marker
-								coordinates={[meeting.longitude, meeting.latitude]}
-								anchor="bottom"
-								title={meeting.location}
-								style={{
-									width: '26px',
-									height: '38.4px',
-									backgroundImage: 'url(data:image/svg+xml;base64,' + window.btoa('<?xml version="1.0" encoding="utf-8"?><svg viewBox="-1.1 -1.086 43.182 63.273" xmlns="http://www.w3.org/2000/svg"><path fill="#f76458" stroke="#b3382c" stroke-width="3" d="M20.5,0.5 c11.046,0,20,8.656,20,19.333c0,10.677-12.059,21.939-20,38.667c-5.619-14.433-20-27.989-20-38.667C0.5,9.156,9.454,0.5,20.5,0.5z"/></svg>') + ')',
-								}}>
-							</Marker>
-							<Popup
-								coordinates={[meeting.longitude, meeting.latitude]}
-								className="popup"
-								offset={{ bottom: [0, -40] }}
+								latitude={this.state.meeting.latitude - .0025}
+								longitude={this.state.meeting.longitude}
+								offsetLeft={-settings.marker_style.width / 2}
+								offsetTop={-settings.marker_style.height}
 								>
-								<h3 className="font-weight-light">{meeting.location}</h3>
-								<p>{meeting.formatted_address}</p>
+								<div
+									title={this.state.meeting.location}
+									style={settings.marker_style}
+									onClick={() => this.setState({popup: true})}
+									/>
+							</Marker>
+							{ this.state.popup && <Popup
+								latitude={this.state.meeting.latitude - .0025}
+								longitude={this.state.meeting.longitude}
+								className="popup"
+								onClose={() => this.setState({popup: false})}
+								offsetTop={-settings.marker_style.height}
+								>
+								<h3 className="font-weight-light">{this.state.meeting.location}</h3>
+								<p>{this.state.meeting.formatted_address}</p>
 								<button className="btn btn-outline-secondary btn-block">Directions</button>
-							</Popup>
-							<ZoomControl className="d-none d-md-flex"/>
-						</MapBox>
-						}
+							</Popup>}
+					        <div className="control">
+								<NavigationControl showCompass={false} onViewportChange={this.updateViewport}/>
+							</div>
+						</ReactMapGL>}
 					</div>
 				</div>
 			</div>

@@ -7,6 +7,9 @@ html, body {
 //"namespaced" css -- should not interfere with presentation outside the <meetings> element
 meetings {
 
+	//no idea why this needs a ../
+	@import "../node_modules/mapbox-gl/dist/mapbox-gl.css";
+
 	//import only what we need from bootstrap
 	@import "node_modules/bootstrap/scss/functions";
 	@import "node_modules/bootstrap/scss/variables";
@@ -76,6 +79,15 @@ meetings {
 		//maps should fill at least 500, but up to entire space
 		.map { 
 			min-height: 500px; 
+			button:focus { outline: none; }
+			.control {
+				@include media-breakpoint-down(sm) {
+					display: none;
+				}
+				position: absolute;
+				right: 10px;
+				top: 10px;
+			}
 			.popup {
 				font-family: $font-family-base;
 				font-size: $font-size-base;
