@@ -11,7 +11,6 @@ export default class Meeting extends Component {
 		this.state = {
 			popup: true,
 			viewport: null,
-			meeting: null,
 		};
 		this.updateViewport = this.updateViewport.bind(this)
 	}
@@ -34,14 +33,14 @@ export default class Meeting extends Component {
 		if (this.props.state.input.meeting) {
 			for (let i = 0; i < this.props.state.meetings.length; i++) {
 				if (this.props.state.meetings[i].slug == this.props.state.input.meeting) {
-					this.state.meeting = this.props.state.meetings[i];
+					meeting = this.props.state.meetings[i];
 
-					this.state.meeting.latitude = parseFloat(this.state.meeting.latitude);
-					this.state.meeting.longitude = parseFloat(this.state.meeting.longitude);
+					meeting.latitude = parseFloat(meeting.latitude);
+					meeting.longitude = parseFloat(meeting.longitude);
 
 					if (!this.state.viewport) this.state.viewport = {
-						latitude: this.state.meeting.latitude,
-						longitude: this.state.meeting.longitude,
+						latitude: meeting.latitude,
+						longitude: meeting.longitude,
 						zoom: 14,
 					};
 
@@ -51,12 +50,12 @@ export default class Meeting extends Component {
 			}
 		}
 
-		return this.state.meeting && (
+		return this.props.state.input.meeting && meeting && (
 			<div className="flex-column flex-grow-1 d-flex">
 				<h1 className="font-weight-light">
 					<a href={window.location.pathname} onClick={event=>this.goBack(event)}>{strings.meetings}</a>
 					<span className="mx-1">&rarr;</span>
-					{this.state.meeting.name}
+					{meeting.name}
 				</h1>
 				<div className="row flex-grow-1">
 					<div className={classNames('mb-3', {'col-md-4 mb-md-0': this.props.state.capabilities.map})}>
@@ -65,11 +64,11 @@ export default class Meeting extends Component {
 							<div className="list-group-item">
 								<h5>Meeting Information</h5>
 								<p className="my-0 mt-1">
-									{strings[settings.days[this.state.meeting.day]]}, {this.state.meeting.time_formatted}
-									{ this.state.meeting.end_time ? ' – ' + this.state.meeting.end_time_formatted : '' }
+									{strings[settings.days[meeting.day]]}, {meeting.time_formatted}
+									{ meeting.end_time ? ' – ' + meeting.end_time_formatted : '' }
 								</p>
-								<ul className={classNames('my-0 mt-1', { 'd-none': (!this.state.meeting.types || !this.state.meeting.types.length) })}>
-									{this.state.meeting.types ? this.state.meeting.types.map(type => {
+								<ul className={classNames('my-0 mt-1', { 'd-none': (!meeting.types || !meeting.types.length) })}>
+									{meeting.types ? meeting.types.map(type => {
 										return(
 											<li key={type}>{strings.types[type]}</li>
 										);
@@ -77,8 +76,8 @@ export default class Meeting extends Component {
 								</ul>
 							</div>
 							<div className="list-group-item">
-								<h5>{this.state.meeting.location}</h5>
-								<p className="my-0 mt-1">{this.state.meeting.formatted_address}</p>
+								<h5>{meeting.location}</h5>
+								<p className="my-0 mt-1">{meeting.formatted_address}</p>
 								<p className="my-0 mt-1">Other meetings at this address:</p>
 								<ol className="my-0 mt-1">
 									<li>One Day at a Time</li>
@@ -91,7 +90,7 @@ export default class Meeting extends Component {
 					</div>
 					<div className={classNames('col-md-8 map', {'d-none': !this.props.state.capabilities.map})}>
 
-						{this.state.viewport && this.state.meeting.latitude && <ReactMapGL
+						{this.state.viewport && meeting.latitude && <ReactMapGL
 							className="rounded border bg-light"
 							{...this.state.viewport}
 							mapboxApiAccessToken={settings.keys.mapbox}
@@ -101,26 +100,26 @@ export default class Meeting extends Component {
 							height="100%"
 						>
 							<Marker
-								latitude={this.state.meeting.latitude - .0025}
-								longitude={this.state.meeting.longitude}
+								latitude={meeting.latitude - .0025}
+								longitude={meeting.longitude}
 								offsetLeft={-settings.marker_style.width / 2}
 								offsetTop={-settings.marker_style.height}
 								>
 								<div
-									title={this.state.meeting.location}
+									title={meeting.location}
 									style={settings.marker_style}
 									onClick={() => this.setState({popup: true})}
 									/>
 							</Marker>
 							{ this.state.popup && <Popup
-								latitude={this.state.meeting.latitude - .0025}
-								longitude={this.state.meeting.longitude}
+								latitude={meeting.latitude - .0025}
+								longitude={meeting.longitude}
 								className="popup"
 								onClose={() => this.setState({popup: false})}
 								offsetTop={-settings.marker_style.height}
 								>
-								<h3 className="font-weight-light">{this.state.meeting.location}</h3>
-								<p>{this.state.meeting.formatted_address}</p>
+								<h3 className="font-weight-light">{meeting.location}</h3>
+								<p>{meeting.formatted_address}</p>
 								<button className="btn btn-outline-secondary btn-block">Directions</button>
 							</Popup>}
 					        <div className="control">
