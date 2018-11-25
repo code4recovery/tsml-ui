@@ -1,53 +1,33 @@
 import React, { Component } from 'react';
 import classNames from 'classnames/bind';
+import ReactMapGL, { Marker, NavigationControl, Popup } from 'react-map-gl';
+import WebMercatorViewport from 'viewport-mercator-project';
 
 import { settings, strings } from '../settings';
 
 export default class Map extends Component {
 	constructor() {
 		super();
-		this.MapBox = false;
-		//this.zoom = [11];
-		this.fitBoundsOptions = {duration: 0, padding: 100};
+		this.state = {
+			bounds: {},
+			popup: true,
+			viewport: null,
+		};
+		this.updateViewport = this.updateViewport.bind(this)
+	}
+
+	updateViewport(viewport) {
+		this.setState({ viewport: viewport });
 	}
 
 	render() {
+
 		const hide = (this.props.filteredSlugs.length == 0) || (this.props.state.input.view != 'map') || this.props.state.input.meeting;
-		let bounds = {};
+
 		let locations = {};
 		let locations_keys = [];
-		let MapBox = false;
 
-		/* todo try json 
-		let geoJSON = {
-			type: 'FeatureCollection',
-			features: [
-				{
-					type: "Feature",
-					properties: {
-						description: '<strong>Make it Mount Pleasant</strong><p><a href="http://www.mtpleasantdc.com/makeitmtpleasant" target="_blank" title="Opens in a new window">Make it Mount Pleasant</a> is a handmade and vintage market and afternoon of live entertainment and kids activities. 12:00-6:00 p.m.</p>',
-						icon: 'theatre'
-					},
-					geometry: {
-						type: 'Point',
-						coordinates: [-77.038659, 38.931567]
-					},
-				},
-			]
-		}; */
-
-		if (!hide && settings.keys.mapbox) {
-			if (!this.MapBox) {
-				/*this.MapBox = ReactMapboxGl({
-					accessToken: settings.keys.mapbox,
-					maxZoom: 18,
-					minZoom: 8,
-				});*/
-			}
-			MapBox = this.MapBox;
-		}
-
-		if (MapBox && !hide) {
+		if (!hide) {
 
 			//filter & sort locations so southern pins are in front
 			let meetings = this.props.state.meetings.filter(meeting => {
@@ -71,56 +51,64 @@ export default class Map extends Component {
 						locations[coords] = {
 							name: meeting.location,
 							formatted_address: meeting.formatted_address,
+							latitude: meeting.latitude,
+							longitude: meeting.longitude,
 							//probably a directions link here
 							meetings: [],
 						}
 					}
 
-					if (!bounds.north || meeting.latitude > bounds.north) bounds.north = meeting.latitude;
-					if (!bounds.south || meeting.latitude < bounds.south) bounds.south = meeting.latitude;
-					if (!bounds.east || meeting.longitude > bounds.east) bounds.east = meeting.longitude;
-					if (!bounds.west || meeting.longitude < bounds.west) bounds.west = meeting.longitude;
+					if (!this.state.bounds.north || meeting.latitude > this.state.bounds.north) this.state.bounds.north = meeting.latitude;
+					if (!this.state.bounds.south || meeting.latitude < this.state.bounds.south) this.state.bounds.south = meeting.latitude;
+					if (!this.state.bounds.east || meeting.longitude > this.state.bounds.east) this.state.bounds.east = meeting.longitude;
+					if (!this.state.bounds.west || meeting.longitude < this.state.bounds.west) this.state.bounds.west = meeting.longitude;
 
 					locations[coords].meetings.push(meeting);
 				}
 			}
+
+			if (!this.state.viewport) this.state.viewport = new WebMercatorViewport({
+				width: 400,
+				height: 400,
+			}).fitBounds([
+				[this.state.bounds.west, this.state.bounds.south], 
+				[this.state.bounds.east, this.state.bounds.north]
+			], { padding: 40 });
 		}
 
-		let center = [(parseFloat(bounds.west) + parseFloat(bounds.east)) / 2, (parseFloat(bounds.north) + parseFloat(bounds.south)) / 2];
-
-		return(
-			<div className={classNames('border rounded bg-light flex-grow-1', { 
-				'd-none': hide,
-				'd-flex': !hide
-			})}>
-				{ MapBox && bounds &&
-				<MapBox
-					style={settings.mapbox_style}
-					center={center}
-					zoom={[14]}
-					fitBounds={[[bounds.west, bounds.south], [bounds.east, bounds.north]]}
-					fitBoundsOptions={this.fitBoundsOptions}
-					flyToOptions={this.fitBoundsOptions}
-					className="map flex-grow-1">
-					{ locations && locations_keys.map(coords => {
-						let location = locations[coords];
+		return !hide && this.state.viewport && (
+			<div className="border rounded bg-light flex-grow-1 map">
+				<ReactMapGL
+					{...this.state.viewport}
+					mapboxApiAccessToken={settings.keys.mapbox}
+					mapStyle={settings.mapbox_style}
+					onViewportChange={this.updateViewport}
+					style={{position: 'absolute'}}
+					width="100%"
+					height="100%"
+					>
+					{locations_keys.map(key => {
+						const location = locations[key];
 						return(
-							<Marker
-								key={coords}
-								coordinates={coords.split(',')}
-								anchor="bottom"
-								title={location.name}
-								style={{
-									width: '26px',
-									height: '38.4px',
-									backgroundImage: 'url(data:image/svg+xml;base64,' + window.btoa('<?xml version="1.0" encoding="utf-8"?><svg viewBox="-1.1 -1.086 43.182 63.273" xmlns="http://www.w3.org/2000/svg"><path fill="#f76458" stroke="#b3382c" stroke-width="3" d="M20.5,0.5 c11.046,0,20,8.656,20,19.333c0,10.677-12.059,21.939-20,38.667c-5.619-14.433-20-27.989-20-38.667C0.5,9.156,9.454,0.5,20.5,0.5z"/></svg>') + ')',
-								}}>
-							</Marker>
+					<Marker
+						key={key}
+						latitude={location.latitude}
+						longitude={location.longitude}
+						offsetLeft={-settings.marker_style.width / 2}
+						offsetTop={-settings.marker_style.height}
+						>
+						<div
+							title={location.name}
+							style={settings.marker_style}
+							onClick={() => this.setState({popup: true})}
+							/>
+					</Marker>
 						);
 					})}
-					<ZoomControl zoomDiff={1.25} className="d-none d-md-flex"/>
-				</MapBox>
-				}
+			        <div className="control">
+						<NavigationControl showCompass={false} onViewportChange={this.updateViewport}/>
+					</div>
+				</ReactMapGL>
 			</div>
 		);
 	}

@@ -76,9 +76,9 @@ meetings {
 			-webkit-appearance: searchfield-cancel-button;
 		}
 
-		//maps should fill at least 500, but up to entire space
 		.map { 
-			min-height: 500px; 
+			min-height: 500px; //maps should fill at least 500, but up to entire space
+			position: relative; //so map can fill 100%
 			button:focus { outline: none; }
 			.control {
 				@include media-breakpoint-down(sm) {
