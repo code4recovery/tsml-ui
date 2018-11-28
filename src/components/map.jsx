@@ -6,8 +6,10 @@ import WebMercatorViewport from 'viewport-mercator-project';
 import { settings, strings } from '../settings';
 
 export default class Map extends Component {
+
 	constructor() {
 		super();
+		this.child = React.createRef();
 		this.state = {
 			bounds: {},
 			popup: true,
@@ -16,68 +18,93 @@ export default class Map extends Component {
 		this.updateViewport = this.updateViewport.bind(this)
 	}
 
+	/*
+	goToNYC() {
+		const viewport = {...this.state.viewport, longitude: -74.1, latitude: 40.7};
+		this.setState({viewport});
+	}
+	*/
+
 	updateViewport(viewport) {
+		console.log('updateViewport');
 		this.setState({ viewport: viewport });
 	}
 
 	render() {
 
-		const hide = (this.props.filteredSlugs.length == 0) || (this.props.state.input.view != 'map') || this.props.state.input.meeting;
+		//is component hidden?
+		if ((this.props.filteredSlugs.length == 0) || (this.props.state.input.view != 'map') || this.props.state.input.meeting) {
+			return null;
+		}
+		
+		console.log('render');
 
+		//filter & sort locations so southern pins are in front
+		let meetings = this.props.state.meetings.filter(meeting => {
+			return (this.props.filteredSlugs.indexOf(meeting.slug) != -1);
+		});
+		meetings.sort((a, b) => {
+			return b.latitude - a.latitude;
+		});
+
+		//build index of map pins and define bounds
 		let locations = {};
 		let locations_keys = [];
+		for (let i = 0; i < meetings.length; i++) {
+			let meeting = meetings[i];
 
-		if (!hide) {
-
-			//filter & sort locations so southern pins are in front
-			let meetings = this.props.state.meetings.filter(meeting => {
-				return (this.props.filteredSlugs.indexOf(meeting.slug) != -1);
-			});
-			meetings.sort((a, b) => {
-				return b.latitude - a.latitude;
-			});
-
-			//loop through again because ideally it'd be sorted and have fewer keys
-			for (let i = 0; i < meetings.length; i++) {
-				let meeting = meetings[i];
-
-				//build index of map pins
-				if (meeting.latitude && meeting.latitude) {
-					let coords = meeting.longitude + ',' + meeting.latitude;
-					meeting.latitude = parseFloat(meeting.latitude);
-					meeting.longitude = parseFloat(meeting.longitude);
-					if (locations_keys.indexOf(coords) == -1) {
-						locations_keys.push(coords);
-						locations[coords] = {
-							name: meeting.location,
-							formatted_address: meeting.formatted_address,
-							latitude: meeting.latitude,
-							longitude: meeting.longitude,
-							//probably a directions link here
-							meetings: [],
-						}
+			if (meeting.latitude && meeting.latitude) {
+				let coords = meeting.longitude + ',' + meeting.latitude;
+				meeting.latitude = parseFloat(meeting.latitude);
+				meeting.longitude = parseFloat(meeting.longitude);
+				if (locations_keys.indexOf(coords) == -1) {
+					locations_keys.push(coords);
+					locations[coords] = {
+						name: meeting.location,
+						formatted_address: meeting.formatted_address,
+						latitude: meeting.latitude,
+						longitude: meeting.longitude,
+						//probably a directions link here
+						meetings: [],
 					}
-
-					if (!this.state.bounds.north || meeting.latitude > this.state.bounds.north) this.state.bounds.north = meeting.latitude;
-					if (!this.state.bounds.south || meeting.latitude < this.state.bounds.south) this.state.bounds.south = meeting.latitude;
-					if (!this.state.bounds.east || meeting.longitude > this.state.bounds.east) this.state.bounds.east = meeting.longitude;
-					if (!this.state.bounds.west || meeting.longitude < this.state.bounds.west) this.state.bounds.west = meeting.longitude;
-
-					locations[coords].meetings.push(meeting);
 				}
-			}
 
-			if (!this.state.viewport) this.state.viewport = new WebMercatorViewport({
-				width: 400,
-				height: 400,
-			}).fitBounds([
-				[this.state.bounds.west, this.state.bounds.south], 
-				[this.state.bounds.east, this.state.bounds.north]
-			], { padding: 40 });
+				if (!this.state.bounds.north || meeting.latitude > this.state.bounds.north) this.state.bounds.north = meeting.latitude;
+				if (!this.state.bounds.south || meeting.latitude < this.state.bounds.south) this.state.bounds.south = meeting.latitude;
+				if (!this.state.bounds.east || meeting.longitude > this.state.bounds.east) this.state.bounds.east = meeting.longitude;
+				if (!this.state.bounds.west || meeting.longitude < this.state.bounds.west) this.state.bounds.west = meeting.longitude;
+
+				locations[coords].meetings.push(meeting);
+			}
 		}
 
-		return !hide && this.state.viewport && (
-			<div className="border rounded bg-light flex-grow-1 map">
+		//do we need to make the viewport
+		if (!this.state.viewport) {
+			if (this.state.bounds.west == this.state.bounds.east) {
+				//single marker
+				this.state.viewport = {
+					latitude: this.state.bounds.north,
+					longitude: this.state.bounds.west,
+					zoom: 14,
+				}
+			} else {
+				//calculate bounds (need to know the map dimensions!)
+				const width = 500;
+				const height = 500;
+				const padding = Math.min(width, height) / 10;
+				this.state.viewport = new WebMercatorViewport({
+					width: width,
+					height: height,
+				}).fitBounds([
+					[this.state.bounds.west, this.state.bounds.south], 
+					[this.state.bounds.east, this.state.bounds.north]
+				], { padding: padding });
+			}
+		}
+
+		return(
+			<div className="border rounded bg-light flex-grow-1 map" ref={this.child}>
+				{ this.state.viewport &&
 				<ReactMapGL
 					{...this.state.viewport}
 					mapboxApiAccessToken={settings.keys.mapbox}
@@ -109,6 +136,7 @@ export default class Map extends Component {
 						<NavigationControl showCompass={false} onViewportChange={this.updateViewport}/>
 					</div>
 				</ReactMapGL>
+				}
 			</div>
 		);
 	}

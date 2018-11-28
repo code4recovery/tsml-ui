@@ -4,6 +4,7 @@ import classNames from 'classnames/bind';
 import { settings, strings } from '../settings';
 
 export default class Table extends Component {
+
 	getValue(meeting, key) {
 		if (key == 'address') {
 			const address = meeting.formatted_address.split(', ');
