@@ -4,6 +4,7 @@ import classNames from 'classnames/bind';
 import { settings, strings } from '../settings';
 
 export default class Title extends Component {
+
 	render() {
 		let title = [strings.meetings];
 		if (this.props.state.input) {
