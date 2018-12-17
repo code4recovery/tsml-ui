@@ -26,7 +26,7 @@ You don't need to download anything. Simply add the following code to your page:
 1. In your `<body>` add:
 			
 		<meetings src="/path/to/meetings.json"></meetings>
-		<script src="https://react.meetingguide.org/react.js" async></script>
+		<script src="https://react.meetingguide.org/app.js" async></script>
 
 1. Edit `/path/to/meetings.json` in the code above to point to your JSON file.
 
