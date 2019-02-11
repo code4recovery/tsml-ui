@@ -46,24 +46,24 @@ meetings {
 	//@import "node_modules/bootstrap/scss/carousel";
 	@import "node_modules/bootstrap/scss/utilities";
 	@import "node_modules/bootstrap/scss/print";
+	background-color: $body-bg; // 2
+	color: $body-color;
 
 	//bootstrap reboot styles for html
 	font-family: sans-serif; // 2
-	line-height: 1.15; // 3
-	-webkit-text-size-adjust: 100%; // 4
-	-ms-text-size-adjust: 100%; // 4
-	-ms-overflow-style: scrollbar; // 5
-	-webkit-tap-highlight-color: rgba($black, 0); // 6
-
-	//bootstrap reboot styles for body
-	margin: 0; // 1
 	font-family: $font-family-base;
 	font-size: $font-size-base;
 	font-weight: $font-weight-base;
+	line-height: 1.15; // 3
 	line-height: $line-height-base;
-	color: $body-color;
+
+	//bootstrap reboot styles for body
+	margin: 0; // 1
+	-ms-overflow-style: scrollbar; // 5
+	-webkit-tap-highlight-color: rgba($black, 0); // 6
 	text-align: left; // 3
-	background-color: $body-bg; // 2
+	-webkit-text-size-adjust: 100%; // 4
+	-ms-text-size-adjust: 100%; // 4
 
 	.container-fluid {
 		min-height: 100%;
@@ -108,12 +108,22 @@ meetings {
 					td {
 						border: 0;
 						padding: 0 0 0 7rem;
-						&.time { 
-							position: absolute; 
+						time { 
 							left: 1rem;
-							padding-left: 0;
+							padding-left: 0; 
+							position: absolute;
 						}
 					}
+				}
+			}
+		}
+
+		.mapboxgl-popup-content .list-group {
+			.list-group-item {
+				padding: 0.25rem 0.25rem 0.25rem 4rem;
+				time {
+					left: .5rem;
+					position: absolute;
 				}
 			}
 		}

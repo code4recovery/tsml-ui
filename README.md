@@ -72,7 +72,7 @@ A full list of meeting types can be found on the [Meeting Guide format spec page
 - [ ] Mapbox
 - [ ] Near location mode with geocoding
 - [ ] Near me mode
-- [ ] Google Docs support
+- [ ] Google Sheet support
 - [ ] Scroll issue on inside page
 - [ ] Upcoming time filter
 

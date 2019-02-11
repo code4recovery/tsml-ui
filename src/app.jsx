@@ -56,6 +56,7 @@ class App extends Component {
 				type: [],
 			},
 			loading: true,
+			map_initialized: false,
 			meetings: [],
 		};
 
@@ -300,6 +301,11 @@ class App extends Component {
 		this.setState({ [key]: value });		
 	}
 
+	//function for map component to say it's done without re-render
+	setMapInitialized() {
+		this.state.map_initialized = true;
+	}
+
 	render() {
 
 		let filteredSlugs = [];
@@ -379,6 +385,9 @@ class App extends Component {
 
 			//show alert
 			this.state.alert = filteredSlugs.length ? null : 'no_results';
+
+			//make map update
+			this.state.map_initialized = false;
 		}
 
 		return(
@@ -387,7 +396,7 @@ class App extends Component {
 				<Controls state={this.state} setAppState={this.setAppState}/>
 				<Alert state={this.state} filteredSlugs={filteredSlugs}/>
 				<Table state={this.state} setAppState={this.setAppState} filteredSlugs={filteredSlugs}/>
-				<Map state={this.state} filteredSlugs={filteredSlugs}/>
+				<Map state={this.state} setAppState={this.setAppState} filteredSlugs={filteredSlugs}/>
 				<Meeting state={this.state} setAppState={this.setAppState}/>
 			</div>
 		);

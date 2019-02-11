@@ -118,7 +118,7 @@ export default class Meeting extends Component {
 								onClose={() => this.setState({popup: false})}
 								offsetTop={-settings.marker_style.height}
 								>
-								<h3 className="font-weight-light">{meeting.location}</h3>
+								<h4 className="font-weight-light">{meeting.location}</h4>
 								<p>{meeting.formatted_address}</p>
 								<button className="btn btn-outline-secondary btn-block">Directions</button>
 							</Popup>}

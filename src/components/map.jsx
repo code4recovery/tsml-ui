@@ -9,12 +9,12 @@ export default class Map extends Component {
 
 	constructor() {
 		super();
-		this.child = React.createRef();
 		this.state = {
 			bounds: {},
 			popup: true,
-			viewport: null,
+			viewport: new WebMercatorViewport(),
 		};
+		//need this for changes to the viewport, eg panning, zooming, resizing
 		this.updateViewport = this.updateViewport.bind(this)
 	}
 
@@ -26,7 +26,7 @@ export default class Map extends Component {
 	*/
 
 	updateViewport(viewport) {
-		console.log('updateViewport');
+		//need this for changes to the viewport, eg panning + zooming
 		this.setState({ viewport: viewport });
 	}
 
@@ -36,8 +36,6 @@ export default class Map extends Component {
 		if ((this.props.filteredSlugs.length == 0) || (this.props.state.input.view != 'map') || this.props.state.input.meeting) {
 			return null;
 		}
-		
-		console.log('render');
 
 		//filter & sort locations so southern pins are in front
 		let meetings = this.props.state.meetings.filter(meeting => {
@@ -46,6 +44,9 @@ export default class Map extends Component {
 		meetings.sort((a, b) => {
 			return b.latitude - a.latitude;
 		});
+
+		//reset bounds
+		this.state.bounds = {}
 
 		//build index of map pins and define bounds
 		let locations = {};
@@ -78,32 +79,30 @@ export default class Map extends Component {
 			}
 		}
 
-		//do we need to make the viewport
-		if (!this.state.viewport) {
-			if (this.state.bounds.west == this.state.bounds.east) {
-				//single marker
-				this.state.viewport = {
-					latitude: this.state.bounds.north,
-					longitude: this.state.bounds.west,
-					zoom: 14,
-				}
-			} else {
-				//calculate bounds (need to know the map dimensions!)
-				const width = 500;
-				const height = 500;
-				const padding = Math.min(width, height) / 10;
-				this.state.viewport = new WebMercatorViewport({
-					width: width,
-					height: height,
-				}).fitBounds([
-					[this.state.bounds.west, this.state.bounds.south], 
-					[this.state.bounds.east, this.state.bounds.north]
-				], { padding: padding });
+		//make the viewport
+		if (this.state.bounds.west == this.state.bounds.east) {
+			//single marker
+			this.state.viewport = {
+				latitude: this.state.bounds.north,
+				longitude: this.state.bounds.west,
+				zoom: 14,
 			}
+		} else if (!this.props.state.map_initialized && this.state.viewport.width > 1) {
+			//calculate bounds now knowing dimensions
+			this.state.viewport = new WebMercatorViewport({
+				width: this.state.viewport.width,
+				height: this.state.viewport.height,
+			}).fitBounds([
+				[this.state.bounds.west, this.state.bounds.south], 
+				[this.state.bounds.east, this.state.bounds.north]
+			], { 
+				padding: Math.min(this.state.viewport.width, this.state.viewport.height) / 10 
+			});
+			//this.props.setAppState('map_initialized', true);
 		}
-
+		console.log('--------------');
 		return(
-			<div className="border rounded bg-light flex-grow-1 map" ref={this.child}>
+			<div className="border rounded bg-light flex-grow-1 map">
 				{ this.state.viewport &&
 				<ReactMapGL
 					{...this.state.viewport}
@@ -116,20 +115,43 @@ export default class Map extends Component {
 					>
 					{locations_keys.map(key => {
 						const location = locations[key];
+						//console.log(locations[key]);
 						return(
-					<Marker
-						key={key}
-						latitude={location.latitude}
-						longitude={location.longitude}
-						offsetLeft={-settings.marker_style.width / 2}
-						offsetTop={-settings.marker_style.height}
-						>
-						<div
-							title={location.name}
-							style={settings.marker_style}
-							onClick={() => this.setState({popup: true})}
-							/>
-					</Marker>
+							<div key={key}>
+								<Marker
+									latitude={location.latitude}
+									longitude={location.longitude}
+									offsetLeft={-settings.marker_style.width / 2}
+									offsetTop={-settings.marker_style.height}
+									>
+									<div
+										title={location.name}
+										style={settings.marker_style}
+										onClick={() => this.setState({popup: key})}
+										/>
+								</Marker>
+								{ (this.state.popup == key) && <Popup
+									latitude={location.latitude}
+									longitude={location.longitude}
+									className="popup"
+									onClose={() => this.setState({popup: null})}
+									offsetTop={-settings.marker_style.height}
+									>
+									<h4 className="font-weight-light">{location.name}</h4>
+									<p>{location.formatted_address}</p>
+									<ul class="list-group mb-3">
+									{location.meetings.map(meeting => {
+										return(
+										<a key={meeting.slug} className="list-group-item list-group-item-action" href={ window.location.pathname + '?meeting=' + meeting.slug } onClick={event => this.setMeeting(event, meeting.slug)}>
+											<time>{meeting.time}</time>
+											{meeting.name}
+										</a>
+										);
+									})}
+									</ul>
+									<button className="btn btn-outline-secondary btn-block">Directions</button>
+								</Popup> }
+							</div>
 						);
 					})}
 			        <div className="control">
