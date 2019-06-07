@@ -90,8 +90,7 @@ export default class Meeting extends Component {
 									{other_meetings.map(other_meeting => {
 										return(
 											<li>
-												{other_meeting.name}
-												({other_meeting.time_formatted})
+												{other_meeting.name} ({strings[settings.days[other_meeting.day]]}, {other_meeting.time_formatted})
 											</li>
 										);
 									})}
