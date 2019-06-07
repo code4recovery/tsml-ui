@@ -3,16 +3,31 @@ import classNames from 'classnames/bind';
 
 import { settings, strings } from '../settings';
 
+
+export class MeetingURL extends Component {
+    render() {
+        let meeting = this.props.meeting;
+
+        return (
+            <a href={ window.location.pathname + '?meeting=' + meeting.slug } onClick={event => this.setMeeting(event, meeting.slug)}>{meeting.name}</a>
+        );
+    }
+}
+
 export default class Table extends Component {
+
+	getMeetingURL(meeting) {
+		return (
+			<a href={ window.location.pathname + '?meeting=' + meeting.slug } onClick={event => this.setMeeting(event, meeting.slug)}>{meeting.name}</a>
+		);
+	}
 
 	getValue(meeting, key) {
 		if (key == 'address') {
 			const address = meeting.formatted_address.split(', ');
 			return address.length ? address[0] : '';
 		} else if (key == 'name' && meeting.slug) {
-			return(
-				<a href={ window.location.pathname + '?meeting=' + meeting.slug } onClick={event => this.setMeeting(event, meeting.slug)}>{meeting.name}</a>
-			);
+			return this.getMeetingURL(meeting);
 		} else if (key == 'time') {
 			return(
 				<time className="text-nowrap">

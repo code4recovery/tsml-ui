@@ -3,6 +3,8 @@ import classNames from 'classnames/bind';
 import ReactMapGL, { Marker, NavigationControl, Popup } from 'react-map-gl';
 
 import { settings, strings } from '../settings';
+import MeetingURL from './table';
+
 
 export default class Meeting extends Component {
 
@@ -88,9 +90,11 @@ export default class Meeting extends Component {
 								<p className="my-0 mt-1">Other meetings at this address:</p>
 								<ol className="my-0 mt-1">
 									{other_meetings.map(other_meeting => {
+										// let t = Table;
+										// let other_meeting_url = t.getMeetingURL(other_meeting);
 										return(
 											<li>
-												{other_meeting.name} ({strings[settings.days[other_meeting.day]]}, {other_meeting.time_formatted})
+												<MeetingUrl meeting={other_meeting} /> ({strings[settings.days[other_meeting.day]]}, {other_meeting.time_formatted})
 											</li>
 										);
 									})}
