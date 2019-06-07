@@ -50,6 +50,13 @@ export default class Meeting extends Component {
 			}
 		}
 
+		let other_meetings = []
+		if(this.props.state.meetings && meeting && meeting.hasOwnProperty('formatted_address')) {
+			other_meetings = this.props.state.meetings.filter(
+				(m) => m.formatted_address === meeting.formatted_address
+			)
+		}
+
 		return this.props.state.input.meeting && meeting && (
 			<div className="flex-column flex-grow-1 d-flex">
 				<h1 className="font-weight-light">
@@ -80,10 +87,13 @@ export default class Meeting extends Component {
 								<p className="my-0 mt-1">{meeting.formatted_address}</p>
 								<p className="my-0 mt-1">Other meetings at this address:</p>
 								<ol className="my-0 mt-1">
-									<li>One Day at a Time</li>
-									<li>One Day at a Time</li>
-									<li>One Day at a Time</li>
-									<li>One Day at a Time</li>
+									{other_meetings.map(other_meeting => {
+										return(
+											<li>
+												{other_meeting.name} ({strings[settings.days[other_meeting.day]]}, {other_meeting.time_formatted})
+											</li>
+										);
+									})}
 								</ol>
 							</div>
 						</div>
