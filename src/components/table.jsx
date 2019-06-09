@@ -4,22 +4,27 @@ import classNames from 'classnames/bind';
 import { settings, strings } from '../settings';
 
 
-export class MeetingURL extends Component {
+export class MeetingLink extends Component {
     render() {
         let meeting = this.props.meeting;
-
         return (
-            <a href={ window.location.pathname + '?meeting=' + meeting.slug } onClick={event => this.setMeeting(event, meeting.slug)}>{meeting.name}</a>
+            <a href={ window.location.pathname + '?meeting=' + meeting.slug } onClick={event => Table.setMeeting(event, meeting.slug)}>{meeting.name}</a>
         );
     }
 }
 
 export default class Table extends Component {
-
-	getMeetingURL(meeting) {
+	getMeetingLink(meeting) {
 		return (
 			<a href={ window.location.pathname + '?meeting=' + meeting.slug } onClick={event => this.setMeeting(event, meeting.slug)}>{meeting.name}</a>
 		);
+	}
+
+	setMeeting(event, slug) {
+		event.preventDefault();
+		console.log(this.props.state.input);
+		this.props.state.input.meeting = slug;
+		this.props.setAppState('input', this.props.state.input);
 	}
 
 	getValue(meeting, key) {
@@ -27,7 +32,8 @@ export default class Table extends Component {
 			const address = meeting.formatted_address.split(', ');
 			return address.length ? address[0] : '';
 		} else if (key == 'name' && meeting.slug) {
-			return this.getMeetingURL(meeting);
+			return this.getMeetingLink(meeting=meeting);
+			// return <MeetingLink meeting={meeting} />;
 		} else if (key == 'time') {
 			return(
 				<time className="text-nowrap">
@@ -42,12 +48,6 @@ export default class Table extends Component {
 			);
 		}
 		return meeting[key];
-	}
-
-	setMeeting(event, slug) {
-		event.preventDefault();
-		this.props.state.input.meeting = slug;
-		this.props.setAppState('input', this.props.state.input);
 	}
 
 	render() {
