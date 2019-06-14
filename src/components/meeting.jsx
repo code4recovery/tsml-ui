@@ -3,7 +3,6 @@ import classNames from 'classnames/bind';
 import ReactMapGL, { Marker, NavigationControl, Popup } from 'react-map-gl';
 
 import { settings, strings } from '../settings';
-import MeetingLink from './table';
 
 
 export default class Meeting extends Component {
