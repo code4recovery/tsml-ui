@@ -4,15 +4,6 @@ import classNames from 'classnames/bind';
 import { settings, strings } from '../settings';
 
 
-export class MeetingLink extends Component {
-    render() {
-        let meeting = this.props.meeting;
-        return (
-            <a href={ window.location.pathname + '?meeting=' + meeting.slug } onClick={event => Table.setMeeting(event, meeting.slug)}>{meeting.name}</a>
-        );
-    }
-}
-
 export default class Table extends Component {
 	getMeetingLink(meeting) {
 		return (
