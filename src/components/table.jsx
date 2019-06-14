@@ -24,7 +24,6 @@ export default class Table extends Component {
 			return address.length ? address[0] : '';
 		} else if (key == 'name' && meeting.slug) {
 			return this.getMeetingLink(meeting=meeting);
-			// return <MeetingLink meeting={meeting} />;
 		} else if (key == 'time') {
 			return(
 				<time className="text-nowrap">
