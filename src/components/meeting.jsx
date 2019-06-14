@@ -27,6 +27,19 @@ export default class Meeting extends Component {
 		this.setState({ viewport: viewport });
 	}
 
+	getMeetingLink(meeting) {
+		return (
+			<a href={ window.location.pathname + '?meeting=' + meeting.slug } onClick={event => this.setMeeting(event, meeting.slug)}>{meeting.name}</a>
+		);
+	}
+
+	setMeeting(event, slug) {
+		event.preventDefault();
+		console.log(this.props.state.input);
+		this.props.state.input.meeting = slug;
+		this.props.setAppState('input', this.props.state.input);
+	}
+
 	render() {
 
 		let meeting = {};
@@ -53,6 +66,7 @@ export default class Meeting extends Component {
 		}
 
 		let other_meetings = []
+		let loop_today = -1;
 		if(this.props.state.meetings && meeting && meeting.hasOwnProperty('formatted_address')) {
 			other_meetings = this.props.state.meetings.filter(
 				(m) => m.formatted_address === meeting.formatted_address
@@ -87,17 +101,23 @@ export default class Meeting extends Component {
 							<div className="list-group-item">
 								<h5>{meeting.location}</h5>
 								<p className="my-0 mt-1">{meeting.formatted_address}</p>
-								<p className="my-0 mt-1">Other meetings at this address:</p>
+							</div>
+							<div className="list-group-item">
+								<h5>Other Meetings Here:</h5>
 								<ol className="my-0 mt-1">
 									{other_meetings.map(other_meeting => {
-										// let t = Table;
-										// let other_meeting_url = t.getMeetingURL(other_meeting);
+										if(loop_today != other_meeting.day) {
+											loop_today = other_meeting.day;
+											return (
+												<strong>{strings[settings.days[other_meeting.day]]}</strong>
+											)
+										}
+										let other_meeting_link= this.getMeetingLink(other_meeting);
 										return(
 											<li>
-												<MeetingLink meeting={other_meeting} /> ({strings[settings.days[other_meeting.day]]}, {other_meeting.time_formatted})
+												{other_meeting.time_formatted}: {other_meeting_link}
 											</li>
 										);
-										// <MeetingURL meeting={other_meeting} /> ({strings[settings.days[other_meeting.day]]}, {other_meeting.time_formatted})	
 									})}
 								</ol>
 							</div>
