@@ -28,6 +28,7 @@ export const settings = merge({
 	strings: {
 		en: {
 			address: 'Address',
+			all_meetings: 'All Meetings at this Location',
 			alerts: {
 				bad_data: 'An error was encountered loading the data source.',
 				no_data: 'A data source parameter must be specified.',
@@ -37,10 +38,12 @@ export const settings = merge({
 			day_any: 'Any Day',
 			evening: 'Evening',
 			friday: 'Friday',
+			get_directions: 'Get Directions',
 			in: 'in', //todo find way to do this with string pattern
 			list: 'List',
 			location: 'Location',
 			map: 'Map',
+			meeting_information: 'Meeting Information',
 			meetings: 'Meetings',
 			midday: 'Midday',
 			monday: 'Monday',

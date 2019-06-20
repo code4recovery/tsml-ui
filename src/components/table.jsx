@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import classNames from 'classnames/bind';
 
 import { settings, strings } from '../settings';
+import Link from './link';
 
 export default class Table extends Component {
 
@@ -10,11 +11,9 @@ export default class Table extends Component {
 			const address = meeting.formatted_address.split(', ');
 			return address.length ? address[0] : '';
 		} else if (key == 'name' && meeting.slug) {
-			return(
-				<a href={ window.location.pathname + '?meeting=' + meeting.slug } onClick={event => this.setMeeting(event, meeting.slug)}>{meeting.name}</a>
-			);
+			return (<Link meeting={meeting} state={this.props.state} setAppState={this.props.setAppState}/>);
 		} else if (key == 'time') {
-			return(
+			return (
 				<time className="text-nowrap">
 					<div className={classNames('mr-1', {
 						'd-none': this.props.state.input.day.length == 1,
@@ -27,12 +26,6 @@ export default class Table extends Component {
 			);
 		}
 		return meeting[key];
-	}
-
-	setMeeting(event, slug) {
-		event.preventDefault();
-		this.props.state.input.meeting = slug;
-		this.props.setAppState('input', this.props.state.input);
 	}
 
 	render() {
