@@ -201,6 +201,21 @@ class App extends Component {
 						capabilities.coordinates = true;
 					}
 
+					//creates formatted_address if necessary
+					if(!meeting.formatted_address){
+						if (meeting.address && meeting.city){
+							let temp = meeting.address + ", " + meeting.city;
+							if(meeting.state) temp = temp + ", " + meeting.state;
+							if(meeting.postal_code) temp = temp + " " + meeting.postal_code;
+							if(meeting.country) temp = temp + ", " + meeting.country;
+							meeting.formatted_address = temp;
+							result[i].formatted_address = meeting.formatted_address;
+						}
+						else {
+							console.error('Formatted address could not be created, at least address and city required.');
+						}
+					}
+
 					//build search string
 					result[i].search = [meeting.name, meeting.location, meeting.location_notes, meeting.notes, meeting.formatted_address].join(' ').toLowerCase();
 				}
