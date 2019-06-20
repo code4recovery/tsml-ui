@@ -3,7 +3,7 @@ import classNames from 'classnames/bind';
 import ReactMapGL, { Marker, NavigationControl, Popup } from 'react-map-gl';
 
 import { settings, strings } from '../settings';
-
+import Link from './link';
 
 export default class Meeting extends Component {
 
@@ -24,19 +24,6 @@ export default class Meeting extends Component {
 
 	updateViewport(viewport) {
 		this.setState({ viewport: viewport });
-	}
-
-	getMeetingLink(meeting) {
-		return (
-			<a href={ window.location.pathname + '?meeting=' + meeting.slug } onClick={event => this.setMeeting(event, meeting.slug)}>{meeting.name}</a>
-		);
-	}
-
-	setMeeting(event, slug) {
-		event.preventDefault();
-		console.log(this.props.state.input);
-		this.props.state.input.meeting = slug;
-		this.props.setAppState('input', this.props.state.input);
 	}
 
 	render() {
@@ -64,14 +51,6 @@ export default class Meeting extends Component {
 			}
 		}
 
-		let other_meetings = []
-		let loop_today = -1;
-		if(this.props.state.meetings && meeting && meeting.hasOwnProperty('formatted_address')) {
-			other_meetings = this.props.state.meetings.filter(
-				(m) => m.formatted_address === meeting.formatted_address
-			)
-		}
-
 		return this.props.state.input.meeting && meeting && (
 			<div className="flex-column flex-grow-1 d-flex">
 				<h1 className="font-weight-light">
@@ -81,10 +60,10 @@ export default class Meeting extends Component {
 				</h1>
 				<div className="row flex-grow-1">
 					<div className={classNames('mb-3', {'col-md-4 mb-md-0': this.props.state.capabilities.map})}>
-						<a className="btn btn-outline-secondary btn-block mb-3" href="">Get Directions</a>
+						<a className="btn btn-outline-secondary btn-block mb-3" href="">{strings.get_directions}</a>
 						<div className="list-group">
 							<div className="list-group-item">
-								<h5>Meeting Information</h5>
+								<h5>{strings.meeting_information}</h5>
 								<p className="my-0 mt-1">
 									{strings[settings.days[meeting.day]]}, {meeting.time_formatted}
 									{ meeting.end_time ? ' – ' + meeting.end_time_formatted : '' }
@@ -101,25 +80,29 @@ export default class Meeting extends Component {
 								<h5>{meeting.location}</h5>
 								<p className="my-0 mt-1">{meeting.formatted_address}</p>
 							</div>
+							{this.props.state.meetings && meeting && meeting.hasOwnProperty('formatted_address') &&
 							<div className="list-group-item">
-								<h5>Other Meetings Here:</h5>
-								<ol className="my-0 mt-1">
-									{other_meetings.map(other_meeting => {
-										if(loop_today != other_meeting.day) {
-											loop_today = other_meeting.day;
-											return (
-												<strong>{strings[settings.days[other_meeting.day]]}</strong>
-											)
-										}
-										let other_meeting_link= this.getMeetingLink(other_meeting);
-										return(
-											<li>
-												{other_meeting.time_formatted}: {other_meeting_link}
-											</li>
-										);
-									})}
-								</ol>
+								<h5>{strings.all_meetings}</h5>
+								{settings.days.map((day, index) => {
+									const other_meetings = this.props.state.meetings.filter(
+										m => m.day == index && m.formatted_address === meeting.formatted_address
+									)
+									return (other_meetings.length > 0) && (
+										<div key={day}>
+											<h6 className="mt-3 pb-2 border-bottom">{strings[day]}</h6>
+											<ol className="m-0 p-0" style={{listStyleType:'none'}}>
+												{other_meetings.map(meeting => (
+												<li key={meeting.slug} style={{paddingLeft:'5rem'}}>
+													<span className="position-absolute text-muted" style={{left:'1.25rem'}}>{meeting.time_formatted}</span>
+													<Link meeting={meeting} state={this.props.state} setAppState={this.props.setAppState}/>
+												</li>
+											))}
+											</ol>
+										</div>
+									);
+								})}
 							</div>
+							}
 						</div>
 					</div>
 					<div className={classNames('col-md-8 map', {'d-none': !this.props.state.capabilities.map})}>
