@@ -2,30 +2,18 @@ import React, { Component } from 'react';
 import classNames from 'classnames/bind';
 
 import { settings, strings } from '../settings';
-
+import Link from './link';
 
 export default class Table extends Component {
-	getMeetingLink(meeting) {
-		return (
-			<a href={ window.location.pathname + '?meeting=' + meeting.slug } onClick={event => this.setMeeting(event, meeting.slug)}>{meeting.name}</a>
-		);
-	}
-
-	setMeeting(event, slug) {
-		event.preventDefault();
-		console.log(this.props.state.input);
-		this.props.state.input.meeting = slug;
-		this.props.setAppState('input', this.props.state.input);
-	}
 
 	getValue(meeting, key) {
 		if (key == 'address') {
 			const address = meeting.formatted_address.split(', ');
 			return address.length ? address[0] : '';
 		} else if (key == 'name' && meeting.slug) {
-			return this.getMeetingLink(meeting=meeting);
+			return (<Link meeting={meeting} state={this.props.state} setAppState={this.props.setAppState}/>);
 		} else if (key == 'time') {
-			return(
+			return (
 				<time className="text-nowrap">
 					<div className={classNames('mr-1', {
 						'd-none': this.props.state.input.day.length == 1,
