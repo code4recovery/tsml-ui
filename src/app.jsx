@@ -12,6 +12,7 @@ import Meeting from './components/meeting';
 import Table from './components/table';
 import Title from './components/title';
 import { settings, strings } from './settings';
+import * as altsrc from './altsrc';
 
 //locate <meetings> element
 let element = document.getElementsByTagName('meetings');
@@ -96,11 +97,10 @@ class App extends Component {
 		const json = element.getAttribute('src');
 
 		//fetch json data file and build indexes
-		fetch(json)
+		((json == 'altsrc') ? altsrc.fetchData(element) : (fetch(json)
 			.then(result => {
-				//todo google docs support
 				return result.json();
-			}).then(result => {
+			}))).then(result => {
 				//indexes start as objects, will be converted to arrays
 				let indexes = {
 					day: {},
