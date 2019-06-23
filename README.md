@@ -1,6 +1,6 @@
 # Website Meeting Finder 2.0
 
-With only a [Meeting Guide format JSON file](https://github.com/meeting-guide/spec), developers can soon have the same meeting finder found in the [12 Step Meeting List](https://github.com/meeting-guide/12-step-meeting-list) WordPress plugin on any website platform. 
+With only a [Meeting Guide format JSON file](https://github.com/meeting-guide/spec) or a Google Sheet, web servants can have the same meeting finder found in the [12 Step Meeting List](https://github.com/meeting-guide/12-step-meeting-list) WordPress plugin on any website platform. 
 
 Advantanges:
 
@@ -25,12 +25,30 @@ You don't need to download anything. Simply add the following code to your page:
 
 1. In your `<body>` add:
 			
-		<meetings src="/path/to/meetings.json"></meetings>
+		<meetings src="/path/to/meetings.json"/>
 		<script src="https://react.meetingguide.org/app.js" async></script>
 
 1. Edit `/path/to/meetings.json` in the code above to point to your JSON file.
 
-## Configuration
+## Google Sheet Support
+
+To use a Google Sheet as your backend:
+
+1. First start and publish a Google Sheet that looks like [this example](https://docs.google.com/spreadsheets/d/e/2PACX-1vQJ5OsDCKSDEvWvqM_Z6tmXe4N-VYEnEAfvU5PX5QXZjHVbnrX-aeiyhWnZp0wpWtOmWjO4L5GJtfFu/pubhtml).
+1. Read this [blog post](https://coderwall.com/p/duapqq/use-a-google-spreadsheet-as-your-json-backend) to determine what the JSON URL of your sheet is.
+1. Use that JSON URL as the `src` in your `<meetings/>`
+
+## Maps
+
+To add a free map to your site:
+
+1. Sign up for [Mapbox](https://mapbox.com) (takes one minute and doesn't require a credit card)
+1. Copy your Public Access Token
+1. Use it in a `mapbox` parameter on your `meetings` tag, eg
+
+		<meetings src="/path/to/meetings.json" mapbox="pk.aaaaabbbbbcccccdddddeeeeefffffgggg"/>
+
+## Advanced Customization
 
 See [src/settings.jsx](settings.jsx) for options that can be set by defining a `window.config` object. You can customize many of the behaviors and all of the text strings that the app uses. Only include the values you wish to override.
 
@@ -69,33 +87,30 @@ A full list of meeting types can be found on the [Meeting Guide format spec page
 - [x] Mobile list view
 - [x] Multilingual support
 - [x] Day query string: don't automatically specify day, support for `any` value
-- [ ] Mapbox
-- [ ] Near location mode with geocoding
-- [ ] Near me mode
-- [ ] Google Sheet support
-- [ ] Scroll issue on inside page
-- [ ] Upcoming time filter
+- [x] Scroll issue on inside page
+- [x] Mapbox
+- [x] Google Sheet support
 
 ### Nice to have
 
+- [ ] Near me mode
+- [ ] Near location mode with geocoding
+- [ ] Upcoming time filter
 - [ ] Better internationalization for title
 - [ ] Sortable columns
 - [ ] Hierarchical regions support
-- [ ] Google Maps support
 - [ ] Slugs (eg `sun`) in query string instead of day IDs
 - [ ] Slugs (eg `mountain-view`) in query string instead of region IDs
 - [ ] Select multiple dropdown items on mobile
-- [ ] Query string key prefix setting
-- [ ] Condition clearing in no results alert
+- [ ] Condition-clearing buttons in no results message
 - [ ] Reduce memory by forgetting unneeded meeting data, eg URLs
 - [ ] Display group names and Venmo links on inside page
 - [ ] Feedback form on inside page
-- [ ] Remove any settings from settings.jsx that should not be overridden
 
 ### Questions
 
-- [x] Possible to do a custom tag? eg `<meetings src="/path/to/meetings"></meetings>`
-- [x] How to handle email transport?
+- [x] Possible to do a custom tag? eg `<meetings src="/path/to/meetings"/>`
+- [ ] How to handle email transport?
 - [ ] What will the impact be on SEO?
 
 ## Contributing
