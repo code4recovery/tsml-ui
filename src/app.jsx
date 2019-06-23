@@ -12,7 +12,7 @@ import Meeting from './components/meeting';
 import Table from './components/table';
 import Title from './components/title';
 import { settings, strings } from './settings';
-import * as googlesheet from './googlesheet';
+import { translateGoogleSheet } from './googlesheet';
 
 //locate <meetings> element
 let element = document.getElementsByTagName('meetings');
@@ -97,10 +97,15 @@ class App extends Component {
 		const json = element.getAttribute('src');
 
 		//fetch json data file and build indexes
-		((json == 'googlesheet') ? googlesheet.fetchData(element) : (fetch(json)
+		fetch(json)
 			.then(result => {
 				return result.json();
-			}))).then(result => {
+			}).then(result => {
+				//checks if src is googlesheet and translates if so translates
+				if (json.includes('spreadsheets.google.com')) {
+					result = translateGoogleSheet(result);
+				}
+
 				//indexes start as objects, will be converted to arrays
 				let indexes = {
 					day: {},
