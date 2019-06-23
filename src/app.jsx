@@ -12,7 +12,7 @@ import Meeting from './components/meeting';
 import Table from './components/table';
 import Title from './components/title';
 import { settings, strings } from './settings';
-import * as altsrc from './altsrc';
+import * as googlesheet from './googlesheet';
 
 //locate <meetings> element
 let element = document.getElementsByTagName('meetings');
@@ -97,7 +97,7 @@ class App extends Component {
 		const json = element.getAttribute('src');
 
 		//fetch json data file and build indexes
-		((json == 'altsrc') ? altsrc.fetchData(element) : (fetch(json)
+		((json == 'googlesheet') ? googlesheet.fetchData(element) : (fetch(json)
 			.then(result => {
 				return result.json();
 			}))).then(result => {
@@ -130,6 +130,9 @@ class App extends Component {
 						}
 						indexes.region[meeting.region].slugs.push(meeting.slug);
 					}
+
+					//convert day to string if integer
+					if(Number.isInteger(meeting.day)) meeting.day = meeting.day.toString();
 
 					//build day index
 					if (meeting.day) {
