@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import classNames from 'classnames/bind';
+import cx from 'classnames/bind';
 import ReactMapGL, { Marker, NavigationControl, Popup } from 'react-map-gl';
 import WebMercatorViewport from 'viewport-mercator-project';
 

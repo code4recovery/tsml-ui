@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import classNames from 'classnames/bind';
+import cx from 'classnames/bind';
 
 import { settings, strings } from '../settings';
 
@@ -37,7 +37,7 @@ export default class Title extends Component {
 		title = title.join(' ');
 		document.title = title;
 		return(
-			<h1 className={classNames('font-weight-light', { 
+			<h1 className={cx('font-weight-light', { 
 				'd-none': !settings.defaults.title || this.props.state.input.meeting || this.props.state.loading
 			})}>{title}</h1>
 		);

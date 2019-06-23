@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import classNames from 'classnames/bind';
+import cx from 'classnames/bind';
 
 import { settings, strings } from '../settings';
 
@@ -13,7 +13,7 @@ export default class Alert extends Component {
 			message = strings.alerts[this.props.state.alert];
 		}
 		return(
-			<div className={classNames('alert', { 
+			<div className={cx('alert', { 
 				'alert-danger': this.props.state.error, 
 				'alert-warning': this.props.state.alert && !this.props.state.error, 
 				'd-none': this.props.state.loading || !message,

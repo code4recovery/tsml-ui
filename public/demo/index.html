@@ -4,19 +4,25 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Demo AA Website</title>
+    <style>
+      body { background: papayawhip; color: gray; font-family: Georgia, serif; font-size: 18px; line-height: 1.4; }
+      main { background: white; border: 1px solid lightgray; margin: 20px auto; padding: 0 15px; }
+      main > h1 { border-bottom: 1px solid lightgray; color: firebrick; margin: 30px 0 0; }
+      p { margin-top: 15px; }
+      a { color: firebrick; }
+      @media (min-width: 620px) { main { width: 90%; } }
+      @media (min-width: 800px) { main { width: 80%; } }
+      @media (min-width: 1400px) { main { width: 1300px; } }
+    </style>
     <link rel="stylesheet" href="/style.css">
-    <link rel="stylesheet" href="/demo/demo.css">
   </head>
   <body>
-    <div id="container">
-      <main>
-        <h1>Meetings</h1>
-        <p>
-          This is a demo site for the <a href="https://github.com/meeting-guide/react/">React project</a> to simulate what embedding the widget could look like on a site with a random design. Meetings are supposed to load below.
-        </p>
-        <meetings src="https://spreadsheets.google.com/feeds/list/1prbiXHu9JS5eREkYgBQkxlkJELRHqrKz6-_PLGPWIWk/1/public/values?alt=json"/>
-      </main>
-    </div>
+    <main>
+      <h1>Meeting Finder 2.0 Demo</h1>
+      <p>This is a demo site for the <a href="https://github.com/meeting-guide/react/">React Meeting Finder 2.0 project</a> to show embedding it on a site with a random design.</p>
+      <p>The data source for this demo is <a href="https://docs.google.com/spreadsheets/d/e/2PACX-1vQJ5OsDCKSDEvWvqM_Z6tmXe4N-VYEnEAfvU5PX5QXZjHVbnrX-aeiyhWnZp0wpWtOmWjO4L5GJtfFu/pubhtml">this live Google Sheet</a> for Carteret County, NC.</p>
+      <meetings src="https://spreadsheets.google.com/feeds/list/1prbiXHu9JS5eREkYgBQkxlkJELRHqrKz6-_PLGPWIWk/1/public/values?alt=json"/>
+    </main>
     <script src="/app.js" async></script>
   </body>
 </html>

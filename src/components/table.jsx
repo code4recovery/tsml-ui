@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import classNames from 'classnames/bind';
+import cx from 'classnames/bind';
 
 import { settings, strings } from '../settings';
 import Link from './link';
@@ -15,7 +15,7 @@ export default class Table extends Component {
 		} else if (key == 'time') {
 			return (
 				<time className="text-nowrap">
-					<div className={classNames('mr-1', {
+					<div className={cx('mr-1', {
 						'd-none': this.props.state.input.day.length == 1,
 						'd-sm-inline': this.props.state.input.day.length != 1,
 					})}>
@@ -31,7 +31,7 @@ export default class Table extends Component {
 	render() {
 		return(
 			<div className="row">
-				<table className={classNames('table table-striped flex-grow-1 my-0', { 
+				<table className={cx('table table-striped flex-grow-1 my-0', { 
 					'd-none': (this.props.filteredSlugs.length == 0) || (this.props.state.input.view != 'list') || this.props.state.input.meeting
 				})}>
 					<thead>
@@ -47,7 +47,7 @@ export default class Table extends Component {
 							return(
 								<tr className="d-block d-sm-table-row" key={meeting.slug}>
 									{settings.defaults.columns.map(column => 
-										<td key={[meeting.slug, column].join('-')} className={classNames('d-block d-sm-table-cell', column)}>
+										<td key={[meeting.slug, column].join('-')} className={cx('d-block d-sm-table-cell', column)}>
 											{this.getValue(meeting, column)}
 										</td>
 									)}
