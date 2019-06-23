@@ -13,6 +13,10 @@ import Table from './components/table';
 import Title from './components/title';
 import { settings, strings } from './settings';
 
+import FormatTime from './helpers/format-time';
+import GoogleSheet from './helpers/google-sheet';
+import Slugify from './helpers/slugify';
+
 //locate <meetings> element
 let element = document.getElementsByTagName('meetings');
 if (!element.length) console.error('Could not find a <meetings> element in your HTML');
@@ -98,15 +102,26 @@ class App extends Component {
 		//fetch json data file and build indexes
 		fetch(json)
 			.then(result => {
-				//todo google docs support
 				return result.json();
 			}).then(result => {
+				//checks if src is google sheet and translates it if so
+				if (json.includes('spreadsheets.google.com')) {
+					result = GoogleSheet(result);
+				}
+
 				//indexes start as objects, will be converted to arrays
 				let indexes = {
 					day: {},
 					region: {},
 					time: {},
 					type: {},
+				}
+
+				//need these lookups in a second
+				const lookup_day = settings.days.map(day => strings[day])
+				const lookup_type = {};
+				for (let code in strings.types) {
+					lookup_type[strings.types[code]] = code;
 				}
 
 				//get a copy of the array
@@ -118,17 +133,30 @@ class App extends Component {
 					//for readability
 					let meeting = result[i];
 
+					//if no region then use city
+					if (!meeting.region && meeting.city) {
+						meeting.region = meeting.city;
+					}
+
 					//build region index
 					if (meeting.region) {
 						capabilities.region = true;
 						if (meeting.region in indexes.region === false) {
 							indexes.region[meeting.region] = {
-								key: meeting.region_id,
+								key: meeting.region_id || Slugify(meeting.region),
 								name: meeting.region,
 								slugs: [],
 							};
 						}
 						indexes.region[meeting.region].slugs.push(meeting.slug);
+					}
+
+					//format day
+					if (Number.isInteger(meeting.day)) {
+						//convert day to string if integer
+						meeting.day = meeting.day.toString();
+					} else if (lookup_day.includes(meeting.day)) {
+						meeting.day = lookup_day.indexOf(meeting.day).toString();
 					}
 
 					//build day index
@@ -173,27 +201,30 @@ class App extends Component {
 							indexes.time[meeting.times[j]].slugs.push(meeting.slug);
 						}
 
-						meeting.time_formatted = this.formatTime(meeting.time);
-						meeting.end_time_formatted = this.formatTime(meeting.end_time);
+						meeting.time_formatted = FormatTime(meeting.time);
+						meeting.end_time_formatted = FormatTime(meeting.end_time);
 					}
 
 					//build type index (can be multiple)
 					if (meeting.types) {
 						capabilities.type = true;
+						meeting.types = meeting.types.map(type => type.trim()).filter(type => type.length);
 						for (let j = 0; j < meeting.types.length; j++) {
-							if (meeting.types[j] in indexes.type === false) {
-								indexes.type[meeting.types[j]] = {
-									key: meeting.types[j],
-									name: strings.types[meeting.types[j]],
-									slugs: [],
-								}
+							if (meeting.types[j] in lookup_type) {
+								meeting.types[j] = lookup_type[meeting.types[j]];
 							}
-							indexes.type[meeting.types[j]].slugs.push(meeting.slug);
+							if (meeting.types[j] in strings.types) {
+								if (meeting.types[j] in indexes.type === false) {
+									indexes.type[meeting.types[j]] = {
+										key: meeting.types[j],
+										name: strings.types[meeting.types[j]],
+										slugs: [],
+									}
+								}
+								indexes.type[meeting.types[j]].slugs.push(meeting.slug);
+							}
 						}
-					}
-
-					if (meeting.slug) {
-						meeting.url = null;
+						meeting.types = meeting.types.filter(type => type in strings.types).sort();
 					}
 
 					//build index of map pins
@@ -202,16 +233,15 @@ class App extends Component {
 					}
 
 					//creates formatted_address if necessary
-					if(!meeting.formatted_address){
+					if (!meeting.formatted_address){
 						if (meeting.address && meeting.city){
 							let temp = meeting.address + ", " + meeting.city;
-							if(meeting.state) temp = temp + ", " + meeting.state;
-							if(meeting.postal_code) temp = temp + " " + meeting.postal_code;
-							if(meeting.country) temp = temp + ", " + meeting.country;
+							if (meeting.state) temp = temp + ", " + meeting.state;
+							if (meeting.postal_code) temp = temp + " " + meeting.postal_code;
+							if (meeting.country) temp = temp + ", " + meeting.country;
 							meeting.formatted_address = temp;
 							result[i].formatted_address = meeting.formatted_address;
-						}
-						else {
+						} else {
 							console.error('Formatted address could not be created, at least address and city required.');
 						}
 					}
@@ -271,23 +301,6 @@ class App extends Component {
 					loading: false,
 				});
 			});
-	}
-
-	//quick format time function
-	formatTime(time) {
-		if (time == null || time.length == 0) return null;
-		let [ hours, minutes ] = time.split(':');
-		let ampm = 'am';
-		hours = parseInt(hours);
-		if (hours == 0) {
-			hours = 12;
-		} else if (hours > 11) {
-			if (hours == 12 && minutes == '00') return 'Noon'; 
-			if (hours == 23 && minutes == '59') return 'Mid';
-			ampm = 'pm';
-			if (hours > 12) hours -= 12;
-		}
-		return hours + ':' + minutes + ' ' + ampm;
 	}
 
 	//get common matches between arrays (for meeting filtering)
