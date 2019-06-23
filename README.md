@@ -2,6 +2,8 @@
 
 With only a [Meeting Guide format JSON file](https://github.com/meeting-guide/spec) or a Google Sheet, web servants can have the same meeting finder found in the [12 Step Meeting List](https://github.com/meeting-guide/12-step-meeting-list) WordPress plugin on any website platform. 
 
+[Here's a demo](https://react.meetingguide.org/demo/) of what the meeting finder can look like embedded in a random website design.
+
 Advantanges:
 
 * faster performance for users
@@ -47,6 +49,8 @@ To add a free map to your site:
 1. Use it in a `mapbox` parameter on your `meetings` tag, eg
 
 		<meetings src="/path/to/meetings.json" mapbox="pk.aaaaabbbbbcccccdddddeeeeefffffgggg"/>
+
+If you're using a Google Sheet, you will have to add `Latitude` and `Longitude` columns for your meetings to show up. There are [some tools](https://www.google.com/search?q=google+sheet+geocode) that can help.
 
 ## Advanced Customization
 

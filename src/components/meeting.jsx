@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import classNames from 'classnames/bind';
+import cx from 'classnames/bind';
 import ReactMapGL, { Marker, NavigationControl, Popup } from 'react-map-gl';
 
 import { settings, strings } from '../settings';
@@ -59,7 +59,7 @@ export default class Meeting extends Component {
 					{meeting.name}
 				</h1>
 				<div className="row flex-grow-1">
-					<div className={classNames('mb-3', {'col-md-4 mb-md-0': this.props.state.capabilities.map})}>
+					<div className="mb-3 col-md-4 mb-md-0">
 						<a className="btn btn-outline-secondary btn-block mb-3" href="">{strings.get_directions}</a>
 						<div className="list-group">
 							<div className="list-group-item">
@@ -68,7 +68,7 @@ export default class Meeting extends Component {
 									{strings[settings.days[meeting.day]]}, {meeting.time_formatted}
 									{ meeting.end_time ? ' – ' + meeting.end_time_formatted : '' }
 								</p>
-								<ul className={classNames('my-0 mt-1', { 'd-none': (!meeting.types || !meeting.types.length) })}>
+								<ul className={cx('my-0 mt-1', { 'd-none': (!meeting.types || !meeting.types.length) })}>
 									{meeting.types ? meeting.types.map(type => {
 										return (
 											<li key={type}>{strings.types[type]}</li>
@@ -105,7 +105,7 @@ export default class Meeting extends Component {
 							}
 						</div>
 					</div>
-					<div className={classNames('col-md-8 map', {'d-none': !this.props.state.capabilities.map})}>
+					<div className={cx('col-md-8 map', {'d-none': !this.props.state.capabilities.map})}>
 
 						{this.state.viewport && meeting.latitude && <ReactMapGL
 							className="rounded border bg-light"
