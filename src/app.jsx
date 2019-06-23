@@ -99,6 +99,11 @@ class App extends Component {
 		//if this is empty it'll be reported in fetch()s error handler
 		const json = element.getAttribute('src');
 
+		//this is the default way to specify a mapbox key
+		if (element.getAttribute('mapbox')) {
+			settings.keys.mapbox = element.getAttribute('mapbox');
+		}
+
 		//fetch json data file and build indexes
 		fetch(json)
 			.then(result => {
