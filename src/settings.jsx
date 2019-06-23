@@ -125,6 +125,6 @@ export const settings = merge({
 		},
 	},
 	times: ['morning', 'midday', 'evening', 'night'],
-}, window.config);
+}, window.config || {});
 
 export const strings = settings.strings[settings.language];

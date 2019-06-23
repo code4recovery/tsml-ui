@@ -1,0 +1,47 @@
+body {
+  background: #f9f9f0;
+  color: #333;
+  font-family: Georgia, sans-serif;
+  font-size: 16px;
+  line-height: 1.4;
+  margin: 0;
+}
+
+#container {
+  margin: 0 auto;
+  padding: 20px 0 30px;
+}
+
+main {
+  background: #fff;
+  border: 1px solid #ccc;
+  margin: 0 auto;
+  padding: 0 10px 0;
+}
+
+p {
+  border-top: 1px solid #ddd;
+  margin: 0;
+  padding: 10px 0;
+}
+
+/* Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) {
+  main { width: 89%; }
+}
+
+/* Medium devices (tablets, 768px and up)*/
+@media (min-width: 768px) {
+  main { width: 750px; }
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+  main { width: 950px; }
+}
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+  main { width: 1100px; }
+}
+
