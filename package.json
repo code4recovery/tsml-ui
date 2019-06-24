@@ -19,11 +19,11 @@
         "deepmerge": "^3.0.0",
         "laravel-mix": "^4.0.12",
         "lodash": "^4.17.11",
-        "mapbox-gl": "^0.52.0",
+        "mapbox-gl": "^1.0.0",
         "query-string": "^6.2.0",
         "react": "^16.7.0",
         "react-dom": "^16.7.0",
-        "react-map-gl": "^4.0.5",
+        "react-map-gl": "^5.0.3",
         "sass": "^1.15.2",
         "sass-loader": "^7.1.0",
         "viewport-mercator-project": "^6.1.0"

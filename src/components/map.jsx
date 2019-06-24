@@ -5,6 +5,8 @@ import WebMercatorViewport from 'viewport-mercator-project';
 
 import { settings, strings } from '../settings';
 
+import Link from './link';
+
 export default class Map extends Component {
 
 	constructor() {
@@ -98,9 +100,8 @@ export default class Map extends Component {
 			], { 
 				padding: Math.min(this.state.viewport.width, this.state.viewport.height) / 10 
 			});
-			//this.props.setAppState('map_initialized', true);
 		}
-		console.log('--------------');
+
 		return(
 			<div className="border rounded bg-light flex-grow-1 map">
 				{ this.state.viewport &&
@@ -139,13 +140,13 @@ export default class Map extends Component {
 									>
 									<h4 className="font-weight-light">{location.name}</h4>
 									<p>{location.formatted_address}</p>
-									<ul class="list-group mb-3">
+									<ul className="list-group mb-3">
 									{location.meetings.map(meeting => {
 										return(
-										<a key={meeting.slug} className="list-group-item list-group-item-action" href={ window.location.pathname + '?meeting=' + meeting.slug } onClick={event => this.setMeeting(event, meeting.slug)}>
-											<time>{meeting.time}</time>
-											{meeting.name}
-										</a>
+										<li key={meeting.slug} className="list-group-item">
+											<time>{meeting.time_formatted}</time>
+											<Link meeting={meeting} state={this.props.state} setAppState={this.props.setAppState}/>
+										</li>
 										);
 									})}
 									</ul>
