@@ -35,6 +35,7 @@ class App extends Component {
 				geolocation: false,
 				map: false,
 				region: false,
+				regions: false,
 				time: false,
 				type: false,
 			},
@@ -122,6 +123,12 @@ class App extends Component {
 					type: {},
 				}
 
+				let regions = {
+					"label": "Everywhere",
+					"value": "0::everywhere",
+					"children": [],
+				}
+
 				//need these lookups in a second
 				const lookup_day = settings.days.map(day => strings[day])
 				const lookup_type = {};
@@ -156,6 +163,14 @@ class App extends Component {
 						indexes.region[meeting.region].slugs.push(meeting.slug);
 					}
 
+					// If tree of regions, build the tree needed by the plugin
+					if (meeting.regions) {
+						capabilities.regions = true;
+
+						// Recursively populate the region tree
+						regions.children = this.updateRegionChildren(regions.children, meeting.regions, 1);
+					}
+
 					//format day
 					if (Number.isInteger(meeting.day)) {
 						//convert day to string if integer
@@ -180,7 +195,7 @@ class App extends Component {
 					//build time index (can be multiple)
 					if (meeting.time) {
 						capabilities.time = true;
-						let [ hours, minutes ] = meeting.time.split(':');
+						let [hours, minutes] = meeting.time.split(':');
 						meeting.minutes = (parseInt(hours) * 60) + parseInt(minutes);
 						meeting.times = [];
 						if (meeting.minutes >= 240 && meeting.minutes < 720) { //4am–12pm
@@ -238,8 +253,8 @@ class App extends Component {
 					}
 
 					//creates formatted_address if necessary
-					if (!meeting.formatted_address){
-						if (meeting.address && meeting.city){
+					if (!meeting.formatted_address) {
+						if (meeting.address && meeting.city) {
 							let temp = meeting.address + ", " + meeting.city;
 							if (meeting.state) temp = temp + ", " + meeting.state;
 							if (meeting.postal_code) temp = temp + " " + meeting.postal_code;
@@ -257,7 +272,7 @@ class App extends Component {
 
 				//convert region to array and sort by name
 				indexes.region = Object.values(indexes.region);
-				indexes.region.sort((a, b) => { 
+				indexes.region.sort((a, b) => {
 					return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
 				});
 
@@ -269,14 +284,19 @@ class App extends Component {
 
 				//convert time to array and sort by ordinal
 				indexes.time = Object.values(indexes.time);
-				indexes.time.sort((a, b) => { 
+				indexes.time.sort((a, b) => {
 					return settings.times.indexOf(a.key) - settings.times.indexOf(b.key);
 				});
 
 				//convert type to array and sort by name
 				indexes.type = Object.values(indexes.type);
-				indexes.type.sort((a, b) => { 
+				indexes.type.sort((a, b) => {
 					return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
+				});
+
+				// Populate the region tree using the children of the hard-coded top level ("Everywhere")
+				this.setState({
+					region_tree: regions.children
 				});
 
 				//near me mode enabled on https
@@ -308,18 +328,55 @@ class App extends Component {
 			});
 	}
 
+	// This function builds the hierarchical region tree
+	updateRegionChildren(children, regions, level) {
+		if (regions.length) {
+			var currentRegionLabel = regions.shift();
+			var currentRegionValue = level.toString() + "::" + currentRegionLabel.replace(/[\W_]+/g, "-").toLowerCase();
+			var found = false;
+
+			for (var i = 0; i < children.length; i++) {
+				if (currentRegionValue == children[i].value) {
+					// We found a child with the value. Updated it's children with any remaining
+					// children
+					children[i].children = this.updateRegionChildren(children[i].children, regions, level + 1);
+
+					found = true;
+					break;
+				}
+			}
+
+			if (!found) {
+				if (regions.length) {
+					children.push({
+						"label": currentRegionLabel,
+						"value": currentRegionValue,
+						"children": this.updateRegionChildren([], regions, level + 1),
+					});
+				} else {
+					children.push({
+						"label": currentRegionLabel,
+						"value": currentRegionValue,
+					});
+				}
+			}
+		}
+
+		return children
+	}
+
 	//get common matches between arrays (for meeting filtering)
 	getCommonElements(arrays) {
 		var currentValues = {};
 		var commonValues = {};
 		if (!arrays.length) return [];
-		for (var i = arrays[0].length - 1; i >=0; i--){//Iterating backwards for efficiency
+		for (var i = arrays[0].length - 1; i >= 0; i--) { //Iterating backwards for efficiency
 			currentValues[arrays[0][i]] = 1; //Doesn't really matter what we set it to
 		}
-		for (var i = arrays.length-1; i>0; i--){
+		for (var i = arrays.length - 1; i > 0; i--) {
 			var currentArray = arrays[i];
-			for (var j = currentArray.length-1; j >=0; j--){
-				if (currentArray[j] in currentValues){
+			for (var j = currentArray.length - 1; j >= 0; j--) {
+				if (currentArray[j] in currentValues) {
 					commonValues[currentArray[j]] = 1; //Once again, the `1` doesn't matter
 				}
 			}
@@ -331,7 +388,7 @@ class App extends Component {
 
 	//function for components to set global state
 	setAppState(key, value) {
-		this.setState({ [key]: value });		
+		this.setState({ [key]: value} );
 	}
 
 	//function for map component to say it's done without re-render
@@ -378,7 +435,7 @@ class App extends Component {
 				filterFound = true;
 				query['search'] = this.state.input.search;
 				let needle = this.state.input.search.toLowerCase();
-				let matches = this.state.meetings.filter(function(meeting){
+				let matches = this.state.meetings.filter(function(meeting) {
 					return meeting.search.search(needle) !== -1;
 				});
 				filteredSlugs.push([].concat.apply([], matches.map(meeting => meeting.slug)));
@@ -389,12 +446,12 @@ class App extends Component {
 
 			//set map property if set
 			if (this.state.input.view != settings.defaults.view) query.view = this.state.input.view;
-			
+
 			//set inside page property if set
 			if (this.state.input.meeting) query.meeting = this.state.input.meeting;
-			
+
 			//create a query string with only values in use
-			query = qs.stringify(merge(merge(existingQuery, { 
+			query = qs.stringify(merge(merge(existingQuery, {
 				day: undefined,
 				mode: undefined,
 				region: undefined,
@@ -412,9 +469,10 @@ class App extends Component {
 			window.history.pushState('', '', query.length ? '?' + query : window.location.pathname);
 
 			//do the filtering, if necessary
-			filteredSlugs = filterFound 
-				? this.getCommonElements(filteredSlugs) //get intersection of slug arrays
-				: this.state.meetings.map(meeting => meeting.slug); //get everything
+			filteredSlugs = filterFound ?
+				this.getCommonElements(filteredSlugs) //get intersection of slug arrays
+				:
+				this.state.meetings.map(meeting => meeting.slug); //get everything
 
 			//show alert
 			this.state.alert = filteredSlugs.length ? null : 'no_results';
@@ -423,7 +481,7 @@ class App extends Component {
 			this.state.map_initialized = false;
 		}
 
-		return(
+		return (
 			<div className="container-fluid py-3 d-flex flex-column">
 				<Title state={this.state}/>
 				<Controls state={this.state} setAppState={this.setAppState}/>
