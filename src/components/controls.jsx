@@ -1,7 +1,13 @@
 import React, { Component } from 'react';
 import cx from 'classnames/bind';
-
+import DropdownTreeSelect from 'react-dropdown-tree-select';
+import 'react-dropdown-tree-select/dist/styles.css';
 import { settings, strings } from '../settings';
+
+const onRegionChange = (currentNode, selectedNodes) => {
+	console.log("CURRENT NODE", currentNode);
+	console.log("SELECTED NODES", currentNode);
+};
 
 export default class Controls extends Component {
 
@@ -99,6 +105,8 @@ export default class Controls extends Component {
 	}
 
 	render() {
+		console.log("IN CONTROLS RENDER...")
+		console.log(this.props.state.region_tree);
 		return(
 			<div className={cx('row d-print-none', {
 				'd-none': this.props.state.loading || this.props.state.input.meeting
@@ -127,6 +135,13 @@ export default class Controls extends Component {
 							</div>
 						</div>
 					</div>
+				</div>
+				<div className={cx('col-sm-6 col-lg mb-3')}>
+					<DropdownTreeSelect
+						data={this.props.state.region_tree}
+						onChange={onRegionChange}
+						className="bootstrap-region-tree"
+					/>
 				</div>
 				{settings.filters.map(filter =>
 				<div className={cx('col-sm-6 col-lg mb-3', {'d-none': !this.props.state.capabilities[filter]})} key={filter}>

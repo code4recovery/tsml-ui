@@ -63,6 +63,7 @@ class App extends Component {
 			loading: true,
 			map_initialized: false,
 			meetings: [],
+			region_tree: [],
 		};
 
 		//load input from query string
@@ -320,11 +321,6 @@ class App extends Component {
 					return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
 				});
 
-				// Populate the region tree using the children of the hard-coded top level ("Everywhere")
-				this.setState({
-					region_tree: regions.children
-				});
-
 				//near me mode enabled on https
 				if (capabilities.coordinates) {
 					settings.modes.push('location');
@@ -339,11 +335,15 @@ class App extends Component {
 
 				//todo filter out unused meetings properties to have a leaner memory footprint
 
+				console.log("REGION TREE");
+				console.log(regions.children);
+
 				this.setState({
 					capabilities: capabilities,
 					indexes: indexes,
 					meetings: result,
 					loading: false,
+					region_tree: regions.children,
 				});
 			}, error => {
 				console.error('JSON fetch error: ' + error);
