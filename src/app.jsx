@@ -139,6 +139,32 @@ class App extends Component {
 				//get a copy of the array
 				let capabilities = this.state.capabilities;
 
+				//check for any meetings with arrays of days and creates an individual meeting for each day in array
+				let meetings_to_add = [];
+				let indexes_to_remove =[];
+
+				for (let i=0; i < result.length; i++) {
+					
+					//for readability
+					let meeting = result[i]; 
+
+					if (Array.isArray(meeting.day)) {
+						indexes_to_remove.push(i);
+						meeting.day.forEach(function(single_day) {
+							let temp_meeting = Object.assign({}, meeting);
+							temp_meeting.day = single_day;
+							temp_meeting.slug = meeting.slug + "-" + single_day;
+							meetings_to_add.push(temp_meeting);
+						});
+					}
+				}
+
+				for (let i=0; i < indexes_to_remove.length; i++) {
+					result = result.splice(indexes_to_remove[i], 1);
+				}
+
+				result = result.concat(meetings_to_add);
+
 				//build index objects for dropdowns
 				for (let i = 0; i < result.length; i++) {
 
