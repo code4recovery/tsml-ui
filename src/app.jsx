@@ -271,7 +271,6 @@ class App extends Component {
 							if (meeting.postal_code) temp = temp + " " + meeting.postal_code;
 							if (meeting.country) temp = temp + ", " + meeting.country;
 							meeting.formatted_address = temp;
-							result[i].formatted_address = meeting.formatted_address;
 						} else {
 							console.error('Formatted address could not be created, at least address and city required.');
 						}
