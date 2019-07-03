@@ -26,7 +26,7 @@
         "react-map-gl": "^5.0.3",
         "sass": "^1.15.2",
         "sass-loader": "^7.1.0",
-        "viewport-mercator-project": "^6.1.0"
-    },
-    "dependencies": {}
+        "viewport-mercator-project": "^6.1.0",
+        "react-dropdown-tree-select": "^2.0.3"
+    }
 }
