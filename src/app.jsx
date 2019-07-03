@@ -277,7 +277,7 @@ class App extends Component {
 					}
 
 					//build search string
-					result[i].search = [meeting.name, meeting.location, meeting.location_notes, meeting.notes, meeting.formatted_address].join(' ').toLowerCase();
+					meeting.search = [meeting.name, meeting.location, meeting.location_notes, meeting.notes, meeting.formatted_address].join(' ').toLowerCase();
 				}
 
 				//convert region to array and sort by name
