@@ -335,9 +335,6 @@ class App extends Component {
 
 				//todo filter out unused meetings properties to have a leaner memory footprint
 
-				console.log("REGION TREE");
-				console.log(regions.children);
-
 				this.setState({
 					capabilities: capabilities,
 					indexes: indexes,
