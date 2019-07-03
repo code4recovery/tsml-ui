@@ -46,9 +46,11 @@ export const settings = merge({
 			meeting_information: 'Meeting Information',
 			meetings: 'Meetings',
 			midday: 'Midday',
+			midnight: 'Mid',
 			monday: 'Monday',
 			morning: 'Morning',
 			name: 'Name',
+			noon: 'Noon',
 			modes: {
 				location: 'Near Location',
 				me: 'Near Me',
