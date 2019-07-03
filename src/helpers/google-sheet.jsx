@@ -25,12 +25,17 @@ export default function translateGoogleSheet(data) {
 
 		//convert time to HH:MM
 		let timeTemp = meeting.time.toLowerCase();
-		if (timeTemp.includes('am')) {
-			meeting.time =  timeTemp.substr(0, timeTemp.indexOf(' am'));
-		} else if (timeTemp.includes('pm')) {
+		if (timeTemp.includes(' am')) {
+			meeting.time = timeTemp.substr(0, timeTemp.indexOf(' am'));
+			if (meeting.time == 12) {
+				let [ tempHours, tempMinutes ] = timeTemp.split(':');
+				tempHours = parseInt(tempHours) - 12;
+				meeting.time = tempHours + ':' + tempMinutes;
+			}
+		} else if (timeTemp.includes(' pm')) {
 			timeTemp = timeTemp.substr(0, timeTemp.indexOf(' pm'));
 			let [ tempHours, tempMinutes ] = timeTemp.split(':');
-			tempHours = parseInt(tempHours) + 12;
+			if (tempHours != '12') tempHours = parseInt(tempHours) + 12;
 			meeting.time = tempHours + ':' + tempMinutes;
 		}
 
