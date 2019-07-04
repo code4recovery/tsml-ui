@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
-import classNames from 'classnames/bind';
-import * as qs from 'query-string';
+import qs from 'query-string';
 import merge from 'deepmerge';
 
 import Alert from './components/alert';
@@ -11,11 +10,9 @@ import Map from './components/map';
 import Meeting from './components/meeting';
 import Table from './components/table';
 import Title from './components/title';
-import { settings, strings } from './settings';
-
-import FormatTime from './helpers/format-time';
 import GoogleSheet from './helpers/google-sheet';
-import Slugify from './helpers/slugify';
+import LoadData from './helpers/load-data';
+import { settings } from './settings';
 
 //locate <meetings> element
 let element = document.getElementsByTagName('meetings');
@@ -105,232 +102,29 @@ class App extends Component {
 		}
 
 		//fetch json data file and build indexes
-		fetch(json)
-			.then(result => {
-				return result.json();
-			}).then(result => {
-				//checks if src is google sheet and translates it if so
-				if (json.includes('spreadsheets.google.com')) {
-					result = GoogleSheet(result);
-				}
+		fetch(json).then(result => {
+			return result.json();
+		}).then(result => {
+			//checks if src is google sheet and translates it if so
+			if (json.includes('spreadsheets.google.com')) {
+				result = GoogleSheet(result);
+			}
 
-				//indexes start as objects, will be converted to arrays
-				let indexes = {
-					day: {},
-					region: {},
-					time: {},
-					type: {},
-				}
+			const [meetings, indexes, capabilities] = LoadData(result, this.state.capabilities);
 
-				//need these lookups in a second
-				const lookup_day = settings.days.map(day => strings[day])
-				const lookup_type = {};
-				for (let code in strings.types) {
-					lookup_type[strings.types[code]] = code;
-				}
-
-				//get a copy of the array
-				let capabilities = this.state.capabilities;
-
-				//check for any meetings with arrays of days and creates an individual meeting for each day in array
-				let meetings_to_add = [];
-				let indexes_to_remove =[];
-
-				for (let i=0; i < result.length; i++) {
-					
-					//for readability
-					let meeting = result[i]; 
-
-					if (Array.isArray(meeting.day)) {
-						indexes_to_remove.push(i);
-						meeting.day.forEach(function(single_day) {
-							let temp_meeting = Object.assign({}, meeting);
-							temp_meeting.day = single_day;
-							temp_meeting.slug = meeting.slug + "-" + single_day;
-							meetings_to_add.push(temp_meeting);
-						});
-					}
-				}
-
-				for (let i=0; i < indexes_to_remove.length; i++) {
-					result = result.splice(indexes_to_remove[i], 1);
-				}
-
-				result = result.concat(meetings_to_add);
-
-				//build index objects for dropdowns
-				for (let i = 0; i < result.length; i++) {
-
-					//for readability
-					let meeting = result[i];
-
-					//if no region then use city
-					if (!meeting.region && meeting.city) {
-						meeting.region = meeting.city;
-					}
-
-					//build region index
-					if (meeting.region) {
-						capabilities.region = true;
-						if (meeting.region in indexes.region === false) {
-							indexes.region[meeting.region] = {
-								key: meeting.region_id || Slugify(meeting.region),
-								name: meeting.region,
-								slugs: [],
-							};
-						}
-						indexes.region[meeting.region].slugs.push(meeting.slug);
-					}
-
-					//format day
-					if (Number.isInteger(meeting.day)) {
-						//convert day to string if integer
-						meeting.day = meeting.day.toString();
-					} else if (lookup_day.includes(meeting.day)) {
-						meeting.day = lookup_day.indexOf(meeting.day).toString();
-					}
-
-					//build day index
-					if (meeting.day) {
-						capabilities.day = true;
-						if (meeting.day in indexes.day === false) {
-							indexes.day[meeting.day] = {
-								key: meeting.day,
-								name: strings[settings.days[meeting.day]],
-								slugs: [],
-							}
-						}
-						indexes.day[meeting.day].slugs.push(meeting.slug);
-					}
-
-					//build time index (can be multiple)
-					if (meeting.time) {
-						capabilities.time = true;
-						let [ hours, minutes ] = meeting.time.split(':');
-						meeting.minutes = (parseInt(hours) * 60) + parseInt(minutes);
-						meeting.times = [];
-						if (meeting.minutes >= 240 && meeting.minutes < 720) { //4am–12pm
-							meeting.times.push(0);
-						}
-						if (meeting.minutes >= 660 && meeting.minutes < 1020) { //11am–5pm
-							meeting.times.push(1);
-						}
-						if (meeting.minutes >= 960 && meeting.minutes < 1260) { //4–9pm
-							meeting.times.push(2);
-						}
-						if (meeting.minutes >= 1200 || meeting.minutes < 300) { //8pm–5am
-							meeting.times.push(3);
-						}
-						for (let j = 0; j < meeting.times.length; j++) {
-							if (meeting.times[j] in indexes.time === false) {
-								indexes.time[meeting.times[j]] = {
-									key: settings.times[meeting.times[j]],
-									name: strings[settings.times[meeting.times[j]]],
-									slugs: [],
-								}
-							}
-							indexes.time[meeting.times[j]].slugs.push(meeting.slug);
-						}
-
-						meeting.time_formatted = FormatTime(meeting.time);
-						meeting.end_time_formatted = FormatTime(meeting.end_time);
-					}
-
-					//build type index (can be multiple)
-					if (meeting.types) {
-						capabilities.type = true;
-						meeting.types = meeting.types.map(type => type.trim()).filter(type => type.length);
-						for (let j = 0; j < meeting.types.length; j++) {
-							if (meeting.types[j] in lookup_type) {
-								meeting.types[j] = lookup_type[meeting.types[j]];
-							}
-							if (meeting.types[j] in strings.types) {
-								if (meeting.types[j] in indexes.type === false) {
-									indexes.type[meeting.types[j]] = {
-										key: meeting.types[j],
-										name: strings.types[meeting.types[j]],
-										slugs: [],
-									}
-								}
-								indexes.type[meeting.types[j]].slugs.push(meeting.slug);
-							}
-						}
-						meeting.types = meeting.types.filter(type => type in strings.types).sort();
-					}
-
-					//build index of map pins
-					if (meeting.latitude && meeting.latitude) {
-						capabilities.coordinates = true;
-					}
-
-					//creates formatted_address if necessary
-					if (!meeting.formatted_address){
-						if (meeting.address && meeting.city){
-							let temp = meeting.address + ", " + meeting.city;
-							if (meeting.state) temp = temp + ", " + meeting.state;
-							if (meeting.postal_code) temp = temp + " " + meeting.postal_code;
-							if (meeting.country) temp = temp + ", " + meeting.country;
-							meeting.formatted_address = temp;
-						} else {
-							console.error('Formatted address could not be created, at least address and city required.');
-						}
-					}
-
-					//build search string
-					meeting.search = [meeting.name, meeting.location, meeting.location_notes, meeting.notes, meeting.formatted_address].join(' ').toLowerCase();
-				}
-
-				//convert region to array and sort by name
-				indexes.region = Object.values(indexes.region);
-				indexes.region.sort((a, b) => { 
-					return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
-				});
-
-				//convert day to array and sort by ordinal
-				indexes.day = Object.values(indexes.day);
-				indexes.day.sort((a, b) => {
-					return a.key - b.key;
-				});
-
-				//convert time to array and sort by ordinal
-				indexes.time = Object.values(indexes.time);
-				indexes.time.sort((a, b) => { 
-					return settings.times.indexOf(a.key) - settings.times.indexOf(b.key);
-				});
-
-				//convert type to array and sort by name
-				indexes.type = Object.values(indexes.type);
-				indexes.type.sort((a, b) => { 
-					return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
-				});
-
-				//near me mode enabled on https
-				if (capabilities.coordinates) {
-					settings.modes.push('location');
-					if (window.location.protocol == 'https:') {
-						capabilities.geolocation = true;
-						settings.modes.push('me');
-					}
-					if (settings.keys.mapbox) {
-						capabilities.map = true;
-					}
-				}
-
-				//todo filter out unused meetings properties to have a leaner memory footprint
-
-				this.setState({
-					capabilities: capabilities,
-					indexes: indexes,
-					meetings: result,
-					loading: false,
-				});
-			}, error => {
-				console.error('JSON fetch error: ' + error);
-				this.setState({
-					error: json ? 'bad_data' : 'no_data',
-					loading: false,
-				});
+			this.setState({
+				capabilities: capabilities,
+				indexes: indexes,
+				meetings: meetings,
+				loading: false,
 			});
+		}, error => {
+			console.error('JSON fetch error: ' + error);
+			this.setState({
+				error: json ? 'bad_data' : 'no_data',
+				loading: false,
+			});
+		});
 	}
 
 	//get common matches between arrays (for meeting filtering)

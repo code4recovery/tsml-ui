@@ -1,7 +1,7 @@
 import { strings } from '../settings';
 
 //quick format time function
-export default function FormatTime(time) {
+export function FormatTime(time) {
 
 	//check that string is HH:MM
 	if (!time || time.length !== 5 || time.substr(2, 1) !== ':') return null;
@@ -28,4 +28,21 @@ export default function FormatTime(time) {
 		hour: '2-digit',
 		minute:'2-digit'
 	});
+}
+
+export function ParseTime(timeString) {
+	if (!timeString.length) return null;
+	
+	const time = timeString.match(/(\d+)(:(\d\d))?\s*(p?)/i);
+
+	if (time == null) return null;
+	
+	let hours = parseInt(time[1], 10);	 
+	if (hours == 12 && !time[4]) {
+		hours = 0;
+	} else {
+		hours += (hours < 12 && time[4]) ? 12 : 0;
+	}	
+
+	return String(hours).padStart(2, '0') + ':' + time[3];
 }
