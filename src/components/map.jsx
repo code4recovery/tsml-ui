@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
+
 import cx from 'classnames/bind';
 import ReactMapGL, { Marker, NavigationControl, Popup } from 'react-map-gl';
 import WebMercatorViewport from 'viewport-mercator-project';
 
 import { settings, strings } from '../settings';
-
 import Link from './link';
 
 export default class Map extends Component {
@@ -20,13 +20,6 @@ export default class Map extends Component {
 		this.updateViewport = this.updateViewport.bind(this)
 	}
 
-	/*
-	goToNYC() {
-		const viewport = {...this.state.viewport, longitude: -74.1, latitude: 40.7};
-		this.setState({viewport});
-	}
-	*/
-
 	updateViewport(viewport) {
 		//need this for changes to the viewport, eg panning + zooming
 		this.setState({ viewport: viewport });
@@ -39,11 +32,10 @@ export default class Map extends Component {
 			return null;
 		}
 
-		//filter & sort locations so southern pins are in front
-		let meetings = this.props.state.meetings.filter(meeting => {
+		//filter & sort meetings so southern pins are in front
+		const meetings = this.props.state.meetings.filter(meeting => {
 			return (this.props.filteredSlugs.indexOf(meeting.slug) != -1);
-		});
-		meetings.sort((a, b) => {
+		}).sort((a, b) => {
 			return b.latitude - a.latitude;
 		});
 
@@ -82,7 +74,7 @@ export default class Map extends Component {
 		}
 
 		//make the viewport
-		if (this.state.bounds.west == this.state.bounds.east) {
+		if (this.state.bounds.west === this.state.bounds.east) {
 			//single marker
 			this.state.viewport = {
 				latitude: this.state.bounds.north,
@@ -102,7 +94,7 @@ export default class Map extends Component {
 			});
 		}
 
-		return(
+		return (
 			<div className="border rounded bg-light flex-grow-1 map">
 				{ this.state.viewport &&
 				<ReactMapGL
