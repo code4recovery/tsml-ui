@@ -21,7 +21,7 @@ export default class Table extends Component {
 					})}>
 						{strings[settings.days[meeting.day]]}
 					</div>
-					{meeting.time_formatted}
+					{meeting.formatted_time}
 				</time>
 			);
 		}

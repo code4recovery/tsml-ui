@@ -65,13 +65,13 @@ export default class Meeting extends Component {
 							<div className="list-group-item">
 								<h5>{strings.meeting_information}</h5>
 								<p className="my-0 mt-1">
-									{strings[settings.days[meeting.day]]}, {meeting.time_formatted}
-									{ meeting.end_time ? ' – ' + meeting.end_time_formatted : '' }
+									{strings[settings.days[meeting.day]]}, {meeting.formatted_time}
+									{ meeting.end_time ? ' – ' + meeting.formatted_end_time : '' }
 								</p>
 								<ul className={cx('my-0 mt-1', { 'd-none': (!meeting.types || !meeting.types.length) })}>
 									{meeting.types ? meeting.types.map(type => {
 										return (
-											<li key={type}>{strings.types[type]}</li>
+											<li key={type}>{type}</li>
 										);
 									}) : ''}
 								</ul>
@@ -90,8 +90,8 @@ export default class Meeting extends Component {
 												<h6 className="mt-3 pb-2 border-bottom">{strings[day]}</h6>
 												<ol className="m-0 p-0" style={{listStyleType:'none'}}>
 													{meetings.map(m => (
-													<li key={m.slug} style={{paddingLeft:'5rem'}}>
-														<span className="position-absolute text-muted" style={{left:'1.25rem'}}>{m.time_formatted}</span>
+													<li key={m.slug} style={{paddingLeft:'5.25rem'}}>
+														<span className="position-absolute text-muted text-right" style={{left:'1.25rem', width: '4.5rem'}}>{m.formatted_time}</span>
 														{m.slug === meeting.slug && 
 															<div>{m.name}</div>
 														}

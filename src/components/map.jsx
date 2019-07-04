@@ -136,7 +136,7 @@ export default class Map extends Component {
 									{location.meetings.map(meeting => {
 										return(
 										<li key={meeting.slug} className="list-group-item">
-											<time>{meeting.time_formatted}</time>
+											<time>{meeting.formatted_time}</time>
 											<Link meeting={meeting} state={this.props.state} setAppState={this.props.setAppState}/>
 										</li>
 										);
