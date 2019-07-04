@@ -79,30 +79,34 @@ export default class Meeting extends Component {
 							<div className="list-group-item">
 								<h5>{meeting.location}</h5>
 								<p className="my-0 mt-1">{meeting.formatted_address}</p>
+								{this.props.state.meetings && meeting && meeting.hasOwnProperty('formatted_address') &&
+								<div>
+									{settings.days.map((day, index) => {
+										const meetings = this.props.state.meetings.filter(
+											m => m.day == index && m.formatted_address === meeting.formatted_address
+										)
+										return (meetings.length > 0) && (
+											<div key={day}>
+												<h6 className="mt-3 pb-2 border-bottom">{strings[day]}</h6>
+												<ol className="m-0 p-0" style={{listStyleType:'none'}}>
+													{meetings.map(m => (
+													<li key={m.slug} style={{paddingLeft:'5rem'}}>
+														<span className="position-absolute text-muted" style={{left:'1.25rem'}}>{m.time_formatted}</span>
+														{m.slug === meeting.slug && 
+															<div>{m.name}</div>
+														}
+														{m.slug !== meeting.slug && 
+															<Link meeting={m} state={this.props.state} setAppState={this.props.setAppState}/>
+														}
+													</li>
+												))}
+												</ol>
+											</div>
+										);
+									})}
+								</div>
+								}
 							</div>
-							{this.props.state.meetings && meeting && meeting.hasOwnProperty('formatted_address') &&
-							<div className="list-group-item">
-								<h5>{strings.all_meetings}</h5>
-								{settings.days.map((day, index) => {
-									const other_meetings = this.props.state.meetings.filter(
-										m => m.day == index && m.formatted_address === meeting.formatted_address
-									)
-									return (other_meetings.length > 0) && (
-										<div key={day}>
-											<h6 className="mt-3 pb-2 border-bottom">{strings[day]}</h6>
-											<ol className="m-0 p-0" style={{listStyleType:'none'}}>
-												{other_meetings.map(meeting => (
-												<li key={meeting.slug} style={{paddingLeft:'5rem'}}>
-													<span className="position-absolute text-muted" style={{left:'1.25rem'}}>{meeting.time_formatted}</span>
-													<Link meeting={meeting} state={this.props.state} setAppState={this.props.setAppState}/>
-												</li>
-											))}
-											</ol>
-										</div>
-									);
-								})}
-							</div>
-							}
 						</div>
 					</div>
 					<div className={cx('col-md-8 map', {'d-none': !this.props.state.capabilities.map})}>
