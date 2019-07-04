@@ -28,7 +28,6 @@ export const settings = merge({
 	strings: {
 		en: {
 			address: 'Address',
-			all_meetings: 'All Meetings at this Location',
 			alerts: {
 				bad_data: 'An error was encountered loading the data source.',
 				no_data: 'A data source parameter must be specified.',
@@ -46,9 +45,11 @@ export const settings = merge({
 			meeting_information: 'Meeting Information',
 			meetings: 'Meetings',
 			midday: 'Midday',
+			midnight: 'Mid',
 			monday: 'Monday',
 			morning: 'Morning',
 			name: 'Name',
+			noon: 'Noon',
 			modes: {
 				location: 'Near Location',
 				me: 'Near Me',
