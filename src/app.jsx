@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 
 import qs from 'query-string';
@@ -10,8 +10,11 @@ import Map from './components/map';
 import Meeting from './components/meeting';
 import Table from './components/table';
 import Title from './components/title';
+
+import GetInput from './helpers/get-input';
 import GoogleSheet from './helpers/google-sheet';
 import LoadData from './helpers/load-data';
+
 import { settings } from './settings';
 
 //locate <meetings> element
@@ -19,7 +22,7 @@ let element = document.getElementsByTagName('meetings');
 if (!element.length) console.error('Could not find a <meetings> element in your HTML');
 element = element[0];
 
-class App extends Component {
+class App extends React.Component {
 	constructor() {
 		super();
 
@@ -36,20 +39,7 @@ class App extends Component {
 				type: false,
 			},
 			error: null,
-			input: {
-				center: null,
-				day: [],
-				district: [],
-				meeting: null,
-				mode: settings.defaults.mode,
-				query: null,
-				radius: null,
-				region: [],
-				search: '',
-				time: [],
-				type: [],
-				view: settings.defaults.view,
-			},
+			input: GetInput(location.search),
 			indexes: {
 				day: [],
 				region: [],
@@ -60,32 +50,6 @@ class App extends Component {
 			map_initialized: false,
 			meetings: [],
 		};
-
-		//load input from query string
-		let querystring = qs.parse(location.search);
-		for (let i = 0; i < settings.filters.length; i++) {
-			let filter = settings.filters[i];
-			if (querystring[filter]) {
-				if (filter == 'day' && querystring.day == 'any') {
-					this.state.input.day = [];
-				} else {
-					this.state.input[filter] = querystring[filter].split('/');
-				}
-			}
-		}
-		for (let i = 0; i < settings.params.length; i++) {
-			if (querystring[settings.params[i]]) {
-				this.state.input[settings.params[i]] = querystring[settings.params[i]];
-			}
-		}
-		if (querystring.meeting) {
-			this.state.input.meeting = querystring.meeting;
-		}
-
-		//today mode
-		if (!querystring.day && settings.defaults.today) {
-			this.state.input.day.push(new Date().getDay());
-		}
 
 		//need to bind this for the function to access `this`
 		this.setAppState = this.setAppState.bind(this);
