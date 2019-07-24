@@ -176,11 +176,16 @@ export default function LoadData(meetings, capabilities) {
 		}
 
 		//creates formatted_address if necessary
-		if (!meeting.formatted_address){
-			if (meeting.address && meeting.city){
+		if (!meeting.formatted_address) {
+			if (meeting.address && meeting.city) {
 				let temp = meeting.address + ", " + meeting.city;
 				if (meeting.state) temp = temp + ", " + meeting.state;
-				if (meeting.postal_code) temp = temp + " " + meeting.postal_code;
+				if (meeting.postal_code) {
+					temp = temp + " " + meeting.postal_code;
+				//for Google Sheets or other feeds without underscore
+				} else if (meeting.postalcode) {
+					temp = temp + " " + meeting.postalcode;
+				}
 				if (meeting.country) temp = temp + ", " + meeting.country;
 				meeting.formatted_address = temp;
 			} else {
