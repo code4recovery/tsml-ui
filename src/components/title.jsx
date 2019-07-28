@@ -54,7 +54,9 @@ export default class Title extends Component {
         title.push(
           this.props.state.input.region
             .map(x => {
-              const value = this.props.state.region.time.find(y => y.key == x);
+              const value = this.props.state.indexes.region.find(
+                y => y.key == x
+              );
               return value ? value.name : '';
             })
             .join(' + ')
