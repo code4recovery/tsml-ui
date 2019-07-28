@@ -13,21 +13,20 @@
     "devDependencies": {
         "@babel/preset-react": "^7.0.0",
         "cross-env": "^5.2.0",
-        "laravel-mix": "^4.0.16",
-        "lodash": "^4.17.11",
-        "sass": "^1.22.3",
+        "laravel-mix": "^4.1.2",
+        "lodash": "^4.17.15",
+        "sass": "^1.22.7",
         "sass-loader": "^7.1.0"
     },
     "dependencies": {
         "bootstrap": "^4.3.1",
         "classnames": "^2.2.6",
-        "deepmerge": "^3.3.0",
-        "mapbox-gl": "^1.1.0",
-        "query-string": "^6.8.1",
+        "deepmerge": "^4.0.0",
+        "mapbox-gl": "^1.1.1",
+        "query-string": "^6.8.2",
         "react": "^16.8.6",
-        "react-bootstrap": "^1.0.0-beta.9",
         "react-dom": "^16.8.6",
-        "react-map-gl": "^5.0.3",
+        "react-map-gl": "^5.0.7",
         "viewport-mercator-project": "^6.1.1"
     }
 }
