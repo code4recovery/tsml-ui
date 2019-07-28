@@ -256,5 +256,14 @@ export default function LoadData(meetings, capabilities) {
     }
   }
 
+  //sort meetings by day -> time -> location -> name
+  //(todo consider extracting for dynamic sorting)
+  meetings.sort((a, b) => {
+    if (a.day !== b.day) return a.day - b.day;
+    if (a.time !== b.time) return a.time.localeCompare(b.time);
+    if (a.location !== b.location) return a.location.localeCompare(b.location);
+    return a.name.localeCompare(b.name);
+  });
+
   return [meetings, indexes, capabilities];
 }
