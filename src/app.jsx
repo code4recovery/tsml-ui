@@ -14,12 +14,8 @@ import { filterData, loadData, translateGoogleSheet } from './helpers/data';
 
 import { settings } from './settings';
 
-//locate <meetings> element
-let element = document.getElementsByTagName('meetings');
-if (!element.length) {
-  console.error('Could not find a <meetings> element in your HTML');
-}
-element = element[0];
+//locate first <meetings> element
+const [element] = document.getElementsByTagName('meetings');
 
 class App extends React.Component {
   constructor() {
@@ -108,21 +104,20 @@ class App extends React.Component {
   }
 
   render() {
-    let filteredSlugs = [];
-
-    if (!this.state.loading) {
-      setQueryString(this.state);
-
-      filteredSlugs = filterData(this.state);
-
-      //show alert
-      this.state.alert = filteredSlugs.length ? null : 'no_results';
-
-      //make map update
-      this.state.map_initialized = false;
-    }
-
+    //show loading spinner?
     if (this.state.loading) return <Loading />;
+
+    //apply filters to query string
+    setQueryString(this.state);
+
+    //filter data
+    const filteredSlugs = filterData(this.state);
+
+    //show alert?
+    this.state.alert = filteredSlugs.length ? null : 'no_results';
+
+    //make map update
+    this.state.map_initialized = false;
 
     return (
       <div className="container-fluid py-3 d-flex flex-column">
@@ -159,4 +154,8 @@ class App extends React.Component {
   }
 }
 
-ReactDOM.render(<App />, element);
+if (element) {
+  ReactDOM.render(<App />, element);
+} else {
+  console.warn('Could not find a <meetings> element in your HTML');
+}
