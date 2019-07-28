@@ -51,7 +51,6 @@ class App extends React.Component {
       loading: true,
       map_initialized: false,
       meetings: [],
-      system_error: false,
     };
 
     //need to bind this for the function to access `this`
@@ -99,11 +98,6 @@ class App extends React.Component {
           });
         }
       );
-  }
-
-  static getDerivedStateFromError(error) {
-    //update state so the next render will show the fallback UI
-    return { system_error: error };
   }
 
   //get common matches between arrays (for meeting filtering)
@@ -253,24 +247,22 @@ class App extends React.Component {
     }
 
     return (
-      !this.state.system_error && (
-        <div className="container-fluid py-3 d-flex flex-column">
-          <Title state={this.state} />
-          <Controls state={this.state} setAppState={this.setAppState} />
-          <Alert state={this.state} filteredSlugs={filteredSlugs} />
-          <Table
-            state={this.state}
-            setAppState={this.setAppState}
-            filteredSlugs={filteredSlugs}
-          />
-          <Map
-            state={this.state}
-            setAppState={this.setAppState}
-            filteredSlugs={filteredSlugs}
-          />
-          <Meeting state={this.state} setAppState={this.setAppState} />
-        </div>
-      )
+      <div className="container-fluid py-3 d-flex flex-column">
+        <Title state={this.state} />
+        <Controls state={this.state} setAppState={this.setAppState} />
+        <Alert state={this.state} filteredSlugs={filteredSlugs} />
+        <Table
+          state={this.state}
+          setAppState={this.setAppState}
+          filteredSlugs={filteredSlugs}
+        />
+        <Map
+          state={this.state}
+          setAppState={this.setAppState}
+          filteredSlugs={filteredSlugs}
+        />
+        <Meeting state={this.state} setAppState={this.setAppState} />
+      </div>
     );
   }
 }
