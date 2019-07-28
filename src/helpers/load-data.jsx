@@ -176,7 +176,7 @@ export default function LoadData(meetings, capabilities) {
     }
 
     //build index of map pins
-    if (meeting.latitude && meeting.latitude) {
+    if (meeting.latitude && meeting.longitude) {
       capabilities.coordinates = true;
     }
 
