@@ -14,7 +14,8 @@ export default class Title extends Component {
         title.unshift(
           this.props.state.input.type
             .map(x => {
-              return this.props.state.indexes.type.find(y => y.key == x).name;
+              const value = this.props.state.indexes.type.find(y => y.key == x);
+              return value ? value.name : '';
             })
             .join(' + ')
         );
@@ -26,7 +27,8 @@ export default class Title extends Component {
         title.unshift(
           this.props.state.input.time
             .map(x => {
-              return this.props.state.indexes.time.find(y => y.key == x).name;
+              const value = this.props.state.indexes.time.find(y => y.key == x);
+              return value ? value.name : '';
             })
             .join(' + ')
         );
@@ -38,7 +40,8 @@ export default class Title extends Component {
         title.unshift(
           this.props.state.input.day
             .map(x => {
-              return this.props.state.indexes.day.find(y => y.key == x).name;
+              const value = this.props.state.indexes.day.find(y => y.key == x);
+              return value ? value.name : '';
             })
             .join(' + ')
         );
@@ -51,7 +54,8 @@ export default class Title extends Component {
         title.push(
           this.props.state.input.region
             .map(x => {
-              return this.props.state.indexes.region.find(y => y.key == x).name;
+              const value = this.props.state.region.time.find(y => y.key == x);
+              return value ? value.name : '';
             })
             .join(' + ')
         );

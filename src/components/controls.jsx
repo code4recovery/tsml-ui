@@ -167,9 +167,10 @@ export default class Controls extends Component {
                 this.props.state.indexes[filter].length
                   ? this.props.state.input[filter]
                       .map(x => {
-                        return this.props.state.indexes[filter].find(
+                        const value = this.props.state.indexes[filter].find(
                           y => y.key == x
-                        ).name;
+                        );
+                        return value ? value.name : '';
                       })
                       .join(' + ')
                   : strings[filter + '_any']}

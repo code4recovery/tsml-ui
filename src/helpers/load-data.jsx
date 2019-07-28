@@ -39,7 +39,6 @@ export default function LoadData(meetings, capabilities) {
   //check for any meetings with arrays of days and creates an individual meeting for each day in array
   let meetings_to_add = [];
   let indexes_to_remove = [];
-  let meeting_keys = [];
 
   for (let i = 0; i < meetings.length; i++) {
     //for readability
