@@ -18,6 +18,7 @@ export default class Meeting extends Component {
   goBack(event) {
     event.preventDefault();
     this.props.state.input.meeting = null;
+    this.state.viewport = null;
     this.props.setAppState('input', this.props.state.input);
   }
 
@@ -39,12 +40,13 @@ export default class Meeting extends Component {
           meeting.latitude = parseFloat(meeting.latitude);
           meeting.longitude = parseFloat(meeting.longitude);
 
-          if (!this.state.viewport)
+          if (!this.state.viewport) {
             this.state.viewport = {
               latitude: meeting.latitude,
               longitude: meeting.longitude,
               zoom: 14,
             };
+          }
 
           //set page title
           document.title = meeting.name;
