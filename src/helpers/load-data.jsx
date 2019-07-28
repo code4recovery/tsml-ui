@@ -217,6 +217,13 @@ export default function LoadData(meetings, capabilities) {
         delete meeting[key];
       }
     });
+
+    //define any missing values
+    for (let i = 0; i < meeting_properties.length; i++) {
+      if (!meeting.hasOwnProperty(meeting_properties[i])) {
+        meeting[meeting_properties[i]] = '';
+      }
+    }
   }
 
   //convert region to array and sort by name
@@ -258,10 +265,27 @@ export default function LoadData(meetings, capabilities) {
   //sort meetings by day -> time -> location -> name
   //(todo consider extracting for dynamic sorting)
   meetings.sort((a, b) => {
-    if (a.day !== b.day) return a.day - b.day;
-    if (a.time !== b.time) return a.time.localeCompare(b.time);
-    if (a.location !== b.location) return a.location.localeCompare(b.location);
-    return a.name.localeCompare(b.name);
+    if (a.day !== b.day) {
+      if (a.day === null) return -1;
+      if (b.day === null) return 1;
+      return a.day - b.day;
+    }
+    if (a.time !== b.time) {
+      if (a.time === null) return -1;
+      if (b.time === null) return 1;
+      return a.time.localeCompare(b.time);
+    }
+    if (a.location !== b.location) {
+      if (a.location === null) return -1;
+      if (b.location === null) return 1;
+      return a.location.localeCompare(b.location);
+    }
+    if (a.name !== b.name) {
+      if (a.name === null) return -1;
+      if (b.name === null) return 1;
+      return a.name.localeCompare(b.location);
+    }
+    return 0;
   });
 
   return [meetings, indexes, capabilities];
