@@ -105,11 +105,7 @@ export default class Controls extends Component {
 
   render() {
     return (
-      <div
-        className={cx('row d-print-none', {
-          'd-none': this.props.state.loading || this.props.state.input.meeting,
-        })}
-      >
+      <div className="row d-print-none">
         <div className="col-sm-6 col-lg">
           <div className="input-group mb-3">
             <input

@@ -122,23 +122,38 @@ class App extends React.Component {
       this.state.map_initialized = false;
     }
 
+    if (this.state.loading) return <Loading />;
+
     return (
       <div className="container-fluid py-3 d-flex flex-column">
-        {this.state.loading && <Loading />}
-        <Title state={this.state} />
-        <Controls state={this.state} setAppState={this.setAppState} />
-        <Alert state={this.state} />
-        <Table
-          state={this.state}
-          setAppState={this.setAppState}
-          filteredSlugs={filteredSlugs}
-        />
-        <Map
-          state={this.state}
-          setAppState={this.setAppState}
-          filteredSlugs={filteredSlugs}
-        />
-        <Meeting state={this.state} setAppState={this.setAppState} />
+        {this.state.input.meeting && (
+          <Meeting state={this.state} setAppState={this.setAppState} />
+        )}
+        {!this.state.input.meeting && (
+          <>
+            {settings.defaults.title && <Title state={this.state} />}
+            <Controls state={this.state} setAppState={this.setAppState} />
+            <Alert state={this.state} />
+            {filteredSlugs.length && (
+              <>
+                {this.state.input.view === 'list' && (
+                  <Table
+                    state={this.state}
+                    setAppState={this.setAppState}
+                    filteredSlugs={filteredSlugs}
+                  />
+                )}
+                {this.state.input.view === 'map' && (
+                  <Map
+                    state={this.state}
+                    setAppState={this.setAppState}
+                    filteredSlugs={filteredSlugs}
+                  />
+                )}
+              </>
+            )}
+          </>
+        )}
       </div>
     );
   }
