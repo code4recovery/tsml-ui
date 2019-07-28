@@ -57,7 +57,12 @@ export default class Meeting extends Component {
     return (
       this.props.state.input.meeting &&
       meeting && (
-        <div className="flex-column flex-grow-1 d-flex">
+        <div
+          className={cx('flex-column flex-grow-1', {
+            'd-none': this.props.state.loading,
+            'd-flex': !this.props.state.loading,
+          })}
+        >
           <h1 className="font-weight-light">
             <a
               href={window.location.pathname}

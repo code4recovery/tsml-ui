@@ -1,19 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import qs from 'query-string';
-import merge from 'deepmerge';
-
 import Alert from './components/alert';
 import Controls from './components/controls';
+import Loading from './components/loading';
 import Map from './components/map';
 import Meeting from './components/meeting';
 import Table from './components/table';
 import Title from './components/title';
 
-import GetInput from './helpers/get-input';
-import GoogleSheet from './helpers/google-sheet';
-import LoadData from './helpers/load-data';
+import { getQueryString, setQueryString } from './helpers/query-string';
+import { filterData, loadData, translateGoogleSheet } from './helpers/data';
 
 import { settings } from './settings';
 
@@ -41,7 +38,7 @@ class App extends React.Component {
         type: false,
       },
       error: null,
-      input: GetInput(location.search),
+      input: getQueryString(location.search),
       indexes: {
         day: [],
         region: [],
@@ -75,10 +72,10 @@ class App extends React.Component {
         result => {
           //checks if src is google sheet and translates it if so
           if (json.includes('spreadsheets.google.com')) {
-            result = GoogleSheet(result);
+            result = translateGoogleSheet(result);
           }
 
-          const [meetings, indexes, capabilities] = LoadData(
+          const [meetings, indexes, capabilities] = loadData(
             result,
             this.state.capabilities
           );
@@ -100,28 +97,6 @@ class App extends React.Component {
       );
   }
 
-  //get common matches between arrays (for meeting filtering)
-  getCommonElements(arrays) {
-    var currentValues = {};
-    var commonValues = {};
-    if (!arrays.length) return [];
-    for (var i = arrays[0].length - 1; i >= 0; i--) {
-      //Iterating backwards for efficiency
-      currentValues[arrays[0][i]] = 1; //Doesn't really matter what we set it to
-    }
-    for (var i = arrays.length - 1; i > 0; i--) {
-      var currentArray = arrays[i];
-      for (var j = currentArray.length - 1; j >= 0; j--) {
-        if (currentArray[j] in currentValues) {
-          commonValues[currentArray[j]] = 1; //Once again, the `1` doesn't matter
-        }
-      }
-      currentValues = commonValues;
-      commonValues = {};
-    }
-    return Object.keys(currentValues);
-  }
-
   //function for components to set global state
   setAppState(key, value) {
     this.setState({ [key]: value });
@@ -136,108 +111,9 @@ class App extends React.Component {
     let filteredSlugs = [];
 
     if (!this.state.loading) {
-      //run filters on meetings
-      let filterFound = false;
-      let query = {};
-      const existingQuery = qs.parse(location.search);
+      setQueryString(this.state);
 
-      //filter by region, day, time, and type
-      for (let i = 0; i < settings.filters.length; i++) {
-        let filter = settings.filters[i];
-        if (
-          this.state.input[filter].length &&
-          this.state.indexes[filter].length
-        ) {
-          filterFound = true;
-          filteredSlugs.push(
-            [].concat.apply(
-              [],
-              this.state.input[filter].map(x => {
-                const value = this.state.indexes[filter].find(y => y.key == x);
-                return value ? value.slugs : [];
-              })
-            )
-          );
-          if (filter != 'day') {
-            query[filter] = this.state.input[filter].join('/');
-          }
-        }
-      }
-
-      //decide whether to set day in the query string (todo refactor)
-      if (this.state.input.day.length && this.state.indexes.day.length) {
-        if (
-          !settings.defaults.today ||
-          existingQuery.search ||
-          existingQuery.day ||
-          existingQuery.region ||
-          existingQuery.district ||
-          existingQuery.time ||
-          existingQuery.type ||
-          this.state.input.day.length > 1 ||
-          this.state.input.day[0] != new Date().getDay()
-        ) {
-          query.day = this.state.input.day.join('/');
-        }
-      } else if (settings.defaults.today) {
-        query.day = 'any';
-      }
-
-      //keyword search
-      if (this.state.input.search.length) {
-        filterFound = true;
-        query['search'] = this.state.input.search;
-        let needle = this.state.input.search.toLowerCase();
-        let matches = this.state.meetings.filter(function(meeting) {
-          return meeting.search.search(needle) !== -1;
-        });
-        filteredSlugs.push(
-          [].concat.apply([], matches.map(meeting => meeting.slug))
-        );
-      }
-
-      //set mode property
-      if (this.state.input.mode != settings.defaults.mode)
-        query.mode = this.state.input.mode;
-
-      //set map property if set
-      if (this.state.input.view != settings.defaults.view)
-        query.view = this.state.input.view;
-
-      //set inside page property if set
-      if (this.state.input.meeting) query.meeting = this.state.input.meeting;
-
-      //create a query string with only values in use
-      query = qs.stringify(
-        merge(
-          merge(existingQuery, {
-            day: undefined,
-            mode: undefined,
-            region: undefined,
-            search: undefined,
-            meeting: undefined,
-            time: undefined,
-            type: undefined,
-            view: undefined,
-          }),
-          query
-        )
-      );
-
-      //un-url-encode the separator
-      query = query.split(encodeURIComponent('/')).join('/');
-
-      //set the query string with html5
-      window.history.pushState(
-        '',
-        '',
-        query.length ? '?' + query : window.location.pathname
-      );
-
-      //do the filtering, if necessary
-      filteredSlugs = filterFound
-        ? this.getCommonElements(filteredSlugs) //get intersection of slug arrays
-        : this.state.meetings.map(meeting => meeting.slug); //get everything
+      filteredSlugs = filterData(this.state);
 
       //show alert
       this.state.alert = filteredSlugs.length ? null : 'no_results';
@@ -248,9 +124,10 @@ class App extends React.Component {
 
     return (
       <div className="container-fluid py-3 d-flex flex-column">
+        {this.state.loading && <Loading />}
         <Title state={this.state} />
         <Controls state={this.state} setAppState={this.setAppState} />
-        <Alert state={this.state} filteredSlugs={filteredSlugs} />
+        <Alert state={this.state} />
         <Table
           state={this.state}
           setAppState={this.setAppState}

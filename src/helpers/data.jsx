@@ -1,8 +1,72 @@
 import { settings, strings } from '../settings';
 import Slugify from './slugify';
-import { FormatTime } from './time';
+import { formatTime, parseTime } from './time';
 
-export default function LoadData(meetings, capabilities) {
+//run filters on meetings
+export function filterData(state) {
+  let filterFound = false;
+  let filteredSlugs = [];
+
+  //filter by region, day, time, and type
+  for (let i = 0; i < settings.filters.length; i++) {
+    let filter = settings.filters[i];
+    if (state.input[filter].length && state.indexes[filter].length) {
+      filterFound = true;
+      filteredSlugs.push(
+        [].concat.apply(
+          [],
+          state.input[filter].map(x => {
+            const value = state.indexes[filter].find(y => y.key == x);
+            return value ? value.slugs : [];
+          })
+        )
+      );
+    }
+  }
+
+  //keyword search
+  if (state.input.search.length) {
+    filterFound = true;
+    let needle = state.input.search.toLowerCase();
+    let matches = state.meetings.filter(function(meeting) {
+      return meeting.search.search(needle) !== -1;
+    });
+    filteredSlugs.push(
+      [].concat.apply([], matches.map(meeting => meeting.slug))
+    );
+  }
+
+  //do the filtering, if necessary
+  filteredSlugs = filterFound
+    ? getCommonElements(filteredSlugs) //get intersection of slug arrays
+    : state.meetings.map(meeting => meeting.slug); //get everything
+
+  return filteredSlugs;
+}
+
+//get common matches between arrays (for meeting filtering)
+function getCommonElements(arrays) {
+  var currentValues = {};
+  var commonValues = {};
+  if (!arrays.length) return [];
+  for (var i = arrays[0].length - 1; i >= 0; i--) {
+    //Iterating backwards for efficiency
+    currentValues[arrays[0][i]] = 1; //Doesn't really matter what we set it to
+  }
+  for (var i = arrays.length - 1; i > 0; i--) {
+    var currentArray = arrays[i];
+    for (var j = currentArray.length - 1; j >= 0; j--) {
+      if (currentArray[j] in currentValues) {
+        commonValues[currentArray[j]] = 1; //Once again, the `1` doesn't matter
+      }
+    }
+    currentValues = commonValues;
+    commonValues = {};
+  }
+  return Object.keys(currentValues);
+}
+
+export function loadData(meetings, capabilities) {
   //indexes start as objects, will be converted to arrays
   let indexes = {
     day: {},
@@ -139,8 +203,8 @@ export default function LoadData(meetings, capabilities) {
       }
 
       //format for display
-      meeting.formatted_time = FormatTime(meeting.time);
-      meeting.formatted_end_time = FormatTime(meeting.end_time);
+      meeting.formatted_time = formatTime(meeting.time);
+      meeting.formatted_end_time = formatTime(meeting.end_time);
     }
 
     //handle types
@@ -289,4 +353,41 @@ export default function LoadData(meetings, capabilities) {
   });
 
   return [meetings, indexes, capabilities];
+}
+
+//translates Google Sheet JSON into Meeting Guide format
+export function translateGoogleSheet(data) {
+  //see Cateret County example on https://github.com/meeting-guide/spreadsheet
+  //https://docs.google.com/spreadsheets/d/e/2PACX-1vQJ5OsDCKSDEvWvqM_Z6tmXe4N-VYEnEAfvU5PX5QXZjHVbnrX-aeiyhWnZp0wpWtOmWjO4L5GJtfFu/pubhtml
+  //JSON: https://spreadsheets.google.com/feeds/list/1prbiXHu9JS5eREkYgBQkxlkJELRHqrKz6-_PLGPWIWk/1/public/values?alt=json
+
+  let meetings = [];
+
+  for (let i = 0; i < data.feed.entry.length; i++) {
+    //creates a meeting object containing a property corresponding to each column header of the Google Sheet
+    let meeting = {};
+    const meetingKeys = Object.keys(data.feed.entry[i]);
+    for (let j = 0; j < meetingKeys.length; j++) {
+      if (meetingKeys[j].substr(0, 4) == 'gsx$') {
+        meeting[meetingKeys[j].substr(4)] =
+          data.feed.entry[i][meetingKeys[j]]['$t'];
+      }
+    }
+
+    //use Google-generated slug if none was provided
+    if (!meeting.slug) {
+      let slug = data.feed.entry[i].id['$t'];
+      meeting.slug = slug.substring(slug.lastIndexOf('/') + 1);
+    }
+
+    //convert time to HH:MM
+    meeting.time = parseTime(meeting.time);
+
+    //array-ify types
+    meeting.types = meeting.types.split(',');
+
+    meetings.push(meeting);
+  }
+
+  return meetings;
 }
