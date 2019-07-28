@@ -134,7 +134,7 @@ class App extends React.Component {
             {settings.defaults.title && <Title state={this.state} />}
             <Controls state={this.state} setAppState={this.setAppState} />
             <Alert state={this.state} />
-            {filteredSlugs.length && (
+            {filteredSlugs.length > 0 && (
               <>
                 {this.state.input.view === 'list' && (
                   <Table
