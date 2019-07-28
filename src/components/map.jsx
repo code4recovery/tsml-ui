@@ -24,15 +24,6 @@ export default class Map extends Component {
   }
 
   render() {
-    //is component hidden?
-    if (
-      this.props.filteredSlugs.length == 0 ||
-      this.props.state.input.view != 'map' ||
-      this.props.state.input.meeting
-    ) {
-      return null;
-    }
-
     //filter & sort meetings so southern pins are in front
     const meetings = this.props.state.meetings
       .filter(meeting => {

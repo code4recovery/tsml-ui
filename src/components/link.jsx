@@ -1,20 +1,16 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-export default class Link extends Component {
-  setMeeting(event, slug) {
-    event.preventDefault();
-    this.props.state.input.meeting = slug;
-    this.props.setAppState('input', this.props.state.input);
-  }
-
-  render() {
-    return (
-      <a
-        href={window.location.pathname + '?meeting=' + this.props.meeting.slug}
-        onClick={event => this.setMeeting(event, this.props.meeting.slug)}
-      >
-        {this.props.meeting.name}
-      </a>
-    );
-  }
+export default function Link(props) {
+  return (
+    <a
+      href={window.location.pathname + '?meeting=' + props.meeting.slug}
+      onClick={event => {
+        event.preventDefault();
+        props.state.input.meeting = props.meeting.slug;
+        props.setAppState('input', props.state.input);
+      }}
+    >
+      {props.meeting.name}
+    </a>
+  );
 }

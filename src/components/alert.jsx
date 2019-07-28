@@ -16,7 +16,7 @@ export default class Alert extends Component {
         className={cx('alert', {
           'alert-danger': this.props.state.error,
           'alert-warning': this.props.state.alert && !this.props.state.error,
-          'd-none': this.props.state.loading || !message,
+          'd-none': !message,
         })}
       >
         {message}

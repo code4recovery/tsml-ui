@@ -38,14 +38,7 @@ export default class Table extends Component {
   render() {
     return (
       <div className="row">
-        <table
-          className={cx('table table-striped flex-grow-1 my-0', {
-            'd-none':
-              this.props.filteredSlugs.length == 0 ||
-              this.props.state.input.view != 'list' ||
-              this.props.state.input.meeting,
-          })}
-        >
+        <table className="table table-striped flex-grow-1 my-0">
           <thead>
             <tr className="d-none d-sm-table-row">
               {settings.defaults.columns.map(column => (
