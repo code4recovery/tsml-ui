@@ -110,6 +110,7 @@ A full list of meeting types can be found on the [Meeting Guide format spec page
 - [x] Reduce memory by forgetting unneeded meeting data, eg URLs
 - [ ] Display group names and Venmo links on inside page
 - [ ] Feedback form on inside page
+- [ ] Auto-suggest locations as you type a location search
 
 ### Questions
 

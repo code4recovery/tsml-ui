@@ -50,6 +50,7 @@ export function getQueryString(queryString) {
 export function setQueryString(state) {
   let query = {};
   const existingQuery = qs.parse(location.search);
+  const separator = ',';
 
   //filter by region, day, time, and type
   for (let i = 0; i < settings.filters.length; i++) {
@@ -74,7 +75,7 @@ export function setQueryString(state) {
       state.input.day.length > 1 ||
       state.input.day[0] != new Date().getDay()
     ) {
-      query.day = state.input.day.join('/');
+      query.day = state.input.day.join(separator);
     }
   } else if (settings.defaults.today) {
     query.day = 'any';
@@ -83,6 +84,11 @@ export function setQueryString(state) {
   //keyword search
   if (state.input.search.length) {
     query['search'] = state.input.search;
+  }
+
+  //location search
+  if (state.input.center) {
+    query['center'] = state.input.center;
   }
 
   //set mode property
@@ -102,6 +108,7 @@ export function setQueryString(state) {
   query = qs.stringify(
     merge(
       merge(existingQuery, {
+        center: undefined,
         day: undefined,
         mode: undefined,
         region: undefined,
@@ -116,7 +123,7 @@ export function setQueryString(state) {
   );
 
   //un-url-encode the separator
-  query = query.split(encodeURIComponent('/')).join('/');
+  query = query.split(encodeURIComponent(separator)).join(separator);
 
   //set the query string with html5
   window.history.pushState(
