@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import qs from 'query-string';
 import cx from 'classnames/bind';
-
+import Dropdown from './dropdown';
 import { settings, strings } from '../settings';
 
 export default class Controls extends Component {
@@ -16,6 +16,8 @@ export default class Controls extends Component {
     this.closeDropdown = this.closeDropdown.bind(this);
     this.keywordSearch = this.keywordSearch.bind(this);
     this.locationSearch = this.locationSearch.bind(this);
+    this.setDropdown = this.setDropdown.bind(this);
+    this.setFilter = this.setFilter.bind(this);
   }
 
   //add click listener for dropdowns (in lieu of including bootstrap js + jquery)
@@ -126,7 +128,7 @@ export default class Controls extends Component {
     } else {
       //focus after waiting for disabled to clear
       setTimeout(
-        function() {
+        function () {
           this.searchInput.current.focus();
         }.bind(this),
         100
@@ -195,62 +197,17 @@ export default class Controls extends Component {
             })}
             key={filter}
           >
-            <div className="dropdown">
-              <button
-                className="btn btn-outline-secondary w-100 dropdown-toggle"
-                onClick={e => this.setDropdown(filter)}
-              >
-                {this.props.state.input[filter].length &&
-                this.props.state.indexes[filter].length
-                  ? this.props.state.input[filter]
-                      .map(x => {
-                        const value = this.props.state.indexes[filter].find(
-                          y => y.key == x
-                        );
-                        return value ? value.name : '';
-                      })
-                      .join(' + ')
-                  : strings[filter + '_any']}
-              </button>
-              <div
-                className={cx('dropdown-menu', {
-                  show: this.state.dropdown == filter,
-                  'dropdown-menu-right':
-                    filter == 'type' && !this.props.state.capabilities.map,
-                })}
-              >
-                <a
-                  className={cx('dropdown-item', {
-                    'active bg-secondary': !this.props.state.input[filter]
-                      .length,
-                  })}
-                  onClick={e => this.setFilter(e, filter, null)}
-                  href="#"
-                >
-                  {strings[filter + '_any']}
-                </a>
-                <div className="dropdown-divider" />
-                {this.props.state.indexes[filter].map(x => (
-                  <a
-                    key={x.key}
-                    className={cx(
-                      'dropdown-item d-flex justify-content-between align-items-center',
-                      {
-                        'active bg-secondary':
-                          this.props.state.input[filter].indexOf(x.key) !== -1,
-                      }
-                    )}
-                    href="#"
-                    onClick={e => this.setFilter(e, filter, x.key)}
-                  >
-                    <span>{x.name}</span>
-                    <span className="badge badge-light ml-3">
-                      {x.slugs.length}
-                    </span>
-                  </a>
-                ))}
-              </div>
-            </div>
+            <Dropdown
+              setDropdown={this.setDropdown}
+              filter={filter}
+              options={this.props.state.indexes[filter]}
+              values={this.props.state.input[filter]}
+              open={this.state.dropdown === filter}
+              right={filter === 'type' && !this.props.state.capabilities.map}
+              setFilter={this.setFilter}
+              default={strings[filter + '_any']}
+            >
+            </Dropdown>
           </div>
         ))}
         <div
