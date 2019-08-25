@@ -1,25 +1,29 @@
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-		<link rel="stylesheet" href="/style.css">
-		<title>Meetings</title>
-	</head>
-	<body>
-		<meetings src="/data.json" mapbox="pk.eyJ1IjoibWVldGluZ2d1aWRlIiwiYSI6ImNqb25haDN6dTA4YWIzcXBnbWc5dGE0bGoifQ.x6_nw57TOsfe7PY1azjTCA"/>
-		<script>
-			window.config = {
-				defaults: {
-					title: true,
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<link rel="stylesheet" href="/style.css">
+	<title>Meetings</title>
+</head>
+
+<body>
+	<meetings src="/data.json"
+		mapbox="pk.eyJ1IjoibWVldGluZ2d1aWRlIiwiYSI6ImNqb25haDN6dTA4YWIzcXBnbWc5dGE0bGoifQ.x6_nw57TOsfe7PY1azjTCA" />
+	<script>
+		window.config = {
+			defaults: {
+				title: true,
+			},
+			strings: {
+				en: {
+					meetings: 'AA Meetings',
 				},
-				strings: {
-					en: {
-						meetings: 'AA Meetings',
-					},
-				},
-			};
-		</script>
-		<script src="/app.js" async></script>
-	</body>
+			},
+		};
+	</script>
+	<script src="/app.js" async></script>
+</body>
+
 </html>
