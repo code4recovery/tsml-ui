@@ -7,12 +7,11 @@ With only a [Meeting Guide format JSON file](https://github.com/meeting-guide/sp
 Advantanges:
 
 * faster performance for users
-* less strain on servers
-* supports any web platform
-* easily embedded into any layout
+* reduced strain on servers
+* can be used on any web platform
+* can be embedded in any layout
 * wider pool of potential project contributors (not just WordPress webmasters)
 * simplifies WordPress plugin (separation of concerns)
-* enables the much-requested meetings shortcode
 
 ## Installation
 
@@ -36,9 +35,9 @@ You don't need to download anything. Simply add the following code to your page:
 
 To use a Google Sheet as your backend:
 
-1. First start and publish a Google Sheet that looks like [this example](https://docs.google.com/spreadsheets/d/e/2PACX-1vQJ5OsDCKSDEvWvqM_Z6tmXe4N-VYEnEAfvU5PX5QXZjHVbnrX-aeiyhWnZp0wpWtOmWjO4L5GJtfFu/pubhtml).
-1. Read this [blog post](https://coderwall.com/p/duapqq/use-a-google-spreadsheet-as-your-json-backend) to determine what the JSON URL of your sheet is.
-1. Use that JSON URL as the `src` in your `<meetings/>`
+1. Publish a Google Sheet that looks like [this example](https://docs.google.com/spreadsheets/d/e/2PACX-1vQJ5OsDCKSDEvWvqM_Z6tmXe4N-VYEnEAfvU5PX5QXZjHVbnrX-aeiyhWnZp0wpWtOmWjO4L5GJtfFu/pubhtml).
+1. Use this [blog post](https://coderwall.com/p/duapqq/use-a-google-spreadsheet-as-your-json-backend) to determine what the JSON URL of your sheet is.
+2. Use that JSON URL as the `src` for your `meetings` tag.
 
 ## Maps
 
@@ -110,6 +109,7 @@ A full list of meeting types can be found on the [Meeting Guide format spec page
 - [x] Reduce memory by forgetting unneeded meeting data, eg URLs
 - [ ] Display group names and Venmo links on inside page
 - [ ] Feedback form on inside page
+- [ ] Auto-suggest locations as you type a location search
 
 ### Questions
 
