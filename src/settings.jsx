@@ -4,8 +4,9 @@ import merge from 'deepmerge';
 export const settings = merge(
   {
     defaults: {
+      bookmarkable: true, //whether to read from/write to the query string
       columns: ['time', 'name', 'location', 'address', 'region'], //can be reordered
-      mode: 'search', //start in keyword search mode
+      mode: 'search', //start in keyword search mode (options are search, location, me)
       title: false, //display the title h1
       today: true, //start with today's meetings, false = any day
       view: 'list', //start in list or map view
