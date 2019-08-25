@@ -1,17 +1,23 @@
 import React, { Component } from 'react';
+import qs from 'query-string';
 import cx from 'classnames/bind';
-
+import Dropdown from './dropdown';
 import { settings, strings } from '../settings';
 
 export default class Controls extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       dropdown: null,
+      geocoding: false,
+      search: props.state.input.search,
     };
     this.searchInput = React.createRef();
     this.closeDropdown = this.closeDropdown.bind(this);
-    this.search = this.search.bind(this);
+    this.keywordSearch = this.keywordSearch.bind(this);
+    this.locationSearch = this.locationSearch.bind(this);
+    this.setDropdown = this.setDropdown.bind(this);
+    this.setFilter = this.setFilter.bind(this);
   }
 
   //add click listener for dropdowns (in lieu of including bootstrap js + jquery)
@@ -31,10 +37,46 @@ export default class Controls extends Component {
   }
 
   //keyword search
-  search(e) {
-    if (this.props.state.input.mode != 'search') return;
-    this.props.state.input.search = e.target.value;
-    this.props.setAppState('input', this.props.state.input);
+  keywordSearch(e) {
+    this.state.search = e.target.value;
+    if (this.props.state.input.mode === 'search') {
+      this.props.state.input.search = e.target.value;
+      this.props.setAppState('input', this.props.state.input);
+    } else {
+      this.setState({ search: this.state.search });
+    }
+  }
+
+  locationSearch(e) {
+    e.preventDefault();
+
+    //make mapbox API request https://docs.mapbox.com/api/search/
+    const geocodingAPI =
+      'https://api.mapbox.com/geocoding/v5/mapbox.places/' +
+      encodeURIComponent(this.searchInput.current.value) +
+      '.json?' +
+      qs.stringify({
+        access_token: settings.keys.mapbox,
+        autocomplete: false,
+        //bbox: ,
+        language: settings.language,
+      });
+
+    fetch(geocodingAPI)
+      .then(result => {
+        return result.json();
+      })
+      .then(result => {
+        if (result.features && result.features.length) {
+          //re-render page with new params
+          console.log(result.features[0].center.join(','));
+          this.props.state.input.search = this.searchInput.current.value;
+          this.props.state.input.center = result.features[0].center.join(',');
+          this.props.setAppState('input', this.props.state.input);
+        } else {
+          //show error
+        }
+      });
   }
 
   //open or close dropdown
@@ -86,7 +128,7 @@ export default class Controls extends Component {
     } else {
       //focus after waiting for disabled to clear
       setTimeout(
-        function() {
+        function () {
           this.searchInput.current.focus();
         }.bind(this),
         100
@@ -107,21 +149,22 @@ export default class Controls extends Component {
     return (
       <div className="row d-print-none">
         <div className="col-sm-6 col-lg">
-          <div className="input-group mb-3">
+          <form className="input-group mb-3" onSubmit={this.locationSearch}>
             <input
               type="search"
               className="form-control"
-              onChange={this.search}
-              value={this.props.state.input.search}
+              onChange={this.keywordSearch}
+              value={this.state.search}
               ref={this.searchInput}
               placeholder={strings.modes[this.props.state.input.mode]}
-              disabled={this.props.state.input.mode == 'me'}
+              disabled={this.props.state.input.mode === 'me'}
               spellCheck="false"
             />
             <div className="input-group-append">
               <button
                 className="btn btn-outline-secondary dropdown-toggle"
                 onClick={e => this.setDropdown('search')}
+                type="button"
               />
               <div
                 className={cx('dropdown-menu dropdown-menu-right', {
@@ -145,7 +188,7 @@ export default class Controls extends Component {
                 ))}
               </div>
             </div>
-          </div>
+          </form>
         </div>
         {settings.filters.map(filter => (
           <div
@@ -154,62 +197,17 @@ export default class Controls extends Component {
             })}
             key={filter}
           >
-            <div className="dropdown">
-              <button
-                className="btn btn-outline-secondary w-100 dropdown-toggle"
-                onClick={e => this.setDropdown(filter)}
-              >
-                {this.props.state.input[filter].length &&
-                this.props.state.indexes[filter].length
-                  ? this.props.state.input[filter]
-                      .map(x => {
-                        const value = this.props.state.indexes[filter].find(
-                          y => y.key == x
-                        );
-                        return value ? value.name : '';
-                      })
-                      .join(' + ')
-                  : strings[filter + '_any']}
-              </button>
-              <div
-                className={cx('dropdown-menu', {
-                  show: this.state.dropdown == filter,
-                  'dropdown-menu-right':
-                    filter == 'type' && !this.props.state.capabilities.map,
-                })}
-              >
-                <a
-                  className={cx('dropdown-item', {
-                    'active bg-secondary': !this.props.state.input[filter]
-                      .length,
-                  })}
-                  onClick={e => this.setFilter(e, filter, null)}
-                  href="#"
-                >
-                  {strings[filter + '_any']}
-                </a>
-                <div className="dropdown-divider" />
-                {this.props.state.indexes[filter].map(x => (
-                  <a
-                    key={x.key}
-                    className={cx(
-                      'dropdown-item d-flex justify-content-between align-items-center',
-                      {
-                        'active bg-secondary':
-                          this.props.state.input[filter].indexOf(x.key) !== -1,
-                      }
-                    )}
-                    href="#"
-                    onClick={e => this.setFilter(e, filter, x.key)}
-                  >
-                    <span>{x.name}</span>
-                    <span className="badge badge-light ml-3">
-                      {x.slugs.length}
-                    </span>
-                  </a>
-                ))}
-              </div>
-            </div>
+            <Dropdown
+              setDropdown={this.setDropdown}
+              filter={filter}
+              options={this.props.state.indexes[filter]}
+              values={this.props.state.input[filter]}
+              open={this.state.dropdown === filter}
+              right={filter === 'type' && !this.props.state.capabilities.map}
+              setFilter={this.setFilter}
+              default={strings[filter + '_any']}
+            >
+            </Dropdown>
           </div>
         ))}
         <div

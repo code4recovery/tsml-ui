@@ -25,7 +25,7 @@ export function filterData(state) {
   }
 
   //keyword search
-  if (state.input.search.length) {
+  if (state.input.search.length && state.input.mode === 'search') {
     filterFound = true;
     let needle = state.input.search.toLowerCase();
     let matches = state.meetings.filter(function(meeting) {

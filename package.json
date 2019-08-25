@@ -15,18 +15,18 @@
         "cross-env": "^5.2.0",
         "laravel-mix": "^4.1.2",
         "lodash": "^4.17.15",
-        "sass": "^1.22.7",
-        "sass-loader": "^7.1.0"
+        "sass": "^1.22.10",
+        "sass-loader": "^7.3.1"
     },
     "dependencies": {
         "bootstrap": "^4.3.1",
         "classnames": "^2.2.6",
         "deepmerge": "^4.0.0",
-        "mapbox-gl": "^1.1.1",
+        "mapbox-gl": "^1.2.1",
         "query-string": "^6.8.2",
-        "react": "^16.8.6",
-        "react-dom": "^16.8.6",
-        "react-map-gl": "^5.0.7",
+        "react": "^16.9.0",
+        "react-dom": "^16.9.0",
+        "react-map-gl": "^5.0.10",
         "viewport-mercator-project": "^6.1.1"
     }
 }
