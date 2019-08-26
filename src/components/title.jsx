@@ -2,56 +2,35 @@ import React from 'react';
 
 import { strings } from '../settings';
 
+const separator = ' + ';
+
 export default function Title(props) {
-  let title = [strings.meetings];
-  if (props.state.input) {
-    if (props.state.indexes.type.length && props.state.input.type.length) {
-      title.unshift(
-        props.state.input.type
-          .map(x => {
-            const value = props.state.indexes.type.find(y => y.key == x);
-            return value ? value.name : '';
-          })
-          .join(' + ')
-      );
-    }
-    if (props.state.indexes.time.length && props.state.input.time.length) {
-      title.unshift(
-        props.state.input.time
-          .map(x => {
-            const value = props.state.indexes.time.find(y => y.key == x);
-            return value ? value.name : '';
-          })
-          .join(' + ')
-      );
-    }
-    if (props.state.indexes.day.length && props.state.input.day.length) {
-      title.unshift(
-        props.state.input.day
-          .map(x => {
-            const value = props.state.indexes.day.find(y => y.key == x);
-            return value ? value.name : '';
-          })
-          .join(' + ')
-      );
-    }
-    if (props.state.indexes.region.length && props.state.input.region.length) {
-      title.push(strings.in);
-      title.push(
-        props.state.input.region
-          .map(x => {
-            const value = props.state.indexes.region.find(y => y.key == x);
-            return value ? value.name : '';
-          })
-          .join(' + ')
-      );
-    }
-    if (props.state.input.search.length) {
-      title.push(strings.with);
-      title.push('‘' + props.state.input.search + '’');
+
+  //loading
+  if (!props.state.indexes || !props.state.input) return;
+
+  //build title from strings.title
+  let title = [];
+  const keys = Object.keys(strings.title);
+  for (var i = 0; i < keys.length; i++) {
+    if (keys[i] === 'meetings') {
+      title.push(strings.meetings);
+    } else if (keys[i] === 'search' && props.state.input.search) {
+      const value = '‘' + props.state.input.search + '’';
+      title.push(strings.title[keys[i]].replace('%search%', value));
+    } else if (props.state.indexes[keys[i]] && props.state.input[keys[i]].length) {
+      const value = props.state.input[keys[i]].map(x => {
+        const value = props.state.indexes[keys[i]].find(y => y.key == x);
+        return value ? value.name : '';
+      }).join(' + ');
+      title.push(strings.title[keys[i]].replace('%' + keys[i] + '%', value));
     }
   }
   title = title.join(' ');
+
+  //set window title
   document.title = title;
+
+  //return h1
   return <h1 className="font-weight-light pb-1">{title}</h1>;
 }

@@ -10,7 +10,7 @@ import Table from './components/table';
 import Title from './components/title';
 
 import { getQueryString, setQueryString } from './helpers/query-string';
-import { filterData, loadData, translateGoogleSheet } from './helpers/data';
+import { filterMeetingData, loadMeetingData, translateGoogleSheet } from './helpers/data';
 
 import { settings } from './settings';
 
@@ -71,7 +71,7 @@ class App extends React.Component {
             result = translateGoogleSheet(result);
           }
 
-          const [meetings, indexes, capabilities] = loadData(
+          const [meetings, indexes, capabilities] = loadMeetingData(
             result,
             this.state.capabilities
           );
@@ -98,7 +98,7 @@ class App extends React.Component {
     this.setState({ [key]: value });
   }
 
-  //function for map component to say it's done without re-render
+  //function for map component to say it's ready without re-rendering
   setMapInitialized() {
     this.state.map_initialized = true;
   }
@@ -111,7 +111,7 @@ class App extends React.Component {
     setQueryString(this.state);
 
     //filter data
-    const filteredSlugs = filterData(this.state);
+    const filteredSlugs = filterMeetingData(this.state);
 
     //show alert?
     this.state.alert = filteredSlugs.length ? null : 'no_results';

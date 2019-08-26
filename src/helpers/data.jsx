@@ -3,7 +3,7 @@ import Slugify from './slugify';
 import { formatTime, parseTime } from './time';
 
 //run filters on meetings
-export function filterData(state) {
+export function filterMeetingData(state) {
   let filterFound = false;
   let filteredSlugs = [];
 
@@ -28,7 +28,7 @@ export function filterData(state) {
   if (state.input.search.length && state.input.mode === 'search') {
     filterFound = true;
     let needle = state.input.search.toLowerCase();
-    let matches = state.meetings.filter(function(meeting) {
+    let matches = state.meetings.filter(function (meeting) {
       return meeting.search.search(needle) !== -1;
     });
     filteredSlugs.push(
@@ -66,7 +66,7 @@ function getCommonElements(arrays) {
   return Object.keys(currentValues);
 }
 
-export function loadData(meetings, capabilities) {
+export function loadMeetingData(meetings, capabilities) {
   //indexes start as objects, will be converted to arrays
   let indexes = {
     day: {},
@@ -95,7 +95,7 @@ export function loadData(meetings, capabilities) {
     'types',
   ];
 
-  //need these lookups in a second
+  //define lookups we'll need later
   const lookup_day = settings.days.map(day => strings[day]);
   const lookup_type_codes = Object.keys(strings.types);
   const lookup_type_values = Object.values(strings.types);
@@ -108,14 +108,14 @@ export function loadData(meetings, capabilities) {
     //for readability
     let meeting = meetings[i];
 
-    if (Array.isArray(meeting.day)) {
+    if (meeting.day.constructor === Array) {
       indexes_to_remove.push(i);
-      meeting.day.forEach(function(single_day) {
+      for (let i = 0; i < meeting.day.length; i++) {
         let temp_meeting = Object.assign({}, meeting);
-        temp_meeting.day = single_day;
-        temp_meeting.slug = meeting.slug + '-' + single_day;
+        temp_meeting.day = meeting.day[i];
+        temp_meeting.slug = meeting.slug + '-' + temp_meeting.day;
         meetings_to_add.push(temp_meeting);
-      });
+      }
     }
   }
 
