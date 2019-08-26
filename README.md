@@ -101,7 +101,7 @@ A full list of meeting types can be found on the [Meeting Guide format spec page
 
 ### Nice to have
 
-- [ ] Better internationalization for title
+- [x] Better internationalization for title
 - [ ] Slugs (eg `sun`) in query string instead of day IDs
 - [x] Slugs (eg `mountain-view`) in query string instead of region IDs
 - [ ] Select multiple dropdown items on mobile
