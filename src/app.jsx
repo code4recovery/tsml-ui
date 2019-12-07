@@ -104,6 +104,18 @@ class App extends React.Component {
   }
 
   render() {
+    //find the end user's location, if they'll allow
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(displayLocationInfo);
+    }
+
+    function displayLocationInfo(position) {
+      const user_lat = position.coords.latitude;
+      const user_lng = position.coords.longitude;
+
+      console.log(`latitude: ${ user_lat } | longitude: ${ user_lng }`);
+    }
+
     //show loading spinner?
     if (this.state.loading) return <Loading />;
 
