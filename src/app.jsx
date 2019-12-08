@@ -50,7 +50,21 @@ class App extends React.Component {
     this.setAppState = this.setAppState.bind(this);
   }
 
+  setUserLatLng(position) {
+    this.setState({
+      user_lat: position.coords.latitude,
+      user_lng: position.coords.longitude,
+    })
+    console.log(`latitude: ${ this.state.user_lat } | longitude: ${ this.state.user_lng }`);
+  }
+
   componentDidMount() {
+    //find the end user's location, if given permission
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(this.setUserLatLng.bind(this));
+      this.state.geolocation = true;
+    }
+
     //if this is empty it'll be reported in fetch()s error handler
     const json = element.getAttribute('src');
 
@@ -104,18 +118,6 @@ class App extends React.Component {
   }
 
   render() {
-    //find the end user's location, if they'll allow
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(displayLocationInfo);
-    }
-
-    function displayLocationInfo(position) {
-      const user_lat = position.coords.latitude;
-      const user_lng = position.coords.longitude;
-
-      console.log(`latitude: ${ user_lat } | longitude: ${ user_lng }`);
-    }
-
     //show loading spinner?
     if (this.state.loading) return <Loading />;
 

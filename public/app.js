@@ -49533,11 +49533,26 @@ function (_React$Component) {
   }
 
   _createClass(App, [{
+    key: "setUserLatLng",
+    value: function setUserLatLng(position) {
+      this.setState({
+        user_lat: position.coords.latitude,
+        user_lng: position.coords.longitude
+      });
+      console.log("latitude: ".concat(this.state.user_lat, " | longitude: ").concat(this.state.user_lng));
+    }
+  }, {
     key: "componentDidMount",
     value: function componentDidMount() {
       var _this2 = this;
 
-      //if this is empty it'll be reported in fetch()s error handler
+      //find the end user's location, if given permission
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(this.setUserLatLng.bind(this));
+        this.state.geolocation = true;
+      } //if this is empty it'll be reported in fetch()s error handler
+
+
       var json = element.getAttribute('src'); //this is the default way to specify a mapbox key
 
       if (element.getAttribute('mapbox')) {
@@ -49589,18 +49604,7 @@ function (_React$Component) {
   }, {
     key: "render",
     value: function render() {
-      //find the end user's location, if they'll allow
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(displayLocationInfo);
-      }
-
-      function displayLocationInfo(position) {
-        var user_lat = position.coords.latitude;
-        var user_lng = position.coords.longitude;
-        console.log("latitude: ".concat(user_lat, " | longitude: ").concat(user_lng));
-      } //show loading spinner?
-
-
+      //show loading spinner?
       if (this.state.loading) return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_loading__WEBPACK_IMPORTED_MODULE_4__["default"], null); //apply filters to query string
 
       Object(_helpers_query_string__WEBPACK_IMPORTED_MODULE_9__["setQueryString"])(this.state); //filter data
