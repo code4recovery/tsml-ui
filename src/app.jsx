@@ -51,6 +51,8 @@ class App extends React.Component {
   }
 
   distance(lat1, lon1, lat2, lon2) {
+      // Calculate the distance as the crow flies between two geometric points
+      // Adapted from: https://www.geodatasource.com/developers/javascript
       if ((lat1 == lat2) && (lon1 == lon2)) {
           return 0;
       } else {
@@ -69,19 +71,20 @@ class App extends React.Component {
   }
 
   setUserLatLng(position) {
+    // Callback function invoked when user allows latitude/longitude to be probed
     this.setState({
-      user_lat: position.coords.latitude,
-      user_lng: position.coords.longitude,
+      user_latitude: position.coords.latitude,
+      user_longitude: position.coords.longitude,
       geolocation: true,
     })
     this.state.meetings[0].distance = this.distance(
-      this.state.user_lat,
-      this.state.user_lng,
+      this.state.user_latitude,
+      this.state.user_longitude,
       this.state.meetings[0].latitude,
       this.state.meetings[0].longitude,
     );
     console.log(this.state.meetings[0]);
-    console.log(`latitude: ${ this.state.user_lat } | longitude: ${ this.state.user_lng }`);
+    console.log(`latitude: ${ this.state.user_latitude } | longitude: ${ this.state.user_longitude }`);
   }
 
   componentDidMount() {
