@@ -435,12 +435,12 @@ function _objectWithoutPropertiesLoose(source, excluded) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return _possibleConstructorReturn; });
-/* harmony import */ var _helpers_esm_typeof_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../helpers/esm/typeof.js */ "./node_modules/@babel/runtime/helpers/esm/typeof.js");
+/* harmony import */ var _helpers_esm_typeof__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../helpers/esm/typeof */ "./node_modules/@babel/runtime/helpers/esm/typeof.js");
 /* harmony import */ var _assertThisInitialized__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./assertThisInitialized */ "./node_modules/@babel/runtime/helpers/esm/assertThisInitialized.js");
 
 
 function _possibleConstructorReturn(self, call) {
-  if (call && (Object(_helpers_esm_typeof_js__WEBPACK_IMPORTED_MODULE_0__["default"])(call) === "object" || typeof call === "function")) {
+  if (call && (Object(_helpers_esm_typeof__WEBPACK_IMPORTED_MODULE_0__["default"])(call) === "object" || typeof call === "function")) {
     return call;
   }
 
@@ -49533,12 +49533,36 @@ function (_React$Component) {
   }
 
   _createClass(App, [{
+    key: "distance",
+    value: function distance(lat1, lon1, lat2, lon2) {
+      if (lat1 == lat2 && lon1 == lon2) {
+        return 0;
+      } else {
+        var radlat1 = Math.PI * lat1 / 180;
+        var radlat2 = Math.PI * lat2 / 180;
+        var radtheta = Math.PI * (lon1 - lon2) / 180;
+        var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+
+        if (dist > 1) {
+          dist = 1;
+        }
+
+        dist = Math.acos(dist);
+        dist = dist * 12436.2 / Math.PI; // 12436.2 = 180 * 60 * 1.1515
+
+        return dist;
+      }
+    }
+  }, {
     key: "setUserLatLng",
     value: function setUserLatLng(position) {
       this.setState({
         user_lat: position.coords.latitude,
-        user_lng: position.coords.longitude
+        user_lng: position.coords.longitude,
+        geolocation: true
       });
+      this.state.meetings[0].distance = this.distance(this.state.user_lat, this.state.user_lng, this.state.meetings[0].latitude, this.state.meetings[0].longitude);
+      console.log(this.state.meetings[0]);
       console.log("latitude: ".concat(this.state.user_lat, " | longitude: ").concat(this.state.user_lng));
     }
   }, {
@@ -49546,13 +49570,7 @@ function (_React$Component) {
     value: function componentDidMount() {
       var _this2 = this;
 
-      //find the end user's location, if given permission
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(this.setUserLatLng.bind(this));
-        this.state.geolocation = true;
-      } //if this is empty it'll be reported in fetch()s error handler
-
-
+      //if this is empty it'll be reported in fetch()s error handler
       var json = element.getAttribute('src'); //this is the default way to specify a mapbox key
 
       if (element.getAttribute('mapbox')) {
@@ -49587,6 +49605,12 @@ function (_React$Component) {
           error: json ? 'bad_data' : 'no_data',
           loading: false
         });
+      }).then(function (result) {
+        // Find the end user's location, if given permission. Load after JSON to ensure
+        // that we can update distances.
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(_this2.setUserLatLng.bind(_this2));
+        }
       });
     } //function for components to set global state
 
@@ -51649,8 +51673,8 @@ var strings = settings.strings[settings.language];
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /Users/tallen/projects/react-meeting-guide/src/app.jsx */"./src/app.jsx");
-module.exports = __webpack_require__(/*! /Users/tallen/projects/react-meeting-guide/src/style.scss */"./src/style.scss");
+__webpack_require__(/*! C:\Users\tallen\Desktop\react\src\app.jsx */"./src/app.jsx");
+module.exports = __webpack_require__(/*! C:\Users\tallen\Desktop\react\src\style.scss */"./src/style.scss");
 
 
 /***/ })
