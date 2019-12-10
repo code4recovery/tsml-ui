@@ -77,14 +77,18 @@ class App extends React.Component {
       user_longitude: position.coords.longitude,
       geolocation: true,
     })
-    this.state.meetings[0].distance = this.distance(
-      this.state.user_latitude,
-      this.state.user_longitude,
-      this.state.meetings[0].latitude,
-      this.state.meetings[0].longitude,
-    );
-    console.log(this.state.meetings[0]);
-    console.log(`latitude: ${ this.state.user_latitude } | longitude: ${ this.state.user_longitude }`);
+
+    for (var index = 0; index < this.state.meetings.length; index++) {
+      this.state.meetings[index].distance = this.distance(
+        this.state.user_latitude,
+        this.state.user_longitude,
+        this.state.meetings[index].latitude,
+        this.state.meetings[index].longitude,
+      ).toFixed(2).toString() + " mi";
+    }
+
+    settings.defaults.columns.push("distance");
+    console.log(settings.defaults.columns);
   }
 
   componentDidMount() {
