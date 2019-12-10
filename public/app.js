@@ -49535,6 +49535,8 @@ function (_React$Component) {
   _createClass(App, [{
     key: "distance",
     value: function distance(lat1, lon1, lat2, lon2) {
+      // Calculate the distance as the crow flies between two geometric points
+      // Adapted from: https://www.geodatasource.com/developers/javascript
       if (lat1 == lat2 && lon1 == lon2) {
         return 0;
       } else {
@@ -49556,14 +49558,19 @@ function (_React$Component) {
   }, {
     key: "setUserLatLng",
     value: function setUserLatLng(position) {
+      // Callback function invoked when user allows latitude/longitude to be probed
       this.setState({
-        user_lat: position.coords.latitude,
-        user_lng: position.coords.longitude,
+        user_latitude: position.coords.latitude,
+        user_longitude: position.coords.longitude,
         geolocation: true
       });
-      this.state.meetings[0].distance = this.distance(this.state.user_lat, this.state.user_lng, this.state.meetings[0].latitude, this.state.meetings[0].longitude);
-      console.log(this.state.meetings[0]);
-      console.log("latitude: ".concat(this.state.user_lat, " | longitude: ").concat(this.state.user_lng));
+
+      for (var index = 0; index < this.state.meetings.length; index++) {
+        this.state.meetings[index].distance = this.distance(this.state.user_latitude, this.state.user_longitude, this.state.meetings[index].latitude, this.state.meetings[index].longitude).toFixed(2).toString() + " mi";
+      }
+
+      _settings__WEBPACK_IMPORTED_MODULE_11__["settings"].defaults.columns.push("distance");
+      console.log(_settings__WEBPACK_IMPORTED_MODULE_11__["settings"].defaults.columns);
     }
   }, {
     key: "componentDidMount",
@@ -50664,6 +50671,7 @@ function (_Component) {
     value: function render() {
       var _this = this;
 
+      console.log(_settings__WEBPACK_IMPORTED_MODULE_2__["settings"].defaults.columns);
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "row"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("table", {
