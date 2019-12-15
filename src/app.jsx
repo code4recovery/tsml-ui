@@ -50,47 +50,6 @@ class App extends React.Component {
     this.setAppState = this.setAppState.bind(this);
   }
 
-  distance(lat1, lon1, lat2, lon2) {
-      // Calculate the distance as the crow flies between two geometric points
-      // Adapted from: https://www.geodatasource.com/developers/javascript
-      if ((lat1 == lat2) && (lon1 == lon2)) {
-          return 0;
-      } else {
-          var radlat1 = Math.PI * lat1 / 180;
-          var radlat2 = Math.PI * lat2 / 180;
-          var radtheta = Math.PI * (lon1 - lon2) / 180;
-          var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
-          if (dist > 1) {
-              dist = 1;
-          }
-          dist = Math.acos(dist);
-          dist = dist * 12436.2 / Math.PI;  // 12436.2 = 180 * 60 * 1.1515
-
-          return dist;
-      }
-  }
-
-  setUserLatLng(position) {
-    // Callback function invoked when user allows latitude/longitude to be probed
-    this.setState({
-      user_latitude: position.coords.latitude,
-      user_longitude: position.coords.longitude,
-      geolocation: true,
-    })
-
-    for (var index = 0; index < this.state.meetings.length; index++) {
-      this.state.meetings[index].distance = this.distance(
-        this.state.user_latitude,
-        this.state.user_longitude,
-        this.state.meetings[index].latitude,
-        this.state.meetings[index].longitude,
-      ).toFixed(2).toString() + " mi";
-    }
-
-    settings.defaults.columns.push("distance");
-    console.log(settings.defaults.columns);
-  }
-
   componentDidMount() {
     //if this is empty it'll be reported in fetch()s error handler
     const json = element.getAttribute('src');
@@ -131,14 +90,7 @@ class App extends React.Component {
             loading: false,
           });
         }
-      )
-      .then(result => {
-        // Find the end user's location, if given permission. Load after JSON to ensure
-        // that we can update distances.
-        if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(this.setUserLatLng.bind(this));
-        }
-      });
+      );
   }
 
   //function for components to set global state

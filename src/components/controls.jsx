@@ -119,12 +119,60 @@ export default class Controls extends Component {
     this.props.setAppState('input', this.props.state.input);
   }
 
+  // Calculate the distance as the crow flies between two geometric points
+  // Adapted from: https://www.geodatasource.com/developers/javascript
+  distance(lat1, lon1, lat2, lon2) {
+      if ((lat1 == lat2) && (lon1 == lon2)) {
+          return 0;
+      } else {
+          var radlat1 = Math.PI * lat1 / 180;
+          var radlat2 = Math.PI * lat2 / 180;
+          var radtheta = Math.PI * (lon1 - lon2) / 180;
+          var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+          if (dist > 1) {
+              dist = 1;
+          }
+          dist = Math.acos(dist);
+          dist = dist * 12436.2 / Math.PI;  // 12436.2 = 180 * 60 * 1.1515
+
+          return dist;
+      }
+  }
+
+  // Callback function invoked when user allows latitude/longitude to be probed
+  setUserLatLng(position) {
+    this.setState({
+      user_latitude: position.coords.latitude,
+      user_longitude: position.coords.longitude,
+      geolocation: true,
+    })
+
+    for (var index = 0; index < this.state.meetings.length; index++) {
+      this.state.meetings[index].distance = this.distance(
+        this.state.user_latitude,
+        this.state.user_longitude,
+        this.state.meetings[index].latitude,
+        this.state.meetings[index].longitude,
+      ).toFixed(2).toString() + " mi";
+    }
+
+    settings.defaults.columns.push("distance");
+    console.log(settings.defaults.columns);
+  }
+
   //set search mode dropdown
   setMode(e, mode) {
     e.preventDefault();
     if (mode == 'me') {
       //clear search value
       this.props.state.input.search = '';
+      // Find the end user's location, if given permission. Load after JSON to ensure
+      // that we can update distances.
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          this.setUserLatLng.bind(this)
+        );
+      }
     } else {
       //focus after waiting for disabled to clear
       setTimeout(

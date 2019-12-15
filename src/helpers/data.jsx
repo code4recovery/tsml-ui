@@ -314,10 +314,10 @@ export function loadMeetingData(meetings, capabilities) {
     return a.name > b.name ? 1 : b.name > a.name ? -1 : 0;
   });
 
-  //near me mode enabled on https
+  //near me mode enabled on https or local development
   if (capabilities.coordinates) {
     settings.modes.push('location');
-    if (window.location.protocol == 'https:') {
+    if (window.location.protocol == 'https:' || window.location.hostname == 'localhost') {
       capabilities.geolocation = true;
       settings.modes.push('me');
     }
