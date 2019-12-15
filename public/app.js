@@ -49901,6 +49901,11 @@ function (_Component) {
 
         dist = Math.acos(dist);
         dist = dist * 12436.2 / Math.PI; // 12436.2 = 180 * 60 * 1.1515
+        // If using kilometers, do an additional multiplication
+
+        if (_settings__WEBPACK_IMPORTED_MODULE_4__["settings"].distance_unit == "km") {
+          dist = dist * 1.609344;
+        }
 
         return dist;
       }
@@ -49915,7 +49920,7 @@ function (_Component) {
 
       for (var index = 0; index < this.props.state.meetings.length; index++) {
         meetings[index] = this.props.state.meetings[index];
-        meetings[index].distance = this.distance(user_latitude, user_longitude, this.props.state.meetings[index].latitude, this.props.state.meetings[index].longitude).toFixed(2).toString() + " mi";
+        meetings[index].distance = this.distance(user_latitude, user_longitude, this.props.state.meetings[index].latitude, this.props.state.meetings[index].longitude).toFixed(2).toString() + ' ' + _settings__WEBPACK_IMPORTED_MODULE_4__["settings"].distance_unit;
       } // If it isn't already there, add the "distance" column
 
 
@@ -51435,6 +51440,8 @@ var settings = deepmerge__WEBPACK_IMPORTED_MODULE_0___default()({
 
   },
   days: ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'],
+  distance_unit: "mi",
+  // "mi" for miles, "km" for kilometers
   filters: ['region', 'day', 'time', 'type'],
   keys: {
     google: null,
@@ -51570,6 +51577,7 @@ var settings = deepmerge__WEBPACK_IMPORTED_MODULE_0___default()({
       },
       back_to_meetings: 'Volver a las reuniones',
       day_any: 'Cualquier día',
+      distance: 'Distancia',
       evening: 'Noche',
       friday: 'Viernes',
       get_directions: 'Obtener las direcciones',

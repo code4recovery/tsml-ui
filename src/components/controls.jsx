@@ -135,6 +135,9 @@ export default class Controls extends Component {
       dist = Math.acos(dist);
       dist = dist * 12436.2 / Math.PI;  // 12436.2 = 180 * 60 * 1.1515
 
+      // If using kilometers, do an additional multiplication
+      if (settings.distance_unit=="km") { dist = dist * 1.609344 }
+
       return dist;
     }
   }
@@ -152,7 +155,7 @@ export default class Controls extends Component {
         user_longitude,
         this.props.state.meetings[index].latitude,
         this.props.state.meetings[index].longitude,
-      ).toFixed(2).toString() + " mi";
+      ).toFixed(2).toString() + ' ' + settings.distance_unit;
     }
 
     // If it isn't already there, add the "distance" column

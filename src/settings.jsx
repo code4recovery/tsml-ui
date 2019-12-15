@@ -20,6 +20,7 @@ export const settings = merge(
       'friday',
       'saturday',
     ],
+    distance_unit: "mi", // "mi" for miles, "km" for kilometers
     filters: ['region', 'day', 'time', 'type'],
     keys: {
       google: null, //enable google maps
@@ -156,6 +157,7 @@ export const settings = merge(
         },
         back_to_meetings: 'Volver a las reuniones',
         day_any: 'Cualquier día',
+        distance: 'Distancia',
         evening: 'Noche',
         friday: 'Viernes',
         get_directions: 'Obtener las direcciones',
