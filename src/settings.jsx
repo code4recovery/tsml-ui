@@ -50,6 +50,7 @@ export const settings = merge(
         },
         back_to_meetings: 'Back to Meetings',
         day_any: 'Any Day',
+        distance: 'Distance',
         evening: 'Evening',
         friday: 'Friday',
         get_directions: 'Get Directions',
@@ -79,6 +80,7 @@ export const settings = merge(
         time_any: 'Any Time',
         title: {
           'day': '%day%',
+          'distance': '%distance%',
           'time': '%time%',
           'type': '%type%',
           'meetings': '%meetings%',

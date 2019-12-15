@@ -122,42 +122,51 @@ export default class Controls extends Component {
   // Calculate the distance as the crow flies between two geometric points
   // Adapted from: https://www.geodatasource.com/developers/javascript
   distance(lat1, lon1, lat2, lon2) {
-      if ((lat1 == lat2) && (lon1 == lon2)) {
-          return 0;
-      } else {
-          var radlat1 = Math.PI * lat1 / 180;
-          var radlat2 = Math.PI * lat2 / 180;
-          var radtheta = Math.PI * (lon1 - lon2) / 180;
-          var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
-          if (dist > 1) {
-              dist = 1;
-          }
-          dist = Math.acos(dist);
-          dist = dist * 12436.2 / Math.PI;  // 12436.2 = 180 * 60 * 1.1515
-
-          return dist;
+    if ((lat1 == lat2) && (lon1 == lon2)) {
+      return 0;
+    } else {
+      var radlat1 = Math.PI * lat1 / 180;
+      var radlat2 = Math.PI * lat2 / 180;
+      var radtheta = Math.PI * (lon1 - lon2) / 180;
+      var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+      if (dist > 1) {
+        dist = 1;
       }
+      dist = Math.acos(dist);
+      dist = dist * 12436.2 / Math.PI;  // 12436.2 = 180 * 60 * 1.1515
+
+      return dist;
+    }
   }
 
   // Callback function invoked when user allows latitude/longitude to be probed
   setUserLatLng(position) {
-    this.setState({
-      user_latitude: position.coords.latitude,
-      user_longitude: position.coords.longitude,
-      geolocation: true,
-    })
+    var user_latitude = position.coords.latitude;
+    var user_longitude = position.coords.longitude;
+    var meetings = [];
 
-    for (var index = 0; index < this.state.meetings.length; index++) {
-      this.state.meetings[index].distance = this.distance(
-        this.state.user_latitude,
-        this.state.user_longitude,
-        this.state.meetings[index].latitude,
-        this.state.meetings[index].longitude,
+    for (var index = 0; index < this.props.state.meetings.length; index++) {
+      meetings[index] = this.props.state.meetings[index];
+      meetings[index].distance = this.distance(
+        user_latitude,
+        user_longitude,
+        this.props.state.meetings[index].latitude,
+        this.props.state.meetings[index].longitude,
       ).toFixed(2).toString() + " mi";
     }
 
-    settings.defaults.columns.push("distance");
-    console.log(settings.defaults.columns);
+    // If it isn't already there, add the "distance" column
+    if (!settings.defaults.columns.includes("distance")) {
+      settings.defaults.columns.push("distance");
+    }
+
+    // Re-render including meeting distances
+    this.props.setAppState({
+      user_latitude: user_latitude,
+      user_longitude: user_longitude,
+      meetings: meetings,
+      geolocation: true,
+    });
   }
 
   //set search mode dropdown
