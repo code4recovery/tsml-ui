@@ -49909,18 +49909,27 @@ function (_Component) {
   }, {
     key: "setUserLatLng",
     value: function setUserLatLng(position) {
-      this.setState({
-        user_latitude: position.coords.latitude,
-        user_longitude: position.coords.longitude,
+      var user_latitude = position.coords.latitude;
+      var user_longitude = position.coords.longitude;
+      var meetings = [];
+
+      for (var index = 0; index < this.props.state.meetings.length; index++) {
+        meetings[index] = this.props.state.meetings[index];
+        meetings[index].distance = this.distance(user_latitude, user_longitude, this.props.state.meetings[index].latitude, this.props.state.meetings[index].longitude).toFixed(2).toString() + " mi";
+      } // If it isn't already there, add the "distance" column
+
+
+      if (!_settings__WEBPACK_IMPORTED_MODULE_4__["settings"].defaults.columns.includes("distance")) {
+        _settings__WEBPACK_IMPORTED_MODULE_4__["settings"].defaults.columns.push("distance");
+      } // Re-render including meeting distances
+
+
+      this.props.setAppState({
+        user_latitude: user_latitude,
+        user_longitude: user_longitude,
+        meetings: meetings,
         geolocation: true
       });
-
-      for (var index = 0; index < this.state.meetings.length; index++) {
-        this.state.meetings[index].distance = this.distance(this.state.user_latitude, this.state.user_longitude, this.state.meetings[index].latitude, this.state.meetings[index].longitude).toFixed(2).toString() + " mi";
-      }
-
-      _settings__WEBPACK_IMPORTED_MODULE_4__["settings"].defaults.columns.push("distance");
-      console.log(_settings__WEBPACK_IMPORTED_MODULE_4__["settings"].defaults.columns);
     } //set search mode dropdown
 
   }, {
@@ -50670,7 +50679,6 @@ function (_Component) {
     value: function render() {
       var _this = this;
 
-      console.log(_settings__WEBPACK_IMPORTED_MODULE_2__["settings"].defaults.columns);
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "row"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("table", {
@@ -51456,6 +51464,7 @@ var settings = deepmerge__WEBPACK_IMPORTED_MODULE_0___default()({
       },
       back_to_meetings: 'Back to Meetings',
       day_any: 'Any Day',
+      distance: 'Distance',
       evening: 'Evening',
       friday: 'Friday',
       get_directions: 'Get Directions',
@@ -51485,6 +51494,7 @@ var settings = deepmerge__WEBPACK_IMPORTED_MODULE_0___default()({
       time_any: 'Any Time',
       title: {
         'day': '%day%',
+        'distance': '%distance%',
         'time': '%time%',
         'type': '%type%',
         'meetings': '%meetings%',

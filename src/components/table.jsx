@@ -36,7 +36,6 @@ export default class Table extends Component {
   }
 
   render() {
-    console.log(settings.defaults.columns);
     return (
       <div className="row">
         <table className="table table-striped flex-grow-1 my-0">
