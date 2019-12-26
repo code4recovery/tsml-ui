@@ -264,16 +264,20 @@ export function loadMeetingData(meetings, capabilities) {
     }
 
     //build search string
-    meeting.search = [
+    let search_array = [
       meeting.name,
       meeting.location,
       meeting.location_notes,
       meeting.notes,
       meeting.formatted_address,
     ]
-      .filter(e => e)
-      .join(' ')
-      .toLowerCase();
+    if(meeting.region) {
+      search_array.push(meeting.region)
+    }
+    if(meeting.regions) {
+      search_array = search_array.concat(meeting.regions)
+    }
+    meeting.search = search_array.filter(e => e).join(' ').toLowerCase();
 
     //loop through and remove items not in whitelist
     Object.keys(meeting).map(key => {
