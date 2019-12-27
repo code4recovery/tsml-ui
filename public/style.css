@@ -381,7 +381,6 @@ meetings .btn {
   color: #212529;
   text-align: center;
   vertical-align: middle;
-  cursor: pointer;
   -webkit-user-select: none;
      -moz-user-select: none;
       -ms-user-select: none;
@@ -427,9 +426,6 @@ meetings .btn-primary:hover {
   border-color: #0062cc;
 }
 meetings .btn-primary:focus, meetings .btn-primary.focus {
-  color: #fff;
-  background-color: #0069d9;
-  border-color: #0062cc;
   box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.5);
 }
 meetings .btn-primary.disabled, meetings .btn-primary:disabled {
@@ -456,9 +452,6 @@ meetings .btn-secondary:hover {
   border-color: #545b62;
 }
 meetings .btn-secondary:focus, meetings .btn-secondary.focus {
-  color: #fff;
-  background-color: #5a6268;
-  border-color: #545b62;
   box-shadow: 0 0 0 0.2rem rgba(130, 138, 145, 0.5);
 }
 meetings .btn-secondary.disabled, meetings .btn-secondary:disabled {
@@ -485,9 +478,6 @@ meetings .btn-success:hover {
   border-color: #1e7e34;
 }
 meetings .btn-success:focus, meetings .btn-success.focus {
-  color: #fff;
-  background-color: #218838;
-  border-color: #1e7e34;
   box-shadow: 0 0 0 0.2rem rgba(72, 180, 97, 0.5);
 }
 meetings .btn-success.disabled, meetings .btn-success:disabled {
@@ -514,9 +504,6 @@ meetings .btn-info:hover {
   border-color: #117a8b;
 }
 meetings .btn-info:focus, meetings .btn-info.focus {
-  color: #fff;
-  background-color: #138496;
-  border-color: #117a8b;
   box-shadow: 0 0 0 0.2rem rgba(58, 176, 195, 0.5);
 }
 meetings .btn-info.disabled, meetings .btn-info:disabled {
@@ -543,9 +530,6 @@ meetings .btn-warning:hover {
   border-color: #d39e00;
 }
 meetings .btn-warning:focus, meetings .btn-warning.focus {
-  color: #212529;
-  background-color: #e0a800;
-  border-color: #d39e00;
   box-shadow: 0 0 0 0.2rem rgba(222, 170, 12, 0.5);
 }
 meetings .btn-warning.disabled, meetings .btn-warning:disabled {
@@ -572,9 +556,6 @@ meetings .btn-danger:hover {
   border-color: #bd2130;
 }
 meetings .btn-danger:focus, meetings .btn-danger.focus {
-  color: #fff;
-  background-color: #c82333;
-  border-color: #bd2130;
   box-shadow: 0 0 0 0.2rem rgba(225, 83, 97, 0.5);
 }
 meetings .btn-danger.disabled, meetings .btn-danger:disabled {
@@ -601,9 +582,6 @@ meetings .btn-light:hover {
   border-color: #dae0e5;
 }
 meetings .btn-light:focus, meetings .btn-light.focus {
-  color: #212529;
-  background-color: #e2e6ea;
-  border-color: #dae0e5;
   box-shadow: 0 0 0 0.2rem rgba(216, 217, 219, 0.5);
 }
 meetings .btn-light.disabled, meetings .btn-light:disabled {
@@ -630,9 +608,6 @@ meetings .btn-dark:hover {
   border-color: #1d2124;
 }
 meetings .btn-dark:focus, meetings .btn-dark.focus {
-  color: #fff;
-  background-color: #23272b;
-  border-color: #1d2124;
   box-shadow: 0 0 0 0.2rem rgba(82, 88, 93, 0.5);
 }
 meetings .btn-dark.disabled, meetings .btn-dark:disabled {
@@ -1122,10 +1097,6 @@ meetings .form-control::-ms-expand {
   background-color: transparent;
   border: 0;
 }
-meetings .form-control:-moz-focusring {
-  color: transparent;
-  text-shadow: 0 0 0 #495057;
-}
 meetings .form-control:focus {
   color: #495057;
   background-color: #fff;
@@ -1188,9 +1159,9 @@ meetings .col-form-label-sm {
 meetings .form-control-plaintext {
   display: block;
   width: 100%;
-  padding: 0.375rem 0;
+  padding-top: 0.375rem;
+  padding-bottom: 0.375rem;
   margin-bottom: 0;
-  font-size: 1rem;
   line-height: 1.5;
   color: #212529;
   background-color: transparent;
@@ -1250,7 +1221,7 @@ meetings .form-check-input {
   margin-top: 0.3rem;
   margin-left: -1.25rem;
 }
-meetings .form-check-input[disabled] ~ .form-check-label, meetings .form-check-input:disabled ~ .form-check-label {
+meetings .form-check-input:disabled ~ .form-check-label {
   color: #6c757d;
 }
 meetings .form-check-label {
@@ -1291,22 +1262,22 @@ meetings .valid-tooltip {
   background-color: rgba(40, 167, 69, 0.9);
   border-radius: 0.25rem;
 }
-.was-validated meetings:valid ~ .valid-feedback,
-.was-validated meetings:valid ~ .valid-tooltip, meetings.is-valid ~ .valid-feedback,
-meetings.is-valid ~ .valid-tooltip {
-  display: block;
-}
 .was-validated meetings .form-control:valid, meetings .form-control.is-valid {
   border-color: #28a745;
   padding-right: calc(1.5em + 0.75rem);
-  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 8 8'%3e%3cpath fill='%2328a745' d='M2.3 6.73L.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e");
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%2328a745' d='M2.3 6.73L.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e");
   background-repeat: no-repeat;
-  background-position: right calc(0.375em + 0.1875rem) center;
+  background-position: center right calc(0.375em + 0.1875rem);
   background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
 }
 .was-validated meetings .form-control:valid:focus, meetings .form-control.is-valid:focus {
   border-color: #28a745;
   box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+}
+.was-validated meetings .form-control:valid ~ .valid-feedback,
+.was-validated meetings .form-control:valid ~ .valid-tooltip, meetings .form-control.is-valid ~ .valid-feedback,
+meetings .form-control.is-valid ~ .valid-tooltip {
+  display: block;
 }
 .was-validated meetings textarea.form-control:valid, meetings textarea.form-control.is-valid {
   padding-right: calc(1.5em + 0.75rem);
@@ -1314,12 +1285,22 @@ meetings.is-valid ~ .valid-tooltip {
 }
 .was-validated meetings .custom-select:valid, meetings .custom-select.is-valid {
   border-color: #28a745;
-  padding-right: calc(0.75em + 2.3125rem);
-  background: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='4' height='5' viewBox='0 0 4 5'%3e%3cpath fill='%23343a40' d='M2 0L0 2h4zm0 5L0 3h4z'/%3e%3c/svg%3e") no-repeat right 0.75rem center/8px 10px, url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 8 8'%3e%3cpath fill='%2328a745' d='M2.3 6.73L.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e") #fff no-repeat center right 1.75rem/calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+  padding-right: calc((1em + 0.75rem) * 3 / 4 + 1.75rem);
+  background: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3e%3cpath fill='%23343a40' d='M2 0L0 2h4zm0 5L0 3h4z'/%3e%3c/svg%3e") no-repeat right 0.75rem center/8px 10px, url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%2328a745' d='M2.3 6.73L.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e") #fff no-repeat center right 1.75rem/calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
 }
 .was-validated meetings .custom-select:valid:focus, meetings .custom-select.is-valid:focus {
   border-color: #28a745;
   box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+}
+.was-validated meetings .custom-select:valid ~ .valid-feedback,
+.was-validated meetings .custom-select:valid ~ .valid-tooltip, meetings .custom-select.is-valid ~ .valid-feedback,
+meetings .custom-select.is-valid ~ .valid-tooltip {
+  display: block;
+}
+.was-validated meetings .form-control-file:valid ~ .valid-feedback,
+.was-validated meetings .form-control-file:valid ~ .valid-tooltip, meetings .form-control-file.is-valid ~ .valid-feedback,
+meetings .form-control-file.is-valid ~ .valid-tooltip {
+  display: block;
 }
 .was-validated meetings .form-check-input:valid ~ .form-check-label, meetings .form-check-input.is-valid ~ .form-check-label {
   color: #28a745;
@@ -1335,6 +1316,11 @@ meetings .form-check-input.is-valid ~ .valid-tooltip {
 .was-validated meetings .custom-control-input:valid ~ .custom-control-label::before, meetings .custom-control-input.is-valid ~ .custom-control-label::before {
   border-color: #28a745;
 }
+.was-validated meetings .custom-control-input:valid ~ .valid-feedback,
+.was-validated meetings .custom-control-input:valid ~ .valid-tooltip, meetings .custom-control-input.is-valid ~ .valid-feedback,
+meetings .custom-control-input.is-valid ~ .valid-tooltip {
+  display: block;
+}
 .was-validated meetings .custom-control-input:valid:checked ~ .custom-control-label::before, meetings .custom-control-input.is-valid:checked ~ .custom-control-label::before {
   border-color: #34ce57;
   background-color: #34ce57;
@@ -1347,6 +1333,11 @@ meetings .form-check-input.is-valid ~ .valid-tooltip {
 }
 .was-validated meetings .custom-file-input:valid ~ .custom-file-label, meetings .custom-file-input.is-valid ~ .custom-file-label {
   border-color: #28a745;
+}
+.was-validated meetings .custom-file-input:valid ~ .valid-feedback,
+.was-validated meetings .custom-file-input:valid ~ .valid-tooltip, meetings .custom-file-input.is-valid ~ .valid-feedback,
+meetings .custom-file-input.is-valid ~ .valid-tooltip {
+  display: block;
 }
 .was-validated meetings .custom-file-input:valid:focus ~ .custom-file-label, meetings .custom-file-input.is-valid:focus ~ .custom-file-label {
   border-color: #28a745;
@@ -1373,22 +1364,22 @@ meetings .invalid-tooltip {
   background-color: rgba(220, 53, 69, 0.9);
   border-radius: 0.25rem;
 }
-.was-validated meetings:invalid ~ .invalid-feedback,
-.was-validated meetings:invalid ~ .invalid-tooltip, meetings.is-invalid ~ .invalid-feedback,
-meetings.is-invalid ~ .invalid-tooltip {
-  display: block;
-}
 .was-validated meetings .form-control:invalid, meetings .form-control.is-invalid {
   border-color: #dc3545;
   padding-right: calc(1.5em + 0.75rem);
-  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' stroke='%23dc3545' viewBox='0 0 12 12'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e");
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='%23dc3545' viewBox='-2 -2 7 7'%3e%3cpath stroke='%23dc3545' d='M0 0l3 3m0-3L0 3'/%3e%3ccircle r='.5'/%3e%3ccircle cx='3' r='.5'/%3e%3ccircle cy='3' r='.5'/%3e%3ccircle cx='3' cy='3' r='.5'/%3e%3c/svg%3E");
   background-repeat: no-repeat;
-  background-position: right calc(0.375em + 0.1875rem) center;
+  background-position: center right calc(0.375em + 0.1875rem);
   background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
 }
 .was-validated meetings .form-control:invalid:focus, meetings .form-control.is-invalid:focus {
   border-color: #dc3545;
   box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+.was-validated meetings .form-control:invalid ~ .invalid-feedback,
+.was-validated meetings .form-control:invalid ~ .invalid-tooltip, meetings .form-control.is-invalid ~ .invalid-feedback,
+meetings .form-control.is-invalid ~ .invalid-tooltip {
+  display: block;
 }
 .was-validated meetings textarea.form-control:invalid, meetings textarea.form-control.is-invalid {
   padding-right: calc(1.5em + 0.75rem);
@@ -1396,12 +1387,22 @@ meetings.is-invalid ~ .invalid-tooltip {
 }
 .was-validated meetings .custom-select:invalid, meetings .custom-select.is-invalid {
   border-color: #dc3545;
-  padding-right: calc(0.75em + 2.3125rem);
-  background: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='4' height='5' viewBox='0 0 4 5'%3e%3cpath fill='%23343a40' d='M2 0L0 2h4zm0 5L0 3h4z'/%3e%3c/svg%3e") no-repeat right 0.75rem center/8px 10px, url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' stroke='%23dc3545' viewBox='0 0 12 12'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e") #fff no-repeat center right 1.75rem/calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+  padding-right: calc((1em + 0.75rem) * 3 / 4 + 1.75rem);
+  background: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3e%3cpath fill='%23343a40' d='M2 0L0 2h4zm0 5L0 3h4z'/%3e%3c/svg%3e") no-repeat right 0.75rem center/8px 10px, url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='%23dc3545' viewBox='-2 -2 7 7'%3e%3cpath stroke='%23dc3545' d='M0 0l3 3m0-3L0 3'/%3e%3ccircle r='.5'/%3e%3ccircle cx='3' r='.5'/%3e%3ccircle cy='3' r='.5'/%3e%3ccircle cx='3' cy='3' r='.5'/%3e%3c/svg%3E") #fff no-repeat center right 1.75rem/calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
 }
 .was-validated meetings .custom-select:invalid:focus, meetings .custom-select.is-invalid:focus {
   border-color: #dc3545;
   box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+.was-validated meetings .custom-select:invalid ~ .invalid-feedback,
+.was-validated meetings .custom-select:invalid ~ .invalid-tooltip, meetings .custom-select.is-invalid ~ .invalid-feedback,
+meetings .custom-select.is-invalid ~ .invalid-tooltip {
+  display: block;
+}
+.was-validated meetings .form-control-file:invalid ~ .invalid-feedback,
+.was-validated meetings .form-control-file:invalid ~ .invalid-tooltip, meetings .form-control-file.is-invalid ~ .invalid-feedback,
+meetings .form-control-file.is-invalid ~ .invalid-tooltip {
+  display: block;
 }
 .was-validated meetings .form-check-input:invalid ~ .form-check-label, meetings .form-check-input.is-invalid ~ .form-check-label {
   color: #dc3545;
@@ -1417,6 +1418,11 @@ meetings .form-check-input.is-invalid ~ .invalid-tooltip {
 .was-validated meetings .custom-control-input:invalid ~ .custom-control-label::before, meetings .custom-control-input.is-invalid ~ .custom-control-label::before {
   border-color: #dc3545;
 }
+.was-validated meetings .custom-control-input:invalid ~ .invalid-feedback,
+.was-validated meetings .custom-control-input:invalid ~ .invalid-tooltip, meetings .custom-control-input.is-invalid ~ .invalid-feedback,
+meetings .custom-control-input.is-invalid ~ .invalid-tooltip {
+  display: block;
+}
 .was-validated meetings .custom-control-input:invalid:checked ~ .custom-control-label::before, meetings .custom-control-input.is-invalid:checked ~ .custom-control-label::before {
   border-color: #e4606d;
   background-color: #e4606d;
@@ -1429,6 +1435,11 @@ meetings .form-check-input.is-invalid ~ .invalid-tooltip {
 }
 .was-validated meetings .custom-file-input:invalid ~ .custom-file-label, meetings .custom-file-input.is-invalid ~ .custom-file-label {
   border-color: #dc3545;
+}
+.was-validated meetings .custom-file-input:invalid ~ .invalid-feedback,
+.was-validated meetings .custom-file-input:invalid ~ .invalid-tooltip, meetings .custom-file-input.is-invalid ~ .invalid-feedback,
+meetings .custom-file-input.is-invalid ~ .invalid-tooltip {
+  display: block;
 }
 .was-validated meetings .custom-file-input:invalid:focus ~ .custom-file-label, meetings .custom-file-input.is-invalid:focus ~ .custom-file-label {
   border-color: #dc3545;
@@ -1534,32 +1545,12 @@ meetings .container {
     max-width: 1140px;
   }
 }
-meetings .container-fluid, meetings .container-xl, meetings .container-lg, meetings .container-md, meetings .container-sm {
+meetings .container-fluid {
   width: 100%;
   padding-right: 15px;
   padding-left: 15px;
   margin-right: auto;
   margin-left: auto;
-}
-@media (min-width: 576px) {
-  meetings .container-sm, meetings .container {
-    max-width: 540px;
-  }
-}
-@media (min-width: 768px) {
-  meetings .container-md, meetings .container-sm, meetings .container {
-    max-width: 720px;
-  }
-}
-@media (min-width: 992px) {
-  meetings .container-lg, meetings .container-md, meetings .container-sm, meetings .container {
-    max-width: 960px;
-  }
-}
-@media (min-width: 1200px) {
-  meetings .container-xl, meetings .container-lg, meetings .container-md, meetings .container-sm, meetings .container {
-    max-width: 1140px;
-  }
 }
 meetings .row {
   display: -webkit-box;
@@ -1593,36 +1584,6 @@ meetings .col {
   -webkit-box-flex: 1;
           flex-grow: 1;
   max-width: 100%;
-}
-meetings .row-cols-1 > * {
-  -webkit-box-flex: 0;
-          flex: 0 0 100%;
-  max-width: 100%;
-}
-meetings .row-cols-2 > * {
-  -webkit-box-flex: 0;
-          flex: 0 0 50%;
-  max-width: 50%;
-}
-meetings .row-cols-3 > * {
-  -webkit-box-flex: 0;
-          flex: 0 0 33.3333333333%;
-  max-width: 33.3333333333%;
-}
-meetings .row-cols-4 > * {
-  -webkit-box-flex: 0;
-          flex: 0 0 25%;
-  max-width: 25%;
-}
-meetings .row-cols-5 > * {
-  -webkit-box-flex: 0;
-          flex: 0 0 20%;
-  max-width: 20%;
-}
-meetings .row-cols-6 > * {
-  -webkit-box-flex: 0;
-          flex: 0 0 16.6666666667%;
-  max-width: 16.6666666667%;
 }
 meetings .col-auto {
   -webkit-box-flex: 0;
@@ -1789,36 +1750,6 @@ meetings .offset-11 {
     -webkit-box-flex: 1;
             flex-grow: 1;
     max-width: 100%;
-  }
-  meetings .row-cols-sm-1 > * {
-    -webkit-box-flex: 0;
-            flex: 0 0 100%;
-    max-width: 100%;
-  }
-  meetings .row-cols-sm-2 > * {
-    -webkit-box-flex: 0;
-            flex: 0 0 50%;
-    max-width: 50%;
-  }
-  meetings .row-cols-sm-3 > * {
-    -webkit-box-flex: 0;
-            flex: 0 0 33.3333333333%;
-    max-width: 33.3333333333%;
-  }
-  meetings .row-cols-sm-4 > * {
-    -webkit-box-flex: 0;
-            flex: 0 0 25%;
-    max-width: 25%;
-  }
-  meetings .row-cols-sm-5 > * {
-    -webkit-box-flex: 0;
-            flex: 0 0 20%;
-    max-width: 20%;
-  }
-  meetings .row-cols-sm-6 > * {
-    -webkit-box-flex: 0;
-            flex: 0 0 16.6666666667%;
-    max-width: 16.6666666667%;
   }
   meetings .col-sm-auto {
     -webkit-box-flex: 0;
@@ -1990,36 +1921,6 @@ meetings .offset-11 {
             flex-grow: 1;
     max-width: 100%;
   }
-  meetings .row-cols-md-1 > * {
-    -webkit-box-flex: 0;
-            flex: 0 0 100%;
-    max-width: 100%;
-  }
-  meetings .row-cols-md-2 > * {
-    -webkit-box-flex: 0;
-            flex: 0 0 50%;
-    max-width: 50%;
-  }
-  meetings .row-cols-md-3 > * {
-    -webkit-box-flex: 0;
-            flex: 0 0 33.3333333333%;
-    max-width: 33.3333333333%;
-  }
-  meetings .row-cols-md-4 > * {
-    -webkit-box-flex: 0;
-            flex: 0 0 25%;
-    max-width: 25%;
-  }
-  meetings .row-cols-md-5 > * {
-    -webkit-box-flex: 0;
-            flex: 0 0 20%;
-    max-width: 20%;
-  }
-  meetings .row-cols-md-6 > * {
-    -webkit-box-flex: 0;
-            flex: 0 0 16.6666666667%;
-    max-width: 16.6666666667%;
-  }
   meetings .col-md-auto {
     -webkit-box-flex: 0;
             flex: 0 0 auto;
@@ -2190,36 +2091,6 @@ meetings .offset-11 {
             flex-grow: 1;
     max-width: 100%;
   }
-  meetings .row-cols-lg-1 > * {
-    -webkit-box-flex: 0;
-            flex: 0 0 100%;
-    max-width: 100%;
-  }
-  meetings .row-cols-lg-2 > * {
-    -webkit-box-flex: 0;
-            flex: 0 0 50%;
-    max-width: 50%;
-  }
-  meetings .row-cols-lg-3 > * {
-    -webkit-box-flex: 0;
-            flex: 0 0 33.3333333333%;
-    max-width: 33.3333333333%;
-  }
-  meetings .row-cols-lg-4 > * {
-    -webkit-box-flex: 0;
-            flex: 0 0 25%;
-    max-width: 25%;
-  }
-  meetings .row-cols-lg-5 > * {
-    -webkit-box-flex: 0;
-            flex: 0 0 20%;
-    max-width: 20%;
-  }
-  meetings .row-cols-lg-6 > * {
-    -webkit-box-flex: 0;
-            flex: 0 0 16.6666666667%;
-    max-width: 16.6666666667%;
-  }
   meetings .col-lg-auto {
     -webkit-box-flex: 0;
             flex: 0 0 auto;
@@ -2389,36 +2260,6 @@ meetings .offset-11 {
     -webkit-box-flex: 1;
             flex-grow: 1;
     max-width: 100%;
-  }
-  meetings .row-cols-xl-1 > * {
-    -webkit-box-flex: 0;
-            flex: 0 0 100%;
-    max-width: 100%;
-  }
-  meetings .row-cols-xl-2 > * {
-    -webkit-box-flex: 0;
-            flex: 0 0 50%;
-    max-width: 50%;
-  }
-  meetings .row-cols-xl-3 > * {
-    -webkit-box-flex: 0;
-            flex: 0 0 33.3333333333%;
-    max-width: 33.3333333333%;
-  }
-  meetings .row-cols-xl-4 > * {
-    -webkit-box-flex: 0;
-            flex: 0 0 25%;
-    max-width: 25%;
-  }
-  meetings .row-cols-xl-5 > * {
-    -webkit-box-flex: 0;
-            flex: 0 0 20%;
-    max-width: 20%;
-  }
-  meetings .row-cols-xl-6 > * {
-    -webkit-box-flex: 0;
-            flex: 0 0 16.6666666667%;
-    max-width: 16.6666666667%;
   }
   meetings .col-xl-auto {
     -webkit-box-flex: 0;
@@ -2598,8 +2439,8 @@ meetings .input-group > .custom-select,
 meetings .input-group > .custom-file {
   position: relative;
   -webkit-box-flex: 1;
-          flex: 1 1 0%;
-  min-width: 0;
+          flex: 1 1 auto;
+  width: 1%;
   margin-bottom: 0;
 }
 meetings .input-group > .form-control + .form-control,
@@ -2779,6 +2620,7 @@ meetings .list-group-item {
   position: relative;
   display: block;
   padding: 0.75rem 1.25rem;
+  margin-bottom: -1px;
   background-color: #fff;
   border: 1px solid rgba(0, 0, 0, 0.125);
 }
@@ -2787,6 +2629,7 @@ meetings .list-group-item:first-child {
   border-top-right-radius: 0.25rem;
 }
 meetings .list-group-item:last-child {
+  margin-bottom: 0;
   border-bottom-right-radius: 0.25rem;
   border-bottom-left-radius: 0.25rem;
 }
@@ -2801,36 +2644,25 @@ meetings .list-group-item.active {
   background-color: #007bff;
   border-color: #007bff;
 }
-meetings .list-group-item + meetings .list-group-item {
-  border-top-width: 0;
-}
-meetings .list-group-item + meetings .list-group-item.active {
-  margin-top: -1px;
-  border-top-width: 1px;
-}
 meetings .list-group-horizontal {
   -webkit-box-orient: horizontal;
   -webkit-box-direction: normal;
           flex-direction: row;
 }
+meetings .list-group-horizontal .list-group-item {
+  margin-right: -1px;
+  margin-bottom: 0;
+}
 meetings .list-group-horizontal .list-group-item:first-child {
+  border-top-left-radius: 0.25rem;
   border-bottom-left-radius: 0.25rem;
   border-top-right-radius: 0;
 }
 meetings .list-group-horizontal .list-group-item:last-child {
+  margin-right: 0;
   border-top-right-radius: 0.25rem;
+  border-bottom-right-radius: 0.25rem;
   border-bottom-left-radius: 0;
-}
-meetings .list-group-horizontal .list-group-item.active {
-  margin-top: 0;
-}
-meetings .list-group-horizontal .list-group-item + .list-group-item {
-  border-top-width: 1px;
-  border-left-width: 0;
-}
-meetings .list-group-horizontal .list-group-item + .list-group-item.active {
-  margin-left: -1px;
-  border-left-width: 1px;
 }
 @media (min-width: 576px) {
   meetings .list-group-horizontal-sm {
@@ -2838,24 +2670,20 @@ meetings .list-group-horizontal .list-group-item + .list-group-item.active {
     -webkit-box-direction: normal;
             flex-direction: row;
   }
+  meetings .list-group-horizontal-sm .list-group-item {
+    margin-right: -1px;
+    margin-bottom: 0;
+  }
   meetings .list-group-horizontal-sm .list-group-item:first-child {
+    border-top-left-radius: 0.25rem;
     border-bottom-left-radius: 0.25rem;
     border-top-right-radius: 0;
   }
   meetings .list-group-horizontal-sm .list-group-item:last-child {
+    margin-right: 0;
     border-top-right-radius: 0.25rem;
+    border-bottom-right-radius: 0.25rem;
     border-bottom-left-radius: 0;
-  }
-  meetings .list-group-horizontal-sm .list-group-item.active {
-    margin-top: 0;
-  }
-  meetings .list-group-horizontal-sm .list-group-item + .list-group-item {
-    border-top-width: 1px;
-    border-left-width: 0;
-  }
-  meetings .list-group-horizontal-sm .list-group-item + .list-group-item.active {
-    margin-left: -1px;
-    border-left-width: 1px;
   }
 }
 @media (min-width: 768px) {
@@ -2864,24 +2692,20 @@ meetings .list-group-horizontal .list-group-item + .list-group-item.active {
     -webkit-box-direction: normal;
             flex-direction: row;
   }
+  meetings .list-group-horizontal-md .list-group-item {
+    margin-right: -1px;
+    margin-bottom: 0;
+  }
   meetings .list-group-horizontal-md .list-group-item:first-child {
+    border-top-left-radius: 0.25rem;
     border-bottom-left-radius: 0.25rem;
     border-top-right-radius: 0;
   }
   meetings .list-group-horizontal-md .list-group-item:last-child {
+    margin-right: 0;
     border-top-right-radius: 0.25rem;
+    border-bottom-right-radius: 0.25rem;
     border-bottom-left-radius: 0;
-  }
-  meetings .list-group-horizontal-md .list-group-item.active {
-    margin-top: 0;
-  }
-  meetings .list-group-horizontal-md .list-group-item + .list-group-item {
-    border-top-width: 1px;
-    border-left-width: 0;
-  }
-  meetings .list-group-horizontal-md .list-group-item + .list-group-item.active {
-    margin-left: -1px;
-    border-left-width: 1px;
   }
 }
 @media (min-width: 992px) {
@@ -2890,24 +2714,20 @@ meetings .list-group-horizontal .list-group-item + .list-group-item.active {
     -webkit-box-direction: normal;
             flex-direction: row;
   }
+  meetings .list-group-horizontal-lg .list-group-item {
+    margin-right: -1px;
+    margin-bottom: 0;
+  }
   meetings .list-group-horizontal-lg .list-group-item:first-child {
+    border-top-left-radius: 0.25rem;
     border-bottom-left-radius: 0.25rem;
     border-top-right-radius: 0;
   }
   meetings .list-group-horizontal-lg .list-group-item:last-child {
+    margin-right: 0;
     border-top-right-radius: 0.25rem;
+    border-bottom-right-radius: 0.25rem;
     border-bottom-left-radius: 0;
-  }
-  meetings .list-group-horizontal-lg .list-group-item.active {
-    margin-top: 0;
-  }
-  meetings .list-group-horizontal-lg .list-group-item + .list-group-item {
-    border-top-width: 1px;
-    border-left-width: 0;
-  }
-  meetings .list-group-horizontal-lg .list-group-item + .list-group-item.active {
-    margin-left: -1px;
-    border-left-width: 1px;
   }
 }
 @media (min-width: 1200px) {
@@ -2916,36 +2736,36 @@ meetings .list-group-horizontal .list-group-item + .list-group-item.active {
     -webkit-box-direction: normal;
             flex-direction: row;
   }
+  meetings .list-group-horizontal-xl .list-group-item {
+    margin-right: -1px;
+    margin-bottom: 0;
+  }
   meetings .list-group-horizontal-xl .list-group-item:first-child {
+    border-top-left-radius: 0.25rem;
     border-bottom-left-radius: 0.25rem;
     border-top-right-radius: 0;
   }
   meetings .list-group-horizontal-xl .list-group-item:last-child {
+    margin-right: 0;
     border-top-right-radius: 0.25rem;
+    border-bottom-right-radius: 0.25rem;
     border-bottom-left-radius: 0;
-  }
-  meetings .list-group-horizontal-xl .list-group-item.active {
-    margin-top: 0;
-  }
-  meetings .list-group-horizontal-xl .list-group-item + .list-group-item {
-    border-top-width: 1px;
-    border-left-width: 0;
-  }
-  meetings .list-group-horizontal-xl .list-group-item + .list-group-item.active {
-    margin-left: -1px;
-    border-left-width: 1px;
   }
 }
 meetings .list-group-flush .list-group-item {
-  border-right-width: 0;
-  border-left-width: 0;
+  border-right: 0;
+  border-left: 0;
   border-radius: 0;
 }
-meetings .list-group-flush .list-group-item:first-child {
-  border-top-width: 0;
+meetings .list-group-flush .list-group-item:last-child {
+  margin-bottom: -1px;
+}
+meetings .list-group-flush:first-child .list-group-item:first-child {
+  border-top: 0;
 }
 meetings .list-group-flush:last-child .list-group-item:last-child {
-  border-bottom-width: 0;
+  margin-bottom: 0;
+  border-bottom: 0;
 }
 meetings .list-group-item-primary {
   color: #004085;
@@ -3155,7 +2975,7 @@ meetings body {
   text-align: left;
   background-color: #fff;
 }
-meetings [tabindex="-1"]:focus:not(:focus-visible) {
+meetings [tabindex="-1"]:focus {
   outline: 0 !important;
 }
 meetings hr {
@@ -3237,13 +3057,16 @@ meetings a:hover {
   color: #0056b3;
   text-decoration: underline;
 }
-meetings a:not([href]) {
+meetings a:not([href]):not([tabindex]) {
   color: inherit;
   text-decoration: none;
 }
-meetings a:not([href]):hover {
+meetings a:not([href]):not([tabindex]):hover, meetings a:not([href]):not([tabindex]):focus {
   color: inherit;
   text-decoration: none;
+}
+meetings a:not([href]):not([tabindex]):focus {
+  outline: 0;
 }
 meetings pre,
 meetings code,
@@ -5003,7 +4826,6 @@ meetings .sr-only {
   width: 1px;
   height: 1px;
   padding: 0;
-  margin: -1px;
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
@@ -6989,36 +6811,36 @@ meetings .visible {
 meetings .invisible {
   visibility: hidden !important;
 }
-meetings .container-fluid, meetings .container-sm, meetings .container-md, meetings .container-lg, meetings .container-xl {
+meetings .container-fluid {
   min-height: 100%;
 }
-meetings .container-fluid .dropdown-menu, meetings .container-sm .dropdown-menu, meetings .container-md .dropdown-menu, meetings .container-lg .dropdown-menu, meetings .container-xl .dropdown-menu {
+meetings .container-fluid .dropdown-menu {
   min-width: 100%;
 }
-meetings .container-fluid .dropdown button, meetings .container-sm .dropdown button, meetings .container-md .dropdown button, meetings .container-lg .dropdown button, meetings .container-xl .dropdown button {
+meetings .container-fluid .dropdown button {
   overflow: hidden;
 }
-meetings .container-fluid input[type=search]::-webkit-search-cancel-button, meetings .container-sm input[type=search]::-webkit-search-cancel-button, meetings .container-md input[type=search]::-webkit-search-cancel-button, meetings .container-lg input[type=search]::-webkit-search-cancel-button, meetings .container-xl input[type=search]::-webkit-search-cancel-button {
+meetings .container-fluid input[type=search]::-webkit-search-cancel-button {
   -webkit-appearance: searchfield-cancel-button;
 }
-meetings .container-fluid .map, meetings .container-sm .map, meetings .container-md .map, meetings .container-lg .map, meetings .container-xl .map {
+meetings .container-fluid .map {
   min-height: 500px;
   position: relative;
 }
-meetings .container-fluid .map button:focus, meetings .container-sm .map button:focus, meetings .container-md .map button:focus, meetings .container-lg .map button:focus, meetings .container-xl .map button:focus {
+meetings .container-fluid .map button:focus {
   outline: none;
 }
-meetings .container-fluid .map .control, meetings .container-sm .map .control, meetings .container-md .map .control, meetings .container-lg .map .control, meetings .container-xl .map .control {
+meetings .container-fluid .map .control {
   position: absolute;
   right: 10px;
   top: 10px;
 }
 @media (max-width: 767.98px) {
-  meetings .container-fluid .map .control, meetings .container-sm .map .control, meetings .container-md .map .control, meetings .container-lg .map .control, meetings .container-xl .map .control {
+  meetings .container-fluid .map .control {
     display: none;
   }
 }
-meetings .container-fluid .map .popup, meetings .container-sm .map .popup, meetings .container-md .map .popup, meetings .container-lg .map .popup, meetings .container-xl .map .popup {
+meetings .container-fluid .map .popup {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   font-size: 1rem;
   font-weight: 400;
@@ -7026,34 +6848,30 @@ meetings .container-fluid .map .popup, meetings .container-sm .map .popup, meeti
   max-width: 85%;
   width: 320px;
 }
-meetings .container-fluid table tr th:first-child, meetings .container-sm table tr th:first-child, meetings .container-md table tr th:first-child, meetings .container-lg table tr th:first-child, meetings .container-xl table tr th:first-child,
-meetings .container-fluid table td:first-child,
-meetings .container-sm table td:first-child,
-meetings .container-md table td:first-child,
-meetings .container-lg table td:first-child,
-meetings .container-xl table td:first-child {
+meetings .container-fluid table tr th:first-child,
+meetings .container-fluid table td:first-child {
   padding-left: 1rem;
 }
 @media (max-width: 575.98px) {
-  meetings .container-fluid table tr, meetings .container-sm table tr, meetings .container-md table tr, meetings .container-lg table tr, meetings .container-xl table tr {
+  meetings .container-fluid table tr {
     border-top: 1px solid #dee2e6;
     padding: 0.5rem 1rem;
     position: relative;
   }
-  meetings .container-fluid table tr td, meetings .container-sm table tr td, meetings .container-md table tr td, meetings .container-lg table tr td, meetings .container-xl table tr td {
+  meetings .container-fluid table tr td {
     border: 0;
     padding: 0 0 0 7rem;
   }
-  meetings .container-fluid table tr td time, meetings .container-sm table tr td time, meetings .container-md table tr td time, meetings .container-lg table tr td time, meetings .container-xl table tr td time {
+  meetings .container-fluid table tr td time {
     left: 1rem;
     padding-left: 0;
     position: absolute;
   }
 }
-meetings .container-fluid .mapboxgl-popup-content .list-group .list-group-item, meetings .container-sm .mapboxgl-popup-content .list-group .list-group-item, meetings .container-md .mapboxgl-popup-content .list-group .list-group-item, meetings .container-lg .mapboxgl-popup-content .list-group .list-group-item, meetings .container-xl .mapboxgl-popup-content .list-group .list-group-item {
+meetings .container-fluid .mapboxgl-popup-content .list-group .list-group-item {
   padding: 0.25rem 0.25rem 0.25rem 5rem;
 }
-meetings .container-fluid .mapboxgl-popup-content .list-group .list-group-item time, meetings .container-sm .mapboxgl-popup-content .list-group .list-group-item time, meetings .container-md .mapboxgl-popup-content .list-group .list-group-item time, meetings .container-lg .mapboxgl-popup-content .list-group .list-group-item time, meetings .container-xl .mapboxgl-popup-content .list-group .list-group-item time {
+meetings .container-fluid .mapboxgl-popup-content .list-group .list-group-item time {
   left: 0.5rem;
   position: absolute;
 }
