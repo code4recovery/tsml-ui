@@ -87,6 +87,12 @@ export default class Meeting extends Component {
                     : ''}
                 </ul>
               </div>
+              {meeting.notes && (
+                <div className="list-group-item">
+                  <h5>Meeting Notes</h5>
+                  {meeting.notes}
+                </div>
+              )}
               <div className="list-group-item">
                 <h5>{meeting.location}</h5>
                 <p className="my-0 mt-1">{meeting.formatted_address}</p>
