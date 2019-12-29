@@ -126,7 +126,6 @@ export default class Map extends Component {
           >
             {locations_keys.map(key => {
               const location = locations[key];
-              //console.log(locations[key]);
               return (
                 <div key={key}>
                   <Marker

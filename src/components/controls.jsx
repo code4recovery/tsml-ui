@@ -3,7 +3,6 @@ import qs from 'query-string';
 import cx from 'classnames/bind';
 import Dropdown from './dropdown';
 import { settings, strings } from '../settings';
-import setUserLatLng from '../helpers/data';
 
 export default class Controls extends Component {
   constructor(props) {
@@ -70,7 +69,6 @@ export default class Controls extends Component {
       .then(result => {
         if (result.features && result.features.length) {
           //re-render page with new params
-          console.log(result.features[0].center.join(','));
           this.props.state.input.search = this.searchInput.current.value;
           this.props.state.input.center = result.features[0].center.join(',');
           this.props.setAppState('input', this.props.state.input);
@@ -126,17 +124,10 @@ export default class Controls extends Component {
     if (mode == 'me') {
       //clear search value
       this.props.state.input.search = '';
-      // Find the end user's location, if given permission. Load after JSON to ensure
-      // that we can update distances.
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          setUserLatLng.bind(this)
-        );
-      }
     } else {
       //focus after waiting for disabled to clear
       setTimeout(
-        function () {
+        function() {
           this.searchInput.current.focus();
         }.bind(this),
         100
@@ -214,8 +205,7 @@ export default class Controls extends Component {
               right={filter === 'type' && !this.props.state.capabilities.map}
               setFilter={this.setFilter}
               default={strings[filter + '_any']}
-            >
-            </Dropdown>
+            ></Dropdown>
           </div>
         ))}
         <div

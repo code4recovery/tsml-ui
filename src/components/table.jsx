@@ -5,6 +5,10 @@ import { settings, strings } from '../settings';
 import Link from './link';
 
 export default class Table extends Component {
+  canShowColumn(column) {
+    return column !== 'distance' || this.props.state.input.mode !== 'search';
+  }
+
   getValue(meeting, key) {
     if (key == 'address') {
       const address = meeting.formatted_address.split(', ');
@@ -41,11 +45,14 @@ export default class Table extends Component {
         <table className="table table-striped flex-grow-1 my-0">
           <thead>
             <tr className="d-none d-sm-table-row">
-              {settings.defaults.columns.map(column => (
-                <th key={column} className={column}>
-                  {strings[column]}
-                </th>
-              ))}
+              {settings.defaults.columns.map(
+                column =>
+                  this.canShowColumn(column) && (
+                    <th key={column} className={column}>
+                      {strings[column]}
+                    </th>
+                  )
+              )}
             </tr>
           </thead>
           <tbody>
@@ -53,14 +60,17 @@ export default class Table extends Component {
               if (this.props.filteredSlugs.indexOf(meeting.slug) == -1) return;
               return (
                 <tr className="d-block d-sm-table-row" key={meeting.slug}>
-                  {settings.defaults.columns.map(column => (
-                    <td
-                      key={[meeting.slug, column].join('-')}
-                      className={cx('d-block d-sm-table-cell', column)}
-                    >
-                      {this.getValue(meeting, column)}
-                    </td>
-                  ))}
+                  {settings.defaults.columns.map(
+                    column =>
+                      this.canShowColumn(column) && (
+                        <td
+                          key={[meeting.slug, column].join('-')}
+                          className={cx('d-block d-sm-table-cell', column)}
+                        >
+                          {this.getValue(meeting, column)}
+                        </td>
+                      )
+                  )}
                 </tr>
               );
             })}

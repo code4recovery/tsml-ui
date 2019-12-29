@@ -10,7 +10,11 @@ import Table from './components/table';
 import Title from './components/title';
 
 import { getQueryString, setQueryString } from './helpers/query-string';
-import { filterMeetingData, loadMeetingData, translateGoogleSheet } from './helpers/data';
+import {
+  filterMeetingData,
+  loadMeetingData,
+  translateGoogleSheet,
+} from './helpers/data';
 
 import { settings } from './settings';
 
@@ -111,7 +115,7 @@ class App extends React.Component {
     setQueryString(this.state);
 
     //filter data
-    const filteredSlugs = filterMeetingData(this.state);
+    const filteredSlugs = filterMeetingData(this.state, this.setAppState);
 
     //show alert?
     this.state.alert = filteredSlugs.length ? null : 'no_results';
