@@ -1,9 +1,10 @@
 import { settings, strings } from '../settings';
 import Slugify from './slugify';
 import { formatTime, parseTime } from './time';
+import distance from './distance';
 
-//run filters on meetings
-export function filterMeetingData(state) {
+//run filters on meetings; this is run at every render
+export function filterMeetingData(state, setAppState) {
   let filterFound = false;
   let filteredSlugs = [];
 
@@ -24,15 +25,48 @@ export function filterMeetingData(state) {
     }
   }
 
-  //keyword search
-  if (state.input.search.length && state.input.mode === 'search') {
-    filterFound = true;
-    let needle = state.input.search.toLowerCase();
-    let matches = state.meetings.filter(function (meeting) {
-      return meeting.search.search(needle) !== -1;
-    });
-    filteredSlugs.push(
-      [].concat.apply([], matches.map(meeting => meeting.slug))
+  //handle keyword search or geolocation
+  if (state.input.mode === 'search') {
+    //clear center
+    state.input.center = null;
+
+    if (state.input.search.length) {
+      //todo: improve searching to be OR search instead of AND
+      filterFound = true;
+      let needle = state.input.search.toLowerCase();
+      let matches = state.meetings.filter(function(meeting) {
+        return meeting.search.search(needle) !== -1;
+      });
+      filteredSlugs.push(
+        [].concat.apply(
+          [],
+          matches.map(meeting => meeting.slug)
+        )
+      );
+    }
+  } else if (state.input.mode === 'me') {
+    if (!state.input.center) {
+      navigator.geolocation.getCurrentPosition(
+        position => {
+          //this will cause a re-render with state.input.center now set
+          state.input.center = position.coords;
+          setAppState('input', state.input);
+        },
+        error => {
+          console.warn('getCurrentPosition error', error);
+        },
+        { timeout: 5000 }
+      );
+    } else {
+      //todo: filter meetings now based on distance
+    }
+  }
+
+  //loop through and update or clear distances
+  for (let i = 0; i < state.meetings.length; i++) {
+    state.meetings[i].distance = distance(
+      state.input.center,
+      state.meetings[i]
     );
   }
 
@@ -66,6 +100,7 @@ function getCommonElements(arrays) {
   return Object.keys(currentValues);
 }
 
+//set up meeting data; this is only run once when the app loads
 export function loadMeetingData(meetings, capabilities) {
   //indexes start as objects, will be converted to arrays
   let indexes = {
@@ -317,7 +352,11 @@ export function loadMeetingData(meetings, capabilities) {
   //near me mode enabled on https or local development
   if (capabilities.coordinates) {
     settings.modes.push('location');
-    if (window.location.protocol == 'https:' || window.location.hostname == 'localhost') {
+    if (
+      navigator.geolocation &&
+      (window.location.protocol == 'https:' ||
+        window.location.hostname == 'localhost')
+    ) {
       capabilities.geolocation = true;
       settings.modes.push('me');
     }
@@ -390,57 +429,4 @@ export function translateGoogleSheet(data) {
   }
 
   return meetings;
-}
-
-// Calculate the distance as the crow flies between two geometric points
-// Adapted from: https://www.geodatasource.com/developers/javascript
-function distance(lat1, lon1, lat2, lon2) {
-  if ((lat1 == lat2) && (lon1 == lon2)) {
-    return 0;
-  } else {
-    const radlat1 = Math.PI * lat1 / 180;
-    const radlat2 = Math.PI * lat2 / 180;
-    const radtheta = Math.PI * (lon1 - lon2) / 180;
-    let dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
-    if (dist > 1) {
-      dist = 1;
-    }
-    dist = Math.acos(dist);
-    dist = dist * 12436.2 / Math.PI;  // 12436.2 = 180 * 60 * 1.1515
-
-    // If using kilometers, do an additional multiplication
-    if (settings.distance_unit=="km") { dist = dist * 1.609344 }
-
-    return dist;
-  }
-}
-
-// Callback function invoked when user allows latitude/longitude to be probed
-export default function setUserLatLng(position) {
-  let user_latitude = position.coords.latitude;
-  let user_longitude = position.coords.longitude;
-  let meetings = [];
-
-  for (let index = 0; index < this.props.state.meetings.length; index++) {
-    meetings[index] = this.props.state.meetings[index];
-    meetings[index].distance = distance(
-      user_latitude,
-      user_longitude,
-      this.props.state.meetings[index].latitude,
-      this.props.state.meetings[index].longitude,
-    ).toFixed(2).toString() + ' ' + settings.distance_unit;
-  }
-
-  // If it isn't already there, add the "distance" column
-  if (!settings.defaults.columns.includes("distance")) {
-    settings.defaults.columns.push("distance");
-  }
-
-  // Re-render including meeting distances
-  this.props.setAppState({
-    user_latitude: user_latitude,
-    user_longitude: user_longitude,
-    meetings: meetings,
-    geolocation: true,
-  });
 }
