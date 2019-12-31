@@ -28,11 +28,14 @@ export function filterMeetingData(state) {
   if (state.input.search.length && state.input.mode === 'search') {
     filterFound = true;
     let needle = state.input.search.toLowerCase();
-    let matches = state.meetings.filter(function (meeting) {
+    let matches = state.meetings.filter(function(meeting) {
       return meeting.search.search(needle) !== -1;
     });
     filteredSlugs.push(
-      [].concat.apply([], matches.map(meeting => meeting.slug))
+      [].concat.apply(
+        [],
+        matches.map(meeting => meeting.slug)
+      )
     );
   }
 
@@ -264,13 +267,20 @@ export function loadMeetingData(meetings, capabilities) {
     }
 
     //build search string
-    meeting.search = [
+    let search_array = [
       meeting.name,
       meeting.location,
       meeting.location_notes,
       meeting.notes,
       meeting.formatted_address,
-    ]
+    ];
+    if (meeting.region) {
+      search_array.push(meeting.region);
+    }
+    if (meeting.regions) {
+      search_array = search_array.concat(meeting.regions);
+    }
+    meeting.search = search_array
       .filter(e => e)
       .join(' ')
       .toLowerCase();
