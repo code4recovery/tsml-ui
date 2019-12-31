@@ -23,7 +23,7 @@ export const settings = merge(
     distance_unit: 'mi', // "mi" for miles, "km" for kilometers
     filters: ['region', 'day', 'time', 'type'],
     keys: {
-      google: null, //enable google maps
+      //google: null, //enable google maps
       mapbox: null, //enable mapbox maps
     },
     language: 'en',

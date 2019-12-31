@@ -299,13 +299,20 @@ export function loadMeetingData(meetings, capabilities) {
     }
 
     //build search string
-    meeting.search = [
+    let search_array = [
       meeting.name,
       meeting.location,
       meeting.location_notes,
       meeting.notes,
       meeting.formatted_address,
-    ]
+    ];
+    if (meeting.region) {
+      search_array.push(meeting.region);
+    }
+    if (meeting.regions) {
+      search_array = search_array.concat(meeting.regions);
+    }
+    meeting.search = search_array
       .filter(e => e)
       .join(' ')
       .toLowerCase();
@@ -351,7 +358,8 @@ export function loadMeetingData(meetings, capabilities) {
 
   //near me mode enabled on https or local development
   if (capabilities.coordinates) {
-    settings.modes.push('location');
+    //todo implement geocoding
+    //settings.modes.push('location');
     if (
       navigator.geolocation &&
       (window.location.protocol == 'https:' ||
