@@ -46,16 +46,24 @@ export default class Meeting extends Component {
         }
 
         //create a link for directions
-        const iOS = !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
+        const iOS =
+          !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
         let maps_prefix = '';
 
-        if(iOS) {
+        if (iOS) {
           maps_prefix = 'maps://?';
         } else {
           maps_prefix = 'https://www.google.com/maps?';
         }
 
-        meeting.direction_link = maps_prefix + "daddr=" + meeting.latitude + "," + meeting.longitude + "&saddr=Current+Location&q=" + encodeURIComponent(meeting.formatted_address);
+        meeting.direction_link =
+          maps_prefix +
+          'daddr=' +
+          meeting.latitude +
+          ',' +
+          meeting.longitude +
+          '&saddr=Current+Location&q=' +
+          encodeURIComponent(meeting.formatted_address);
 
         //set page title
         document.title = meeting.name;
@@ -76,7 +84,11 @@ export default class Meeting extends Component {
         </h1>
         <div className="row flex-grow-1">
           <div className="mb-3 col-md-4 mb-md-0">
-            <a className="btn btn-outline-secondary btn-block mb-3" href={meeting.direction_link} target="_blank">
+            <a
+              className="btn btn-outline-secondary btn-block mb-3"
+              href={meeting.direction_link}
+              target="_blank"
+            >
               {strings.get_directions}
             </a>
             <div className="list-group">
@@ -98,13 +110,12 @@ export default class Meeting extends Component {
                       })
                     : ''}
                 </ul>
+                {meeting.notes && (
+                  <p className="my-0 mt-2">
+                    {meeting.notes.replace(/(?:\r\n|\r|\n)/g, '<br>')}
+                  </p>
+                )}
               </div>
-              {meeting.notes && (
-                <div className="list-group-item">
-                  <h5>Meeting Notes</h5>
-                  {meeting.notes}
-                </div>
-              )}
               <div className="list-group-item">
                 <h5>{meeting.location}</h5>
                 <p className="my-0 mt-1">{meeting.formatted_address}</p>
