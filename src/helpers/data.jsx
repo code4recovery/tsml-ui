@@ -1,9 +1,10 @@
 import { settings, strings } from '../settings';
 import Slugify from './slugify';
 import { formatTime, parseTime } from './time';
+import distance from './distance';
 
-//run filters on meetings
-export function filterMeetingData(state) {
+//run filters on meetings; this is run at every render
+export function filterMeetingData(state, setAppState) {
   let filterFound = false;
   let filteredSlugs = [];
 
@@ -24,18 +25,48 @@ export function filterMeetingData(state) {
     }
   }
 
-  //keyword search
-  if (state.input.search.length && state.input.mode === 'search') {
-    filterFound = true;
-    let needle = state.input.search.toLowerCase();
-    let matches = state.meetings.filter(function(meeting) {
-      return meeting.search.search(needle) !== -1;
-    });
-    filteredSlugs.push(
-      [].concat.apply(
-        [],
-        matches.map(meeting => meeting.slug)
-      )
+  //handle keyword search or geolocation
+  if (state.input.mode === 'search') {
+    //clear center
+    state.input.center = null;
+
+    if (state.input.search.length) {
+      //todo: improve searching to be OR search instead of AND
+      filterFound = true;
+      let needle = state.input.search.toLowerCase();
+      let matches = state.meetings.filter(function(meeting) {
+        return meeting.search.search(needle) !== -1;
+      });
+      filteredSlugs.push(
+        [].concat.apply(
+          [],
+          matches.map(meeting => meeting.slug)
+        )
+      );
+    }
+  } else if (state.input.mode === 'me') {
+    if (!state.input.center) {
+      navigator.geolocation.getCurrentPosition(
+        position => {
+          //this will cause a re-render with state.input.center now set
+          state.input.center = position.coords;
+          setAppState('input', state.input);
+        },
+        error => {
+          console.warn('getCurrentPosition error', error);
+        },
+        { timeout: 5000 }
+      );
+    } else {
+      //todo: filter meetings now based on distance
+    }
+  }
+
+  //loop through and update or clear distances
+  for (let i = 0; i < state.meetings.length; i++) {
+    state.meetings[i].distance = distance(
+      state.input.center,
+      state.meetings[i]
     );
   }
 
@@ -69,6 +100,7 @@ function getCommonElements(arrays) {
   return Object.keys(currentValues);
 }
 
+//set up meeting data; this is only run once when the app loads
 export function loadMeetingData(meetings, capabilities) {
   //indexes start as objects, will be converted to arrays
   let indexes = {
@@ -324,10 +356,15 @@ export function loadMeetingData(meetings, capabilities) {
     return a.name > b.name ? 1 : b.name > a.name ? -1 : 0;
   });
 
-  //near me mode enabled on https
+  //near me mode enabled on https or local development
   if (capabilities.coordinates) {
-    settings.modes.push('location');
-    if (window.location.protocol == 'https:') {
+    //todo implement geocoding
+    //settings.modes.push('location');
+    if (
+      navigator.geolocation &&
+      (window.location.protocol == 'https:' ||
+        window.location.hostname == 'localhost')
+    ) {
       capabilities.geolocation = true;
       settings.modes.push('me');
     }

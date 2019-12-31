@@ -5,7 +5,7 @@ export const settings = merge(
   {
     defaults: {
       bookmarkable: true, //whether to read from/write to the query string
-      columns: ['time', 'name', 'location', 'address', 'region'], //can be reordered
+      columns: ['time', 'distance', 'name', 'location', 'address', 'region'], //can be reordered
       mode: 'search', //start in keyword search mode (options are search, location, me)
       title: false, //display the title h1
       today: true, //start with today's meetings, false = any day
@@ -20,9 +20,10 @@ export const settings = merge(
       'friday',
       'saturday',
     ],
+    distance_unit: 'mi', // "mi" for miles, "km" for kilometers
     filters: ['region', 'day', 'time', 'type'],
     keys: {
-      google: null, //enable google maps
+      //google: null, //enable google maps
       mapbox: null, //enable mapbox maps
     },
     language: 'en',
@@ -50,6 +51,7 @@ export const settings = merge(
         },
         back_to_meetings: 'Back to Meetings',
         day_any: 'Any Day',
+        distance: 'Distance',
         evening: 'Evening',
         friday: 'Friday',
         get_directions: 'Get Directions',
@@ -79,6 +81,7 @@ export const settings = merge(
         time_any: 'Any Time',
         title: {
           day: '%day%',
+          distance: '%distance%',
           time: '%time%',
           type: '%type%',
           meetings: '%meetings%',
@@ -155,6 +158,7 @@ export const settings = merge(
         },
         back_to_meetings: 'Volver a las reuniones',
         day_any: 'Cualquier día',
+        distance: 'Distancia',
         evening: 'Noche',
         friday: 'Viernes',
         get_directions: 'Obtener las direcciones',

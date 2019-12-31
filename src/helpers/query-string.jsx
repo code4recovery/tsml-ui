@@ -64,7 +64,11 @@ export function setQueryString(state) {
   //filter by region, day, time, and type
   for (let i = 0; i < settings.filters.length; i++) {
     let filter = settings.filters[i];
-    if (state.input[filter].length && state.indexes[filter].length && filter !== 'day') {
+    if (
+      state.input[filter].length &&
+      state.indexes[filter].length &&
+      filter !== 'day'
+    ) {
       query[filter] = state.input[filter].join(separator);
     }
   }
@@ -95,7 +99,10 @@ export function setQueryString(state) {
 
   //location search
   if (state.input.center) {
-    query['center'] = state.input.center;
+    query['center'] = [
+      state.input.center.latitude,
+      state.input.center.longitude,
+    ].join(',');
   }
 
   //set mode property
