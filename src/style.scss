@@ -102,9 +102,16 @@ meetings {
           td {
             border: 0;
             padding: 0 0 0 7rem;
-            time {
+            &.time {
               left: 1rem;
               padding-left: 0;
+              position: absolute;
+            }
+            &.distance {
+              left: 1rem;
+              top: 2rem;
+              padding-left: 0;
+              font-size: 1.5rem;
               position: absolute;
             }
           }
