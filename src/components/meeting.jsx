@@ -160,7 +160,7 @@ export default class Meeting extends Component {
                 height="100%"
               >
                 <Marker
-                  latitude={meeting.latitude - 0.0025}
+                  latitude={meeting.latitude}
                   longitude={meeting.longitude}
                   offsetLeft={-settings.marker_style.width / 2}
                   offsetTop={-settings.marker_style.height}
@@ -173,7 +173,7 @@ export default class Meeting extends Component {
                 </Marker>
                 {this.state.popup && (
                   <Popup
-                    latitude={meeting.latitude - 0.0025}
+                    latitude={meeting.latitude}
                     longitude={meeting.longitude}
                     className="popup"
                     onClose={() => this.setState({ popup: false })}
