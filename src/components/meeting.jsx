@@ -46,7 +46,16 @@ export default class Meeting extends Component {
         }
 
         //create a link for directions
-        meeting.direction_link = "https://www.google.com/maps?daddr=" + meeting.latitude + "," + meeting.longitude + "&saddr=Current+Location&q=" + encodeURIComponent(meeting.formatted_address);
+        const iOS = !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
+        let maps_prefix = '';
+
+        if(iOS) {
+          maps_prefix = 'maps://?';
+        } else {
+          maps_prefix = 'https://www.google.com/maps?';
+        }
+
+        meeting.direction_link = maps_prefix + "daddr=" + meeting.latitude + "," + meeting.longitude + "&saddr=Current+Location&q=" + encodeURIComponent(meeting.formatted_address);
 
         //set page title
         document.title = meeting.name;
