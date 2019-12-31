@@ -51356,8 +51356,19 @@ function (_Component) {
               longitude: meeting.longitude,
               zoom: 14
             };
-          } //set page title
+          } //create a link for directions
 
+
+          var iOS = !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
+          var maps_prefix = '';
+
+          if (iOS) {
+            maps_prefix = 'maps://?';
+          } else {
+            maps_prefix = 'https://www.google.com/maps?';
+          }
+
+          meeting.direction_link = maps_prefix + "daddr=" + meeting.latitude + "," + meeting.longitude + "&saddr=Current+Location&q=" + encodeURIComponent(meeting.formatted_address); //set page title
 
           document.title = meeting.name;
         }
@@ -51380,7 +51391,8 @@ function (_Component) {
         className: "mb-3 col-md-4 mb-md-0"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
         className: "btn btn-outline-secondary btn-block mb-3",
-        href: ""
+        href: meeting.direction_link,
+        target: "_blank"
       }, _settings__WEBPACK_IMPORTED_MODULE_3__["strings"].get_directions), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "list-group"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -51446,7 +51458,7 @@ function (_Component) {
         width: "100%",
         height: "100%"
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_map_gl__WEBPACK_IMPORTED_MODULE_2__["Marker"], {
-        latitude: meeting.latitude - 0.0025,
+        latitude: meeting.latitude,
         longitude: meeting.longitude,
         offsetLeft: -_settings__WEBPACK_IMPORTED_MODULE_3__["settings"].marker_style.width / 2,
         offsetTop: -_settings__WEBPACK_IMPORTED_MODULE_3__["settings"].marker_style.height
@@ -51459,7 +51471,7 @@ function (_Component) {
           });
         }
       })), this.state.popup && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_map_gl__WEBPACK_IMPORTED_MODULE_2__["Popup"], {
-        latitude: meeting.latitude - 0.0025,
+        latitude: meeting.latitude,
         longitude: meeting.longitude,
         className: "popup",
         onClose: function onClose() {
@@ -51470,9 +51482,7 @@ function (_Component) {
         offsetTop: -_settings__WEBPACK_IMPORTED_MODULE_3__["settings"].marker_style.height
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", {
         className: "font-weight-light"
-      }, meeting.location), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, meeting.formatted_address), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-        className: "btn btn-outline-secondary btn-block"
-      }, "Directions")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, meeting.location), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, meeting.formatted_address)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "control"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_map_gl__WEBPACK_IMPORTED_MODULE_2__["NavigationControl"], {
         showCompass: false,
