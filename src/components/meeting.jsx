@@ -45,6 +45,18 @@ export default class Meeting extends Component {
           };
         }
 
+        //create a link for directions
+        const iOS = !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
+        let maps_prefix = '';
+
+        if(iOS) {
+          maps_prefix = 'maps://?';
+        } else {
+          maps_prefix = 'https://www.google.com/maps?';
+        }
+
+        meeting.direction_link = maps_prefix + "daddr=" + meeting.latitude + "," + meeting.longitude + "&saddr=Current+Location&q=" + encodeURIComponent(meeting.formatted_address);
+
         //set page title
         document.title = meeting.name;
       }
@@ -64,7 +76,7 @@ export default class Meeting extends Component {
         </h1>
         <div className="row flex-grow-1">
           <div className="mb-3 col-md-4 mb-md-0">
-            <a className="btn btn-outline-secondary btn-block mb-3" href="">
+            <a className="btn btn-outline-secondary btn-block mb-3" href={meeting.direction_link} target="_blank">
               {strings.get_directions}
             </a>
             <div className="list-group">
@@ -166,7 +178,7 @@ export default class Meeting extends Component {
                 height="100%"
               >
                 <Marker
-                  latitude={meeting.latitude - 0.0025}
+                  latitude={meeting.latitude}
                   longitude={meeting.longitude}
                   offsetLeft={-settings.marker_style.width / 2}
                   offsetTop={-settings.marker_style.height}
@@ -179,7 +191,7 @@ export default class Meeting extends Component {
                 </Marker>
                 {this.state.popup && (
                   <Popup
-                    latitude={meeting.latitude - 0.0025}
+                    latitude={meeting.latitude}
                     longitude={meeting.longitude}
                     className="popup"
                     onClose={() => this.setState({ popup: false })}
@@ -187,9 +199,16 @@ export default class Meeting extends Component {
                   >
                     <h4 className="font-weight-light">{meeting.location}</h4>
                     <p>{meeting.formatted_address}</p>
-                    <button className="btn btn-outline-secondary btn-block">
-                      Directions
+
+                    {/*
+                    <button
+                      className="btn btn-outline-secondary btn-block"
+                      href={meeting.direction_link}
+                      target="_blank"
+                    >
+                      {strings.get_directions}
                     </button>
+                    */}
                   </Popup>
                 )}
                 <div className="control">
