@@ -2,7 +2,7 @@
     "private": true,
     "scripts": {
         "dev": "npm run development",
-        "development": "node node_modules/cross-env/dist/bin/cross-env.js NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+        "development": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
         "watch": "npm run development -- --watch",
         "watch-poll": "npm run watch -- --watch-poll",
         "hot": "cross-env NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
@@ -11,21 +11,21 @@
         "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
     },
     "devDependencies": {
-        "@babel/preset-react": "^7.0.0",
-        "cross-env": "^5.2.0",
-        "laravel-mix": "^4.1.2",
-        "sass": "^1.22.10",
-        "sass-loader": "^7.3.1"
+        "@babel/preset-react": "^7.8.3",
+        "cross-env": "^6.0",
+        "laravel-mix": "^5.0.1",
+        "sass": "^1.15.2",
+        "sass-loader": "^8.0.0"
     },
     "dependencies": {
-        "bootstrap": "^4.3.1",
+        "bootstrap": "^4.4.1",
         "classnames": "^2.2.6",
-        "deepmerge": "^4.0.0",
-        "mapbox-gl": "^1.2.1",
-        "query-string": "^6.8.2",
-        "react": "^16.9.0",
-        "react-dom": "^16.9.0",
-        "react-map-gl": "^5.0.10",
-        "viewport-mercator-project": "^6.1.1"
+        "deepmerge": "^4.2.2",
+        "mapbox-gl": "^1.6.1",
+        "query-string": "^6.10.1",
+        "react": "^16.12.0",
+        "react-dom": "^16.12.0",
+        "react-map-gl": "^5.2.1",
+        "viewport-mercator-project": "^7.0.1"
     }
 }
