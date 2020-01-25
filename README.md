@@ -1,8 +1,8 @@
 # Website Meeting Finder 2.0
 
-With only a [Meeting Guide format JSON file](https://github.com/meeting-guide/spec) or a Google Sheet, web servants can have the same meeting finder found in the [12 Step Meeting List](https://github.com/meeting-guide/12-step-meeting-list) WordPress plugin on any website platform. 
+With only a [Meeting Guide format JSON file](https://github.com/code4recovery/spec) or a Google Sheet, web servants can have the same meeting finder found in the [12 Step Meeting List](https://github.com/code4recovery/12-step-meeting-list) WordPress plugin on any website platform. 
 
-[Here's a demo](https://react.meetingguide.org/demo/) of what the meeting finder can look like embedded in a random website design.
+[Here's a demo](https://react.meetingguide.org/) of what the meeting finder looks like with no styling, and [here's a demo](https://react.meetingguide.org/demo.html) of what it can look like embedded in a random website design.
 
 Advantanges:
 
@@ -77,7 +77,7 @@ See [src/settings.jsx](settings.jsx) for options that can be set by defining a `
 		},
 	};
 	
-A full list of meeting types can be found on the [Meeting Guide format spec page](https://github.com/meeting-guide/spec). These can be overridden by specifying the code and preferred nomenclature as demonstrated above.
+A full list of meeting types can be found on the [Meeting Guide format spec page](https://github.com/code4recovery/spec). These can be overridden by specifying the code and preferred nomenclature as demonstrated above.
 
 ## To Do
 
