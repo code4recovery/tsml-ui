@@ -11,6 +11,8 @@ export default class Map extends Component {
     super();
     this.state = {
       bounds: {},
+      locations: {},
+      locations_keys: [],
       popup: true,
       viewport: new WebMercatorViewport(),
     };
@@ -23,7 +25,7 @@ export default class Map extends Component {
     this.setState({ viewport: viewport });
   }
 
-  render() {
+  resetMapBounds() {
     //filter & sort meetings so southern pins are in front
     const meetings = this.props.state.meetings
       .filter(meeting => {
@@ -34,11 +36,11 @@ export default class Map extends Component {
       });
 
     //reset bounds
+    this.state.locations = {};
+    this.state.locations_keys = [];
     this.state.bounds = {};
 
     //build index of map pins and define bounds
-    let locations = {};
-    let locations_keys = [];
     for (let i = 0; i < meetings.length; i++) {
       let meeting = meetings[i];
 
@@ -46,9 +48,11 @@ export default class Map extends Component {
         let coords = meeting.longitude + ',' + meeting.latitude;
         meeting.latitude = parseFloat(meeting.latitude);
         meeting.longitude = parseFloat(meeting.longitude);
-        if (locations_keys.indexOf(coords) == -1) {
-          locations_keys.push(coords);
-          locations[coords] = {
+
+        //create a new pin
+        if (this.state.locations_keys.indexOf(coords) === -1) {
+          this.state.locations_keys.push(coords);
+          this.state.locations[coords] = {
             name: meeting.location,
             formatted_address: meeting.formatted_address,
             latitude: meeting.latitude,
@@ -58,6 +62,7 @@ export default class Map extends Component {
           };
         }
 
+        //expand bounds
         if (
           !this.state.bounds.north ||
           meeting.latitude > this.state.bounds.north
@@ -79,7 +84,8 @@ export default class Map extends Component {
         )
           this.state.bounds.west = meeting.longitude;
 
-        locations[coords].meetings.push(meeting);
+        //add meeting to pin
+        this.state.locations[coords].meetings.push(meeting);
       }
     }
 
@@ -91,25 +97,35 @@ export default class Map extends Component {
         longitude: this.state.bounds.west,
         zoom: 14,
       };
-    } else if (
-      !this.props.state.map_initialized &&
-      this.state.viewport.width > 1
-    ) {
+    } else {
       //calculate bounds now knowing dimensions
-      this.state.viewport = new WebMercatorViewport({
-        width: this.state.viewport.width,
-        height: this.state.viewport.height,
-      }).fitBounds(
-        [
-          [this.state.bounds.west, this.state.bounds.south],
-          [this.state.bounds.east, this.state.bounds.north],
-        ],
-        {
-          padding:
-            Math.min(this.state.viewport.width, this.state.viewport.height) /
-            10,
-        }
-      );
+      //setTimeout seems to be unfortunately necessary to render properly (todo try removing)
+      setTimeout(() => {
+        this.setState({
+          viewport: new WebMercatorViewport({
+            width: this.state.viewport.width,
+            height: this.state.viewport.height,
+          }).fitBounds(
+            [
+              [this.state.bounds.west, this.state.bounds.south],
+              [this.state.bounds.east, this.state.bounds.north],
+            ],
+            {
+              padding:
+                Math.min(this.state.viewport.width, this.state.viewport.height) /
+                10,
+            }
+          )
+        });
+      });
+    }
+  }
+
+  render() {
+    //reset the map bounds if necessary
+    if (!this.props.state.map_initialized) {
+      this.resetMapBounds();
+      this.props.setMapInitialized(); //report that bounds are set
     }
 
     return (
@@ -124,8 +140,8 @@ export default class Map extends Component {
             width="100%"
             height="100%"
           >
-            {locations_keys.map(key => {
-              const location = locations[key];
+            {this.state.locations_keys.map(key => {
+              const location = this.state.locations[key];
               return (
                 <div key={key}>
                   <Marker
