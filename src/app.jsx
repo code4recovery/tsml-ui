@@ -146,6 +146,7 @@ class App extends React.Component {
                   <Map
                     state={this.state}
                     setAppState={this.setAppState}
+                    setMapInitialized={this.setMapInitialized}
                     filteredSlugs={filteredSlugs}
                   />
                 )}
