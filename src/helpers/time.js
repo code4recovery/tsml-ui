@@ -24,7 +24,7 @@ export function formatTime(time) {
   date.setHours(parseInt(hours));
   date.setMinutes(parseInt(minutes));
   return date.toLocaleTimeString([], {
-    hour: '2-digit',
+    hour: 'numeric',
     minute: '2-digit',
   });
 }
