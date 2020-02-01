@@ -113,6 +113,7 @@ export function loadMeetingData(meetings, capabilities) {
   //filter out unused meetings properties for a leaner memory footprint
   const meeting_properties = [
     'day',
+    'end_time',
     'formatted_address',
     'formatted_end_time',
     'formatted_time',
