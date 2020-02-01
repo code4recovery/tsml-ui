@@ -82,6 +82,14 @@ export default class Meeting extends Component {
           <span className="mx-1">&rarr;</span>
           {meeting.name}
         </h1>
+        <h6>
+          <a
+            href={window.location.pathname}
+            onClick={event => this.goBack(event)}
+          >
+            &larr; {strings.back_to_meetings}
+          </a>
+        </h6>
         <div className="row flex-grow-1">
           <div className="mb-3 col-md-4 mb-md-0">
             <a
