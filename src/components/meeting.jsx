@@ -87,7 +87,7 @@ export default class Meeting extends Component {
             href={window.location.pathname}
             onClick={event => this.goBack(event)}
           >
-            &larr; {strings.back_to_meetings}
+            <strong>&rsaquo;</strong> {strings.back_to_meetings}
           </a>
         </h6>
         <div className="row flex-grow-1">
