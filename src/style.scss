@@ -119,11 +119,10 @@ meetings {
       }
     }
 
-    .mapboxgl-popup-content .list-group {
-      //max-height: 300px;
-      //overflow-y: scroll;
+    .mapboxgl-popup {
+      z-index: 100; //to get above the pins
       .list-group-item {
-        padding: 0.25rem 0.25rem 0.25rem 5rem;
+        padding: 0.25rem 0.25rem 0.25rem 5.5rem;
         time {
           left: 0.5rem;
           position: absolute;
