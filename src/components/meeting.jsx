@@ -72,22 +72,16 @@ export default class Meeting extends Component {
 
     return (
       <div className="flex-column flex-grow-1 d-flex">
-        <h1 className="font-weight-light">
-          <a
-            href={window.location.pathname}
-            onClick={event => this.goBack(event)}
-          >
-            {strings.meetings}
-          </a>
-          <span className="mx-1">&rarr;</span>
+        <h1 className="font-weight-light mb-1">
           {meeting.name}
         </h1>
-        <h6>
+        <h6 className="mb-3 border-bottom pb-2">
+          <span className="font-weight-bold mr-2">&rsaquo;</span>
           <a
             href={window.location.pathname}
             onClick={event => this.goBack(event)}
           >
-            <strong>&rsaquo;</strong> {strings.back_to_meetings}
+            {strings.back_to_meetings}
           </a>
         </h6>
         <div className="row flex-grow-1">
@@ -100,7 +94,7 @@ export default class Meeting extends Component {
               {strings.get_directions}
             </a>
             <div className="list-group">
-              <div className="list-group-item">
+              <div className="list-group-item border-bottom-0">
                 <h5>{strings.meeting_information}</h5>
                 <p className="my-0 mt-1">
                   {strings[settings.days[meeting.day]]},{' '}
@@ -114,8 +108,8 @@ export default class Meeting extends Component {
                 >
                   {meeting.types
                     ? meeting.types.map(type => {
-                        return <li key={type}>{type}</li>;
-                      })
+                      return <li key={type}>{type}</li>;
+                    })
                     : ''}
                 </ul>
                 {meeting.notes && (
