@@ -34,7 +34,7 @@ export function filterMeetingData(state, setAppState) {
       //todo: improve searching to be OR search instead of AND
       filterFound = true;
       let needle = state.input.search.toLowerCase();
-      let matches = state.meetings.filter(function(meeting) {
+      let matches = state.meetings.filter(function (meeting) {
         return meeting.search.search(needle) !== -1;
       });
       filteredSlugs.push(
@@ -114,6 +114,7 @@ export function loadMeetingData(meetings, capabilities) {
   const meeting_properties = [
     'day',
     'end_time',
+    'flags',
     'formatted_address',
     'formatted_end_time',
     'formatted_time',
@@ -246,6 +247,15 @@ export function loadMeetingData(meetings, capabilities) {
     //handle types
     if (meeting.types) {
       capabilities.type = true;
+
+      //flags
+      meeting.flags = settings.flags
+        .filter(type => lookup_type_codes.includes(type) && meeting.types.includes(type))
+        .map(type => {
+          return lookup_type_codes.includes(type) ? strings.types[type] : type;
+        })
+        .sort()
+        .join(', ');
 
       //clean up and sort types
       meeting.types = meeting.types

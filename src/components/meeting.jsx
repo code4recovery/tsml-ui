@@ -4,6 +4,7 @@ import ReactMapGL, { Marker, NavigationControl, Popup } from 'react-map-gl';
 
 import { settings, strings } from '../settings';
 import Link from './link';
+import Name from './name';
 
 export default class Meeting extends Component {
   constructor() {
@@ -73,7 +74,7 @@ export default class Meeting extends Component {
     return (
       <div className="flex-column flex-grow-1 d-flex">
         <h1 className="font-weight-light mb-1">
-          {meeting.name}
+          <Name meeting={meeting} />
         </h1>
         <h6 className="mb-3 border-bottom pb-2">
           <span className="font-weight-bold mr-2">&rsaquo;</span>
@@ -155,7 +156,7 @@ export default class Meeting extends Component {
                                     >
                                       {m.formatted_time}
                                     </span>
-                                    {m.slug === meeting.slug && <>{m.name}</>}
+                                    {m.slug === meeting.slug && <Name meeting={m} />}
                                     {m.slug !== meeting.slug && (
                                       <Link
                                         meeting={m}

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-
 import ReactMapGL, { Marker, NavigationControl, Popup } from 'react-map-gl';
 import WebMercatorViewport from 'viewport-mercator-project';
 
