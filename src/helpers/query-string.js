@@ -1,5 +1,6 @@
 import qs from 'query-string';
 import merge from 'deepmerge';
+
 import { settings } from '../settings';
 
 const separator = '/'; //used to separate multiple query string values (eg day=0/1)
