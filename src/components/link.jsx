@@ -1,5 +1,7 @@
 import React from 'react';
 
+import Name from './name';
+
 export default function Link(props) {
   return (
     <a
@@ -10,7 +12,7 @@ export default function Link(props) {
         props.setAppState('input', props.state.input);
       }}
     >
-      {props.meeting.name}
+      <Name meeting={props.meeting} />
     </a>
   );
 }
