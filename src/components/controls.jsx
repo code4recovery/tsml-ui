@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import qs from 'query-string';
 import cx from 'classnames/bind';
+
 import Dropdown from './dropdown';
 import { settings, strings } from '../settings';
 
@@ -127,7 +128,7 @@ export default class Controls extends Component {
     } else {
       //focus after waiting for disabled to clear
       setTimeout(
-        function() {
+        function () {
           this.searchInput.current.focus();
         }.bind(this),
         100
