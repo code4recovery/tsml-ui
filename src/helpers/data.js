@@ -33,7 +33,7 @@ export function filterMeetingData(state, setAppState) {
     if (state.input.search.length) {
       //todo: improve searching to be OR search instead of AND
       filterFound = true;
-      let needle = state.input.search.toLowerCase();
+      let needle = processSearch(state.input.search.toLowerCase());
       let matches = state.meetings.filter(function (meeting) {
         return meeting.search.search(needle) !== -1;
       });
@@ -448,4 +448,28 @@ export function translateGoogleSheet(data) {
   }
 
   return meetings;
+}
+
+// converts a search string into pipe delimited format. Example:
+// input: "west chester" malvern devon "center city west"
+// output: west chester|malvern|devon|center city west
+function processSearch(search_string) {
+  var terms = [];
+  // Parse out any quoted strings
+  if (search_string.includes('"')) {
+    var exp = /"(.*?)"/g;
+    // Grab any quoted strings, add them to terms, and delete from source string
+    for (var match = exp.exec(search_string); match != null; match = exp.exec(search_string)) {
+      search_string = search_string.replace(match[0], '');
+      terms.push(match[0].replace(/"/g, ''));
+    }
+  }
+
+  // Add any non-quoted strings remaining to the terms
+  if (search_string.length) {
+    terms = terms.concat(search_string.match(/[^ ]+/g));
+  }
+
+  // Return the the pipe delimited search string
+  return terms.join('|');
 }
