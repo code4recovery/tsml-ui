@@ -80,16 +80,16 @@ export function filterMeetingData(state, setAppState) {
 
 //get common matches between arrays (for meeting filtering)
 function getCommonElements(arrays) {
-  var currentValues = {};
-  var commonValues = {};
+  let currentValues = {};
+  let commonValues = {};
   if (!arrays.length) return [];
-  for (var i = arrays[0].length - 1; i >= 0; i--) {
+  for (let i = arrays[0].length - 1; i >= 0; i--) {
     //Iterating backwards for efficiency
     currentValues[arrays[0][i]] = 1; //Doesn't really matter what we set it to
   }
-  for (var i = arrays.length - 1; i > 0; i--) {
-    var currentArray = arrays[i];
-    for (var j = currentArray.length - 1; j >= 0; j--) {
+  for (let i = arrays.length - 1; i > 0; i--) {
+    const currentArray = arrays[i];
+    for (let j = currentArray.length - 1; j >= 0; j--) {
       if (currentArray[j] in currentValues) {
         commonValues[currentArray[j]] = 1; //Once again, the `1` doesn't matter
       }
@@ -248,15 +248,6 @@ export function loadMeetingData(meetings, capabilities) {
     if (meeting.types) {
       capabilities.type = true;
 
-      //flags
-      meeting.flags = settings.flags
-        .filter(type => lookup_type_codes.includes(type) && meeting.types.includes(type))
-        .map(type => {
-          return lookup_type_codes.includes(type) ? strings.types[type] : type;
-        })
-        .sort()
-        .join(', ');
-
       //clean up and sort types
       meeting.types = meeting.types
         .map(type => type.trim())
@@ -270,6 +261,12 @@ export function loadMeetingData(meetings, capabilities) {
           return lookup_type_codes.includes(type) ? strings.types[type] : type;
         })
         .sort();
+
+      //flags
+      meeting.flags = settings.flags
+        .filter(type => lookup_type_values.includes(type) && meeting.types.includes(type))
+        .sort()
+        .join(', ');
 
       //build type index (can be multiple)
       for (let j = 0; j < meeting.types.length; j++) {

@@ -58,23 +58,23 @@ See [src/settings.jsx](settings.jsx) for options that can be set by defining a `
 ### Change the column heading “Region” to “City”
 
 	window.config = {
-		strings: {
-			en: {
-				region: 'City',
-			},
-		},
+	  strings: {
+	    en: {
+	      region: 'City',
+	    },
+	  },
 	};
 
 ### Change “Newcomer” meeting type to “Beginner”
 
 	window.config = {
-		strings: {
-			en: {
-				types: {
-					BE: 'Beginner',
-				},				
-			},
-		},
+	  strings: {
+	    en: {
+	      types: {
+	        BE: 'Beginner',
+	      },				
+	    },
+	  },
 	};
 	
 A full list of meeting types can be found on the [Meeting Guide format spec page](https://github.com/code4recovery/spec). These can be overridden by specifying the code and preferred nomenclature as demonstrated above.
