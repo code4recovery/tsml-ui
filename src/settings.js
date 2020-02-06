@@ -22,7 +22,7 @@ export const settings = merge(
     ],
     distance_unit: 'mi', // "mi" for miles, "km" for kilometers
     filters: ['region', 'day', 'time', 'type'],
-    flags: ['M', 'W'],
+    flags: window.config.flags ? [] : ['Men', 'Women'],
     keys: {
       //google: null, //enable google maps
       mapbox: null, //enable mapbox maps
