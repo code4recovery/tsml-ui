@@ -1,4 +1,4 @@
-import { settings, strings } from '../settings';
+import { settings, strings } from './settings';
 import Slugify from './slugify';
 import { formatTime, parseTime } from './time';
 import distance from './distance';

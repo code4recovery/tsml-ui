@@ -1,4 +1,4 @@
-import { strings } from '../settings';
+import { strings } from './settings';
 
 //quick format time function
 export function formatTime(time) {

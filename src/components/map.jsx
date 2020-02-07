@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import ReactMapGL, { Marker, NavigationControl, Popup } from 'react-map-gl';
 import WebMercatorViewport from 'viewport-mercator-project';
 
-import { settings } from '../settings';
+import { settings } from '../helpers/settings';
 import Link from './link';
 
 export default class Map extends Component {

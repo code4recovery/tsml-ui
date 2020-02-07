@@ -1,4 +1,4 @@
-import { settings } from '../settings';
+import { settings } from './settings';
 
 // Calculate the distance as the crow flies between two geometric points
 // Adapted from: https://www.geodatasource.com/developers/javascript
