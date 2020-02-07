@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import cx from 'classnames/bind';
 import ReactMapGL, { Marker, NavigationControl, Popup } from 'react-map-gl';
 
-import { settings, strings } from '../settings';
+import { settings, strings } from '../helpers/settings';
 import Link from './link';
 import Name from './name';
 
@@ -77,7 +77,7 @@ export default class Meeting extends Component {
           <Name meeting={meeting} />
         </h1>
         <h6 className="mb-3 border-bottom pb-2">
-          <span className="font-weight-bold mr-2">&rsaquo;</span>
+          <span className="font-weight-bold mr-1">&larr;</span>
           <a
             href={window.location.pathname}
             onClick={event => this.goBack(event)}

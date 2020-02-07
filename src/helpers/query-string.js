@@ -1,7 +1,7 @@
 import qs from 'query-string';
 import merge from 'deepmerge';
 
-import { settings } from '../settings';
+import { settings } from './settings';
 
 const separator = '/'; //used to separate multiple query string values (eg day=0/1)
 
@@ -24,11 +24,6 @@ export function getQueryString(queryString) {
   //today mode
   if (settings.defaults.today) {
     input.day.push(new Date().getDay());
-  }
-
-  //non-bookmarkable mode
-  if (!settings.defaults.bookmarkable) {
-    return input;
   }
 
   //load input from query string
@@ -56,8 +51,6 @@ export function getQueryString(queryString) {
 }
 
 export function setQueryString(state) {
-  //non-bookmarkable mode
-  if (!settings.defaults.bookmarkable) return;
 
   let query = {};
   const existingQuery = qs.parse(location.search);
