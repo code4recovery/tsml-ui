@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { strings } from '../settings';
+import { strings } from '../helpers/settings';
 
 const separator = ' + ';
 

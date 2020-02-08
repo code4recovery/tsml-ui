@@ -3,14 +3,6 @@ import merge from 'deepmerge';
 //override these on your page with window.config
 export const settings = merge(
   {
-    defaults: {
-      bookmarkable: true, //whether to read from/write to the query string
-      columns: ['time', 'distance', 'name', 'location', 'address', 'region'], //can be reordered
-      mode: 'search', //start in keyword search mode (options are search, location, me)
-      title: false, //display the title h1
-      today: true, //start with today's meetings, false = any day
-      view: 'list', //start in list or map view
-    },
     days: [
       'sunday',
       'monday',
@@ -20,9 +12,15 @@ export const settings = merge(
       'friday',
       'saturday',
     ],
+    defaults: {
+      columns: ['time', 'distance', 'name', 'location', 'address', 'region'], //can be reordered
+      mode: 'search', //start in keyword search mode (options are search, location, me)
+      today: true, //start with today's meetings, false = any day
+      view: 'list', //start in list or map view
+    },
     distance_unit: 'mi', // "mi" for miles, "km" for kilometers
     filters: ['region', 'day', 'time', 'type'],
-    flags: ['M', 'W'],
+    flags: window.config.flags ? [] : ['Men', 'Women'],
     keys: {
       //google: null, //enable google maps
       mapbox: null, //enable mapbox maps
@@ -40,7 +38,7 @@ export const settings = merge(
       height: 38.4,
       width: 26,
     },
-    modes: ['search'], //location and me will be appended if capable
+    modes: ['search'], //"location" and "me" will be appended if capable
     params: ['search', 'mode', 'view'], //utility array
     strings: {
       en: {
@@ -257,6 +255,7 @@ export const settings = merge(
       },
     },
     times: ['morning', 'midday', 'evening', 'night'],
+    title: true, //whether to display the title h1
   },
   window.config || {}
 );
