@@ -8,15 +8,9 @@ import Map from './components/map';
 import Meeting from './components/meeting';
 import Table from './components/table';
 import Title from './components/title';
-
 import { getQueryString, setQueryString } from './helpers/query-string';
-import {
-  filterMeetingData,
-  loadMeetingData,
-  translateGoogleSheet,
-} from './helpers/data';
-
-import { settings } from './settings';
+import { filterMeetingData, loadMeetingData, translateGoogleSheet } from './helpers/data';
+import { settings } from './helpers/settings';
 
 //locate first <meetings> element
 const [element] = document.getElementsByTagName('meetings');
@@ -125,35 +119,30 @@ class App extends React.Component {
 
     return (
       <div className="container-fluid py-3 d-flex flex-column">
-        {this.state.input.meeting && (
+        {this.state.input.meeting ? (
           <Meeting state={this.state} setAppState={this.setAppState} />
-        )}
-        {!this.state.input.meeting && (
-          <>
-            {settings.defaults.title && <Title state={this.state} />}
-            <Controls state={this.state} setAppState={this.setAppState} />
-            <Alert state={this.state} />
-            {filteredSlugs.length > 0 && (
-              <>
-                {this.state.input.view === 'list' && (
-                  <Table
-                    state={this.state}
-                    setAppState={this.setAppState}
-                    filteredSlugs={filteredSlugs}
-                  />
-                )}
-                {this.state.input.view === 'map' && (
-                  <Map
-                    state={this.state}
-                    setAppState={this.setAppState}
-                    setMapInitialized={this.setMapInitialized}
-                    filteredSlugs={filteredSlugs}
-                  />
-                )}
-              </>
-            )}
-          </>
-        )}
+        ) : (
+            <>
+              {settings.title && <Title state={this.state} />}
+              <Controls state={this.state} setAppState={this.setAppState} />
+              <Alert state={this.state} />
+              {filteredSlugs.length > 0 && this.state.input.view === 'list' && (
+                <Table
+                  state={this.state}
+                  setAppState={this.setAppState}
+                  filteredSlugs={filteredSlugs}
+                />
+              )}
+              {filteredSlugs.length > 0 && this.state.input.view === 'map' && (
+                <Map
+                  state={this.state}
+                  setAppState={this.setAppState}
+                  setMapInitialized={this.setMapInitialized}
+                  filteredSlugs={filteredSlugs}
+                />
+              )}
+            </>
+          )}
       </div>
     );
   }

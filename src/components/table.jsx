@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import cx from 'classnames/bind';
 
-import { settings, strings } from '../settings';
+import { settings, strings } from '../helpers/settings';
 import Link from './link';
 
 export default class Table extends Component {

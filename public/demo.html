@@ -1,28 +1,79 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Demo AA Website</title>
-    <style>
-      body { background: papayawhip; color: gray; font-family: Georgia, serif; font-size: 18px; line-height: 1.4; }
-      main { background: white; border: 1px solid lightgray; margin: 20px auto; padding: 0 15px; }
-      main > h1 { border-bottom: 1px solid lightgray; color: firebrick; margin: 30px 0 0; }
-      p { margin-top: 15px; }
-      a { color: firebrick; }
-      @media (min-width: 620px) { main { width: 90%; } }
-      @media (min-width: 800px) { main { width: 80%; } }
-      @media (min-width: 1400px) { main { width: 1300px; } }
-    </style>
-    <link rel="stylesheet" href="/style.css">
-  </head>
-  <body>
-    <main>
-      <h1>Meeting Finder 2.0 Demo</h1>
-      <p>This is a demo site for the <a href="https://github.com/meeting-guide/react/">React Meeting Finder 2.0 project</a> to show embedding it on a site with a random design.</p>
-      <p>The data source for this demo is <a href="https://docs.google.com/spreadsheets/d/1-sDB7TIXXa9hlIO71sYOV_X_64jjs4WdAjtmOWv26CA/edit#gid=0">this Google Sheet</a>.</p>
-      <meetings src="https://spreadsheets.google.com/feeds/list/1-sDB7TIXXa9hlIO71sYOV_X_64jjs4WdAjtmOWv26CA/1/public/values?alt=json"/>
-    </main>
-    <script src="/app.js" async></script>
-  </body>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Demo AA Website</title>
+  <style>
+    body {
+      background: papayawhip;
+      color: gray;
+      font-family: Georgia, serif;
+      font-size: 18px;
+      line-height: 1.4;
+    }
+
+    main {
+      background: white;
+      border: 1px solid lightgray;
+      margin: 20px auto;
+      padding: 0 15px;
+    }
+
+    main>h1 {
+      border-bottom: 1px solid lightgray;
+      color: firebrick;
+      margin: 30px 0 0;
+    }
+
+    p {
+      margin-top: 15px;
+    }
+
+    a {
+      color: firebrick;
+    }
+
+    @media (min-width: 620px) {
+      main {
+        width: 90%;
+      }
+    }
+
+    @media (min-width: 800px) {
+      main {
+        width: 80%;
+      }
+    }
+
+    @media (min-width: 1400px) {
+      main {
+        width: 1300px;
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+  <main>
+    <h1>Meeting Finder 2.0 Demo</h1>
+    <p>This is a demo site for the <a href="https://github.com/meeting-guide/react/">React Meeting Finder 2.0
+        project</a> to show embedding it on a site with a random design.</p>
+    <p>The data source for this demo is <a
+        href="https://docs.google.com/spreadsheets/d/1-sDB7TIXXa9hlIO71sYOV_X_64jjs4WdAjtmOWv26CA/edit#gid=0">this
+        Google Sheet</a>.</p>
+    <script>
+      window.config = {
+        flags: ['Open', 'Closed'],
+        title: false,
+      }
+    </script>
+    <meetings
+      src="https://spreadsheets.google.com/feeds/list/1-sDB7TIXXa9hlIO71sYOV_X_64jjs4WdAjtmOWv26CA/1/public/values?alt=json" />
+  </main>
+  <script src="/app.js" async></script>
+</body>
+
 </html>

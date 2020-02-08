@@ -3,7 +3,7 @@ import qs from 'query-string';
 import cx from 'classnames/bind';
 
 import Dropdown from './dropdown';
-import { settings, strings } from '../settings';
+import { settings, strings } from '../helpers/settings';
 
 export default class Controls extends Component {
   constructor(props) {
