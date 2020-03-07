@@ -59,15 +59,26 @@ export function filterMeetingData(state, setAppState) {
       );
     } else {
       //todo: filter meetings now based on distance
+      console.log(state.meetings);
+      state.meetings.sort((a, b) => {
+        return a.distance_number - b.distance_number
+      });
+      console.log(state.meetings);
     }
   }
 
   //loop through and update or clear distances
   for (let i = 0; i < state.meetings.length; i++) {
-    state.meetings[i].distance = distance(
+    let distance_number = distance(
       state.input.center,
       state.meetings[i]
     );
+    state.meetings[i].distance_number = distance_number;
+    if(distance_number) {
+      state.meetings[i].distance = distance_number.toFixed(2).toString() + ' ' + settings.distance_unit;
+    } else {
+      state.meetings[i].distance = null;
+    }
   }
 
   //do the filtering, if necessary
