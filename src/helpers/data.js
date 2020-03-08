@@ -60,9 +60,7 @@ export function filterMeetingData(state, setAppState) {
     } else {
       //todo: filter meetings now based on distance
       console.log(state.meetings);
-      state.meetings.sort((a, b) => {
-        return a.distance_number - b.distance_number
-      });
+      state.meetings.sort((a, b) => a.distance_number - b.distance_number);
       console.log(state.meetings);
     }
   }
