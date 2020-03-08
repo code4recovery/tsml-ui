@@ -1,7 +1,7 @@
 import { settings, strings } from './settings';
 import Slugify from './slugify';
 import { formatTime, parseTime } from './time';
-import distance from './distance';
+import { distance, distanceNumber } from './distance';
 
 //run filters on meetings; this is run at every render
 export function filterMeetingData(state, setAppState) {
@@ -69,16 +69,12 @@ export function filterMeetingData(state, setAppState) {
 
   //loop through and update or clear distances
   for (let i = 0; i < state.meetings.length; i++) {
-    let distance_number = distance(
+    let distance_number = distanceNumber(
       state.input.center,
       state.meetings[i]
     );
+    state.meetings[i].distance = distance(distance_number);
     state.meetings[i].distance_number = distance_number;
-    if(distance_number) {
-      state.meetings[i].distance = distance_number.toFixed(2).toString() + ' ' + settings.distance_unit;
-    } else {
-      state.meetings[i].distance = null;
-    }
   }
 
   //do the filtering, if necessary

@@ -2,7 +2,7 @@ import { settings } from './settings';
 
 // Calculate the distance as the crow flies between two geometric points
 // Adapted from: https://www.geodatasource.com/developers/javascript
-export default function distance(a, b) {
+export function distanceNumber(a, b) {
   if (!a || !b) return null;
 
   if (a.latitude == b.latitude && a.longitude == b.longitude) {
@@ -25,5 +25,13 @@ export default function distance(a, b) {
     if (settings.distance_unit === 'km') dist *= 1.609344;
 
     return dist
+  }
+}
+
+export function distance(a) {
+  if(a) {
+    return a.toFixed(2).toString() + ' ' + settings.distance_unit;
+  } else {
+    return null
   }
 }
