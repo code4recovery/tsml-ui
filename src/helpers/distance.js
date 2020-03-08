@@ -29,7 +29,7 @@ export function distanceNumber(a, b) {
 }
 
 export function distance(a) {
-  if(a) {
+  if (a) {
     return a.toFixed(2).toString() + ' ' + settings.distance_unit;
   } else {
     return null
