@@ -34,7 +34,7 @@ export function filterMeetingData(state, setAppState) {
       //todo: improve searching to be OR search instead of AND
       filterFound = true;
       let needle = processSearch(state.input.search.toLowerCase());
-      let matches = state.meetings.filter(function (meeting) {
+      let matches = state.meetings.filter(function(meeting) {
         return meeting.search.search(needle) !== -1;
       });
       filteredSlugs.push(
@@ -130,6 +130,8 @@ export function loadMeetingData(meetings, capabilities) {
     'sub_region',
     'time',
     'types',
+    'video_conference_url',
+    'video_conference_dial_in',
   ];
 
   //define lookups we'll need later
@@ -264,7 +266,10 @@ export function loadMeetingData(meetings, capabilities) {
 
       //flags
       meeting.flags = settings.flags
-        .filter(type => lookup_type_values.includes(type) && meeting.types.includes(type))
+        .filter(
+          type =>
+            lookup_type_values.includes(type) && meeting.types.includes(type)
+        )
         .sort()
         .join(', ');
 
@@ -456,7 +461,11 @@ function processSearch(search_string) {
   if (search_string.includes('"')) {
     var exp = /"(.*?)"/g;
     // Grab any quoted strings, add them to terms, and delete from source string
-    for (var match = exp.exec(search_string); match != null; match = exp.exec(search_string)) {
+    for (
+      var match = exp.exec(search_string);
+      match != null;
+      match = exp.exec(search_string)
+    ) {
       search_string = search_string.replace(match[0], '');
       terms.push(match[0].replace(/"/g, ''));
     }

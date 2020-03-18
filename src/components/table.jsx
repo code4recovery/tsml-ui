@@ -21,6 +21,16 @@ export default class Table extends Component {
           setAppState={this.props.setAppState}
         />
       );
+    } else if (key == 'location' && meeting.video_conference_url) {
+      return (
+        <div className="location">
+          <a href={meeting.video_conference_url} target="_blank">
+            {meeting.video_conference_url}
+          </a>
+          <br />
+          Dial In: {meeting.video_conference_dial_in}
+        </div>
+      );
     } else if (key == 'time') {
       return (
         <time className="text-nowrap">
