@@ -1,8 +1,8 @@
-//only two global styles this applies
+//minimal global styling
 html,
 body {
-  height: 100%; //height needs to be 100% for dropdown blur handler to register
-  margin: 0; //this is a little opinionated...
+  height: 100%; //for dropdown blur
+  margin: 0;
 }
 
 //"namespaced" css -- should not interfere with presentation outside the <meetings> element
@@ -12,43 +12,60 @@ meetings {
 
   //import only what we need from bootstrap
   @import '~bootstrap/scss/functions';
-  @import '~bootstrap/scss/mixins';
   @import '~bootstrap/scss/variables';
-
-  @import '~bootstrap/scss/alert';
-  @import '~bootstrap/scss/badge';
-  @import '~bootstrap/scss/button-group';
-  @import '~bootstrap/scss/buttons';
-  @import '~bootstrap/scss/dropdown';
-  @import '~bootstrap/scss/forms';
-  @import '~bootstrap/scss/grid';
-  @import '~bootstrap/scss/input-group';
-  @import '~bootstrap/scss/list-group';
-  @import '~bootstrap/scss/print';
-  @import '~bootstrap/scss/reboot';
-  @import '~bootstrap/scss/spinners';
-  @import '~bootstrap/scss/tables';
-  @import '~bootstrap/scss/type';
+  @import '~bootstrap/scss/mixins';
   @import '~bootstrap/scss/utilities';
+  @import '~bootstrap/scss/root';
+  @import '~bootstrap/scss/reboot';
+  @import '~bootstrap/scss/type';
+  //@import '~bootstrap/scss/images';
+  @import '~bootstrap/scss/containers';
+  @import '~bootstrap/scss/grid';
+  @import '~bootstrap/scss/tables';
+  @import '~bootstrap/scss/forms';
+  @import '~bootstrap/scss/buttons';
+  //@import '~bootstrap/scss/transitions';
+  @import '~bootstrap/scss/dropdown';
+  @import '~bootstrap/scss/button-group';
+  //@import '~bootstrap/scss/nav';
+  //@import '~bootstrap/scss/navbar';
+  @import '~bootstrap/scss/card';
+  //@import '~bootstrap/scss/breadcrumb';
+  //@import '~bootstrap/scss/pagination';
+  @import '~bootstrap/scss/badge';
+  @import '~bootstrap/scss/alert';
+  //@import '~bootstrap/scss/progress';
+  @import '~bootstrap/scss/list-group';
+  //@import '~bootstrap/scss/close';
+  //@import '~bootstrap/scss/toasts';
+  //@import '~bootstrap/scss/modal';
+  //@import '~bootstrap/scss/tooltip';
+  //@import '~bootstrap/scss/popover';
+  //@import '~bootstrap/scss/carousel';
+  @import '~bootstrap/scss/spinners';
+  @import '~bootstrap/scss/helpers';
+  @import '~bootstrap/scss/utilities/api';
 
-  background-color: $body-bg; // 2
-  color: $body-color;
-
-  //bootstrap reboot styles for html
-  font-family: sans-serif; // 2
-  font-family: $font-family-base;
-  font-size: $font-size-base;
+  //styles that bootstrap normally puts on the body
+  font-family: $font-family-sans-serif;
+  @include font-size($font-size-base);
   font-weight: $font-weight-base;
-  line-height: 1.15; // 3
   line-height: $line-height-base;
+  color: $body-color;
+  text-align: $body-text-align;
+  background-color: $body-bg;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: rgba($black, 0);
 
-  //bootstrap reboot styles for body
-  margin: 0; // 1
-  -ms-overflow-style: scrollbar; // 5
-  -webkit-tap-highlight-color: rgba($black, 0); // 6
-  text-align: left; // 3
-  -webkit-text-size-adjust: 100%; // 4
-  -ms-text-size-adjust: 100%; // 4
+  a {
+    color: $link-color;
+    text-decoration: $link-decoration;
+
+    &:hover {
+      color: $link-hover-color;
+      text-decoration: $link-hover-decoration;
+    }
+  }
 
   .container-fluid {
     min-height: 100%;
@@ -63,6 +80,17 @@ meetings {
 
     input[type='search']::-webkit-search-cancel-button {
       -webkit-appearance: searchfield-cancel-button;
+    }
+
+    //needed as of v5
+    .row {
+      //to prevent white border
+      margin-left: -1rem;
+      margin-right: -1rem;
+      //to allow map to fill available space
+      &.controls {
+        flex: none;
+      }
     }
 
     .map {
@@ -80,12 +108,12 @@ meetings {
         top: 10px;
       }
       .popup {
-        font-family: $font-family-base;
-        font-size: $font-size-base;
-        font-weight: $font-weight-base;
-        line-height: $line-height-base;
         max-width: 85%;
         width: 320px;
+        .mapboxgl-popup-close-button {
+          font-size: 1.5rem;
+          line-height: 1;
+        }
       }
     }
 
@@ -94,7 +122,14 @@ meetings {
       td:first-child {
         padding-left: 1rem;
       }
-      @include media-breakpoint-down(xs) {
+      //necessary as of v5 to prevent overlapping bg
+      &.table-striped > tbody > tr:nth-of-type(odd) {
+        background-color: $gray-100;
+        * {
+          background: none;
+        }
+      }
+      @include media-breakpoint-down(sm) {
         tr {
           border-top: 1px solid $table-border-color;
           padding: 0.5rem 1rem;
@@ -109,7 +144,7 @@ meetings {
             }
             &.distance {
               left: 1rem;
-              top: 2rem;
+              top: 3.5rem;
               padding-left: 0;
               font-size: 1.5rem;
               position: absolute;
@@ -126,6 +161,9 @@ meetings {
         time {
           left: 0.5rem;
           position: absolute;
+        }
+        & + .list-group-item {
+          border-top-width: 0;
         }
       }
     }

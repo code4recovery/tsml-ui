@@ -5,6 +5,7 @@ import ReactMapGL, { Marker, NavigationControl, Popup } from 'react-map-gl';
 import { settings, strings } from '../helpers/settings';
 import Link from './link';
 import Name from './name';
+import Button from './button';
 
 export default class Meeting extends Component {
   constructor() {
@@ -49,22 +50,14 @@ export default class Meeting extends Component {
         //create a link for directions
         const iOS =
           !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
-        let maps_prefix = '';
 
-        if (iOS) {
-          maps_prefix = 'maps://?';
-        } else {
-          maps_prefix = 'https://www.google.com/maps?';
-        }
-
-        meeting.direction_link =
-          maps_prefix +
-          'daddr=' +
-          meeting.latitude +
-          ',' +
-          meeting.longitude +
-          '&saddr=Current+Location&q=' +
-          encodeURIComponent(meeting.formatted_address);
+        meeting.directions_url = `${
+          iOS ? 'maps://' : 'https://www.google.com/maps'
+        }?daddr=${meeting.latitude},${
+          meeting.longitude
+        }&saddr=Current+Location&q=${encodeURIComponent(
+          meeting.formatted_address
+        )}`;
 
         //set page title
         document.title = meeting.name;
@@ -87,13 +80,14 @@ export default class Meeting extends Component {
         </h6>
         <div className="row flex-grow-1">
           <div className="mb-3 col-md-4 mb-md-0">
-            <a
-              className="btn btn-outline-secondary btn-block mb-3"
-              href={meeting.direction_link}
-              target="_blank"
-            >
-              {strings.get_directions}
-            </a>
+            {meeting.directions_url && (
+              <Button
+                href={meeting.directions_url}
+                text={strings.get_directions}
+                icon={'directions'}
+                className="mb-3"
+              />
+            )}
             <div className="list-group">
               <div className="list-group-item border-bottom-0">
                 <h5>{strings.meeting_information}</h5>
@@ -109,8 +103,8 @@ export default class Meeting extends Component {
                 >
                   {meeting.types
                     ? meeting.types.map(type => {
-                      return <li key={type}>{type}</li>;
-                    })
+                        return <li key={type}>{type}</li>;
+                      })
                     : ''}
                 </ul>
                 {meeting.notes && (
@@ -156,7 +150,9 @@ export default class Meeting extends Component {
                                     >
                                       {m.formatted_time}
                                     </span>
-                                    {m.slug === meeting.slug && <Name meeting={m} />}
+                                    {m.slug === meeting.slug && (
+                                      <Name meeting={m} />
+                                    )}
                                     {m.slug !== meeting.slug && (
                                       <Link
                                         meeting={m}
@@ -208,21 +204,20 @@ export default class Meeting extends Component {
                     latitude={meeting.latitude}
                     longitude={meeting.longitude}
                     className="popup"
+                    closeOnClick={false}
                     onClose={() => this.setState({ popup: false })}
                     offsetTop={-settings.marker_style.height}
                   >
                     <h4 className="font-weight-light">{meeting.location}</h4>
                     <p>{meeting.formatted_address}</p>
 
-                    {/*
-                    <button
-                      className="btn btn-outline-secondary btn-block"
-                      href={meeting.direction_link}
-                      target="_blank"
-                    >
-                      {strings.get_directions}
-                    </button>
-                    */}
+                    {meeting.directions_url && (
+                      <Button
+                        href={meeting.directions_url}
+                        text={strings.get_directions}
+                        icon={'directions'}
+                      />
+                    )}
                   </Popup>
                 )}
                 <div className="control">
