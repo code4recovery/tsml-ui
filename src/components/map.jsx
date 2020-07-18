@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import ReactMapGL, { Marker, NavigationControl, Popup } from 'react-map-gl';
 import WebMercatorViewport from 'viewport-mercator-project';
 
-import { settings } from '../helpers/settings';
+import { settings, strings } from '../helpers/settings';
 import Link from './link';
+import Button from './button';
 
 export default class Map extends Component {
   constructor() {
@@ -111,10 +112,12 @@ export default class Map extends Component {
             ],
             {
               padding:
-                Math.min(this.state.viewport.width, this.state.viewport.height) /
-                10,
+                Math.min(
+                  this.state.viewport.width,
+                  this.state.viewport.height
+                ) / 10,
             }
-          )
+          ),
         });
       });
     }
@@ -141,6 +144,20 @@ export default class Map extends Component {
           >
             {this.state.locations_keys.map(key => {
               const location = this.state.locations[key];
+
+              //create a link for directions
+              const iOS =
+                !!navigator.platform &&
+                /iPad|iPhone|iPod/.test(navigator.platform);
+
+              location.directions_url = `${
+                iOS ? 'maps://' : 'https://www.google.com/maps'
+              }?daddr=${location.latitude},${
+                location.longitude
+              }&saddr=Current+Location&q=${encodeURIComponent(
+                location.formatted_address
+              )}`;
+
               return (
                 <div key={key}>
                   <Marker
@@ -160,28 +177,31 @@ export default class Map extends Component {
                       latitude={location.latitude}
                       longitude={location.longitude}
                       className="popup"
+                      closeOnClick={false}
                       onClose={() => this.setState({ popup: null })}
                       offsetTop={-settings.marker_style.height}
                     >
                       <h4 className="font-weight-light">{location.name}</h4>
                       <p>{location.formatted_address}</p>
                       <ul className="list-group mb-3">
-                        {location.meetings.map(meeting => {
-                          return (
-                            <li key={meeting.slug} className="list-group-item">
-                              <time>{meeting.formatted_time}</time>
-                              <Link
-                                meeting={meeting}
-                                state={this.props.state}
-                                setAppState={this.props.setAppState}
-                              />
-                            </li>
-                          );
-                        })}
+                        {location.meetings.map(meeting => (
+                          <li key={meeting.slug} className="list-group-item">
+                            <time>{meeting.formatted_time}</time>
+                            <Link
+                              meeting={meeting}
+                              state={this.props.state}
+                              setAppState={this.props.setAppState}
+                            />
+                          </li>
+                        ))}
                       </ul>
-                      <button className="btn btn-outline-secondary btn-block">
-                        Directions
-                      </button>
+                      {location.directions_url && (
+                        <Button
+                          href={location.directions_url}
+                          text={strings.get_directions}
+                          icon={'directions'}
+                        />
+                      )}
                     </Popup>
                   )}
                 </div>
