@@ -95,6 +95,11 @@ meetings {
       }
     }
 
+    .list-group-item+.list-group-item {
+      border-top-width: 0;
+    }
+
+
     .map {
       min-height: 500px; //maps should fill at least 500, but up to entire space
       position: relative; //so map can fill 100%
@@ -187,10 +192,6 @@ meetings {
         time {
           left: 0.5rem;
           position: absolute;
-        }
-
-        &+.list-group-item {
-          border-top-width: 0;
         }
       }
     }

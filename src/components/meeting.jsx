@@ -69,7 +69,7 @@ export default class Meeting extends Component {
         <h1 className="font-weight-light mb-1">
           <Name meeting={meeting} />
         </h1>
-        <h6 className="mb-3 border-bottom pb-2">
+        <h6 className="border-bottom mb-3 pb-2">
           <span className="font-weight-bold mr-1">&larr;</span>
           <a
             href={window.location.pathname}
@@ -89,7 +89,7 @@ export default class Meeting extends Component {
               />
             )}
             <div className="list-group">
-              <div className="list-group-item border-bottom-0">
+              <div className="list-group-item py-3">
                 <h5>{strings.meeting_information}</h5>
                 <p className="my-0 mt-1">
                   {strings[settings.days[meeting.day]]},{' '}
@@ -113,7 +113,53 @@ export default class Meeting extends Component {
                   </p>
                 )}
               </div>
-              <div className="list-group-item">
+              {(!!meeting.conference_provider ||
+                !!meeting.conference_phone) && (
+                <div className="list-group-item py-3">
+                  <h5>{strings.types.ONL}</h5>
+                  {!!meeting.conference_provider && (
+                    <Button
+                      text={meeting.conference_provider}
+                      icon="camera-video"
+                      href={meeting.conference_url}
+                    />
+                  )}
+                  {!!meeting.conference_phone && (
+                    <Button
+                      text={strings.phone}
+                      icon="telephone"
+                      href={`tel:${meeting.conference_url}`}
+                    />
+                  )}
+                </div>
+              )}
+              {(!!meeting.venmo || !!meeting.square || !!meeting.paypal) && (
+                <div className="list-group-item py-3">
+                  <h5>{strings.seventh_tradition}</h5>
+                  {!!meeting.venmo && (
+                    <Button
+                      text="Venmo"
+                      icon="cash"
+                      href={`https://venmo.com/${meeting.venmo.substr(1)}`}
+                    />
+                  )}
+                  {!!meeting.square && (
+                    <Button
+                      text="Cash App"
+                      icon="cash"
+                      href={`https://cash.app/${meeting.square}`}
+                    />
+                  )}
+                  {!!meeting.paypal && (
+                    <Button
+                      text="PayPal"
+                      icon="cash"
+                      href={`https://www.paypal.me/${meeting.paypal}`}
+                    />
+                  )}
+                </div>
+              )}
+              <div className="list-group-item py-3">
                 <h5>{meeting.location}</h5>
                 <p className="my-0 mt-1">{meeting.formatted_address}</p>
                 {this.props.state.meetings &&
@@ -129,7 +175,7 @@ export default class Meeting extends Component {
                         return (
                           meetings.length > 0 && (
                             <div key={day}>
-                              <h6 className="mt-3 pb-2 border-bottom">
+                              <h6 className="border-bottom mt-3 pb-2">
                                 {strings[day]}
                               </h6>
                               <ol
