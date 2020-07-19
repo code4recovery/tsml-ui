@@ -3,6 +3,18 @@ import merge from 'deepmerge';
 //override these on your page with window.config
 export const settings = merge(
   {
+    conference_providers: {
+      'bluejeans.com': 'Bluejeans',
+      'freeconference.com': 'Free Conference',
+      'freeconferencecall.com': 'FreeConferenceCall',
+      'meet.google.com': 'Google Hangouts',
+      'gotomeet.me': 'GoToMeeting',
+      'gotomeeting.com': 'GoToMeeting',
+      'skype.com': 'Skype',
+      'webex.com': 'WebEx',
+      'zoho.com': 'Zoho',
+      'zoom.us': 'Zoom',
+    },
     days: [
       'sunday',
       'monday',
@@ -71,6 +83,7 @@ export const settings = merge(
           search: 'Search',
         },
         night: 'Night',
+        phone: 'Phone',
         region: 'Region',
         region_any: 'Everywhere',
         saturday: 'Saturday',
@@ -182,6 +195,7 @@ export const settings = merge(
           search: 'Buscar',
         },
         night: 'Noche',
+        phone: 'Teléfono',
         region: 'Región',
         region_any: 'Todos lados',
         saturday: 'Sábado',
