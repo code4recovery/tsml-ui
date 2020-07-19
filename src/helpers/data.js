@@ -1,6 +1,7 @@
 import { settings, strings } from './settings';
 import Slugify from './slugify';
 import { formatTime, parseTime } from './time';
+import { formatConferenceProvider } from './conference';
 import distance from './distance';
 
 //run filters on meetings; this is run at every render
@@ -34,7 +35,7 @@ export function filterMeetingData(state, setAppState) {
       //todo: improve searching to be OR search instead of AND
       filterFound = true;
       let needle = processSearch(state.input.search.toLowerCase());
-      let matches = state.meetings.filter(function (meeting) {
+      let matches = state.meetings.filter(function(meeting) {
         return meeting.search.search(needle) !== -1;
       });
       filteredSlugs.push(
@@ -130,6 +131,9 @@ export function loadMeetingData(meetings, capabilities) {
     'sub_region',
     'time',
     'types',
+    'conference_url',
+    'conference_phone',
+    'conference_provider',
   ];
 
   //define lookups we'll need later
@@ -264,7 +268,10 @@ export function loadMeetingData(meetings, capabilities) {
 
       //flags
       meeting.flags = settings.flags
-        .filter(type => lookup_type_values.includes(type) && meeting.types.includes(type))
+        .filter(
+          type =>
+            lookup_type_values.includes(type) && meeting.types.includes(type)
+        )
         .sort()
         .join(', ');
 
@@ -281,6 +288,11 @@ export function loadMeetingData(meetings, capabilities) {
       }
     }
 
+    //conference provider
+    meeting.conference_provider = meeting.conference_url
+      ? formatConferenceProvider(meeting.conference_url)
+      : null;
+
     //build index of map pins
     if (meeting.latitude && meeting.longitude) {
       capabilities.coordinates = true;
@@ -288,20 +300,31 @@ export function loadMeetingData(meetings, capabilities) {
 
     //creates formatted_address if necessary
     if (!meeting.formatted_address) {
-      if (meeting.address && meeting.city) {
-        let temp = meeting.address + ', ' + meeting.city;
-        if (meeting.state) temp = temp + ', ' + meeting.state;
+      if (meeting.city) {
+        meeting.formatted_address = meeting.city;
+        if (meeting.address) {
+          meeting.formatted_address =
+            meeting.address + ', ' + meeting.formatted_address;
+        }
+        if (meeting.state) {
+          meeting.formatted_address =
+            meeting.formatted_address + ', ' + meeting.state;
+        }
         if (meeting.postal_code) {
-          temp = temp + ' ' + meeting.postal_code;
+          meeting.formatted_address =
+            meeting.formatted_address + ' ' + meeting.postal_code;
           //for Google Sheets or other feeds without underscore
         } else if (meeting.postalcode) {
-          temp = temp + ' ' + meeting.postalcode;
+          meeting.formatted_address =
+            meeting.formatted_address + ' ' + meeting.postalcode;
         }
-        if (meeting.country) temp = temp + ', ' + meeting.country;
-        meeting.formatted_address = temp;
+        if (meeting.country) {
+          meeting.formatted_address =
+            meeting.formatted_address + ', ' + meeting.country;
+        }
       } else {
         console.error(
-          'Formatted address could not be created, at least address and city required.'
+          'Formatted address could not be created, at least city is required.'
         );
       }
     }
@@ -456,7 +479,11 @@ function processSearch(search_string) {
   if (search_string.includes('"')) {
     var exp = /"(.*?)"/g;
     // Grab any quoted strings, add them to terms, and delete from source string
-    for (var match = exp.exec(search_string); match != null; match = exp.exec(search_string)) {
+    for (
+      var match = exp.exec(search_string);
+      match != null;
+      match = exp.exec(search_string)
+    ) {
       search_string = search_string.replace(match[0], '');
       terms.push(match[0].replace(/"/g, ''));
     }

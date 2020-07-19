@@ -74,6 +74,7 @@ meetings {
     .dropdown-menu {
       min-width: 100%;
     }
+
     .dropdown button {
       overflow: hidden;
     }
@@ -87,6 +88,7 @@ meetings {
       //to prevent white border
       margin-left: -1rem;
       margin-right: -1rem;
+
       //to allow map to fill available space
       &.controls {
         flex: none;
@@ -96,20 +98,21 @@ meetings {
     .map {
       min-height: 500px; //maps should fill at least 500, but up to entire space
       position: relative; //so map can fill 100%
-      button:focus {
-        outline: none;
-      }
+
       .control {
         @include media-breakpoint-down(sm) {
           display: none;
         }
+
         position: absolute;
         right: 10px;
         top: 10px;
       }
+
       .popup {
         max-width: 85%;
         width: 320px;
+
         .mapboxgl-popup-close-button {
           font-size: 1.5rem;
           line-height: 1;
@@ -118,30 +121,40 @@ meetings {
     }
 
     table {
+
+      //align edges
       tr th:first-child,
       td:first-child {
         padding-left: 1rem;
       }
+
       //necessary as of v5 to prevent overlapping bg
-      &.table-striped > tbody > tr:nth-of-type(odd) {
+      &.table-striped>tbody>tr:nth-of-type(odd) {
         background-color: $gray-100;
-        * {
+
+        td,
+        time {
           background: none;
         }
       }
+
+      //mobile view
       @include media-breakpoint-down(sm) {
         tr {
           border-top: 1px solid $table-border-color;
           padding: 0.5rem 1rem;
           position: relative;
+
           td {
             border: 0;
             padding: 0 0 0 7rem;
+
             &.time {
               left: 1rem;
               padding-left: 0;
               position: absolute;
             }
+
             &.distance {
               left: 1rem;
               top: 3.5rem;
@@ -152,17 +165,31 @@ meetings {
           }
         }
       }
+
+      //regular column widths
+      @include media-breakpoint-up(sm) {
+
+        .name,
+        .location,
+        .address,
+        .region {
+          width: 25%;
+        }
+      }
     }
 
     .mapboxgl-popup {
       z-index: 100; //to get above the pins
+
       .list-group-item {
         padding: 0.25rem 0.25rem 0.25rem 5.5rem;
+
         time {
           left: 0.5rem;
           position: absolute;
         }
-        & + .list-group-item {
+
+        &+.list-group-item {
           border-top-width: 0;
         }
       }

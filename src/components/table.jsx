@@ -3,6 +3,7 @@ import cx from 'classnames/bind';
 
 import { settings, strings } from '../helpers/settings';
 import Link from './link';
+import Button from './button';
 
 export default class Table extends Component {
   canShowColumn(column) {
@@ -11,8 +12,46 @@ export default class Table extends Component {
 
   getValue(meeting, key) {
     if (key == 'address') {
-      const address = meeting.formatted_address.split(', ');
-      return address.length ? address[0] : '';
+      if (meeting.conference_url || meeting.conference_phone) {
+        return meeting.conference_provider && meeting.conference_phone ? (
+          <div className="btn-group w-100">
+            <Button
+              text={meeting.conference_provider}
+              href={meeting.conference_url}
+              icon="camera-video"
+              className="btn-sm"
+              block={false}
+            />
+            <Button
+              text={strings.phone}
+              href={'tel:' + meeting.conference_phone}
+              icon="telephone"
+              className="btn-sm"
+              block={false}
+            />
+          </div>
+        ) : meeting.conference_provider ? (
+          <Button
+            text={meeting.conference_provider}
+            href={meeting.conference_url}
+            icon="camera-video"
+            className="btn-sm"
+          />
+        ) : (
+          <Button
+            text="Phone"
+            href={'tel:' + meeting.conference_phone}
+            icon="telephone"
+            className="btn-sm"
+          />
+        );
+      } else {
+        console.log(meeting);
+        const address = meeting.formatted_address.split(', ');
+        return address.length && address[0] !== meeting.region
+          ? address[0]
+          : '';
+      }
     } else if (key == 'name' && meeting.slug) {
       return (
         <Link
