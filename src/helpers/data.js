@@ -134,6 +134,9 @@ export function loadMeetingData(meetings, capabilities) {
     'conference_url',
     'conference_phone',
     'conference_provider',
+    'venmo',
+    'square',
+    'paypal',
   ];
 
   //define lookups we'll need later
