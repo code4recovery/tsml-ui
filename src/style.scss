@@ -144,7 +144,7 @@ meetings {
       }
 
       //mobile view
-      @include media-breakpoint-down(sm) {
+      @include media-breakpoint-down(md) {
         tr {
           border-top: 1px solid $table-border-color;
           padding: 0.5rem 1rem;
@@ -172,7 +172,7 @@ meetings {
       }
 
       //regular column widths
-      @include media-breakpoint-up(sm) {
+      @include media-breakpoint-up(md) {
 
         .name,
         .location,

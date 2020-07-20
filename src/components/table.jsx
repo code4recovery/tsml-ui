@@ -46,7 +46,6 @@ export default class Table extends Component {
           />
         );
       } else {
-        console.log(meeting);
         const address = meeting.formatted_address.split(', ');
         return address.length && address[0] !== meeting.region
           ? address[0]
@@ -63,12 +62,7 @@ export default class Table extends Component {
     } else if (key == 'time') {
       return (
         <time className="text-nowrap">
-          <div
-            className={cx('mr-1', {
-              'd-none': this.props.state.input.day.length == 1,
-              'd-sm-inline': this.props.state.input.day.length != 1,
-            })}
-          >
+          <div className="d-lg-inline mr-1">
             {strings[settings.days[meeting.day]]}
           </div>
           {meeting.formatted_time}
@@ -83,7 +77,7 @@ export default class Table extends Component {
       <div className="row">
         <table className="table table-striped flex-grow-1 my-0">
           <thead>
-            <tr className="d-none d-sm-table-row">
+            <tr className="d-none d-md-table-row">
               {settings.defaults.columns.map(
                 column =>
                   this.canShowColumn(column) && (
@@ -95,16 +89,18 @@ export default class Table extends Component {
             </tr>
           </thead>
           <tbody>
-            {this.props.state.meetings.map(meeting => {
-              if (this.props.filteredSlugs.indexOf(meeting.slug) == -1) return;
+            {this.props.filteredSlugs.map(slug => {
+              const meeting = this.props.state.meetings.filter(
+                meeting => meeting.slug == slug
+              )[0];
               return (
-                <tr className="d-block d-sm-table-row" key={meeting.slug}>
+                <tr className="d-block d-md-table-row" key={meeting.slug}>
                   {settings.defaults.columns.map(
                     column =>
                       this.canShowColumn(column) && (
                         <td
                           key={[meeting.slug, column].join('-')}
-                          className={cx('d-block d-sm-table-cell', column)}
+                          className={cx('d-block d-md-table-cell', column)}
                         >
                           {this.getValue(meeting, column)}
                         </td>
