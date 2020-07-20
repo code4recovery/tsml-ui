@@ -27,7 +27,6 @@ export const settings = merge(
     defaults: {
       columns: ['time', 'distance', 'name', 'location', 'address', 'region'], //can be reordered
       mode: 'search', //start in keyword search mode (options are search, location, me)
-      today: true, //start with today's meetings, false = any day
       view: 'list', //start in list or map view
     },
     distance_unit: 'mi', // "mi" for miles, "km" for kilometers
@@ -61,7 +60,7 @@ export const settings = merge(
           no_results: 'No meetings were found matching the selected criteria.',
         },
         back_to_meetings: 'Back to Meetings',
-        day_any: 'Any Day',
+        day_any: 'Upcoming',
         distance: 'Distance',
         evening: 'Evening',
         friday: 'Friday',
@@ -174,7 +173,7 @@ export const settings = merge(
             'No se encontraron reuniones que coincidan con los criterios seleccionados.',
         },
         back_to_meetings: 'Volver a las reuniones',
-        day_any: 'Cualquier día',
+        day_any: 'Próximas',
         distance: 'Distancia',
         evening: 'Noche',
         friday: 'Viernes',
@@ -279,6 +278,7 @@ export const settings = merge(
       },
     },
     times: ['morning', 'midday', 'evening', 'night'],
+    timezone: 'America/New_York',
     title: true, //whether to display the title h1
   },
   window.config || {}

@@ -3,6 +3,7 @@ import Slugify from './slugify';
 import { formatTime, parseTime } from './time';
 import { formatConferenceProvider } from './conference';
 import distance from './distance';
+import moment from 'moment-timezone';
 
 //run filters on meetings; this is run at every render
 export function filterMeetingData(state, setAppState) {
@@ -76,6 +77,47 @@ export function filterMeetingData(state, setAppState) {
     ? getCommonElements(filteredSlugs) //get intersection of slug arrays
     : state.meetings.map(meeting => meeting.slug); //get everything
 
+  //sort slugs
+  filteredSlugs.sort((a, b) => {
+    const meetingA = state.meetings.filter(meeting => meeting.slug == a)[0];
+    const meetingB = state.meetings.filter(meeting => meeting.slug == b)[0];
+
+    if (!state.input.day.length) {
+      //if upcoming, sort by time_diff
+      if (meetingA.time_diff !== meetingB.time_diff) {
+        return meetingA.time_diff - meetingB.time_diff;
+      }
+    } else {
+      //sort by day then time
+      if (meetingA.day !== meetingB.day) {
+        if (meetingA.day === null) return -1;
+        if (meetingB.day === null) return 1;
+        return meetingA.day - meetingB.day;
+      }
+      if (meetingA.time !== meetingB.time) {
+        if (meetingA.time === null) return -1;
+        if (meetingB.time === null) return 1;
+        return meetingA.time.localeCompare(meetingB.time);
+      }
+    }
+
+    //then by location name
+    if (meetingA.location !== meetingB.location) {
+      if (meetingA.location === null) return -1;
+      if (meetingB.location === null) return 1;
+      return meetingA.location.localeCompare(meetingB.location);
+    }
+
+    //then by meeting name
+    if (meetingA.name !== meetingB.name) {
+      if (meetingA.name === null) return -1;
+      if (meetingB.name === null) return 1;
+      return meetingA.name.localeCompare(meetingB.location);
+    }
+
+    return 0;
+  });
+
   return filteredSlugs;
 }
 
@@ -113,6 +155,9 @@ export function loadMeetingData(meetings, capabilities) {
 
   //filter out unused meetings properties for a leaner memory footprint
   const meeting_properties = [
+    'conference_phone',
+    'conference_provider',
+    'conference_url',
     'day',
     'end_time',
     'flags',
@@ -120,23 +165,21 @@ export function loadMeetingData(meetings, capabilities) {
     'formatted_end_time',
     'formatted_time',
     'latitude',
-    'longitude',
     'location',
     'location_notes',
+    'longitude',
     'name',
     'notes',
+    'paypal',
     'region',
     'search',
     'slug',
+    'square',
     'sub_region',
     'time',
+    'time_diff',
     'types',
-    'conference_url',
-    'conference_phone',
-    'conference_provider',
     'venmo',
-    'square',
-    'paypal',
   ];
 
   //define lookups we'll need later
@@ -199,6 +242,19 @@ export function loadMeetingData(meetings, capabilities) {
     } else if (lookup_day.includes(meeting.day)) {
       meeting.day = lookup_day.indexOf(meeting.day).toString();
     }
+
+    //difference from now in minutes for sorting
+    meeting.time_diff =
+      moment
+        .tz(
+          `${settings.days[meeting.day]} ${meeting.time}`,
+          'dddd hh:mm',
+          meeting.timezone ?? settings.timezone
+        )
+        .diff() / 60000;
+
+    //if time is earlier than 10 minutes ago, add a week
+    if (meeting.time_diff < -10) meeting.time_diff += 10080;
 
     //build day index
     if (meeting.day) {
@@ -316,7 +372,7 @@ export function loadMeetingData(meetings, capabilities) {
         if (meeting.postal_code) {
           meeting.formatted_address =
             meeting.formatted_address + ' ' + meeting.postal_code;
-          //for Google Sheets or other feeds without underscore
+          //for Google Sheets or other feeds without underscore (todo fix in translateGoogleSheet)
         } else if (meeting.postalcode) {
           meeting.formatted_address =
             meeting.formatted_address + ' ' + meeting.postalcode;
@@ -406,32 +462,6 @@ export function loadMeetingData(meetings, capabilities) {
       capabilities.map = true;
     }
   }
-
-  //sort meetings by day -> time -> location -> name
-  //(todo consider extracting for dynamic sorting)
-  meetings.sort((a, b) => {
-    if (a.day !== b.day) {
-      if (a.day === null) return -1;
-      if (b.day === null) return 1;
-      return a.day - b.day;
-    }
-    if (a.time !== b.time) {
-      if (a.time === null) return -1;
-      if (b.time === null) return 1;
-      return a.time.localeCompare(b.time);
-    }
-    if (a.location !== b.location) {
-      if (a.location === null) return -1;
-      if (b.location === null) return 1;
-      return a.location.localeCompare(b.location);
-    }
-    if (a.name !== b.name) {
-      if (a.name === null) return -1;
-      if (b.name === null) return 1;
-      return a.name.localeCompare(b.location);
-    }
-    return 0;
-  });
 
   return [meetings, indexes, capabilities];
 }

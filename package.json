@@ -22,6 +22,7 @@
         "classnames": "^2.2.6",
         "deepmerge": "^4.2.2",
         "mapbox-gl": "^1.6.1",
+        "moment-timezone": "^0.5.31",
         "query-string": "^6.10.1",
         "react": "^16.12.0",
         "react-dom": "^16.12.0",
