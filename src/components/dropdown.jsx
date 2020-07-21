@@ -9,25 +9,23 @@ export default function Dropdown(props) {
         onClick={e => props.setDropdown(props.filter)}
       >
         {props.values.length && props.options.length
-          ? props.values.map(x => {
-            const value = props.options.find(
-              y => y.key == x
-            );
-            return value ? value.name : '';
-          }).join(' + ')
+          ? props.values
+              .map(x => {
+                const value = props.options.find(y => y.key == x);
+                return value ? value.name : '';
+              })
+              .join(' + ')
           : props.default}
       </button>
       <div
         className={cx('dropdown-menu', {
           show: props.open,
-          'dropdown-menu-right':
-            props.right,
+          'dropdown-menu-right': props.right,
         })}
       >
         <a
           className={cx('dropdown-item', {
-            'active bg-secondary': !props.values
-              .length,
+            'active bg-secondary': !props.values.length,
           })}
           onClick={e => props.setFilter(e, props.filter, null)}
           href="#"
@@ -41,15 +39,14 @@ export default function Dropdown(props) {
             className={cx(
               'dropdown-item d-flex justify-content-between align-items-center',
               {
-                'active bg-secondary':
-                  props.values.indexOf(x.key) !== -1,
+                'active bg-secondary': props.values.indexOf(x.key) !== -1,
               }
             )}
             href="#"
             onClick={e => props.setFilter(e, props.filter, x.key)}
           >
             <span>{x.name}</span>
-            <span className="badge badge-light ml-3">
+            <span className="badge bg-light text-dark ml-3">
               {x.slugs.length}
             </span>
           </a>

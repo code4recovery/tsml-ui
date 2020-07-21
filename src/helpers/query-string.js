@@ -21,21 +21,12 @@ export function getQueryString(queryString) {
     view: settings.defaults.view,
   };
 
-  //today mode
-  if (settings.defaults.today) {
-    input.day.push(new Date().getDay());
-  }
-
   //load input from query string
   let querystring = qs.parse(location.search);
   for (let i = 0; i < settings.filters.length; i++) {
     let filter = settings.filters[i];
     if (querystring[filter]) {
-      if (filter === 'day' && querystring.day === 'any') {
-        input.day = [];
-      } else if (querystring[filter]) {
-        input[filter] = querystring[filter].split(separator);
-      }
+      input[filter] = querystring[filter].split(separator);
     }
   }
   for (let i = 0; i < settings.params.length; i++) {
@@ -51,7 +42,6 @@ export function getQueryString(queryString) {
 }
 
 export function setQueryString(state) {
-
   let query = {};
   const existingQuery = qs.parse(location.search);
 

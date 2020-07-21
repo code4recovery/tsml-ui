@@ -1,8 +1,8 @@
-//only two global styles this applies
+//minimal global styling
 html,
 body {
-  height: 100%; //height needs to be 100% for dropdown blur handler to register
-  margin: 0; //this is a little opinionated...
+  height: 100%; //for dropdown blur
+  margin: 0;
 }
 
 //"namespaced" css -- should not interfere with presentation outside the <meetings> element
@@ -12,43 +12,60 @@ meetings {
 
   //import only what we need from bootstrap
   @import '~bootstrap/scss/functions';
-  @import '~bootstrap/scss/mixins';
   @import '~bootstrap/scss/variables';
-
-  @import '~bootstrap/scss/alert';
-  @import '~bootstrap/scss/badge';
-  @import '~bootstrap/scss/button-group';
-  @import '~bootstrap/scss/buttons';
-  @import '~bootstrap/scss/dropdown';
-  @import '~bootstrap/scss/forms';
-  @import '~bootstrap/scss/grid';
-  @import '~bootstrap/scss/input-group';
-  @import '~bootstrap/scss/list-group';
-  @import '~bootstrap/scss/print';
-  @import '~bootstrap/scss/reboot';
-  @import '~bootstrap/scss/spinners';
-  @import '~bootstrap/scss/tables';
-  @import '~bootstrap/scss/type';
+  @import '~bootstrap/scss/mixins';
   @import '~bootstrap/scss/utilities';
+  @import '~bootstrap/scss/root';
+  @import '~bootstrap/scss/reboot';
+  @import '~bootstrap/scss/type';
+  //@import '~bootstrap/scss/images';
+  @import '~bootstrap/scss/containers';
+  @import '~bootstrap/scss/grid';
+  @import '~bootstrap/scss/tables';
+  @import '~bootstrap/scss/forms';
+  @import '~bootstrap/scss/buttons';
+  //@import '~bootstrap/scss/transitions';
+  @import '~bootstrap/scss/dropdown';
+  @import '~bootstrap/scss/button-group';
+  //@import '~bootstrap/scss/nav';
+  //@import '~bootstrap/scss/navbar';
+  @import '~bootstrap/scss/card';
+  //@import '~bootstrap/scss/breadcrumb';
+  //@import '~bootstrap/scss/pagination';
+  @import '~bootstrap/scss/badge';
+  @import '~bootstrap/scss/alert';
+  //@import '~bootstrap/scss/progress';
+  @import '~bootstrap/scss/list-group';
+  //@import '~bootstrap/scss/close';
+  //@import '~bootstrap/scss/toasts';
+  //@import '~bootstrap/scss/modal';
+  //@import '~bootstrap/scss/tooltip';
+  //@import '~bootstrap/scss/popover';
+  //@import '~bootstrap/scss/carousel';
+  @import '~bootstrap/scss/spinners';
+  @import '~bootstrap/scss/helpers';
+  @import '~bootstrap/scss/utilities/api';
 
-  background-color: $body-bg; // 2
-  color: $body-color;
-
-  //bootstrap reboot styles for html
-  font-family: sans-serif; // 2
-  font-family: $font-family-base;
-  font-size: $font-size-base;
+  //styles that bootstrap normally puts on the body
+  font-family: $font-family-sans-serif;
+  @include font-size($font-size-base);
   font-weight: $font-weight-base;
-  line-height: 1.15; // 3
   line-height: $line-height-base;
+  color: $body-color;
+  text-align: $body-text-align;
+  background-color: $body-bg;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: rgba($black, 0);
 
-  //bootstrap reboot styles for body
-  margin: 0; // 1
-  -ms-overflow-style: scrollbar; // 5
-  -webkit-tap-highlight-color: rgba($black, 0); // 6
-  text-align: left; // 3
-  -webkit-text-size-adjust: 100%; // 4
-  -ms-text-size-adjust: 100%; // 4
+  a {
+    color: $link-color;
+    text-decoration: $link-decoration;
+
+    &:hover {
+      color: $link-hover-color;
+      text-decoration: $link-hover-decoration;
+    }
+  }
 
   .container-fluid {
     min-height: 100%;
@@ -57,6 +74,7 @@ meetings {
     .dropdown-menu {
       min-width: 100%;
     }
+
     .dropdown button {
       overflow: hidden;
     }
@@ -65,51 +83,86 @@ meetings {
       -webkit-appearance: searchfield-cancel-button;
     }
 
+    //needed as of v5
+    .row {
+      //to prevent white border
+      margin-left: -1rem;
+      margin-right: -1rem;
+
+      //to allow map to fill available space
+      &.controls {
+        flex: none;
+      }
+    }
+
+    .list-group-item+.list-group-item {
+      border-top-width: 0;
+    }
+
+
     .map {
       min-height: 500px; //maps should fill at least 500, but up to entire space
       position: relative; //so map can fill 100%
-      button:focus {
-        outline: none;
-      }
+
       .control {
         @include media-breakpoint-down(sm) {
           display: none;
         }
+
         position: absolute;
         right: 10px;
         top: 10px;
       }
+
       .popup {
-        font-family: $font-family-base;
-        font-size: $font-size-base;
-        font-weight: $font-weight-base;
-        line-height: $line-height-base;
         max-width: 85%;
         width: 320px;
+
+        .mapboxgl-popup-close-button {
+          font-size: 1.5rem;
+          line-height: 1;
+        }
       }
     }
 
     table {
+
+      //align edges
       tr th:first-child,
       td:first-child {
         padding-left: 1rem;
       }
-      @include media-breakpoint-down(xs) {
+
+      //necessary as of v5 to prevent overlapping bg
+      &.table-striped>tbody>tr:nth-of-type(odd) {
+        background-color: $gray-100;
+
+        td,
+        time {
+          background: none;
+        }
+      }
+
+      //mobile view
+      @include media-breakpoint-down(md) {
         tr {
           border-top: 1px solid $table-border-color;
           padding: 0.5rem 1rem;
           position: relative;
+
           td {
             border: 0;
             padding: 0 0 0 7rem;
+
             &.time {
               left: 1rem;
               padding-left: 0;
               position: absolute;
             }
+
             &.distance {
               left: 1rem;
-              top: 2rem;
+              top: 3.5rem;
               padding-left: 0;
               font-size: 1.5rem;
               position: absolute;
@@ -117,12 +170,25 @@ meetings {
           }
         }
       }
+
+      //regular column widths
+      @include media-breakpoint-up(md) {
+
+        .name,
+        .location,
+        .address,
+        .region {
+          width: 25%;
+        }
+      }
     }
 
     .mapboxgl-popup {
       z-index: 100; //to get above the pins
+
       .list-group-item {
         padding: 0.25rem 0.25rem 0.25rem 5.5rem;
+
         time {
           left: 0.5rem;
           position: absolute;
