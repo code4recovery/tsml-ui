@@ -62,10 +62,10 @@ export default class Table extends Component {
     } else if (key == 'time') {
       return (
         <time className="text-nowrap">
-          <div className="d-lg-inline mr-1">
+          {meeting.formatted_time}
+          <div className="d-xl-inline ml-xl-1">
             {strings[settings.days[meeting.day]]}
           </div>
-          {meeting.formatted_time}
         </time>
       );
     }
