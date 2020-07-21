@@ -1,7 +1,9 @@
 import { settings, strings } from './settings';
 import Slugify from './slugify';
 import { formatTime, parseTime } from './time';
+import { formatConferenceProvider } from './conference';
 import distance from './distance';
+import moment from 'moment-timezone';
 
 //run filters on meetings; this is run at every render
 export function filterMeetingData(state, setAppState) {
@@ -34,7 +36,7 @@ export function filterMeetingData(state, setAppState) {
       //todo: improve searching to be OR search instead of AND
       filterFound = true;
       let needle = processSearch(state.input.search.toLowerCase());
-      let matches = state.meetings.filter(function (meeting) {
+      let matches = state.meetings.filter(function(meeting) {
         return meeting.search.search(needle) !== -1;
       });
       filteredSlugs.push(
@@ -75,6 +77,47 @@ export function filterMeetingData(state, setAppState) {
     ? getCommonElements(filteredSlugs) //get intersection of slug arrays
     : state.meetings.map(meeting => meeting.slug); //get everything
 
+  //sort slugs
+  filteredSlugs.sort((a, b) => {
+    const meetingA = state.meetings.filter(meeting => meeting.slug == a)[0];
+    const meetingB = state.meetings.filter(meeting => meeting.slug == b)[0];
+
+    if (!state.input.day.length) {
+      //if upcoming, sort by time_diff
+      if (meetingA.time_diff !== meetingB.time_diff) {
+        return meetingA.time_diff - meetingB.time_diff;
+      }
+    } else {
+      //sort by day then time
+      if (meetingA.day !== meetingB.day) {
+        if (meetingA.day === null) return -1;
+        if (meetingB.day === null) return 1;
+        return meetingA.day - meetingB.day;
+      }
+      if (meetingA.time !== meetingB.time) {
+        if (meetingA.time === null) return -1;
+        if (meetingB.time === null) return 1;
+        return meetingA.time.localeCompare(meetingB.time);
+      }
+    }
+
+    //then by location name
+    if (meetingA.location !== meetingB.location) {
+      if (meetingA.location === null) return -1;
+      if (meetingB.location === null) return 1;
+      return meetingA.location.localeCompare(meetingB.location);
+    }
+
+    //then by meeting name
+    if (meetingA.name !== meetingB.name) {
+      if (meetingA.name === null) return -1;
+      if (meetingB.name === null) return 1;
+      return meetingA.name.localeCompare(meetingB.location);
+    }
+
+    return 0;
+  });
+
   return filteredSlugs;
 }
 
@@ -112,6 +155,9 @@ export function loadMeetingData(meetings, capabilities) {
 
   //filter out unused meetings properties for a leaner memory footprint
   const meeting_properties = [
+    'conference_phone',
+    'conference_provider',
+    'conference_url',
     'day',
     'end_time',
     'flags',
@@ -119,17 +165,21 @@ export function loadMeetingData(meetings, capabilities) {
     'formatted_end_time',
     'formatted_time',
     'latitude',
-    'longitude',
     'location',
     'location_notes',
+    'longitude',
     'name',
     'notes',
+    'paypal',
     'region',
     'search',
     'slug',
+    'square',
     'sub_region',
     'time',
+    'time_diff',
     'types',
+    'venmo',
   ];
 
   //define lookups we'll need later
@@ -192,6 +242,19 @@ export function loadMeetingData(meetings, capabilities) {
     } else if (lookup_day.includes(meeting.day)) {
       meeting.day = lookup_day.indexOf(meeting.day).toString();
     }
+
+    //difference from now in minutes for sorting
+    meeting.time_diff =
+      moment
+        .tz(
+          `${settings.days[meeting.day]} ${meeting.time}`,
+          'dddd hh:mm',
+          meeting.timezone ?? settings.timezone
+        )
+        .diff() / 60000;
+
+    //if time is earlier than 10 minutes ago, add a week
+    if (meeting.time_diff < -10) meeting.time_diff += 10080;
 
     //build day index
     if (meeting.day) {
@@ -264,7 +327,10 @@ export function loadMeetingData(meetings, capabilities) {
 
       //flags
       meeting.flags = settings.flags
-        .filter(type => lookup_type_values.includes(type) && meeting.types.includes(type))
+        .filter(
+          type =>
+            lookup_type_values.includes(type) && meeting.types.includes(type)
+        )
         .sort()
         .join(', ');
 
@@ -281,6 +347,11 @@ export function loadMeetingData(meetings, capabilities) {
       }
     }
 
+    //conference provider
+    meeting.conference_provider = meeting.conference_url
+      ? formatConferenceProvider(meeting.conference_url)
+      : null;
+
     //build index of map pins
     if (meeting.latitude && meeting.longitude) {
       capabilities.coordinates = true;
@@ -288,20 +359,31 @@ export function loadMeetingData(meetings, capabilities) {
 
     //creates formatted_address if necessary
     if (!meeting.formatted_address) {
-      if (meeting.address && meeting.city) {
-        let temp = meeting.address + ', ' + meeting.city;
-        if (meeting.state) temp = temp + ', ' + meeting.state;
-        if (meeting.postal_code) {
-          temp = temp + ' ' + meeting.postal_code;
-          //for Google Sheets or other feeds without underscore
-        } else if (meeting.postalcode) {
-          temp = temp + ' ' + meeting.postalcode;
+      if (meeting.city) {
+        meeting.formatted_address = meeting.city;
+        if (meeting.address) {
+          meeting.formatted_address =
+            meeting.address + ', ' + meeting.formatted_address;
         }
-        if (meeting.country) temp = temp + ', ' + meeting.country;
-        meeting.formatted_address = temp;
+        if (meeting.state) {
+          meeting.formatted_address =
+            meeting.formatted_address + ', ' + meeting.state;
+        }
+        if (meeting.postal_code) {
+          meeting.formatted_address =
+            meeting.formatted_address + ' ' + meeting.postal_code;
+          //for Google Sheets or other feeds without underscore (todo fix in translateGoogleSheet)
+        } else if (meeting.postalcode) {
+          meeting.formatted_address =
+            meeting.formatted_address + ' ' + meeting.postalcode;
+        }
+        if (meeting.country) {
+          meeting.formatted_address =
+            meeting.formatted_address + ', ' + meeting.country;
+        }
       } else {
         console.error(
-          'Formatted address could not be created, at least address and city required.'
+          'Formatted address could not be created, at least city is required.'
         );
       }
     }
@@ -381,32 +463,6 @@ export function loadMeetingData(meetings, capabilities) {
     }
   }
 
-  //sort meetings by day -> time -> location -> name
-  //(todo consider extracting for dynamic sorting)
-  meetings.sort((a, b) => {
-    if (a.day !== b.day) {
-      if (a.day === null) return -1;
-      if (b.day === null) return 1;
-      return a.day - b.day;
-    }
-    if (a.time !== b.time) {
-      if (a.time === null) return -1;
-      if (b.time === null) return 1;
-      return a.time.localeCompare(b.time);
-    }
-    if (a.location !== b.location) {
-      if (a.location === null) return -1;
-      if (b.location === null) return 1;
-      return a.location.localeCompare(b.location);
-    }
-    if (a.name !== b.name) {
-      if (a.name === null) return -1;
-      if (b.name === null) return 1;
-      return a.name.localeCompare(b.location);
-    }
-    return 0;
-  });
-
   return [meetings, indexes, capabilities];
 }
 
@@ -456,7 +512,11 @@ function processSearch(search_string) {
   if (search_string.includes('"')) {
     var exp = /"(.*?)"/g;
     // Grab any quoted strings, add them to terms, and delete from source string
-    for (var match = exp.exec(search_string); match != null; match = exp.exec(search_string)) {
+    for (
+      var match = exp.exec(search_string);
+      match != null;
+      match = exp.exec(search_string)
+    ) {
       search_string = search_string.replace(match[0], '');
       terms.push(match[0].replace(/"/g, ''));
     }

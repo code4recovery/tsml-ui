@@ -3,6 +3,18 @@ import merge from 'deepmerge';
 //override these on your page with window.config
 export const settings = merge(
   {
+    conference_providers: {
+      'bluejeans.com': 'Bluejeans',
+      'freeconference.com': 'Free Conference',
+      'freeconferencecall.com': 'FreeConferenceCall',
+      'meet.google.com': 'Google Hangouts',
+      'gotomeet.me': 'GoToMeeting',
+      'gotomeeting.com': 'GoToMeeting',
+      'skype.com': 'Skype',
+      'webex.com': 'WebEx',
+      'zoho.com': 'Zoho',
+      'zoom.us': 'Zoom',
+    },
     days: [
       'sunday',
       'monday',
@@ -15,12 +27,11 @@ export const settings = merge(
     defaults: {
       columns: ['time', 'distance', 'name', 'location', 'address', 'region'], //can be reordered
       mode: 'search', //start in keyword search mode (options are search, location, me)
-      today: true, //start with today's meetings, false = any day
       view: 'list', //start in list or map view
     },
     distance_unit: 'mi', // "mi" for miles, "km" for kilometers
     filters: ['region', 'day', 'time', 'type'],
-    flags: window.config.flags ? [] : ['Men', 'Women'],
+    flags: window.config?.flags ? [] : ['Men', 'Women'],
     keys: {
       //google: null, //enable google maps
       mapbox: null, //enable mapbox maps
@@ -49,7 +60,7 @@ export const settings = merge(
           no_results: 'No meetings were found matching the selected criteria.',
         },
         back_to_meetings: 'Back to Meetings',
-        day_any: 'Any Day',
+        day_any: 'Upcoming',
         distance: 'Distance',
         evening: 'Evening',
         friday: 'Friday',
@@ -71,9 +82,11 @@ export const settings = merge(
           search: 'Search',
         },
         night: 'Night',
+        phone: 'Phone',
         region: 'Region',
         region_any: 'Everywhere',
         saturday: 'Saturday',
+        seventh_tradition: 'Seventh Tradition',
         sunday: 'Sunday',
         thursday: 'Thursday',
         time: 'Time',
@@ -160,7 +173,7 @@ export const settings = merge(
             'No se encontraron reuniones que coincidan con los criterios seleccionados.',
         },
         back_to_meetings: 'Volver a las reuniones',
-        day_any: 'Cualquier día',
+        day_any: 'Próximas',
         distance: 'Distancia',
         evening: 'Noche',
         friday: 'Viernes',
@@ -182,9 +195,11 @@ export const settings = merge(
           search: 'Buscar',
         },
         night: 'Noche',
+        phone: 'Teléfono',
         region: 'Región',
         region_any: 'Todos lados',
         saturday: 'Sábado',
+        seventh_tradition: 'Séptima Tradición',
         sunday: 'Domingo',
         thursday: 'Jueves',
         time: 'Hora',
@@ -263,6 +278,7 @@ export const settings = merge(
       },
     },
     times: ['morning', 'midday', 'evening', 'night'],
+    timezone: 'America/New_York',
     title: true, //whether to display the title h1
   },
   window.config || {}

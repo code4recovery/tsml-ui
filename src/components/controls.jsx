@@ -128,7 +128,7 @@ export default class Controls extends Component {
     } else {
       //focus after waiting for disabled to clear
       setTimeout(
-        function () {
+        function() {
           this.searchInput.current.focus();
         }.bind(this),
         100
@@ -147,7 +147,7 @@ export default class Controls extends Component {
 
   render() {
     return (
-      <div className="row d-print-none">
+      <div className="row d-print-none controls">
         <div className="col-sm-6 col-lg">
           <form className="input-group mb-3" onSubmit={this.locationSearch}>
             <input
@@ -160,33 +160,31 @@ export default class Controls extends Component {
               disabled={this.props.state.input.mode === 'me'}
               spellCheck="false"
             />
-            <div className="input-group-append">
-              <button
-                className="btn btn-outline-secondary dropdown-toggle"
-                onClick={e => this.setDropdown('search')}
-                type="button"
-              />
-              <div
-                className={cx('dropdown-menu dropdown-menu-right', {
-                  show: this.state.dropdown == 'search',
-                })}
-              >
-                {settings.modes.map(x => (
-                  <a
-                    key={x}
-                    className={cx(
-                      'dropdown-item d-flex justify-content-between align-items-center',
-                      {
-                        'active bg-secondary': this.props.state.input.mode == x,
-                      }
-                    )}
-                    href="#"
-                    onClick={e => this.setMode(e, x)}
-                  >
-                    {strings.modes[x]}
-                  </a>
-                ))}
-              </div>
+            <button
+              className="btn btn-outline-secondary dropdown-toggle"
+              onClick={e => this.setDropdown('search')}
+              type="button"
+            />
+            <div
+              className={cx('dropdown-menu dropdown-menu-right', {
+                show: this.state.dropdown == 'search',
+              })}
+            >
+              {settings.modes.map(x => (
+                <a
+                  key={x}
+                  className={cx(
+                    'dropdown-item d-flex justify-content-between align-items-center',
+                    {
+                      'active bg-secondary': this.props.state.input.mode == x,
+                    }
+                  )}
+                  href="#"
+                  onClick={e => this.setMode(e, x)}
+                >
+                  {strings.modes[x]}
+                </a>
+              ))}
             </div>
           </form>
         </div>

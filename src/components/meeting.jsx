@@ -5,6 +5,7 @@ import ReactMapGL, { Marker, NavigationControl, Popup } from 'react-map-gl';
 import { settings, strings } from '../helpers/settings';
 import Link from './link';
 import Name from './name';
+import Button from './button';
 
 export default class Meeting extends Component {
   constructor() {
@@ -49,22 +50,14 @@ export default class Meeting extends Component {
         //create a link for directions
         const iOS =
           !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
-        let maps_prefix = '';
 
-        if (iOS) {
-          maps_prefix = 'maps://?';
-        } else {
-          maps_prefix = 'https://www.google.com/maps?';
-        }
-
-        meeting.direction_link =
-          maps_prefix +
-          'daddr=' +
-          meeting.latitude +
-          ',' +
-          meeting.longitude +
-          '&saddr=Current+Location&q=' +
-          encodeURIComponent(meeting.formatted_address);
+        meeting.directions_url = `${
+          iOS ? 'maps://' : 'https://www.google.com/maps'
+        }?daddr=${meeting.latitude},${
+          meeting.longitude
+        }&saddr=Current+Location&q=${encodeURIComponent(
+          meeting.formatted_address
+        )}`;
 
         //set page title
         document.title = meeting.name;
@@ -76,7 +69,7 @@ export default class Meeting extends Component {
         <h1 className="font-weight-light mb-1">
           <Name meeting={meeting} />
         </h1>
-        <h6 className="mb-3 border-bottom pb-2">
+        <h6 className="border-bottom mb-3 pb-2">
           <span className="font-weight-bold mr-1">&larr;</span>
           <a
             href={window.location.pathname}
@@ -87,15 +80,16 @@ export default class Meeting extends Component {
         </h6>
         <div className="row flex-grow-1">
           <div className="mb-3 col-md-4 mb-md-0">
-            <a
-              className="btn btn-outline-secondary btn-block mb-3"
-              href={meeting.direction_link}
-              target="_blank"
-            >
-              {strings.get_directions}
-            </a>
+            {meeting.directions_url && (
+              <Button
+                href={meeting.directions_url}
+                text={strings.get_directions}
+                icon={'directions'}
+                className="mb-3"
+              />
+            )}
             <div className="list-group">
-              <div className="list-group-item border-bottom-0">
+              <div className="list-group-item py-3">
                 <h5>{strings.meeting_information}</h5>
                 <p className="my-0 mt-1">
                   {strings[settings.days[meeting.day]]},{' '}
@@ -109,8 +103,8 @@ export default class Meeting extends Component {
                 >
                   {meeting.types
                     ? meeting.types.map(type => {
-                      return <li key={type}>{type}</li>;
-                    })
+                        return <li key={type}>{type}</li>;
+                      })
                     : ''}
                 </ul>
                 {meeting.notes && (
@@ -119,7 +113,53 @@ export default class Meeting extends Component {
                   </p>
                 )}
               </div>
-              <div className="list-group-item">
+              {(!!meeting.conference_provider ||
+                !!meeting.conference_phone) && (
+                <div className="list-group-item py-3">
+                  <h5>{strings.types.ONL}</h5>
+                  {!!meeting.conference_provider && (
+                    <Button
+                      text={meeting.conference_provider}
+                      icon="camera-video"
+                      href={meeting.conference_url}
+                    />
+                  )}
+                  {!!meeting.conference_phone && (
+                    <Button
+                      text={strings.phone}
+                      icon="telephone"
+                      href={`tel:${meeting.conference_url}`}
+                    />
+                  )}
+                </div>
+              )}
+              {(!!meeting.venmo || !!meeting.square || !!meeting.paypal) && (
+                <div className="list-group-item py-3">
+                  <h5>{strings.seventh_tradition}</h5>
+                  {!!meeting.venmo && (
+                    <Button
+                      text="Venmo"
+                      icon="cash"
+                      href={`https://venmo.com/${meeting.venmo.substr(1)}`}
+                    />
+                  )}
+                  {!!meeting.square && (
+                    <Button
+                      text="Cash App"
+                      icon="cash"
+                      href={`https://cash.app/${meeting.square}`}
+                    />
+                  )}
+                  {!!meeting.paypal && (
+                    <Button
+                      text="PayPal"
+                      icon="cash"
+                      href={`https://www.paypal.me/${meeting.paypal}`}
+                    />
+                  )}
+                </div>
+              )}
+              <div className="list-group-item py-3">
                 <h5>{meeting.location}</h5>
                 <p className="my-0 mt-1">{meeting.formatted_address}</p>
                 {this.props.state.meetings &&
@@ -135,7 +175,7 @@ export default class Meeting extends Component {
                         return (
                           meetings.length > 0 && (
                             <div key={day}>
-                              <h6 className="mt-3 pb-2 border-bottom">
+                              <h6 className="border-bottom mt-3 pb-2">
                                 {strings[day]}
                               </h6>
                               <ol
@@ -156,7 +196,9 @@ export default class Meeting extends Component {
                                     >
                                       {m.formatted_time}
                                     </span>
-                                    {m.slug === meeting.slug && <Name meeting={m} />}
+                                    {m.slug === meeting.slug && (
+                                      <Name meeting={m} />
+                                    )}
                                     {m.slug !== meeting.slug && (
                                       <Link
                                         meeting={m}
@@ -208,21 +250,20 @@ export default class Meeting extends Component {
                     latitude={meeting.latitude}
                     longitude={meeting.longitude}
                     className="popup"
+                    closeOnClick={false}
                     onClose={() => this.setState({ popup: false })}
                     offsetTop={-settings.marker_style.height}
                   >
                     <h4 className="font-weight-light">{meeting.location}</h4>
                     <p>{meeting.formatted_address}</p>
 
-                    {/*
-                    <button
-                      className="btn btn-outline-secondary btn-block"
-                      href={meeting.direction_link}
-                      target="_blank"
-                    >
-                      {strings.get_directions}
-                    </button>
-                    */}
+                    {meeting.directions_url && (
+                      <Button
+                        href={meeting.directions_url}
+                        text={strings.get_directions}
+                        icon={'directions'}
+                      />
+                    )}
                   </Popup>
                 )}
                 <div className="control">
