@@ -101,6 +101,13 @@ export function filterMeetingData(state, setAppState) {
       }
     }
 
+    //then by distance
+    if (meetingA.distance !== meetingB.distance) {
+      if (meetingA.distance === null) return -1;
+      if (meetingB.distance === null) return 1;
+      return meetingA.distance - meetingB.distance;
+    }
+
     //then by location name
     if (meetingA.location !== meetingB.location) {
       if (meetingA.location === null) return -1;
