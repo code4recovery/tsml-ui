@@ -507,13 +507,13 @@ export function translateGoogleSheet(data) {
 // input: "west chester" malvern devon "center city west"
 // output: west chester|malvern|devon|center city west
 function processSearch(search_string) {
-  var terms = [];
+  let terms = [];
   // Parse out any quoted strings
   if (search_string.includes('"')) {
-    var exp = /"(.*?)"/g;
+    const exp = /"(.*?)"/g;
     // Grab any quoted strings, add them to terms, and delete from source string
     for (
-      var match = exp.exec(search_string);
+      let match = exp.exec(search_string);
       match != null;
       match = exp.exec(search_string)
     ) {

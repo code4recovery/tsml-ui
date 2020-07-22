@@ -1,49 +1,58 @@
 import React from 'react';
 import cx from 'classnames/bind';
 
-export default function Dropdown(props) {
+export default function Dropdown({
+  filter,
+  options,
+  open,
+  right,
+  values,
+  defaultValue,
+  setDropdown,
+  setFilter,
+}) {
   return (
     <div className="dropdown">
       <button
         className="btn btn-outline-secondary w-100 dropdown-toggle"
-        onClick={e => props.setDropdown(props.filter)}
+        onClick={() => setDropdown(open ? null : filter)}
       >
-        {props.values.length && props.options.length
-          ? props.values
+        {values.length && options.length
+          ? values
               .map(x => {
-                const value = props.options.find(y => y.key == x);
+                const value = options.find(y => y.key == x);
                 return value ? value.name : '';
               })
               .join(' + ')
-          : props.default}
+          : defaultValue}
       </button>
       <div
         className={cx('dropdown-menu', {
-          show: props.open,
-          'dropdown-menu-right': props.right,
+          show: open,
+          'dropdown-menu-right': right,
         })}
       >
         <a
           className={cx('dropdown-item', {
-            'active bg-secondary': !props.values.length,
+            'active bg-secondary': !values.length,
           })}
-          onClick={e => props.setFilter(e, props.filter, null)}
+          onClick={e => setFilter(e, filter, null)}
           href="#"
         >
-          {props.default}
+          {defaultValue}
         </a>
         <div className="dropdown-divider" />
-        {props.options.map(x => (
+        {options.map(x => (
           <a
             key={x.key}
             className={cx(
               'dropdown-item d-flex justify-content-between align-items-center',
               {
-                'active bg-secondary': props.values.indexOf(x.key) !== -1,
+                'active bg-secondary': values.indexOf(x.key) !== -1,
               }
             )}
             href="#"
-            onClick={e => props.setFilter(e, props.filter, x.key)}
+            onClick={e => setFilter(e, filter, x.key)}
           >
             <span>{x.name}</span>
             <span className="badge bg-light text-dark ml-3">
