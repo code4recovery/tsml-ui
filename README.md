@@ -23,11 +23,16 @@ You don't need to download anything. Simply add the following code to your page:
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link rel="stylesheet" href="https://react.meetingguide.org/style.css">
 
-1) In your `<body>` add:
-   <meetings src="/path/to/meetings.json"/>
-   <script src="https://react.meetingguide.org/app.js" async></script>
+1.  In your `<body>` add:
 
-1) Edit `/path/to/meetings.json` in the code above to point to your JSON file.
+    <meetings src="/path/to/meetings.json"/>
+    <script src="https://react.meetingguide.org/app.js" async></script>
+
+1.  Edit `/path/to/meetings.json` in the code above to point to your JSON file.
+
+## 12 Step Meeting List
+
+If you're using the 12 Step Meeting List plugin for WordPress, you may use the shortcode `[tsml_react]`.
 
 ## Google Sheet Support
 
@@ -47,11 +52,19 @@ To add a free map to your site:
 
         <meetings src="/path/to/meetings.json" mapbox="pk.aaaaabbbbbcccccdddddeeeeefffffgggg"/>
 
-If you're using a Google Sheet, you will have to add `Latitude` and `Longitude` columns for your meetings to show up. There are [some tools](https://www.google.com/search?q=google+sheet+geocode) that can help.
+If you're using a Google Sheet, you will have to add `Latitude` and `Longitude` columns for your map to appear. There are [some tools](https://www.google.com/search?q=google+sheet+geocode) that can help.
 
 ## Advanced Customization
 
 See [src/settings.jsx](settings.jsx) for options that can be set by defining a `window.config` object. You can customize many of the behaviors and all of the text strings that the app uses. Only include the values you wish to override.
+
+### Set your timezone
+
+It uses `America\New_York` as the default. To change this, specify your tz in your config.
+
+    window.config = {
+      timezone: 'America/Los_Angeles'
+    };
 
 ### Change the column heading “Region” to “City”
 
@@ -75,44 +88,25 @@ See [src/settings.jsx](settings.jsx) for options that can be set by defining a `
       },
     };
 
-A full list of meeting types can be found on the [Meeting Guide format spec page](https://github.com/code4recovery/spec). These can be overridden by specifying the code and preferred nomenclature as demonstrated above.
+A complete list of meeting types can be found in the [Meeting Guide format spec](https://github.com/code4recovery/spec). These can be overridden by specifying the code and preferred nomenclature as demonstrated above.
 
-## To Do
+## Next Steps
 
-- [x] Error message when no data specified, or error loading data
-- [x] Display day in list when multiple
-- [x] Hide map and proximity features if no coordinates in data
-- [x] Hide filters if not present in data
-- [x] Inside page
-- [x] Isolate CSS so it doesn't interfere with overall site layout
-- [x] Mobile list view
-- [x] Multilingual support
-- [x] Day query string: don't automatically specify day, support for `any` value
-- [x] Scroll issue on inside page
-- [x] Mapbox
-- [x] Google Sheet support
-- [ ] Near me mode
 - [ ] Near location mode with geocoding
-- [ ] Upcoming time filter
-- [ ] Sortable columns
 - [ ] Hierarchical regions support
+- [ ] Alternate appearance of `TC` meetings (hide directions and on map)
+- [ ] Alternate appearance of approximate addresses
+- [ ] Display group info on inside page
+- [ ] Filter-clearing buttons when no results
 
-### Nice to have
+### Further Steps
 
-- [x] Better internationalization for title
 - [ ] Slugs (eg `sun`) in query string instead of day IDs
-- [x] Slugs (eg `mountain-view`) in query string instead of region IDs
 - [ ] Select multiple dropdown items on mobile
-- [ ] Condition-clearing buttons when no results
-- [x] Reduce memory by forgetting unneeded meeting data, eg URLs
-- [ ] Display group names and Venmo links on inside page
-- [ ] Feedback form on inside page
-- [ ] Auto-suggest locations as you type a location search
+- [ ] Consider alternate designs for table view and controls
 
 ### Questions
 
-- [x] Possible to do a custom tag? eg `<meetings src="/path/to/meetings"/>`
-- [ ] How to handle email transport?
 - [ ] What will the impact be on SEO?
 
 ## Contributing
