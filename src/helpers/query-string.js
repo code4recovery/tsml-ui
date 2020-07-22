@@ -123,10 +123,12 @@ export function setQueryString(state) {
   //un-url-encode the separator
   query = query.split(encodeURIComponent(separator)).join(separator);
 
-  //set the query string with html5
-  window.history.pushState(
-    '',
-    '',
-    query.length ? '?' + query : window.location.pathname
-  );
+  if (location.search.substr(1) != query) {
+    //set the query string with html5
+    window.history.pushState(
+      '',
+      '',
+      query.length ? '?' + query : window.location.pathname
+    );
+  }
 }
