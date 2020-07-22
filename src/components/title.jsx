@@ -4,25 +4,26 @@ import { strings } from '../helpers/settings';
 
 const separator = ' + ';
 
-export default function Title(props) {
-
+export default function Title({ state }) {
   //loading
-  if (!props.state.indexes || !props.state.input) return;
+  if (!state.indexes || !state.input) return;
 
   //build title from strings.title
   let title = [];
   const keys = Object.keys(strings.title);
-  for (var i = 0; i < keys.length; i++) {
+  for (let i = 0; i < keys.length; i++) {
     if (keys[i] === 'meetings') {
       title.push(strings.meetings);
-    } else if (keys[i] === 'search' && props.state.input.search) {
-      const value = '‘' + props.state.input.search + '’';
+    } else if (keys[i] === 'search' && state.input.search) {
+      const value = '‘' + state.input.search + '’';
       title.push(strings.title[keys[i]].replace('%search%', value));
-    } else if (props.state.indexes[keys[i]] && props.state.input[keys[i]].length) {
-      const value = props.state.input[keys[i]].map(x => {
-        const value = props.state.indexes[keys[i]].find(y => y.key == x);
-        return value ? value.name : '';
-      }).join(' + ');
+    } else if (state.indexes[keys[i]] && state.input[keys[i]].length) {
+      const value = state.input[keys[i]]
+        .map(x => {
+          const value = state.indexes[keys[i]].find(y => y.key == x);
+          return value ? value.name : '';
+        })
+        .join(' + ');
       title.push(strings.title[keys[i]].replace('%' + keys[i] + '%', value));
     }
   }

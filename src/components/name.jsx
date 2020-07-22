@@ -1,11 +1,11 @@
 import React from 'react';
 
-export default function Name(props) {
+export default function Name({ meeting }) {
   return (
     <>
-      {props.meeting.name}
-      {props.meeting.flags && (
-        <small className="text-muted mx-2">/ {props.meeting.flags}</small>
+      {meeting.name}
+      {meeting.flags && (
+        <small className="text-muted mx-2">/ {meeting.flags}</small>
       )}
     </>
   );

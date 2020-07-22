@@ -1,16 +1,20 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import cx from 'classnames/bind';
+import InfiniteScroll from 'react-infinite-scroller';
 
 import { settings, strings } from '../helpers/settings';
 import Link from './link';
 import Button from './button';
 
-export default class Table extends Component {
-  canShowColumn(column) {
-    return column !== 'distance' || this.props.state.input.mode !== 'search';
-  }
+export default function Table({ state, setAppState, filteredSlugs }) {
+  const meetingsPerPage = 10;
+  const [limit, setLimit] = useState(meetingsPerPage);
 
-  getValue(meeting, key) {
+  const canShowColumn = column => {
+    return column !== 'distance' || state.input.mode !== 'search';
+  };
+
+  const getValue = (meeting, key) => {
     if (key == 'address') {
       if (meeting.conference_url || meeting.conference_phone) {
         return meeting.conference_provider && meeting.conference_phone ? (
@@ -52,13 +56,7 @@ export default class Table extends Component {
           : '';
       }
     } else if (key == 'name' && meeting.slug) {
-      return (
-        <Link
-          meeting={meeting}
-          state={this.props.state}
-          setAppState={this.props.setAppState}
-        />
-      );
+      return <Link meeting={meeting} state={state} setAppState={setAppState} />;
     } else if (key == 'time') {
       return (
         <time className="text-nowrap">
@@ -70,17 +68,17 @@ export default class Table extends Component {
       );
     }
     return meeting[key];
-  }
+  };
 
-  render() {
-    return (
+  return (
+    !!filteredSlugs.length && (
       <div className="row">
         <table className="table table-striped flex-grow-1 my-0">
           <thead>
             <tr className="d-none d-md-table-row">
               {settings.defaults.columns.map(
                 column =>
-                  this.canShowColumn(column) && (
+                  canShowColumn(column) && (
                     <th key={column} className={column}>
                       {strings[column]}
                     </th>
@@ -88,30 +86,36 @@ export default class Table extends Component {
               )}
             </tr>
           </thead>
-          <tbody>
-            {this.props.filteredSlugs.map(slug => {
-              const meeting = this.props.state.meetings.filter(
+          <InfiniteScroll
+            element="tbody"
+            loadMore={() => {
+              setLimit(limit + meetingsPerPage);
+            }}
+            hasMore={filteredSlugs.length > limit}
+          >
+            {filteredSlugs.slice(0, limit).map(slug => {
+              const meeting = state.meetings.filter(
                 meeting => meeting.slug == slug
               )[0];
               return (
                 <tr className="d-block d-md-table-row" key={meeting.slug}>
                   {settings.defaults.columns.map(
                     column =>
-                      this.canShowColumn(column) && (
+                      canShowColumn(column) && (
                         <td
                           key={[meeting.slug, column].join('-')}
                           className={cx('d-block d-md-table-cell', column)}
                         >
-                          {this.getValue(meeting, column)}
+                          {getValue(meeting, column)}
                         </td>
                       )
                   )}
                 </tr>
               );
             })}
-          </tbody>
+          </InfiniteScroll>
         </table>
       </div>
-    );
-  }
+    )
+  );
 }

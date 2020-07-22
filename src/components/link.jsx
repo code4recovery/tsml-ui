@@ -2,17 +2,17 @@ import React from 'react';
 
 import Name from './name';
 
-export default function Link(props) {
+export default function Link({ state, meeting, setAppState }) {
   return (
     <a
-      href={window.location.pathname + '?meeting=' + props.meeting.slug}
-      onClick={event => {
+      href={window.location.pathname + '?meeting=' + meeting.slug}
+      onClick={e => {
         event.preventDefault();
-        props.state.input.meeting = props.meeting.slug;
-        props.setAppState('input', props.state.input);
+        state.input.meeting = meeting.slug;
+        setAppState('input', state.input);
       }}
     >
-      <Name meeting={props.meeting} />
+      <Name meeting={meeting} />
     </a>
   );
 }
