@@ -7,6 +7,8 @@ import moment from 'moment-timezone';
 
 //run filters on meetings; this is run at every render
 export function filterMeetingData(state, setAppState) {
+  const execStart = new Date();
+
   let filterFound = false;
   let filteredSlugs = [];
 
@@ -35,16 +37,11 @@ export function filterMeetingData(state, setAppState) {
     if (state.input.search.length) {
       //todo: improve searching to be OR search instead of AND
       filterFound = true;
-      let needle = processSearch(state.input.search.toLowerCase());
-      let matches = state.meetings.filter(function(meeting) {
-        return meeting.search.search(needle) !== -1;
+      const needle = processSearch(state.input.search.toLowerCase());
+      const matches = Object.keys(state.meetings).filter(slug => {
+        return state.meetings[slug].search.search(needle) !== -1;
       });
-      filteredSlugs.push(
-        [].concat.apply(
-          [],
-          matches.map(meeting => meeting.slug)
-        )
-      );
+      filteredSlugs.push([].concat.apply([], matches));
     }
   } else if (state.input.mode === 'me') {
     if (!state.input.center) {
@@ -65,22 +62,22 @@ export function filterMeetingData(state, setAppState) {
   }
 
   //loop through and update or clear distances
-  for (let i = 0; i < state.meetings.length; i++) {
-    state.meetings[i].distance = distance(
-      state.input.center,
-      state.meetings[i]
-    );
-  }
+  Object.keys(state.meetings).map(slug => {
+    return {
+      distance: distance(state.input.center, state.meetings[slug]),
+      ...state.meetings[slug],
+    };
+  });
 
   //do the filtering, if necessary
   filteredSlugs = filterFound
     ? getCommonElements(filteredSlugs) //get intersection of slug arrays
-    : state.meetings.map(meeting => meeting.slug); //get everything
+    : Object.keys(state.meetings); //get everything
 
   //sort slugs
   filteredSlugs.sort((a, b) => {
-    const meetingA = state.meetings.filter(meeting => meeting.slug == a)[0];
-    const meetingB = state.meetings.filter(meeting => meeting.slug == b)[0];
+    const meetingA = state.meetings[a];
+    const meetingB = state.meetings[b];
 
     if (!state.input.day.length) {
       //if upcoming, sort by time_diff
@@ -125,7 +122,34 @@ export function filterMeetingData(state, setAppState) {
     return 0;
   });
 
+  //console.log(`filterMeetingData took ${(new Date() - execStart) / 1000}`);
+
   return filteredSlugs;
+}
+
+//look for data with multiple days and make them all single
+function flattenDays(data) {
+  let meetings_to_add = [];
+  let indexes_to_remove = [];
+
+  data.forEach((meeting, index) => {
+    if (Array.isArray(meeting.day)) {
+      indexes_to_remove.push(index);
+      meeting.day.forEach(day => {
+        meetings_to_add.push({
+          day: day,
+          slug: meeting.slug + '-' + day,
+          ...meeting,
+        });
+      });
+    }
+  });
+
+  indexes_to_remove.forEach(index => {
+    data = data.splice(index, 1);
+  });
+
+  return data.concat(meetings_to_add);
 }
 
 //get common matches between arrays (for meeting filtering)
@@ -151,7 +175,12 @@ function getCommonElements(arrays) {
 }
 
 //set up meeting data; this is only run once when the app loads
-export function loadMeetingData(meetings, capabilities) {
+export function loadMeetingData(data, capabilities) {
+  const execStart = new Date();
+
+  //meetings is a lookup
+  let meetings = {};
+
   //indexes start as objects, will be converted to arrays
   let indexes = {
     day: {},
@@ -194,36 +223,11 @@ export function loadMeetingData(meetings, capabilities) {
   const lookup_type_codes = Object.keys(strings.types);
   const lookup_type_values = Object.values(strings.types);
 
-  //check for any meetings with arrays of days and creates an individual meeting for each day in array
-  let meetings_to_add = [];
-  let indexes_to_remove = [];
+  //check for meetings with multiple days and create an individual meeting for each
+  data = flattenDays(data);
 
-  for (let i = 0; i < meetings.length; i++) {
-    //for readability
-    let meeting = meetings[i];
-
-    if (meeting.day.constructor === Array) {
-      indexes_to_remove.push(i);
-      for (let i = 0; i < meeting.day.length; i++) {
-        let temp_meeting = Object.assign({}, meeting);
-        temp_meeting.day = meeting.day[i];
-        temp_meeting.slug = meeting.slug + '-' + temp_meeting.day;
-        meetings_to_add.push(temp_meeting);
-      }
-    }
-  }
-
-  for (let i = 0; i < indexes_to_remove.length; i++) {
-    meetings = meetings.splice(indexes_to_remove[i], 1);
-  }
-
-  meetings = meetings.concat(meetings_to_add);
-
-  //build index objects for dropdowns
-  for (let i = 0; i < meetings.length; i++) {
-    //for readability
-    let meeting = meetings[i];
-
+  //loop through each entry
+  data.forEach(meeting => {
     //if no region then use city
     if (!meeting.region && meeting.city) {
       meeting.region = meeting.city;
@@ -249,6 +253,10 @@ export function loadMeetingData(meetings, capabilities) {
     } else if (lookup_day.includes(meeting.day)) {
       meeting.day = lookup_day.indexOf(meeting.day).toString();
     }
+
+    //format latitude + longitude
+    if (meeting.latitude) meeting.latitude = parseFloat(meeting.latitude);
+    if (meeting.longitude) meeting.longitude = parseFloat(meeting.longitude);
 
     //difference from now in minutes for sorting
     meeting.time_diff =
@@ -379,10 +387,6 @@ export function loadMeetingData(meetings, capabilities) {
         if (meeting.postal_code) {
           meeting.formatted_address =
             meeting.formatted_address + ' ' + meeting.postal_code;
-          //for Google Sheets or other feeds without underscore (todo fix in translateGoogleSheet)
-        } else if (meeting.postalcode) {
-          meeting.formatted_address =
-            meeting.formatted_address + ' ' + meeting.postalcode;
         }
         if (meeting.country) {
           meeting.formatted_address =
@@ -421,13 +425,8 @@ export function loadMeetingData(meetings, capabilities) {
       }
     });
 
-    //define any missing values
-    for (let i = 0; i < meeting_properties.length; i++) {
-      if (!meeting.hasOwnProperty(meeting_properties[i])) {
-        meeting[meeting_properties[i]] = '';
-      }
-    }
-  }
+    meetings[meeting.slug] = meeting;
+  });
 
   //convert region to array and sort by name
   indexes.region = Object.values(indexes.region);
@@ -470,6 +469,8 @@ export function loadMeetingData(meetings, capabilities) {
     }
   }
 
+  //console.log(`loadMeetingData took ${(new Date() - execStart) / 1000}`);
+
   return [meetings, indexes, capabilities];
 }
 
@@ -492,6 +493,12 @@ export function translateGoogleSheet(data) {
       }
     }
 
+    //Google Sheets don't support underscore
+    if (meeting.postalcode) {
+      meeting.postal_code = meeting.postalcode;
+      delete meeting['postalcode'];
+    }
+
     //use Google-generated slug if none was provided
     if (!meeting.slug) {
       let slug = data.feed.entry[i].id['$t'];
@@ -502,7 +509,7 @@ export function translateGoogleSheet(data) {
     meeting.time = parseTime(meeting.time);
 
     //array-ify types
-    meeting.types = meeting.types.split(',');
+    meeting.types = meeting.types.split(',').map(trim);
 
     meetings.push(meeting);
   }

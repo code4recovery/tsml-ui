@@ -94,9 +94,7 @@ export default function Table({ state, setAppState, filteredSlugs }) {
             hasMore={filteredSlugs.length > limit}
           >
             {filteredSlugs.slice(0, limit).map(slug => {
-              const meeting = state.meetings.filter(
-                meeting => meeting.slug == slug
-              )[0];
+              const meeting = state.meetings[slug];
               return (
                 <tr className="d-block d-md-table-row" key={meeting.slug}>
                   {settings.defaults.columns.map(

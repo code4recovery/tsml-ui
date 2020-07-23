@@ -29,40 +29,30 @@ export default class Meeting extends Component {
   }
 
   render() {
-    let meeting = {};
+    const meeting = this.props.state.meetings[this.props.state.input.meeting];
 
-    //fetch meeting data from array
-    for (let i = 0; i < this.props.state.meetings.length; i++) {
-      if (this.props.state.meetings[i].slug == this.props.state.input.meeting) {
-        meeting = this.props.state.meetings[i];
-
-        meeting.latitude = parseFloat(meeting.latitude);
-        meeting.longitude = parseFloat(meeting.longitude);
-
-        if (!this.state.viewport) {
-          this.state.viewport = {
-            latitude: meeting.latitude,
-            longitude: meeting.longitude,
-            zoom: 14,
-          };
-        }
-
-        //create a link for directions
-        const iOS =
-          !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
-
-        meeting.directions_url = `${
-          iOS ? 'maps://' : 'https://www.google.com/maps'
-        }?daddr=${meeting.latitude},${
-          meeting.longitude
-        }&saddr=Current+Location&q=${encodeURIComponent(
-          meeting.formatted_address
-        )}`;
-
-        //set page title
-        document.title = meeting.name;
-      }
+    if (!this.state.viewport) {
+      this.state.viewport = {
+        latitude: meeting.latitude,
+        longitude: meeting.longitude,
+        zoom: 14,
+      };
     }
+
+    //create a link for directions
+    const iOS =
+      !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
+
+    meeting.directions_url = `${
+      iOS ? 'maps://' : 'https://www.google.com/maps'
+    }?daddr=${meeting.latitude},${
+      meeting.longitude
+    }&saddr=Current+Location&q=${encodeURIComponent(
+      meeting.formatted_address
+    )}`;
+
+    //set page title
+    document.title = meeting.name;
 
     return (
       <div className="flex-column flex-grow-1 d-flex">
@@ -167,11 +157,15 @@ export default class Meeting extends Component {
                   meeting.hasOwnProperty('formatted_address') && (
                     <>
                       {settings.days.map((day, index) => {
-                        const meetings = this.props.state.meetings.filter(
-                          m =>
-                            m.day == index &&
-                            m.formatted_address === meeting.formatted_address
-                        );
+                        const meetings = Object.keys(this.props.state.meetings)
+                          .filter(slug => {
+                            const m = this.props.state.meetings[slug];
+                            return (
+                              m.day == index &&
+                              m.formatted_address == meeting.formatted_address
+                            );
+                          })
+                          .map(slug => this.props.state.meetings[slug]);
                         return (
                           meetings.length > 0 && (
                             <div key={day}>
