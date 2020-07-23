@@ -27,9 +27,9 @@ export default class Map extends Component {
 
   resetMapBounds() {
     //filter & sort meetings so southern pins are in front
-    const meetings = this.props.state.meetings
-      .filter(meeting => {
-        return this.props.filteredSlugs.indexOf(meeting.slug) != -1;
+    const meetings = this.props.filteredSlugs
+      .map(slug => {
+        return this.props.state.meetings[slug];
       })
       .sort((a, b) => {
         return b.latitude - a.latitude;
@@ -41,13 +41,9 @@ export default class Map extends Component {
     this.state.bounds = {};
 
     //build index of map pins and define bounds
-    for (let i = 0; i < meetings.length; i++) {
-      let meeting = meetings[i];
-
+    meetings.forEach(meeting => {
       if (meeting.latitude && meeting.latitude) {
-        let coords = meeting.longitude + ',' + meeting.latitude;
-        meeting.latitude = parseFloat(meeting.latitude);
-        meeting.longitude = parseFloat(meeting.longitude);
+        const coords = meeting.longitude + ',' + meeting.latitude;
 
         //create a new pin
         if (this.state.locations_keys.indexOf(coords) === -1) {
@@ -87,7 +83,7 @@ export default class Map extends Component {
         //add meeting to pin
         this.state.locations[coords].meetings.push(meeting);
       }
-    }
+    });
 
     //make the viewport
     if (this.state.bounds.west === this.state.bounds.east) {
