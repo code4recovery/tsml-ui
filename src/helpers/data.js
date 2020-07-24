@@ -1,9 +1,10 @@
 import { settings, strings } from './settings';
 import Slugify from './slugify';
-import { formatTime, parseTime } from './time';
 import { formatConferenceProvider } from './conference';
 import distance from './distance';
 import moment from 'moment-timezone';
+
+const debug = false;
 
 //run filters on meetings; this is run at every render
 export function filterMeetingData(state, setAppState) {
@@ -81,20 +82,12 @@ export function filterMeetingData(state, setAppState) {
 
     if (!state.input.day.length) {
       //if upcoming, sort by time_diff
-      if (meetingA.time_diff !== meetingB.time_diff) {
-        return meetingA.time_diff - meetingB.time_diff;
+      if (meetingA.minutes_now !== meetingB.minutes_now) {
+        return meetingA.minutes_now - meetingB.minutes_now;
       }
     } else {
-      //sort by day then time
-      if (meetingA.day !== meetingB.day) {
-        if (meetingA.day === null) return -1;
-        if (meetingB.day === null) return 1;
-        return meetingA.day - meetingB.day;
-      }
-      if (meetingA.time !== meetingB.time) {
-        if (meetingA.time === null) return -1;
-        if (meetingB.time === null) return 1;
-        return meetingA.time.localeCompare(meetingB.time);
+      if (meetingA.minutes_midnight !== meetingB.minutes_midnight) {
+        return meetingA.minutes_midnight - meetingB.minutes_midnight;
       }
     }
 
@@ -122,7 +115,8 @@ export function filterMeetingData(state, setAppState) {
     return 0;
   });
 
-  //console.log(`filterMeetingData took ${(new Date() - execStart) / 1000}`);
+  if (debug)
+    console.log(`filterMeetingData took ${(new Date() - execStart) / 1000}`);
 
   return filteredSlugs;
 }
@@ -194,16 +188,15 @@ export function loadMeetingData(data, capabilities) {
     'conference_phone',
     'conference_provider',
     'conference_url',
-    'day',
-    'end_time',
+    'end',
     'flags',
     'formatted_address',
-    'formatted_end_time',
-    'formatted_time',
     'latitude',
     'location',
     'location_notes',
     'longitude',
+    'minutes_midnight',
+    'minutes_now',
     'name',
     'notes',
     'paypal',
@@ -211,9 +204,8 @@ export function loadMeetingData(data, capabilities) {
     'search',
     'slug',
     'square',
+    'start',
     'sub_region',
-    'time',
-    'time_diff',
     'types',
     'venmo',
   ];
@@ -222,6 +214,9 @@ export function loadMeetingData(data, capabilities) {
   const lookup_day = settings.days.map(day => strings[day]);
   const lookup_type_codes = Object.keys(strings.types);
   const lookup_type_values = Object.values(strings.types);
+
+  //for diff
+  const now = moment();
 
   //check for meetings with multiple days and create an individual meeting for each
   data = flattenDays(data);
@@ -258,23 +253,11 @@ export function loadMeetingData(data, capabilities) {
     if (meeting.latitude) meeting.latitude = parseFloat(meeting.latitude);
     if (meeting.longitude) meeting.longitude = parseFloat(meeting.longitude);
 
-    //difference from now in minutes for sorting
-    meeting.time_diff =
-      moment
-        .tz(
-          `${settings.days[meeting.day]} ${meeting.time}`,
-          'dddd hh:mm',
-          meeting.timezone ?? settings.timezone
-        )
-        .diff() / 60000;
-
-    //if time is earlier than 10 minutes ago, add a week
-    if (meeting.time_diff < -10) meeting.time_diff += 10080;
-
-    //build day index
-    if (meeting.day) {
-      capabilities.day = true;
-      if (meeting.day in indexes.day === false) {
+    //handle day and time
+    if (meeting.day && meeting.time) {
+      //build day index
+      if (!indexes.day.hasOwnProperty(meeting.day)) {
+        capabilities.day = true;
         indexes.day[meeting.day] = {
           key: meeting.day,
           name: strings[settings.days[meeting.day]],
@@ -282,44 +265,61 @@ export function loadMeetingData(data, capabilities) {
         };
       }
       indexes.day[meeting.day].slugs.push(meeting.slug);
-    }
 
-    //build time index (can be multiple)
-    if (meeting.time) {
-      capabilities.time = true;
-      const [hours, minutes] = meeting.time.split(':');
-      const timeInMinutes = parseInt(hours) * 60 + parseInt(minutes);
+      //make moments out of start and end
+      meeting.start = moment.tz(
+        `${meeting.day} ${meeting.time}`,
+        'd hh:mm',
+        meeting.timezone ?? settings.timezone
+      );
+
+      if (meeting.end_time) {
+        meeting.end = moment.tz(
+          `${meeting.day} ${meeting.end_time}`,
+          'd hh:mm',
+          meeting.timezone ?? settings.timezone
+        );
+      }
+
+      //time differences for sorting
+      meeting.minutes_now = meeting.start.diff(now, 'minutes');
+      meeting.minutes_midnight =
+        meeting.start.get('hour') * 60 + meeting.start.get('minutes');
+
+      //if time is earlier than 10 minutes ago, increment diff by a week
+      if (meeting.minutes_now < -10) {
+        meeting.minutes_now += 10080;
+      }
+
+      //build time index (can be multiple)
       let times = [];
-      if (timeInMinutes >= 240 && timeInMinutes < 720) {
+      if (meeting.minutes_midnight >= 240 && meeting.minutes_midnight < 720) {
         //4am–12pm
         times.push(0); //morning
       }
-      if (timeInMinutes >= 660 && timeInMinutes < 1020) {
+      if (meeting.minutes_midnight >= 660 && meeting.minutes_midnight < 1020) {
         //11am–5pm
         times.push(1); //midday
       }
-      if (timeInMinutes >= 960 && timeInMinutes < 1260) {
+      if (meeting.minutes_midnight >= 960 && meeting.minutes_midnight < 1260) {
         //4–9pm
         times.push(2); //evening
       }
-      if (timeInMinutes >= 1200 || timeInMinutes < 300) {
+      if (meeting.minutes_midnight >= 1200 || meeting.minutes_midnight < 300) {
         //8pm–5am
         times.push(3); //night
       }
-      for (let j = 0; j < times.length; j++) {
-        if (times[j] in indexes.time === false) {
-          indexes.time[times[j]] = {
-            key: settings.times[times[j]],
-            name: strings[settings.times[times[j]]],
+      times.forEach(time => {
+        if (!indexes.time.hasOwnProperty(time)) {
+          capabilities.time = true;
+          indexes.time[time] = {
+            key: settings.times[time],
+            name: strings[settings.times[time]],
             slugs: [],
           };
         }
-        indexes.time[times[j]].slugs.push(meeting.slug);
-      }
-
-      //format for display
-      meeting.formatted_time = formatTime(meeting.time);
-      meeting.formatted_end_time = formatTime(meeting.end_time);
+        indexes.time[time].slugs.push(meeting.slug);
+      });
     }
 
     //handle types
@@ -469,7 +469,8 @@ export function loadMeetingData(data, capabilities) {
     }
   }
 
-  //console.log(`loadMeetingData took ${(new Date() - execStart) / 1000}`);
+  if (debug)
+    console.log(`loadMeetingData took ${(new Date() - execStart) / 1000}`);
 
   return [meetings, indexes, capabilities];
 }
@@ -515,6 +516,24 @@ export function translateGoogleSheet(data) {
   }
 
   return meetings;
+}
+
+//parse weird google sheet times - todo use moment
+function parseTime(timeString) {
+  if (!timeString.length) return null;
+
+  const time = timeString.match(/(\d+)(:(\d\d))?\s*(p?)/i);
+
+  if (time == null) return null;
+
+  let hours = parseInt(time[1], 10);
+  if (hours == 12 && !time[4]) {
+    hours = 0;
+  } else {
+    hours += hours < 12 && time[4] ? 12 : 0;
+  }
+
+  return String(hours).padStart(2, '0') + ':' + time[3];
 }
 
 // converts a search string into pipe delimited format. Example:

@@ -82,9 +82,9 @@ export default class Meeting extends Component {
               <div className="list-group-item py-3">
                 <h5>{strings.meeting_information}</h5>
                 <p className="my-0 mt-1">
-                  {strings[settings.days[meeting.day]]},{' '}
-                  {meeting.formatted_time}
-                  {meeting.end_time ? ' – ' + meeting.formatted_end_time : ''}
+                  {strings[settings.days[meeting.start.format('d')]]},{' '}
+                  {meeting.start.format('h:mm a')}
+                  {meeting.end ? ' – ' + meeting.end.format('h:mm a') : ''}
                 </p>
                 <ul
                   className={cx('my-0 mt-1', {
@@ -188,7 +188,7 @@ export default class Meeting extends Component {
                                         width: '4.5rem',
                                       }}
                                     >
-                                      {m.formatted_time}
+                                      {m.start.format('h:mm a')}
                                     </span>
                                     {m.slug === meeting.slug && (
                                       <Name meeting={m} />

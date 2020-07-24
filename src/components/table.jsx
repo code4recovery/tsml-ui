@@ -60,9 +60,9 @@ export default function Table({ state, setAppState, filteredSlugs }) {
     } else if (key == 'time') {
       return (
         <time className="text-nowrap">
-          {meeting.formatted_time}
+          {meeting.start.format('h:mm a')}
           <div className="d-xl-inline ml-xl-1">
-            {strings[settings.days[meeting.day]]}
+            {strings[settings.days[meeting.start.format('d')]]}
           </div>
         </time>
       );
