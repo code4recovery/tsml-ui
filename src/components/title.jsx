@@ -2,31 +2,30 @@ import React from 'react';
 
 import { strings } from '../helpers/settings';
 
-const separator = ' + ';
-
 export default function Title({ state }) {
   //loading
   if (!state.indexes || !state.input) return;
 
   //build title from strings.title
   let title = [];
-  const keys = Object.keys(strings.title);
-  for (let i = 0; i < keys.length; i++) {
-    if (keys[i] === 'meetings') {
+
+  Object.keys(strings.title).forEach(key => {
+    if (key === 'meetings') {
       title.push(strings.meetings);
-    } else if (keys[i] === 'search' && state.input.search) {
-      const value = '‘' + state.input.search + '’';
-      title.push(strings.title[keys[i]].replace('%search%', value));
-    } else if (state.indexes[keys[i]] && state.input[keys[i]].length) {
-      const value = state.input[keys[i]]
+    } else if (key === 'search' && state.input.search) {
+      title.push(
+        strings.title[key].replace('%search%', `‘${state.input.search}’`)
+      );
+    } else if (state.indexes[key] && state.input[key].length) {
+      const value = state.input[key]
         .map(x => {
-          const value = state.indexes[keys[i]].find(y => y.key == x);
-          return value ? value.name : '';
+          const value = state.indexes[key].find(y => y.key == x);
+          return value?.name;
         })
         .join(' + ');
-      title.push(strings.title[keys[i]].replace('%' + keys[i] + '%', value));
+      title.push(strings.title[key].replace(`%${key}%`, value));
     }
-  }
+  });
   title = title.join(' ');
 
   //set window title
