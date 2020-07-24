@@ -50,6 +50,7 @@ class App extends React.Component {
 
     //need to bind this for the function to access `this`
     this.setAppState = this.setAppState.bind(this);
+    this.setMapInitialized = this.setMapInitialized.bind(this);
   }
 
   componentDidMount() {
