@@ -143,7 +143,7 @@ export default function Map({
                     <ul className="list-group mb-3">
                       {location.meetings.map(meeting => (
                         <li key={meeting.slug} className="list-group-item">
-                          <time>{meeting.formatted_time}</time>
+                          <time>{meeting.start.format('h:mm a')}</time>
                           <Link
                             meeting={meeting}
                             state={state}
