@@ -1,21 +1,21 @@
 # Website Meeting Finder 2.0
 
-With only a [Meeting Guide format JSON file](https://github.com/code4recovery/spec) or a Google Sheet, web servants can have the same meeting finder found in the [12 Step Meeting List](https://github.com/code4recovery/12-step-meeting-list) WordPress plugin on any website platform.
+With only a [Meeting Guide format JSON file](https://github.com/code4recovery/spec) or a Google Sheet, web servants can have the same meeting finder found in the [12 Step Meeting List](https://github.com/code4recovery/12-step-meeting-list) WordPress plugin, but without WordPress.
 
-[Here's a demo](https://react.meetingguide.org/) of what the meeting finder looks like with no styling, and [here's a demo](https://react.meetingguide.org/demo.html) of what it can look like embedded in a random website design.
+[Here's a demo](https://react.meetingguide.org/) of what the meeting finder looks like with no styling. [Here's a demo](https://react.meetingguide.org/demo.html) of what it can look like embedded in a random website design.
 
 Advantanges:
 
-- faster performance for users
+- better performance for users
 - reduced strain on servers
 - can be used on any web platform
 - can be embedded in any layout
-- wider pool of potential project contributors (not just WordPress webmasters)
+- wider pool of potential project contributors (not just WordPress developers)
 - simplifies WordPress plugin (separation of concerns)
 
 ## Install on Your Website
 
-You don't need to download anything, or use a particular platform. Simply add the following code to your page:
+You don't need to download anything. Simply add the following code to your page:
 
 1.  In your `<head>` add:
 
@@ -34,7 +34,7 @@ You don't need to download anything, or use a particular platform. Simply add th
 
 ### 12 Step Meeting List
 
-If you're using the 12 Step Meeting List plugin for WordPress, you may use the shortcode `[tsml_react]`.
+If you're using the 12 Step Meeting List plugin for WordPress, you may use the shortcode `[tsml_react]`. There is no need to follow the installation instructions above.
 
 ### Google Sheet Support
 
@@ -48,27 +48,33 @@ To use a Google Sheet as your backend:
 
 To add a free map to your site:
 
-1.  Sign up for [Mapbox](https://mapbox.com) (takes one minute and doesn't require a credit card)
+1.  Sign up for [Mapbox](https://mapbox.com) (very easy and doesn't require a credit card)
 1.  Copy your Public Access Token
 1.  Use it in a `mapbox` parameter on your `meetings` tag, eg
 
         <meetings src="/path/to/meetings.json" mapbox="pk.aaaaabbbbbcccccdddddeeeeefffffgggg"/>
 
-If you're using a Google Sheet, you will have to add `Latitude` and `Longitude` columns for your map to appear. There are [some tools](https://www.google.com/search?q=google+sheet+geocode) that can help.
+If you're using a Google Sheet, you will have to add `Latitude` and `Longitude` columns for the map to appear. There are [some tools](https://www.google.com/search?q=google+sheet+geocode) that can help.
+
+## Enable "Near Me" Mode
+
+You don't need to do anything other than enable HTTPS on your website. To ensure all users see this functionality, make sure that anyone who enters the http version of your site is redirected to the https address.
 
 ## Advanced Customization
 
-See [src/settings.js](settings.js) for options that can be set by defining a `window.config` object. You can customize many of the behaviors and all of the text strings that the app uses. Only include the values you wish to override.
+See [src/settings.js](settings.js) for options that can be set by defining a `window.config` object. You can customize many of the behaviors and any text string that the app uses. It's only necessary to specify those values you wish to override.
 
 ### Set your timezone
 
-`America/New_York` is the default. To set to a different timezone that can be done in the config.
+`America/New_York` is the default. To change it, add this code inside a `<script>` tag.
 
     window.config = {
       timezone: 'America/Los_Angeles'
     };
 
 ### Change strings
+
+Here is another example with two strings overridden.
 
     window.config = {
       strings: {
