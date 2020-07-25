@@ -147,6 +147,9 @@ meetings {
 
     table {
 
+      //was seeing interference from themes
+      border-width: 0;
+
       .distance {
         text-align: right;
       }
