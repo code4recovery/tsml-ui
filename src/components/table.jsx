@@ -18,7 +18,7 @@ export default function Table({ state, setAppState, filteredSlugs }) {
     if (key == 'address') {
       if (meeting.conference_url || meeting.conference_phone) {
         return meeting.conference_provider && meeting.conference_phone ? (
-          <div className="btn-group my-2 w-100">
+          <div className="btn-group my-1 w-100">
             <Button
               text={meeting.conference_provider}
               href={meeting.conference_url}
@@ -39,14 +39,14 @@ export default function Table({ state, setAppState, filteredSlugs }) {
             text={meeting.conference_provider}
             href={meeting.conference_url}
             icon="camera-video"
-            className="btn-sm"
+            className="btn-sm my-1"
           />
         ) : (
           <Button
             text="Phone"
             href={'tel:' + meeting.conference_phone}
             icon="telephone"
-            className="btn-sm"
+            className="btn-sm my-1"
           />
         );
       } else {
@@ -65,6 +65,15 @@ export default function Table({ state, setAppState, filteredSlugs }) {
             {strings[settings.days[meeting.start.format('d')]]}
           </div>
         </time>
+      );
+    } else if (key == 'distance') {
+      return (
+        <>
+          {meeting.distance}
+          {meeting.distance && (
+            <small className="text-muted ml-1">{settings.distance_unit}</small>
+          )}
+        </>
       );
     }
     return meeting[key];
