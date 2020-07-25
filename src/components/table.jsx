@@ -18,7 +18,7 @@ export default function Table({ state, setAppState, filteredSlugs }) {
     if (key == 'address') {
       if (meeting.conference_url || meeting.conference_phone) {
         return meeting.conference_provider && meeting.conference_phone ? (
-          <div className="btn-group w-100">
+          <div className="btn-group my-2 w-100">
             <Button
               text={meeting.conference_provider}
               href={meeting.conference_url}

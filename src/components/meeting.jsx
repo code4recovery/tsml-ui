@@ -4,7 +4,6 @@ import ReactMapGL, { Marker, NavigationControl, Popup } from 'react-map-gl';
 
 import { settings, strings } from '../helpers/settings';
 import Link from './link';
-import Name from './name';
 import Button from './button';
 
 export default class Meeting extends Component {
@@ -57,7 +56,7 @@ export default class Meeting extends Component {
     return (
       <div className="flex-column flex-grow-1 d-flex">
         <h1 className="font-weight-light mb-1">
-          <Name meeting={meeting} />
+          <Link meeting={meeting} />
         </h1>
         <h6 className="border-bottom mb-3 pb-2">
           <span className="font-weight-bold mr-1">&larr;</span>
@@ -86,17 +85,13 @@ export default class Meeting extends Component {
                   {meeting.start.format('h:mm a')}
                   {meeting.end ? ' – ' + meeting.end.format('h:mm a') : ''}
                 </p>
-                <ul
-                  className={cx('my-0 mt-1', {
-                    'd-none': !meeting.types || !meeting.types.length,
-                  })}
-                >
-                  {meeting.types
-                    ? meeting.types.map(type => {
-                        return <li key={type}>{type}</li>;
-                      })
-                    : ''}
-                </ul>
+                {meeting.types && (
+                  <ul className="my-0 mt-1">
+                    {meeting.types.sort().map(type => (
+                      <li key={type}>{type}</li>
+                    ))}
+                  </ul>
+                )}
                 {meeting.notes && (
                   <p className="my-0 mt-2">
                     {meeting.notes.replace(/(?:\r\n|\r|\n)/g, '<br>')}
@@ -191,7 +186,7 @@ export default class Meeting extends Component {
                                       {m.start.format('h:mm a')}
                                     </span>
                                     {m.slug === meeting.slug && (
-                                      <Name meeting={m} />
+                                      <Link meeting={m} />
                                     )}
                                     {m.slug !== meeting.slug && (
                                       <Link
@@ -212,63 +207,61 @@ export default class Meeting extends Component {
               </div>
             </div>
           </div>
-          <div
-            className={cx('col-md-8 map', {
-              'd-none': !this.props.state.capabilities.map,
-            })}
-          >
-            {this.state.viewport && meeting.latitude && (
-              <ReactMapGL
-                className="rounded border bg-light"
-                {...this.state.viewport}
-                mapboxApiAccessToken={settings.keys.mapbox}
-                mapStyle={settings.mapbox_style}
-                onViewportChange={this.updateViewport}
-                width="100%"
-                height="100%"
-              >
-                <Marker
-                  latitude={meeting.latitude}
-                  longitude={meeting.longitude}
-                  offsetLeft={-settings.marker_style.width / 2}
-                  offsetTop={-settings.marker_style.height}
+          {this.props.state.capabilities.map && (
+            <div className="col-md-8 map">
+              {this.state.viewport && meeting.latitude && (
+                <ReactMapGL
+                  className="rounded border bg-light"
+                  {...this.state.viewport}
+                  mapboxApiAccessToken={settings.keys.mapbox}
+                  mapStyle={settings.mapbox_style}
+                  onViewportChange={this.updateViewport}
+                  width="100%"
+                  height="100%"
                 >
-                  <div
-                    title={meeting.location}
-                    style={settings.marker_style}
-                    onClick={() => this.setState({ popup: true })}
-                  />
-                </Marker>
-                {this.state.popup && (
-                  <Popup
+                  <Marker
                     latitude={meeting.latitude}
                     longitude={meeting.longitude}
-                    className="popup"
-                    closeOnClick={false}
-                    onClose={() => this.setState({ popup: false })}
+                    offsetLeft={-settings.marker_style.width / 2}
                     offsetTop={-settings.marker_style.height}
                   >
-                    <h4 className="font-weight-light">{meeting.location}</h4>
-                    <p>{meeting.formatted_address}</p>
+                    <div
+                      title={meeting.location}
+                      style={settings.marker_style}
+                      onClick={() => this.setState({ popup: true })}
+                    />
+                  </Marker>
+                  {this.state.popup && (
+                    <Popup
+                      latitude={meeting.latitude}
+                      longitude={meeting.longitude}
+                      className="popup"
+                      closeOnClick={false}
+                      onClose={() => this.setState({ popup: false })}
+                      offsetTop={-settings.marker_style.height}
+                    >
+                      <h4 className="font-weight-light">{meeting.location}</h4>
+                      <p>{meeting.formatted_address}</p>
 
-                    {meeting.directions_url && (
-                      <Button
-                        href={meeting.directions_url}
-                        text={strings.get_directions}
-                        icon={'directions'}
-                      />
-                    )}
-                  </Popup>
-                )}
-                <div className="control">
-                  <NavigationControl
-                    showCompass={false}
-                    onViewportChange={this.updateViewport}
-                  />
-                </div>
-              </ReactMapGL>
-            )}
-          </div>
+                      {meeting.directions_url && (
+                        <Button
+                          href={meeting.directions_url}
+                          text={strings.get_directions}
+                          icon={'directions'}
+                        />
+                      )}
+                    </Popup>
+                  )}
+                  <div className="control">
+                    <NavigationControl
+                      showCompass={false}
+                      onViewportChange={this.updateViewport}
+                    />
+                  </div>
+                </ReactMapGL>
+              )}
+            </div>
+          )}
         </div>
       </div>
     );

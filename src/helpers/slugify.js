@@ -1,6 +1,6 @@
 //turn Mountain View into mountain-view
 
-export default function Slugify(str, separator = '-') {
+export default function slugify(str, separator = '-') {
   str = str.trim();
   str = str.toLowerCase();
 
