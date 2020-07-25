@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import cx from 'classnames/bind';
+import { getIndexByKey } from '../helpers/data';
 
 export default function Dropdown({
   filter,
@@ -11,7 +12,33 @@ export default function Dropdown({
   setDropdown,
   setFilter,
 }) {
-  //if (filter == 'region') console.log(values);
+  const renderDropdownItem = x => {
+    return (
+      <Fragment key={x.key}>
+        <a
+          className={cx(
+            'dropdown-item d-flex justify-content-between align-items-center',
+            {
+              'active bg-secondary': values.indexOf(x.key) !== -1,
+            }
+          )}
+          href="#"
+          onClick={e => setFilter(e, filter, x.key)}
+        >
+          <span>{x.name}</span>
+          <span className="badge bg-light border ml-3 text-dark">
+            {x.slugs.length}
+          </span>
+        </a>
+        {!!x.children?.length && (
+          <div className="children">
+            {x.children.map(child => renderDropdownItem(child))}
+          </div>
+        )}
+      </Fragment>
+    );
+  };
+
   return (
     <div className="dropdown">
       <button
@@ -21,7 +48,7 @@ export default function Dropdown({
         {values.length && options.length
           ? values
               .map(x => {
-                const value = options.find(y => y.key == x);
+                const value = getIndexByKey(options, x);
                 return value?.name;
               })
               .join(' + ')
@@ -43,44 +70,7 @@ export default function Dropdown({
           {defaultValue}
         </a>
         <div className="dropdown-divider" />
-        {options.map(x => (
-          <Fragment key={x.key}>
-            <a
-              className={cx(
-                'dropdown-item d-flex justify-content-between align-items-center',
-                {
-                  'active bg-secondary': values.indexOf(x.key) !== -1,
-                }
-              )}
-              href="#"
-              onClick={e => setFilter(e, filter, x.key)}
-            >
-              <span>{x.name}</span>
-              <span className="badge bg-light border ml-3 text-dark">
-                {x.slugs.length}
-              </span>
-            </a>
-            {x.children &&
-              x.children.map(x => (
-                <a
-                  key={x.key}
-                  className={cx(
-                    'dropdown-item d-flex justify-content-between align-items-center pl-4',
-                    {
-                      'active bg-secondary': values.indexOf(x.key) !== -1,
-                    }
-                  )}
-                  href="#"
-                  onClick={e => setFilter(e, filter, x.key)}
-                >
-                  <span className="ml-1">{x.name}</span>
-                  <span className="badge bg-light border ml-3 text-dark">
-                    {x.slugs.length}
-                  </span>
-                </a>
-              ))}
-          </Fragment>
-        ))}
+        {options.map(x => renderDropdownItem(x))}
       </div>
     </div>
   );

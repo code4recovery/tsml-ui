@@ -70,35 +70,55 @@ meetings {
   .container-fluid {
     min-height: 100%;
 
-    //dropdown control fixes
-    .dropdown-menu {
-      min-width: 100%;
-    }
-
-    .dropdown button {
-      overflow: hidden;
-    }
-
-    input[type='search']::-webkit-search-cancel-button {
-      -webkit-appearance: searchfield-cancel-button;
-    }
-
-    //needed as of v5
+    //to prevent white border
     .row {
-      //to prevent white border
       margin-left: -1rem;
       margin-right: -1rem;
-
-      //to allow map to fill available space
-      &.controls {
-        flex: none;
-      }
     }
 
+    //to prevent double border
     .list-group-item+.list-group-item {
       border-top-width: 0;
     }
 
+    .controls {
+      //to allow map to fill available space
+      flex: none;
+
+      //show search cancel button
+      input[type='search']::-webkit-search-cancel-button {
+        -webkit-appearance: searchfield-cancel-button;
+      }
+
+      .dropdown {
+        .dropdown button {
+          overflow: hidden;
+        }
+
+        .dropdown-menu {
+          min-width: 100%;
+        }
+
+        //indentation todo make recursive with sass?
+        .children {
+          a {
+            padding-left: 2rem;
+          }
+
+          .children {
+            a {
+              padding-left: 4rem;
+            }
+
+            .children {
+              a {
+                padding-left: 6rem;
+              }
+            }
+          }
+        }
+      }
+    }
 
     .map {
       min-height: 500px; //maps should fill at least 500, but up to entire space
