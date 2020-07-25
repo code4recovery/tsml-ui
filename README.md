@@ -58,11 +58,11 @@ If you're using a Google Sheet, you will have to add `Latitude` and `Longitude` 
 
 ## Enable "Near Me" Mode
 
-You don't need to do anything other than enable HTTPS on your website. To ensure all users see this functionality, make sure that anyone who enters the http version of your site is redirected to the https address.
+You don't need to do anything other than enable HTTPS on your website. To ensure all users see this functionality, make sure that anyone who enters a `http://` address for your site is redirected to the `https://` address.
 
 ## Advanced Customization
 
-See [src/settings.js](settings.js) for options that can be set by defining a `window.config` object. You can customize many of the behaviors and any text string that the app uses. It's only necessary to specify those values you wish to override.
+See [src/helpers/settings.js](settings.js) for options that can be set by defining a `window.config` object. You can customize many of the behaviors and any text string that the app uses. It's only necessary to specify those values you wish to override.
 
 ### Set your timezone
 
