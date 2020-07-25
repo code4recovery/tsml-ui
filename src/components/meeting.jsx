@@ -145,7 +145,7 @@ export default class Meeting extends Component {
                 </div>
               )}
               <div className="list-group-item py-3">
-                <h5>{meeting.location}</h5>
+                {meeting.location && <h5>{meeting.location}</h5>}
                 <p className="my-0 mt-1">{meeting.formatted_address}</p>
                 {this.props.state.meetings &&
                   meeting &&
@@ -205,6 +205,18 @@ export default class Meeting extends Component {
                     </>
                   )}
               </div>
+              {(meeting.group || meeting.group_notes) && (
+                <div className="list-group-item py-3">
+                  {!!meeting.group && (
+                    <h5 className={cx({ 'm-0': !meeting.group_notes })}>
+                      {meeting.group}
+                    </h5>
+                  )}
+                  {!!meeting.group_notes && (
+                    <p className="my-0 mt-1">{meeting.group_notes}</p>
+                  )}
+                </div>
+              )}
             </div>
           </div>
           {this.props.state.capabilities.map && (
