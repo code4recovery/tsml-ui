@@ -91,15 +91,16 @@ A complete list of meeting types can be found in the [Meeting Guide format spec]
 
 ## Next Steps
 
-- [ ] Hierarchical region dropdown
-- [ ] Near location mode with geocoding
+- [x] Hierarchical region dropdown
 - [ ] Alternate appearance of `TC` meetings (hide directions and on map)
 - [ ] Alternate appearance of approximate addresses
 - [ ] Display group info on inside page
 - [ ] Filter-clearing buttons when no results
+- [ ] Near location mode with geocoding
+- [ ] Distance dropdown instead of regions when in near me or location mode
 - [ ] Slugs (eg `sun`) in query string instead of day IDs
 - [ ] Select multiple dropdown items on mobile
-- [ ] Consider alternate designs for table view and controls
+- [ ] Proper `href` attributes (instead of `#`) in dropdowns for SEO
 
 ## Contributing
 

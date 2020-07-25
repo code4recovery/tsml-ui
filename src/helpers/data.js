@@ -10,19 +10,17 @@ const debug = false;
 export function filterMeetingData(state, setAppState) {
   const execStart = new Date();
 
-  let filterFound = false;
-  let filteredSlugs = [];
+  const matchGroups = [];
 
   //filter by region, day, time, and type
   settings.filters.forEach(filter => {
     if (state.input[filter].length && state.indexes[filter].length) {
-      filterFound = true;
-      filteredSlugs.push(
+      matchGroups.push(
         [].concat.apply(
           [],
-          state.input[filter].map(x => {
-            const value = state.indexes[filter].find(y => y.key == x);
-            return value ? value.slugs : [];
+          state.input[filter].map(key => {
+            const match = getIndexByKey(state.indexes[filter], key);
+            return match ? match.slugs : [];
           })
         )
       );
@@ -33,12 +31,11 @@ export function filterMeetingData(state, setAppState) {
   if (state.input.mode === 'search') {
     if (state.input.search.length) {
       //todo: improve searching to be OR search instead of AND
-      filterFound = true;
       const needle = processSearch(state.input.search.toLowerCase());
       const matches = Object.keys(state.meetings).filter(slug => {
         return state.meetings[slug].search.search(needle) !== -1;
       });
-      filteredSlugs.push([].concat.apply([], matches));
+      matchGroups.push([].concat.apply([], matches));
     }
   } else if (state.input.mode === 'me') {
     if (!state.input.latitude || !state.input.longitude) {
@@ -62,8 +59,8 @@ export function filterMeetingData(state, setAppState) {
   }
 
   //do the filtering, if necessary
-  filteredSlugs = filterFound
-    ? getCommonElements(filteredSlugs) //get intersection of slug arrays
+  const filteredSlugs = matchGroups.length
+    ? getCommonElements(matchGroups) //get intersection of slug arrays
     : Object.keys(state.meetings); //get everything
 
   //loop through and update or clear distances
@@ -120,6 +117,31 @@ export function filterMeetingData(state, setAppState) {
     console.log(`filterMeetingData took ${(new Date() - execStart) / 1000}`);
 
   return filteredSlugs;
+}
+
+//find an index by key (todo refactor)
+export function getIndexByKey(indexes, key) {
+  const getFilterByKey = key => {
+    const searchFunc = (found, item) => {
+      const children = item.children || [];
+      return (
+        found || (item.key === key ? item : children.reduce(searchFunc, null))
+      );
+    };
+    return searchFunc;
+  };
+  return indexes.reduce(getFilterByKey(key), null);
+}
+
+//recursive function to make sorted array from object index
+function flattenAndSortIndexes(index, sortFn) {
+  return Object.values(index)
+    .map(entry => {
+      if (entry.children)
+        entry.children = flattenAndSortIndexes(entry.children, sortFn);
+      return entry;
+    })
+    .sort(sortFn);
 }
 
 //look for data with multiple days and make them all single
@@ -191,6 +213,8 @@ export function loadMeetingData(data, capabilities) {
     'conference_url',
     'end',
     'formatted_address',
+    'group',
+    'group_notes',
     'latitude',
     'location',
     'location_notes',
@@ -200,12 +224,11 @@ export function loadMeetingData(data, capabilities) {
     'name',
     'notes',
     'paypal',
-    'region',
+    'regions',
     'search',
     'slug',
     'square',
     'start',
-    'sub_region',
     'types',
     'venmo',
   ];
@@ -223,42 +246,30 @@ export function loadMeetingData(data, capabilities) {
 
   //loop through each entry
   data.forEach(meeting => {
-    //if no region then use city
-    if (!meeting.region && meeting.city) {
-      meeting.region = meeting.city;
+    //using array for regions now, but legacy region, sub_region, etc still supported
+    //todo remove if/when tsml implements regions array format
+    if (!meeting.regions) {
+      if (meeting.region) {
+        meeting.regions = [meeting.region];
+        if (meeting.sub_region) {
+          meeting.regions.push(meeting.sub_region);
+          if (meeting.sub_sub_region) {
+            meeting.regions.push(meeting.sub_sub_region);
+          }
+        }
+      } else if (meeting.city) {
+        meeting.regions = [meeting.city];
+      }
     }
 
     //build region index
-    if (meeting.region) {
-      if (!indexes.region.hasOwnProperty(meeting.region)) {
-        capabilities.region = true;
-        indexes.region[meeting.region] = {
-          key: slugify(meeting.region),
-          name: meeting.region,
-          slugs: [],
-          children: {},
-        };
-      }
-      indexes.region[meeting.region].slugs.push(meeting.slug);
-
-      //sub region?
-      if (meeting.sub_region) {
-        //console.log(meeting.sub_region);
-        if (
-          !indexes.region[meeting.region].children.hasOwnProperty(
-            meeting.sub_region
-          )
-        ) {
-          indexes.region[meeting.region].children[meeting.sub_region] = {
-            key: slugify(meeting.region + ' ' + meeting.sub_region),
-            name: meeting.sub_region,
-            slugs: [],
-          };
-        }
-        indexes.region[meeting.region].children[meeting.sub_region].slugs.push(
-          meeting.slug
-        );
-      }
+    if (meeting.regions) {
+      indexes.region = populateRegionsIndex(
+        meeting.regions,
+        0,
+        indexes.region,
+        meeting.slug
+      );
     }
 
     //format day
@@ -280,7 +291,6 @@ export function loadMeetingData(data, capabilities) {
     if (meeting.day && meeting.time) {
       //build day index
       if (!indexes.day.hasOwnProperty(meeting.day)) {
-        capabilities.day = true;
         indexes.day[meeting.day] = {
           key: meeting.day,
           name: strings[settings.days[meeting.day]],
@@ -336,7 +346,6 @@ export function loadMeetingData(data, capabilities) {
       }
       times.forEach(time => {
         if (!indexes.time.hasOwnProperty(time)) {
-          capabilities.time = true;
           indexes.time[time] = {
             key: settings.times[time],
             name: strings[settings.times[time]],
@@ -364,7 +373,6 @@ export function loadMeetingData(data, capabilities) {
       //build type index (can be multiple)
       meeting.types.forEach(type => {
         if (!indexes.type.hasOwnProperty(type)) {
-          capabilities.type = true;
           indexes.type[type] = {
             key: slugify(type),
             name: type,
@@ -409,15 +417,14 @@ export function loadMeetingData(data, capabilities) {
 
     //build search string
     let search_array = [
-      meeting.name,
+      meeting.formatted_address,
+      meeting.group,
+      meeting.group_notes,
       meeting.location,
       meeting.location_notes,
+      meeting.name,
       meeting.notes,
-      meeting.formatted_address,
     ];
-    if (meeting.region) {
-      search_array.push(meeting.region);
-    }
     if (meeting.regions) {
       search_array = search_array.concat(meeting.regions);
     }
@@ -426,7 +433,7 @@ export function loadMeetingData(data, capabilities) {
       .join(' ')
       .toLowerCase();
 
-    //loop through and remove items not in whitelist
+    //clean up keys not in allowed meeting properties
     Object.keys(meeting).map(key => {
       if (!meeting_properties.includes(key)) {
         delete meeting[key];
@@ -436,37 +443,29 @@ export function loadMeetingData(data, capabilities) {
     meetings[meeting.slug] = meeting;
   });
 
-  //convert region to array and sort by name
-  indexes.region = Object.values(indexes.region).sort((a, b) =>
-    a.name > b.name ? 1 : b.name > a.name ? -1 : 0
-  );
-
-  //convert sub_regions to array and sort by name
-  indexes.region.map(region => {
-    if (region.children)
-      region.children = Object.values(region.children).sort((a, b) =>
-        a.name > b.name ? 1 : b.name > a.name ? -1 : 0
-      );
-    return region;
-  });
-
-  //convert day to array and sort by ordinal
-  indexes.day = Object.values(indexes.day);
-  indexes.day.sort((a, b) => {
-    return a.key - b.key;
-  });
-
-  //convert time to array and sort by ordinal
-  indexes.time = Object.values(indexes.time);
-  indexes.time.sort((a, b) => {
-    return settings.times.indexOf(a.key) - settings.times.indexOf(b.key);
-  });
-
-  //convert type to array and sort by name
-  indexes.type = Object.values(indexes.type);
-  indexes.type.sort((a, b) => {
+  //convert region to array, sort by name
+  indexes.region = flattenAndSortIndexes(indexes.region, (a, b) => {
     return a.name > b.name ? 1 : b.name > a.name ? -1 : 0;
   });
+  capabilities.region = !!indexes.region.length;
+
+  //convert day to array and sort by ordinal
+  indexes.day = flattenAndSortIndexes(indexes.day, (a, b) => {
+    return a.key - b.key;
+  });
+  capabilities.day = !!indexes.day.length;
+
+  //convert time to array and sort by ordinal
+  indexes.time = flattenAndSortIndexes(indexes.time, (a, b) => {
+    return settings.times.indexOf(a.key) - settings.times.indexOf(b.key);
+  });
+  capabilities.time = !!indexes.time.length;
+
+  //convert type to array and sort by name
+  indexes.type = flattenAndSortIndexes(indexes.type, (a, b) => {
+    return a.name > b.name ? 1 : b.name > a.name ? -1 : 0;
+  });
+  capabilities.type = !!indexes.type.length;
 
   //near me mode enabled on https or local development
   if (capabilities.coordinates) {
@@ -489,6 +488,75 @@ export function loadMeetingData(data, capabilities) {
     console.log(`loadMeetingData took ${(new Date() - execStart) / 1000}`);
 
   return [meetings, indexes, capabilities];
+}
+
+//parse weird google sheet times - todo use moment
+function parseTime(timeString) {
+  if (!timeString.length) return null;
+
+  const time = timeString.match(/(\d+)(:(\d\d))?\s*(p?)/i);
+
+  if (time == null) return null;
+
+  let hours = parseInt(time[1], 10);
+  if (hours == 12 && !time[4]) {
+    hours = 0;
+  } else {
+    hours += hours < 12 && time[4] ? 12 : 0;
+  }
+
+  return String(hours).padStart(2, '0') + ':' + time[3];
+}
+
+//recursive function to build an index of regions from a flat array
+function populateRegionsIndex(regions, position, index, slug) {
+  const region = regions[position];
+  if (!index.hasOwnProperty(region)) {
+    index[region] = {
+      key: slugify(regions.slice(0, position + 1).join(' ')),
+      name: region,
+      slugs: [],
+      children: {},
+    };
+  }
+  index[region].slugs.push(slug);
+  if (regions.length > position + 1) {
+    index[region].children = populateRegionsIndex(
+      regions,
+      position + 1,
+      index[region].children,
+      slug
+    );
+  }
+  return index;
+}
+
+// converts a search string into pipe delimited format. Example:
+// input: "west chester" malvern devon "center city west"
+// output: west chester|malvern|devon|center city west
+function processSearch(search_string) {
+  let terms = [];
+  // Parse out any quoted strings
+  if (search_string.includes('"')) {
+    const exp = /"(.*?)"/g;
+    // Grab any quoted strings, add them to terms, and delete from source string
+    for (
+      let match = exp.exec(search_string);
+      match != null;
+      match = exp.exec(search_string)
+    ) {
+      search_string = search_string.replace(match[0], '');
+      terms.push(match[0].replace(/"/g, ''));
+    }
+  }
+
+  // Add any non-quoted strings remaining to the terms
+  if (search_string.length) {
+    terms = terms.concat(search_string.match(/[^ ]+/g));
+  }
+
+  // Return the the pipe delimited search string
+  return terms.join('|');
 }
 
 //translates Google Sheet JSON into Meeting Guide format
@@ -532,50 +600,4 @@ export function translateGoogleSheet(data) {
   }
 
   return meetings;
-}
-
-//parse weird google sheet times - todo use moment
-function parseTime(timeString) {
-  if (!timeString.length) return null;
-
-  const time = timeString.match(/(\d+)(:(\d\d))?\s*(p?)/i);
-
-  if (time == null) return null;
-
-  let hours = parseInt(time[1], 10);
-  if (hours == 12 && !time[4]) {
-    hours = 0;
-  } else {
-    hours += hours < 12 && time[4] ? 12 : 0;
-  }
-
-  return String(hours).padStart(2, '0') + ':' + time[3];
-}
-
-// converts a search string into pipe delimited format. Example:
-// input: "west chester" malvern devon "center city west"
-// output: west chester|malvern|devon|center city west
-function processSearch(search_string) {
-  let terms = [];
-  // Parse out any quoted strings
-  if (search_string.includes('"')) {
-    const exp = /"(.*?)"/g;
-    // Grab any quoted strings, add them to terms, and delete from source string
-    for (
-      let match = exp.exec(search_string);
-      match != null;
-      match = exp.exec(search_string)
-    ) {
-      search_string = search_string.replace(match[0], '');
-      terms.push(match[0].replace(/"/g, ''));
-    }
-  }
-
-  // Add any non-quoted strings remaining to the terms
-  if (search_string.length) {
-    terms = terms.concat(search_string.match(/[^ ]+/g));
-  }
-
-  // Return the the pipe delimited search string
-  return terms.join('|');
 }

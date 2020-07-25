@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { strings } from '../helpers/settings';
+import { getIndexByKey } from '../helpers/data';
 
 export default function Title({ state }) {
   //loading
@@ -19,7 +20,7 @@ export default function Title({ state }) {
     } else if (state.indexes[key] && state.input[key].length) {
       const value = state.input[key]
         .map(x => {
-          const value = state.indexes[key].find(y => y.key == x);
+          const value = getIndexByKey(state.indexes[key], x);
           return value?.name;
         })
         .join(' + ');
