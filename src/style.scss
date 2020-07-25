@@ -127,6 +127,10 @@ meetings {
 
     table {
 
+      .distance {
+        text-align: right;
+      }
+
       //align edges
       tr th:first-child,
       td:first-child {

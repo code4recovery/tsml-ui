@@ -24,6 +24,6 @@ export default function distance(a, b) {
     // If using kilometers, do an additional multiplication
     if (settings.distance_unit === 'km') dist *= 1.609344;
 
-    return dist.toFixed(2).toString() + ' ' + settings.distance_unit;
+    return parseFloat(dist.toFixed(2));
   }
 }

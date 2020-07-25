@@ -14,8 +14,7 @@ export function filterMeetingData(state, setAppState) {
   let filteredSlugs = [];
 
   //filter by region, day, time, and type
-  for (let i = 0; i < settings.filters.length; i++) {
-    let filter = settings.filters[i];
+  settings.filters.forEach(filter => {
     if (state.input[filter].length && state.indexes[filter].length) {
       filterFound = true;
       filteredSlugs.push(
@@ -28,13 +27,10 @@ export function filterMeetingData(state, setAppState) {
         )
       );
     }
-  }
+  });
 
   //handle keyword search or geolocation
   if (state.input.mode === 'search') {
-    //clear center
-    state.input.center = null;
-
     if (state.input.search.length) {
       //todo: improve searching to be OR search instead of AND
       filterFound = true;
@@ -45,15 +41,18 @@ export function filterMeetingData(state, setAppState) {
       filteredSlugs.push([].concat.apply([], matches));
     }
   } else if (state.input.mode === 'me') {
-    if (!state.input.center) {
+    if (!state.input.latitude || !state.input.longitude) {
       navigator.geolocation.getCurrentPosition(
         position => {
-          //this will cause a re-render with state.input.center now set
-          state.input.center = position.coords;
-          setAppState('input', state.input);
+          //this will cause a re-render with latitude and longitude now set
+          setAppState('input', {
+            latitude: parseFloat(position.coords.latitude.toFixed(5)),
+            longitude: parseFloat(position.coords.longitude.toFixed(5)),
+            ...state.input,
+          });
         },
         error => {
-          console.warn('getCurrentPosition error', error);
+          console.warn(`getCurrentPosition() error: ${error.message}`);
         },
         { timeout: 5000 }
       );
@@ -62,18 +61,20 @@ export function filterMeetingData(state, setAppState) {
     }
   }
 
-  //loop through and update or clear distances
-  Object.keys(state.meetings).map(slug => {
-    return {
-      distance: distance(state.input.center, state.meetings[slug]),
-      ...state.meetings[slug],
-    };
-  });
-
   //do the filtering, if necessary
   filteredSlugs = filterFound
     ? getCommonElements(filteredSlugs) //get intersection of slug arrays
     : Object.keys(state.meetings); //get everything
+
+  //loop through and update or clear distances
+  filteredSlugs.forEach(slug => {
+    if (state.input.latitude && state.input.longitude) {
+      state.meetings[slug] = {
+        distance: distance(state.input, state.meetings[slug]),
+        ...state.meetings[slug],
+      };
+    }
+  });
 
   //sort slugs
   filteredSlugs.sort((a, b) => {
@@ -86,8 +87,8 @@ export function filterMeetingData(state, setAppState) {
         return meetingA.minutes_now - meetingB.minutes_now;
       }
     } else {
-      if (meetingA.minutes_midnight !== meetingB.minutes_midnight) {
-        return meetingA.minutes_midnight - meetingB.minutes_midnight;
+      if (meetingA.minutes_week !== meetingB.minutes_week) {
+        return meetingA.minutes_week - meetingB.minutes_week;
       }
     }
 
@@ -194,8 +195,8 @@ export function loadMeetingData(data, capabilities) {
     'location',
     'location_notes',
     'longitude',
-    'minutes_midnight',
     'minutes_now',
+    'minutes_week',
     'name',
     'notes',
     'paypal',
@@ -289,6 +290,7 @@ export function loadMeetingData(data, capabilities) {
       indexes.day[meeting.day].slugs.push(meeting.slug);
 
       //make start/end moments
+      if (debug) console.log(meeting.timezone ?? settings.timezone);
       meeting.start = moment.tz(
         `${meeting.day} ${meeting.time}`,
         'd hh:mm',
@@ -305,8 +307,9 @@ export function loadMeetingData(data, capabilities) {
 
       //time differences for sorting
       meeting.minutes_now = meeting.start.diff(now, 'minutes');
-      meeting.minutes_midnight =
+      const minutes_midnight =
         meeting.start.get('hour') * 60 + meeting.start.get('minutes');
+      meeting.minutes_week = minutes_midnight + meeting.day * 1440;
 
       //if time is earlier than 10 minutes ago, increment diff by a week
       if (meeting.minutes_now < -10) {
@@ -315,19 +318,19 @@ export function loadMeetingData(data, capabilities) {
 
       //build time index (can be multiple)
       let times = [];
-      if (meeting.minutes_midnight >= 240 && meeting.minutes_midnight < 720) {
+      if (minutes_midnight >= 240 && minutes_midnight < 720) {
         //4am–12pm
         times.push(0); //morning
       }
-      if (meeting.minutes_midnight >= 660 && meeting.minutes_midnight < 1020) {
+      if (minutes_midnight >= 660 && minutes_midnight < 1020) {
         //11am–5pm
         times.push(1); //midday
       }
-      if (meeting.minutes_midnight >= 960 && meeting.minutes_midnight < 1260) {
+      if (minutes_midnight >= 960 && minutes_midnight < 1260) {
         //4–9pm
         times.push(2); //evening
       }
-      if (meeting.minutes_midnight >= 1200 || meeting.minutes_midnight < 300) {
+      if (minutes_midnight >= 1200 || minutes_midnight < 300) {
         //8pm–5am
         times.push(3); //night
       }

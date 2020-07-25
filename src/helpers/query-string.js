@@ -7,7 +7,6 @@ const separator = '/'; //used to separate multiple query string values (eg day=0
 
 export function getQueryString(queryString) {
   let input = {
-    center: null,
     day: [],
     district: [],
     meeting: null,
@@ -81,14 +80,6 @@ export function setQueryString(state) {
     query['search'] = state.input.search;
   }
 
-  //location search
-  if (state.input.center) {
-    query['center'] = [
-      state.input.center.latitude,
-      state.input.center.longitude,
-    ].join(',');
-  }
-
   //set mode property
   if (state.input.mode != settings.defaults.mode) {
     query.mode = state.input.mode;
@@ -106,12 +97,11 @@ export function setQueryString(state) {
   query = qs.stringify(
     merge(
       merge(existingQuery, {
-        center: undefined,
         day: undefined,
+        meeting: undefined,
         mode: undefined,
         region: undefined,
         search: undefined,
-        meeting: undefined,
         time: undefined,
         type: undefined,
         view: undefined,
