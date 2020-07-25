@@ -167,51 +167,47 @@ export default function Controls({ state, setAppState }) {
           </div>
         </form>
       </div>
-      {settings.filters.map(filter => (
-        <div
-          className={cx('col-sm-6 col-lg mb-3', {
-            'd-none': !state.capabilities[filter],
-          })}
-          key={filter}
-        >
-          <Dropdown
-            setDropdown={setDropdown}
-            filter={filter}
-            options={state.indexes[filter]}
-            values={state.input[filter]}
-            open={dropdown === filter}
-            right={filter === 'type' && !state.capabilities.map}
-            setFilter={setFilter}
-            defaultValue={strings[filter + '_any']}
-          ></Dropdown>
+      {settings.filters.map(
+        filter =>
+          state.capabilities[filter] && (
+            <div className="col-sm-6 col-lg mb-3" key={filter}>
+              <Dropdown
+                setDropdown={setDropdown}
+                filter={filter}
+                options={state.indexes[filter]}
+                values={state.input[filter]}
+                open={dropdown === filter}
+                right={filter === 'type' && !state.capabilities.map}
+                setFilter={setFilter}
+                defaultValue={strings[filter + '_any']}
+              ></Dropdown>
+            </div>
+          )
+      )}
+      {state.capabilities.map && (
+        <div className="col-sm-6 col-lg mb-3">
+          <div className="btn-group w-100" role="group">
+            <button
+              type="button"
+              className={cx('btn btn-outline-secondary w-100', {
+                active: state.input.view == 'list',
+              })}
+              onClick={e => setView(e, 'list')}
+            >
+              {strings.list}
+            </button>
+            <button
+              type="button"
+              className={cx('btn btn-outline-secondary w-100', {
+                active: state.input.view == 'map',
+              })}
+              onClick={e => setView(e, 'map')}
+            >
+              {strings.map}
+            </button>
+          </div>
         </div>
-      ))}
-      <div
-        className={cx('col-sm-6 col-lg mb-3', {
-          'd-none': !state.capabilities.map,
-        })}
-      >
-        <div className="btn-group w-100" role="group">
-          <button
-            type="button"
-            className={cx('btn btn-outline-secondary w-100', {
-              active: state.input.view == 'list',
-            })}
-            onClick={e => setView(e, 'list')}
-          >
-            {strings.list}
-          </button>
-          <button
-            type="button"
-            className={cx('btn btn-outline-secondary w-100', {
-              active: state.input.view == 'map',
-            })}
-            onClick={e => setView(e, 'map')}
-          >
-            {strings.map}
-          </button>
-        </div>
-      </div>
+      )}
     </div>
   );
 }

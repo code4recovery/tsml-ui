@@ -1,5 +1,5 @@
 import { settings, strings } from './settings';
-import Slugify from './slugify';
+import slugify from './slugify';
 import { formatConferenceProvider } from './conference';
 import distance from './distance';
 import moment from 'moment-timezone';
@@ -189,7 +189,6 @@ export function loadMeetingData(data, capabilities) {
     'conference_provider',
     'conference_url',
     'end',
-    'flags',
     'formatted_address',
     'latitude',
     'location',
@@ -230,15 +229,35 @@ export function loadMeetingData(data, capabilities) {
 
     //build region index
     if (meeting.region) {
-      capabilities.region = true;
-      if (meeting.region in indexes.region === false) {
+      if (!indexes.region.hasOwnProperty(meeting.region)) {
+        capabilities.region = true;
         indexes.region[meeting.region] = {
-          key: meeting.region_id || Slugify(meeting.region),
+          key: slugify(meeting.region),
           name: meeting.region,
           slugs: [],
+          children: {},
         };
       }
       indexes.region[meeting.region].slugs.push(meeting.slug);
+
+      //sub region?
+      if (meeting.sub_region) {
+        //console.log(meeting.sub_region);
+        if (
+          !indexes.region[meeting.region].children.hasOwnProperty(
+            meeting.sub_region
+          )
+        ) {
+          indexes.region[meeting.region].children[meeting.sub_region] = {
+            key: slugify(meeting.region + ' ' + meeting.sub_region),
+            name: meeting.sub_region,
+            slugs: [],
+          };
+        }
+        indexes.region[meeting.region].children[meeting.sub_region].slugs.push(
+          meeting.slug
+        );
+      }
     }
 
     //format day
@@ -250,8 +269,11 @@ export function loadMeetingData(data, capabilities) {
     }
 
     //format latitude + longitude
-    if (meeting.latitude) meeting.latitude = parseFloat(meeting.latitude);
-    if (meeting.longitude) meeting.longitude = parseFloat(meeting.longitude);
+    if (meeting.latitude && meeting.longitude) {
+      capabilities.coordinates = true;
+      meeting.latitude = parseFloat(meeting.latitude);
+      meeting.longitude = parseFloat(meeting.longitude);
+    }
 
     //handle day and time
     if (meeting.day && meeting.time) {
@@ -266,7 +288,7 @@ export function loadMeetingData(data, capabilities) {
       }
       indexes.day[meeting.day].slugs.push(meeting.slug);
 
-      //make moments out of start and end
+      //make start/end moments
       meeting.start = moment.tz(
         `${meeting.day} ${meeting.time}`,
         'd hh:mm',
@@ -324,53 +346,36 @@ export function loadMeetingData(data, capabilities) {
 
     //handle types
     if (meeting.types) {
-      capabilities.type = true;
-
       //clean up and sort types
       meeting.types = meeting.types
         .map(type => type.trim())
-        .filter(type => {
-          return (
-            lookup_type_codes.includes(type) ||
-            lookup_type_values.includes(type)
-          );
-        })
-        .map(type => {
-          return lookup_type_codes.includes(type) ? strings.types[type] : type;
-        })
-        .sort();
-
-      //flags
-      meeting.flags = settings.flags
         .filter(
           type =>
-            lookup_type_values.includes(type) && meeting.types.includes(type)
+            lookup_type_codes.includes(type) ||
+            lookup_type_values.includes(type)
         )
-        .sort()
-        .join(', ');
+        .map(type =>
+          lookup_type_codes.includes(type) ? strings.types[type] : type
+        );
 
       //build type index (can be multiple)
-      for (let j = 0; j < meeting.types.length; j++) {
-        if (meeting.types[j] in indexes.type === false) {
-          indexes.type[meeting.types[j]] = {
-            key: Slugify(meeting.types[j]),
-            name: meeting.types[j],
+      meeting.types.forEach(type => {
+        if (!indexes.type.hasOwnProperty(type)) {
+          capabilities.type = true;
+          indexes.type[type] = {
+            key: slugify(type),
+            name: type,
             slugs: [],
           };
         }
-        indexes.type[meeting.types[j]].slugs.push(meeting.slug);
-      }
+        indexes.type[type].slugs.push(meeting.slug);
+      });
     }
 
     //conference provider
     meeting.conference_provider = meeting.conference_url
       ? formatConferenceProvider(meeting.conference_url)
       : null;
-
-    //build index of map pins
-    if (meeting.latitude && meeting.longitude) {
-      capabilities.coordinates = true;
-    }
 
     //creates formatted_address if necessary
     if (!meeting.formatted_address) {
@@ -429,9 +434,17 @@ export function loadMeetingData(data, capabilities) {
   });
 
   //convert region to array and sort by name
-  indexes.region = Object.values(indexes.region);
-  indexes.region.sort((a, b) => {
-    return a.name > b.name ? 1 : b.name > a.name ? -1 : 0;
+  indexes.region = Object.values(indexes.region).sort((a, b) =>
+    a.name > b.name ? 1 : b.name > a.name ? -1 : 0
+  );
+
+  //convert sub_regions to array and sort by name
+  indexes.region.map(region => {
+    if (region.children)
+      region.children = Object.values(region.children).sort((a, b) =>
+        a.name > b.name ? 1 : b.name > a.name ? -1 : 0
+      );
+    return region;
   });
 
   //convert day to array and sort by ordinal

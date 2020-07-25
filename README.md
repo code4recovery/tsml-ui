@@ -13,9 +13,9 @@ Advantanges:
 - wider pool of potential project contributors (not just WordPress webmasters)
 - simplifies WordPress plugin (separation of concerns)
 
-## Installation
+## Install on Your Website
 
-You don't need to download anything. Simply add the following code to your page:
+You don't need to download anything, or use a particular platform. Simply add the following code to your page:
 
 1.  In your `<head>` add:
 
@@ -25,16 +25,18 @@ You don't need to download anything. Simply add the following code to your page:
 
 1.  In your `<body>` add:
 
-    <meetings src="/path/to/meetings.json"/>
-    <script src="https://react.meetingguide.org/app.js" async></script>
+        <meetings src="/path/to/meetings.json"/>
+        <script src="https://react.meetingguide.org/app.js" async></script>
 
 1.  Edit `/path/to/meetings.json` in the code above to point to your JSON file.
 
-## 12 Step Meeting List
+## Populate Data
+
+### 12 Step Meeting List
 
 If you're using the 12 Step Meeting List plugin for WordPress, you may use the shortcode `[tsml_react]`.
 
-## Google Sheet Support
+### Google Sheet Support
 
 To use a Google Sheet as your backend:
 
@@ -42,7 +44,7 @@ To use a Google Sheet as your backend:
 1. Use this [blog post](https://coderwall.com/p/duapqq/use-a-google-spreadsheet-as-your-json-backend) to determine what the JSON URL of your sheet is.
 1. Use that JSON URL as the `src` for your `meetings` tag.
 
-## Maps
+## Configure Maps
 
 To add a free map to your site:
 
@@ -56,31 +58,22 @@ If you're using a Google Sheet, you will have to add `Latitude` and `Longitude` 
 
 ## Advanced Customization
 
-See [src/settings.jsx](settings.jsx) for options that can be set by defining a `window.config` object. You can customize many of the behaviors and all of the text strings that the app uses. Only include the values you wish to override.
+See [src/settings.js](settings.js) for options that can be set by defining a `window.config` object. You can customize many of the behaviors and all of the text strings that the app uses. Only include the values you wish to override.
 
 ### Set your timezone
 
-It uses `America\New_York` as the default. To change this, specify your tz in your config.
+`America/New_York` is the default. To set to a different timezone that can be done in the config.
 
     window.config = {
       timezone: 'America/Los_Angeles'
     };
 
-### Change the column heading “Region” to “City”
+### Change strings
 
     window.config = {
       strings: {
         en: {
           region: 'City',
-        },
-      },
-    };
-
-### Change “Newcomer” meeting type to “Beginner”
-
-    window.config = {
-      strings: {
-        en: {
           types: {
             BE: 'Beginner',
           },
@@ -88,26 +81,19 @@ It uses `America\New_York` as the default. To change this, specify your tz in yo
       },
     };
 
-A complete list of meeting types can be found in the [Meeting Guide format spec](https://github.com/code4recovery/spec). These can be overridden by specifying the code and preferred nomenclature as demonstrated above.
+A complete list of meeting types can be found in the [Meeting Guide format spec](https://github.com/code4recovery/spec).
 
 ## Next Steps
 
+- [ ] Hierarchical region dropdown
 - [ ] Near location mode with geocoding
-- [ ] Hierarchical regions support
 - [ ] Alternate appearance of `TC` meetings (hide directions and on map)
 - [ ] Alternate appearance of approximate addresses
 - [ ] Display group info on inside page
 - [ ] Filter-clearing buttons when no results
-
-### Further Steps
-
 - [ ] Slugs (eg `sun`) in query string instead of day IDs
 - [ ] Select multiple dropdown items on mobile
 - [ ] Consider alternate designs for table view and controls
-
-### Questions
-
-- [ ] What will the impact be on SEO?
 
 ## Contributing
 
@@ -115,4 +101,4 @@ Pull requests are welcome. To get started, clone this repository, run `yarn`, an
 
 This project uses [React JS](https://reactjs.org/) and [Bootstrap CSS](http://getbootstrap.com/).
 
-While developing, run the `yarn watch` terminal command to compile assets as you edit them. When you're ready to commit, run `yarn prod` to prepare them for production.
+While developing, run `yarn watch` to compile assets as you edit them. When you're ready to commit, run `yarn prod` to prepare them for production.
