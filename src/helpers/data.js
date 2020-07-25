@@ -523,7 +523,7 @@ export function translateGoogleSheet(data) {
     meeting.time = parseTime(meeting.time);
 
     //array-ify types
-    meeting.types = meeting.types.split(',').map(trim);
+    meeting.types = meeting.types.split(',').map(type => type.trim());
 
     meetings.push(meeting);
   }
