@@ -5,6 +5,7 @@ import InfiniteScroll from 'react-infinite-scroller';
 import { settings, strings } from '../helpers/settings';
 import Link from './link';
 import Button from './button';
+import { formatAddress } from '../helpers/format';
 
 export default function Table({ state, setAppState, filteredSlugs }) {
   const meetingsPerPage = 10;
@@ -50,11 +51,17 @@ export default function Table({ state, setAppState, filteredSlugs }) {
           />
         );
       } else {
-        const address = meeting.formatted_address.split(', ');
-        return address.length &&
-          address[0] !== meeting.regions[meeting.regions.length - 1]
-          ? address[0]
-          : '';
+        return (
+          <span
+            className={cx({
+              'text-decoration-line-through text-muted': meeting.types.includes(
+                strings.types.TC
+              ),
+            })}
+          >
+            {formatAddress(meeting.formatted_address)}
+          </span>
+        );
       }
     } else if (key == 'name' && meeting.slug) {
       return <Link meeting={meeting} state={state} setAppState={setAppState} />;

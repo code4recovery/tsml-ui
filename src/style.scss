@@ -68,7 +68,10 @@ meetings {
   }
 
   .container-fluid {
-    min-height: 100%;
+
+    @include media-breakpoint-up(md) {
+      min-height: 100%;
+    }
 
     //to prevent white border
     .row {
@@ -77,8 +80,12 @@ meetings {
     }
 
     //to prevent double border
-    .list-group-item+.list-group-item {
-      border-top-width: 0;
+    .list-group {
+      overflow-x: hidden;
+
+      .list-group-item+.list-group-item {
+        border-top-width: 0;
+      }
     }
 
     .controls {
@@ -121,6 +128,7 @@ meetings {
     }
 
     .map {
+      max-height: 1000px;
       min-height: 500px; //maps should fill at least 500, but up to entire space
       position: relative; //so map can fill 100%
 

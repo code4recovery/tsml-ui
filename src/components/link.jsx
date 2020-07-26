@@ -11,7 +11,7 @@ export default function Link({ state, meeting, setAppState }) {
     return (
       <>
         <span>{meeting.name}</span>
-        {flags && <small className="text-muted mx-2">/ {flags}</small>}
+        {flags && <small className="ml-2 text-muted">{flags}</small>}
       </>
     );
   }
@@ -28,9 +28,7 @@ export default function Link({ state, meeting, setAppState }) {
       >
         {meeting.name}
       </a>
-      {flags && (
-        <small className="ml-2 text-muted text-nowrap">/ {flags}</small>
-      )}
+      {flags && <small className="ml-2 text-muted">{flags}</small>}
     </>
   );
 }
