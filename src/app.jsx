@@ -39,6 +39,7 @@ class App extends React.Component {
       input: getQueryString(location.search),
       indexes: {
         day: [],
+        distance: [],
         region: [],
         time: [],
         type: [],

@@ -13,7 +13,9 @@ export function filterMeetingData(state, setAppState) {
 
   //filter by region, day, time, and type
   settings.filters.forEach(filter => {
-    if (state.input[filter].length && state.indexes[filter].length) {
+    if (filter == 'distance') {
+      //
+    } else if (state.input[filter].length && state.indexes[filter].length) {
       matchGroups.push(
         [].concat.apply(
           [],

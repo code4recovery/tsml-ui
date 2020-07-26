@@ -95,9 +95,11 @@ A complete list of meeting types can be found in the [Meeting Guide format spec]
 - [x] Alternate appearance of `TC` meetings (hide directions and cross out address)
 - [x] Alternate appearance of approximate addresses (no location list group, zoom out map, no popup)
 - [x] Display group info on inside page
+- [ ] Distance dropdown instead of regions when in near me or location mode
 - [ ] Filter-clearing buttons when no results
 - [ ] Near location mode with geocoding
-- [ ] Distance dropdown instead of regions when in near me or location mode
+- [ ] Spanish
+- [ ] French
 - [ ] Accessibility improvements
 - [ ] Slugs (eg `sun`) in query string instead of day IDs
 - [ ] Select multiple dropdown items on mobile

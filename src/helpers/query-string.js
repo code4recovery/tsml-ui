@@ -8,11 +8,11 @@ const separator = '/'; //used to separate multiple query string values (eg day=0
 export function getQueryString(queryString) {
   let input = {
     day: [],
+    distance: null,
     district: [],
     meeting: null,
     mode: settings.defaults.mode,
     query: null,
-    radius: null,
     region: [],
     search: '',
     time: [],
@@ -45,35 +45,13 @@ export function setQueryString(state) {
   const existingQuery = qs.parse(location.search);
 
   //filter by region, day, time, and type
-  for (let i = 0; i < settings.filters.length; i++) {
-    let filter = settings.filters[i];
-    if (
-      state.input[filter].length &&
-      state.indexes[filter].length &&
-      filter !== 'day'
-    ) {
+  settings.filters.forEach(filter => {
+    if (filter == 'distance') {
+      if (state.input.distance) query.distance = state.input.distance;
+    } else if (state.input[filter].length && state.indexes[filter].length) {
       query[filter] = state.input[filter].join(separator);
     }
-  }
-
-  //decide whether to set day in the query string (todo refactor)
-  if (state.input.day.length && state.indexes.day.length) {
-    if (
-      !settings.defaults.today ||
-      existingQuery.search ||
-      existingQuery.day ||
-      existingQuery.region ||
-      existingQuery.district ||
-      existingQuery.time ||
-      existingQuery.type ||
-      state.input.day.length > 1 ||
-      state.input.day[0] != new Date().getDay()
-    ) {
-      query.day = state.input.day.join(separator);
-    }
-  } else if (settings.defaults.today) {
-    query.day = 'any';
-  }
+  });
 
   //keyword search
   if (state.input.search.length) {

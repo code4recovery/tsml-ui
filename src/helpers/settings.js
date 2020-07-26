@@ -29,8 +29,9 @@ export const settings = merge(
       mode: 'search', //start in keyword search mode (options are search, location, me)
       view: 'list', //start in list or map view
     },
+    distance_options: [1, 2, 5, 10, 25],
     distance_unit: 'mi', // "mi" for miles, "km" for kilometers
-    filters: ['region', 'day', 'time', 'type'],
+    filters: ['region', 'distance', 'day', 'time', 'type'],
     flags: window.config?.flags ? [] : ['Men', 'Women'],
     keys: {
       //google: null, //enable google maps
@@ -62,6 +63,7 @@ export const settings = merge(
         back_to_meetings: 'Back to Meetings',
         day_any: 'Upcoming',
         distance: 'Distance',
+        distance_any: 'Any Distance',
         evening: 'Evening',
         friday: 'Friday',
         get_directions: 'Get Directions',
@@ -175,6 +177,7 @@ export const settings = merge(
         back_to_meetings: 'Volver a las reuniones',
         day_any: 'Próximas',
         distance: 'Distancia',
+        distance_any: 'Cualquier distancia',
         evening: 'Noche',
         friday: 'Viernes',
         get_directions: 'Obtener las direcciones',
