@@ -92,9 +92,9 @@ A complete list of meeting types can be found in the [Meeting Guide format spec]
 ## Next Steps
 
 - [x] Hierarchical region dropdown
-- [ ] Alternate appearance of `TC` meetings (hide directions and on map)
-- [ ] Alternate appearance of approximate addresses
-- [ ] Display group info on inside page
+- [x] Alternate appearance of `TC` meetings (hide directions and cross out address)
+- [x] Alternate appearance of approximate addresses (no location list group, zoom out map, no popup)
+- [x] Display group info on inside page
 - [ ] Filter-clearing buttons when no results
 - [ ] Near location mode with geocoding
 - [ ] Distance dropdown instead of regions when in near me or location mode

@@ -1,6 +1,5 @@
 import { settings, strings } from './settings';
-import slugify from './slugify';
-import { formatConferenceProvider } from './conference';
+import { formatConferenceProvider, formatSlug } from './format';
 import distance from './distance';
 import moment from 'moment-timezone';
 
@@ -374,7 +373,7 @@ export function loadMeetingData(data, capabilities) {
       meeting.types.forEach(type => {
         if (!indexes.type.hasOwnProperty(type)) {
           indexes.type[type] = {
-            key: slugify(type),
+            key: formatSlug(type),
             name: type,
             slugs: [],
           };
@@ -513,7 +512,7 @@ function populateRegionsIndex(regions, position, index, slug) {
   const region = regions[position];
   if (!index.hasOwnProperty(region)) {
     index[region] = {
-      key: slugify(regions.slice(0, position + 1).join(' ')),
+      key: formatSlug(regions.slice(0, position + 1).join(' ')),
       name: region,
       slugs: [],
       children: {},
