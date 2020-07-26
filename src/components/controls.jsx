@@ -42,16 +42,14 @@ export default function Controls({ state, setAppState }) {
     e.preventDefault();
 
     //make mapbox API request https://docs.mapbox.com/api/search/
-    const geocodingAPI =
-      'https://api.mapbox.com/geocoding/v5/mapbox.places/' +
-      encodeURIComponent(searchInput.current.value) +
-      '.json?' +
-      qs.stringify({
+    const geocodingAPI = `https://api.mapbox.com/geocoding/v5/mapbox.places/
+      ${encodeURIComponent(searchInput.current.value)}
+      .json?${qs.stringify({
         access_token: settings.keys.mapbox,
         autocomplete: false,
         //bbox: ,
         language: settings.language,
-      });
+      })}`;
 
     fetch(geocodingAPI)
       .then(result => {
@@ -60,9 +58,12 @@ export default function Controls({ state, setAppState }) {
       .then(result => {
         if (result.features && result.features.length) {
           //re-render page with new params
-          state.input.search = searchInput.current.value;
-          state.input.center = result.features[0].center.join(',');
-          setAppState('input', state.input);
+          setAppState('input', {
+            ...state.input,
+            search: searchInput.current.value,
+            latitude: result.features[0].center[0],
+            longitude: result.features[0].center[1],
+          });
         } else {
           //show error
         }
@@ -127,8 +128,8 @@ export default function Controls({ state, setAppState }) {
 
   return (
     <div className="row d-print-none controls">
-      <div className="col-sm-6 col-lg">
-        <form className="input-group mb-3" onSubmit={locationSearch}>
+      <div className="col-sm-6 col-lg mb-3">
+        <form className="input-group" onSubmit={locationSearch}>
           <input
             type="search"
             className="form-control"
@@ -136,7 +137,7 @@ export default function Controls({ state, setAppState }) {
             value={search}
             ref={searchInput}
             placeholder={strings.modes[state.input.mode]}
-            disabled={state.input.mode === 'me'}
+            disabled={state.input.mode == 'me'}
             spellCheck="false"
           />
           <button
@@ -176,11 +177,11 @@ export default function Controls({ state, setAppState }) {
                 filter={filter}
                 options={state.indexes[filter]}
                 values={state.input[filter]}
-                open={dropdown === filter}
-                right={filter === 'type' && !state.capabilities.map}
+                open={dropdown == filter}
+                right={filter == 'type' && !state.capabilities.map}
                 setFilter={setFilter}
                 defaultValue={strings[filter + '_any']}
-              ></Dropdown>
+              />
             </div>
           )
       )}
