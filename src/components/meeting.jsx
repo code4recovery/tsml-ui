@@ -17,7 +17,7 @@ export default function Meeting({ state, setAppState }) {
   const [viewport, setViewport] = useState({
     latitude: meeting.latitude,
     longitude: meeting.longitude,
-    zoom: isApproxAddress ? 9 : 14,
+    zoom: isApproxAddress ? 10 : 14,
   });
 
   //create a link for directions
@@ -39,11 +39,11 @@ export default function Meeting({ state, setAppState }) {
   document.title = meeting.name;
 
   return (
-    <div className="flex-column flex-grow-1 d-flex">
-      <h1 className="font-weight-light mb-1">
+    <div className="flex-column flex-grow-1 d-flex meeting">
+      <h1 className="font-weight-light m-0 mb-1 text-left">
         <Link meeting={meeting} />
       </h1>
-      <h6 className="border-bottom mb-3 pb-2">
+      <h6 className="border-bottom m-0 mb-3 pb-2 text-left">
         <span className="font-weight-bold mr-1">&larr;</span>
         <a
           href={window.location.pathname}
@@ -69,28 +69,28 @@ export default function Meeting({ state, setAppState }) {
           )}
           <div className="list-group">
             <div className="list-group-item py-3">
-              <h5>{strings.meeting_information}</h5>
-              <p className="my-0 mt-1">
+              <h5 className="m-0 mb-2">{strings.meeting_information}</h5>
+              <p className="m-0 mt-1">
                 {strings[settings.days[meeting.start.format('d')]]},{' '}
                 {meeting.start.format('h:mm a')}
                 {meeting.end ? ' – ' + meeting.end.format('h:mm a') : ''}
               </p>
               {meeting.types && (
-                <ul className="my-0 mt-1">
+                <ul className="m-0 mt-1">
                   {meeting.types.sort().map(type => (
                     <li key={type}>{type}</li>
                   ))}
                 </ul>
               )}
               {meeting.notes && (
-                <p className="my-0 mt-2">
+                <p className="m-0 mt-2">
                   {meeting.notes.replace(/(?:\r\n|\r|\n)/g, '<br>')}
                 </p>
               )}
             </div>
             {(!!meeting.conference_provider || !!meeting.conference_phone) && (
               <div className="list-group-item py-3">
-                <h5>{strings.types.ONL}</h5>
+                <h5 className="m-0 mb-2">{strings.types.ONL}</h5>
                 {!!meeting.conference_provider && (
                   <Button
                     text={meeting.conference_provider}
@@ -109,7 +109,7 @@ export default function Meeting({ state, setAppState }) {
             )}
             {(!!meeting.venmo || !!meeting.square || !!meeting.paypal) && (
               <div className="list-group-item py-3">
-                <h5>{strings.seventh_tradition}</h5>
+                <h5 className="m-0 mb-2">{strings.seventh_tradition}</h5>
                 {!!meeting.venmo && (
                   <Button
                     text="Venmo"
@@ -135,7 +135,9 @@ export default function Meeting({ state, setAppState }) {
             )}
             {!isApproxAddress && (
               <div className="list-group-item py-3">
-                {meeting.location && <h5>{meeting.location}</h5>}
+                {meeting.location && (
+                  <h5 className="m-0 mb-2">{meeting.location}</h5>
+                )}
                 <p
                   className={cx('my-0 mt-1', {
                     'text-decoration-line-through text-muted': isTempClosed,
@@ -156,7 +158,7 @@ export default function Meeting({ state, setAppState }) {
                         return (
                           meetings.length > 0 && (
                             <div key={day}>
-                              <h6 className="border-bottom mt-3 pb-2">
+                              <h6 className="border-bottom m-0 mt-3 pb-2">
                                 {strings[day]}
                               </h6>
                               <ol
@@ -169,7 +171,7 @@ export default function Meeting({ state, setAppState }) {
                                     style={{ paddingLeft: '5.25rem' }}
                                   >
                                     <span
-                                      className="position-absolute text-muted text-right"
+                                      className="position-absolute text-muted text-nowrap text-right"
                                       style={{
                                         left: '1.25rem',
                                         width: '4.5rem',
@@ -201,12 +203,12 @@ export default function Meeting({ state, setAppState }) {
             {(meeting.group || meeting.group_notes) && (
               <div className="list-group-item py-3">
                 {!!meeting.group && (
-                  <h5 className={cx({ 'm-0': !meeting.group_notes })}>
+                  <h5 className={cx('m-0', { 'mb-3': !meeting.group_notes })}>
                     {meeting.group}
                   </h5>
                 )}
                 {!!meeting.group_notes && (
-                  <p className="my-0 mt-1">{meeting.group_notes}</p>
+                  <p className="m-0">{meeting.group_notes}</p>
                 )}
               </div>
             )}
@@ -220,9 +222,9 @@ export default function Meeting({ state, setAppState }) {
                 {...viewport}
                 mapboxApiAccessToken={settings.keys.mapbox}
                 mapStyle={settings.mapbox_style}
-                onViewportChange={setViewport}
-                width="100%"
+                onViewportChange={isApproxAddress ? undefined : setViewport}
                 height="100%"
+                width="100%"
               >
                 {!isApproxAddress && (
                   <>
@@ -242,12 +244,11 @@ export default function Meeting({ state, setAppState }) {
                       <Popup
                         latitude={meeting.latitude}
                         longitude={meeting.longitude}
-                        className="popup"
                         closeOnClick={false}
                         onClose={() => setPopup(false)}
                         offsetTop={-settings.marker_style.height}
                       >
-                        <h4 className="font-weight-light mb-2">
+                        <h4 className="font-weight-light m-0 mb-2">
                           {meeting.location}
                         </h4>
                         <p

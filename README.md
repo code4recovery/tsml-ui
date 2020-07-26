@@ -98,9 +98,10 @@ A complete list of meeting types can be found in the [Meeting Guide format spec]
 - [ ] Filter-clearing buttons when no results
 - [ ] Near location mode with geocoding
 - [ ] Distance dropdown instead of regions when in near me or location mode
+- [ ] Accessibility improvements
 - [ ] Slugs (eg `sun`) in query string instead of day IDs
 - [ ] Select multiple dropdown items on mobile
-- [ ] Proper `href` attributes (instead of `#`) in dropdowns for SEO
+- [ ] Proper `href` attributes (instead of `#`) in controls for SEO
 
 ## Contributing
 

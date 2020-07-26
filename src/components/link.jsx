@@ -8,10 +8,12 @@ export default function Link({ state, meeting, setAppState }) {
     .join(', ');
 
   if (!state || !setAppState) {
-    return (
+    return !flags ? (
+      meeting.name
+    ) : (
       <>
         <span>{meeting.name}</span>
-        {flags && <small className="ml-2 text-muted">{flags}</small>}
+        <small className="ml-2 text-muted">{flags}</small>
       </>
     );
   }
@@ -28,7 +30,7 @@ export default function Link({ state, meeting, setAppState }) {
       >
         {meeting.name}
       </a>
-      {flags && <small className="ml-2 text-muted">{flags}</small>}
+      {!!flags && <small className="ml-2 text-muted">{flags}</small>}
     </>
   );
 }

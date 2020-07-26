@@ -5,6 +5,7 @@ import WebMercatorViewport from 'viewport-mercator-project';
 import { settings, strings } from '../helpers/settings';
 import Link from './link';
 import Button from './button';
+import { formatAddress } from '../helpers/format';
 
 export default function Map({
   filteredSlugs,
@@ -30,7 +31,14 @@ export default function Map({
   filteredSlugs.forEach(slug => {
     const meeting = state.meetings[slug];
 
-    if (meeting.latitude && meeting.latitude) {
+    const address = formatAddress(meeting.formatted_address);
+
+    if (
+      !!meeting.latitude &&
+      !!meeting.latitude &&
+      !!address &&
+      !meeting.types.includes(strings.types.TC)
+    ) {
       const coords = meeting.longitude + ',' + meeting.latitude;
 
       //create a new pin
@@ -95,9 +103,6 @@ export default function Map({
           mapboxApiAccessToken={settings.keys.mapbox}
           mapStyle={settings.mapbox_style}
           onViewportChange={setViewport}
-          style={{ position: 'absolute' }}
-          width="100%"
-          height="100%"
         >
           {locationKeys.map(key => {
             const location = locations[key];
@@ -133,25 +138,26 @@ export default function Map({
                   <Popup
                     latitude={location.latitude}
                     longitude={location.longitude}
-                    className="popup"
                     closeOnClick={false}
                     onClose={() => setPopup(null)}
                     offsetTop={-settings.marker_style.height}
                   >
-                    <h4 className="font-weight-light">{location.name}</h4>
+                    <h4 className="font-weight-light m-0 mb-2">
+                      {location.name}
+                    </h4>
                     <p>{location.formatted_address}</p>
-                    <ul className="list-group mb-3">
+                    <div className="list-group mb-3">
                       {location.meetings.map(meeting => (
-                        <li key={meeting.slug} className="list-group-item">
+                        <div key={meeting.slug} className="list-group-item">
                           <time>{meeting.start.format('h:mm a')}</time>
                           <Link
                             meeting={meeting}
                             state={state}
                             setAppState={setAppState}
                           />
-                        </li>
+                        </div>
                       ))}
-                    </ul>
+                    </div>
                     {location.directions_url && (
                       <Button
                         href={location.directions_url}
