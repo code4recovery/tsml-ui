@@ -157,7 +157,10 @@ meetings {
 
       //was seeing interference from themes
       border-width: 0;
-      vertical-align: middle;
+
+      td {
+        vertical-align: middle;
+      }
 
       .distance {
         text-align: right;
