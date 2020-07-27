@@ -30,11 +30,10 @@ export const settings = merge(
       view: 'list', //start in list or map view
     },
     distance_options: [1, 2, 5, 10, 25],
-    distance_unit: 'mi', // "mi" for miles, "km" for kilometers
+    distance_unit: 'mi', // "mi" or "km"
     filters: ['region', 'distance', 'day', 'time', 'type'],
     flags: window.config?.flags ? [] : ['Men', 'Women'],
     keys: {
-      //google: null, //enable google maps
       mapbox: null, //enable mapbox maps
     },
     language: 'en',
@@ -95,12 +94,12 @@ export const settings = merge(
         time_any: 'Any Time',
         title: {
           day: '%day%',
-          distance: '%distance%',
           time: '%time%',
           type: '%type%',
           meetings: '%meetings%',
           region: 'in %region%',
           search: 'with %search%',
+          distance: 'within %distance%',
         },
         tuesday: 'Tuesday',
         type_any: 'Any Type',
@@ -214,6 +213,7 @@ export const settings = merge(
           meetings: '%meetings%',
           region: 'en %region%',
           search: 'con %search%',
+          distance: 'dentro de %distance%',
         },
         tuesday: 'Martes',
         type_any: 'Cualquier tipo',

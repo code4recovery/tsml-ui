@@ -29,6 +29,7 @@ class App extends React.Component {
       capabilities: {
         coordinates: false,
         day: false,
+        distance: false,
         geolocation: false,
         map: false,
         region: false,
@@ -104,7 +105,12 @@ class App extends React.Component {
 
   //function for components to set global state
   setAppState(key, value) {
-    this.setState({ [key]: value });
+    if (key && typeof key === 'object') {
+      //used when setting both input and indexes when geocoding
+      this.setState(key);
+    } else {
+      this.setState({ [key]: value });
+    }
   }
 
   //function for map component to say it's ready without re-rendering

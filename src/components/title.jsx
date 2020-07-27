@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { strings } from '../helpers/settings';
+import { settings, strings } from '../helpers/settings';
 import { getIndexByKey } from '../helpers/data';
 
 export default function Title({ state }) {
@@ -17,6 +17,14 @@ export default function Title({ state }) {
       title.push(
         strings.title[key].replace('%search%', `‘${state.input.search}’`)
       );
+    } else if (key === 'distance') {
+      if (state.input.distance)
+        title.push(
+          strings.title[key].replace(
+            '%distance%',
+            `${state.input.distance} ${settings.distance_unit}`
+          )
+        );
     } else if (state.indexes[key] && state.input[key].length) {
       const value = state.input[key]
         .map(x => {

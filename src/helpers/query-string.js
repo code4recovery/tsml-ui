@@ -8,7 +8,7 @@ const separator = '/'; //used to separate multiple query string values (eg day=0
 export function getQueryString(queryString) {
   let input = {
     day: [],
-    distance: null,
+    distance: [],
     district: [],
     meeting: null,
     mode: settings.defaults.mode,
@@ -46,9 +46,7 @@ export function setQueryString(state) {
 
   //filter by region, day, time, and type
   settings.filters.forEach(filter => {
-    if (filter == 'distance') {
-      if (state.input.distance) query.distance = state.input.distance;
-    } else if (state.input[filter].length && state.indexes[filter].length) {
+    if (state.input[filter].length && state.indexes[filter].length) {
       query[filter] = state.input[filter].join(separator);
     }
   });
