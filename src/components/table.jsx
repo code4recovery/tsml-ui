@@ -72,7 +72,7 @@ export default function Table({ state, setAppState, filteredSlugs }) {
         <time className="text-nowrap">
           {meeting.start.format('h:mm a')}
           <div className="d-xl-inline ml-xl-1">
-            {strings[settings.days[meeting.start.format('d')]]}
+            {strings[settings.weekdays[meeting.start.format('d')]]}
           </div>
         </time>
       );

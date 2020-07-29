@@ -71,9 +71,9 @@ export default function Meeting({ state, setAppState }) {
             <div className="list-group-item py-3">
               <h5 className="m-0 mb-2">{strings.meeting_information}</h5>
               <p className="m-0 mt-1">
-                {strings[settings.days[meeting.start.format('d')]]},{' '}
+                {strings[settings.weekdays[meeting.start.format('d')]]},
                 {meeting.start.format('h:mm a')}
-                {meeting.end ? ' – ' + meeting.end.format('h:mm a') : ''}
+                {meeting.end && ` – ${meeting.end.format('h:mm a')}`}
               </p>
               {meeting.types && (
                 <ul className="m-0 mt-1">
@@ -149,7 +149,7 @@ export default function Meeting({ state, setAppState }) {
                   meeting &&
                   meeting.hasOwnProperty('formatted_address') && (
                     <>
-                      {settings.days.map((day, index) => {
+                      {settings.weekdays.map((weekday, index) => {
                         const meetings = Object.values(state.meetings).filter(
                           m =>
                             m.formatted_address == meeting.formatted_address &&
@@ -157,9 +157,9 @@ export default function Meeting({ state, setAppState }) {
                         );
                         return (
                           meetings.length > 0 && (
-                            <div key={day}>
+                            <div key={weekday}>
                               <h6 className="border-bottom m-0 mt-3 pb-2">
-                                {strings[day]}
+                                {strings[weekday]}
                               </h6>
                               <ol
                                 className="m-0 p-0"

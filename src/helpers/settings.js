@@ -15,15 +15,6 @@ export const settings = merge(
       'zoho.com': 'Zoho',
       'zoom.us': 'Zoom',
     },
-    days: [
-      'sunday',
-      'monday',
-      'tuesday',
-      'wednesday',
-      'thursday',
-      'friday',
-      'saturday',
-    ],
     defaults: {
       columns: ['time', 'distance', 'name', 'location', 'address', 'region'], //can be reordered
       mode: 'search', //start in keyword search mode (options are search, location, me)
@@ -31,7 +22,7 @@ export const settings = merge(
     },
     distance_options: [1, 2, 5, 10, 25],
     distance_unit: 'mi', // "mi" or "km"
-    filters: ['region', 'distance', 'day', 'time', 'type'],
+    filters: ['region', 'distance', 'weekday', 'time', 'type'],
     flags: window.config?.flags ? [] : ['Men', 'Women'],
     keys: {
       mapbox: null, //enable mapbox maps
@@ -60,7 +51,6 @@ export const settings = merge(
           no_results: 'No meetings were found matching the selected criteria.',
         },
         back_to_meetings: 'Back to Meetings',
-        day_any: 'Upcoming',
         distance: 'Distance',
         distance_any: 'Any Distance',
         evening: 'Evening',
@@ -93,7 +83,7 @@ export const settings = merge(
         time: 'Time',
         time_any: 'Any Time',
         title: {
-          day: '%day%',
+          weekday: '%weekday%',
           time: '%time%',
           type: '%type%',
           meetings: '%meetings%',
@@ -164,6 +154,7 @@ export const settings = merge(
           Y: 'Young People',
         },
         wednesday: 'Wednesday',
+        weekday_any: 'Upcoming',
       },
       es: {
         address: 'Dirección',
@@ -174,7 +165,6 @@ export const settings = merge(
             'No se encontraron reuniones que coincidan con los criterios seleccionados.',
         },
         back_to_meetings: 'Volver a las reuniones',
-        day_any: 'Próximas',
         distance: 'Distancia',
         distance_any: 'Cualquier distancia',
         evening: 'Noche',
@@ -207,7 +197,7 @@ export const settings = merge(
         time: 'Hora',
         time_any: 'Cualquier momento',
         title: {
-          day: '%day%',
+          weekday: '%weekday%',
           time: '%time%',
           type: '%type%',
           meetings: '%meetings%',
@@ -278,11 +268,21 @@ export const settings = merge(
           Y: 'Gente joven',
         },
         wednesday: 'Miércoles',
+        weekday_any: 'Próximas',
       },
     },
     times: ['morning', 'midday', 'evening', 'night'],
     timezone: 'America/New_York',
     title: true, //whether to display the title h1
+    weekdays: [
+      'sunday',
+      'monday',
+      'tuesday',
+      'wednesday',
+      'thursday',
+      'friday',
+      'saturday',
+    ],
   },
   window.config || {}
 );

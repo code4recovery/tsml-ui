@@ -7,9 +7,9 @@ import moment from 'moment-timezone';
 export function filterMeetingData(state, setAppState) {
   const matchGroups = [];
 
-  //filter by region, day, time, and type
+  //filter by region, time, type, and weekday
   settings.filters.forEach(filter => {
-    if (state.input[filter].length && state.capabilities.filter) {
+    if (state.input[filter].length && state.capabilities[filter]) {
       matchGroups.push(
         [].concat.apply(
           [],
@@ -110,7 +110,7 @@ export function filterMeetingData(state, setAppState) {
     const meetingA = state.meetings[a];
     const meetingB = state.meetings[b];
 
-    if (!state.input.day.length) {
+    if (!state.input.weekday.length) {
       //if upcoming, sort by time_diff
       if (meetingA.minutes_now !== meetingB.minutes_now) {
         return meetingA.minutes_now - meetingB.minutes_now;
@@ -227,10 +227,10 @@ export function loadMeetingData(data, capabilities) {
 
   //indexes start as objects, will be converted to arrays
   let indexes = {
-    day: {},
     region: {},
     time: {},
     type: {},
+    weekday: {},
   };
 
   //filter out unused meetings properties for a leaner memory footprint
@@ -261,7 +261,7 @@ export function loadMeetingData(data, capabilities) {
   ];
 
   //define lookups we'll need later
-  const lookup_day = settings.days.map(day => strings[day]);
+  const lookup_weekday = settings.weekdays.map(weekday => strings[weekday]);
   const lookup_type_codes = Object.keys(strings.types);
   const lookup_type_values = Object.values(strings.types);
 
@@ -303,8 +303,8 @@ export function loadMeetingData(data, capabilities) {
     if (Number.isInteger(meeting.day)) {
       //convert day to string if integer
       meeting.day = meeting.day.toString();
-    } else if (lookup_day.includes(meeting.day)) {
-      meeting.day = lookup_day.indexOf(meeting.day).toString();
+    } else if (lookup_weekday.includes(meeting.day)) {
+      meeting.day = lookup_weekday.indexOf(meeting.day).toString();
     }
 
     //format latitude + longitude
@@ -317,14 +317,14 @@ export function loadMeetingData(data, capabilities) {
     //handle day and time
     if (meeting.day && meeting.time) {
       //build day index
-      if (!indexes.day.hasOwnProperty(meeting.day)) {
-        indexes.day[meeting.day] = {
+      if (!indexes.weekday.hasOwnProperty(meeting.day)) {
+        indexes.weekday[meeting.day] = {
           key: meeting.day,
-          name: strings[settings.days[meeting.day]],
+          name: strings[settings.weekdays[meeting.day]],
           slugs: [],
         };
       }
-      indexes.day[meeting.day].slugs.push(meeting.slug);
+      indexes.weekday[meeting.day].slugs.push(meeting.slug);
 
       //make start/end moments
       meeting.start = moment.tz(
@@ -475,11 +475,11 @@ export function loadMeetingData(data, capabilities) {
   });
   capabilities.region = !!indexes.region.length;
 
-  //convert day to array and sort by ordinal
-  indexes.day = flattenAndSortIndexes(indexes.day, (a, b) => {
-    return a.key - b.key;
+  //convert weekday to array and sort by ordinal
+  indexes.weekday = flattenAndSortIndexes(indexes.weekday, (a, b) => {
+    return parseInt(a.key) - parseInt(b.key);
   });
-  capabilities.day = !!indexes.day.length;
+  capabilities.weekday = !!indexes.weekday.length;
 
   //convert time to array and sort by ordinal
   indexes.time = flattenAndSortIndexes(indexes.time, (a, b) => {

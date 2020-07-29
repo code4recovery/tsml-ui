@@ -3,21 +3,19 @@ import merge from 'deepmerge';
 
 import { settings } from './settings';
 
-const separator = '/'; //used to separate multiple query string values (eg day=0/1)
+const separator = '/'; //used to separate multiple query string values
 
 export function getQueryString() {
   const input = {
-    day: [],
     distance: [],
-    district: [],
     meeting: null,
     mode: settings.defaults.mode,
-    query: null,
     region: [],
     search: '',
     time: [],
     type: [],
     view: settings.defaults.view,
+    weekday: [],
   };
 
   //load input from query string
@@ -44,7 +42,7 @@ export function setQueryString(state) {
   let query = {};
   const existingQuery = qs.parse(location.search);
 
-  //filter by region, day, time, and type
+  //filter by region, time, type, and weekday
   settings.filters
     .filter(filter => state.input[filter].length)
     .forEach(filter => {
@@ -73,7 +71,6 @@ export function setQueryString(state) {
   query = qs.stringify(
     merge(
       merge(existingQuery, {
-        day: undefined,
         distance: undefined,
         meeting: undefined,
         mode: undefined,
@@ -82,6 +79,7 @@ export function setQueryString(state) {
         time: undefined,
         type: undefined,
         view: undefined,
+        weekday: undefined,
       }),
       query
     )
