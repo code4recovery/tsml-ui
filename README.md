@@ -101,7 +101,6 @@ A complete list of meeting types can be found in the [Meeting Guide format spec]
 - [ ] Spanish
 - [ ] French
 - [ ] Accessibility improvements
-- [ ] Slugs (eg `sun`) in query string instead of day IDs
 - [ ] Select multiple dropdown items on mobile
 - [ ] Proper `href` attributes (instead of `#`) in controls for SEO
 
