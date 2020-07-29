@@ -95,7 +95,7 @@ export default function Table({ state, setAppState, filteredSlugs }) {
         <table className="table table-striped flex-grow-1 my-0">
           <thead>
             <tr className="d-none d-md-table-row">
-              {settings.defaults.columns.map(
+              {settings.columns.map(
                 column =>
                   canShowColumn(column) && (
                     <th key={column} className={column}>
@@ -116,7 +116,7 @@ export default function Table({ state, setAppState, filteredSlugs }) {
               const meeting = state.meetings[slug];
               return (
                 <tr className="d-block d-md-table-row" key={meeting.slug}>
-                  {settings.defaults.columns.map(
+                  {settings.columns.map(
                     column =>
                       canShowColumn(column) && (
                         <td

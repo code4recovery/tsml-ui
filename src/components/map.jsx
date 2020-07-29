@@ -74,7 +74,7 @@ export default function Map({
   });
 
   //make the viewport
-  if (viewport && !state.map_initialized) {
+  if (viewport && locationKeys.length && !state.map_initialized) {
     setMapInitialized();
     setViewport(
       bounds.west === bounds.east
@@ -97,7 +97,7 @@ export default function Map({
 
   return (
     <div className="border rounded bg-light flex-grow-1 map" ref={mapFrame}>
-      {viewport && (
+      {viewport && locationKeys.length && (
         <ReactMapGL
           {...viewport}
           mapboxApiAccessToken={settings.keys.mapbox}
