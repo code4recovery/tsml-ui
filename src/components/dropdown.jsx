@@ -39,10 +39,6 @@ export default function Dropdown({
     );
   };
 
-  if (filter == 'distance') {
-    values = values ? values : [];
-  }
-
   return (
     <div className="dropdown">
       <button

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { settings, strings } from '../helpers/settings';
+import { strings } from '../helpers/settings';
 import { getIndexByKey } from '../helpers/data';
 
 export default function Title({ state }) {
