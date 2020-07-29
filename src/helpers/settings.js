@@ -50,7 +50,7 @@ export const settings = merge(
       width: 26,
     },
     modes: ['search'], //"location" and "me" will be appended if capable
-    params: ['search', 'mode', 'view'], //utility array
+    params: ['search', 'mode', 'view', 'meeting'], //utility array
     strings: {
       en: {
         address: 'Address',

@@ -63,7 +63,7 @@ export function filterMeetingData(state, setAppState) {
 
           //flatten index and set capability
           distanceIndex = flattenAndSortIndexes(distanceIndex, (a, b) => {
-            return a.key > b.key ? 1 : b.key > a.key ? -1 : 0;
+            return parseInt(a.key) - parseInt(b.key);
           });
           state.capabilities.distance = !!distanceIndex.length;
 
@@ -87,8 +87,16 @@ export function filterMeetingData(state, setAppState) {
         },
         { timeout: 5000 }
       );
-    } else {
-      //todo: filter meetings now based on distance
+    } else if (state.input.distance.length) {
+      matchGroups.push(
+        [].concat.apply(
+          [],
+          state.input.distance.map(key => {
+            const match = getIndexByKey(state.indexes.distance, key);
+            return match ? match.slugs : [];
+          })
+        )
+      );
     }
   }
 
