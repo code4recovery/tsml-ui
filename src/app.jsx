@@ -29,6 +29,7 @@ class App extends React.Component {
       capabilities: {
         coordinates: false,
         day: false,
+        distance: false,
         geolocation: false,
         map: false,
         region: false,
@@ -39,6 +40,7 @@ class App extends React.Component {
       input: getQueryString(location.search),
       indexes: {
         day: [],
+        distance: [],
         region: [],
         time: [],
         type: [],
@@ -103,7 +105,11 @@ class App extends React.Component {
 
   //function for components to set global state
   setAppState(key, value) {
-    this.setState({ [key]: value });
+    if (key && typeof key === 'object') {
+      this.setState(key);
+    } else {
+      this.setState({ [key]: value });
+    }
   }
 
   //function for map component to say it's ready without re-rendering

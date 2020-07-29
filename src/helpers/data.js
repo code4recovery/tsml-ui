@@ -3,17 +3,13 @@ import { formatConferenceProvider, formatSlug } from './format';
 import distance from './distance';
 import moment from 'moment-timezone';
 
-const debug = false;
-
 //run filters on meetings; this is run at every render
 export function filterMeetingData(state, setAppState) {
-  const execStart = new Date();
-
   const matchGroups = [];
 
   //filter by region, day, time, and type
   settings.filters.forEach(filter => {
-    if (state.input[filter].length && state.indexes[filter].length) {
+    if (state.input[filter].length && state.capabilities.filter) {
       matchGroups.push(
         [].concat.apply(
           [],
@@ -40,11 +36,50 @@ export function filterMeetingData(state, setAppState) {
     if (!state.input.latitude || !state.input.longitude) {
       navigator.geolocation.getCurrentPosition(
         position => {
+          //build new index and meetings array
+          const meetings = {};
+          let distanceIndex = {};
+
+          //loop through and update or clear distances, and rebuild index
+          filteredSlugs.forEach(slug => {
+            meetings[slug] = {
+              ...state.meetings[slug],
+              distance: distance(position.coords, state.meetings[slug]),
+            };
+
+            settings.distance_options.forEach(distance => {
+              if (meetings[slug].distance <= distance) {
+                if (!distanceIndex.hasOwnProperty(distance)) {
+                  distanceIndex[distance] = {
+                    key: distance.toString(),
+                    name: `${distance} ${settings.distance_unit}`,
+                    slugs: [],
+                  };
+                }
+                distanceIndex[distance].slugs.push(slug);
+              }
+            });
+          });
+
+          //flatten index and set capability
+          distanceIndex = flattenAndSortIndexes(distanceIndex, (a, b) => {
+            return parseInt(a.key) - parseInt(b.key);
+          });
+          state.capabilities.distance = !!distanceIndex.length;
+
           //this will cause a re-render with latitude and longitude now set
-          setAppState('input', {
-            latitude: parseFloat(position.coords.latitude.toFixed(5)),
-            longitude: parseFloat(position.coords.longitude.toFixed(5)),
-            ...state.input,
+          setAppState({
+            capabilities: state.capabilities,
+            indexes: {
+              ...state.indexes,
+              distance: distanceIndex,
+            },
+            input: {
+              ...state.input,
+              latitude: parseFloat(position.coords.latitude.toFixed(5)),
+              longitude: parseFloat(position.coords.longitude.toFixed(5)),
+            },
+            meetings: meetings,
           });
         },
         error => {
@@ -52,8 +87,16 @@ export function filterMeetingData(state, setAppState) {
         },
         { timeout: 5000 }
       );
-    } else {
-      //todo: filter meetings now based on distance
+    } else if (state.input.distance.length) {
+      matchGroups.push(
+        [].concat.apply(
+          [],
+          state.input.distance.map(key => {
+            const match = getIndexByKey(state.indexes.distance, key);
+            return match ? match.slugs : [];
+          })
+        )
+      );
     }
   }
 
@@ -61,16 +104,6 @@ export function filterMeetingData(state, setAppState) {
   const filteredSlugs = matchGroups.length
     ? getCommonElements(matchGroups) //get intersection of slug arrays
     : Object.keys(state.meetings); //get everything
-
-  //loop through and update or clear distances
-  filteredSlugs.forEach(slug => {
-    if (state.input.latitude && state.input.longitude) {
-      state.meetings[slug] = {
-        distance: distance(state.input, state.meetings[slug]),
-        ...state.meetings[slug],
-      };
-    }
-  });
 
   //sort slugs
   filteredSlugs.sort((a, b) => {
@@ -111,9 +144,6 @@ export function filterMeetingData(state, setAppState) {
 
     return 0;
   });
-
-  if (debug)
-    console.log(`filterMeetingData took ${(new Date() - execStart) / 1000}`);
 
   return filteredSlugs;
 }
@@ -192,8 +222,6 @@ function getCommonElements(arrays) {
 
 //set up meeting data; this is only run once when the app loads
 export function loadMeetingData(data, capabilities) {
-  const execStart = new Date();
-
   //meetings is a lookup
   let meetings = {};
 
@@ -299,7 +327,6 @@ export function loadMeetingData(data, capabilities) {
       indexes.day[meeting.day].slugs.push(meeting.slug);
 
       //make start/end moments
-      if (debug) console.log(meeting.timezone ?? settings.timezone);
       meeting.start = moment.tz(
         `${meeting.day} ${meeting.time}`,
         'd hh:mm',
@@ -482,9 +509,6 @@ export function loadMeetingData(data, capabilities) {
       capabilities.map = true;
     }
   }
-
-  if (debug)
-    console.log(`loadMeetingData took ${(new Date() - execStart) / 1000}`);
 
   return [meetings, indexes, capabilities];
 }

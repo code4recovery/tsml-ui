@@ -126,6 +126,14 @@ export default function Controls({ state, setAppState }) {
     setAppState('input', state.input);
   };
 
+  //decide whether to show filter
+  const canShowFilter = filter => {
+    if (!state.capabilities[filter]) return false;
+    if (filter == 'region' && state.input.mode == 'me') return false;
+    if (filter == 'distance' && state.input.mode == 'search') return false;
+    return true;
+  };
+
   return (
     <div className="row d-print-none controls">
       <div className="col-sm-6 col-lg mb-3">
@@ -170,7 +178,7 @@ export default function Controls({ state, setAppState }) {
       </div>
       {settings.filters.map(
         filter =>
-          state.capabilities[filter] && (
+          canShowFilter(filter) && (
             <div className="col-sm-6 col-lg mb-3" key={filter}>
               <Dropdown
                 setDropdown={setDropdown}
