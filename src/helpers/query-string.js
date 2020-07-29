@@ -1,22 +1,12 @@
 import qs from 'query-string';
-import merge from 'deepmerge';
 
 import { settings } from './settings';
 
 const separator = '/'; //used to separate multiple query string values
 
+//load input values from query string
 export function getQueryString() {
-  const input = {
-    distance: [],
-    meeting: null,
-    mode: settings.defaults.mode,
-    region: [],
-    search: '',
-    time: [],
-    type: [],
-    view: settings.defaults.view,
-    weekday: [],
-  };
+  const input = { ...settings.defaults };
 
   //load input from query string
   const querystring = qs.parse(location.search);
@@ -38,52 +28,27 @@ export function getQueryString() {
   return input;
 }
 
+//save input values to query string
 export function setQueryString(state) {
   let query = {};
   const existingQuery = qs.parse(location.search);
 
-  //filter by region, time, type, and weekday
+  //distance, region, time, type, and weekday
   settings.filters
     .filter(filter => state.input[filter].length)
     .forEach(filter => {
       query[filter] = state.input[filter].join(separator);
     });
 
-  //keyword search
-  if (state.input.search.length) {
-    query['search'] = state.input.search;
-  }
-
-  //set mode property
-  if (state.input.mode != settings.defaults.mode) {
-    query.mode = state.input.mode;
-  }
-
-  //set map property if set
-  if (state.input.view != settings.defaults.view) {
-    query.view = state.input.view;
-  }
-
-  //set inside page property if set
-  if (state.input.meeting) query.meeting = state.input.meeting;
+  //meeting, mode, search, view
+  settings.params
+    .filter(param => state.input[param] != settings.defaults[param])
+    .forEach(param => {
+      query[param] = state.input[param];
+    });
 
   //create a query string with only values in use
-  query = qs.stringify(
-    merge(
-      merge(existingQuery, {
-        distance: undefined,
-        meeting: undefined,
-        mode: undefined,
-        region: undefined,
-        search: undefined,
-        time: undefined,
-        type: undefined,
-        view: undefined,
-        weekday: undefined,
-      }),
-      query
-    )
-  );
+  query = qs.stringify(query);
 
   //un-url-encode the separator
   query = query.split(encodeURIComponent(separator)).join(separator);
