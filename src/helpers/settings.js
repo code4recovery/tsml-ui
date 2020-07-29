@@ -29,11 +29,11 @@ export const settings = merge(
       mode: 'search', //start in keyword search mode (options are search, location, me)
       view: 'list', //start in list or map view
     },
-    distance_unit: 'mi', // "mi" for miles, "km" for kilometers
-    filters: ['region', 'day', 'time', 'type'],
+    distance_options: [1, 2, 5, 10, 25],
+    distance_unit: 'mi', // "mi" or "km"
+    filters: ['region', 'distance', 'day', 'time', 'type'],
     flags: window.config?.flags ? [] : ['Men', 'Women'],
     keys: {
-      //google: null, //enable google maps
       mapbox: null, //enable mapbox maps
     },
     language: 'en',
@@ -50,7 +50,7 @@ export const settings = merge(
       width: 26,
     },
     modes: ['search'], //"location" and "me" will be appended if capable
-    params: ['search', 'mode', 'view'], //utility array
+    params: ['search', 'mode', 'view', 'meeting'], //utility array
     strings: {
       en: {
         address: 'Address',
@@ -62,6 +62,7 @@ export const settings = merge(
         back_to_meetings: 'Back to Meetings',
         day_any: 'Upcoming',
         distance: 'Distance',
+        distance_any: 'Any Distance',
         evening: 'Evening',
         friday: 'Friday',
         get_directions: 'Get Directions',
@@ -93,12 +94,12 @@ export const settings = merge(
         time_any: 'Any Time',
         title: {
           day: '%day%',
-          distance: '%distance%',
           time: '%time%',
           type: '%type%',
           meetings: '%meetings%',
           region: 'in %region%',
           search: 'with %search%',
+          distance: 'within %distance%',
         },
         tuesday: 'Tuesday',
         type_any: 'Any Type',
@@ -175,6 +176,7 @@ export const settings = merge(
         back_to_meetings: 'Volver a las reuniones',
         day_any: 'Próximas',
         distance: 'Distancia',
+        distance_any: 'Cualquier distancia',
         evening: 'Noche',
         friday: 'Viernes',
         get_directions: 'Obtener las direcciones',
@@ -211,6 +213,7 @@ export const settings = merge(
           meetings: '%meetings%',
           region: 'en %region%',
           search: 'con %search%',
+          distance: 'dentro de %distance%',
         },
         tuesday: 'Martes',
         type_any: 'Cualquier tipo',

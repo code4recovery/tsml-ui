@@ -5,14 +5,14 @@ import { settings } from './settings';
 
 const separator = '/'; //used to separate multiple query string values (eg day=0/1)
 
-export function getQueryString(queryString) {
-  let input = {
+export function getQueryString() {
+  const input = {
     day: [],
+    distance: [],
     district: [],
     meeting: null,
     mode: settings.defaults.mode,
     query: null,
-    radius: null,
     region: [],
     search: '',
     time: [],
@@ -21,21 +21,21 @@ export function getQueryString(queryString) {
   };
 
   //load input from query string
-  let querystring = qs.parse(location.search);
-  for (let i = 0; i < settings.filters.length; i++) {
-    let filter = settings.filters[i];
-    if (querystring[filter]) {
+  const querystring = qs.parse(location.search);
+
+  //loop through filters
+  settings.filters
+    .filter(filter => querystring[filter])
+    .forEach(filter => {
       input[filter] = querystring[filter].split(separator);
-    }
-  }
-  for (let i = 0; i < settings.params.length; i++) {
-    if (querystring[settings.params[i]]) {
-      input[settings.params[i]] = querystring[settings.params[i]];
-    }
-  }
-  if (querystring.meeting) {
-    input.meeting = querystring.meeting;
-  }
+    });
+
+  //loop through additional values
+  settings.params
+    .filter(param => querystring[param])
+    .forEach(param => {
+      input[param] = querystring[param];
+    });
 
   return input;
 }
@@ -45,35 +45,11 @@ export function setQueryString(state) {
   const existingQuery = qs.parse(location.search);
 
   //filter by region, day, time, and type
-  for (let i = 0; i < settings.filters.length; i++) {
-    let filter = settings.filters[i];
-    if (
-      state.input[filter].length &&
-      state.indexes[filter].length &&
-      filter !== 'day'
-    ) {
+  settings.filters
+    .filter(filter => state.input[filter].length)
+    .forEach(filter => {
       query[filter] = state.input[filter].join(separator);
-    }
-  }
-
-  //decide whether to set day in the query string (todo refactor)
-  if (state.input.day.length && state.indexes.day.length) {
-    if (
-      !settings.defaults.today ||
-      existingQuery.search ||
-      existingQuery.day ||
-      existingQuery.region ||
-      existingQuery.district ||
-      existingQuery.time ||
-      existingQuery.type ||
-      state.input.day.length > 1 ||
-      state.input.day[0] != new Date().getDay()
-    ) {
-      query.day = state.input.day.join(separator);
-    }
-  } else if (settings.defaults.today) {
-    query.day = 'any';
-  }
+    });
 
   //keyword search
   if (state.input.search.length) {
@@ -98,6 +74,7 @@ export function setQueryString(state) {
     merge(
       merge(existingQuery, {
         day: undefined,
+        distance: undefined,
         meeting: undefined,
         mode: undefined,
         region: undefined,
