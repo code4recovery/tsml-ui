@@ -158,7 +158,7 @@ export default function Meeting({ state, setAppState }) {
                         return (
                           meetings.length > 0 && (
                             <div key={weekday}>
-                              <h6 className="border-bottom m-0 mt-3 pb-2">
+                              <h6 className="m-0 mt-3 mb-1 text-left">
                                 {strings[weekday]}
                               </h6>
                               <ol
