@@ -2,6 +2,7 @@ import merge from 'deepmerge';
 
 import en from '../i18n/en';
 import es from '../i18n/es';
+import fr from '../i18n/fr';
 
 //override these on your page with window.config
 export const settings = merge(
@@ -55,6 +56,7 @@ export const settings = merge(
     strings: {
       en: en,
       es: es,
+      fr: fr,
     },
     times: ['morning', 'midday', 'evening', 'night'],
     timezone: 'America/New_York',

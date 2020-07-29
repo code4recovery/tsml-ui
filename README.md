@@ -96,10 +96,10 @@ A complete list of meeting types can be found in the [Meeting Guide format spec]
 - [x] Alternate appearance of approximate addresses (no location list group, zoom out map, no popup)
 - [x] Display group info on inside page
 - [x] Distance dropdown instead of regions when in near me or location mode
+- [x] Spanish
+- [x] French
 - [ ] Filter-clearing buttons when no results
 - [ ] Near location mode with geocoding
-- [x] Spanish
-- [ ] French
 - [ ] Accessibility improvements
 - [ ] Select multiple dropdown items on mobile
 - [ ] Proper `href` attributes (instead of `#`) in controls for SEO
