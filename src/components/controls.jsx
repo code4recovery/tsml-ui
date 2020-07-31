@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import qs from 'query-string';
 import cx from 'classnames/bind';
 
 import Dropdown from './dropdown';
@@ -19,7 +18,7 @@ export default function Controls({ state, setAppState }) {
       //remove click listener for dropdowns (in lieu of including bootstrap js + jquery)
       document.body.removeEventListener('click', closeDropdown);
     };
-  }, []);
+  }, [document]);
 
   //close current dropdown (on body click)
   const closeDropdown = e => {
@@ -29,45 +28,25 @@ export default function Controls({ state, setAppState }) {
 
   //keyword search
   const keywordSearch = e => {
-    if (state.input.mode === 'search') {
-      setSearch(e.target.value);
-      state.input.search = e.target.value;
-      setAppState('input', state.input);
-    } else {
-      setSearch(state.search);
+    setSearch(e.target.value);
+    if (state.input.mode == 'search') {
+      setAppState('input', {
+        ...state.input,
+        search: e.target.value,
+      });
     }
   };
 
+  //near location search
   const locationSearch = e => {
     e.preventDefault();
 
-    //make mapbox API request https://docs.mapbox.com/api/search/
-    const geocodingAPI = `https://api.mapbox.com/geocoding/v5/mapbox.places/
-      ${encodeURIComponent(searchInput.current.value)}
-      .json?${qs.stringify({
-        access_token: settings.keys.mapbox,
-        autocomplete: false,
-        //bbox: ,
-        language: settings.language,
-      })}`;
-
-    fetch(geocodingAPI)
-      .then(result => {
-        return result.json();
-      })
-      .then(result => {
-        if (result.features && result.features.length) {
-          //re-render page with new params
-          setAppState('input', {
-            ...state.input,
-            search: searchInput.current.value,
-            latitude: result.features[0].center[0],
-            longitude: result.features[0].center[1],
-          });
-        } else {
-          //show error
-        }
+    if (state.input.mode == 'location') {
+      setAppState('input', {
+        ...state.input,
+        search: search,
       });
+    }
   };
 
   //set filter: pass it up to parent
