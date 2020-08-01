@@ -2,8 +2,6 @@ import qs from 'query-string';
 
 import { settings } from './settings';
 
-const separator = '/'; //used to separate multiple query string values
-
 //load input values from query string
 export function getQueryString() {
   const input = { ...settings.defaults };
@@ -15,7 +13,7 @@ export function getQueryString() {
   settings.filters
     .filter(filter => querystring[filter])
     .forEach(filter => {
-      input[filter] = querystring[filter].split(separator);
+      input[filter] = querystring[filter].split('/');
     });
 
   //loop through additional values
@@ -37,7 +35,7 @@ export function setQueryString(state) {
   settings.filters
     .filter(filter => state.input[filter].length)
     .forEach(filter => {
-      query[filter] = state.input[filter].join(separator);
+      query[filter] = state.input[filter].join('/');
     });
 
   //meeting, mode, search, view
@@ -50,8 +48,11 @@ export function setQueryString(state) {
   //create a query string with only values in use
   query = qs.stringify(query);
 
-  //un-url-encode the separator
-  query = query.split(encodeURIComponent(separator)).join(separator);
+  //un-url-encode a few things
+  query = query
+    .replace(/%2F/g, '/')
+    .replace(/%20/g, '+')
+    .replace(/%2C/g, ',');
 
   if (location.search.substr(1) != query) {
     //set the query string with html5

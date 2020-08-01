@@ -44,7 +44,8 @@ export default {
     type: '%type%',
     meetings: '%meetings%',
     region: 'en %region%',
-    search: 'con %search%',
+    search_with: 'con %search%',
+    search_near: 'cerca de %search%',
     distance: 'dentro de %distance%',
   },
   tuesday: 'Martes',
@@ -110,5 +111,5 @@ export default {
     Y: 'Gente joven',
   },
   wednesday: 'Miércoles',
-  weekday_any: 'Próximas',
+  weekday_any: 'Cualquier día',
 };

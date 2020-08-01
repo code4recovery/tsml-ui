@@ -44,6 +44,8 @@ export default function Controls({ state, setAppState }) {
     if (state.input.mode == 'location') {
       setAppState('input', {
         ...state.input,
+        latitude: null,
+        longitude: null,
         search: search,
       });
     }
@@ -82,20 +84,40 @@ export default function Controls({ state, setAppState }) {
     setAppState('input', state.input);
   };
 
-  //set search mode dropdown
+  //set search mode dropdown and clear all distances
   const setMode = (e, mode) => {
     e.preventDefault();
-    if (mode == 'me') {
-      //clear search value
-      state.input.search = '';
-    } else {
-      //focus after waiting for disabled to clear
-      setTimeout(() => {
-        searchInput.current.focus();
-      }, 100);
-    }
-    state.input.mode = mode;
-    setAppState('input', state.input);
+
+    Object.keys(state.meetings).forEach(slug => {
+      state.meetings[slug].distance = null;
+    });
+
+    //clear search
+    setSearch('');
+
+    //focus after waiting for disabled to clear
+    setTimeout(() => {
+      searchInput.current.focus();
+    }, 100);
+
+    setAppState({
+      capabilities: {
+        ...state.capabilities,
+        distance: false,
+      },
+      indexes: {
+        ...state.indexes,
+        distance: [],
+      },
+      input: {
+        ...state.input,
+        search: '',
+        mode: mode,
+        latitude: null,
+        longitude: null,
+      },
+      meetings: state.meetings,
+    });
   };
 
   //toggle list/map view

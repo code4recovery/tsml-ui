@@ -96,7 +96,7 @@ export function filterMeetingData(state, setAppState) {
       if (state.input.mode == 'location') {
         //make mapbox API request https://docs.mapbox.com/api/search/
         const geocodingAPI = `https://api.mapbox.com/geocoding/v5/mapbox.places/
-          ${encodeURIComponent(state.input.search)}
+          ${encodeURI(state.input.search)}
           .json?${qs.stringify({
             access_token: settings.keys.mapbox,
             autocomplete: false,
@@ -110,7 +110,6 @@ export function filterMeetingData(state, setAppState) {
           })
           .then(result => {
             if (result.features && result.features.length) {
-              console.log(result.features[0]);
               //re-render page with new params
               calculateDistances(
                 result.features[0].center[1],
@@ -123,7 +122,7 @@ export function filterMeetingData(state, setAppState) {
               //show error
             }
           });
-      } else if (state.input.mode == 'location') {
+      } else if (state.input.mode == 'me') {
         navigator.geolocation.getCurrentPosition(
           position => {
             calculateDistances(
