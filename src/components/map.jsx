@@ -116,7 +116,7 @@ export default function Map({
               iOS ? 'maps://' : 'https://www.google.com/maps'
             }?daddr=${location.latitude},${
               location.longitude
-            }&saddr=Current+Location&q=${encodeURIComponent(
+            }&saddr=Current+Location&q=${encodeURI(
               location.formatted_address
             )}`;
 

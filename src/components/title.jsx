@@ -13,9 +13,21 @@ export default function Title({ state }) {
   Object.keys(strings.title).forEach(key => {
     if (key === 'meetings') {
       title.push(strings.meetings);
-    } else if (key === 'search' && state.input.search) {
+    } else if (
+      key === 'search_with' &&
+      state.input.mode == 'search' &&
+      state.input.search
+    ) {
       title.push(
-        strings.title[key].replace('%search%', `‘${state.input.search}’`)
+        strings.title.search_with.replace('%search%', `‘${state.input.search}’`)
+      );
+    } else if (
+      key === 'search_near' &&
+      state.input.mode == 'location' &&
+      state.input.search
+    ) {
+      title.push(
+        strings.title.search_near.replace('%search%', `‘${state.input.search}’`)
       );
     } else if (state.indexes[key] && state.input[key].length) {
       const value = state.input[key]

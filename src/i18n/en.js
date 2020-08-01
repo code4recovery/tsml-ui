@@ -43,7 +43,8 @@ export default {
     type: '%type%',
     meetings: '%meetings%',
     region: 'in %region%',
-    search: 'with %search%',
+    search_with: 'with %search%',
+    search_near: 'near %search%',
     distance: 'within %distance%',
   },
   tuesday: 'Tuesday',
@@ -109,5 +110,5 @@ export default {
     Y: 'Young People',
   },
   wednesday: 'Wednesday',
-  weekday_any: 'Upcoming',
+  weekday_any: 'Any Day',
 };

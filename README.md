@@ -98,8 +98,8 @@ A complete list of meeting types can be found in the [Meeting Guide format spec]
 - [x] Distance dropdown instead of regions when in near me or location mode
 - [x] Spanish
 - [x] French
+- [x] Near location mode with geocoding
 - [ ] Filter-clearing buttons when no results
-- [ ] Near location mode with geocoding
 - [ ] Accessibility improvements
 - [ ] Select multiple dropdown items on mobile
 - [ ] Proper `href` attributes (instead of `#`) in controls for SEO

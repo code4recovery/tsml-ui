@@ -31,7 +31,7 @@ export default function Meeting({ state, setAppState }) {
       ? undefined
       : `${iOS ? 'maps://' : 'https://www.google.com/maps'}?daddr=${
           meeting.latitude
-        },${meeting.longitude}&saddr=Current+Location&q=${encodeURIComponent(
+        },${meeting.longitude}&saddr=Current+Location&q=${encodeURI(
           meeting.formatted_address
         )}`;
 
