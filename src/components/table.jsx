@@ -12,7 +12,7 @@ export default function Table({ state, setAppState, filteredSlugs }) {
   const [limit, setLimit] = useState(meetingsPerPage);
 
   const canShowColumn = column => {
-    return column !== 'distance' || state.input.mode !== 'search';
+    return column !== 'distance' || state.capabilities.distance;
   };
 
   const getValue = (meeting, key) => {

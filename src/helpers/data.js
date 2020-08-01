@@ -2,6 +2,65 @@ import { settings, strings } from './settings';
 import { formatConferenceProvider, formatSlug } from './format';
 import distance from './distance';
 import moment from 'moment-timezone';
+import qs from 'query-string';
+
+//calculate distances
+function calculateDistances(
+  latitude,
+  longitude,
+  filteredSlugs,
+  state,
+  setAppState
+) {
+  //build new index and meetings array
+  const meetings = {};
+  let distanceIndex = {};
+
+  //loop through and update or clear distances, and rebuild index
+  filteredSlugs.forEach(slug => {
+    meetings[slug] = {
+      ...state.meetings[slug],
+      distance: distance(
+        { latitude: latitude, longitude: longitude },
+        state.meetings[slug]
+      ),
+    };
+
+    settings.distance_options.forEach(distance => {
+      if (meetings[slug].distance <= distance) {
+        if (!distanceIndex.hasOwnProperty(distance)) {
+          distanceIndex[distance] = {
+            key: distance.toString(),
+            name: `${distance} ${settings.distance_unit}`,
+            slugs: [],
+          };
+        }
+        distanceIndex[distance].slugs.push(slug);
+      }
+    });
+  });
+
+  //flatten index and set capability
+  distanceIndex = flattenAndSortIndexes(distanceIndex, (a, b) => {
+    return parseInt(a.key) - parseInt(b.key);
+  });
+  state.capabilities.distance = !!distanceIndex.length;
+
+  //this will cause a re-render with latitude and longitude now set
+  setAppState({
+    capabilities: state.capabilities,
+    indexes: {
+      ...state.indexes,
+      distance: distanceIndex,
+    },
+    input: {
+      ...state.input,
+      latitude: parseFloat(latitude.toFixed(5)),
+      longitude: parseFloat(longitude.toFixed(5)),
+    },
+    meetings: meetings,
+  });
+}
 
 //run filters on meetings; this is run at every render
 export function filterMeetingData(state, setAppState) {
@@ -32,61 +91,54 @@ export function filterMeetingData(state, setAppState) {
       });
       matchGroups.push([].concat.apply([], matches));
     }
-  } else if (state.input.mode === 'me') {
+  } else if (['me', 'location'].includes(state.input.mode)) {
     if (!state.input.latitude || !state.input.longitude) {
-      navigator.geolocation.getCurrentPosition(
-        position => {
-          //build new index and meetings array
-          const meetings = {};
-          let distanceIndex = {};
+      if (state.input.mode == 'location') {
+        //make mapbox API request https://docs.mapbox.com/api/search/
+        const geocodingAPI = `https://api.mapbox.com/geocoding/v5/mapbox.places/
+          ${encodeURI(state.input.search)}
+          .json?${qs.stringify({
+            access_token: settings.keys.mapbox,
+            autocomplete: false,
+            //bbox: ,
+            language: settings.language,
+          })}`;
 
-          //loop through and update or clear distances, and rebuild index
-          filteredSlugs.forEach(slug => {
-            meetings[slug] = {
-              ...state.meetings[slug],
-              distance: distance(position.coords, state.meetings[slug]),
-            };
-
-            settings.distance_options.forEach(distance => {
-              if (meetings[slug].distance <= distance) {
-                if (!distanceIndex.hasOwnProperty(distance)) {
-                  distanceIndex[distance] = {
-                    key: distance.toString(),
-                    name: `${distance} ${settings.distance_unit}`,
-                    slugs: [],
-                  };
-                }
-                distanceIndex[distance].slugs.push(slug);
-              }
-            });
+        fetch(geocodingAPI)
+          .then(result => {
+            return result.json();
+          })
+          .then(result => {
+            if (result.features && result.features.length) {
+              //re-render page with new params
+              calculateDistances(
+                result.features[0].center[1],
+                result.features[0].center[0],
+                filteredSlugs,
+                state,
+                setAppState
+              );
+            } else {
+              //show error
+            }
           });
-
-          //flatten index and set capability
-          distanceIndex = flattenAndSortIndexes(distanceIndex, (a, b) => {
-            return parseInt(a.key) - parseInt(b.key);
-          });
-          state.capabilities.distance = !!distanceIndex.length;
-
-          //this will cause a re-render with latitude and longitude now set
-          setAppState({
-            capabilities: state.capabilities,
-            indexes: {
-              ...state.indexes,
-              distance: distanceIndex,
-            },
-            input: {
-              ...state.input,
-              latitude: parseFloat(position.coords.latitude.toFixed(5)),
-              longitude: parseFloat(position.coords.longitude.toFixed(5)),
-            },
-            meetings: meetings,
-          });
-        },
-        error => {
-          console.warn(`getCurrentPosition() error: ${error.message}`);
-        },
-        { timeout: 5000 }
-      );
+      } else if (state.input.mode == 'me') {
+        navigator.geolocation.getCurrentPosition(
+          position => {
+            calculateDistances(
+              position.coords.latitude,
+              position.coords.longitude,
+              filteredSlugs,
+              state,
+              setAppState
+            );
+          },
+          error => {
+            console.warn(`getCurrentPosition() error: ${error.message}`);
+          },
+          { timeout: 5000 }
+        );
+      }
     } else if (state.input.distance.length) {
       matchGroups.push(
         [].concat.apply(
@@ -496,7 +548,7 @@ export function loadMeetingData(data, capabilities) {
   //near me mode enabled on https or local development
   if (capabilities.coordinates) {
     //todo implement geocoding
-    //settings.modes.push('location');
+    settings.modes.push('location');
     if (
       navigator.geolocation &&
       (window.location.protocol == 'https:' ||
