@@ -100,8 +100,8 @@ export default function Map({
       {!!viewport && !!locationKeys.length && (
         <ReactMapGL
           {...viewport}
-          mapboxApiAccessToken={settings.keys.mapbox}
-          mapStyle={settings.mapbox_style}
+          mapboxApiAccessToken={settings.map.key}
+          mapStyle={settings.map.style}
           onViewportChange={setViewport}
         >
           {locationKeys.map(key => {
@@ -125,12 +125,12 @@ export default function Map({
                 <Marker
                   latitude={location.latitude}
                   longitude={location.longitude}
-                  offsetLeft={-settings.marker_style.width / 2}
-                  offsetTop={-settings.marker_style.height}
+                  offsetLeft={-settings.map.markers.location.width / 2}
+                  offsetTop={-settings.map.markers.location.height}
                 >
                   <div
                     title={location.name}
-                    style={settings.marker_style}
+                    style={settings.map.markers.location}
                     onClick={() => setPopup(key)}
                   />
                 </Marker>
@@ -140,7 +140,7 @@ export default function Map({
                     longitude={location.longitude}
                     closeOnClick={false}
                     onClose={() => setPopup(null)}
-                    offsetTop={-settings.marker_style.height}
+                    offsetTop={-settings.map.markers.location.height}
                   >
                     <h4 className="font-weight-light m-0 mb-2">
                       {location.name}

@@ -98,7 +98,7 @@ export function filterMeetingData(state, setAppState) {
         const geocodingAPI = `https://api.mapbox.com/geocoding/v5/mapbox.places/
           ${encodeURI(state.input.search)}
           .json?${qs.stringify({
-            access_token: settings.keys.mapbox,
+            access_token: settings.map.key,
             autocomplete: false,
             //bbox: ,
             language: settings.language,
@@ -324,7 +324,7 @@ export function loadMeetingData(data, capabilities) {
   data = flattenDays(data);
 
   //loop through each entry
-  data.forEach(meeting => {
+  data.forEach((meeting, index) => {
     //using array for regions now, but legacy region, sub_region, etc still supported
     //todo remove if/when tsml implements regions array format
     if (!meeting.regions) {
@@ -437,16 +437,18 @@ export function loadMeetingData(data, capabilities) {
     //handle types
     if (meeting.types) {
       //clean up and sort types
-      meeting.types = meeting.types
-        .map(type => type.trim())
-        .filter(
-          type =>
-            lookup_type_codes.includes(type) ||
-            lookup_type_values.includes(type)
-        )
-        .map(type =>
-          lookup_type_codes.includes(type) ? strings.types[type] : type
-        );
+      meeting.types = Array.isArray(meeting.types)
+        ? meeting.types
+            .map(type => type.trim())
+            .filter(
+              type =>
+                lookup_type_codes.includes(type) ||
+                lookup_type_values.includes(type)
+            )
+            .map(type =>
+              lookup_type_codes.includes(type) ? strings.types[type] : type
+            )
+        : [];
 
       //build type index (can be multiple)
       meeting.types.forEach(type => {
@@ -465,6 +467,10 @@ export function loadMeetingData(data, capabilities) {
     meeting.conference_provider = meeting.conference_url
       ? formatConferenceProvider(meeting.conference_url)
       : null;
+
+    if (meeting.conference_url && !meeting.conference_provider) {
+      warn(meeting, index, `conference_url ${meeting.conference_url}`);
+    }
 
     //creates formatted_address if necessary
     if (!meeting.formatted_address) {
@@ -487,9 +493,7 @@ export function loadMeetingData(data, capabilities) {
             meeting.formatted_address + ', ' + meeting.country;
         }
       } else {
-        console.error(
-          'Formatted address could not be created, at least city is required.'
-        );
+        warn(meeting, index, 'at least city is required.');
       }
     }
 
@@ -557,7 +561,7 @@ export function loadMeetingData(data, capabilities) {
       capabilities.geolocation = true;
       settings.modes.push('me');
     }
-    if (settings.keys.mapbox) {
+    if (settings.map.key) {
       capabilities.map = true;
     }
   }
@@ -675,4 +679,10 @@ export function translateGoogleSheet(data) {
   }
 
   return meetings;
+}
+
+function warn(meeting, index, content) {
+  if (settings.show.warnings) {
+    console.warn(`${index} ${meeting.slug}: ${content}`);
+  }
 }

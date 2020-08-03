@@ -61,7 +61,7 @@ class App extends React.Component {
 
     //this is the default way to specify a mapbox key
     if (element.getAttribute('mapbox')) {
-      settings.keys.mapbox = element.getAttribute('mapbox');
+      settings.map.key = element.getAttribute('mapbox');
     }
 
     //enabling forward / back buttons
@@ -139,8 +139,10 @@ class App extends React.Component {
           <Meeting state={this.state} setAppState={this.setAppState} />
         ) : (
           <>
-            {settings.title && <Title state={this.state} />}
-            <Controls state={this.state} setAppState={this.setAppState} />
+            {settings.show.title && <Title state={this.state} />}
+            {settings.show.controls && (
+              <Controls state={this.state} setAppState={this.setAppState} />
+            )}
             <Alert state={this.state} />
             {filteredSlugs.length > 0 && this.state.input.view === 'list' && (
               <Table

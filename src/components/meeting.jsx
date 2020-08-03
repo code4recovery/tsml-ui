@@ -10,6 +10,11 @@ import { formatAddress } from '../helpers/format';
 export default function Meeting({ state, setAppState }) {
   const meeting = state.meetings[state.input.meeting];
 
+  if (!meeting) {
+    //todo display error somewhere else
+    return null;
+  }
+
   const isApproxAddress = !formatAddress(meeting.formatted_address);
 
   const [popup, setPopup] = useState(true);
@@ -220,8 +225,8 @@ export default function Meeting({ state, setAppState }) {
               <ReactMapGL
                 className="rounded border bg-light"
                 {...viewport}
-                mapboxApiAccessToken={settings.keys.mapbox}
-                mapStyle={settings.mapbox_style}
+                mapboxApiAccessToken={settings.map.key}
+                mapStyle={settings.map.style}
                 onViewportChange={isApproxAddress ? undefined : setViewport}
                 height="100%"
                 width="100%"
@@ -231,12 +236,12 @@ export default function Meeting({ state, setAppState }) {
                     <Marker
                       latitude={meeting.latitude}
                       longitude={meeting.longitude}
-                      offsetLeft={-settings.marker_style.width / 2}
-                      offsetTop={-settings.marker_style.height}
+                      offsetLeft={-settings.map.markers.location.width / 2}
+                      offsetTop={-settings.map.markers.location.height}
                     >
                       <div
                         title={meeting.location}
-                        style={settings.marker_style}
+                        style={settings.map.markers.location}
                         onClick={() => setPopup(true)}
                       />
                     </Marker>
@@ -246,7 +251,7 @@ export default function Meeting({ state, setAppState }) {
                         longitude={meeting.longitude}
                         closeOnClick={false}
                         onClose={() => setPopup(false)}
-                        offsetTop={-settings.marker_style.height}
+                        offsetTop={-settings.map.markers.location.height}
                       >
                         <h4 className="font-weight-light m-0 mb-2">
                           {meeting.location}
