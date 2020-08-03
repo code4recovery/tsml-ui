@@ -17,39 +17,31 @@ export default function Table({ state, setAppState, filteredSlugs }) {
 
   const getValue = (meeting, key) => {
     if (key == 'address') {
-      if (meeting.conference_url || meeting.conference_phone) {
-        return meeting.conference_provider && meeting.conference_phone ? (
-          <div className="btn-group my-1 w-100">
-            <Button
-              text={meeting.conference_provider}
-              href={meeting.conference_url}
-              icon="camera-video"
-              className="btn-sm"
-              block={false}
-            />
-            <Button
-              text={strings.phone}
-              href={'tel:' + meeting.conference_phone}
-              icon="telephone"
-              className="btn-sm"
-              block={false}
-            />
-          </div>
-        ) : meeting.conference_provider ? (
+      const buttons = [];
+      if (meeting.conference_provider) {
+        buttons.push(
           <Button
             text={meeting.conference_provider}
             href={meeting.conference_url}
             icon="camera-video"
-            className="btn-sm my-1"
-          />
-        ) : (
-          <Button
-            text="Phone"
-            href={'tel:' + meeting.conference_phone}
-            icon="telephone"
-            className="btn-sm my-1"
+            className="btn-sm"
+            block={false}
           />
         );
+      }
+      if (meeting.conference_phone) {
+        buttons.push(
+          <Button
+            text={strings.phone}
+            href={'tel:' + meeting.conference_phone}
+            icon="telephone"
+            className="btn-sm"
+            block={false}
+          />
+        );
+      }
+      if (buttons.length) {
+        return <div className="btn-group my-1 w-100">{buttons}</div>;
       } else {
         return (
           <span
