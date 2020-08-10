@@ -76,7 +76,8 @@ export default function Meeting({ state, setAppState }) {
             <div className="list-group-item py-3">
               <h5 className="m-0 mb-2">{strings.meeting_information}</h5>
               <p className="m-0 mt-1">
-                {strings[settings.weekdays[meeting.start.format('d')]]},
+                {strings[settings.weekdays[meeting.start.format('d')]]}
+                {', '}
                 {meeting.start.format('h:mm a')}
                 {meeting.end && ` – ${meeting.end.format('h:mm a')}`}
               </p>
@@ -107,7 +108,7 @@ export default function Meeting({ state, setAppState }) {
                   <Button
                     text={strings.phone}
                     icon="telephone"
-                    href={`tel:${meeting.conference_url}`}
+                    href={`tel:${meeting.conference_phone}`}
                   />
                 )}
               </div>
