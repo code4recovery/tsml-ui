@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import cx from 'classnames/bind';
 
-import Dropdown from './dropdown';
-import { settings, strings } from '../helpers/settings';
+import Dropdown from './Dropdown';
+import { settings, strings } from '../helpers';
 
 export default function Controls({ state, setAppState }) {
   const [dropdown, setDropdown] = useState(null);

@@ -1,7 +1,7 @@
 import React from 'react';
 import cx from 'classnames/bind';
 
-import { strings } from '../helpers/settings';
+import { strings } from '../helpers';
 
 export default function Alert({ state }) {
   const message = state.error

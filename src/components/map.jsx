@@ -2,10 +2,9 @@ import React, { useRef, useState, useLayoutEffect } from 'react';
 import ReactMapGL, { Marker, NavigationControl, Popup } from 'react-map-gl';
 import WebMercatorViewport from 'viewport-mercator-project';
 
-import { settings, strings } from '../helpers/settings';
-import Link from './link';
-import Button from './button';
-import { formatAddress } from '../helpers/format';
+import { formatAddress, settings, strings } from '../helpers';
+import Link from './Link';
+import Button from './Button';
 
 export default function Map({
   filteredSlugs,

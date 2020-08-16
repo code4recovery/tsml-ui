@@ -1,18 +1,23 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import cx from 'classnames/bind';
 import ReactMapGL, { Marker, NavigationControl, Popup } from 'react-map-gl';
 
-import { settings, strings } from '../helpers/settings';
-import Link from './link';
-import Button from './button';
-import { formatAddress, formatMultiline } from '../helpers/format';
-import Stack from './stack';
+import { formatAddress, formatMultiline, settings, strings } from '../helpers';
+import Button from './Button';
+import Icon from './Icon';
+import Link from './Link';
+import Stack from './Stack';
 
 export default function Meeting({ state, setAppState }) {
   const meeting = state.meetings[state.input.meeting];
 
+  //scroll to top when you navigate to this page
+  useEffect(() => {
+    window.scroll(0, 0);
+  }, [state.input.meeting]);
+
   if (!meeting) {
-    //todo display error somewhere else
+    //todo display an error somewhere
     return null;
   }
 
@@ -63,16 +68,7 @@ export default function Meeting({ state, setAppState }) {
         <Link meeting={meeting} />
       </h1>
       <h6 className="border-bottom mb-3 pb-2 d-flex align-items-center">
-        <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor">
-          <path
-            fillRule="evenodd"
-            d="M7.854 4.646a.5.5 0 0 1 0 .708L5.207 8l2.647 2.646a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 0 1 .708 0z"
-          />
-          <path
-            fillRule="evenodd"
-            d="M4.5 8a.5.5 0 0 1 .5-.5h6.5a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5z"
-          />
-        </svg>
+        <Icon icon="back" />
         <a
           href={window.location.pathname}
           onClick={event => {
@@ -120,7 +116,7 @@ export default function Meeting({ state, setAppState }) {
                   <Stack>
                     <Button
                       text={meeting.conference_provider}
-                      icon="camera-video"
+                      icon="camera"
                       href={meeting.conference_url}
                     />
                     {!!meeting.conference_url_notes && (
@@ -170,55 +166,53 @@ export default function Meeting({ state, setAppState }) {
                 )}
               </Stack>
             )}
-            {!isApproxAddress && (
-              <Stack className="list-group-item py-3">
-                {!!meeting.location && <h5>{meeting.location}</h5>}
-                {!!meeting.formatted_address && (
-                  <p
-                    className={cx({
-                      'text-decoration-line-through text-muted': isTempClosed,
-                    })}
-                  >
-                    {meeting.formatted_address}
-                  </p>
-                )}
-                {!!meeting.location_notes && (
-                  <p>{formatMultiline(meeting.location_notes)}</p>
-                )}
-                {!!weekdays.length && (
-                  <Stack>
-                    {weekdays.map((weekday, index) => (
-                      <Stack key={index} spacing={1}>
-                        <h6>{weekday.name}</h6>
-                        <ol style={{ listStyleType: 'none' }}>
-                          {weekday.meetings.map(m => (
-                            <li key={m.slug} style={{ paddingLeft: '5.25rem' }}>
-                              <span
-                                className="position-absolute text-muted text-nowrap text-right"
-                                style={{
-                                  left: '1.25rem',
-                                  width: '4.5rem',
-                                }}
-                              >
-                                {m.start.format('h:mm a')}
-                              </span>
-                              {m.slug === meeting.slug && <Link meeting={m} />}
-                              {m.slug !== meeting.slug && (
-                                <Link
-                                  meeting={m}
-                                  state={state}
-                                  setAppState={setAppState}
-                                />
-                              )}
-                            </li>
-                          ))}
-                        </ol>
-                      </Stack>
-                    ))}
-                  </Stack>
-                )}
-              </Stack>
-            )}
+            <Stack className="list-group-item py-3">
+              {!!meeting.location && <h5>{meeting.location}</h5>}
+              {!!meeting.formatted_address && (
+                <p
+                  className={cx({
+                    'text-decoration-line-through text-muted': isTempClosed,
+                  })}
+                >
+                  {meeting.formatted_address}
+                </p>
+              )}
+              {!!meeting.location_notes && (
+                <p>{formatMultiline(meeting.location_notes)}</p>
+              )}
+              {!isApproxAddress && !!weekdays.length && (
+                <Stack>
+                  {weekdays.map((weekday, index) => (
+                    <Stack key={index} spacing={1}>
+                      <h6>{weekday.name}</h6>
+                      <ol style={{ listStyleType: 'none' }}>
+                        {weekday.meetings.map(m => (
+                          <li key={m.slug} style={{ paddingLeft: '5.25rem' }}>
+                            <span
+                              className="position-absolute text-muted text-nowrap text-right"
+                              style={{
+                                left: '1.25rem',
+                                width: '4.5rem',
+                              }}
+                            >
+                              {m.start.format('h:mm a')}
+                            </span>
+                            {m.slug === meeting.slug && <Link meeting={m} />}
+                            {m.slug !== meeting.slug && (
+                              <Link
+                                meeting={m}
+                                state={state}
+                                setAppState={setAppState}
+                              />
+                            )}
+                          </li>
+                        ))}
+                      </ol>
+                    </Stack>
+                  ))}
+                </Stack>
+              )}
+            </Stack>
             {(meeting.group || meeting.group_notes) && (
               <Stack className="list-group-item py-3">
                 {!!meeting.group && <h5>{meeting.group}</h5>}
@@ -281,7 +275,7 @@ export default function Meeting({ state, setAppState }) {
                           ) : (
                             <Button
                               className="btn-outline-danger disabled"
-                              icon="x-circle"
+                              icon="close"
                               text={strings.types.TC}
                             />
                           )}

@@ -1,4 +1,4 @@
-import React from 'react';
+import { createElement } from 'react';
 import { settings } from './settings';
 
 //get address from formatted_address
@@ -25,7 +25,7 @@ export function formatMultiline(text) {
       (res, frag, i, arr) => [
         ...res,
         frag,
-        ...(i < arr.length - 1 ? [React.createElement('br')] : []),
+        ...(i < arr.length - 1 ? [createElement('br', { key: i })] : []),
       ],
       []
     );

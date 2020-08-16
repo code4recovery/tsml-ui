@@ -1,5 +1,6 @@
 import React from 'react';
-import { settings } from '../helpers/settings';
+
+import { settings } from '../helpers';
 
 export default function Link({ state, meeting, setAppState }) {
   const flags = settings.flags
