@@ -4,6 +4,7 @@ import InfiniteScroll from 'react-infinite-scroller';
 
 import { formatAddress, settings, strings } from '../helpers';
 import Button from './Button';
+import Icon from './Icon';
 import Link from './Link';
 
 export default function Table({ state, setAppState, filteredSlugs }) {
@@ -16,35 +17,35 @@ export default function Table({ state, setAppState, filteredSlugs }) {
 
   const getValue = (meeting, key) => {
     if (key == 'address') {
-      const buttons = [];
-      if (meeting.conference_provider) {
-        buttons.push(
-          <Button
-            key="url"
-            text={meeting.conference_provider}
-            href={meeting.conference_url}
-            icon="camera"
-            className="btn-sm"
-            block={false}
-          />
-        );
-      }
-      if (meeting.conference_phone) {
-        buttons.push(
-          <Button
-            key="phone"
-            text={strings.phone}
-            href={'tel:' + meeting.conference_phone}
-            icon="telephone"
-            className="btn-sm"
-            block={false}
-          />
-        );
-      }
-      if (buttons.length) {
-        return <div className="btn-group my-1 w-100">{buttons}</div>;
-      } else {
-        return (
+      if (settings.show.listButtons) {
+        const buttons = [];
+        if (meeting.conference_provider) {
+          buttons.push(
+            <Button
+              block={false}
+              className="btn-sm"
+              href={meeting.conference_url}
+              icon="camera"
+              key="url"
+              text={meeting.conference_provider}
+            />
+          );
+        }
+        if (meeting.conference_phone) {
+          buttons.push(
+            <Button
+              block={false}
+              className="btn-sm"
+              href={`tel:${meeting.conference_phone}`}
+              icon="telephone"
+              key="phone"
+              text={strings.phone}
+            />
+          );
+        }
+        return buttons.length ? (
+          <div className="btn-group my-1 w-100">{buttons}</div>
+        ) : (
           <span
             className={cx({
               'text-decoration-line-through text-muted': meeting.types.includes(
@@ -54,6 +55,40 @@ export default function Table({ state, setAppState, filteredSlugs }) {
           >
             {formatAddress(meeting.formatted_address)}
           </span>
+        );
+      } else {
+        const labels = [];
+        if (meeting.conference_provider) {
+          labels.push({
+            label: meeting.conference_provider,
+            icon: 'camera',
+          });
+        }
+        if (meeting.conference_phone) {
+          labels.push({
+            label: strings.phone,
+            icon: 'telephone',
+          });
+        }
+        if (meeting.types.includes(strings.types.TC)) {
+          labels.push({
+            label: formatAddress(meeting.formatted_address),
+          });
+        }
+        return (
+          <div className="overflow-auto">
+            {labels.map((label, index) => (
+              <small
+                className="d-flex float-left mr-1 align-items-center bg-secondary text-light rounded px-2 p-1 my-1"
+                key={index}
+              >
+                {label.icon && (
+                  <Icon icon={label.icon} className="mr-1" size={18} />
+                )}
+                {label.label}
+              </small>
+            ))}
+          </div>
         );
       }
     } else if (key == 'name' && meeting.slug) {
@@ -70,14 +105,12 @@ export default function Table({ state, setAppState, filteredSlugs }) {
         </time>
       );
     } else if (key == 'distance') {
-      return (
+      return meeting.distance ? (
         <>
           {meeting.distance}
-          {meeting.distance && (
-            <small className="text-muted ml-1">{settings.distance_unit}</small>
-          )}
+          <small className="text-muted ml-1">{settings.distance_unit}</small>
         </>
-      );
+      ) : null;
     }
     return meeting[key];
   };
