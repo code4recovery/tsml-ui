@@ -1,7 +1,6 @@
 import React from 'react';
 
-import { strings } from '../helpers/settings';
-import { getIndexByKey } from '../helpers/data';
+import { getIndexByKey, strings } from '../helpers';
 
 export default function Title({ state }) {
   //loading

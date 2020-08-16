@@ -2,10 +2,9 @@ import React, { useState } from 'react';
 import cx from 'classnames/bind';
 import InfiniteScroll from 'react-infinite-scroller';
 
-import { settings, strings } from '../helpers/settings';
-import Link from './link';
-import Button from './button';
-import { formatAddress } from '../helpers/format';
+import { formatAddress, settings, strings } from '../helpers';
+import Button from './Button';
+import Link from './Link';
 
 export default function Table({ state, setAppState, filteredSlugs }) {
   const meetingsPerPage = 10;
@@ -24,7 +23,7 @@ export default function Table({ state, setAppState, filteredSlugs }) {
             key="url"
             text={meeting.conference_provider}
             href={meeting.conference_url}
-            icon="camera-video"
+            icon="camera"
             className="btn-sm"
             block={false}
           />
