@@ -4,7 +4,7 @@ import en from '../i18n/en';
 import es from '../i18n/es';
 import fr from '../i18n/fr';
 
-//override these on your page with window.config
+//override these on your page with tsml_react_config
 export const settings = merge(
   {
     columns: ['time', 'distance', 'name', 'location', 'address', 'region'],
@@ -35,7 +35,7 @@ export const settings = merge(
     distance_options: [1, 2, 5, 10, 25],
     distance_unit: 'mi', //mi or km
     filters: ['region', 'distance', 'weekday', 'time', 'type'],
-    flags: window.config?.flags ? [] : ['Men', 'Women'],
+    flags: tsml_react_config?.flags ? [] : ['Men', 'Women'],
     language: 'en', //fallback language
     map: {
       key: null, //access token
@@ -76,7 +76,7 @@ export const settings = merge(
       'saturday',
     ],
   },
-  window.config || {}
+  tsml_react_config || {}
 );
 
 const preferredLanguage = navigator.language.substr(0, 2);

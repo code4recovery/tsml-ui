@@ -62,13 +62,13 @@ You don't need to do anything other than enable HTTPS on your website. To ensure
 
 ## Advanced Customization
 
-See [src/helpers/settings.js](settings.js) for options that can be set by defining a `window.config` object. You can customize many of the behaviors and any text string that the app uses. It's only necessary to specify those values you wish to override.
+See [src/helpers/settings.js](settings.js) for options that can be set by defining a `tsml_react_config` object. You can customize many of the behaviors and any text string that the app uses. It's only necessary to specify those values you wish to override.
 
 ### Set your timezone
 
 `America/New_York` is the default. To change it, add this code inside a `<script>` tag.
 
-    window.config = {
+    var tsml_react_config = {
       timezone: 'America/Los_Angeles'
     };
 
@@ -76,7 +76,7 @@ See [src/helpers/settings.js](settings.js) for options that can be set by defini
 
 Here is another example with two strings overridden.
 
-    window.config = {
+    var tsml_react_config = {
       strings: {
         en: {
           region: 'City',
