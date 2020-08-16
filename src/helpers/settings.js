@@ -54,7 +54,8 @@ export const settings = merge(
     modes: ['search'], //location and me will be appended if capable
     params: ['search', 'mode', 'view', 'meeting'], //input other than filters
     show: {
-      controls: true, //whether tho show search + dropdowns + list/map
+      controls: true, //whether to show search + dropdowns + list/map
+      listButtons: false, //show conference buttons in list or show labels
       title: true, //whether to display the title h1
       warnings: false, //console.warn for bad data
     },
