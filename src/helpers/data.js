@@ -288,8 +288,10 @@ export function loadMeetingData(data, capabilities) {
   //filter out unused meetings properties for a leaner memory footprint
   const meeting_properties = [
     'conference_phone',
+    'conference_phone_notes',
     'conference_provider',
     'conference_url',
+    'conference_url_notes',
     'end',
     'formatted_address',
     'group',

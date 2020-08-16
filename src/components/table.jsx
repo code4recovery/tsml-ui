@@ -21,6 +21,7 @@ export default function Table({ state, setAppState, filteredSlugs }) {
       if (meeting.conference_provider) {
         buttons.push(
           <Button
+            key="url"
             text={meeting.conference_provider}
             href={meeting.conference_url}
             icon="camera-video"
@@ -32,6 +33,7 @@ export default function Table({ state, setAppState, filteredSlugs }) {
       if (meeting.conference_phone) {
         buttons.push(
           <Button
+            key="phone"
             text={strings.phone}
             href={'tel:' + meeting.conference_phone}
             icon="telephone"
