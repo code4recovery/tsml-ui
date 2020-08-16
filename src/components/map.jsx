@@ -142,9 +142,7 @@ export default function Map({
                     onClose={() => setPopup(null)}
                     offsetTop={-settings.map.markers.location.height}
                   >
-                    <h4 className="font-weight-light m-0 mb-2">
-                      {location.name}
-                    </h4>
+                    <h4 className="font-weight-light mb-2">{location.name}</h4>
                     <p>{location.formatted_address}</p>
                     <div className="list-group mb-3">
                       {location.meetings.map(meeting => (

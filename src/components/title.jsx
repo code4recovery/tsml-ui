@@ -45,5 +45,5 @@ export default function Title({ state }) {
   document.title = title;
 
   //return h1
-  return <h1 className="font-weight-light m-0 mb-2 text-left">{title}</h1>;
+  return <h1 className="font-weight-light mb-2">{title}</h1>;
 }

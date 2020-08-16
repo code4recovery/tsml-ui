@@ -1,3 +1,4 @@
+import React from 'react';
 import { settings } from './settings';
 
 //get address from formatted_address
@@ -14,6 +15,20 @@ export function formatConferenceProvider(url) {
     urlParts[2].endsWith(domain)
   );
   return provider.length ? settings.conference_providers[provider[0]] : null;
+}
+
+//convert multiline text to HTML
+export function formatMultiline(text) {
+  return text
+    .split(/(?:\r\n|\r|\n)/)
+    .reduce(
+      (res, frag, i, arr) => [
+        ...res,
+        frag,
+        ...(i < arr.length - 1 ? [React.createElement('br')] : []),
+      ],
+      []
+    );
 }
 
 //turn Mountain View into mountain-view
