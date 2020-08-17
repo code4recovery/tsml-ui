@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 
 import Alert from './components/alert';
@@ -8,54 +8,47 @@ import Map from './components/map';
 import Meeting from './components/meeting';
 import Table from './components/table';
 import Title from './components/title';
-import { getQueryString, setQueryString } from './helpers/query-string';
 import {
   filterMeetingData,
+  getQueryString,
   loadMeetingData,
   translateGoogleSheet,
-} from './helpers/data';
-import { settings } from './helpers/settings';
+  setQueryString,
+  settings,
+} from './helpers';
 
 //locate first <meetings> element
 const [element] = document.getElementsByTagName('meetings');
 
-class App extends React.Component {
-  constructor() {
-    super();
+function App() {
+  const [state, setState] = useState({
+    alert: null,
+    capabilities: {
+      coordinates: false,
+      distance: false,
+      geolocation: false,
+      map: false,
+      region: false,
+      time: false,
+      type: false,
+      weekday: false,
+    },
+    error: null,
+    input: getQueryString(location.search),
+    indexes: {
+      distance: [],
+      region: [],
+      time: [],
+      type: [],
+      weekday: [],
+    },
+    loading: true,
+    map_initialized: false,
+    meetings: [],
+  });
 
-    //initialize state
-    this.state = {
-      alert: null,
-      capabilities: {
-        coordinates: false,
-        distance: false,
-        geolocation: false,
-        map: false,
-        region: false,
-        time: false,
-        type: false,
-        weekday: false,
-      },
-      error: null,
-      input: getQueryString(location.search),
-      indexes: {
-        distance: [],
-        region: [],
-        time: [],
-        type: [],
-        weekday: [],
-      },
-      loading: true,
-      map_initialized: false,
-      meetings: [],
-    };
-
-    //need to bind this for the function to access `this`
-    this.setAppState = this.setAppState.bind(this);
-    this.setMapInitialized = this.setMapInitialized.bind(this);
-  }
-
-  componentDidMount() {
+  if (state.loading) {
+    console.log('loading');
     //if this is empty it'll be reported in fetch()s error handler
     const json = element.getAttribute('src');
 
@@ -64,16 +57,9 @@ class App extends React.Component {
       settings.map.key = element.getAttribute('mapbox');
     }
 
-    //enabling forward / back buttons
-    window.addEventListener('popstate', () => {
-      this.setState({ input: getQueryString(location.search) });
-    });
-
     //fetch json data file and build indexes
     fetch(json)
-      .then(result => {
-        return result.json();
-      })
+      .then(result => result.json())
       .then(
         result => {
           //checks if src is google sheet and translates it if so
@@ -83,10 +69,11 @@ class App extends React.Component {
 
           const [meetings, indexes, capabilities] = loadMeetingData(
             result,
-            this.state.capabilities
+            state.capabilities
           );
 
-          this.setState({
+          setState({
+            ...state,
             capabilities: capabilities,
             indexes: indexes,
             meetings: meetings,
@@ -95,7 +82,8 @@ class App extends React.Component {
         },
         error => {
           console.error('JSON fetch error: ' + error);
-          this.setState({
+          setState({
+            ...state,
             error: json ? 'bad_data' : 'no_data',
             loading: false,
           });
@@ -103,67 +91,73 @@ class App extends React.Component {
       );
   }
 
+  //enable forward & back buttons
+  const listenToPopstate = () => {
+    console.log('listenToPopstate');
+    setState({ ...state, input: getQueryString(window.location.search) });
+  };
+  useState(() => {
+    window.addEventListener('popstate', listenToPopstate);
+    return () => {
+      window.removeEventListener('popstate', listenToPopstate);
+    };
+  }, []);
+
   //function for components to set global state
-  setAppState(key, value) {
+  const setAppState = (key, value) => {
     if (key && typeof key === 'object') {
-      this.setState(key);
+      setState(key);
     } else {
-      this.setState({ [key]: value });
+      setState({ ...state, [key]: value });
     }
-  }
+  };
 
   //function for map component to say it's ready without re-rendering
-  setMapInitialized() {
-    this.state.map_initialized = true;
-  }
+  const setMapInitialized = () => {
+    state.map_initialized = true;
+  };
 
-  render() {
-    //show loading spinner?
-    if (this.state.loading) return <Loading />;
+  //apply filters to query string
+  setQueryString(state);
 
-    //apply filters to query string
-    setQueryString(this.state);
+  //filter data
+  const filteredSlugs = filterMeetingData(state, setAppState);
 
-    //filter data
-    const filteredSlugs = filterMeetingData(this.state, this.setAppState);
+  //show alert?
+  state.alert = filteredSlugs.length ? null : 'no_results';
 
-    //show alert?
-    this.state.alert = filteredSlugs.length ? null : 'no_results';
-
-    //make map update
-    this.state.map_initialized = false;
-
-    return (
-      <div className="container-fluid py-3 d-flex flex-column">
-        {this.state.input.meeting ? (
-          <Meeting state={this.state} setAppState={this.setAppState} />
-        ) : (
-          <>
-            {settings.show.title && <Title state={this.state} />}
-            {settings.show.controls && (
-              <Controls state={this.state} setAppState={this.setAppState} />
-            )}
-            <Alert state={this.state} />
-            {filteredSlugs.length > 0 && this.state.input.view === 'list' && (
-              <Table
-                state={this.state}
-                setAppState={this.setAppState}
-                filteredSlugs={filteredSlugs}
-              />
-            )}
-            {filteredSlugs.length > 0 && this.state.input.view === 'map' && (
-              <Map
-                state={this.state}
-                setAppState={this.setAppState}
-                setMapInitialized={this.setMapInitialized}
-                filteredSlugs={filteredSlugs}
-              />
-            )}
-          </>
-        )}
-      </div>
-    );
-  }
+  return state.loading ? (
+    <Loading />
+  ) : (
+    <div className="container-fluid py-3 d-flex flex-column">
+      {state.input.meeting ? (
+        <Meeting state={state} setAppState={setAppState} />
+      ) : (
+        <>
+          {settings.show.title && <Title state={state} />}
+          {settings.show.controls && (
+            <Controls state={state} setAppState={setAppState} />
+          )}
+          <Alert state={state} />
+          {filteredSlugs.length > 0 && state.input.view === 'list' && (
+            <Table
+              state={state}
+              setAppState={setAppState}
+              filteredSlugs={filteredSlugs}
+            />
+          )}
+          {filteredSlugs.length > 0 && state.input.view === 'map' && (
+            <Map
+              state={state}
+              setAppState={setAppState}
+              setMapInitialized={setMapInitialized}
+              filteredSlugs={filteredSlugs}
+            />
+          )}
+        </>
+      )}
+    </div>
+  );
 }
 
 if (element) {
