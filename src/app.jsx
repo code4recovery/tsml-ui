@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 
-import Alert from './components/alert';
-import Controls from './components/controls';
-import Loading from './components/loading';
-import Map from './components/map';
-import Meeting from './components/meeting';
-import Table from './components/table';
-import Title from './components/title';
+import {
+  Alert,
+  Controls,
+  Loading,
+  Map,
+  Meeting,
+  Table,
+  Title,
+} from './components';
 import {
   filterMeetingData,
   getQueryString,
@@ -43,12 +45,22 @@ function App() {
       weekday: [],
     },
     loading: true,
-    map_initialized: false,
     meetings: [],
   });
 
+  //enable forward & back buttons
+  useEffect(() => {
+    const popstateListener = () => {
+      setState({ ...state, input: getQueryString(location.search) });
+    };
+    window.addEventListener('popstate', popstateListener);
+    return () => {
+      window.removeEventListener('popstate', popstateListener);
+    };
+  }, []);
+
+  //load data once from json
   if (state.loading) {
-    console.log('loading');
     //if this is empty it'll be reported in fetch()s error handler
     const json = element.getAttribute('src');
 
@@ -91,37 +103,11 @@ function App() {
       );
   }
 
-  //enable forward & back buttons
-  const listenToPopstate = () => {
-    console.log('listenToPopstate');
-    setState({ ...state, input: getQueryString(window.location.search) });
-  };
-  useState(() => {
-    window.addEventListener('popstate', listenToPopstate);
-    return () => {
-      window.removeEventListener('popstate', listenToPopstate);
-    };
-  }, []);
-
-  //function for components to set global state
-  const setAppState = (key, value) => {
-    if (key && typeof key === 'object') {
-      setState(key);
-    } else {
-      setState({ ...state, [key]: value });
-    }
-  };
-
-  //function for map component to say it's ready without re-rendering
-  const setMapInitialized = () => {
-    state.map_initialized = true;
-  };
-
-  //apply filters to query string
-  setQueryString(state);
+  //apply input changes to query string
+  setQueryString(state.input);
 
   //filter data
-  const filteredSlugs = filterMeetingData(state, setAppState);
+  const filteredSlugs = filterMeetingData(state, setState);
 
   //show alert?
   state.alert = filteredSlugs.length ? null : 'no_results';
@@ -131,26 +117,25 @@ function App() {
   ) : (
     <div className="container-fluid py-3 d-flex flex-column">
       {state.input.meeting ? (
-        <Meeting state={state} setAppState={setAppState} />
+        <Meeting state={state} setState={setState} />
       ) : (
         <>
-          {settings.show.title && <Title state={state} />}
-          {settings.show.controls && (
-            <Controls state={state} setAppState={setAppState} />
+          {!!settings.show.title && <Title state={state} />}
+          {!!settings.show.controls && (
+            <Controls state={state} setState={setState} />
           )}
           <Alert state={state} />
-          {filteredSlugs.length > 0 && state.input.view === 'list' && (
+          {!!filteredSlugs.length && state.input.view === 'list' && (
             <Table
               state={state}
-              setAppState={setAppState}
+              setState={setState}
               filteredSlugs={filteredSlugs}
             />
           )}
-          {filteredSlugs.length > 0 && state.input.view === 'map' && (
+          {!!filteredSlugs.length && state.input.view === 'map' && (
             <Map
               state={state}
-              setAppState={setAppState}
-              setMapInitialized={setMapInitialized}
+              setState={setState}
               filteredSlugs={filteredSlugs}
             />
           )}

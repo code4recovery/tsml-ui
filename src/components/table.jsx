@@ -7,7 +7,7 @@ import Button from './Button';
 import Icon from './Icon';
 import Link from './Link';
 
-export default function Table({ state, setAppState, filteredSlugs }) {
+export default function Table({ state, setState, filteredSlugs }) {
   const meetingsPerPage = 10;
   const [limit, setLimit] = useState(meetingsPerPage);
 
@@ -92,7 +92,7 @@ export default function Table({ state, setAppState, filteredSlugs }) {
         );
       }
     } else if (key == 'name' && meeting.slug) {
-      return <Link meeting={meeting} state={state} setAppState={setAppState} />;
+      return <Link meeting={meeting} state={state} setState={setState} />;
     } else if (key == 'region' && meeting.regions) {
       return meeting.regions[meeting.regions.length - 1];
     } else if (key == 'time') {

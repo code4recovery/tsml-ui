@@ -2,13 +2,13 @@ import React from 'react';
 
 import { settings } from '../helpers';
 
-export default function Link({ state, meeting, setAppState }) {
+export default function Link({ state, meeting, setState }) {
   const flags = settings.flags
     .filter(type => meeting.types.includes(type))
     .sort()
     .join(', ');
 
-  if (!state || !setAppState) {
+  if (!state || !setState) {
     return !flags ? (
       meeting.name
     ) : (
@@ -24,9 +24,14 @@ export default function Link({ state, meeting, setAppState }) {
       <a
         href={window.location.pathname + '?meeting=' + meeting.slug}
         onClick={e => {
-          event.preventDefault();
-          state.input.meeting = meeting.slug;
-          setAppState('input', state.input);
+          e.preventDefault();
+          setState({
+            ...state,
+            input: {
+              ...state.input,
+              meeting: meeting.slug,
+            },
+          });
         }}
       >
         {meeting.name}

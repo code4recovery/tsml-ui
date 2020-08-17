@@ -3,21 +3,21 @@ import ReactMapGL, { Marker, NavigationControl, Popup } from 'react-map-gl';
 import WebMercatorViewport from 'viewport-mercator-project';
 
 import { formatAddress, settings, strings } from '../helpers';
-import Link from './Link';
 import Button from './Button';
+import Link from './Link';
+import Stack from './Stack';
 
-export default function Map({
-  filteredSlugs,
-  state,
-  setAppState,
-  setMapInitialized,
-}) {
+export default function Map({ filteredSlugs, state, setState }) {
   const [popup, setPopup] = useState(null);
   const [viewport, setViewport] = useState(null);
+  const [initialized, setInitialized] = useState(false);
+
   const mapFrame = useRef();
 
   const bounds = {};
   const locations = {};
+
+  console.log(`viewport is ${JSON.stringify(viewport)}`);
 
   //first get map size
   useLayoutEffect(() => {
@@ -27,6 +27,7 @@ export default function Map({
     });
   }, []);
 
+  console.log('about to filter slugs');
   filteredSlugs.forEach(slug => {
     const meeting = state.meetings[slug];
 
@@ -72,9 +73,7 @@ export default function Map({
     return locations[b].latitude - locations[a].latitude;
   });
 
-  //make the viewport
-  if (viewport && !!locationKeys.length && !state.map_initialized) {
-    setMapInitialized();
+  if (viewport && locationKeys.length && !initialized) {
     setViewport(
       bounds.west === bounds.east
         ? {
@@ -92,6 +91,8 @@ export default function Map({
             }
           )
     );
+    setInitialized(true);
+    console.log(`just set viewport to ${JSON.stringify(viewport)}`);
   }
 
   return (
@@ -141,27 +142,32 @@ export default function Map({
                     onClose={() => setPopup(null)}
                     offsetTop={-settings.map.markers.location.height}
                   >
-                    <h4 className="font-weight-light mb-2">{location.name}</h4>
-                    <p>{location.formatted_address}</p>
-                    <div className="list-group mb-3">
-                      {location.meetings.map(meeting => (
-                        <div key={meeting.slug} className="list-group-item">
-                          <time>{meeting.start.format('h:mm a')}</time>
-                          <Link
-                            meeting={meeting}
-                            state={state}
-                            setAppState={setAppState}
-                          />
-                        </div>
-                      ))}
-                    </div>
-                    {location.directions_url && (
-                      <Button
-                        href={location.directions_url}
-                        text={strings.get_directions}
-                        icon={'directions'}
-                      />
-                    )}
+                    <Stack>
+                      <h4 className="font-weight-light">{location.name}</h4>
+                      <p>{location.formatted_address}</p>
+                      <div className="list-group">
+                        {location.meetings.map(meeting => (
+                          <div key={meeting.slug} className="list-group-item">
+                            <time>
+                              {strings.weekdays[meeting.start.getDay()]}
+                              {meeting.start.format('h:mm a')}
+                            </time>
+                            <Link
+                              meeting={meeting}
+                              state={state}
+                              setState={setState}
+                            />
+                          </div>
+                        ))}
+                      </div>
+                      {!!location.directions_url && (
+                        <Button
+                          href={location.directions_url}
+                          text={strings.get_directions}
+                          icon={'directions'}
+                        />
+                      )}
+                    </Stack>
                   </Popup>
                 )}
               </div>
