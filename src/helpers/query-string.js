@@ -27,28 +27,28 @@ export function getQueryString() {
 }
 
 //save input values to query string
-export function setQueryString(state) {
+export function setQueryString(input) {
   let query = {};
   const existingQuery = qs.parse(location.search);
 
   //distance, region, time, type, and weekday
   settings.filters
-    .filter(filter => state.input[filter].length)
+    .filter(filter => input[filter].length)
     .forEach(filter => {
-      query[filter] = state.input[filter].join('/');
+      query[filter] = input[filter].join('/');
     });
 
   //meeting, mode, search, view
   settings.params
-    .filter(param => state.input[param] != settings.defaults[param])
+    .filter(param => input[param] != settings.defaults[param])
     .forEach(param => {
-      query[param] = state.input[param];
+      query[param] = input[param];
     });
 
   //create a query string with only values in use
   query = qs.stringify(query);
 
-  //un-url-encode a few things
+  //make prettier
   query = query
     .replace(/%2F/g, '/')
     .replace(/%20/g, '+')

@@ -7,7 +7,7 @@ import Button from './Button';
 import Icon from './Icon';
 import Link from './Link';
 
-export default function Table({ state, setAppState, filteredSlugs }) {
+export default function Table({ state, setState, filteredSlugs }) {
   const meetingsPerPage = 10;
   const [limit, setLimit] = useState(meetingsPerPage);
 
@@ -58,6 +58,7 @@ export default function Table({ state, setAppState, filteredSlugs }) {
         );
       } else {
         const labels = [];
+        const address = formatAddress(meeting.formatted_address);
         if (meeting.conference_provider) {
           labels.push({
             label: meeting.conference_provider,
@@ -70,9 +71,9 @@ export default function Table({ state, setAppState, filteredSlugs }) {
             icon: 'telephone',
           });
         }
-        if (meeting.types.includes(strings.types.TC)) {
+        if (address && !meeting.types.includes(strings.types.TC)) {
           labels.push({
-            label: formatAddress(meeting.formatted_address),
+            label: address,
           });
         }
         return (
@@ -92,7 +93,7 @@ export default function Table({ state, setAppState, filteredSlugs }) {
         );
       }
     } else if (key == 'name' && meeting.slug) {
-      return <Link meeting={meeting} state={state} setAppState={setAppState} />;
+      return <Link meeting={meeting} state={state} setState={setState} />;
     } else if (key == 'region' && meeting.regions) {
       return meeting.regions[meeting.regions.length - 1];
     } else if (key == 'time') {
