@@ -1,4 +1,4 @@
-import React, { useRef, useState, useLayoutEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import ReactMapGL, { Marker, NavigationControl, Popup } from 'react-map-gl';
 import WebMercatorViewport from 'viewport-mercator-project';
 
@@ -10,102 +10,133 @@ import Stack from './Stack';
 export default function Map({ filteredSlugs, state, setState }) {
   const [popup, setPopup] = useState(null);
   const [viewport, setViewport] = useState(null);
-  const [initialized, setInitialized] = useState(false);
-
+  const [data, setData] = useState({
+    locations: {},
+    bounds: {},
+    locationKeys: [],
+  });
+  const [dimensions, setDimensions] = useState({
+    height: window.innerHeight,
+    width: window.innerWidth,
+  });
   const mapFrame = useRef();
 
-  const bounds = {};
-  const locations = {};
-
-  console.log(`viewport is ${JSON.stringify(viewport)}`);
-
-  //first get map size
-  useLayoutEffect(() => {
-    setViewport({
-      width: mapFrame.current.offsetWidth,
-      height: mapFrame.current.offsetHeight,
-    });
+  //window size listener (todo figure out why this is needed here and not in Meeting.tsx)
+  useEffect(() => {
+    const resizeListener = () => {
+      setDimensions({
+        height: window.innerHeight,
+        width: window.innerWidth,
+      });
+    };
+    window.addEventListener('resize', resizeListener);
+    return () => {
+      window.removeEventListener('resize', resizeListener);
+    };
   }, []);
 
-  console.log('about to filter slugs');
-  filteredSlugs.forEach(slug => {
-    const meeting = state.meetings[slug];
+  //first get map size
+  useEffect(() => {
+    const newViewport = {
+      ...viewport,
+      width: mapFrame.current.offsetWidth,
+      height: mapFrame.current.offsetHeight,
+    };
+    setViewport(newViewport);
+  }, [dimensions]);
 
-    const address = formatAddress(meeting.formatted_address);
+  //reset bounds and locations when filteredSlugs changes
+  useEffect(() => {
+    const locations = {};
+    const bounds = {};
 
-    if (
-      !!meeting.latitude &&
-      !!meeting.latitude &&
-      !!address &&
-      !meeting.types.includes(strings.types.TC)
-    ) {
-      const coords = meeting.longitude + ',' + meeting.latitude;
+    filteredSlugs.forEach(slug => {
+      const meeting = state.meetings[slug];
 
-      //create a new pin
-      if (!locations.hasOwnProperty(coords)) {
-        locations[coords] = {
-          name: meeting.location,
-          formatted_address: meeting.formatted_address,
-          latitude: meeting.latitude,
-          longitude: meeting.longitude,
-          //probably a directions link here
-          meetings: [],
-        };
+      const address = formatAddress(meeting.formatted_address);
+
+      if (
+        !!meeting.latitude &&
+        !!meeting.latitude &&
+        !!address &&
+        !meeting.types.includes(strings.types.TC)
+      ) {
+        const coords = meeting.latitude + ',' + meeting.longitude;
+
+        //create a new pin
+        if (!locations.hasOwnProperty(coords)) {
+          locations[coords] = {
+            name: meeting.location,
+            formatted_address: meeting.formatted_address,
+            latitude: meeting.latitude,
+            longitude: meeting.longitude,
+            //probably a directions link here
+            meetings: [],
+          };
+        }
+
+        //expand bounds
+        if (!bounds.north || meeting.latitude > bounds.north)
+          bounds.north = meeting.latitude;
+        if (!bounds.south || meeting.latitude < bounds.south)
+          bounds.south = meeting.latitude;
+        if (!bounds.east || meeting.longitude > bounds.east)
+          bounds.east = meeting.longitude;
+        if (!bounds.west || meeting.longitude < bounds.west)
+          bounds.west = meeting.longitude;
+
+        //add meeting to pin
+        locations[coords].meetings.push(meeting);
       }
+    });
 
-      //expand bounds
-      if (!bounds.north || meeting.latitude > bounds.north)
-        bounds.north = meeting.latitude;
-      if (!bounds.south || meeting.latitude < bounds.south)
-        bounds.south = meeting.latitude;
-      if (!bounds.east || meeting.longitude > bounds.east)
-        bounds.east = meeting.longitude;
-      if (!bounds.west || meeting.longitude < bounds.west)
-        bounds.west = meeting.longitude;
+    //quick reference array
+    const locationKeys = Object.keys(locations).sort(
+      (a, b) => locations[b].latitude - locations[a].latitude
+    );
 
-      //add meeting to pin
-      locations[coords].meetings.push(meeting);
-    }
-  });
+    //set state (sort so southern pins appear in front)
+    setData({
+      bounds: bounds,
+      locations: locations,
+      locationKeys: locationKeys,
+    });
+  }, [filteredSlugs]);
 
-  //sort so southern pins appear in front
-  const locationKeys = Object.keys(locations).sort((a, b) => {
-    return locations[b].latitude - locations[a].latitude;
-  });
-
-  if (viewport && locationKeys.length && !initialized) {
-    setViewport(
-      bounds.west === bounds.east
+  //reset viewport when data changes
+  useEffect(() => {
+    if (!viewport || !data.bounds) return;
+    const newViewport =
+      data.bounds.west === data.bounds.east
         ? {
-            latitude: bounds.north,
-            longitude: bounds.west,
+            ...viewport,
+            latitude: data.bounds.north,
+            longitude: data.bounds.west,
             zoom: 14,
           }
         : new WebMercatorViewport(viewport).fitBounds(
             [
-              [bounds.west, bounds.south],
-              [bounds.east, bounds.north],
+              [data.bounds.west, data.bounds.south],
+              [data.bounds.east, data.bounds.north],
             ],
             {
               padding: Math.min(viewport.width, viewport.height) / 10,
             }
-          )
-    );
-    setInitialized(true);
-    console.log(`just set viewport to ${JSON.stringify(viewport)}`);
-  }
+          );
+    setViewport(newViewport);
+  }, [data.bounds, viewport?.width, viewport?.height]);
 
   return (
     <div className="border rounded bg-light flex-grow-1 map" ref={mapFrame}>
-      {!!viewport && !!locationKeys.length && (
+      {!!viewport && !!data.locationKeys.length && (
         <ReactMapGL
           {...viewport}
           mapboxApiAccessToken={settings.map.key}
           mapStyle={settings.map.style}
           onViewportChange={setViewport}
         >
-          {locationKeys.map(key => {
-            const location = locations[key];
+          {data.locationKeys.map(key => {
+            const location = data.locations[key];
 
             //create a link for directions
             const iOS =
@@ -145,20 +176,30 @@ export default function Map({ filteredSlugs, state, setState }) {
                     <Stack>
                       <h4 className="font-weight-light">{location.name}</h4>
                       <p>{location.formatted_address}</p>
-                      <div className="list-group">
-                        {location.meetings.map(meeting => (
-                          <div key={meeting.slug} className="list-group-item">
-                            <time>
-                              {strings.weekdays[meeting.start.getDay()]}
-                              {meeting.start.format('h:mm a')}
-                            </time>
-                            <Link
-                              meeting={meeting}
-                              state={state}
-                              setState={setState}
-                            />
-                          </div>
-                        ))}
+                      <div className="list-group mb-1">
+                        {location.meetings
+                          .sort((a, b) => a.start.isAfter(b.start))
+                          .map(meeting => (
+                            <div key={meeting.slug} className="list-group-item">
+                              <time className="d-block">
+                                {meeting.start.format('h:mm a')}
+                                <span className="ml-1">
+                                  {
+                                    strings[
+                                      settings.weekdays[
+                                        meeting.start.format('d')
+                                      ]
+                                    ]
+                                  }
+                                </span>
+                              </time>
+                              <Link
+                                meeting={meeting}
+                                state={state}
+                                setState={setState}
+                              />
+                            </div>
+                          ))}
                       </div>
                       {!!location.directions_url && (
                         <Button
