@@ -15,35 +15,23 @@ export default function Map({ filteredSlugs, state, setState }) {
     bounds: {},
     locationKeys: [],
   });
-  const [dimensions, setDimensions] = useState({
-    height: window.innerHeight,
-    width: window.innerWidth,
-  });
+  const [dimensions, setDimensions] = useState(null);
   const mapFrame = useRef();
 
-  //window size listener (todo figure out why this is needed here and not in Meeting.tsx)
+  //window size listener (todo figure out why height can go up but not down)
   useEffect(() => {
     const resizeListener = () => {
       setDimensions({
-        height: window.innerHeight,
-        width: window.innerWidth,
+        width: mapFrame.current.offsetWidth - 2,
+        height: mapFrame.current.offsetHeight - 2,
       });
     };
+    resizeListener();
     window.addEventListener('resize', resizeListener);
     return () => {
       window.removeEventListener('resize', resizeListener);
     };
   }, []);
-
-  //first get map size
-  useEffect(() => {
-    const newViewport = {
-      ...viewport,
-      width: mapFrame.current.offsetWidth,
-      height: mapFrame.current.offsetHeight,
-    };
-    setViewport(newViewport);
-  }, [dimensions]);
 
   //reset bounds and locations when filteredSlugs changes
   useEffect(() => {
@@ -103,28 +91,28 @@ export default function Map({ filteredSlugs, state, setState }) {
     });
   }, [filteredSlugs]);
 
-  //reset viewport when data changes
+  //reset viewport when data or dimensions change
   useEffect(() => {
-    if (!viewport || !data.bounds) return;
-    const newViewport =
+    if (!dimensions || !data.bounds) return;
+    setViewport(
       data.bounds.west === data.bounds.east
         ? {
-            ...viewport,
+            ...dimensions,
             latitude: data.bounds.north,
             longitude: data.bounds.west,
             zoom: 14,
           }
-        : new WebMercatorViewport(viewport).fitBounds(
+        : new WebMercatorViewport(dimensions).fitBounds(
             [
               [data.bounds.west, data.bounds.south],
               [data.bounds.east, data.bounds.north],
             ],
             {
-              padding: Math.min(viewport.width, viewport.height) / 10,
+              padding: Math.min(dimensions.width, dimensions.height) / 10,
             }
-          );
-    setViewport(newViewport);
-  }, [data.bounds, viewport?.width, viewport?.height]);
+          )
+    );
+  }, [data, dimensions]);
 
   return (
     <div className="border rounded bg-light flex-grow-1 map" ref={mapFrame}>
