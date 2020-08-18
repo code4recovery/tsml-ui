@@ -165,26 +165,27 @@ meetings {
         width: 320px;
         z-index: 100; //above the pins
 
-        .list-group-item {
-          padding: 0.25rem 0.25rem 0.25rem 5.5rem;
+        .mapboxgl-popup-content {
+          padding: .75rem;
 
-          time {
-            left: 0.5rem;
-            position: absolute;
+          .list-group-item {
+            font-size: .9rem;
+            padding: .5rem;
+          }
+
+          .mapboxgl-popup-close-button {
+            color: $gray-500;
+            font-size: 1.5rem;
+            line-height: 1;
+            padding: 0 .25rem .25rem .25rem;
+
+            &:hover {
+              background-color: inherit;
+              color: $gray-800;
+            }
           }
         }
 
-        .mapboxgl-popup-close-button {
-          color: $gray-500;
-          font-size: 1.5rem;
-          line-height: 1;
-          padding: 0 .25rem .25rem .25rem;
-
-          &:hover {
-            background-color: inherit;
-            color: $gray-800;
-          }
-        }
       }
     }
 

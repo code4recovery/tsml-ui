@@ -8,7 +8,7 @@ import Icon from './Icon';
 import Link from './Link';
 import Stack from './Stack';
 
-export default function Meeting({ state, setAppState }) {
+export default function Meeting({ state, setState }) {
   const meeting = state.meetings[state.input.meeting];
 
   //scroll to top when you navigate to this page
@@ -71,11 +71,16 @@ export default function Meeting({ state, setAppState }) {
         <Icon icon="back" />
         <a
           href={window.location.pathname}
-          onClick={event => {
-            event.preventDefault();
+          onClick={e => {
+            e.preventDefault();
             setViewport(null);
-            state.input.meeting = null;
-            setAppState('input', state.input);
+            setState({
+              ...state,
+              input: {
+                ...state.input,
+                meeting: null,
+              },
+            });
           }}
         >
           {strings.back_to_meetings}
@@ -202,7 +207,7 @@ export default function Meeting({ state, setAppState }) {
                               <Link
                                 meeting={m}
                                 state={state}
-                                setAppState={setAppState}
+                                setState={setState}
                               />
                             )}
                           </li>

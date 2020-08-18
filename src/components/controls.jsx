@@ -4,7 +4,7 @@ import cx from 'classnames/bind';
 import Dropdown from './Dropdown';
 import { settings, strings } from '../helpers';
 
-export default function Controls({ state, setAppState }) {
+export default function Controls({ state, setState }) {
   const [dropdown, setDropdown] = useState(null);
   //const [geocoding, setGeocoding] = useState(false);
   const [search, setSearch] = useState(state.input.search);
@@ -30,9 +30,12 @@ export default function Controls({ state, setAppState }) {
   const keywordSearch = e => {
     setSearch(e.target.value);
     if (state.input.mode == 'search') {
-      setAppState('input', {
-        ...state.input,
-        search: e.target.value,
+      setState({
+        ...state,
+        input: {
+          ...state.input,
+          search: e.target.value,
+        },
       });
     }
   };
@@ -42,11 +45,14 @@ export default function Controls({ state, setAppState }) {
     e.preventDefault();
 
     if (state.input.mode == 'location') {
-      setAppState('input', {
-        ...state.input,
-        latitude: null,
-        longitude: null,
-        search: search,
+      setState({
+        ...state,
+        input: {
+          ...state.input,
+          latitude: null,
+          longitude: null,
+          search: search,
+        },
       });
     }
   };
@@ -81,7 +87,7 @@ export default function Controls({ state, setAppState }) {
     });
 
     //pass it up to app controller
-    setAppState('input', state.input);
+    setState({ ...state, input: state.input });
   };
 
   //set search mode dropdown and clear all distances
@@ -100,7 +106,8 @@ export default function Controls({ state, setAppState }) {
       searchInput.current.focus();
     }, 100);
 
-    setAppState({
+    setState({
+      ...state,
       capabilities: {
         ...state.capabilities,
         distance: false,
@@ -123,8 +130,7 @@ export default function Controls({ state, setAppState }) {
   //toggle list/map view
   const setView = (e, view) => {
     e.preventDefault();
-    state.input.view = view;
-    setAppState('input', state.input);
+    setState({ ...state, input: { ...state.input, view: view } });
   };
 
   //decide whether to show filter

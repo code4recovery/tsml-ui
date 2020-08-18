@@ -10,7 +10,7 @@ function calculateDistances(
   longitude,
   filteredSlugs,
   state,
-  setAppState
+  setState
 ) {
   //build new index and meetings array
   const meetings = {};
@@ -47,7 +47,8 @@ function calculateDistances(
   state.capabilities.distance = !!distanceIndex.length;
 
   //this will cause a re-render with latitude and longitude now set
-  setAppState({
+  setState({
+    ...state,
     capabilities: state.capabilities,
     indexes: {
       ...state.indexes,
@@ -63,7 +64,7 @@ function calculateDistances(
 }
 
 //run filters on meetings; this is run at every render
-export function filterMeetingData(state, setAppState) {
+export function filterMeetingData(state, setState) {
   const matchGroups = [];
 
   //filter by region, time, type, and weekday
@@ -116,7 +117,7 @@ export function filterMeetingData(state, setAppState) {
                 result.features[0].center[0],
                 filteredSlugs,
                 state,
-                setAppState
+                setState
               );
             } else {
               //show error
@@ -130,7 +131,7 @@ export function filterMeetingData(state, setAppState) {
               position.coords.longitude,
               filteredSlugs,
               state,
-              setAppState
+              setState
             );
           },
           error => {
@@ -552,7 +553,7 @@ export function loadMeetingData(data, capabilities) {
   capabilities.type = !!indexes.type.length;
 
   //near me mode enabled on https or local development
-  if (capabilities.coordinates) {
+  if (capabilities.coordinates && !settings.modes.includes('location')) {
     //todo implement geocoding
     settings.modes.push('location');
     if (
