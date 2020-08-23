@@ -218,6 +218,15 @@ meetings {
         }
       }
 
+      //when whole row is clickable
+      &.clickable-rows tbody tr:hover {
+        cursor: pointer;
+
+        a {
+          color: #024dbc;
+        }
+      }
+
       //mobile view
       @include media-breakpoint-down(md) {
         tr {

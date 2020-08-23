@@ -119,7 +119,11 @@ export default function Table({ state, setState, filteredSlugs }) {
   return (
     !!filteredSlugs.length && (
       <div className="row">
-        <table className="table table-striped flex-grow-1 my-0">
+        <table
+          className={cx('table table-striped flex-grow-1 my-0', {
+            'clickable-rows': !settings.show.listButtons,
+          })}
+        >
           <thead>
             <tr className="d-none d-md-table-row">
               {settings.columns.map(
@@ -142,7 +146,20 @@ export default function Table({ state, setState, filteredSlugs }) {
             {filteredSlugs.slice(0, limit).map(slug => {
               const meeting = state.meetings[slug];
               return (
-                <tr className="d-block d-md-table-row" key={meeting.slug}>
+                <tr
+                  className="d-block d-md-table-row"
+                  key={meeting.slug}
+                  onClick={() => {
+                    if (settings.show.listButtons) return;
+                    setState({
+                      ...state,
+                      input: {
+                        ...state.input,
+                        meeting: meeting.slug,
+                      },
+                    });
+                  }}
+                >
                   {settings.columns.map(
                     column =>
                       canShowColumn(column) && (
