@@ -1,5 +1,5 @@
 export default {
-  address: 'Address',
+  address: 'Address / Platform',
   alerts: {
     bad_data: 'An error was encountered loading the data source.',
     no_data: 'A data source parameter must be specified.',
@@ -29,7 +29,7 @@ export default {
   },
   night: 'Night',
   phone: 'Phone',
-  region: 'Region',
+  region: 'City / Neighborhood',
   region_any: 'Everywhere',
   saturday: 'Saturday',
   seventh_tradition: 'Seventh Tradition',

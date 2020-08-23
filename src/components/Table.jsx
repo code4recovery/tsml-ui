@@ -59,6 +59,11 @@ export default function Table({ state, setState, filteredSlugs }) {
       } else {
         const labels = [];
         const address = formatAddress(meeting.formatted_address);
+        if (address && !meeting.types.includes(strings.types.TC)) {
+          labels.push({
+            label: address,
+          });
+        }
         if (meeting.conference_provider) {
           labels.push({
             label: meeting.conference_provider,
@@ -69,11 +74,6 @@ export default function Table({ state, setState, filteredSlugs }) {
           labels.push({
             label: strings.phone,
             icon: 'telephone',
-          });
-        }
-        if (address && !meeting.types.includes(strings.types.TC)) {
-          labels.push({
-            label: address,
           });
         }
         return (
