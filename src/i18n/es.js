@@ -10,6 +10,7 @@ export default {
   distance: 'Distancia',
   distance_any: 'Cualquier distancia',
   evening: 'Noche',
+  feedback: 'Actualizar la información de la reunión',
   friday: 'Viernes',
   get_directions: 'Obtener las direcciones',
   list: 'Lista',

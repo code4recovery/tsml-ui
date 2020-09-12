@@ -9,6 +9,7 @@ export default {
   distance: 'Distance',
   distance_any: 'Any Distance',
   evening: 'Evening',
+  feedback: 'Update Meeting Info',
   friday: 'Friday',
   get_directions: 'Get Directions',
   list: 'List',
