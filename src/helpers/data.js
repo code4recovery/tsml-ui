@@ -294,6 +294,7 @@ export function loadMeetingData(data, capabilities) {
     'conference_url',
     'conference_url_notes',
     'end',
+    'feedback_url',
     'formatted_address',
     'group',
     'group_notes',
@@ -472,7 +473,7 @@ export function loadMeetingData(data, capabilities) {
       : null;
 
     if (meeting.conference_url && !meeting.conference_provider) {
-      warn(meeting, index, `conference_url ${meeting.conference_url}`);
+      warn(meeting, index, `invalid conference_url ${meeting.conference_url}`);
     }
 
     //creates formatted_address if necessary
@@ -496,7 +497,30 @@ export function loadMeetingData(data, capabilities) {
             meeting.formatted_address + ', ' + meeting.country;
         }
       } else {
-        warn(meeting, index, 'at least city is required.');
+        //commented because this doesn't prevent meeting from showing up
+        //warn(meeting, index, `${meeting.name} has no city specified`);
+      }
+    }
+
+    //7th tradition validation
+    if (meeting.venmo) {
+      if (meeting.venmo.substr(0, 1) !== '@') {
+        warn(meeting, index, `${meeting.venmo} is not a valid venmo`);
+        meeting.venmo = null;
+      }
+    }
+
+    if (meeting.square) {
+      if (meeting.square.substr(0, 1) !== '$') {
+        warn(meeting, index, `${meeting.square} is not a valid square`);
+        meeting.square = null;
+      }
+    }
+
+    if (meeting.paypal) {
+      if (meeting.paypal.substr(0, 21) !== 'https://www.paypal.me') {
+        warn(meeting, index, `${meeting.paypal} is not a valid paypal.me URL`);
+        meeting.paypal = null;
       }
     }
 
@@ -685,7 +709,5 @@ export function translateGoogleSheet(data) {
 }
 
 function warn(meeting, index, content) {
-  if (settings.show.warnings) {
-    console.warn(`${index} ${meeting.slug}: ${content}`);
-  }
+  console.warn(`${index} ${meeting.slug}: ${content}`);
 }

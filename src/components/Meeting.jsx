@@ -225,6 +225,15 @@ export default function Meeting({ state, setState }) {
               </Stack>
             )}
           </div>
+
+          {meeting.feedback_url && (
+            <Button
+              href={meeting.feedback_url}
+              text={strings.feedback}
+              icon="edit"
+              className="mt-3"
+            />
+          )}
         </div>
         {state.capabilities.map && (
           <div className="col-md-8 map">
