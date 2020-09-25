@@ -52,7 +52,7 @@ export default {
   type_any: 'Any Type',
   types: {
     '11': '11th Step Meditation',
-    '12x12': '12 Steps & 12 Traditions,',
+    '12x12': '12 Steps & 12 Traditions',
     'AL-AN': 'Concurrent with Al-Anon',
     A: 'Secular',
     ABSI: 'As Bill Sees It',
