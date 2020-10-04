@@ -54,6 +54,7 @@ export const settings = merge(
     modes: ['search'], //location and me will be appended if capable
     params: ['search', 'mode', 'view', 'meeting'], //input other than filters
     show: {
+      cityAsRegionFallback: true, //whether to use city if region is empty and city is not
       controls: true, //whether to show search + dropdowns + list/map
       listButtons: false, //show conference buttons in list or show labels
       title: true, //whether to display the title h1

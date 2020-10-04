@@ -340,7 +340,7 @@ export function loadMeetingData(data, capabilities) {
             meeting.regions.push(meeting.sub_sub_region);
           }
         }
-      } else if (meeting.city) {
+      } else if (settings.show.cityAsRegionFallback && meeting.city) {
         meeting.regions = [meeting.city];
       }
     }
