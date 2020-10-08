@@ -166,7 +166,7 @@ export default function Meeting({ state, setState }) {
                   <Button
                     text="PayPal"
                     icon="cash"
-                    href={`https://www.paypal.me/${meeting.paypal}`}
+                    href={meeting.paypal}
                   />
                 )}
               </Stack>

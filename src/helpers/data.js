@@ -504,21 +504,21 @@ export function loadMeetingData(data, capabilities) {
 
     //7th tradition validation
     if (meeting.venmo) {
-      if (meeting.venmo.substr(0, 1) !== '@') {
+      if (!meeting.venmo.startsWith('@')) {
         warn(meeting, index, `${meeting.venmo} is not a valid venmo`);
         meeting.venmo = null;
       }
     }
 
     if (meeting.square) {
-      if (meeting.square.substr(0, 1) !== '$') {
+      if (!meeting.square.startsWith('$')) {
         warn(meeting, index, `${meeting.square} is not a valid square`);
         meeting.square = null;
       }
     }
 
     if (meeting.paypal) {
-      if (meeting.paypal.substr(0, 21) !== 'https://www.paypal.me') {
+      if (!meeting.paypal.startsWith('https://www.paypal.me') && !meeting.paypal.startsWith('https://paypal.me')) {
         warn(meeting, index, `${meeting.paypal} is not a valid paypal.me URL`);
         meeting.paypal = null;
       }
