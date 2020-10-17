@@ -183,15 +183,15 @@ export function filterMeetingData(state, setState) {
 
     //then by location name
     if (meetingA.location !== meetingB.location) {
-      if (meetingA.location === null) return -1;
-      if (meetingB.location === null) return 1;
+      if (!meetingA.location) return -1;
+      if (!meetingB.location) return 1;
       return meetingA.location.localeCompare(meetingB.location);
     }
 
     //then by meeting name
     if (meetingA.name !== meetingB.name) {
-      if (meetingA.name === null) return -1;
-      if (meetingB.name === null) return 1;
+      if (!meetingA.name) return -1;
+      if (!meetingB.name) return 1;
       return meetingA.name.localeCompare(meetingB.location);
     }
 
@@ -518,7 +518,10 @@ export function loadMeetingData(data, capabilities) {
     }
 
     if (meeting.paypal) {
-      if (!meeting.paypal.startsWith('https://www.paypal.me') && !meeting.paypal.startsWith('https://paypal.me')) {
+      if (
+        !meeting.paypal.startsWith('https://www.paypal.me') &&
+        !meeting.paypal.startsWith('https://paypal.me')
+      ) {
         warn(meeting, index, `${meeting.paypal} is not a valid paypal.me URL`);
         meeting.paypal = null;
       }
@@ -671,14 +674,14 @@ export function translateGoogleSheet(data) {
   //https://docs.google.com/spreadsheets/d/e/2PACX-1vQJ5OsDCKSDEvWvqM_Z6tmXe4N-VYEnEAfvU5PX5QXZjHVbnrX-aeiyhWnZp0wpWtOmWjO4L5GJtfFu/pubhtml
   //JSON: https://spreadsheets.google.com/feeds/list/1prbiXHu9JS5eREkYgBQkxlkJELRHqrKz6-_PLGPWIWk/1/public/values?alt=json
 
-  let meetings = [];
+  const meetings = [];
 
   for (let i = 0; i < data.feed.entry.length; i++) {
     //creates a meeting object containing a property corresponding to each column header of the Google Sheet
-    let meeting = {};
+    const meeting = {};
     const meetingKeys = Object.keys(data.feed.entry[i]);
     for (let j = 0; j < meetingKeys.length; j++) {
-      if (meetingKeys[j].substr(0, 4) == 'gsx$') {
+      if (meetingKeys[j].startsWith('gsx$')) {
         meeting[meetingKeys[j].substr(4)] =
           data.feed.entry[i][meetingKeys[j]]['$t'];
       }
@@ -705,6 +708,24 @@ export function translateGoogleSheet(data) {
     meetings.push(meeting);
   }
 
+  return meetings;
+}
+
+//translate result from nocodeapi.com (used by airtable instances)
+export function translateNoCodeAPI(data) {
+  if (!data.records) return data;
+  const meetings = [];
+  data.records.forEach(record => {
+    //fix time format
+    record.fields.time = parseTime(record.fields.time);
+
+    //array-ify types
+    record.fields.types = record.fields.types
+      .split(',')
+      .map(type => type.trim());
+
+    meetings.push(record.fields);
+  });
   return meetings;
 }
 

@@ -15,6 +15,7 @@ import {
   getQueryString,
   loadMeetingData,
   translateGoogleSheet,
+  translateNoCodeAPI,
   setQueryString,
   settings,
 } from './helpers';
@@ -77,6 +78,8 @@ function App() {
           //checks if src is google sheet and translates it if so
           if (json.includes('spreadsheets.google.com')) {
             result = translateGoogleSheet(result);
+          } else if (json.includes('nocodeapi.com')) {
+            result = translateNoCodeAPI(result);
           }
 
           const [meetings, indexes, capabilities] = loadMeetingData(
