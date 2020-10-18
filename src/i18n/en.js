@@ -58,7 +58,7 @@ export default {
     ABSI: 'As Bill Sees It',
     AL: 'Concurrent with Alateen',
     AN: 'Candlelight',
-    ASL: 'Sign Language',
+    ASL: 'American Sign Language',
     B: 'Big Book',
     BA: 'Babysitting Available',
     BE: 'Newcomer',
