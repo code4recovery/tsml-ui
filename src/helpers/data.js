@@ -86,7 +86,7 @@ export function filterMeetingData(state, setState) {
   if (state.input.mode === 'search') {
     if (state.input.search.length) {
       //todo: improve searching to be OR search instead of AND
-      const needle = processSearch(state.input.search.toLowerCase());
+      const needle = processSearch(state.input.search);
       const matches = Object.keys(state.meetings).filter(slug => {
         return state.meetings[slug].search.search(needle) !== -1;
       });
@@ -645,9 +645,9 @@ function populateRegionsIndex(regions, position, index, slug) {
 // output: west chester|malvern|devon|center city west
 function processSearch(search_string) {
   let terms = [];
-
   if (settings.search == 'quoted') {
     // Search type quoted ("Google Style"): parse out any quoted strings
+    search_string = search_string.toLowerCase();
     if (search_string.includes('"')) {
       const exp = /"(.*?)"/g;
       // Grab any quoted strings, add them to terms, and delete from source string
@@ -670,10 +670,10 @@ function processSearch(search_string) {
     return terms.join('|');
   } else if (settings.search == 'or') {
     // Search type "or": replace capitalized OR with a pipe.
-    return settings.search.replace(' OR ', '|');
+    return search_string.replace(' OR ', '|').toLowerCase();
   } else {
     // Search type "default": just return the string as-is
-    return search_string;
+    return search_string.toLowerCase();
   }
 }
 
