@@ -89,6 +89,16 @@ Here is another example with two strings overridden.
 
 A complete list of meeting types can be found in the [Meeting Guide format spec](https://github.com/code4recovery/spec).
 
+### Changing the Search Function
+
+The search function has three options. For this example, let's return results from West Chester, Brooklyn, and Manhattan.
+
+`default`: west chester|brooklyn|manhattan
+`or`: west chester OR brooklyn OR manhattan
+`quoted`: "west chester" brooklyn manhattan
+
+The default requires the pipe character for search, but is also the most straight forward; most users will likely only be search for one town ("West Chester"), a ZIP code ("19147"), or a meeting name ("Happy Hour"). However, the two other search options allow for more precise searching; you can return multiple results for adjacent towns.
+
 ## Next Steps
 
 - [x] Hierarchical region dropdown

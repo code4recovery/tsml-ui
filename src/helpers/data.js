@@ -645,27 +645,36 @@ function populateRegionsIndex(regions, position, index, slug) {
 // output: west chester|malvern|devon|center city west
 function processSearch(search_string) {
   let terms = [];
-  // Parse out any quoted strings
-  if (search_string.includes('"')) {
-    const exp = /"(.*?)"/g;
-    // Grab any quoted strings, add them to terms, and delete from source string
-    for (
-      let match = exp.exec(search_string);
-      match != null;
-      match = exp.exec(search_string)
-    ) {
-      search_string = search_string.replace(match[0], '');
-      terms.push(match[0].replace(/"/g, ''));
+
+  if (settings.search == 'quoted') {
+    // Search type quoted ("Google Style"): parse out any quoted strings
+    if (search_string.includes('"')) {
+      const exp = /"(.*?)"/g;
+      // Grab any quoted strings, add them to terms, and delete from source string
+      for (
+        let match = exp.exec(search_string);
+        match != null;
+        match = exp.exec(search_string)
+      ) {
+        search_string = search_string.replace(match[0], '');
+        terms.push(match[0].replace(/"/g, ''));
+      }
     }
-  }
 
-  // Add any non-quoted strings remaining to the terms
-  if (search_string.length) {
-    terms = terms.concat(search_string.match(/[^ ]+/g));
-  }
+    // Add any non-quoted strings remaining to the terms
+    if (search_string.length) {
+      terms = terms.concat(search_string.match(/[^ ]+/g));
+    }
 
-  // Return the the pipe delimited search string
-  return terms.join('|');
+    // Return the the pipe delimited search string
+    return terms.join('|');
+  } else if (settings.search == 'or') {
+    // Search type "or": replace capitalized OR with a pipe.
+    return settings.search.replace(' OR ', '|');
+  } else {
+    // Search type "default": just return the string as-is
+    return search_string;
+  }
 }
 
 //translates Google Sheet JSON into Meeting Guide format
