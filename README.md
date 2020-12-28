@@ -93,9 +93,9 @@ A complete list of meeting types can be found in the [Meeting Guide format spec]
 
 The search function has three options:
 
-`default`: west chester|brooklyn|manhattan
-`or`: west chester OR brooklyn OR manhattan
-`quoted`: "west chester" brooklyn manhattan
+- `default`: west chester|brooklyn|manhattan
+- `or`: west chester OR brooklyn OR manhattan
+- `quoted`: "west chester" brooklyn manhattan
 
 The default requires the pipe character for search, but is also the most straight forward; most users will likely only be search for one town ("West Chester"), a ZIP code ("19147"), or a meeting name ("Happy Hour"). However, the two other search options allow for more precise searching; you can return multiple results for adjacent towns.
 
