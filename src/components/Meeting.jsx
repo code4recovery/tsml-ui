@@ -99,33 +99,34 @@ export default function Meeting({ state, setState }) {
           <div className="list-group">
             <Stack className="list-group-item py-3">
               <h5>{strings.meeting_information}</h5>
-              <p>
+              <p class="meeting-time">
                 {strings[settings.weekdays[meeting.start.format('d')]]}
                 {', '}
                 {meeting.start.format('h:mm a')}
                 {meeting.end && ` – ${meeting.end.format('h:mm a')}`}
               </p>
               {meeting.types && (
-                <ul className="ml-4">
+                <ul className="ml-4 meeting-types">
                   {meeting.types.sort().map(type => (
                     <li key={type}>{type}</li>
                   ))}
                 </ul>
               )}
-              {meeting.notes && <p>{formatMultiline(meeting.notes)}</p>}
+              {meeting.notes && <p class="meeting-notes">{formatMultiline(meeting.notes)}</p>}
             </Stack>
             {(!!meeting.conference_provider || !!meeting.conference_phone) && (
               <Stack className="list-group-item py-3">
                 <h5>{strings.types.ONL}</h5>
                 {!!meeting.conference_provider && (
-                  <Stack>
+                  <Stack className={'conference-provider'}>
                     <Button
                       text={meeting.conference_provider}
                       icon="camera"
                       href={meeting.conference_url}
+                      className={'conference-url'}
                     />
                     {!!meeting.conference_url_notes && (
-                      <small className="d-block text-muted">
+                      <small className="d-block text-muted conference-url-notes">
                         {formatMultiline(meeting.conference_url_notes)}
                       </small>
                     )}
@@ -136,10 +137,11 @@ export default function Meeting({ state, setState }) {
                     text={strings.phone}
                     icon="telephone"
                     href={`tel:${meeting.conference_phone}`}
+                    className={'conference-phone'}
                   />
                 )}
                 {!!meeting.conference_phone_notes && (
-                  <small className="d-block text-muted">
+                  <small className="d-block text-muted conference-phone-notes">
                     {formatMultiline(meeting.conference_phone_notes)}
                   </small>
                 )}
@@ -153,6 +155,7 @@ export default function Meeting({ state, setState }) {
                     text="Venmo"
                     icon="cash"
                     href={`https://venmo.com/${meeting.venmo.substr(1)}`}
+                    className={'venmo'}
                   />
                 )}
                 {!!meeting.square && (
@@ -160,6 +163,7 @@ export default function Meeting({ state, setState }) {
                     text="Cash App"
                     icon="cash"
                     href={`https://cash.app/${meeting.square}`}
+                    className={'square'}
                   />
                 )}
                 {!!meeting.paypal && (
@@ -167,6 +171,7 @@ export default function Meeting({ state, setState }) {
                     text="PayPal"
                     icon="cash"
                     href={meeting.paypal}
+                    className={'paypal'}
                   />
                 )}
               </Stack>
@@ -183,7 +188,7 @@ export default function Meeting({ state, setState }) {
                 </p>
               )}
               {!!meeting.location_notes && (
-                <p>{formatMultiline(meeting.location_notes)}</p>
+                <p class="location-notes">{formatMultiline(meeting.location_notes)}</p>
               )}
               {!isApproxAddress && !!weekdays.length && (
                 <Stack>
@@ -221,7 +226,7 @@ export default function Meeting({ state, setState }) {
             {(meeting.group || meeting.group_notes) && (
               <Stack className="list-group-item py-3">
                 {!!meeting.group && <h5>{meeting.group}</h5>}
-                {!!meeting.group_notes && <p>{meeting.group_notes}</p>}
+                {!!meeting.group_notes && <p class="meeting-group-notes">{meeting.group_notes}</p>}
               </Stack>
             )}
           </div>
@@ -231,7 +236,7 @@ export default function Meeting({ state, setState }) {
               href={meeting.feedback_url}
               text={strings.feedback}
               icon="edit"
-              className="mt-3"
+              className="mt-3 feedback-url"
             />
           )}
         </div>
