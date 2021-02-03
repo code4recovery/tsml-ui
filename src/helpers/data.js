@@ -670,7 +670,7 @@ function processSearch(search_string) {
     return terms.join('|');
   } else if (settings.search == 'or') {
     // Search type "or": replace capitalized OR with a pipe.
-    return search_string.replace(' OR ', '|').toLowerCase();
+    return search_string.replaceAll(' OR ', '|').toLowerCase();
   } else {
     // Search type "default": just return the string as-is
     return search_string.toLowerCase();
