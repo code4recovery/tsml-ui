@@ -21,13 +21,14 @@ You don't need to download anything. Let's get started by putting TSML_UI on you
 
 Simply add the following code to your page:
 
-1.  In your `<head>` add:
+1. In your `<head>` add:
 
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link rel="stylesheet" href="https://react.meetingguide.org/style.css">
 
-2.  In your `<body>` add:
+2. In your `<body>` add:
+
         <script>
           var tsml_react_config = {
               timezone: 'America/New_York'
@@ -36,7 +37,7 @@ Simply add the following code to your page:
         <meetings src="https://spreadsheets.google.com/feeds/list/1iEHbgXYMUdSjcrRRguBqa97yP61nm3fHg_tDrChFSLg/od6/public/values?alt=json">
         <script src="https://react.meetingguide.org/app.js" async></script>
 
-3.  If you are already hosting a valid JSON file, then in <meetings src=" "> replace the demo with your `/path/to/meetings.json`.
+3. If you are already hosting a valid JSON file, then in <meetings src=" "> replace the demo with your `/path/to/meetings.json`.
 
 ## Populate Data
 
