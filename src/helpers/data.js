@@ -696,10 +696,13 @@ export function translateGoogleSheet(data) {
       }
     }
 
-    //Google Sheets don't support underscore
-    if (meeting.postalcode) {
-      meeting.postal_code = meeting.postalcode;
-      delete meeting['postalcode'];
+    // Google Spreadsheets do not allow underscores
+    for (underscore_term of meeting_properties) {
+      google_term = underscore_term.replace('_', '');
+      if (meeting.hasOwnProperty(google_term)) {
+          meeting[underscore_term] = meeting[google_term];
+          delete meeting[google_term];
+      }
     }
 
     //use Google-generated slug if none was provided
