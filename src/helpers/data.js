@@ -702,6 +702,31 @@ export function translateGoogleSheet(data) {
       delete meeting['postalcode'];
     }
 
+    if (meeting.conferenceurl) {
+      meeting.conference_url = meeting.conferenceurl;
+      delete meeting['conferenceurl'];
+    }
+
+    if (meeting.conferenceurlnotes) {
+      meeting.conference_url_notes = meeting.conferenceurlnotes;
+      delete meeting['conferenceurlnotes'];
+    }
+
+    if (meeting.conferencephone) {
+      meeting.conference_phone = meeting.conferencephone;
+      delete meeting['conferencephone'];
+    }
+
+    if (meeting.conferencephonenotes) {
+      meeting.conference_phone = meeting.conferencephonenotes;
+      delete meeting['conferencephonenotes'];
+    }
+
+    if (meeting.locationnotes) {
+      meeting.location_notes = meeting.locationnotes;
+      delete meeting['locationnotes'];
+    }
+
     //use Google-generated slug if none was provided
     if (!meeting.slug) {
       let slug = data.feed.entry[i].id['$t'];
