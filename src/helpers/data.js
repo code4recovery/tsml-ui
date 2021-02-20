@@ -697,8 +697,23 @@ export function translateGoogleSheet(data) {
     }
 
     // Google Spreadsheets do not allow underscores
-    for (underscore_term of meeting_properties) {
-      google_term = underscore_term.replace('_', '');
+    const terms_to_transform = [
+      'conference_phone',
+      'conference_phone_notes',
+      'conference_provider',
+      'conference_url',
+      'conference_url_notes',
+      'feedback_url',
+      'formatted_address',
+      'group_notes',
+      'location_notes',
+      'minutes_now',
+      'minutes_week',
+    ];
+    let underscore_term = "";
+
+    for (underscore_term of terms_to_transform) {
+      let google_term = underscore_term.replace('_', '');
       if (meeting.hasOwnProperty(google_term)) {
           meeting[underscore_term] = meeting[google_term];
           delete meeting[google_term];
