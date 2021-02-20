@@ -1,4 +1,4 @@
-# Twelve Step Meeting List User Interface (TSML UI)
+# TSML UI
 
 TSML UI is a React JS module that makes TSML available for use on any web page, and you can use it with no coding experience. Just get your meeting information in the right format on a Google Sheet or JSON, copy-paste a few lines of code, and you're set.
 
