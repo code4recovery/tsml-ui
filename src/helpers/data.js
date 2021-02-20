@@ -696,35 +696,13 @@ export function translateGoogleSheet(data) {
       }
     }
 
-    //Google Sheets don't support underscore
-    if (meeting.postalcode) {
-      meeting.postal_code = meeting.postalcode;
-      delete meeting['postalcode'];
-    }
-
-    if (meeting.conferenceurl) {
-      meeting.conference_url = meeting.conferenceurl;
-      delete meeting['conferenceurl'];
-    }
-
-    if (meeting.conferenceurlnotes) {
-      meeting.conference_url_notes = meeting.conferenceurlnotes;
-      delete meeting['conferenceurlnotes'];
-    }
-
-    if (meeting.conferencephone) {
-      meeting.conference_phone = meeting.conferencephone;
-      delete meeting['conferencephone'];
-    }
-
-    if (meeting.conferencephonenotes) {
-      meeting.conference_phone = meeting.conferencephonenotes;
-      delete meeting['conferencephonenotes'];
-    }
-
-    if (meeting.locationnotes) {
-      meeting.location_notes = meeting.locationnotes;
-      delete meeting['locationnotes'];
+    // Google Spreadsheets do not allow underscores
+    for (underscore_term of meeting_properties) {
+      google_term = underscore_term.replace('_', '');
+      if (meeting.hasOwnProperty(google_term)) {
+          meeting[underscore_term] = meeting[google_term];
+          delete meeting[google_term];
+      }
     }
 
     //use Google-generated slug if none was provided
