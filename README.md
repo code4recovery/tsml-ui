@@ -23,21 +23,28 @@ Simply add the following code to your page:
 
 1. In your `<head>` add:
 
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/code4recovery/tsml-ui/public/style.css">
+```html
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/code4recovery/tsml-ui/public/style.css">
+```
 
-2. In your `<body>` add:
+1. In your `<body>` add:
 
-        <script>
-          var tsml_react_config = {
-              timezone: 'America/New_York'
-          };
-        </script>
-        <meetings src="https://spreadsheets.google.com/feeds/list/1iEHbgXYMUdSjcrRRguBqa97yP61nm3fHg_tDrChFSLg/od6/public/values?alt=json">
-        <script src="https://cdn.jsdelivr.net/gh/code4recovery/tsml-ui/public/app.js" async></script>
+```html
+<script>
+var tsml_react_config = {
+  timezone: 'America/New_York'
+};
+</script>
+<meetings src="https://spreadsheets.google.com/feeds/list/1iEHbgXYMUdSjcrRRguBqa97yP61nm3fHg_tDrChFSLg/od6/public/values?alt=json">
+<script src="https://cdn.jsdelivr.net/gh/code4recovery/tsml-ui/public/app.js" async></script>
+```
 
-3. If you are already hosting a valid JSON file, then in <meetings src=" "> replace the demo with your `/path/to/meetings.json`.
+1. If you are already hosting a valid JSON file, replace the `<meetings>` tag with either a local file or a URL:
+
+    * `<meetings src="/path/to/meetings.json">`
+    * `<meetings src="https://aaintergroup.com/api/meetings/">
 
 ## Populate Data
 
