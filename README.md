@@ -25,7 +25,7 @@ Simply add the following code to your page:
 
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <link rel="stylesheet" href="https://react.meetingguide.org/style.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/code4recovery/tsml-ui/public/style.css">
 
 2. In your `<body>` add:
 
@@ -35,7 +35,7 @@ Simply add the following code to your page:
           };
         </script>
         <meetings src="https://spreadsheets.google.com/feeds/list/1iEHbgXYMUdSjcrRRguBqa97yP61nm3fHg_tDrChFSLg/od6/public/values?alt=json">
-        <script src="https://react.meetingguide.org/app.js" async></script>
+        <script src="https://cdn.jsdelivr.net/gh/code4recovery/tsml-ui/public/app.js" async></script>
 
 3. If you are already hosting a valid JSON file, then in <meetings src=" "> replace the demo with your `/path/to/meetings.json`.
 
