@@ -29,7 +29,7 @@ Simply add the following code to your page:
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/code4recovery/tsml-ui/public/style.css">
 ```
 
-1. In your `<body>` add:
+2. In your `<body>` add:
 
 ```html
 <script>
@@ -41,10 +41,10 @@ var tsml_react_config = {
 <script src="https://cdn.jsdelivr.net/gh/code4recovery/tsml-ui/public/app.js" async></script>
 ```
 
-1. If you are already hosting a valid JSON file, replace the `<meetings>` tag with either a local file or a URL:
+3. If you are already hosting a valid JSON file, replace the `<meetings>` tag with either a local file or a URL:
 
     * `<meetings src="/path/to/meetings.json">`
-    * `<meetings src="https://aaintergroup.com/api/meetings/">
+    * `<meetings src="https://aaintergroup.com/api/meetings/">`
 
 ## Populate Data
 
