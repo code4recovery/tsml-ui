@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import cx from 'classnames/bind';
 import ReactMapGL, { Marker, NavigationControl, Popup } from 'react-map-gl';
 
-import { formatAddress, formatMultiline, settings, strings } from '../helpers';
+import { formatAddress, formatMultiline, settings, setTitle, strings } from '../helpers';
 import Button from './Button';
 import Icon from './Icon';
 import Link from './Link';
@@ -47,7 +47,7 @@ export default function Meeting({ state, setState }) {
         )}`;
 
   //set page title
-  document.title = meeting.name;
+  setTitle(meeting.name);
 
   const weekdays = settings.weekdays
     .map((weekday, index) => {
