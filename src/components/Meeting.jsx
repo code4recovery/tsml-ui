@@ -99,7 +99,7 @@ export default function Meeting({ state, setState }) {
           <div className="list-group">
             <Stack className="list-group-item py-3">
               <h5>{strings.meeting_information}</h5>
-              <p class="meeting-time">
+              <p className="meeting-time">
                 {strings[settings.weekdays[meeting.start.format('d')]]}
                 {', '}
                 {meeting.start.format('h:mm a')}
@@ -112,7 +112,7 @@ export default function Meeting({ state, setState }) {
                   ))}
                 </ul>
               )}
-              {meeting.notes && <p class="meeting-notes">{formatMultiline(meeting.notes)}</p>}
+              {meeting.notes && <p className="meeting-notes">{formatMultiline(meeting.notes)}</p>}
             </Stack>
             {(!!meeting.conference_provider || !!meeting.conference_phone) && (
               <Stack className="list-group-item py-3">
@@ -188,7 +188,7 @@ export default function Meeting({ state, setState }) {
                 </p>
               )}
               {!!meeting.location_notes && (
-                <p class="location-notes">{formatMultiline(meeting.location_notes)}</p>
+                <p className="location-notes">{formatMultiline(meeting.location_notes)}</p>
               )}
               {!isApproxAddress && !!weekdays.length && (
                 <Stack>
@@ -226,7 +226,7 @@ export default function Meeting({ state, setState }) {
             {(meeting.group || meeting.group_notes) && (
               <Stack className="list-group-item py-3">
                 {!!meeting.group && <h5>{meeting.group}</h5>}
-                {!!meeting.group_notes && <p class="meeting-group-notes">{meeting.group_notes}</p>}
+                {!!meeting.group_notes && <p className="meeting-group-notes">{meeting.group_notes}</p>}
               </Stack>
             )}
           </div>
