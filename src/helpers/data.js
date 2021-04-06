@@ -759,3 +759,9 @@ export function translateNoCodeAPI(data) {
 function warn(meeting, index, content) {
   console.warn(`${index} ${meeting.slug}: ${content}`);
 }
+
+// Set the document title; originally was going ot set OpenGraph tags but
+// they will have no effect since they are rendered after the main page.
+export function setTitle(title) {
+  document.title = title;
+}

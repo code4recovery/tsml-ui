@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { getIndexByKey, strings } from '../helpers';
+import { getIndexByKey, setTitle, strings } from '../helpers';
 
 export default function Title({ state }) {
   //loading
@@ -41,7 +41,7 @@ export default function Title({ state }) {
   title = title.join(' ');
 
   //set window title
-  document.title = title;
+  setTitle(title)
 
   //return h1
   return <h1 className="font-weight-light mb-2">{title}</h1>;
