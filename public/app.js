@@ -71964,7 +71964,7 @@ var settings = deepmerge__WEBPACK_IMPORTED_MODULE_0___default()({
   },
   modes: ['search'],
   //location and me will be appended if capable
-  params: ['search', 'mode', 'view', 'meeting'],
+  params: ['search', 'mode', 'view', 'meeting', 'meeting_name'],
   //input other than filters
   search: 'default',
   //one of 'default', 'quoted' or 'or'
