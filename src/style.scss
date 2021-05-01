@@ -214,10 +214,9 @@ meetings {
       //necessary as of v5 to prevent overlapping bg
       &.table-striped > tbody > tr:nth-of-type(odd) {
         background-color: $gray-100;
-
         td,
         time {
-          background: none;
+          box-shadow: none;
         }
       }
 
