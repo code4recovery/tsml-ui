@@ -438,34 +438,34 @@ export function loadMeetingData(data, capabilities) {
       });
     }
 
-    //handle types
-    if (meeting.types) {
-      //clean up and sort types
-      meeting.types = Array.isArray(meeting.types)
-        ? meeting.types
-            .map(type => type.trim())
-            .filter(
-              type =>
-                lookup_type_codes.includes(type) ||
-                lookup_type_values.includes(type)
-            )
-            .map(type =>
-              lookup_type_codes.includes(type) ? strings.types[type] : type
-            )
-        : [];
+    //check for types
+    if (!meeting.types) meeting.types = [];
 
-      //build type index (can be multiple)
-      meeting.types.forEach(type => {
-        if (!indexes.type.hasOwnProperty(type)) {
-          indexes.type[type] = {
-            key: formatSlug(type),
-            name: type,
-            slugs: [],
-          };
-        }
-        indexes.type[type].slugs.push(meeting.slug);
-      });
-    }
+    //clean up and sort types
+    meeting.types = Array.isArray(meeting.types)
+      ? meeting.types
+          .map(type => type.trim())
+          .filter(
+            type =>
+              lookup_type_codes.includes(type) ||
+              lookup_type_values.includes(type)
+          )
+          .map(type =>
+            lookup_type_codes.includes(type) ? strings.types[type] : type
+          )
+      : [];
+
+    //build type index (can be multiple)
+    meeting.types.forEach(type => {
+      if (!indexes.type.hasOwnProperty(type)) {
+        indexes.type[type] = {
+          key: formatSlug(type),
+          name: type,
+          slugs: [],
+        };
+      }
+      indexes.type[type].slugs.push(meeting.slug);
+    });
 
     //conference provider
     meeting.conference_provider = meeting.conference_url
@@ -710,13 +710,13 @@ export function translateGoogleSheet(data) {
       'minutes_now',
       'minutes_week',
     ];
-    let underscore_term = "";
+    let underscore_term = '';
 
     for (underscore_term of terms_to_transform) {
       let google_term = underscore_term.replace('_', '');
       if (meeting.hasOwnProperty(google_term)) {
-          meeting[underscore_term] = meeting[google_term];
-          delete meeting[google_term];
+        meeting[underscore_term] = meeting[google_term];
+        delete meeting[google_term];
       }
     }
 
@@ -730,7 +730,9 @@ export function translateGoogleSheet(data) {
     meeting.time = parseTime(meeting.time);
 
     //array-ify types
-    meeting.types = meeting.types.split(',').map(type => type.trim());
+    meeting.types = meeting.types
+      ? meeting.types.split(',').map(type => type.trim())
+      : [];
 
     meetings.push(meeting);
   }
@@ -748,8 +750,8 @@ export function translateNoCodeAPI(data) {
 
     //array-ify types
     record.fields.types = record.fields.types
-      .split(',')
-      .map(type => type.trim());
+      ? record.fields.types.split(',').map(type => type.trim())
+      : [];
 
     meetings.push(record.fields);
   });
