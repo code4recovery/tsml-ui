@@ -27,7 +27,7 @@ export default function Dropdown({
           onClick={e => setFilter(e, filter, x.key)}
         >
           <span>{x.name}</span>
-          <span className="badge bg-light border ml-3 text-dark">
+          <span className="badge bg-light border ms-3 text-dark">
             {x.slugs.length}
           </span>
         </a>
@@ -58,7 +58,7 @@ export default function Dropdown({
       <div
         className={cx('dropdown-menu', {
           show: open,
-          'dropdown-menu-right': right,
+          'dropdown-menu-end': right,
         })}
       >
         <a

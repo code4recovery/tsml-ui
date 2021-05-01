@@ -157,11 +157,11 @@ export default function Controls({ state, setState }) {
           />
           <button
             className="btn btn-outline-secondary dropdown-toggle"
-            onClick={e => setDropdown('search')}
+            onClick={e => setDropdown(dropdown == 'search' ? null : 'search')}
             type="button"
           />
           <div
-            className={cx('dropdown-menu dropdown-menu-right', {
+            className={cx('dropdown-menu dropdown-menu-end', {
               show: dropdown == 'search',
             })}
           >

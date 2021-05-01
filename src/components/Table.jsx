@@ -80,11 +80,11 @@ export default function Table({ state, setState, filteredSlugs }) {
           <div className="overflow-auto">
             {labels.map((label, index) => (
               <small
-                className="d-flex float-left mr-1 align-items-center bg-secondary text-light rounded px-2 p-1 my-1"
+                className="d-flex float-start me-1 align-items-center bg-secondary text-light rounded px-2 p-1 my-1"
                 key={index}
               >
                 {label.icon && (
-                  <Icon icon={label.icon} className="mr-1" size={18} />
+                  <Icon icon={label.icon} className="me-1" size={18} />
                 )}
                 {label.label}
               </small>
@@ -100,7 +100,7 @@ export default function Table({ state, setState, filteredSlugs }) {
       return (
         <time className="text-nowrap">
           {meeting.start.format('h:mm a')}
-          <div className="d-xl-inline ml-xl-1">
+          <div className="d-xl-inline ms-xl-1">
             {strings[settings.weekdays[meeting.start.format('d')]]}
           </div>
         </time>
@@ -109,7 +109,7 @@ export default function Table({ state, setState, filteredSlugs }) {
       return meeting.distance ? (
         <>
           {meeting.distance}
-          <small className="text-muted ml-1">{settings.distance_unit}</small>
+          <small className="text-muted ms-1">{settings.distance_unit}</small>
         </>
       ) : null;
     }

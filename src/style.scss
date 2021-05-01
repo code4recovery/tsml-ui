@@ -31,6 +31,7 @@ meetings {
   //@import '~bootstrap/scss/nav';
   //@import '~bootstrap/scss/navbar';
   //@import '~bootstrap/scss/card';
+  //@import '~bootstrap/scss/accordion';
   //@import '~bootstrap/scss/breadcrumb';
   //@import '~bootstrap/scss/pagination';
   @import '~bootstrap/scss/badge';
@@ -44,6 +45,7 @@ meetings {
   //@import '~bootstrap/scss/popover';
   //@import '~bootstrap/scss/carousel';
   @import '~bootstrap/scss/spinners';
+  @import '~bootstrap/scss/offcanvas';
   @import '~bootstrap/scss/helpers';
   @import '~bootstrap/scss/utilities/api';
 
@@ -83,7 +85,6 @@ meetings {
   }
 
   .container-fluid {
-
     @include media-breakpoint-up(md) {
       min-height: 100%;
     }
@@ -98,7 +99,7 @@ meetings {
     .list-group {
       overflow-x: hidden;
 
-      .list-group-item+.list-group-item {
+      .list-group-item + .list-group-item {
         border-top-width: 0;
       }
     }
@@ -140,6 +141,10 @@ meetings {
           }
         }
       }
+
+      .dropdown-menu-end {
+        right: 0;
+      }
     }
 
     .meeting .map {
@@ -166,18 +171,18 @@ meetings {
         z-index: 100; //above the pins
 
         .mapboxgl-popup-content {
-          padding: .75rem;
+          padding: 0.75rem;
 
           .list-group-item {
-            font-size: .9rem;
-            padding: .5rem;
+            font-size: 0.9rem;
+            padding: 0.5rem;
           }
 
           .mapboxgl-popup-close-button {
             color: $gray-500;
             font-size: 1.5rem;
             line-height: 1;
-            padding: 0 .25rem .25rem .25rem;
+            padding: 0 0.25rem 0.25rem 0.25rem;
 
             &:hover {
               background-color: inherit;
@@ -185,12 +190,10 @@ meetings {
             }
           }
         }
-
       }
     }
 
     table {
-
       //was seeing interference from themes
       border-width: 0;
 
@@ -209,7 +212,7 @@ meetings {
       }
 
       //necessary as of v5 to prevent overlapping bg
-      &.table-striped>tbody>tr:nth-of-type(odd) {
+      &.table-striped > tbody > tr:nth-of-type(odd) {
         background-color: $gray-100;
 
         td,
@@ -257,7 +260,6 @@ meetings {
 
       //regular column widths
       @include media-breakpoint-up(md) {
-
         .name,
         .location,
         .address,

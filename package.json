@@ -18,7 +18,7 @@
         "sass-loader": "^9.0.2"
     },
     "dependencies": {
-        "bootstrap": "^5.0.0-alpha1",
+        "bootstrap": "^5.0.0-beta3",
         "classnames": "^2.2.6",
         "deepmerge": "^4.2.2",
         "mapbox-gl": "^1.6.1",
