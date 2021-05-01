@@ -31,7 +31,7 @@ export default {
   night: 'Night',
   phone: 'Phone',
   region: 'City / Neighborhood',
-  region_any: 'Everywhere',
+  region_any: 'Anywhere',
   saturday: 'Saturday',
   seventh_tradition: 'Seventh Tradition',
   sunday: 'Sunday',
