@@ -2,7 +2,13 @@ import React, { useEffect, useState } from 'react';
 import cx from 'classnames/bind';
 import ReactMapGL, { Marker, NavigationControl, Popup } from 'react-map-gl';
 
-import { formatAddress, formatMultiline, settings, setTitle, strings } from '../helpers';
+import {
+  formatAddress,
+  formatMultiline,
+  settings,
+  setTitle,
+  strings,
+} from '../helpers';
 import Button from './Button';
 import Icon from './Icon';
 import Link from './Link';
@@ -106,13 +112,17 @@ export default function Meeting({ state, setState }) {
                 {meeting.end && ` – ${meeting.end.format('h:mm a')}`}
               </p>
               {meeting.types && (
-                <ul className="ml-4 meeting-types">
+                <ul className="ms-4 meeting-types">
                   {meeting.types.sort().map(type => (
                     <li key={type}>{type}</li>
                   ))}
                 </ul>
               )}
-              {meeting.notes && <p className="meeting-notes">{formatMultiline(meeting.notes)}</p>}
+              {meeting.notes && (
+                <p className="meeting-notes">
+                  {formatMultiline(meeting.notes)}
+                </p>
+              )}
             </Stack>
             {(!!meeting.conference_provider || !!meeting.conference_phone) && (
               <Stack className="list-group-item py-3">
@@ -188,7 +198,9 @@ export default function Meeting({ state, setState }) {
                 </p>
               )}
               {!!meeting.location_notes && (
-                <p className="location-notes">{formatMultiline(meeting.location_notes)}</p>
+                <p className="location-notes">
+                  {formatMultiline(meeting.location_notes)}
+                </p>
               )}
               {!isApproxAddress && !!weekdays.length && (
                 <Stack>
@@ -226,7 +238,9 @@ export default function Meeting({ state, setState }) {
             {(meeting.group || meeting.group_notes) && (
               <Stack className="list-group-item py-3">
                 {!!meeting.group && <h5>{meeting.group}</h5>}
-                {!!meeting.group_notes && <p className="meeting-group-notes">{meeting.group_notes}</p>}
+                {!!meeting.group_notes && (
+                  <p className="meeting-group-notes">{meeting.group_notes}</p>
+                )}
               </Stack>
             )}
           </div>

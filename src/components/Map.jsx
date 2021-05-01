@@ -171,7 +171,7 @@ export default function Map({ filteredSlugs, state, setState }) {
                             <div key={meeting.slug} className="list-group-item">
                               <time className="d-block">
                                 {meeting.start.format('h:mm a')}
-                                <span className="ml-1">
+                                <span className="ms-1">
                                   {
                                     strings[
                                       settings.weekdays[

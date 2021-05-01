@@ -3,7 +3,7 @@ import React from 'react';
 import { settings, fixedEncodeURIComponent } from '../helpers';
 
 export default function Link({ state, meeting, setState }) {
-  const encodedMeetingName = encodeURIComponent(meeting.name)
+  const encodedMeetingName = encodeURIComponent(meeting.name);
   const flags = settings.flags
     .filter(type => meeting.types.includes(type))
     .sort()
@@ -15,7 +15,7 @@ export default function Link({ state, meeting, setState }) {
     ) : (
       <>
         <span>{meeting.name}</span>
-        <small className="ml-2 text-muted">{flags}</small>
+        <small className="ms-2 text-muted">{flags}</small>
       </>
     );
   }
@@ -23,7 +23,13 @@ export default function Link({ state, meeting, setState }) {
   return (
     <>
       <a
-        href={window.location.pathname + '?meeting=' + meeting.slug + '&meeting_name=' + encodedMeetingName}
+        href={
+          window.location.pathname +
+          '?meeting=' +
+          meeting.slug +
+          '&meeting_name=' +
+          encodedMeetingName
+        }
         onClick={e => {
           e.preventDefault();
           setState({
@@ -38,7 +44,7 @@ export default function Link({ state, meeting, setState }) {
       >
         {meeting.name}
       </a>
-      {!!flags && <small className="ml-2 text-muted">{flags}</small>}
+      {!!flags && <small className="ms-2 text-muted">{flags}</small>}
     </>
   );
 }
