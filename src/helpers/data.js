@@ -403,8 +403,8 @@ export function loadMeetingData(data, capabilities) {
         meeting.start.get('hour') * 60 + meeting.start.get('minutes');
       meeting.minutes_week = minutes_midnight + meeting.day * 1440;
 
-      //if time is earlier than 10 minutes ago, increment diff by a week
-      if (meeting.minutes_now < -10) {
+      //if time is earlier than X minutes ago, increment diff by a week
+      if (meeting.minutes_now < settings.now_offset) {
         meeting.minutes_now += 10080;
       }
 
