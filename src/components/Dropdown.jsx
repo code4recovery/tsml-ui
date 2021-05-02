@@ -46,7 +46,7 @@ export default function Dropdown({
         className="btn btn-outline-secondary w-100 dropdown-toggle"
         onClick={() => setDropdown(open ? null : filter)}
       >
-        {values.length && options.length
+        {values?.length && options?.length
           ? values
               .map(x => {
                 const value = getIndexByKey(options, x);
@@ -71,7 +71,7 @@ export default function Dropdown({
           {defaultValue}
         </a>
         <div className="dropdown-divider" />
-        {options.map(x => renderDropdownItem(x))}
+        {options?.map(x => renderDropdownItem(x))}
       </div>
     </div>
   );

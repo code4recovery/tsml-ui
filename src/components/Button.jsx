@@ -20,7 +20,7 @@ export default function Button({
       href={href}
       target="_blank"
     >
-      {icon && <Icon icon={icon} className="mr-2" />}
+      {icon && <Icon icon={icon} className="me-2" />}
       {text}
     </a>
   );
