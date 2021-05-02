@@ -104,6 +104,7 @@ function App() {
           });
         }
       );
+    return <Loading />;
   }
 
   //apply input changes to query string
@@ -115,9 +116,7 @@ function App() {
   //show alert?
   state.alert = filteredSlugs.length ? null : 'no_results';
 
-  return state.loading ? (
-    <Loading />
-  ) : (
+  return (
     <div className="container-fluid py-3 d-flex flex-column">
       {state.input.meeting ? (
         <Meeting state={state} setState={setState} />

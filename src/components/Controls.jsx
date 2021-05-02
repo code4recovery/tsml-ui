@@ -123,7 +123,6 @@ export default function Controls({ state, setState }) {
         latitude: null,
         longitude: null,
       },
-      meetings: state.meetings,
     });
   };
 

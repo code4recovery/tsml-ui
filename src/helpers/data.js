@@ -13,12 +13,11 @@ function calculateDistances(
   setState
 ) {
   //build new index and meetings array
-  const meetings = {};
   let distanceIndex = {};
 
   //loop through and update or clear distances, and rebuild index
   filteredSlugs.forEach(slug => {
-    meetings[slug] = {
+    state.meetings[slug] = {
       ...state.meetings[slug],
       distance: distance(
         { latitude: latitude, longitude: longitude },
@@ -27,7 +26,7 @@ function calculateDistances(
     };
 
     settings.distance_options.forEach(distance => {
-      if (meetings[slug].distance <= distance) {
+      if (state.meetings[slug].distance <= distance) {
         if (!distanceIndex.hasOwnProperty(distance)) {
           distanceIndex[distance] = {
             key: distance.toString(),
@@ -41,9 +40,10 @@ function calculateDistances(
   });
 
   //flatten index and set capability
-  distanceIndex = flattenAndSortIndexes(distanceIndex, (a, b) => {
-    return parseInt(a.key) - parseInt(b.key);
-  });
+  distanceIndex = flattenAndSortIndexes(
+    distanceIndex,
+    (a, b) => parseInt(a.key) - parseInt(b.key)
+  );
   state.capabilities.distance = !!distanceIndex.length;
 
   //this will cause a re-render with latitude and longitude now set
@@ -59,25 +59,22 @@ function calculateDistances(
       latitude: parseFloat(latitude.toFixed(5)),
       longitude: parseFloat(longitude.toFixed(5)),
     },
-    meetings: meetings,
   });
 }
 
 //run filters on meetings; this is run at every render
 export function filterMeetingData(state, setState) {
-  const matchGroups = [];
+  const matchGroups = {};
 
-  //filter by region, time, type, and weekday
+  //filter by distance, region, time, type, and weekday
   settings.filters.forEach(filter => {
     if (state.input[filter].length && state.capabilities[filter]) {
-      matchGroups.push(
-        [].concat.apply(
-          [],
-          state.input[filter].map(key => {
-            const match = getIndexByKey(state.indexes[filter], key);
-            return match ? match.slugs : [];
-          })
-        )
+      matchGroups[filter] = [].concat.apply(
+        [],
+        state.input[filter].map(key => {
+          const match = getIndexByKey(state.indexes[filter], key);
+          return match ? match.slugs : [];
+        })
       );
     }
   });
@@ -87,12 +84,18 @@ export function filterMeetingData(state, setState) {
     if (state.input.search.length) {
       //todo: improve searching to be OR search instead of AND
       const needle = processSearch(state.input.search);
-      const matches = Object.keys(state.meetings).filter(slug => {
-        return state.meetings[slug].search.search(needle) !== -1;
-      });
-      matchGroups.push([].concat.apply([], matches));
+      const matches = Object.keys(state.meetings).filter(
+        slug => state.meetings[slug].search.search(needle) !== -1
+      );
+      matchGroups.search = [].concat.apply([], matches);
     }
   } else if (['me', 'location'].includes(state.input.mode)) {
+    //only show meetings with physical locations
+    const meetingsWithCoordinates = Object.keys(state.meetings).filter(
+      slug => !!state.meetings[slug].latitude && !!state.meetings[slug].latitude
+    );
+    matchGroups.coordinates = meetingsWithCoordinates;
+
     if (!state.input.latitude || !state.input.longitude) {
       if (state.input.mode == 'location') {
         //make mapbox API request https://docs.mapbox.com/api/search/
@@ -140,22 +143,12 @@ export function filterMeetingData(state, setState) {
           { timeout: 5000 }
         );
       }
-    } else if (state.input.distance.length) {
-      matchGroups.push(
-        [].concat.apply(
-          [],
-          state.input.distance.map(key => {
-            const match = getIndexByKey(state.indexes.distance, key);
-            return match ? match.slugs : [];
-          })
-        )
-      );
     }
   }
 
   //do the filtering, if necessary
-  const filteredSlugs = matchGroups.length
-    ? getCommonElements(matchGroups) //get intersection of slug arrays
+  const filteredSlugs = Object.keys(matchGroups).length
+    ? getCommonElements(Object.values(matchGroups)) //get intersection of slug arrays
     : Object.keys(state.meetings); //get everything
 
   //sort slugs
@@ -212,7 +205,7 @@ export function getIndexByKey(indexes, key) {
     };
     return searchFunc;
   };
-  return indexes.reduce(getFilterByKey(key), null);
+  return indexes?.reduce(getFilterByKey(key), null);
 }
 
 //recursive function to make sorted array from object index
@@ -276,10 +269,10 @@ function getCommonElements(arrays) {
 //set up meeting data; this is only run once when the app loads
 export function loadMeetingData(data, capabilities) {
   //meetings is a lookup
-  let meetings = {};
+  const meetings = {};
 
   //indexes start as objects, will be converted to arrays
-  let indexes = {
+  const indexes = {
     region: {},
     time: {},
     type: {},
@@ -759,7 +752,9 @@ export function translateNoCodeAPI(data) {
 }
 
 function warn(meeting, index, content) {
-  console.warn(`${index} ${meeting.slug}: ${content}`);
+  if (settings.show.warnings) {
+    console.warn(`${index} ${meeting.slug}: ${content}`);
+  }
 }
 
 // Set the document title; originally was going ot set OpenGraph tags but
