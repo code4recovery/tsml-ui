@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 
+import '../public/style.css';
+
 import {
   Alert,
   Controls,
