@@ -35,6 +35,7 @@ export const settings = merge(
     distance_options: [1, 2, 5, 10, 25],
     distance_unit: 'mi', //mi or km
     filters: ['region', 'distance', 'weekday', 'time', 'type'],
+    filter_special_types: ['online', 'in-person'],
     flags: tsml_react_config?.flags ? [] : ['Men', 'Women'],
     language: 'en', //fallback language
     map: {

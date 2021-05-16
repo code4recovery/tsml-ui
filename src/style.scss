@@ -8,9 +8,6 @@ meetings {
 
 //"namespaced" css -- should not interfere with presentation outside the <meetings> element
 meetings {
-  //import map
-  @import '~mapbox-gl/dist/mapbox-gl.css';
-
   //import only what we need from bootstrap
   @import '~bootstrap/scss/functions';
   @import '~bootstrap/scss/variables';

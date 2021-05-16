@@ -436,35 +436,6 @@ export function loadMeetingData(data, capabilities) {
       });
     }
 
-    //check for types
-    if (!meeting.types) meeting.types = [];
-
-    //clean up and sort types
-    meeting.types = Array.isArray(meeting.types)
-      ? meeting.types
-          .map(type => type.trim())
-          .filter(
-            type =>
-              lookup_type_codes.includes(type) ||
-              lookup_type_values.includes(type)
-          )
-          .map(type =>
-            lookup_type_codes.includes(type) ? strings.types[type] : type
-          )
-      : [];
-
-    //build type index (can be multiple)
-    meeting.types.forEach(type => {
-      if (!indexes.type.hasOwnProperty(type)) {
-        indexes.type[type] = {
-          key: formatSlug(type),
-          name: type,
-          slugs: [],
-        };
-      }
-      indexes.type[type].slugs.push(meeting.slug);
-    });
-
     //conference provider
     meeting.conference_provider = meeting.conference_url
       ? formatConferenceProvider(meeting.conference_url)
@@ -499,6 +470,49 @@ export function loadMeetingData(data, capabilities) {
         //warn(meeting, index, `${meeting.name} has no city specified`);
       }
     }
+
+    //add online and in-person metattypes
+    if (meeting.conference_url || meeting.conference_phone) {
+      meeting.types.push('online');
+    }
+
+    if (
+      !meeting.types.includes('TC') &&
+      (meeting.formatted_address.match(/,/g) || []).length > 2
+    ) {
+      meeting.types.push('in-person');
+    }
+
+    //check for types
+    if (!meeting.types) meeting.types = [];
+
+    //clean up and sort types
+    meeting.types = Array.isArray(meeting.types)
+      ? meeting.types
+          .map(type => type.trim())
+          .filter(
+            type =>
+              lookup_type_codes.includes(type) ||
+              lookup_type_values.includes(type)
+          )
+          .map(type =>
+            lookup_type_codes.includes(type) ? strings.types[type] : type
+          )
+      : [];
+
+    //build type index (can be multiple)
+    meeting.types.forEach(type => {
+      if (!indexes.type.hasOwnProperty(type)) {
+        indexes.type[type] = {
+          key: formatSlug(type),
+          name: type,
+          slugs: [],
+        };
+      }
+      indexes.type[type].slugs.push(meeting.slug);
+    });
+
+    //console.log(meeting.types);
 
     //7th tradition validation
     if (meeting.venmo) {
