@@ -119,7 +119,7 @@ function App() {
   state.alert = filteredSlugs.length ? null : 'no_results';
 
   return (
-    <div className="container-fluid py-3 d-flex flex-column">
+    <div className="container-fluid d-flex flex-column overflow-hidden py-3">
       {state.input.meeting ? (
         <Meeting state={state} setState={setState} />
       ) : (

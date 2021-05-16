@@ -202,12 +202,12 @@ export default function Map({ filteredSlugs, state, setState }) {
               </div>
             );
           })}
-          <div className="control">
-            <NavigationControl
-              showCompass={false}
-              onViewportChange={setViewport}
-            />
-          </div>
+          <NavigationControl
+            className="d-none d-md-block"
+            onViewportChange={setViewport}
+            showCompass={false}
+            style={{ top: 10, right: 10 }}
+          />
         </ReactMapGL>
       )}
     </div>

@@ -143,22 +143,24 @@ export default function Controls({ state, setState }) {
   return (
     <div className="row d-print-none controls">
       <div className="col-sm-6 col-lg mb-3">
-        <form className="input-group" onSubmit={locationSearch}>
-          <input
-            type="search"
-            className="form-control"
-            onChange={keywordSearch}
-            value={search}
-            ref={searchInput}
-            placeholder={strings.modes[state.input.mode]}
-            disabled={state.input.mode == 'me'}
-            spellCheck="false"
-          />
-          <button
-            className="btn btn-outline-secondary dropdown-toggle"
-            onClick={e => setDropdown(dropdown == 'search' ? null : 'search')}
-            type="button"
-          />
+        <div className="position-relative">
+          <form className="input-group" onSubmit={locationSearch}>
+            <input
+              type="search"
+              className="form-control"
+              onChange={keywordSearch}
+              value={search}
+              ref={searchInput}
+              placeholder={strings.modes[state.input.mode]}
+              disabled={state.input.mode == 'me'}
+              spellCheck="false"
+            />
+            <button
+              className="btn btn-outline-secondary dropdown-toggle"
+              onClick={e => setDropdown(dropdown == 'search' ? null : 'search')}
+              type="button"
+            />
+          </form>
           <div
             className={cx('dropdown-menu dropdown-menu-end', {
               show: dropdown == 'search',
@@ -180,7 +182,7 @@ export default function Controls({ state, setState }) {
               </a>
             ))}
           </div>
-        </form>
+        </div>
       </div>
       {settings.filters.map(
         filter =>
