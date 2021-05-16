@@ -111,6 +111,7 @@ export default {
     XT: 'Charla cruzada permitida',
     Y: 'Gente joven',
   },
+  unnamed_meeting: 'Reunión sin nombre',
   wednesday: 'Miércoles',
   weekday_any: 'Cualquier día',
 };
