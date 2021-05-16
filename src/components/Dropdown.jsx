@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import cx from 'classnames/bind';
 
-import { getIndexByKey } from '../helpers';
+import { getIndexByKey, settings } from '../helpers';
 
 export default function Dropdown({
   filter,
@@ -70,8 +70,18 @@ export default function Dropdown({
         >
           {defaultValue}
         </a>
+        {filter === 'type' && (
+          <>
+            <div className="dropdown-divider" />
+            {options
+              ?.filter(x => settings.filter_special_types.includes(x.key))
+              .map(x => renderDropdownItem(x))}
+          </>
+        )}
         <div className="dropdown-divider" />
-        {options?.map(x => renderDropdownItem(x))}
+        {options
+          ?.filter(x => !settings.filter_special_types.includes(x.key))
+          .map(x => renderDropdownItem(x))}
       </div>
     </div>
   );
