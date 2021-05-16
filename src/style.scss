@@ -152,16 +152,6 @@ meetings {
       min-height: 500px; //maps should fill at least 500, but up to entire space
       position: relative; //so map can fill 100%
 
-      .control {
-        @include media-breakpoint-down(sm) {
-          display: none;
-        }
-
-        position: absolute;
-        right: 10px;
-        top: 10px;
-      }
-
       .mapboxgl-popup {
         max-width: 85%;
         width: 320px;

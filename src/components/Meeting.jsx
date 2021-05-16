@@ -294,7 +294,8 @@ export default function Meeting({ state, setState }) {
                           </h4>
                           <p
                             className={cx({
-                              'text-decoration-line-through text-muted': isTempClosed,
+                              'text-decoration-line-through text-muted':
+                                isTempClosed,
                             })}
                           >
                             {meeting.formatted_address}
@@ -315,12 +316,12 @@ export default function Meeting({ state, setState }) {
                         </Stack>
                       </Popup>
                     )}
-                    <div className="control">
-                      <NavigationControl
-                        showCompass={false}
-                        onViewportChange={setViewport}
-                      />
-                    </div>
+                    <NavigationControl
+                      className="d-none d-md-block"
+                      onViewportChange={setViewport}
+                      showCompass={false}
+                      style={{ top: 10, right: 10 }}
+                    />
                   </>
                 )}
               </ReactMapGL>
