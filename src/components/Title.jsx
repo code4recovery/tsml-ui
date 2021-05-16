@@ -41,7 +41,7 @@ export default function Title({ state }) {
   title = title.join(' ');
 
   //set window title
-  setTitle(title)
+  setTitle(title);
 
   //return h1
   return <h1 className="font-weight-light mb-2">{title}</h1>;
