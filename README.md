@@ -26,7 +26,6 @@ Simply add the following code to your page:
 ```html
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/code4recovery/tsml-ui/public/style.css">
 ```
 
 2. In your `<body>` add:
