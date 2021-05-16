@@ -322,6 +322,11 @@ export function loadMeetingData(data, capabilities) {
 
   //loop through each entry
   data.forEach((meeting, index) => {
+    //meeting name is required
+    if (!meeting.name) {
+      meeting.name = strings.unnamed_meeting;
+    }
+
     //using array for regions now, but legacy region, sub_region, etc still supported
     //todo remove if/when tsml implements regions array format
     if (!meeting.regions) {

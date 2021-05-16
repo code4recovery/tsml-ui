@@ -6,7 +6,7 @@
     "watch-poll": "mix watch -- --watch-options-poll=1000",
     "hot": "mix watch --hot",
     "prod": "mix --production",
-    "postprod": "rm -f mix-manifest.json public/style.css"
+    "postprod": "rm -f mix-manifest.json"
   },
   "devDependencies": {
     "@babel/preset-react": "^7.13.13",

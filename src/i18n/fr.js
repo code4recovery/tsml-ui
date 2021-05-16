@@ -111,6 +111,7 @@ export default {
     XT: 'Conversation croisée permise',
     Y: 'Jeunes',
   },
+  unnamed_meeting: 'Réunion sans nom',
   wednesday: 'Mercredi',
   weekday_any: 'Tous les jours',
 };

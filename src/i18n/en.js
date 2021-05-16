@@ -110,6 +110,7 @@ export default {
     XT: 'Cross Talk Permitted',
     Y: 'Young People',
   },
+  unnamed_meeting: 'Unnamed meeting',
   wednesday: 'Wednesday',
   weekday_any: 'Any Day',
 };
