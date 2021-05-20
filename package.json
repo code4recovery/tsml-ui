@@ -2,11 +2,16 @@
   "private": true,
   "scripts": {
     "dev": "mix",
-    "watch": "mix watch",
-    "watch-poll": "mix watch -- --watch-options-poll=1000",
     "hot": "mix watch --hot",
+    "postdev": "rm -f mix-manifest.json public/style.css",
+    "postprod": "rm -f mix-manifest.json public/style.css",
+    "postwatch": "rm -f mix-manifest.json public/style.css",
+    "predev": "touch public/style.css",
+    "preprod": "touch public/style.css",
+    "prewatch": "touch public/style.css",
     "prod": "mix --production",
-    "postprod": "rm -f mix-manifest.json"
+    "watch": "mix watch",
+    "watch-poll": "mix watch -- --watch-options-poll=1000"
   },
   "devDependencies": {
     "@babel/preset-react": "^7.13.13",
