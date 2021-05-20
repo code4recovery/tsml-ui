@@ -1,9 +1,8 @@
 import React from 'react';
 
-import { settings, fixedEncodeURIComponent } from '../helpers';
+import { settings } from '../helpers';
 
 export default function Link({ state, meeting, setState }) {
-  const encodedMeetingName = encodeURIComponent(meeting.name);
   const flags = settings.flags
     .filter(type => meeting.types.includes(type))
     .sort()
@@ -23,13 +22,7 @@ export default function Link({ state, meeting, setState }) {
   return (
     <>
       <a
-        href={
-          window.location.pathname +
-          '?meeting=' +
-          meeting.slug +
-          '&meeting_name=' +
-          encodedMeetingName
-        }
+        href={`${window.location.pathname}?meeting=${meeting.slug}`}
         onClick={e => {
           e.preventDefault();
           setState({
@@ -37,7 +30,6 @@ export default function Link({ state, meeting, setState }) {
             input: {
               ...state.input,
               meeting: meeting.slug,
-              meeting_name: encodedMeetingName,
             },
           });
         }}
