@@ -1,5 +1,6 @@
 {
-  "private": true,
+  "name": "TSML-UI",
+  "version": "1.0.0",
   "scripts": {
     "dev": "mix",
     "hot": "mix watch --hot",
