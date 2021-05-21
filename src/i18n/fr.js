@@ -6,6 +6,7 @@ export default {
     no_data: 'Un paramètre de source de données doit être spécifié.',
     no_results: 'Aucune réunion ne correspond aux critères sélectionnés.',
   },
+  appointment: 'Rendez-vous',
   back_to_meetings: 'Retour aux réunions',
   distance: 'Distance',
   distance_any: 'Toute distance',
