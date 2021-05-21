@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import '../../public/style.css';
 
-import { Alert, Controls, Loading, Map, Meeting, Table, Title } from './';
+import { Alert, Controls, Loading, Map, Meeting, Table, Title } from '.';
 
 import {
   filterMeetingData,
@@ -14,7 +14,7 @@ import {
   settings,
 } from '../helpers';
 
-export default function TSML({ json, mapbox }) {
+export default function TsmlUI({ json, mapbox }) {
   const [state, setState] = useState({
     alert: null,
     capabilities: {
@@ -89,7 +89,11 @@ export default function TSML({ json, mapbox }) {
           });
         }
       );
-    return <Loading />;
+    return (
+      <meetings>
+        <Loading />
+      </meetings>
+    );
   }
 
   //apply input changes to query string
@@ -102,7 +106,7 @@ export default function TSML({ json, mapbox }) {
   state.alert = filteredSlugs.length ? null : 'no_results';
 
   return (
-    <div className="container-fluid d-flex flex-column overflow-hidden py-3">
+    <meetings className="container-fluid d-flex flex-column overflow-hidden py-3">
       {state.input.meeting ? (
         <Meeting state={state} setState={setState} />
       ) : (
@@ -128,6 +132,6 @@ export default function TSML({ json, mapbox }) {
           )}
         </>
       )}
-    </div>
+    </meetings>
   );
 }

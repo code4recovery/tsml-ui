@@ -1,6 +1,6 @@
 import ReactDOM from 'react-dom';
 
-import { TSML } from './components';
+import { TsmlUI } from './components';
 
 //locate first <meetings> element
 const [element] = document.getElementsByTagName('meetings');
@@ -14,7 +14,7 @@ const mapbox = element.getAttribute('mapbox')
   : undefined;
 
 if (element) {
-  ReactDOM.render(<TSML json={json} mapbox={mapbox} />, element);
+  ReactDOM.render(<TsmlUI json={json} mapbox={mapbox} />, element);
 } else {
   console.warn('Could not find a <meetings> element in your HTML');
 }

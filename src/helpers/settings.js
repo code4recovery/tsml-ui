@@ -36,7 +36,7 @@ export const settings = merge(
     distance_unit: 'mi', //mi or km
     filters: ['region', 'distance', 'weekday', 'time', 'type'],
     filter_special_types: ['online', 'in-person'],
-    flags: tsml_react_config?.flags ? [] : ['Men', 'Women'],
+    flags: ['Men', 'Women'],
     language: 'en', //fallback language
     map: {
       key: null, //access token
@@ -80,7 +80,7 @@ export const settings = merge(
       'saturday',
     ],
   },
-  tsml_react_config || {}
+  typeof tsml_react_config === 'object' ? tsml_react_config : {}
 );
 
 const preferredLanguage = navigator.language.substr(0, 2);
