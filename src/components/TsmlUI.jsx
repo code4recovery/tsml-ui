@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import '../../public/style.css';
 
-import { Alert, Controls, Loading, Map, Meeting, Table, Title } from '.';
+import { Alert, Controls, Loading, Map, Meeting, Table, Title } from './';
 
 import {
   filterMeetingData,
@@ -106,35 +106,34 @@ export default function TsmlUI({ json, mapbox }) {
   state.alert = filteredSlugs.length ? null : 'no_results';
 
   return (
-    <div
-      id="tsml-ui"
-      className="container-fluid d-flex flex-column overflow-hidden py-3"
-    >
-      {state.input.meeting ? (
-        <Meeting state={state} setState={setState} />
-      ) : (
-        <>
-          {!!settings.show.title && <Title state={state} />}
-          {!!settings.show.controls && (
-            <Controls state={state} setState={setState} />
-          )}
-          <Alert state={state} />
-          {!!filteredSlugs.length && state.input.view === 'list' && (
-            <Table
-              state={state}
-              setState={setState}
-              filteredSlugs={filteredSlugs}
-            />
-          )}
-          {!!filteredSlugs.length && state.input.view === 'map' && (
-            <Map
-              state={state}
-              setState={setState}
-              filteredSlugs={filteredSlugs}
-            />
-          )}
-        </>
-      )}
+    <div id="tsml-ui">
+      <div className="container-fluid d-flex flex-column overflow-hidden py-3">
+        {state.input.meeting ? (
+          <Meeting state={state} setState={setState} />
+        ) : (
+          <>
+            {!!settings.show.title && <Title state={state} />}
+            {!!settings.show.controls && (
+              <Controls state={state} setState={setState} />
+            )}
+            <Alert state={state} />
+            {!!filteredSlugs.length && state.input.view === 'list' && (
+              <Table
+                state={state}
+                setState={setState}
+                filteredSlugs={filteredSlugs}
+              />
+            )}
+            {!!filteredSlugs.length && state.input.view === 'map' && (
+              <Map
+                state={state}
+                setState={setState}
+                filteredSlugs={filteredSlugs}
+              />
+            )}
+          </>
+        )}
+      </div>
     </div>
   );
 }
