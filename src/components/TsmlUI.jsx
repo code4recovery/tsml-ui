@@ -90,9 +90,9 @@ export default function TsmlUI({ json, mapbox }) {
         }
       );
     return (
-      <meetings>
+      <div id="tsml-ui">
         <Loading />
-      </meetings>
+      </div>
     );
   }
 
@@ -106,7 +106,10 @@ export default function TsmlUI({ json, mapbox }) {
   state.alert = filteredSlugs.length ? null : 'no_results';
 
   return (
-    <meetings className="container-fluid d-flex flex-column overflow-hidden py-3">
+    <div
+      id="tsml-ui"
+      className="container-fluid d-flex flex-column overflow-hidden py-3"
+    >
       {state.input.meeting ? (
         <Meeting state={state} setState={setState} />
       ) : (
@@ -132,6 +135,6 @@ export default function TsmlUI({ json, mapbox }) {
           )}
         </>
       )}
-    </meetings>
+    </div>
   );
 }

@@ -1,13 +1,14 @@
 //minimal global styling
 html,
 body,
-meetings {
+meetings,
+div#tsml-ui {
   height: 100%; //for dropdown blur
   margin: 0;
 }
 
 //"namespaced" css -- should not interfere with presentation outside the <meetings> element
-meetings {
+div#tsml-ui {
   //import only what we need from bootstrap
   @import '~bootstrap/scss/functions';
   @import '~bootstrap/scss/variables';
