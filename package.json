@@ -1,5 +1,5 @@
 {
-  "name": "TSML-UI",
+  "name": "@code4recovery/tsml-ui",
   "version": "1.0.0",
   "scripts": {
     "dev": "mix",
