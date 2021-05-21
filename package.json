@@ -1,6 +1,7 @@
 {
-  "name": "@code4recovery/tsml-ui",
+  "name": "tsml-ui",
   "version": "1.0.0",
+  "license": "MIT",
   "scripts": {
     "dev": "mix",
     "hot": "mix watch --hot",
