@@ -6,6 +6,7 @@ export default {
     no_results:
       'No se encontraron reuniones que coincidan con los criterios seleccionados.',
   },
+  appointment: 'Cita',
   back_to_meetings: 'Volver a las reuniones',
   distance: 'Distancia',
   distance_any: 'Cualquier distancia',

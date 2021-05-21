@@ -62,11 +62,18 @@ export default function Meeting({ state, setState }) {
         meetings: Object.values(state.meetings).filter(
           m =>
             m.formatted_address == meeting.formatted_address &&
-            m.start.day() == index
+            m.start?.day() == index
         ),
       };
     })
     .filter(e => e.meetings.length);
+
+  const timeString = meeting.start
+    ? `
+      ${strings[settings.weekdays[meeting.start.format('d')]]},  
+      ${meeting.start.format('h:mm a')}
+      ${meeting.end ? ` – ${meeting.end.format('h:mm a')}` : ''}`
+    : strings.appointment;
 
   return (
     <div className="flex-column flex-grow-1 d-flex meeting">
@@ -105,12 +112,7 @@ export default function Meeting({ state, setState }) {
           <div className="list-group">
             <Stack className="list-group-item py-3">
               <h5>{strings.meeting_information}</h5>
-              <p className="meeting-time">
-                {strings[settings.weekdays[meeting.start.format('d')]]}
-                {', '}
-                {meeting.start.format('h:mm a')}
-                {meeting.end && ` – ${meeting.end.format('h:mm a')}`}
-              </p>
+              <p className="meeting-time">{timeString}</p>
               {meeting.types && (
                 <ul className="ms-4 meeting-types">
                   {meeting.types.sort().map(type => (
@@ -126,7 +128,7 @@ export default function Meeting({ state, setState }) {
             </Stack>
             {(!!meeting.conference_provider || !!meeting.conference_phone) && (
               <Stack className="list-group-item py-3">
-                <h5>{strings.types.ONL}</h5>
+                <h5>{strings.types.online}</h5>
                 {!!meeting.conference_provider && (
                   <Stack className={'conference-provider'}>
                     <Button

@@ -1,0 +1,18 @@
+[
+  {
+    "slug": "josh-meeting",
+    "name": "Meeting name",
+    "location": "Josh's house",
+    "city": "San Francisco",
+    "conference_url": "https://zoom.us/j/12345678"
+  },
+  {
+    "slug": "time-meeting",
+    "day": 4,
+    "time": "20:00",
+    "name": "Meeting name",
+    "location": "Josh's house",
+    "city": "San Francisco",
+    "conference_url": "https://zoom.us/j/12345678"
+  }
+]

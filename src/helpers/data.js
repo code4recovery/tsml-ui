@@ -156,6 +156,10 @@ export function filterMeetingData(state, setState) {
     const meetingA = state.meetings[a];
     const meetingB = state.meetings[b];
 
+    //sort appointment meetings to the end
+    if (meetingA.minutes_week && !meetingB.minutes_week) return -1;
+    if (!meetingA.minutes_week && meetingB.minutes_week) return 1;
+
     if (!state.input.weekday.length) {
       //if upcoming, sort by time_diff
       if (meetingA.minutes_now !== meetingB.minutes_now) {
@@ -322,6 +326,12 @@ export function loadMeetingData(data, capabilities) {
 
   //loop through each entry
   data.forEach((meeting, index) => {
+    //slug is required
+    if (!meeting.slug) {
+      warn(index, 'no slug');
+      return;
+    }
+
     //meeting name is required
     if (!meeting.name) {
       meeting.name = strings.unnamed_meeting;
@@ -442,7 +452,7 @@ export function loadMeetingData(data, capabilities) {
       : null;
 
     if (meeting.conference_url && !meeting.conference_provider) {
-      warn(meeting, index, `invalid conference_url ${meeting.conference_url}`);
+      warn(index, `invalid conference_url ${meeting.conference_url}`);
     }
 
     //creates formatted_address if necessary
@@ -467,9 +477,13 @@ export function loadMeetingData(data, capabilities) {
         }
       } else {
         //commented because this doesn't prevent meeting from showing up
-        //warn(meeting, index, `${meeting.name} has no city specified`);
+        warn(index, `no formatted_address or city`);
+        return;
       }
     }
+
+    //check for types
+    if (!meeting.types) meeting.types = [];
 
     //add online and in-person metattypes
     if (meeting.conference_url || meeting.conference_phone) {
@@ -482,9 +496,6 @@ export function loadMeetingData(data, capabilities) {
     ) {
       meeting.types.push('in-person');
     }
-
-    //check for types
-    if (!meeting.types) meeting.types = [];
 
     //clean up and sort types
     meeting.types = Array.isArray(meeting.types)
@@ -517,14 +528,14 @@ export function loadMeetingData(data, capabilities) {
     //7th tradition validation
     if (meeting.venmo) {
       if (!meeting.venmo.startsWith('@')) {
-        warn(meeting, index, `${meeting.venmo} is not a valid venmo`);
+        warn(index, `${meeting.venmo} is not a valid venmo`);
         meeting.venmo = null;
       }
     }
 
     if (meeting.square) {
       if (!meeting.square.startsWith('$')) {
-        warn(meeting, index, `${meeting.square} is not a valid square`);
+        warn(index, `${meeting.square} is not a valid square`);
         meeting.square = null;
       }
     }
@@ -534,7 +545,7 @@ export function loadMeetingData(data, capabilities) {
         !meeting.paypal.startsWith('https://www.paypal.me') &&
         !meeting.paypal.startsWith('https://paypal.me')
       ) {
-        warn(meeting, index, `${meeting.paypal} is not a valid paypal.me URL`);
+        warn(index, `${meeting.paypal} is not a valid paypal.me URL`);
         meeting.paypal = null;
       }
     }
@@ -770,10 +781,9 @@ export function translateNoCodeAPI(data) {
   return meetings;
 }
 
-function warn(meeting, index, content) {
-  if (settings.show.warnings) {
-    console.warn(`${index} ${meeting.slug}: ${content}`);
-  }
+function warn(index, content) {
+  if (!settings.show.warnings) return;
+  console.warn(`#${index + 1}: ${content}`);
 }
 
 // Set the document title; originally was going ot set OpenGraph tags but

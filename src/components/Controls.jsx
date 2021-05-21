@@ -102,9 +102,7 @@ export default function Controls({ state, setState }) {
     setSearch('');
 
     //focus after waiting for disabled to clear
-    setTimeout(() => {
-      searchInput.current.focus();
-    }, 100);
+    setTimeout(() => searchInput.current.focus(), 100);
 
     setState({
       ...state,
@@ -141,90 +139,94 @@ export default function Controls({ state, setState }) {
   };
 
   return (
-    <div className="row d-print-none controls">
-      <div className="col-sm-6 col-lg mb-3">
-        <div className="position-relative">
-          <form className="input-group" onSubmit={locationSearch}>
-            <input
-              type="search"
-              className="form-control"
-              onChange={keywordSearch}
-              value={search}
-              ref={searchInput}
-              placeholder={strings.modes[state.input.mode]}
-              disabled={state.input.mode == 'me'}
-              spellCheck="false"
-            />
-            <button
-              className="btn btn-outline-secondary dropdown-toggle"
-              onClick={e => setDropdown(dropdown == 'search' ? null : 'search')}
-              type="button"
-            />
-          </form>
-          <div
-            className={cx('dropdown-menu dropdown-menu-end', {
-              show: dropdown == 'search',
-            })}
-          >
-            {settings.modes.map(x => (
-              <a
-                key={x}
-                className={cx(
-                  'dropdown-item d-flex justify-content-between align-items-center',
-                  {
-                    'active bg-secondary': state.input.mode == x,
-                  }
-                )}
-                href="#"
-                onClick={e => setMode(e, x)}
-              >
-                {strings.modes[x]}
-              </a>
-            ))}
-          </div>
-        </div>
-      </div>
-      {settings.filters.map(
-        filter =>
-          canShowFilter(filter) && (
-            <div className="col-sm-6 col-lg mb-3" key={filter}>
-              <Dropdown
-                setDropdown={setDropdown}
-                filter={filter}
-                options={state.indexes[filter]}
-                values={state.input[filter]}
-                open={dropdown == filter}
-                right={filter == 'type' && !state.capabilities.map}
-                setFilter={setFilter}
-                defaultValue={strings[filter + '_any']}
-              />
-            </div>
-          )
-      )}
-      {state.capabilities.map && (
+    !!Object.keys(state.meetings).length && (
+      <div className="row d-print-none controls">
         <div className="col-sm-6 col-lg mb-3">
-          <div className="btn-group w-100" role="group">
-            <button
-              type="button"
-              className={cx('btn btn-outline-secondary w-100', {
-                active: state.input.view == 'list',
+          <div className="position-relative">
+            <form className="input-group" onSubmit={locationSearch}>
+              <input
+                type="search"
+                className="form-control"
+                onChange={keywordSearch}
+                value={search}
+                ref={searchInput}
+                placeholder={strings.modes[state.input.mode]}
+                disabled={state.input.mode == 'me'}
+                spellCheck="false"
+              />
+              <button
+                className="btn btn-outline-secondary dropdown-toggle"
+                onClick={e =>
+                  setDropdown(dropdown == 'search' ? null : 'search')
+                }
+                type="button"
+              />
+            </form>
+            <div
+              className={cx('dropdown-menu dropdown-menu-end', {
+                show: dropdown == 'search',
               })}
-              onClick={e => setView(e, 'list')}
             >
-              {strings.list}
-            </button>
-            <button
-              type="button"
-              className={cx('btn btn-outline-secondary w-100', {
-                active: state.input.view == 'map',
-              })}
-              onClick={e => setView(e, 'map')}
-            >
-              {strings.map}
-            </button>
+              {settings.modes.map(x => (
+                <a
+                  key={x}
+                  className={cx(
+                    'dropdown-item d-flex justify-content-between align-items-center',
+                    {
+                      'active bg-secondary': state.input.mode == x,
+                    }
+                  )}
+                  href="#"
+                  onClick={e => setMode(e, x)}
+                >
+                  {strings.modes[x]}
+                </a>
+              ))}
+            </div>
           </div>
         </div>
-      )}
-    </div>
+        {settings.filters.map(
+          filter =>
+            canShowFilter(filter) && (
+              <div className="col-sm-6 col-lg mb-3" key={filter}>
+                <Dropdown
+                  setDropdown={setDropdown}
+                  filter={filter}
+                  options={state.indexes[filter]}
+                  values={state.input[filter]}
+                  open={dropdown == filter}
+                  right={filter == 'type' && !state.capabilities.map}
+                  setFilter={setFilter}
+                  defaultValue={strings[filter + '_any']}
+                />
+              </div>
+            )
+        )}
+        {state.capabilities.map && (
+          <div className="col-sm-6 col-lg mb-3">
+            <div className="btn-group w-100" role="group">
+              <button
+                type="button"
+                className={cx('btn btn-outline-secondary w-100', {
+                  active: state.input.view == 'list',
+                })}
+                onClick={e => setView(e, 'list')}
+              >
+                {strings.list}
+              </button>
+              <button
+                type="button"
+                className={cx('btn btn-outline-secondary w-100', {
+                  active: state.input.view == 'map',
+                })}
+                onClick={e => setView(e, 'map')}
+              >
+                {strings.map}
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+    )
   );
 }

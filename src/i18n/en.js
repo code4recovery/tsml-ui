@@ -5,6 +5,7 @@ export default {
     no_data: 'A data source parameter must be specified.',
     no_results: 'No meetings were found matching the selected criteria.',
   },
+  appointment: 'Appointment',
   back_to_meetings: 'Back to Meetings',
   distance: 'Distance',
   distance_any: 'Any Distance',

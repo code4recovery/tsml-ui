@@ -97,13 +97,15 @@ export default function Table({ state, setState, filteredSlugs }) {
     } else if (key == 'region' && meeting.regions) {
       return meeting.regions[meeting.regions.length - 1];
     } else if (key == 'time') {
-      return (
+      return meeting.start ? (
         <time className="text-nowrap">
           {meeting.start.format('h:mm a')}
           <div className="d-xl-inline ms-xl-1">
-            {strings[settings.weekdays[meeting.start.format('d')]]}
+            {strings[settings.weekdays[meeting.start?.format('d')]]}
           </div>
         </time>
+      ) : (
+        strings.appointment
       );
     } else if (key == 'distance') {
       return meeting.distance ? (
@@ -127,9 +129,9 @@ export default function Table({ state, setState, filteredSlugs }) {
           <thead>
             <tr className="d-none d-md-table-row">
               {settings.columns.map(
-                column =>
+                (column, index) =>
                   canShowColumn(column) && (
-                    <th key={column} className={column}>
+                    <th key={index} className={column}>
                       {strings[column]}
                     </th>
                   )
@@ -143,12 +145,12 @@ export default function Table({ state, setState, filteredSlugs }) {
             }}
             hasMore={filteredSlugs.length > limit}
           >
-            {filteredSlugs.slice(0, limit).map(slug => {
+            {filteredSlugs.slice(0, limit).map((slug, index) => {
               const meeting = state.meetings[slug];
               return (
                 <tr
                   className="d-block d-md-table-row"
-                  key={meeting.slug}
+                  key={index}
                   onClick={() => {
                     if (settings.show.listButtons) return;
                     setState({
@@ -161,10 +163,10 @@ export default function Table({ state, setState, filteredSlugs }) {
                   }}
                 >
                   {settings.columns.map(
-                    column =>
+                    (column, index) =>
                       canShowColumn(column) && (
                         <td
-                          key={[meeting.slug, column].join('-')}
+                          key={index}
                           className={cx('d-block d-md-table-cell', column)}
                         >
                           {getValue(meeting, column)}
