@@ -12,7 +12,6 @@ import {
 import Button from './Button';
 import Icon from './Icon';
 import Link from './Link';
-import Stack from './Stack';
 
 export default function Meeting({ state, setState }) {
   const meeting = state.meetings[state.input.meeting];
@@ -110,7 +109,7 @@ export default function Meeting({ state, setState }) {
             />
           )}
           <div className="list-group">
-            <Stack className="list-group-item py-3">
+            <div className="d-grid gap-2 list-group-item py-3">
               <h5>{strings.meeting_information}</h5>
               <p className="meeting-time">{timeString}</p>
               {meeting.types && (
@@ -125,31 +124,31 @@ export default function Meeting({ state, setState }) {
                   {formatMultiline(meeting.notes)}
                 </p>
               )}
-            </Stack>
+            </div>
             {(!!meeting.conference_provider || !!meeting.conference_phone) && (
-              <Stack className="list-group-item py-3">
+              <div className="d-grid gap-2 list-group-item py-3">
                 <h5>{strings.types.online}</h5>
                 {!!meeting.conference_provider && (
-                  <Stack className={'conference-provider'}>
+                  <div className="d-grid gap-2 conference-provider">
                     <Button
                       text={meeting.conference_provider}
                       icon="camera"
                       href={meeting.conference_url}
-                      className={'conference-url'}
+                      className="conference-url"
                     />
                     {!!meeting.conference_url_notes && (
                       <small className="d-block text-muted conference-url-notes">
                         {formatMultiline(meeting.conference_url_notes)}
                       </small>
                     )}
-                  </Stack>
+                  </div>
                 )}
                 {!!meeting.conference_phone && (
                   <Button
                     text={strings.phone}
                     icon="telephone"
                     href={`tel:${meeting.conference_phone}`}
-                    className={'conference-phone'}
+                    className="conference-phone"
                   />
                 )}
                 {!!meeting.conference_phone_notes && (
@@ -157,17 +156,17 @@ export default function Meeting({ state, setState }) {
                     {formatMultiline(meeting.conference_phone_notes)}
                   </small>
                 )}
-              </Stack>
+              </div>
             )}
             {(!!meeting.venmo || !!meeting.square || !!meeting.paypal) && (
-              <Stack className="list-group-item py-3">
+              <div className="d-grid gap-2 list-group-item py-3">
                 <h5>{strings.seventh_tradition}</h5>
                 {!!meeting.venmo && (
                   <Button
                     text="Venmo"
                     icon="cash"
                     href={`https://venmo.com/${meeting.venmo.substr(1)}`}
-                    className={'venmo'}
+                    className="venmo"
                   />
                 )}
                 {!!meeting.square && (
@@ -175,7 +174,7 @@ export default function Meeting({ state, setState }) {
                     text="Cash App"
                     icon="cash"
                     href={`https://cash.app/${meeting.square}`}
-                    className={'square'}
+                    className="square"
                   />
                 )}
                 {!!meeting.paypal && (
@@ -183,12 +182,12 @@ export default function Meeting({ state, setState }) {
                     text="PayPal"
                     icon="cash"
                     href={meeting.paypal}
-                    className={'paypal'}
+                    className="paypal"
                   />
                 )}
-              </Stack>
+              </div>
             )}
-            <Stack className="list-group-item py-3">
+            <div className="d-grid gap-2 list-group-item py-3">
               {!!meeting.location && <h5>{meeting.location}</h5>}
               {!!meeting.formatted_address && (
                 <p
@@ -205,11 +204,11 @@ export default function Meeting({ state, setState }) {
                 </p>
               )}
               {!isApproxAddress && !!weekdays.length && (
-                <Stack>
+                <div className="d-grid gap-3">
                   {weekdays.map((weekday, index) => (
-                    <Stack key={index} spacing={1}>
-                      <h6>{weekday.name}</h6>
-                      <ol style={{ listStyleType: 'none' }}>
+                    <div key={index}>
+                      <h6 className="mb-1">{weekday.name}</h6>
+                      <ol className="list-unstyled">
                         {weekday.meetings.map(m => (
                           <li key={m.slug} style={{ paddingLeft: '5.25rem' }}>
                             <span
@@ -232,18 +231,18 @@ export default function Meeting({ state, setState }) {
                           </li>
                         ))}
                       </ol>
-                    </Stack>
+                    </div>
                   ))}
-                </Stack>
+                </div>
               )}
-            </Stack>
+            </div>
             {(meeting.group || meeting.group_notes) && (
-              <Stack className="list-group-item py-3">
+              <div className="d-grid gap-2 list-group-item py-3">
                 {!!meeting.group && <h5>{meeting.group}</h5>}
                 {!!meeting.group_notes && (
                   <p className="meeting-group-notes">{meeting.group_notes}</p>
                 )}
-              </Stack>
+              </div>
             )}
           </div>
 
@@ -290,7 +289,7 @@ export default function Meeting({ state, setState }) {
                         onClose={() => setPopup(false)}
                         offsetTop={-settings.map.markers.location.height}
                       >
-                        <Stack>
+                        <div className="d-grid gap-2 ">
                           <h4 className="font-weight-light">
                             {meeting.location}
                           </h4>
@@ -315,7 +314,7 @@ export default function Meeting({ state, setState }) {
                               text={strings.types.TC}
                             />
                           )}
-                        </Stack>
+                        </div>
                       </Popup>
                     )}
                     <NavigationControl
