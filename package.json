@@ -1,6 +1,7 @@
 {
   "name": "tsml-ui",
   "version": "1.0.0",
+  "private": false,
   "license": "MIT",
   "scripts": {
     "dev": "mix",
@@ -38,5 +39,10 @@
       }
     },
     "./*": "./*"
+  },
+  "babel": {
+    "presets": [
+      "@babel/preset-react"
+    ]
   }
 }
