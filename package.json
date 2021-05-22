@@ -30,5 +30,13 @@
     "react-infinite-scroller": "^1.2.4",
     "react-map-gl": "^5.2.1",
     "viewport-mercator-project": "^7.0.1"
+  },
+  "exports": {
+    ".": {
+      "browser": {
+        "default": "./src/components/TsmlUI.jsx"
+      }
+    },
+    "./*": "./*"
   }
 }
