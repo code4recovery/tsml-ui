@@ -395,7 +395,7 @@ export function loadMeetingData(data, capabilities) {
         .tz(
           `${meeting.day} ${meeting.time}`,
           'd hh:mm',
-          meeting.timezone ?? settings.timezone
+          meeting.timezone || settings.timezone
         )
         .tz(settings.timezone);
 
@@ -404,7 +404,7 @@ export function loadMeetingData(data, capabilities) {
           .tz(
             `${meeting.day} ${meeting.end_time}`,
             'd hh:mm',
-            meeting.timezone ?? settings.timezone
+            meeting.timezone || settings.timezone
           )
           .tz(settings.timezone);
       }

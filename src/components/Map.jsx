@@ -5,7 +5,6 @@ import WebMercatorViewport from 'viewport-mercator-project';
 import { formatAddress, settings, strings } from '../helpers';
 import Button from './Button';
 import Link from './Link';
-import Stack from './Stack';
 
 export default function Map({ filteredSlugs, state, setState }) {
   const [popup, setPopup] = useState(null);
@@ -161,7 +160,7 @@ export default function Map({ filteredSlugs, state, setState }) {
                     onClose={() => setPopup(null)}
                     offsetTop={-settings.map.markers.location.height}
                   >
-                    <Stack>
+                    <div className="d-grid gap-2">
                       <h4 className="font-weight-light">{location.name}</h4>
                       <p>{location.formatted_address}</p>
                       <div className="list-group mb-1">
@@ -196,7 +195,7 @@ export default function Map({ filteredSlugs, state, setState }) {
                           icon={'directions'}
                         />
                       )}
-                    </Stack>
+                    </div>
                   </Popup>
                 )}
               </div>
