@@ -1,0 +1,18 @@
+[
+  {
+    "slug": "sf-meeting",
+    "name": "San Francisco meeting at 9:00",
+    "time": "09:00",
+    "day": 6,
+    "timezone": "America/Los_Angeles",
+    "city": "San Francisco"
+  },
+  {
+    "slug": "pa-meeting",
+    "name": "PA meeting at 11:55",
+    "time": "11:55",
+    "day": 6,
+    "timezone": "America/New_York",
+    "city": "Philadelphia"
+  }
+]
