@@ -391,18 +391,22 @@ export function loadMeetingData(data, capabilities) {
       indexes.weekday[meeting.day].slugs.push(meeting.slug);
 
       //make start/end moments
-      meeting.start = moment.tz(
-        `${meeting.day} ${meeting.time}`,
-        'd hh:mm',
-        meeting.timezone ?? settings.timezone
-      );
-
-      if (meeting.end_time) {
-        meeting.end = moment.tz(
-          `${meeting.day} ${meeting.end_time}`,
+      meeting.start = moment
+        .tz(
+          `${meeting.day} ${meeting.time}`,
           'd hh:mm',
           meeting.timezone ?? settings.timezone
-        );
+        )
+        .tz(settings.timezone);
+
+      if (meeting.end_time) {
+        meeting.end = moment
+          .tz(
+            `${meeting.day} ${meeting.end_time}`,
+            'd hh:mm',
+            meeting.timezone ?? settings.timezone
+          )
+          .tz(settings.timezone);
       }
 
       //time differences for sorting
