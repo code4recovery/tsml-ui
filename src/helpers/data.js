@@ -492,16 +492,16 @@ export function loadMeetingData(data, capabilities) {
     if (!meeting.types) meeting.types = [];
 
     //add online and in-person metattypes
-    if (meeting.conference_url || meeting.conference_phone) {
-      meeting.types.push('online');
-    }
+    const isOnline = meeting.conference_url || meeting.conference_phone;
+    if (isOnline) meeting.types.push('online');
 
-    if (
+    const isInPerson =
       !meeting.types.includes('TC') &&
-      (meeting.formatted_address.match(/,/g) || []).length > 2
-    ) {
-      meeting.types.push('in-person');
-    }
+      (meeting.formatted_address.match(/,/g) || []).length > 2;
+    if (isInPerson) meeting.types.push('in-person');
+
+    //if neither online nor in person, skip it
+    if (!isOnline && !isInPerson) return;
 
     //clean up and sort types
     meeting.types = Array.isArray(meeting.types)

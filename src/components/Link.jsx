@@ -4,7 +4,7 @@ import { settings } from '../helpers';
 
 export default function Link({ state, meeting, setState }) {
   const flags = settings.flags
-    .filter(type => meeting.types.includes(type))
+    .filter(flag => meeting.types.includes(flag))
     .sort()
     .join(', ');
 
