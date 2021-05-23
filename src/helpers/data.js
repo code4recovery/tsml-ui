@@ -1,8 +1,8 @@
-import { settings, strings } from './settings';
-import { formatConferenceProvider, formatSlug } from './format';
-import distance from './distance';
 import moment from 'moment-timezone';
-import qs from 'query-string';
+
+import { distance } from './distance';
+import { formatConferenceProvider, formatSlug } from './format';
+import { settings, strings } from './settings';
 
 //calculate distances
 function calculateDistances(
@@ -97,21 +97,18 @@ export function filterMeetingData(state, setState) {
     matchGroups.coordinates = meetingsWithCoordinates;
 
     if (!state.input.latitude || !state.input.longitude) {
-      if (state.input.mode == 'location') {
+      if (state.input.search && state.input.mode === 'location') {
         //make mapbox API request https://docs.mapbox.com/api/search/
-        const geocodingAPI = `https://api.mapbox.com/geocoding/v5/mapbox.places/
-          ${encodeURI(state.input.search)}
-          .json?${qs.stringify({
+        fetch(
+          `https://api.mapbox.com/geocoding/v5/mapbox.places/${
+            state.input.search
+          }.json?${new URLSearchParams({
             access_token: settings.map.key,
             autocomplete: false,
-            //bbox: ,
             language: settings.language,
-          })}`;
-
-        fetch(geocodingAPI)
-          .then(result => {
-            return result.json();
-          })
+          })}`
+        )
+          .then(result => result.json())
           .then(result => {
             if (result.features && result.features.length) {
               //re-render page with new params

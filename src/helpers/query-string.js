@@ -1,5 +1,3 @@
-import qs from 'query-string';
-
 import { settings } from './settings';
 
 //load input values from query string
@@ -7,20 +5,20 @@ export function getQueryString() {
   const input = { ...settings.defaults };
 
   //load input from query string
-  const querystring = qs.parse(location.search);
+  const query = new URLSearchParams(window.location.search);
 
   //loop through filters
   settings.filters
-    .filter(filter => querystring[filter])
+    .filter(filter => query.has(filter))
     .forEach(filter => {
-      input[filter] = querystring[filter].split('/');
+      input[filter] = query.get(filter).split('/');
     });
 
   //loop through additional values
   settings.params
-    .filter(param => querystring[param])
+    .filter(param => query.has(param))
     .forEach(param => {
-      input[param] = querystring[param];
+      input[param] = query.get(param);
     });
 
   return input;
@@ -28,8 +26,7 @@ export function getQueryString() {
 
 //save input values to query string
 export function setQueryString(input) {
-  let query = {};
-  const existingQuery = qs.parse(location.search);
+  const query = {};
 
   //distance, region, time, type, and weekday
   settings.filters
@@ -46,20 +43,18 @@ export function setQueryString(input) {
     });
 
   //create a query string with only values in use
-  query = qs.stringify(query);
-
-  //make prettier
-  query = query
+  const queryString = new URLSearchParams(query)
+    .toString()
     .replace(/%2F/g, '/')
     .replace(/%20/g, '+')
     .replace(/%2C/g, ',');
 
-  if (location.search.substr(1) != query) {
-    //set the query string with html5
+  //set the query string with the history api
+  if (window.location.search.substr(1) != queryString) {
     window.history.pushState(
       '',
       '',
-      query.length ? '?' + query : window.location.pathname
+      queryString.length ? '?' + queryString : window.location.pathname
     );
   }
 }
