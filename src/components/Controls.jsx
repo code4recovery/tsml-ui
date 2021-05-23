@@ -60,7 +60,6 @@ export default function Controls({ state, setState }) {
   //set filter: pass it up to parent
   const setFilter = (e, filter, value) => {
     e.preventDefault();
-    e.stopPropagation();
 
     //add or remove from filters
     if (value) {
