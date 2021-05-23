@@ -290,6 +290,7 @@ export function loadMeetingData(data, capabilities) {
     'conference_provider',
     'conference_url',
     'conference_url_notes',
+    'district',
     'end',
     'feedback_url',
     'formatted_address',
@@ -310,6 +311,7 @@ export function loadMeetingData(data, capabilities) {
     'square',
     'start',
     'types',
+    'updated',
     'venmo',
   ];
 

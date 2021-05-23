@@ -17,18 +17,9 @@ export function formatConferenceProvider(url) {
   return provider.length ? settings.conference_providers[provider[0]] : null;
 }
 
-//convert multiline text to HTML
+//convert multiline text to array
 export function formatMultiline(text) {
-  return text
-    .split(/(?:\r\n|\r|\n)/)
-    .reduce(
-      (res, frag, i, arr) => [
-        ...res,
-        frag,
-        ...(i < arr.length - 1 ? [createElement('br', { key: i })] : []),
-      ],
-      []
-    );
+  return text.split('\n').filter(e => e);
 }
 
 //turn Mountain View into mountain-view
