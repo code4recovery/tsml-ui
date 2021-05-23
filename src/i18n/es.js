@@ -113,6 +113,7 @@ export default {
     Y: 'Gente joven',
   },
   unnamed_meeting: 'Reunión sin nombre',
+  updated: 'Actualizado el %updated%',
   wednesday: 'Miércoles',
   weekday_any: 'Cualquier día',
 };

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import cx from 'classnames/bind';
 import ReactMapGL, { Marker, NavigationControl, Popup } from 'react-map-gl';
+import moment from 'moment-timezone';
 
 import {
   formatAddress,
@@ -120,9 +121,11 @@ export default function Meeting({ state, setState }) {
                 </ul>
               )}
               {meeting.notes && (
-                <p className="meeting-notes">
-                  {formatMultiline(meeting.notes)}
-                </p>
+                <div className="meeting-notes">
+                  {formatMultiline(meeting.notes).map(p => (
+                    <p>{p}</p>
+                  ))}
+                </div>
               )}
             </div>
             {(!!meeting.conference_provider || !!meeting.conference_phone) && (
@@ -137,9 +140,15 @@ export default function Meeting({ state, setState }) {
                       className="conference-url"
                     />
                     {!!meeting.conference_url_notes && (
-                      <small className="d-block text-muted conference-url-notes">
-                        {formatMultiline(meeting.conference_url_notes)}
-                      </small>
+                      <div className="d-block text-muted conference-url-notes">
+                        {formatMultiline(meeting.conference_url_notes).map(
+                          p => (
+                            <p>
+                              <small>{p}</small>
+                            </p>
+                          )
+                        )}
+                      </div>
                     )}
                   </div>
                 )}
@@ -152,9 +161,13 @@ export default function Meeting({ state, setState }) {
                   />
                 )}
                 {!!meeting.conference_phone_notes && (
-                  <small className="d-block text-muted conference-phone-notes">
-                    {formatMultiline(meeting.conference_phone_notes)}
-                  </small>
+                  <div className="d-block text-muted conference-phone-notes">
+                    {formatMultiline(meeting.conference_phone_notes).map(p => (
+                      <p>
+                        <small>{p}</small>
+                      </p>
+                    ))}
+                  </div>
                 )}
               </div>
             )}
@@ -199,9 +212,11 @@ export default function Meeting({ state, setState }) {
                 </p>
               )}
               {!!meeting.location_notes && (
-                <p className="location-notes">
-                  {formatMultiline(meeting.location_notes)}
-                </p>
+                <div className="location-notes">
+                  {formatMultiline(meeting.location_notes).map(p => (
+                    <p>{p}</p>
+                  ))}
+                </div>
               )}
               {!isApproxAddress && !!weekdays.length && (
                 <div className="d-grid gap-3">
@@ -236,11 +251,29 @@ export default function Meeting({ state, setState }) {
                 </div>
               )}
             </div>
-            {(meeting.group || meeting.group_notes) && (
+            {(meeting.group || meeting.group_notes || meeting.district) && (
               <div className="d-grid gap-2 list-group-item py-3">
                 {!!meeting.group && <h5>{meeting.group}</h5>}
                 {!!meeting.group_notes && (
-                  <p className="meeting-group-notes">{meeting.group_notes}</p>
+                  <div className="meeting-group-notes">
+                    {formatMultiline(meeting.group_notes).map(p => (
+                      <p>{p}</p>
+                    ))}
+                  </div>
+                )}
+                {!!meeting.district && (
+                  <p className="meeting-district">{meeting.district}</p>
+                )}
+              </div>
+            )}
+            {meeting.updated && (
+              <div className="list-group-item">
+                {strings.updated.replace(
+                  '%updated%',
+                  moment
+                    .tz(meeting.updated, 'UTC')
+                    .tz(settings.timezone)
+                    .format('ll')
                 )}
               </div>
             )}
