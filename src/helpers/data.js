@@ -336,6 +336,61 @@ export function loadMeetingData(data, capabilities) {
       meeting.name = strings.unnamed_meeting;
     }
 
+    //conference provider
+    meeting.conference_provider = meeting.conference_url
+      ? formatConferenceProvider(meeting.conference_url)
+      : null;
+
+    if (meeting.conference_url && !meeting.conference_provider) {
+      warn(index, `invalid conference_url ${meeting.conference_url}`);
+    }
+
+    //creates formatted_address if necessary
+    if (!meeting.formatted_address) {
+      if (meeting.city) {
+        meeting.formatted_address = meeting.city;
+        if (meeting.address) {
+          meeting.formatted_address =
+            meeting.address + ', ' + meeting.formatted_address;
+        }
+        if (meeting.state) {
+          meeting.formatted_address =
+            meeting.formatted_address + ', ' + meeting.state;
+        }
+        if (meeting.postal_code) {
+          meeting.formatted_address =
+            meeting.formatted_address + ' ' + meeting.postal_code;
+        }
+        if (meeting.country) {
+          meeting.formatted_address =
+            meeting.formatted_address + ', ' + meeting.country;
+        }
+      } else {
+        warn(index, `no formatted_address or city`);
+      }
+    }
+
+    //check for types
+    if (!meeting.types) meeting.types = [];
+
+    //add online and in-person metattypes
+    const isOnline = meeting.conference_url || meeting.conference_phone;
+    if (isOnline) meeting.types.push('online');
+
+    const isInPerson =
+      !meeting.types.includes('TC') &&
+      !meeting.types.includes(strings.types.TC) &&
+      (meeting.formatted_address.match(/,/g) || []).length > 2;
+    if (isInPerson) meeting.types.push('in-person');
+
+    //if neither online nor in person, skip it
+    if (!isOnline && !isInPerson) {
+      warn(index, `${meeting.name} is neither online or in person, skipping`);
+      return;
+    }
+
+    //last chance to exit. now we're going to populate some indexes with the meeting slug
+
     //using array for regions now, but legacy region, sub_region, etc still supported
     //todo remove if/when tsml implements regions array format
     if (!meeting.regions) {
@@ -448,57 +503,6 @@ export function loadMeetingData(data, capabilities) {
         indexes.time[time].slugs.push(meeting.slug);
       });
     }
-
-    //conference provider
-    meeting.conference_provider = meeting.conference_url
-      ? formatConferenceProvider(meeting.conference_url)
-      : null;
-
-    if (meeting.conference_url && !meeting.conference_provider) {
-      warn(index, `invalid conference_url ${meeting.conference_url}`);
-    }
-
-    //creates formatted_address if necessary
-    if (!meeting.formatted_address) {
-      if (meeting.city) {
-        meeting.formatted_address = meeting.city;
-        if (meeting.address) {
-          meeting.formatted_address =
-            meeting.address + ', ' + meeting.formatted_address;
-        }
-        if (meeting.state) {
-          meeting.formatted_address =
-            meeting.formatted_address + ', ' + meeting.state;
-        }
-        if (meeting.postal_code) {
-          meeting.formatted_address =
-            meeting.formatted_address + ' ' + meeting.postal_code;
-        }
-        if (meeting.country) {
-          meeting.formatted_address =
-            meeting.formatted_address + ', ' + meeting.country;
-        }
-      } else {
-        //commented because this doesn't prevent meeting from showing up
-        warn(index, `no formatted_address or city`);
-        return;
-      }
-    }
-
-    //check for types
-    if (!meeting.types) meeting.types = [];
-
-    //add online and in-person metattypes
-    const isOnline = meeting.conference_url || meeting.conference_phone;
-    if (isOnline) meeting.types.push('online');
-
-    const isInPerson =
-      !meeting.types.includes('TC') &&
-      (meeting.formatted_address.match(/,/g) || []).length > 2;
-    if (isInPerson) meeting.types.push('in-person');
-
-    //if neither online nor in person, skip it
-    if (!isOnline && !isInPerson) return;
 
     //clean up and sort types
     meeting.types = Array.isArray(meeting.types)

@@ -87,12 +87,6 @@ div#tsml-ui {
       min-height: 100%;
     }
 
-    //to prevent white border
-    .row {
-      margin-left: -1rem;
-      margin-right: -1rem;
-    }
-
     //to prevent double border
     .list-group {
       overflow-x: hidden;
@@ -151,7 +145,6 @@ div#tsml-ui {
 
     .map {
       min-height: 500px; //maps should fill at least 500, but up to entire space
-      position: relative; //so map can fill 100%
 
       .mapboxgl-popup {
         max-width: 85%;
@@ -160,17 +153,29 @@ div#tsml-ui {
 
         .mapboxgl-popup-content {
           padding: 0.75rem;
+          position: relative;
 
-          .list-group-item {
-            font-size: 0.9rem;
-            padding: 0.5rem;
+          .list-group {
+            max-height: 250px;
+            .list-group-item {
+              font-size: 0.9rem;
+              padding: 0.5rem;
+            }
           }
 
           .mapboxgl-popup-close-button {
+            background: white;
+            border-radius: 100%;
+            border: 1px solid #eee;
             color: $gray-500;
             font-size: 1.5rem;
+            height: 30px;
             line-height: 1;
             padding: 0 0.25rem 0.25rem 0.25rem;
+            position: absolute;
+            right: -10px;
+            top: -10px;
+            width: 30px;
 
             &:hover {
               background-color: inherit;
@@ -211,7 +216,6 @@ div#tsml-ui {
       //when whole row is clickable
       &.clickable-rows tbody tr:hover {
         cursor: pointer;
-
         a {
           color: #024dbc;
         }
