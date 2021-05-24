@@ -113,19 +113,19 @@ export default function TsmlUI({ json, mapbox }) {
           <Meeting state={state} setState={setState} />
         ) : (
           <>
-            {!!settings.show.title && <Title state={state} />}
-            {!!settings.show.controls && (
+            {settings.show.title && <Title state={state} />}
+            {settings.show.controls && (
               <Controls state={state} setState={setState} />
             )}
             <Alert state={state} />
-            {!!filteredSlugs.length && state.input.view === 'list' && (
+            {filteredSlugs && state.input.view === 'list' && (
               <Table
                 state={state}
                 setState={setState}
                 filteredSlugs={filteredSlugs}
               />
             )}
-            {!!filteredSlugs.length && state.input.view === 'map' && (
+            {filteredSlugs && state.input.view === 'map' && (
               <Map
                 state={state}
                 setState={setState}

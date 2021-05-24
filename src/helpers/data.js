@@ -92,7 +92,7 @@ export function filterMeetingData(state, setState) {
   } else if (['me', 'location'].includes(state.input.mode)) {
     //only show meetings with physical locations
     const meetingsWithCoordinates = Object.keys(state.meetings).filter(
-      slug => !!state.meetings[slug].latitude && !!state.meetings[slug].latitude
+      slug => state.meetings[slug].latitude && state.meetings[slug].latitude
     );
     matchGroups.coordinates = meetingsWithCoordinates;
 
