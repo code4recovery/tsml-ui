@@ -3,13 +3,7 @@ import cx from 'classnames/bind';
 import ReactMapGL, { Marker, NavigationControl, Popup } from 'react-map-gl';
 import moment from 'moment-timezone';
 
-import {
-  formatAddress,
-  formatMultiline,
-  settings,
-  setTitle,
-  strings,
-} from '../helpers';
+import { formatAddress, settings, setTitle, strings } from '../helpers';
 import Button from './Button';
 import Icon from './Icon';
 import Link from './Link';
@@ -56,16 +50,14 @@ export default function Meeting({ state, setState }) {
   setTitle(meeting.name);
 
   const weekdays = settings.weekdays
-    .map((weekday, index) => {
-      return {
-        name: strings[weekday],
-        meetings: Object.values(state.meetings).filter(
-          m =>
-            m.formatted_address == meeting.formatted_address &&
-            m.start?.day() == index
-        ),
-      };
-    })
+    .map((weekday, index) => ({
+      name: strings[weekday],
+      meetings: Object.values(state.meetings).filter(
+        m =>
+          m.formatted_address == meeting.formatted_address &&
+          m.start?.day() == index
+      ),
+    }))
     .filter(e => e.meetings.length);
 
   const timeString = meeting.start
@@ -115,17 +107,13 @@ export default function Meeting({ state, setState }) {
               <p className="meeting-time">{timeString}</p>
               {meeting.types && (
                 <ul className="ms-4 meeting-types">
-                  {meeting.types.sort().map(type => (
-                    <li key={type}>{type}</li>
+                  {meeting.types.sort().map((type, index) => (
+                    <li key={index}>{type}</li>
                   ))}
                 </ul>
               )}
               {meeting.notes && (
-                <div className="meeting-notes">
-                  {formatMultiline(meeting.notes).map(p => (
-                    <p>{p}</p>
-                  ))}
-                </div>
+                <Paragraphs text={meeting.notes} className="meeting-notes" />
               )}
             </div>
             {(!!meeting.conference_provider || !!meeting.conference_phone) && (
@@ -140,15 +128,10 @@ export default function Meeting({ state, setState }) {
                       className="conference-url"
                     />
                     {!!meeting.conference_url_notes && (
-                      <div className="d-block text-muted conference-url-notes">
-                        {formatMultiline(meeting.conference_url_notes).map(
-                          p => (
-                            <p>
-                              <small>{p}</small>
-                            </p>
-                          )
-                        )}
-                      </div>
+                      <Paragraphs
+                        text={meeting.conference_url_notes}
+                        className="d-block text-muted conference-url-notes"
+                      />
                     )}
                   </div>
                 )}
@@ -161,13 +144,10 @@ export default function Meeting({ state, setState }) {
                   />
                 )}
                 {!!meeting.conference_phone_notes && (
-                  <div className="d-block text-muted conference-phone-notes">
-                    {formatMultiline(meeting.conference_phone_notes).map(p => (
-                      <p>
-                        <small>{p}</small>
-                      </p>
-                    ))}
-                  </div>
+                  <Paragraphs
+                    text={meeting.conference_phone_notes}
+                    className="d-block text-muted conference-phone-notes"
+                  />
                 )}
               </div>
             )}
@@ -212,54 +192,49 @@ export default function Meeting({ state, setState }) {
                 </p>
               )}
               {!!meeting.location_notes && (
-                <div className="location-notes">
-                  {formatMultiline(meeting.location_notes).map(p => (
-                    <p>{p}</p>
-                  ))}
-                </div>
+                <Paragraphs
+                  text={meeting.location_notes}
+                  className="location-notes"
+                />
               )}
-              {!isApproxAddress && !!weekdays.length && (
-                <div className="d-grid gap-3">
-                  {weekdays.map((weekday, index) => (
-                    <div key={index}>
-                      <h6 className="mb-1">{weekday.name}</h6>
-                      <ol className="list-unstyled">
-                        {weekday.meetings.map(m => (
-                          <li key={m.slug} style={{ paddingLeft: '5.25rem' }}>
-                            <span
-                              className="position-absolute text-muted text-nowrap text-right"
-                              style={{
-                                left: '1.25rem',
-                                width: '4.5rem',
-                              }}
-                            >
-                              {m.start.format('h:mm a')}
-                            </span>
-                            {m.slug === meeting.slug && <Link meeting={m} />}
-                            {m.slug !== meeting.slug && (
-                              <Link
-                                meeting={m}
-                                state={state}
-                                setState={setState}
-                              />
-                            )}
-                          </li>
-                        ))}
-                      </ol>
-                    </div>
-                  ))}
-                </div>
-              )}
+              {!isApproxAddress &&
+                weekdays.map((weekday, index) => (
+                  <div key={index}>
+                    <h6 className="mt-2 mb-1">{weekday.name}</h6>
+                    <ol className="list-unstyled">
+                      {weekday.meetings.map((m, index) => (
+                        <li key={index} style={{ paddingLeft: '5.25rem' }}>
+                          <span
+                            className="position-absolute text-muted text-nowrap text-right"
+                            style={{
+                              left: '1.25rem',
+                              width: '4.5rem',
+                            }}
+                          >
+                            {m.start.format('h:mm a')}
+                          </span>
+                          {m.slug === meeting.slug && <Link meeting={m} />}
+                          {m.slug !== meeting.slug && (
+                            <Link
+                              meeting={m}
+                              state={state}
+                              setState={setState}
+                            />
+                          )}
+                        </li>
+                      ))}
+                    </ol>
+                  </div>
+                ))}
             </div>
             {(meeting.group || meeting.group_notes || meeting.district) && (
               <div className="d-grid gap-2 list-group-item py-3">
                 {!!meeting.group && <h5>{meeting.group}</h5>}
                 {!!meeting.group_notes && (
-                  <div className="meeting-group-notes">
-                    {formatMultiline(meeting.group_notes).map(p => (
-                      <p>{p}</p>
-                    ))}
-                  </div>
+                  <Paragraphs
+                    text={meeting.group_notes}
+                    className="meeting-group-notes"
+                  />
                 )}
                 {!!meeting.district && (
                   <p className="meeting-district">{meeting.district}</p>
@@ -363,6 +338,18 @@ export default function Meeting({ state, setState }) {
           </div>
         )}
       </div>
+    </div>
+  );
+}
+
+//return paragraphs from possibly-multiline string
+function Paragraphs({ text, className }) {
+  const paragraphs = text.split('\n').filter(e => e);
+  return (
+    <div className={className}>
+      {paragraphs.map((p, index) => (
+        <p key={index}>{p}</p>
+      ))}
     </div>
   );
 }
