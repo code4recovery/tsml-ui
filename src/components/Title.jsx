@@ -14,7 +14,7 @@ export default function Title({ state }) {
       title.push(strings.meetings);
     } else if (
       key === 'search_with' &&
-      state.input.mode == 'search' &&
+      state.input.mode === 'search' &&
       state.input.search
     ) {
       title.push(
@@ -22,7 +22,7 @@ export default function Title({ state }) {
       );
     } else if (
       key === 'search_near' &&
-      state.input.mode == 'location' &&
+      state.input.mode === 'location' &&
       state.input.search
     ) {
       title.push(

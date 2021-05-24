@@ -16,7 +16,7 @@ export default function Table({ state, setState, filteredSlugs }) {
   };
 
   const getValue = (meeting, key) => {
-    if (key == 'address') {
+    if (key === 'address') {
       if (settings.show.listButtons) {
         const buttons = [];
         if (meeting.conference_provider) {
@@ -80,7 +80,7 @@ export default function Table({ state, setState, filteredSlugs }) {
           <div className="overflow-auto">
             {labels.map((label, index) => (
               <small
-                className="d-flex float-start me-1 align-items-center bg-secondary text-light rounded px-2 p-1 my-1"
+                className="align-items-center bg-secondary d-flex float-start me-1 my-1 px-2 py-1 rounded text-light"
                 key={index}
               >
                 {label.icon && (
@@ -92,11 +92,11 @@ export default function Table({ state, setState, filteredSlugs }) {
           </div>
         );
       }
-    } else if (key == 'name' && meeting.slug) {
+    } else if (key === 'name' && meeting.slug) {
       return <Link meeting={meeting} state={state} setState={setState} />;
-    } else if (key == 'region' && meeting.regions) {
+    } else if (key === 'region' && meeting.regions) {
       return meeting.regions[meeting.regions.length - 1];
-    } else if (key == 'time') {
+    } else if (key === 'time') {
       return meeting.start ? (
         <time className="text-nowrap">
           {meeting.start.format('h:mm a')}
@@ -107,11 +107,11 @@ export default function Table({ state, setState, filteredSlugs }) {
       ) : (
         strings.appointment
       );
-    } else if (key == 'distance') {
+    } else if (key === 'distance') {
       return meeting.distance ? (
         <>
           {meeting.distance}
-          <small className="text-muted ms-1">{settings.distance_unit}</small>
+          <small className="ms-1 text-muted">{settings.distance_unit}</small>
         </>
       ) : null;
     }

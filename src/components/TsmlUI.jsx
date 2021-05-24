@@ -108,7 +108,7 @@ export default function TsmlUI({ json, mapbox }) {
 
   return (
     <div id="tsml-ui">
-      <div className="container-fluid d-flex flex-column overflow-hidden py-3">
+      <div className="container-fluid d-flex flex-column py-3">
         {state.input.meeting ? (
           <Meeting state={state} setState={setState} />
         ) : (

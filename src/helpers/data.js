@@ -123,7 +123,7 @@ export function filterMeetingData(state, setState) {
               //show error
             }
           });
-      } else if (state.input.mode == 'me') {
+      } else if (state.input.mode === 'me') {
         navigator.geolocation.getCurrentPosition(
           position => {
             calculateDistances(
@@ -615,8 +615,8 @@ export function loadMeetingData(data, capabilities) {
     settings.modes.push('location');
     if (
       navigator.geolocation &&
-      (window.location.protocol == 'https:' ||
-        window.location.hostname == 'localhost')
+      (window.location.protocol === 'https:' ||
+        window.location.hostname === 'localhost')
     ) {
       capabilities.geolocation = true;
       settings.modes.push('me');
@@ -635,10 +635,10 @@ function parseTime(timeString) {
 
   const time = timeString.match(/(\d+)(:(\d\d))?\s*(p?)/i);
 
-  if (time == null) return null;
+  if (time === null) return null;
 
   let hours = parseInt(time[1], 10);
-  if (hours == 12 && !time[4]) {
+  if (hours === 12 && !time[4]) {
     hours = 0;
   } else {
     hours += hours < 12 && time[4] ? 12 : 0;
@@ -675,7 +675,7 @@ function populateRegionsIndex(regions, position, index, slug) {
 // output: west chester|malvern|devon|center city west
 function processSearch(search_string) {
   let terms = [];
-  if (settings.search == 'quoted') {
+  if (settings.search === 'quoted') {
     // Search type quoted ("Google Style"): parse out any quoted strings
     search_string = search_string.toLowerCase();
     if (search_string.includes('"')) {
@@ -698,7 +698,7 @@ function processSearch(search_string) {
 
     // Return the the pipe delimited search string
     return terms.join('|');
-  } else if (settings.search == 'or') {
+  } else if (settings.search === 'or') {
     // Search type "or": replace capitalized OR with a pipe.
     return search_string.replaceAll(' OR ', '|').toLowerCase();
   } else {
