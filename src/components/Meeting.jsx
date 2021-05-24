@@ -32,8 +32,7 @@ export default function Meeting({ state, setState }) {
   });
 
   //create a link for directions
-  const iOS =
-    !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
+  const iOS = navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
 
   const isTempClosed = meeting.types.includes(strings.types.TC);
 
@@ -95,10 +94,10 @@ export default function Meeting({ state, setState }) {
         <div className="mb-3 col-md-4 mb-md-0">
           {directionsUrl && (
             <Button
-              href={directionsUrl}
-              text={strings.get_directions}
-              icon="directions"
               className="mb-3"
+              href={directionsUrl}
+              icon="directions"
+              text={strings.get_directions}
             />
           )}
           <div className="list-group">
@@ -116,73 +115,73 @@ export default function Meeting({ state, setState }) {
                 <Paragraphs text={meeting.notes} className="meeting-notes" />
               )}
             </div>
-            {(!!meeting.conference_provider || !!meeting.conference_phone) && (
+            {(meeting.conference_provider || meeting.conference_phone) && (
               <div className="d-grid gap-2 list-group-item py-3">
                 <h5>{strings.types.online}</h5>
-                {!!meeting.conference_provider && (
+                {meeting.conference_provider && (
                   <div className="d-grid gap-2 conference-provider">
                     <Button
-                      text={meeting.conference_provider}
-                      icon="camera"
-                      href={meeting.conference_url}
                       className="conference-url"
+                      href={meeting.conference_url}
+                      icon="camera"
+                      text={meeting.conference_provider}
                     />
-                    {!!meeting.conference_url_notes && (
+                    {meeting.conference_url_notes && (
                       <Paragraphs
-                        text={meeting.conference_url_notes}
                         className="d-block text-muted conference-url-notes"
+                        text={meeting.conference_url_notes}
                       />
                     )}
                   </div>
                 )}
-                {!!meeting.conference_phone && (
+                {meeting.conference_phone && (
                   <Button
-                    text={strings.phone}
-                    icon="telephone"
-                    href={`tel:${meeting.conference_phone}`}
                     className="conference-phone"
+                    href={`tel:${meeting.conference_phone}`}
+                    icon="telephone"
+                    text={strings.phone}
                   />
                 )}
-                {!!meeting.conference_phone_notes && (
+                {meeting.conference_phone_notes && (
                   <Paragraphs
-                    text={meeting.conference_phone_notes}
                     className="d-block text-muted conference-phone-notes"
+                    text={meeting.conference_phone_notes}
                   />
                 )}
               </div>
             )}
-            {(!!meeting.venmo || !!meeting.square || !!meeting.paypal) && (
+            {(meeting.venmo || meeting.square || meeting.paypal) && (
               <div className="d-grid gap-2 list-group-item py-3">
                 <h5>{strings.seventh_tradition}</h5>
-                {!!meeting.venmo && (
+                {meeting.venmo && (
                   <Button
-                    text="Venmo"
-                    icon="cash"
-                    href={`https://venmo.com/${meeting.venmo.substr(1)}`}
                     className="venmo"
+                    href={`https://venmo.com/${meeting.venmo.substr(1)}`}
+                    icon="cash"
+                    text="Venmo"
                   />
                 )}
-                {!!meeting.square && (
+                {meeting.square && (
                   <Button
-                    text="Cash App"
-                    icon="cash"
-                    href={`https://cash.app/${meeting.square}`}
                     className="square"
+                    href={`https://cash.app/${meeting.square}`}
+                    icon="cash"
+                    text="Cash App"
                   />
                 )}
-                {!!meeting.paypal && (
+                {meeting.paypal && (
                   <Button
-                    text="PayPal"
-                    icon="cash"
-                    href={meeting.paypal}
                     className="paypal"
+                    href={meeting.paypal}
+                    icon="cash"
+                    text="PayPal"
                   />
                 )}
               </div>
             )}
             <div className="d-grid gap-2 list-group-item py-3">
-              {!!meeting.location && <h5>{meeting.location}</h5>}
-              {!!meeting.formatted_address && (
+              {meeting.location && <h5>{meeting.location}</h5>}
+              {meeting.formatted_address && (
                 <p
                   className={cx({
                     'text-decoration-line-through text-muted': isTempClosed,
@@ -191,10 +190,10 @@ export default function Meeting({ state, setState }) {
                   {meeting.formatted_address}
                 </p>
               )}
-              {!!meeting.location_notes && (
+              {meeting.location_notes && (
                 <Paragraphs
-                  text={meeting.location_notes}
                   className="location-notes"
+                  text={meeting.location_notes}
                 />
               )}
               {!isApproxAddress &&
@@ -217,8 +216,8 @@ export default function Meeting({ state, setState }) {
                           {m.slug !== meeting.slug && (
                             <Link
                               meeting={m}
-                              state={state}
                               setState={setState}
+                              state={state}
                             />
                           )}
                         </li>
@@ -229,14 +228,14 @@ export default function Meeting({ state, setState }) {
             </div>
             {(meeting.group || meeting.group_notes || meeting.district) && (
               <div className="d-grid gap-2 list-group-item py-3">
-                {!!meeting.group && <h5>{meeting.group}</h5>}
-                {!!meeting.group_notes && (
+                {meeting.group && <h5>{meeting.group}</h5>}
+                {meeting.group_notes && (
                   <Paragraphs
-                    text={meeting.group_notes}
                     className="meeting-group-notes"
+                    text={meeting.group_notes}
                   />
                 )}
-                {!!meeting.district && (
+                {meeting.district && (
                   <p className="meeting-district">{meeting.district}</p>
                 )}
               </div>
@@ -256,10 +255,10 @@ export default function Meeting({ state, setState }) {
 
           {meeting.feedback_url && (
             <Button
-              href={meeting.feedback_url}
-              text={strings.feedback}
-              icon="edit"
               className="mt-3 feedback-url"
+              href={meeting.feedback_url}
+              icon="edit"
+              text={strings.feedback}
             />
           )}
         </div>
@@ -268,12 +267,12 @@ export default function Meeting({ state, setState }) {
             {viewport && meeting.latitude && (
               <ReactMapGL
                 className="rounded border bg-light"
-                {...viewport}
-                mapboxApiAccessToken={settings.map.key}
-                mapStyle={settings.map.style}
-                onViewportChange={isApproxAddress ? undefined : setViewport}
                 height="100%"
+                mapStyle={settings.map.style}
+                mapboxApiAccessToken={settings.map.key}
+                onViewportChange={isApproxAddress ? undefined : setViewport}
                 width="100%"
+                {...viewport}
               >
                 {!isApproxAddress && (
                   <>
@@ -284,18 +283,18 @@ export default function Meeting({ state, setState }) {
                       offsetTop={-settings.map.markers.location.height}
                     >
                       <div
-                        title={meeting.location}
-                        style={settings.map.markers.location}
                         onClick={() => setPopup(true)}
+                        style={settings.map.markers.location}
+                        title={meeting.location}
                       />
                     </Marker>
                     {popup && (
                       <Popup
+                        closeOnClick={false}
                         latitude={meeting.latitude}
                         longitude={meeting.longitude}
-                        closeOnClick={false}
-                        onClose={() => setPopup(false)}
                         offsetTop={-settings.map.markers.location.height}
+                        onClose={() => setPopup(false)}
                       >
                         <div className="d-grid gap-2 ">
                           <h4 className="font-weight-light">
@@ -344,12 +343,14 @@ export default function Meeting({ state, setState }) {
 
 //return paragraphs from possibly-multiline string
 function Paragraphs({ text, className }) {
-  const paragraphs = text.split('\n').filter(e => e);
   return (
     <div className={className}>
-      {paragraphs.map((p, index) => (
-        <p key={index}>{p}</p>
-      ))}
+      {text
+        .split('\n')
+        .filter(e => e)
+        .map((p, index) => (
+          <p key={index}>{p}</p>
+        ))}
     </div>
   );
 }

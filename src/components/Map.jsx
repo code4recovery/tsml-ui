@@ -117,10 +117,10 @@ export default function Map({ filteredSlugs, state, setState }) {
     <div className="border rounded bg-light flex-grow-1 map" ref={mapFrame}>
       {!!viewport && !!data.locationKeys.length && (
         <ReactMapGL
-          {...viewport}
-          mapboxApiAccessToken={settings.map.key}
           mapStyle={settings.map.style}
+          mapboxApiAccessToken={settings.map.key}
           onViewportChange={setViewport}
+          {...viewport}
         >
           {data.locationKeys.map(key => {
             const location = data.locations[key];
@@ -147,18 +147,19 @@ export default function Map({ filteredSlugs, state, setState }) {
                   offsetTop={-settings.map.markers.location.height}
                 >
                   <div
-                    title={location.name}
-                    style={settings.map.markers.location}
                     onClick={() => setPopup(key)}
+                    style={settings.map.markers.location}
+                    title={location.name}
                   />
                 </Marker>
                 {popup == key && (
                   <Popup
+                    captureScroll={true}
+                    closeOnClick={false}
                     latitude={location.latitude}
                     longitude={location.longitude}
-                    closeOnClick={false}
-                    onClose={() => setPopup(null)}
                     offsetTop={-settings.map.markers.location.height}
+                    onClose={() => setPopup(null)}
                   >
                     <div className="d-grid gap-2">
                       <h4 className="font-weight-light">{location.name}</h4>
