@@ -18,7 +18,7 @@ export default function Dropdown({
       <Fragment key={x.key}>
         <a
           className={cx(
-            'dropdown-item d-flex justify-content-between align-items-center',
+            'align-items-center d-flex dropdown-item justify-content-between',
             {
               'active bg-secondary': values.indexOf(x.key) !== -1,
             }
@@ -43,7 +43,7 @@ export default function Dropdown({
   return (
     <div className="dropdown">
       <button
-        className="btn btn-outline-secondary w-100 dropdown-toggle"
+        className="btn btn-outline-secondary dropdown-toggle w-100"
         onClick={() => setDropdown(open ? null : filter)}
       >
         {values?.length && options?.length

@@ -29,7 +29,7 @@ export default function Controls({ state, setState }) {
   //keyword search
   const keywordSearch = e => {
     setSearch(e.target.value);
-    if (state.input.mode == 'search') {
+    if (state.input.mode === 'search') {
       setState({
         ...state,
         input: {
@@ -44,7 +44,7 @@ export default function Controls({ state, setState }) {
   const locationSearch = e => {
     e.preventDefault();
 
-    if (state.input.mode == 'location') {
+    if (state.input.mode === 'location') {
       setState({
         ...state,
         input: {
@@ -65,7 +65,7 @@ export default function Controls({ state, setState }) {
     if (value) {
       if (e.metaKey) {
         const index = state.input[filter].indexOf(value);
-        if (index == -1) {
+        if (index === -1) {
           state.input[filter].push(value);
         } else {
           state.input[filter].splice(index, 1);
@@ -80,8 +80,8 @@ export default function Controls({ state, setState }) {
     //sort filters
     state.input[filter].sort((a, b) => {
       return (
-        state.indexes[filter].findIndex(x => a == x.key) -
-        state.indexes[filter].findIndex(x => b == x.key)
+        state.indexes[filter].findIndex(x => a === x.key) -
+        state.indexes[filter].findIndex(x => b === x.key)
       );
     });
 
@@ -132,8 +132,8 @@ export default function Controls({ state, setState }) {
   //decide whether to show filter
   const canShowFilter = filter => {
     if (!state.capabilities[filter]) return false;
-    if (filter == 'region' && state.input.mode == 'me') return false;
-    if (filter == 'distance' && state.input.mode == 'search') return false;
+    if (filter === 'region' && state.input.mode === 'me') return false;
+    if (filter === 'distance' && state.input.mode === 'search') return false;
     return true;
   };
 
@@ -150,29 +150,29 @@ export default function Controls({ state, setState }) {
                 value={search}
                 ref={searchInput}
                 placeholder={strings.modes[state.input.mode]}
-                disabled={state.input.mode == 'me'}
+                disabled={state.input.mode === 'me'}
                 spellCheck="false"
               />
               <button
                 className="btn btn-outline-secondary dropdown-toggle"
                 onClick={e =>
-                  setDropdown(dropdown == 'search' ? null : 'search')
+                  setDropdown(dropdown === 'search' ? null : 'search')
                 }
                 type="button"
               />
             </form>
             <div
               className={cx('dropdown-menu dropdown-menu-end', {
-                show: dropdown == 'search',
+                show: dropdown === 'search',
               })}
             >
               {settings.modes.map(x => (
                 <a
                   key={x}
                   className={cx(
-                    'dropdown-item d-flex justify-content-between align-items-center',
+                    'align-items-center dropdown-item d-flex justify-content-between',
                     {
-                      'active bg-secondary': state.input.mode == x,
+                      'active bg-secondary': state.input.mode === x,
                     }
                   )}
                   href="#"
@@ -189,14 +189,14 @@ export default function Controls({ state, setState }) {
             canShowFilter(filter) && (
               <div className="col-sm-6 col-lg mb-3" key={filter}>
                 <Dropdown
-                  setDropdown={setDropdown}
-                  filter={filter}
-                  options={state.indexes[filter]}
-                  values={state.input[filter]}
-                  open={dropdown == filter}
-                  right={filter == 'type' && !state.capabilities.map}
-                  setFilter={setFilter}
                   defaultValue={strings[filter + '_any']}
+                  filter={filter}
+                  open={dropdown === filter}
+                  options={state.indexes[filter]}
+                  right={filter === 'type' && !state.capabilities.map}
+                  setDropdown={setDropdown}
+                  setFilter={setFilter}
+                  values={state.input[filter]}
                 />
               </div>
             )
@@ -207,7 +207,7 @@ export default function Controls({ state, setState }) {
               <button
                 type="button"
                 className={cx('btn btn-outline-secondary w-100', {
-                  active: state.input.view == 'list',
+                  active: state.input.view === 'list',
                 })}
                 onClick={e => setView(e, 'list')}
               >
@@ -216,7 +216,7 @@ export default function Controls({ state, setState }) {
               <button
                 type="button"
                 className={cx('btn btn-outline-secondary w-100', {
-                  active: state.input.view == 'map',
+                  active: state.input.view === 'map',
                 })}
                 onClick={e => setView(e, 'map')}
               >

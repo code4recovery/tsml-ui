@@ -42,8 +42,8 @@ export default function Meeting({ state, setState }) {
       name: strings[weekday],
       meetings: Object.values(state.meetings).filter(
         m =>
-          m.formatted_address == meeting.formatted_address &&
-          m.start?.day() == index
+          m.formatted_address === meeting.formatted_address &&
+          m.start?.day() === index
       ),
     }))
     .filter(e => e.meetings.length);
@@ -56,11 +56,11 @@ export default function Meeting({ state, setState }) {
     : strings.appointment;
 
   return (
-    <div className="flex-column flex-grow-1 d-flex meeting">
+    <div className="d-flex flex-column flex-grow-1 meeting">
       <h1 className="font-weight-light mb-1">
         <Link meeting={meeting} />
       </h1>
-      <h6 className="border-bottom mb-3 pb-2 d-flex align-items-center">
+      <h6 className="align-items-center border-bottom d-flex mb-3 pb-2">
         <Icon icon="back" />
         <a
           href={window.location.pathname}
@@ -78,11 +78,10 @@ export default function Meeting({ state, setState }) {
           {strings.back_to_meetings}
         </a>
       </h6>
-      <div className="row flex-grow-1">
-        <div className="mb-3 col-md-4 mb-md-0">
+      <div className="flex-grow-1 row">
+        <div className="align-content-start col-md-4 d-grid gap-3 mb-3 mb-md-0">
           {directionsUrl && (
             <Button
-              className="mb-3"
               href={directionsUrl}
               icon="directions"
               text={strings.get_directions}
@@ -91,32 +90,29 @@ export default function Meeting({ state, setState }) {
           <div className="list-group">
             <div className="d-grid gap-2 list-group-item py-3">
               <h5>{strings.meeting_information}</h5>
-              <p className="meeting-time">{timeString}</p>
+              <p>{timeString}</p>
               {meeting.types && (
-                <ul className="ms-4 meeting-types">
+                <ul className="ms-4">
                   {meeting.types.sort().map((type, index) => (
                     <li key={index}>{type}</li>
                   ))}
                 </ul>
               )}
-              {meeting.notes && (
-                <Paragraphs text={meeting.notes} className="meeting-notes" />
-              )}
+              {meeting.notes && <Paragraphs text={meeting.notes} />}
             </div>
             {(meeting.conference_provider || meeting.conference_phone) && (
               <div className="d-grid gap-2 list-group-item py-3">
                 <h5>{strings.types.online}</h5>
                 {meeting.conference_provider && (
-                  <div className="d-grid gap-2 conference-provider">
+                  <div className="d-grid gap-2">
                     <Button
-                      className="conference-url"
                       href={meeting.conference_url}
                       icon="camera"
                       text={meeting.conference_provider}
                     />
                     {meeting.conference_url_notes && (
                       <Paragraphs
-                        className="d-block text-muted conference-url-notes"
+                        className="d-block text-muted"
                         text={meeting.conference_url_notes}
                       />
                     )}
@@ -124,7 +120,6 @@ export default function Meeting({ state, setState }) {
                 )}
                 {meeting.conference_phone && (
                   <Button
-                    className="conference-phone"
                     href={`tel:${meeting.conference_phone}`}
                     icon="telephone"
                     text={strings.phone}
@@ -132,7 +127,7 @@ export default function Meeting({ state, setState }) {
                 )}
                 {meeting.conference_phone_notes && (
                   <Paragraphs
-                    className="d-block text-muted conference-phone-notes"
+                    className="d-block text-muted"
                     text={meeting.conference_phone_notes}
                   />
                 )}
@@ -143,7 +138,6 @@ export default function Meeting({ state, setState }) {
                 <h5>{strings.seventh_tradition}</h5>
                 {meeting.venmo && (
                   <Button
-                    className="venmo"
                     href={`https://venmo.com/${meeting.venmo.substr(1)}`}
                     icon="cash"
                     text="Venmo"
@@ -151,19 +145,13 @@ export default function Meeting({ state, setState }) {
                 )}
                 {meeting.square && (
                   <Button
-                    className="square"
                     href={`https://cash.app/${meeting.square}`}
                     icon="cash"
                     text="Cash App"
                   />
                 )}
                 {meeting.paypal && (
-                  <Button
-                    className="paypal"
-                    href={meeting.paypal}
-                    icon="cash"
-                    text="PayPal"
-                  />
+                  <Button href={meeting.paypal} icon="cash" text="PayPal" />
                 )}
               </div>
             )}
@@ -179,10 +167,7 @@ export default function Meeting({ state, setState }) {
                 </p>
               )}
               {meeting.location_notes && (
-                <Paragraphs
-                  className="location-notes"
-                  text={meeting.location_notes}
-                />
+                <Paragraphs text={meeting.location_notes} />
               )}
               {!isApproxAddress &&
                 weekdays.map((weekday, index) => (
@@ -218,14 +203,9 @@ export default function Meeting({ state, setState }) {
               <div className="d-grid gap-2 list-group-item py-3">
                 {meeting.group && <h5>{meeting.group}</h5>}
                 {meeting.group_notes && (
-                  <Paragraphs
-                    className="meeting-group-notes"
-                    text={meeting.group_notes}
-                  />
+                  <Paragraphs text={meeting.group_notes} />
                 )}
-                {meeting.district && (
-                  <p className="meeting-district">{meeting.district}</p>
-                )}
+                {meeting.district && <p>{meeting.district}</p>}
               </div>
             )}
             {meeting.updated && (
@@ -243,7 +223,6 @@ export default function Meeting({ state, setState }) {
 
           {meeting.feedback_url && (
             <Button
-              className="mt-3 feedback-url"
               href={meeting.feedback_url}
               icon="edit"
               text={strings.feedback}

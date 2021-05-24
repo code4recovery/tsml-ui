@@ -13,7 +13,7 @@ export default function Button({
   return (
     <a
       className={cx(
-        'btn btn-outline-secondary d-flex align-items-center justify-content-center',
+        'align-items-center btn btn-outline-secondary d-flex justify-content-center',
         { 'btn-block': block },
         className
       )}

@@ -185,8 +185,8 @@ export default function Map({
                               </time>
                               <Link
                                 meeting={meeting}
-                                state={state}
                                 setState={setState}
+                                state={state}
                               />
                             </div>
                           ))}
@@ -195,8 +195,8 @@ export default function Map({
                     {data.locations[key].directions_url && (
                       <Button
                         href={data.locations[key].directions_url}
+                        icon="directions"
                         text={strings.get_directions}
-                        icon={'directions'}
                       />
                     )}
                   </div>

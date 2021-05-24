@@ -6,7 +6,7 @@ export function distance(a, b) {
   if (!a?.latitude || !b?.latitude || !a?.longitude || !b?.longitude)
     return null;
 
-  if (a.latitude == b.latitude && a.longitude == b.longitude) {
+  if (a.latitude === b.latitude && a.longitude === b.longitude) {
     return 0;
   } else {
     const aRadLat = (Math.PI * a.latitude) / 180;
