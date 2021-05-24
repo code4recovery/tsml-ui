@@ -17,6 +17,21 @@ export function formatConferenceProvider(url) {
   return provider.length ? settings.conference_providers[provider[0]] : null;
 }
 
+//send back a string url to get directions with the appropriate provider
+export function formatDirectionsUrl({
+  formatted_address,
+  latitude,
+  longitude,
+}) {
+  //create a link for directions
+  const iOS = navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
+  return `${
+    iOS ? 'maps://' : 'https://www.google.com/maps'
+  }?daddr=${latitude},${longitude}&saddr=Current+Location&q=${encodeURI(
+    formatted_address
+  )}`;
+}
+
 //turn Mountain View into mountain-view
 export function formatSlug(str, separator = '-') {
   str = str.trim();

@@ -2,11 +2,21 @@ import React, { useEffect, useRef, useState } from 'react';
 import ReactMapGL, { Marker, NavigationControl, Popup } from 'react-map-gl';
 import WebMercatorViewport from 'viewport-mercator-project';
 
-import { formatAddress, settings, strings } from '../helpers';
+import {
+  formatAddress,
+  formatDirectionsUrl,
+  settings,
+  strings,
+} from '../helpers';
 import Button from './Button';
 import Link from './Link';
 
-export default function Map({ filteredSlugs, state, setState }) {
+export default function Map({
+  filteredSlugs,
+  listMeetingsInPopup = true,
+  state,
+  setState,
+}) {
   const [popup, setPopup] = useState(null);
   const [viewport, setViewport] = useState(null);
   const [data, setData] = useState({
@@ -43,9 +53,9 @@ export default function Map({ filteredSlugs, state, setState }) {
       const address = formatAddress(meeting.formatted_address);
 
       if (
-        !!meeting.latitude &&
-        !!meeting.latitude &&
-        !!address &&
+        meeting.latitude &&
+        meeting.latitude &&
+        address &&
         !meeting.types.includes(strings.types.TC)
       ) {
         const coords = meeting.latitude + ',' + meeting.longitude;
@@ -53,12 +63,12 @@ export default function Map({ filteredSlugs, state, setState }) {
         //create a new pin
         if (!locations.hasOwnProperty(coords)) {
           locations[coords] = {
-            name: meeting.location,
+            directions_url: formatDirectionsUrl(meeting),
             formatted_address: meeting.formatted_address,
             latitude: meeting.latitude,
             longitude: meeting.longitude,
-            //probably a directions link here
             meetings: [],
+            name: meeting.location,
           };
         }
 
@@ -88,6 +98,11 @@ export default function Map({ filteredSlugs, state, setState }) {
       locations: locations,
       locationKeys: locationKeys,
     });
+
+    //show popup if only one
+    if (locationKeys.length === 1) {
+      setPopup(locationKeys[0]);
+    }
   }, [filteredSlugs]);
 
   //reset viewport when data or dimensions change
@@ -115,57 +130,44 @@ export default function Map({ filteredSlugs, state, setState }) {
 
   return (
     <div className="border rounded bg-light flex-grow-1 map" ref={mapFrame}>
-      {!!viewport && !!data.locationKeys.length && (
+      {viewport && !!data.locationKeys.length && (
         <ReactMapGL
           mapStyle={settings.map.style}
           mapboxApiAccessToken={settings.map.key}
           onViewportChange={setViewport}
           {...viewport}
         >
-          {data.locationKeys.map(key => {
-            const location = data.locations[key];
-
-            //create a link for directions
-            const iOS =
-              !!navigator.platform &&
-              /iPad|iPhone|iPod/.test(navigator.platform);
-
-            location.directions_url = `${
-              iOS ? 'maps://' : 'https://www.google.com/maps'
-            }?daddr=${location.latitude},${
-              location.longitude
-            }&saddr=Current+Location&q=${encodeURI(
-              location.formatted_address
-            )}`;
-
-            return (
-              <div key={key}>
-                <Marker
-                  latitude={location.latitude}
-                  longitude={location.longitude}
-                  offsetLeft={-settings.map.markers.location.width / 2}
+          {data.locationKeys.map(key => (
+            <div key={key}>
+              <Marker
+                latitude={data.locations[key].latitude}
+                longitude={data.locations[key].longitude}
+                offsetLeft={-settings.map.markers.location.width / 2}
+                offsetTop={-settings.map.markers.location.height}
+              >
+                <div
+                  onClick={() => setPopup(key)}
+                  style={settings.map.markers.location}
+                  title={data.locations[key].name}
+                />
+              </Marker>
+              {popup === key && (
+                <Popup
+                  captureScroll={true}
+                  closeOnClick={false}
+                  latitude={data.locations[key].latitude}
+                  longitude={data.locations[key].longitude}
                   offsetTop={-settings.map.markers.location.height}
+                  onClose={() => setPopup(null)}
                 >
-                  <div
-                    onClick={() => setPopup(key)}
-                    style={settings.map.markers.location}
-                    title={location.name}
-                  />
-                </Marker>
-                {popup == key && (
-                  <Popup
-                    captureScroll={true}
-                    closeOnClick={false}
-                    latitude={location.latitude}
-                    longitude={location.longitude}
-                    offsetTop={-settings.map.markers.location.height}
-                    onClose={() => setPopup(null)}
-                  >
-                    <div className="d-grid gap-2">
-                      <h4 className="font-weight-light">{location.name}</h4>
-                      <p>{location.formatted_address}</p>
+                  <div className="d-grid gap-2">
+                    <h4 className="font-weight-light">
+                      {data.locations[key].name}
+                    </h4>
+                    <p>{data.locations[key].formatted_address}</p>
+                    {listMeetingsInPopup && (
                       <div className="list-group mb-1">
-                        {location.meetings
+                        {data.locations[key].meetings
                           .sort((a, b) => a.start.isAfter(b.start))
                           .map(meeting => (
                             <div key={meeting.slug} className="list-group-item">
@@ -189,19 +191,19 @@ export default function Map({ filteredSlugs, state, setState }) {
                             </div>
                           ))}
                       </div>
-                      {!!location.directions_url && (
-                        <Button
-                          href={location.directions_url}
-                          text={strings.get_directions}
-                          icon={'directions'}
-                        />
-                      )}
-                    </div>
-                  </Popup>
-                )}
-              </div>
-            );
-          })}
+                    )}
+                    {data.locations[key].directions_url && (
+                      <Button
+                        href={data.locations[key].directions_url}
+                        text={strings.get_directions}
+                        icon={'directions'}
+                      />
+                    )}
+                  </div>
+                </Popup>
+              )}
+            </div>
+          ))}
           <NavigationControl
             className="d-none d-md-block"
             onViewportChange={setViewport}

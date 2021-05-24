@@ -1,12 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import cx from 'classnames/bind';
-import ReactMapGL, { Marker, NavigationControl, Popup } from 'react-map-gl';
 import moment from 'moment-timezone';
 
-import { formatAddress, settings, setTitle, strings } from '../helpers';
+import {
+  formatAddress,
+  formatDirectionsUrl,
+  settings,
+  setTitle,
+  strings,
+} from '../helpers';
 import Button from './Button';
 import Icon from './Icon';
 import Link from './Link';
+import Map from './Map';
 
 export default function Meeting({ state, setState }) {
   const meeting = state.meetings[state.input.meeting];
@@ -23,27 +29,10 @@ export default function Meeting({ state, setState }) {
 
   const isApproxAddress = !formatAddress(meeting.formatted_address);
 
-  const [popup, setPopup] = useState(true);
-
-  const [viewport, setViewport] = useState({
-    latitude: meeting.latitude,
-    longitude: meeting.longitude,
-    zoom: isApproxAddress ? 10 : 14,
-  });
-
-  //create a link for directions
-  const iOS = navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
-
   const isTempClosed = meeting.types.includes(strings.types.TC);
 
   const directionsUrl =
-    isTempClosed || isApproxAddress
-      ? undefined
-      : `${iOS ? 'maps://' : 'https://www.google.com/maps'}?daddr=${
-          meeting.latitude
-        },${meeting.longitude}&saddr=Current+Location&q=${encodeURI(
-          meeting.formatted_address
-        )}`;
+    isTempClosed || isApproxAddress ? undefined : formatDirectionsUrl(meeting);
 
   //set page title
   setTitle(meeting.name);
@@ -77,7 +66,6 @@ export default function Meeting({ state, setState }) {
           href={window.location.pathname}
           onClick={e => {
             e.preventDefault();
-            setViewport(null);
             setState({
               ...state,
               input: {
@@ -263,77 +251,13 @@ export default function Meeting({ state, setState }) {
           )}
         </div>
         {state.capabilities.map && (
-          <div className="col-md-8 map">
-            {viewport && meeting.latitude && (
-              <ReactMapGL
-                className="rounded border bg-light"
-                height="100%"
-                mapStyle={settings.map.style}
-                mapboxApiAccessToken={settings.map.key}
-                onViewportChange={isApproxAddress ? undefined : setViewport}
-                width="100%"
-                {...viewport}
-              >
-                {!isApproxAddress && (
-                  <>
-                    <Marker
-                      latitude={meeting.latitude}
-                      longitude={meeting.longitude}
-                      offsetLeft={-settings.map.markers.location.width / 2}
-                      offsetTop={-settings.map.markers.location.height}
-                    >
-                      <div
-                        onClick={() => setPopup(true)}
-                        style={settings.map.markers.location}
-                        title={meeting.location}
-                      />
-                    </Marker>
-                    {popup && (
-                      <Popup
-                        closeOnClick={false}
-                        latitude={meeting.latitude}
-                        longitude={meeting.longitude}
-                        offsetTop={-settings.map.markers.location.height}
-                        onClose={() => setPopup(false)}
-                      >
-                        <div className="d-grid gap-2 ">
-                          <h4 className="font-weight-light">
-                            {meeting.location}
-                          </h4>
-                          <p
-                            className={cx({
-                              'text-decoration-line-through text-muted':
-                                isTempClosed,
-                            })}
-                          >
-                            {meeting.formatted_address}
-                          </p>
-                          {directionsUrl ? (
-                            <Button
-                              href={directionsUrl}
-                              icon="directions"
-                              text={strings.get_directions}
-                            />
-                          ) : (
-                            <Button
-                              className="btn-outline-danger disabled"
-                              icon="close"
-                              text={strings.types.TC}
-                            />
-                          )}
-                        </div>
-                      </Popup>
-                    )}
-                    <NavigationControl
-                      className="d-none d-md-block"
-                      onViewportChange={setViewport}
-                      showCompass={false}
-                      style={{ top: 10, right: 10 }}
-                    />
-                  </>
-                )}
-              </ReactMapGL>
-            )}
+          <div className="col-md-8">
+            <Map
+              filteredSlugs={[meeting.slug]}
+              listMeetingsInPopup={false}
+              state={state}
+              setState={setState}
+            />
           </div>
         )}
       </div>

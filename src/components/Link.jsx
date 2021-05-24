@@ -36,7 +36,7 @@ export default function Link({ state, meeting, setState }) {
       >
         {meeting.name}
       </a>
-      {!!flags && <small className="ms-2 text-muted">{flags}</small>}
+      {flags && <small className="ms-2 text-muted">{flags}</small>}
     </>
   );
 }
