@@ -2,12 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import ReactMapGL, { Marker, NavigationControl, Popup } from 'react-map-gl';
 import WebMercatorViewport from 'viewport-mercator-project';
 
-import {
-  formatAddress,
-  formatDirectionsUrl,
-  settings,
-  strings,
-} from '../helpers';
+import { formatDirectionsUrl, settings, strings } from '../helpers';
 import Button from './Button';
 import Link from './Link';
 
@@ -50,14 +45,7 @@ export default function Map({
     filteredSlugs.forEach(slug => {
       const meeting = state.meetings[slug];
 
-      const address = formatAddress(meeting.formatted_address);
-
-      if (
-        meeting.latitude &&
-        meeting.latitude &&
-        address &&
-        !meeting.types.includes(strings.types.TC)
-      ) {
+      if (meeting.latitude && meeting.longitude && meeting.isInPerson) {
         const coords = meeting.latitude + ',' + meeting.longitude;
 
         //create a new pin

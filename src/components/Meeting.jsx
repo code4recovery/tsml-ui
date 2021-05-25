@@ -2,13 +2,7 @@ import React, { useEffect } from 'react';
 import cx from 'classnames/bind';
 import moment from 'moment-timezone';
 
-import {
-  formatAddress,
-  formatDirectionsUrl,
-  settings,
-  setTitle,
-  strings,
-} from '../helpers';
+import { formatDirectionsUrl, settings, setTitle, strings } from '../helpers';
 import Button from './Button';
 import Icon from './Icon';
 import Link from './Link';
@@ -27,12 +21,9 @@ export default function Meeting({ state, setState }) {
     return null;
   }
 
-  const isApproxAddress = !formatAddress(meeting.formatted_address);
-
-  const isTempClosed = meeting.types.includes(strings.types.TC);
-
-  const directionsUrl =
-    isTempClosed || isApproxAddress ? undefined : formatDirectionsUrl(meeting);
+  const directionsUrl = meeting.isInPerson
+    ? undefined
+    : formatDirectionsUrl(meeting);
 
   //set page title
   setTitle(meeting.name);
@@ -160,7 +151,8 @@ export default function Meeting({ state, setState }) {
               {meeting.formatted_address && (
                 <p
                   className={cx({
-                    'text-decoration-line-through text-muted': isTempClosed,
+                    'text-decoration-line-through text-muted':
+                      meeting.isTempClosed,
                   })}
                 >
                   {meeting.formatted_address}
@@ -169,7 +161,7 @@ export default function Meeting({ state, setState }) {
               {meeting.location_notes && (
                 <Paragraphs text={meeting.location_notes} />
               )}
-              {!isApproxAddress &&
+              {meeting.address &&
                 weekdays.map((weekday, index) => (
                   <div key={index}>
                     <h6 className="mt-2 mb-1">{weekday.name}</h6>

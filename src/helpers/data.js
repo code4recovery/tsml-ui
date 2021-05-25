@@ -1,7 +1,7 @@
 import moment from 'moment-timezone';
 
 import { distance } from './distance';
-import { formatConferenceProvider, formatSlug } from './format';
+import { formatAddress, formatConferenceProvider, formatSlug } from './format';
 import { settings, strings } from './settings';
 
 //calculate distances
@@ -282,6 +282,7 @@ export function loadMeetingData(data, capabilities) {
 
   //filter out unused meetings properties for a leaner memory footprint
   const meeting_properties = [
+    'address',
     'conference_phone',
     'conference_phone_notes',
     'conference_provider',
@@ -293,6 +294,9 @@ export function loadMeetingData(data, capabilities) {
     'formatted_address',
     'group',
     'group_notes',
+    'isInPerson',
+    'isOnline',
+    'isTempClosed',
     'latitude',
     'location',
     'location_notes',
@@ -370,21 +374,27 @@ export function loadMeetingData(data, capabilities) {
       }
     }
 
+    //used in table, and for knowing if location is approximate
+    if (!meeting.address) {
+      meeting.address = formatAddress(meeting.formatted_address);
+    }
+
     //check for types
     if (!meeting.types) meeting.types = [];
 
     //add online and in-person metattypes
-    const isOnline = meeting.conference_url || meeting.conference_phone;
-    if (isOnline) meeting.types.push('online');
+    meeting.isOnline = meeting.conference_provider || meeting.conference_phone;
+    if (meeting.isOnline) meeting.types.push('online');
 
-    const isInPerson =
-      !meeting.types.includes('TC') &&
-      !meeting.types.includes(strings.types.TC) &&
-      (meeting.formatted_address.match(/,/g) || []).length > 2;
-    if (isInPerson) meeting.types.push('in-person');
+    meeting.isTempClosed =
+      meeting.types.includes('TC') || meeting.types.includes(strings.types.TC);
+
+    meeting.isInPerson = !meeting.isTempClosed && meeting.address;
+
+    if (meeting.isInPerson) meeting.types.push('in-person');
 
     //if neither online nor in person, skip it
-    if (!isOnline && !isInPerson) {
+    if (!meeting.isOnline && !meeting.isInPerson) {
       warn(index, `${meeting.name} is neither online or in person, skipping`);
       return;
     }
