@@ -15,7 +15,7 @@ export default {
   friday: 'Vendredi',
   get_directions: 'Directions',
   list: 'Liste',
-  location: 'Emplacement',
+  location: 'Emplacement / Groupe',
   map: 'Carte',
   meeting_information: 'Informations sur la réunion',
   meetings: 'Rencontres',

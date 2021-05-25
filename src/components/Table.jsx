@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import cx from 'classnames/bind';
 import InfiniteScroll from 'react-infinite-scroller';
 
-import { formatAddress, settings, strings } from '../helpers';
+import { settings, strings } from '../helpers';
 import Button from './Button';
 import Icon from './Icon';
 import Link from './Link';
@@ -46,22 +46,13 @@ export default function Table({ state, setState, filteredSlugs }) {
         return buttons.length ? (
           <div className="btn-group my-1 w-100">{buttons}</div>
         ) : (
-          <span
-            className={cx({
-              'text-decoration-line-through text-muted': meeting.types.includes(
-                strings.types.TC
-              ),
-            })}
-          >
-            {formatAddress(meeting.formatted_address)}
-          </span>
+          meeting.address
         );
       } else {
         const labels = [];
-        const address = formatAddress(meeting.formatted_address);
-        if (address && !meeting.types.includes(strings.types.TC)) {
+        if (meeting.isInPerson) {
           labels.push({
-            label: address,
+            label: meeting.address,
           });
         }
         if (meeting.conference_provider) {
@@ -92,6 +83,15 @@ export default function Table({ state, setState, filteredSlugs }) {
           </div>
         );
       }
+    } else if (key === 'distance') {
+      return meeting.distance ? (
+        <>
+          {meeting.distance}
+          <small className="ms-1 text-muted">{settings.distance_unit}</small>
+        </>
+      ) : null;
+    } else if (key === 'location') {
+      return meeting.isInPerson ? meeting.location : meeting.group;
     } else if (key === 'name' && meeting.slug) {
       return <Link meeting={meeting} state={state} setState={setState} />;
     } else if (key === 'region' && meeting.regions) {
@@ -107,13 +107,6 @@ export default function Table({ state, setState, filteredSlugs }) {
       ) : (
         strings.appointment
       );
-    } else if (key === 'distance') {
-      return meeting.distance ? (
-        <>
-          {meeting.distance}
-          <small className="ms-1 text-muted">{settings.distance_unit}</small>
-        </>
-      ) : null;
     }
     return meeting[key];
   };

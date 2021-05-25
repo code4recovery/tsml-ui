@@ -14,7 +14,7 @@ export default {
   friday: 'Friday',
   get_directions: 'Get Directions',
   list: 'List',
-  location: 'Location',
+  location: 'Location / Group',
   map: 'Map',
   meeting_information: 'Meeting Information',
   meetings: 'Meetings',
