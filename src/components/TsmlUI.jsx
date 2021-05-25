@@ -117,7 +117,7 @@ export default function TsmlUI({ json, mapbox }) {
             {settings.show.controls && (
               <Controls state={state} setState={setState} />
             )}
-            <Alert state={state} />
+            <Alert alert={state.alert} error={state.error} />
             {filteredSlugs && state.input.view === 'list' && (
               <Table
                 state={state}
