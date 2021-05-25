@@ -155,7 +155,7 @@ export default function Controls({ state, setState }) {
               />
               <button
                 className="btn btn-outline-secondary dropdown-toggle"
-                onClick={e =>
+                onClick={() =>
                   setDropdown(dropdown === 'search' ? null : 'search')
                 }
                 type="button"

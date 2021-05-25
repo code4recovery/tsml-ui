@@ -7,17 +7,17 @@ export default function Title({ state }) {
   if (!state.indexes || !state.input) return;
 
   //build title from strings.title
-  let title = [];
+  const parts = [];
 
   Object.keys(strings.title).forEach(key => {
     if (key === 'meetings') {
-      title.push(strings.meetings);
+      parts.push(strings.meetings);
     } else if (
       key === 'search_with' &&
       state.input.mode === 'search' &&
       state.input.search
     ) {
-      title.push(
+      parts.push(
         strings.title.search_with.replace('%search%', `‘${state.input.search}’`)
       );
     } else if (
@@ -25,24 +25,22 @@ export default function Title({ state }) {
       state.input.mode === 'location' &&
       state.input.search
     ) {
-      title.push(
+      parts.push(
         strings.title.search_near.replace('%search%', `‘${state.input.search}’`)
       );
     } else if (state.indexes[key] && state.input[key].length) {
       const value = state.input[key]
-        .map(x => {
-          const value = getIndexByKey(state.indexes[key], x);
-          return value?.name;
-        })
+        .map(value => getIndexByKey(state.indexes[key], value)?.name)
         .join(' + ');
-      title.push(strings.title[key].replace(`%${key}%`, value));
+      parts.push(strings.title[key].replace(`%${key}%`, value));
     }
   });
-  title = title.join(' ');
+
+  const title = parts.join(' ');
 
   //set window title
   setTitle(title);
 
   //return h1
-  return <h1 className="font-weight-light mb-2">{title}</h1>;
+  return <h1 className="fw-light mb-2">{title}</h1>;
 }

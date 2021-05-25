@@ -13,32 +13,30 @@ export default function Dropdown({
   setDropdown,
   setFilter,
 }) {
-  const renderDropdownItem = x => {
-    return (
-      <Fragment key={x.key}>
-        <a
-          className={cx(
-            'align-items-center d-flex dropdown-item justify-content-between',
-            {
-              'active bg-secondary': values.indexOf(x.key) !== -1,
-            }
-          )}
-          href="#"
-          onClick={e => setFilter(e, filter, x.key)}
-        >
-          <span>{x.name}</span>
-          <span className="badge bg-light border ms-3 text-dark">
-            {x.slugs.length}
-          </span>
-        </a>
-        {!!x.children?.length && (
-          <div className="children">
-            {x.children.map(child => renderDropdownItem(child))}
-          </div>
+  const renderDropdownItem = option => (
+    <Fragment key={option.key}>
+      <a
+        className={cx(
+          'align-items-center d-flex dropdown-item justify-content-between',
+          {
+            'active bg-secondary': values.indexOf(option.key) !== -1,
+          }
         )}
-      </Fragment>
-    );
-  };
+        href="#"
+        onClick={e => setFilter(e, filter, option.key)}
+      >
+        <span>{option.name}</span>
+        <span className="badge bg-light border ms-3 text-dark">
+          {option.slugs.length}
+        </span>
+      </a>
+      {!!option.children?.length && (
+        <div className="children">
+          {option.children.map(child => renderDropdownItem(child))}
+        </div>
+      )}
+    </Fragment>
+  );
 
   return (
     <div className="dropdown">
@@ -47,12 +45,7 @@ export default function Dropdown({
         onClick={() => setDropdown(open ? null : filter)}
       >
         {values?.length && options?.length
-          ? values
-              .map(x => {
-                const value = getIndexByKey(options, x);
-                return value?.name;
-              })
-              .join(' + ')
+          ? values.map(value => getIndexByKey(options, value)?.name).join(' + ')
           : defaultValue}
       </button>
       <div
@@ -74,14 +67,18 @@ export default function Dropdown({
           <>
             <div className="dropdown-divider" />
             {options
-              ?.filter(x => settings.filter_special_types.includes(x.key))
-              .map(x => renderDropdownItem(x))}
+              ?.filter(option =>
+                settings.filter_special_types.includes(option.key)
+              )
+              .map(option => renderDropdownItem(option))}
           </>
         )}
         <div className="dropdown-divider" />
         {options
-          ?.filter(x => !settings.filter_special_types.includes(x.key))
-          .map(x => renderDropdownItem(x))}
+          ?.filter(
+            option => !settings.filter_special_types.includes(option.key)
+          )
+          .map(option => renderDropdownItem(option))}
       </div>
     </div>
   );

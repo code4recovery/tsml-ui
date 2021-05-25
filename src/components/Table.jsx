@@ -23,10 +23,10 @@ export default function Table({ state, setState, filteredSlugs }) {
           buttons.push(
             <Button
               block={false}
-              className="btn-sm"
               href={meeting.conference_url}
               icon="camera"
               key="url"
+              small={true}
               text={meeting.conference_provider}
             />
           );
@@ -35,10 +35,10 @@ export default function Table({ state, setState, filteredSlugs }) {
           buttons.push(
             <Button
               block={false}
-              className="btn-sm"
               href={`tel:${meeting.conference_phone}`}
               icon="telephone"
               key="phone"
+              small={true}
               text={strings.phone}
             />
           );

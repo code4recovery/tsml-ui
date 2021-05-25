@@ -57,7 +57,7 @@ export default function Meeting({ state, setState }) {
 
   return (
     <div className="d-flex flex-column flex-grow-1 meeting">
-      <h1 className="font-weight-light mb-1">
+      <h1 className="fw-light mb-1">
         <Link meeting={meeting} />
       </h1>
       <h6 className="align-items-center border-bottom d-flex mb-3 pb-2">
