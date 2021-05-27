@@ -53,25 +53,32 @@ export default function Table({ state, setState, filteredSlugs }) {
         if (meeting.isInPerson) {
           labels.push({
             label: meeting.address,
+            icon: 'pin-filled',
+            className: 'label-in-person',
           });
         }
         if (meeting.conference_provider) {
           labels.push({
             label: meeting.conference_provider,
-            icon: 'camera',
+            icon: 'camera-filled',
+            className: 'label-online',
           });
         }
         if (meeting.conference_phone) {
           labels.push({
             label: strings.phone,
-            icon: 'telephone',
+            icon: 'telephone-filled',
+            className: 'label-online',
           });
         }
         return (
           <div className="overflow-auto">
             {labels.map((label, index) => (
               <small
-                className="align-items-center bg-secondary d-flex float-start me-1 my-1 px-2 py-1 rounded text-light"
+                className={cx(
+                  label.className,
+                  'align-items-center d-flex float-start me-1 my-1 px-2 py-1 rounded'
+                )}
                 key={index}
               >
                 {label.icon && (

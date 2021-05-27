@@ -199,6 +199,17 @@ div#tsml-ui {
         text-align: right;
       }
 
+      .label-online {
+        //background-color: #2d8cff !important;
+        background-color: $blue-100;
+        color: $blue-500;
+      }
+
+      .label-in-person {
+        background-color: $green-100;
+        color: $green-500;
+      }
+
       //align edges
       tr th:first-child,
       td:first-child {
