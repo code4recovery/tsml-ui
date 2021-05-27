@@ -37,9 +37,18 @@ A list of AA meeting types can be found in the [Meeting Guide format spec](https
 
 Maps are not shown on meetings that are not meeting in person, which results in a lot of empty space on large screens. If you'd like to display a custom graphic here specifically for online meetings, try adapting this CSS to your needs.
 
-    meetings .meeting.online .map::after {
+    #tsml-ui .meeting.online .map::after {
       background-image: url(https://images.unsplash.com/photo-1588196749597-9ff075ee6b5b?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=1440&ixid=MnwxfDB8MXxhbGx8fHx8fHx8fHwxNjIyMTIzODkw&ixlib=rb-1.2.1&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=1920);
+      background-position: center center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      bottom: 0;
+      content: '';
+      left: 0;
       opacity: 0.25;
+      position: absolute;
+      right: 0;
+      top: 0;
     }
 
 ### Changing the Search Function
