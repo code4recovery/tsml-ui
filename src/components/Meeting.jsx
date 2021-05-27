@@ -47,7 +47,13 @@ export default function Meeting({ state, setState }) {
     : strings.appointment;
 
   return (
-    <div className="d-flex flex-column flex-grow-1 meeting">
+    <div
+      className={cx('d-flex flex-column flex-grow-1 meeting', {
+        'in-person': meeting.isInPerson,
+        'online': meeting.isOnline,
+        'location-temporarily-closed': meeting.isTempClosed,
+      })}
+    >
       <h1 className="fw-light mb-1">
         <Link meeting={meeting} />
       </h1>
