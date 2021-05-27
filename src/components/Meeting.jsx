@@ -22,8 +22,8 @@ export default function Meeting({ state, setState }) {
   }
 
   const directionsUrl = meeting.isInPerson
-    ? undefined
-    : formatDirectionsUrl(meeting);
+    ? formatDirectionsUrl(meeting)
+    : undefined;
 
   //set page title
   setTitle(meeting.name);
