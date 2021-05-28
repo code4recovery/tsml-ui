@@ -46,7 +46,13 @@ export default function Table({ state, setState, filteredSlugs }) {
         return buttons.length ? (
           <div className="btn-group my-1 w-100">{buttons}</div>
         ) : (
-          meeting.address
+          <span
+            className={cx({
+              'text-decoration-line-through text-muted': !meeting.isInPerson,
+            })}
+          >
+            {meeting.address}
+          </span>
         );
       } else {
         const labels = [];
