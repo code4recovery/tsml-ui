@@ -391,12 +391,19 @@ export function loadMeetingData(data, capabilities) {
 
     meeting.isInPerson = !meeting.isTempClosed && meeting.address;
 
-    if (meeting.isInPerson) meeting.types.push('in-person');
+    if (meeting.isInPerson) {
+      meeting.types.push('in-person');
+      if (meeting.isOnline) {
+        meeting.types.push('hybrid');
+      }
+    }
 
     //if neither online nor in person, skip it
     if (!meeting.isOnline && !meeting.isInPerson) {
-      warn(index, `${meeting.name} is neither online or in person, skipping`);
-      return;
+      capabilities.inactive = true;
+      meeting.types.push('inactive');
+    } else {
+      meeting.types.push('active');
     }
 
     //last chance to exit. now we're going to populate some indexes with the meeting slug

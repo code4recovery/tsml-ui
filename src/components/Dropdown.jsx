@@ -70,6 +70,11 @@ export default function Dropdown({
               ?.filter(option =>
                 settings.filter_special_types.includes(option.key)
               )
+              .sort(
+                (a, b) =>
+                  settings.filter_special_types.indexOf(a.key) -
+                  settings.filter_special_types.indexOf(b.key)
+              )
               .map(option => renderDropdownItem(option))}
           </>
         )}

@@ -212,6 +212,11 @@ div#tsml-ui {
         color: $green-500;
       }
 
+      .label-inactive {
+        background-color: $red-100;
+        color: $red-500;
+      }
+
       //align edges
       tr th:first-child,
       td:first-child {

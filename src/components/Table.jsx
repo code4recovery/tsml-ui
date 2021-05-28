@@ -53,22 +53,29 @@ export default function Table({ state, setState, filteredSlugs }) {
         if (meeting.isInPerson) {
           labels.push({
             label: meeting.address,
-            icon: 'pin-filled',
+            icon: 'geo',
             className: 'label-in-person',
           });
         }
         if (meeting.conference_provider) {
           labels.push({
             label: meeting.conference_provider,
-            icon: 'camera-filled',
+            icon: 'camera',
             className: 'label-online',
           });
         }
         if (meeting.conference_phone) {
           labels.push({
             label: strings.phone,
-            icon: 'telephone-filled',
+            icon: 'telephone',
             className: 'label-online',
+          });
+        }
+        if (!meeting.isInPerson && !meeting.isOnline) {
+          labels.push({
+            label: strings.types.inactive,
+            icon: 'close',
+            className: 'label-inactive',
           });
         }
         return (
