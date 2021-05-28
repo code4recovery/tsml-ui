@@ -8,11 +8,11 @@ TSML UI is a React web app that makes the [12 Step Meeting List](https://github.
 
 To use TSML UI on your website you only need to add some HTML code to your web page. To get started, use our [TSML UI configuration helper](https://tsml-ui-config.netlify.app) to generate HTML code for your website.
 
-## Enable "Near Me" Mode
+## Enable "Near Me" mode
 
 You don't need to do anything other than enable HTTPS on your website. To ensure all users see this functionality, make sure that anyone who enters a `http://` address for your site is redirected to the `https://` address.
 
-## Advanced Customization
+## Advanced customization
 
 See [src/helpers/settings.js](settings.js) for options that can be set by extending your `tsml_react_config` object. You can customize many of the behaviors and any text string that the app uses. It's only necessary to specify those values you wish to override.
 
@@ -63,7 +63,21 @@ The default requires the pipe character for search, but is also the most straigh
 
 For more details, please see: [Search: How It Works](README-search.md).
 
-## Next Steps
+## Frequently asked questions
+
+### How are metatypes like "Active" and "Hybrid" calculated?
+
+This logic can be a little opaque so an explanation is in order.
+
+- A meeting is considered `In-Person` if it doens't have a type of `Location Temporarily Closed` and it has a specific street address.
+
+- A meeting is considered `Online` if it has a `conference_url` that matches our recognized formats and/or it has a `conference_phone`
+
+- A meeting is considered `Hybrid` if it is both `In-Person` and `Online`. (Consequently, the `In-Person` and `Online` types include all `Hybrid` meetings.)
+
+- A meeting is considered `Active` if it is `In-Person` or `Online`, and `Inactive` if it is neither.
+
+## Next steps
 
 - [x] Hierarchical region dropdown
 - [x] Alternate appearance of `TC` meetings (hide directions and cross out address)
