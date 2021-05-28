@@ -55,6 +55,7 @@ export default {
   types: {
     '11': 'Meditación del 11º paso',
     '12x12': '12 pasos y 12 tradiciones',
+    'active': 'Activo',
     'AL-AN': 'Concurrente con Al-Anon',
     A: 'Secular',
     ABSI: 'Como Lo Ve Bill',
@@ -77,6 +78,8 @@ export default {
     G: 'Gay',
     GR: 'La Viña',
     H: 'Cumpleaños',
+    hybrid: 'Híbrido',
+    inactive: 'Inactivo',
     'in-person': 'En persona',
     ITA: 'Italiano',
     JA: 'Japonés',

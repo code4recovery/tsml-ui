@@ -55,6 +55,7 @@ export default {
   types: {
     '11': 'Méditation sur la 11e Étape',
     '12x12': '12 Étapes et 12 Traditions,',
+    active: 'Actives',
     'AL-AN': 'En même temps qu’Al-Anon',
     A: 'Séculier',
     ABSI: 'Réflexions de Bill',
@@ -77,6 +78,8 @@ export default {
     G: 'Gai',
     GR: 'Grapevine',
     H: 'Anniversaire',
+    hybrid: 'Hybride',
+    inactive: 'Inactives',
     'in-person': 'En personne',
     ITA: 'Italien',
     JA: 'Japonais',

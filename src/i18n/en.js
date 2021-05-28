@@ -54,6 +54,7 @@ export default {
   types: {
     '11': '11th Step Meditation',
     '12x12': '12 Steps & 12 Traditions',
+    active: 'Active',
     'AL-AN': 'Concurrent with Al-Anon',
     A: 'Secular',
     ABSI: 'As Bill Sees It',
@@ -76,6 +77,8 @@ export default {
     G: 'Gay',
     GR: 'Grapevine',
     H: 'Birthday',
+    hybrid: 'Hybrid',
+    inactive: 'Inactive',
     'in-person': 'In-person',
     ITA: 'Italian',
     JA: 'Japanese',
