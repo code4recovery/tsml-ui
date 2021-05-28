@@ -626,6 +626,11 @@ export function loadMeetingData(data, capabilities) {
   });
   capabilities.type = !!indexes.type.length;
 
+  //remove active type if no inactive meetings
+  if (!capabilities.inactive) {
+    indexes.type = indexes.type.filter(type => type.key !== 'active');
+  }
+
   //near me mode enabled on https or local development
   if (capabilities.coordinates && !settings.modes.includes('location')) {
     //todo implement geocoding
