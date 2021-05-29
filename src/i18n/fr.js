@@ -78,7 +78,6 @@ export default {
     G: 'Gai',
     GR: 'Grapevine',
     H: 'Anniversaire',
-    hybrid: 'Hybride',
     inactive: 'Inactives',
     'in-person': 'En personne',
     ITA: 'Italien',

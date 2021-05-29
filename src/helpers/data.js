@@ -396,9 +396,6 @@ export function loadMeetingData(data, capabilities) {
 
     if (meeting.isInPerson) {
       meeting.types.push('in-person');
-      if (meeting.isOnline) {
-        meeting.types.push('hybrid');
-      }
     }
 
     //if neither online nor in person, skip it
