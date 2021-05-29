@@ -21,7 +21,6 @@ export default function TsmlUI({ json, mapbox }) {
     capabilities: {
       distance: false,
       geolocation: false,
-      inactive: false,
       map: false,
       region: false,
       time: false,

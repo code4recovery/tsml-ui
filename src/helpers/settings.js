@@ -59,6 +59,7 @@ const defaults = {
   show: {
     cityAsRegionFallback: true, //whether to use city if region is empty and city is not
     controls: true, //whether to show search + dropdowns + list/map
+    inactive: true, //whether to show inactive meetings at all
     listButtons: false, //show conference buttons in list or show labels
     title: true, //whether to display the title h1
     warnings: false, //console.warn for bad data

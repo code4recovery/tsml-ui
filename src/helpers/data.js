@@ -326,6 +326,7 @@ export function loadMeetingData(data, capabilities) {
 
   //for geo capabilities
   let dataHasCoordinates = false;
+  let dataHasInactive = false;
 
   //check for meetings with multiple days and create an individual meeting for each
   data = flattenDays(data);
@@ -399,11 +400,16 @@ export function loadMeetingData(data, capabilities) {
     }
 
     //if neither online nor in person, skip it
-    if (!meeting.isOnline && !meeting.isInPerson) {
-      capabilities.inactive = true;
-      meeting.types.push('inactive');
-    } else {
-      meeting.types.push('active');
+    if (settings.show.inactive) {
+      if (!meeting.isOnline && !meeting.isInPerson) {
+        dataHasInactive = true;
+        meeting.types.push('inactive');
+      } else {
+        meeting.types.push('active');
+      }
+    } else if (!meeting.isOnline && !meeting.isInPerson) {
+      warn(index, 'skipped because inactive');
+      return;
     }
 
     //last chance to exit. now we're going to populate some indexes with the meeting slug
@@ -627,7 +633,7 @@ export function loadMeetingData(data, capabilities) {
   capabilities.type = !!indexes.type.length;
 
   //remove active type if no inactive meetings
-  if (!capabilities.inactive) {
+  if (!dataHasInactive) {
     indexes.type = indexes.type.filter(type => type.key !== 'active');
   }
 

@@ -79,6 +79,18 @@ This app exists to help people find AA meetings, and after much discussion we de
 
 Web servants may add their own Hybrid type manually of course.
 
+### Hide all "inactive" meetings?
+
+If you have inactive meetings in your data that you can't remove but you'd prefer not be shown at all, then you can extend your config object like so:
+
+    var tsml_react_config = {
+      show: {
+        inactive: false,
+      },
+    };
+
+This will also hide the "Active" and "Inactive" filtering options.
+
 ## Next steps
 
 - [x] Hierarchical region dropdown
