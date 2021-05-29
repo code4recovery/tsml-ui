@@ -2,19 +2,17 @@
 
 TSML UI is a React web app that makes the [12 Step Meeting List](https://github.com/code4recovery/12-step-meeting-list) interface available for use on any web page, regardless of platform.
 
-[Here's a demo](https://react.meetingguide.org/) of what the meeting finder looks like with no styling.
+[Here's a demo](https://react.meetingguide.org/) of what the meeting finder looks like with no styling, [here's another demo](https://react.meetingguide.org/demo.html) embedded into a different design.
 
-## Get started
+To use TSML UI on your website you only need to add some HTML to your web page. To get started, use our [TSML UI configuration helper](https://tsml-ui-config.netlify.app).
 
-To use TSML UI on your website you only need to add some HTML code to your web page. To get started, use our [TSML UI configuration helper](https://tsml-ui-config.netlify.app) to generate HTML code for your website.
-
-## Enable "Near Me" mode
-
-You don't need to do anything other than enable HTTPS on your website. To ensure all users see this functionality, make sure that anyone who enters a `http://` address for your site is redirected to the `https://` address.
-
-## Advanced customization
+## Customize
 
 See [src/helpers/settings.js](settings.js) for options that can be set by extending your `tsml_react_config` object. You can customize many of the behaviors and any text string that the app uses. It's only necessary to specify those values you wish to override.
+
+### Enable "Near Me" mode
+
+You don't need to do anything other than enable HTTPS on your website. To ensure all users see this functionality, make sure that anyone who enters a `http://` address for your site is redirected to the `https://` address.
 
 ### Add custom types
 
@@ -33,7 +31,7 @@ Here is an example of extending the `tsml_react_config` object to include a defi
 
 A list of AA meeting types can be found in the [Meeting Guide format spec](https://github.com/code4recovery/spec).
 
-### Custom image in place of map on online meetings
+### Custom image instead of map on online meetings
 
 Maps are not shown on meetings that are not meeting in person, which results in a lot of empty space on large screens. If you'd like to display a custom graphic here specifically for online meetings, try adapting this CSS to your needs.
 
@@ -51,7 +49,7 @@ Maps are not shown on meetings that are not meeting in person, which results in 
       top: 0;
     }
 
-### Changing the Search Function
+### Changing the search
 
 The search function has three options:
 
@@ -65,7 +63,7 @@ For more details, please see: [Search: How It Works](README-search.md).
 
 ## Frequently asked questions
 
-### How are metatypes like "Active" and "Hybrid" calculated?
+### How are metatypes like "Active" and "Online" calculated?
 
 This logic can be a little opaque so an explanation is in order.
 
@@ -73,9 +71,13 @@ This logic can be a little opaque so an explanation is in order.
 
 - A meeting is considered `Online` if it has a `conference_url` that matches our recognized formats and/or it has a `conference_phone`
 
-- A meeting is considered `Hybrid` if it is both `In-Person` and `Online`. (Consequently, the `In-Person` and `Online` types include all `Hybrid` meetings.)
-
 - A meeting is considered `Active` if it is `In-Person` or `Online`, and `Inactive` if it is neither.
+
+### Why not a "hybrid" filter?
+
+This app exists to help people find AA meetings, and after much discussion we decided that Hybrid was not a useful filter type for that purpose. We believe that people on the whole do not set out looking for a hybrid meeting, they simply want to know whether their online or in-person meeting happens to be hybrid. They will know this by its appearance in the list.
+
+Web servants may add their own Hybrid type manually of course.
 
 ## Next steps
 
@@ -100,4 +102,4 @@ While developing, run `yarn watch` to compile assets as you edit them. When you'
 
 ## Credits
 
-This project uses [React JS](https://reactjs.org/) and [Bootstrap CSS](http://getbootstrap.com/).
+This project uses [React JS](https://reactjs.org/) and [Bootstrap CSS](https://getbootstrap.com/).
