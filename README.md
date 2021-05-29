@@ -65,13 +65,13 @@ For more details, please see: [Search: How It Works](README-search.md).
 
 ### How are metatypes like "Active" and "Online" calculated?
 
-This logic can be a little opaque so an explanation is in order.
+Metatypes are types that are not specified explicitly in the data, they are inferred from the data based on this logic:
 
-- A meeting is considered `In-Person` if it doens't have a type of `Location Temporarily Closed` and it has a specific street address.
+- A meeting is considered `In-Person` if it doesn't have a type of `Location Temporarily Closed` and it has a specific street address.
 
 - A meeting is considered `Online` if it has a `conference_url` that matches our recognized formats and/or it has a `conference_phone`
 
-- A meeting is considered `Active` if it is `In-Person` or `Online`, and `Inactive` if it is neither.
+- A meeting is considered `Active` if it's `In-Person` or `Online`, otherwise it's `Inactive`.
 
 ### Why not a "hybrid" filter?
 
