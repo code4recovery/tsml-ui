@@ -19,7 +19,6 @@ export default function TsmlUI({ json, mapbox }) {
   const [state, setState] = useState({
     alert: null,
     capabilities: {
-      coordinates: false,
       distance: false,
       geolocation: false,
       inactive: false,
@@ -30,7 +29,7 @@ export default function TsmlUI({ json, mapbox }) {
       weekday: false,
     },
     error: null,
-    input: getQueryString(location.search),
+    input: getQueryString(window.location.search),
     indexes: {
       distance: [],
       region: [],
@@ -45,13 +44,13 @@ export default function TsmlUI({ json, mapbox }) {
   //enable forward & back buttons
   useEffect(() => {
     const popstateListener = () => {
-      setState({ ...state, input: getQueryString(location.search) });
+      setState({ ...state, input: getQueryString(window.location.search) });
     };
     window.addEventListener('popstate', popstateListener);
     return () => {
       window.removeEventListener('popstate', popstateListener);
     };
-  }, []);
+  }, [state, window.location.search]);
 
   //load data once from json
   if (state.loading) {
