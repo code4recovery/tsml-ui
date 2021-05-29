@@ -324,6 +324,9 @@ export function loadMeetingData(data, capabilities) {
   //for diff
   const now = moment();
 
+  //for geo capabilities
+  let dataHasCoordinates = false;
+
   //check for meetings with multiple days and create an individual meeting for each
   data = flattenDays(data);
 
@@ -444,7 +447,7 @@ export function loadMeetingData(data, capabilities) {
 
     //format latitude + longitude
     if (meeting.latitude && meeting.longitude) {
-      capabilities.coordinates = true;
+      dataHasCoordinates = true;
       meeting.latitude = parseFloat(meeting.latitude);
       meeting.longitude = parseFloat(meeting.longitude);
     }
@@ -631,9 +634,8 @@ export function loadMeetingData(data, capabilities) {
     indexes.type = indexes.type.filter(type => type.key !== 'active');
   }
 
-  //near me mode enabled on https or local development
-  if (capabilities.coordinates && !settings.modes.includes('location')) {
-    //todo implement geocoding
+  //determine search modes
+  if (dataHasCoordinates && !settings.modes.includes('location')) {
     settings.modes.push('location');
     if (
       navigator.geolocation &&
