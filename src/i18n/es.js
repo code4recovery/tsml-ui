@@ -78,7 +78,6 @@ export default {
     G: 'Gay',
     GR: 'La Viña',
     H: 'Cumpleaños',
-    hybrid: 'Híbrido',
     inactive: 'Inactivo',
     'in-person': 'En persona',
     ITA: 'Italiano',
