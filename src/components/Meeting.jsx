@@ -50,8 +50,8 @@ export default function Meeting({ state, setState }) {
     <div
       className={cx('d-flex flex-column flex-grow-1 meeting', {
         'in-person': meeting.isInPerson,
+        'inactive': !meeting.isInPerson && !meeting.isOnline,
         'online': meeting.isOnline,
-        'location-temporarily-closed': meeting.isTempClosed,
       })}
     >
       <h1 className="fw-light mb-1">
