@@ -34,6 +34,7 @@ const defaults = {
   },
   distance_options: [1, 2, 5, 10, 25],
   distance_unit: 'mi', //mi or km
+  feedback_emails: [], //email addresses for update meeting info button
   filters: ['region', 'distance', 'weekday', 'time', 'type'],
   filter_special_types: ['active', 'in-person', 'online'],
   flags: ['Men', 'Women'],
