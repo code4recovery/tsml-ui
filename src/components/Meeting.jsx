@@ -46,6 +46,12 @@ export default function Meeting({ state, setState }) {
       ${meeting.end ? ` – ${meeting.end.format('h:mm a')}` : ''}`
     : strings.appointment;
 
+  if (!meeting.feedback_url && settings.feedback_emails) {
+    meeting.feedback_url = `mailto:${settings.feedback_emails.join()}?subject=${
+      window.location.href
+    }`;
+  }
+
   return (
     <div
       className={cx('d-flex flex-column flex-grow-1 meeting', {
