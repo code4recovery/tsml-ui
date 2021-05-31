@@ -384,7 +384,11 @@ export function loadMeetingData(data, capabilities) {
     }
 
     //check for types
-    if (!meeting.types) meeting.types = [];
+    if (!meeting.types) {
+      meeting.types = [];
+    } else if (typeof meeting.types === 'string') {
+      meeting.types = meeting.types.split(',');
+    }
 
     //add online and in-person metattypes
     meeting.isOnline = meeting.conference_provider || meeting.conference_phone;
