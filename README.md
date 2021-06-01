@@ -73,11 +73,13 @@ Metatypes are types that are not specified explicitly in the data, they are infe
 
 - A meeting is considered `Active` if it's `In-Person` or `Online`, otherwise it's `Inactive`.
 
-### Why not a "hybrid" filter?
+### Why not a "hybrid" filter and meeting type?
 
 This app exists to help people find AA meetings, and after much discussion we decided that Hybrid was not a useful filter type for that purpose. We believe that people on the whole do not set out looking for a hybrid meeting, they simply want to know whether their online or in-person meeting happens to be hybrid. They will know this by its appearance in the list.
 
-Web servants may add their own Hybrid type manually of course.
+Second, the app should not assume that if a meeting listing has both online and in-person options that it is an actual "hybrid" meeting with a video screen and speakers in the room.
+
+Web servants may [add their own meetimg types](#add-custom-types) of course.
 
 ### Hide all "inactive" meetings?
 
