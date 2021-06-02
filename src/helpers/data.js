@@ -267,6 +267,22 @@ function getCommonElements(arrays) {
   return Object.keys(currentValues);
 }
 
+//get meetings, indexes, and capabilities from session storage, keyed by JSON URL
+export function getCache(json) {
+  const cache = JSON.parse(window.sessionStorage.getItem(json));
+  if (!cache) return null;
+  const keys = Object.keys(cache.meetings);
+  keys.forEach(key => {
+    if (typeof cache.meetings[key].start === 'string') {
+      cache.meetings[key].start = moment(cache.meetings[key].start);
+    }
+    if (typeof cache.meetings[key].end === 'string') {
+      cache.meetings[key].end = moment(cache.meetings[key].end);
+    }
+  });
+  return cache;
+}
+
 //set up meeting data; this is only run once when the app loads
 export function loadMeetingData(data, capabilities) {
   //meetings is a lookup
@@ -736,6 +752,14 @@ function processSearch(search_string) {
     // Search type "default": just return the string as-is
     return search_string.toLowerCase();
   }
+}
+
+//set meetings, indexes, and capabilities to session storage, keyed by JSON URL
+export function setCache(json, meetings, indexes, capabilities) {
+  window.sessionStorage.setItem(
+    json,
+    JSON.stringify({ meetings, indexes, capabilities })
+  );
 }
 
 //translates Google Sheet JSON into Meeting Guide format
