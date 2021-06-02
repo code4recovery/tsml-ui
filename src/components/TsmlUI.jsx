@@ -7,8 +7,10 @@ import { Alert, Controls, Loading, Map, Meeting, Table, Title } from './';
 
 import {
   filterMeetingData,
+  getCache,
   getQueryString,
   loadMeetingData,
+  setCache,
   translateGoogleSheet,
   translateNoCodeAPI,
   setQueryString,
@@ -55,40 +57,55 @@ export default function TsmlUI({ json, mapbox }) {
   if (state.loading) {
     settings.map.key = mapbox;
 
-    //fetch json data file and build indexes
-    fetch(json)
-      .then(result => result.json())
-      .then(
-        result => {
-          //checks if src is google sheet and translates it if so
-          if (json.includes('spreadsheets.google.com')) {
-            result = translateGoogleSheet(result);
-          } else if (json.includes('nocodeapi.com')) {
-            result = translateNoCodeAPI(result);
+    const cache = getCache(json);
+
+    if (cache) {
+      setState({
+        ...state,
+        capabilities: cache.capabilities,
+        indexes: cache.indexes,
+        meetings: cache.meetings,
+        loading: false,
+      });
+    } else {
+      //fetch json data file and build indexes
+      fetch(json)
+        .then(result => result.json())
+        .then(
+          result => {
+            //checks if src is google sheet and translates it if so
+            if (json.includes('spreadsheets.google.com')) {
+              result = translateGoogleSheet(result);
+            } else if (json.includes('nocodeapi.com')) {
+              result = translateNoCodeAPI(result);
+            }
+
+            const [meetings, indexes, capabilities] = loadMeetingData(
+              result,
+              state.capabilities
+            );
+
+            setCache(json, meetings, indexes, capabilities);
+
+            setState({
+              ...state,
+              capabilities: capabilities,
+              indexes: indexes,
+              meetings: meetings,
+              loading: false,
+            });
+          },
+          error => {
+            console.error('JSON fetch error: ' + error);
+            setState({
+              ...state,
+              error: json ? 'bad_data' : 'no_data',
+              loading: false,
+            });
           }
+        );
+    }
 
-          const [meetings, indexes, capabilities] = loadMeetingData(
-            result,
-            state.capabilities
-          );
-
-          setState({
-            ...state,
-            capabilities: capabilities,
-            indexes: indexes,
-            meetings: meetings,
-            loading: false,
-          });
-        },
-        error => {
-          console.error('JSON fetch error: ' + error);
-          setState({
-            ...state,
-            error: json ? 'bad_data' : 'no_data',
-            loading: false,
-          });
-        }
-      );
     return (
       <div id="tsml-ui">
         <Loading />
