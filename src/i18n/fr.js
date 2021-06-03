@@ -5,6 +5,7 @@ export default {
       'Une erreur s’est produite lors du chargement de la source de données.',
     no_data: 'Un paramètre de source de données doit être spécifié.',
     no_results: 'Aucune réunion ne correspond aux critères sélectionnés.',
+    not_found: 'Réunion introuvable.',
   },
   appointment: 'Rendez-vous',
   back_to_meetings: 'Retour aux réunions',

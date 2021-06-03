@@ -53,7 +53,6 @@ const defaults = {
     },
     style: 'mapbox://styles/mapbox/streets-v9',
   },
-  modes: ['search'], //location and me will be appended if capable
   now_offset: -10, //"now" includes meetings that started in the last 10 minutes
   params: ['search', 'mode', 'view', 'meeting'], //input other than filters
   search: 'default', //one of 'default', 'quoted' or 'or'

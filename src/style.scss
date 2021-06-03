@@ -96,6 +96,29 @@ div#tsml-ui {
       }
     }
 
+    .btn {
+      &.online {
+        //background-color: #2d8cff !important;
+        background-color: $blue-100;
+        color: $blue-500;
+        border-color: $blue-200 !important;
+        &:hover {
+          background-color: $blue-400;
+          color: white;
+        }
+      }
+
+      &.in-person {
+        background-color: $green-100;
+        color: $green-500;
+        border-color: $green-200 !important;
+        &:hover {
+          background-color: $green-400;
+          color: white;
+        }
+      }
+    }
+
     .controls {
       //to allow map to fill available space
       flex: none;

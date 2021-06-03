@@ -9,12 +9,14 @@ export default function Button({
   icon,
   small = false,
   text,
+  className,
 }) {
   return (
     <a
       className={cx(
         'align-items-center btn btn-outline-secondary d-flex justify-content-center',
-        { 'btn-block': block, 'btn-sm': small }
+        { 'btn-block': block, 'btn-sm': small },
+        className
       )}
       href={href}
       target="_blank"

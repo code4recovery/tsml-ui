@@ -180,8 +180,9 @@ export default function Map({
                     )}
                     {data.locations[key].directions_url && (
                       <Button
+                        className="in-person"
                         href={data.locations[key].directions_url}
-                        icon="directions"
+                        icon="geo"
                         text={strings.get_directions}
                       />
                     )}
