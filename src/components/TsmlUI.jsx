@@ -21,6 +21,7 @@ export default function TsmlUI({ json, mapbox }) {
   const [state, setState] = useState({
     alert: null,
     capabilities: {
+      coordinates: false,
       distance: false,
       geolocation: false,
       map: false,
@@ -120,13 +121,23 @@ export default function TsmlUI({ json, mapbox }) {
   const filteredSlugs = filterMeetingData(state, setState);
 
   //show alert?
-  state.alert = filteredSlugs.length ? null : 'no_results';
+  state.alert = !filteredSlugs.length ? 'no_results' : null;
+
+  //show error?
+  state.error =
+    state.input.meeting && !(state.input.meeting in state.meetings)
+      ? 'not_found'
+      : null;
 
   return (
     <div id="tsml-ui">
       <div className="container-fluid d-flex flex-column py-3">
-        {state.input.meeting ? (
-          <Meeting state={state} setState={setState} />
+        {state.input.meeting && state.input.meeting in state.meetings ? (
+          <Meeting
+            state={state}
+            setState={setState}
+            meeting={state.meetings[state.input.meeting]}
+          />
         ) : (
           <>
             {settings.show.title && <Title state={state} />}

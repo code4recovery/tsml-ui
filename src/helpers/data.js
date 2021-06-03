@@ -341,7 +341,6 @@ export function loadMeetingData(data, capabilities) {
   const now = moment();
 
   //for geo capabilities
-  let dataHasCoordinates = false;
   let dataHasInactive = false;
 
   //check for meetings with multiple days and create an individual meeting for each
@@ -420,16 +419,15 @@ export function loadMeetingData(data, capabilities) {
     }
 
     //if neither online nor in person, skip it
-    if (settings.show.inactive) {
-      if (!meeting.isOnline && !meeting.isInPerson) {
-        dataHasInactive = true;
-        meeting.types.push('inactive');
-      } else {
-        meeting.types.push('active');
+    if (!meeting.isOnline && !meeting.isInPerson) {
+      if (!settings.show.inactive) {
+        warn(index, 'skipped because inactive');
+        return;
       }
-    } else if (!meeting.isOnline && !meeting.isInPerson) {
-      warn(index, 'skipped because inactive');
-      return;
+      dataHasInactive = true;
+      meeting.types.push('inactive');
+    } else if (settings.show.inactive) {
+      meeting.types.push('active');
     }
 
     //last chance to exit. now we're going to populate some indexes with the meeting slug
@@ -470,7 +468,7 @@ export function loadMeetingData(data, capabilities) {
 
     //format latitude + longitude
     if (meeting.latitude && meeting.longitude) {
-      dataHasCoordinates = true;
+      capabilities.coordinates = true;
       meeting.latitude = parseFloat(meeting.latitude);
       meeting.longitude = parseFloat(meeting.longitude);
     }
@@ -658,15 +656,13 @@ export function loadMeetingData(data, capabilities) {
   }
 
   //determine search modes
-  if (dataHasCoordinates && !settings.modes.includes('location')) {
-    settings.modes.push('location');
+  if (capabilities.coordinates) {
     if (
       navigator.geolocation &&
       (window.location.protocol === 'https:' ||
         window.location.hostname === 'localhost')
     ) {
       capabilities.geolocation = true;
-      settings.modes.push('me');
     }
     if (settings.map.key) {
       capabilities.map = true;

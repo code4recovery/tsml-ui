@@ -4,6 +4,7 @@ export default {
     bad_data: 'An error was encountered loading the data source.',
     no_data: 'A data source parameter must be specified.',
     no_results: 'No meetings were found matching the selected criteria.',
+    not_found: 'Meeting not found.',
   },
   appointment: 'Appointment',
   back_to_meetings: 'Back to Meetings',

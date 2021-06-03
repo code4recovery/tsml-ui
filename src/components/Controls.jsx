@@ -26,6 +26,11 @@ export default function Controls({ state, setState }) {
     setDropdown(null);
   };
 
+  //search modes
+  const modes = ['search'];
+  if (state.capabilities.coordinates) modes.push('location');
+  if (state.capabilities.geolocation) modes.push('me');
+
   //keyword search
   const keywordSearch = e => {
     setSearch(e.target.value);
@@ -166,7 +171,7 @@ export default function Controls({ state, setState }) {
                 show: dropdown === 'search',
               })}
             >
-              {settings.modes.map(x => (
+              {modes.map(x => (
                 <a
                   key={x}
                   className={cx(

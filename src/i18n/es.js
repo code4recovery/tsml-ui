@@ -5,6 +5,7 @@ export default {
     no_data: 'Se debe especificar un parámetro de fuente de datos.',
     no_results:
       'No se encontraron reuniones que coincidan con los criterios seleccionados.',
+    not_found: 'Reunión no encontrada.',
   },
   appointment: 'Cita',
   back_to_meetings: 'Volver a las reuniones',
