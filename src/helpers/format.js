@@ -25,11 +25,15 @@ export function formatDirectionsUrl({
 }) {
   //create a link for directions
   const iOS = navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
-  return `${
-    iOS ? 'maps://' : 'https://www.google.com/maps'
-  }?daddr=${latitude},${longitude}&saddr=Current+Location&q=${encodeURI(
-    formatted_address
-  )}`;
+  const baseURL = iOS ? 'maps://' : 'https://www.google.com/maps';
+  const params = { saddr: 'Current Location' };
+  if (latitude && longitude) {
+    params['daddr'] = [latitude, longitude].join();
+    params['q'] = formatted_address;
+  } else {
+    params['daddr'] = formatted_address;
+  }
+  return `${baseURL}?${new URLSearchParams(params)}`;
 }
 
 //turn Mountain View into mountain-view

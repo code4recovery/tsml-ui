@@ -135,7 +135,7 @@ export function filterMeetingData(state, setState) {
             );
           },
           error => {
-            console.warn(`getCurrentPosition() error: ${error.message}`);
+            console.warn('getCurrentPosition() error', error);
           },
           { timeout: 5000 }
         );
@@ -468,9 +468,14 @@ export function loadMeetingData(data, capabilities) {
 
     //format latitude + longitude
     if (meeting.latitude && meeting.longitude) {
-      capabilities.coordinates = true;
-      meeting.latitude = parseFloat(meeting.latitude);
-      meeting.longitude = parseFloat(meeting.longitude);
+      if (meeting.isInPerson) {
+        capabilities.coordinates = true;
+        meeting.latitude = parseFloat(meeting.latitude);
+        meeting.longitude = parseFloat(meeting.longitude);
+      } else {
+        meeting.latitude = null;
+        meeting.longitude = null;
+      }
     }
 
     //handle day and time
