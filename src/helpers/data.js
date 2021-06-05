@@ -4,6 +4,60 @@ import { distance } from './distance';
 import { formatAddress, formatConferenceProvider, formatSlug } from './format';
 import { settings, strings } from './settings';
 
+//all the fields in the meeting guide spec
+const spec_properties = [
+  'address',
+  'city',
+  'conference_phone',
+  'conference_phone_notes',
+  'conference_provider',
+  'conference_url',
+  'conference_url_notes',
+  'contact_1_email',
+  'contact_1_name',
+  'contact_1_phone',
+  'contact_2_email',
+  'contact_2_name',
+  'contact_2_phone',
+  'contact_3_email',
+  'contact_3_name',
+  'contact_3_phone',
+  'country',
+  'day',
+  'district',
+  'email',
+  'end_time',
+  'feedback_url',
+  'formatted_address',
+  'group',
+  'group_notes',
+  'image',
+  'latitude',
+  'location',
+  'location_notes',
+  'longitude',
+  'minutes_now',
+  'minutes_week',
+  'name',
+  'notes',
+  'paypal',
+  'phone',
+  'postal_code',
+  'region',
+  'regions',
+  'search',
+  'slug',
+  'square',
+  'state',
+  'sub_region',
+  'time',
+  'timezone',
+  'types',
+  'updated',
+  'venmo',
+  'website',
+];
+
 //calculate distances
 function calculateDistances(
   latitude,
@@ -296,42 +350,6 @@ export function loadMeetingData(data, capabilities) {
     weekday: {},
   };
 
-  //filter out unused meetings properties for a leaner memory footprint
-  const meeting_properties = [
-    'address',
-    'conference_phone',
-    'conference_phone_notes',
-    'conference_provider',
-    'conference_url',
-    'conference_url_notes',
-    'district',
-    'end',
-    'feedback_url',
-    'formatted_address',
-    'group',
-    'group_notes',
-    'isInPerson',
-    'isOnline',
-    'isTempClosed',
-    'latitude',
-    'location',
-    'location_notes',
-    'longitude',
-    'minutes_now',
-    'minutes_week',
-    'name',
-    'notes',
-    'paypal',
-    'regions',
-    'search',
-    'slug',
-    'square',
-    'start',
-    'types',
-    'updated',
-    'venmo',
-  ];
-
   //define lookups we'll need later
   const lookup_weekday = settings.weekdays.map(weekday => strings[weekday]);
   const lookup_type_codes = Object.keys(strings.types);
@@ -345,6 +363,13 @@ export function loadMeetingData(data, capabilities) {
 
   //loop through each entry
   data.forEach((meeting, index) => {
+    //strip out extra fields not in the spec
+    Object.keys(meeting)
+      .filter(key => !spec_properties.includes(key))
+      .forEach(key => {
+        delete meeting[key];
+      });
+
     //slug is required
     if (!meeting.slug) {
       warn(index, 'no slug');
@@ -612,13 +637,6 @@ export function loadMeetingData(data, capabilities) {
       .join(' ')
       .toLowerCase();
 
-    //clean up keys not in allowed meeting properties
-    Object.keys(meeting).map(key => {
-      if (!meeting_properties.includes(key)) {
-        delete meeting[key];
-      }
-    });
-
     meetings[meeting.slug] = meeting;
   });
 
@@ -773,20 +791,10 @@ export function setMinutesNow(meetings) {
 export function translateGoogleSheet(data) {
   const meetings = [];
 
-  //terms with underscores (google doesn't like these)
-  const keys_with_underscores = [
-    'conference_phone',
-    'conference_phone_notes',
-    'conference_provider',
-    'conference_url',
-    'conference_url_notes',
-    'end_time',
-    'feedback_url',
-    'formatted_address',
-    'group_notes',
-    'location_notes',
-    'postal_code',
-  ];
+  //properties with underscores (google doesn't support them)
+  const spec_properties_phrases = spec_properties.filter(key =>
+    key.includes('_')
+  );
 
   data.feed.entry.forEach(entry => {
     //creates a meeting object
@@ -800,7 +808,7 @@ export function translateGoogleSheet(data) {
       });
 
     //google sheets don't do underscores
-    keys_with_underscores.forEach(key => {
+    spec_properties_phrases.forEach(key => {
       const google_key = key.replaceAll('_', '');
       if (meeting.hasOwnProperty(google_key)) {
         meeting[key] = meeting[google_key];
