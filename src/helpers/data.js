@@ -769,53 +769,48 @@ export function setMinutesNow(meetings) {
   return meetings;
 }
 
-//translates Google Sheet JSON into Meeting Guide format
+//translates Google Sheet JSON into Meeting Guide format (example demo.html)
 export function translateGoogleSheet(data) {
-  //see Cateret County example on https://github.com/meeting-guide/spreadsheet
-  //https://docs.google.com/spreadsheets/d/e/2PACX-1vQJ5OsDCKSDEvWvqM_Z6tmXe4N-VYEnEAfvU5PX5QXZjHVbnrX-aeiyhWnZp0wpWtOmWjO4L5GJtfFu/pubhtml
-  //JSON: https://spreadsheets.google.com/feeds/list/1prbiXHu9JS5eREkYgBQkxlkJELRHqrKz6-_PLGPWIWk/1/public/values?alt=json
-
   const meetings = [];
 
-  for (let i = 0; i < data.feed.entry.length; i++) {
-    //creates a meeting object containing a property corresponding to each column header of the Google Sheet
+  //terms with underscores (google doesn't like these)
+  const keys_with_underscores = [
+    'conference_phone',
+    'conference_phone_notes',
+    'conference_provider',
+    'conference_url',
+    'conference_url_notes',
+    'end_time',
+    'feedback_url',
+    'formatted_address',
+    'group_notes',
+    'location_notes',
+    'postal_code',
+  ];
+
+  data.feed.entry.forEach(entry => {
+    //creates a meeting object
     const meeting = {};
-    const meetingKeys = Object.keys(data.feed.entry[i]);
-    for (let j = 0; j < meetingKeys.length; j++) {
-      if (meetingKeys[j].startsWith('gsx$')) {
-        meeting[meetingKeys[j].substr(4)] =
-          data.feed.entry[i][meetingKeys[j]]['$t'];
-      }
-    }
 
-    // Google Spreadsheets do not allow underscores
-    const terms_to_transform = [
-      'conference_phone',
-      'conference_phone_notes',
-      'conference_provider',
-      'conference_url',
-      'conference_url_notes',
-      'feedback_url',
-      'formatted_address',
-      'group_notes',
-      'location_notes',
-      'minutes_now',
-      'minutes_week',
-    ];
-    let underscore_term = '';
+    //with a property for each column
+    Object.keys(entry)
+      .filter(key => key.startsWith('gsx$'))
+      .forEach(key => {
+        meeting[key.substr(4)] = entry[key]['$t'];
+      });
 
-    for (underscore_term of terms_to_transform) {
-      let google_term = underscore_term.replace('_', '');
-      if (meeting.hasOwnProperty(google_term)) {
-        meeting[underscore_term] = meeting[google_term];
-        delete meeting[google_term];
+    //google sheets don't do underscores
+    keys_with_underscores.forEach(key => {
+      const google_key = key.replaceAll('_', '');
+      if (meeting.hasOwnProperty(google_key)) {
+        meeting[key] = meeting[google_key];
+        delete meeting[google_key];
       }
-    }
+    });
 
     //use Google-generated slug if none was provided
     if (!meeting.slug) {
-      let slug = data.feed.entry[i].id['$t'];
-      meeting.slug = slug.substring(slug.lastIndexOf('/') + 1);
+      meeting.slug = entry.id['$t'].split('/').pop();
     }
 
     //convert time to HH:MM
@@ -827,7 +822,7 @@ export function translateGoogleSheet(data) {
       : [];
 
     meetings.push(meeting);
-  }
+  });
 
   return meetings;
 }
