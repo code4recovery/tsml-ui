@@ -337,9 +337,6 @@ export function loadMeetingData(data, capabilities) {
   const lookup_type_codes = Object.keys(strings.types);
   const lookup_type_values = Object.values(strings.types);
 
-  //for diff
-  const now = moment();
-
   //for geo capabilities
   let dataHasInactive = false;
 
@@ -510,15 +507,9 @@ export function loadMeetingData(data, capabilities) {
       }
 
       //time differences for sorting
-      meeting.minutes_now = meeting.start.diff(now, 'minutes');
       const minutes_midnight =
         meeting.start.get('hour') * 60 + meeting.start.get('minutes');
       meeting.minutes_week = minutes_midnight + meeting.day * 1440;
-
-      //if time is earlier than X minutes ago, increment diff by a week
-      if (meeting.minutes_now < settings.now_offset) {
-        meeting.minutes_now += 10080;
-      }
 
       //build time index (can be multiple)
       let times = [];
@@ -761,6 +752,21 @@ export function setCache(json, meetings, indexes, capabilities) {
     json,
     JSON.stringify({ meetings, indexes, capabilities })
   );
+}
+
+//set minutes
+export function setMinutesNow(meetings) {
+  const now = moment();
+  Object.keys(meetings).forEach(key => {
+    meetings[key].minutes_now = meetings[key].start
+      ? meetings[key].start.diff(now, 'minutes')
+      : -9999;
+    //if time is earlier than X minutes ago, increment diff by a week
+    if (meetings[key].minutes_now < settings.now_offset) {
+      meetings[key].minutes_now += 10080;
+    }
+  });
+  return meetings;
 }
 
 //translates Google Sheet JSON into Meeting Guide format
