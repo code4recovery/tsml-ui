@@ -11,6 +11,7 @@ import {
   getQueryString,
   loadMeetingData,
   setCache,
+  setMinutesNow,
   translateGoogleSheet,
   translateNoCodeAPI,
   setQueryString,
@@ -116,6 +117,9 @@ export default function TsmlUI({ json, mapbox }) {
 
   //apply input changes to query string
   setQueryString(state.input);
+
+  //update time for sorting
+  state.meetings = setMinutesNow(state.meetings);
 
   //filter data
   const filteredSlugs = filterMeetingData(state, setState);
