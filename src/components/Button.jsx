@@ -15,14 +15,14 @@ export default function Button({
     <a
       className={cx(
         'align-items-center btn btn-outline-secondary d-flex justify-content-center',
-        { 'btn-block': block, 'btn-sm': small },
+        { 'btn-block overflow-hidden': block, 'btn-sm': small },
         className
       )}
       href={href}
       target="_blank"
     >
       {icon && <Icon icon={icon} className="me-2" />}
-      {text}
+      <div className="text-truncate">{text}</div>
     </a>
   );
 }

@@ -36,7 +36,7 @@ export default function Table({ state, setState, filteredSlugs }) {
             <Button
               block={false}
               href={`tel:${meeting.conference_phone}`}
-              icon="telephone"
+              icon="phone"
               key="phone"
               small={true}
               text={strings.phone}
@@ -73,7 +73,7 @@ export default function Table({ state, setState, filteredSlugs }) {
         if (meeting.conference_phone) {
           labels.push({
             label: strings.phone,
-            icon: 'telephone',
+            icon: 'phone',
             className: 'label-online',
           });
         }

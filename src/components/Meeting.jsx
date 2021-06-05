@@ -24,10 +24,11 @@ export default function Meeting({ meeting, state, setState }) {
 
   //format time string (duration? or appointment?)
   const timeString = meeting.start
-    ? `
-      ${strings[settings.weekdays[meeting.start.format('d')]]},  
-      ${meeting.start.format('h:mm a')}
-      ${meeting.end ? ` – ${meeting.end.format('h:mm a')}` : ''}`
+    ? strings[settings.weekdays[meeting.start.format('d')]].concat(
+        ' ',
+        meeting.start.format('h:mm a'),
+        meeting.end ? ` – ${meeting.end.format('h:mm a')}` : ''
+      )
     : strings.appointment;
 
   //feedback URL link
@@ -88,65 +89,90 @@ export default function Meeting({ meeting, state, setState }) {
                 </ul>
               )}
               {meeting.notes && <Paragraphs text={meeting.notes} />}
-            </div>
-            {(meeting.conference_provider || meeting.conference_phone) && (
-              <div className="d-grid gap-2 list-group-item py-3">
-                <h5>{strings.types.online}</h5>
-                {meeting.conference_provider && (
-                  <div className="d-grid gap-2">
-                    <Button
-                      className="online"
-                      href={meeting.conference_url}
-                      icon="camera"
-                      text={meeting.conference_provider}
-                    />
-                    {meeting.conference_url_notes && (
-                      <Paragraphs
-                        className="d-block text-muted"
-                        text={meeting.conference_url_notes}
+              {(meeting.conference_provider ||
+                meeting.conference_phone ||
+                meeting.email ||
+                meeting.website ||
+                meeting.phone ||
+                meeting.venmo ||
+                meeting.paypal ||
+                meeting.square) && (
+                <div className="d-grid gap-3 mt-2">
+                  {meeting.conference_provider && (
+                    <div className="d-grid gap-1">
+                      <Button
+                        className="online"
+                        href={meeting.conference_url}
+                        icon="camera"
+                        text={meeting.conference_provider}
                       />
-                    )}
-                  </div>
-                )}
-                {meeting.conference_phone && (
-                  <Button
-                    className="online"
-                    href={`tel:${meeting.conference_phone}`}
-                    icon="telephone"
-                    text={strings.phone}
-                  />
-                )}
-                {meeting.conference_phone_notes && (
-                  <Paragraphs
-                    className="d-block text-muted"
-                    text={meeting.conference_phone_notes}
-                  />
-                )}
-              </div>
-            )}
-            {(meeting.venmo || meeting.square || meeting.paypal) && (
-              <div className="d-grid gap-2 list-group-item py-3">
-                <h5>{strings.seventh_tradition}</h5>
-                {meeting.venmo && (
-                  <Button
-                    href={`https://venmo.com/${meeting.venmo.substr(1)}`}
-                    icon="cash"
-                    text="Venmo"
-                  />
-                )}
-                {meeting.square && (
-                  <Button
-                    href={`https://cash.app/${meeting.square}`}
-                    icon="cash"
-                    text="Cash App"
-                  />
-                )}
-                {meeting.paypal && (
-                  <Button href={meeting.paypal} icon="cash" text="PayPal" />
-                )}
-              </div>
-            )}
-            {meeting.isInPerson && (
+                      {meeting.conference_url_notes && (
+                        <Paragraphs
+                          className="d-block text-muted"
+                          text={meeting.conference_url_notes}
+                        />
+                      )}
+                    </div>
+                  )}
+                  {meeting.conference_phone && (
+                    <div className="d-grid gap-1">
+                      <Button
+                        className="online"
+                        href={`tel:${meeting.conference_phone}`}
+                        icon="phone"
+                        text={strings.phone}
+                      />
+                      {meeting.conference_phone_notes && (
+                        <Paragraphs
+                          className="d-block text-muted"
+                          text={meeting.conference_phone_notes}
+                        />
+                      )}
+                    </div>
+                  )}
+                  {meeting.email && (
+                    <Button
+                      href={`mailto:${meeting.email}`}
+                      icon="email"
+                      text={meeting.email}
+                    />
+                  )}
+                  {meeting.website && (
+                    <Button
+                      href={meeting.website}
+                      target="_blank"
+                      icon="link"
+                      text={new URL(meeting.website).host.replace('www.', '')}
+                    />
+                  )}
+                  {meeting.phone && (
+                    <Button
+                      href={meeting.phone}
+                      icon="tel"
+                      text={meeting.phone}
+                    />
+                  )}
+                  {meeting.venmo && (
+                    <Button
+                      href={`https://venmo.com/${meeting.venmo.substr(1)}`}
+                      icon="cash"
+                      text="Venmo"
+                    />
+                  )}
+                  {meeting.square && (
+                    <Button
+                      href={`https://cash.app/${meeting.square}`}
+                      icon="cash"
+                      text="Cash App"
+                    />
+                  )}
+                  {meeting.paypal && (
+                    <Button href={meeting.paypal} icon="cash" text="PayPal" />
+                  )}
+                </div>
+              )}
+            </div>
+            {meeting.address && (
               <div className="d-grid gap-2 list-group-item py-3">
                 {meeting.location && <h5>{meeting.location}</h5>}
                 {meeting.formatted_address && (
@@ -177,7 +203,7 @@ export default function Meeting({ meeting, state, setState }) {
                   <Paragraphs text={meeting.group_notes} />
                 )}
                 {meeting.district && <p>{meeting.district}</p>}
-                {!meeting.isInPerson && meeting.group && (
+                {!meeting.address && meeting.group && (
                   <Weekdays
                     group={meeting.group}
                     state={state}
