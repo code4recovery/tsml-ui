@@ -1,5 +1,4 @@
 import merge from 'deepmerge';
-import moment from 'moment-timezone';
 
 import en from '../i18n/en';
 import es from '../i18n/es';
@@ -54,7 +53,7 @@ const defaults = {
     style: 'mapbox://styles/mapbox/streets-v9',
   },
   now_offset: -10, //"now" includes meetings that started in the last 10 minutes
-  params: ['search', 'mode', 'view', 'meeting'], //input other than filters
+  params: ['search', 'mode', 'view', 'meeting', 'debug'], //input other than filters
   search: 'default', //one of 'default', 'quoted' or 'or'
   show: {
     cityAsRegionFallback: true, //whether to use city if region is empty and city is not
@@ -62,7 +61,6 @@ const defaults = {
     inactive: true, //whether to show inactive meetings at all
     listButtons: false, //show conference buttons in list or show labels
     title: true, //whether to display the title h1
-    warnings: false, //console.warn for bad data
   },
   strings: {
     en: en,
@@ -70,7 +68,6 @@ const defaults = {
     fr: fr,
   },
   times: ['morning', 'midday', 'evening', 'night'],
-  timezone: 'America/New_York',
   weekdays: [
     'sunday',
     'monday',
@@ -86,14 +83,6 @@ const settings =
   typeof tsml_react_config === 'object'
     ? merge(defaults, tsml_react_config)
     : defaults;
-
-//check that timezone is valid
-if (!moment.tz.zone(settings.timezone)) {
-  console.warn(
-    `invalid timezone "${settings.timezone}", using ${defaults.timezone} as a fallback`
-  );
-  settings.timezone = defaults.timezone;
-}
 
 const preferredLanguage = navigator.language.substr(0, 2);
 
