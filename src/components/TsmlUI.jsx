@@ -9,6 +9,7 @@ import {
   filterMeetingData,
   getCache,
   getQueryString,
+  getTimeZone,
   loadMeetingData,
   setCache,
   setMinutesNow,
@@ -32,7 +33,7 @@ export default function TsmlUI({ json, mapbox }) {
       weekday: false,
     },
     error: null,
-    input: getQueryString(window.location.search),
+    input: {},
     indexes: {
       distance: [],
       region: [],
@@ -42,6 +43,7 @@ export default function TsmlUI({ json, mapbox }) {
     },
     loading: true,
     meetings: [],
+    timezone: '',
   });
 
   //enable forward & back buttons
@@ -59,15 +61,20 @@ export default function TsmlUI({ json, mapbox }) {
   if (state.loading) {
     settings.map.key = mapbox;
 
+    const input = getQueryString();
+    const timezone = getTimeZone(input.debug);
+
     const cache = getCache(json);
 
-    if (cache) {
+    if (cache && !input.debug) {
       setState({
         ...state,
         capabilities: cache.capabilities,
         indexes: cache.indexes,
         meetings: cache.meetings,
         loading: false,
+        input: input,
+        timezone: timezone,
       });
     } else {
       //fetch json data file and build indexes
@@ -84,7 +91,9 @@ export default function TsmlUI({ json, mapbox }) {
 
             const [meetings, indexes, capabilities] = loadMeetingData(
               result,
-              state.capabilities
+              state.capabilities,
+              input.debug,
+              timezone
             );
 
             setCache(json, meetings, indexes, capabilities);
@@ -95,6 +104,8 @@ export default function TsmlUI({ json, mapbox }) {
               indexes: indexes,
               meetings: meetings,
               loading: false,
+              input: input,
+              timezone: timezone,
             });
           },
           error => {

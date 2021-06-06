@@ -189,7 +189,9 @@ export function filterMeetingData(state, setState) {
             );
           },
           error => {
-            console.warn('getCurrentPosition() error', error);
+            if (state.input.debug) {
+              console.warn('getCurrentPosition() error', error);
+            }
           },
           { timeout: 5000 }
         );
@@ -261,6 +263,23 @@ export function getIndexByKey(indexes, key) {
     return searchFunc;
   };
   return indexes?.reduce(getFilterByKey(key), null);
+}
+
+//get time zone
+export function getTimeZone(debug) {
+  //check that timezone is valid
+  const defaultTZ = 'America/New_York';
+  if (!moment.tz.zone(settings.timezone)) {
+    if (debug) {
+      console.warn(
+        `invalid timezone "${settings.timezone}", using ${defaultTZ} as a fallback`
+      );
+    }
+    return defaultTZ;
+  } else if (debug) {
+    console.log(`using supplied timezone ${settings.timezone}`);
+  }
+  return settings.timezone;
 }
 
 //recursive function to make sorted array from object index
@@ -338,7 +357,7 @@ export function getCache(json) {
 }
 
 //set up meeting data; this is only run once when the app loads
-export function loadMeetingData(data, capabilities) {
+export function loadMeetingData(data, capabilities, debug, timezone) {
   //meetings is a lookup
   const meetings = {};
 
@@ -372,7 +391,7 @@ export function loadMeetingData(data, capabilities) {
 
     //slug is required
     if (!meeting.slug) {
-      warn(index, 'no slug');
+      warn(index, 'no slug', debug);
       return;
     }
 
@@ -387,7 +406,7 @@ export function loadMeetingData(data, capabilities) {
       : null;
 
     if (meeting.conference_url && !meeting.conference_provider) {
-      warn(index, `invalid conference_url ${meeting.conference_url}`);
+      warn(index, `invalid conference_url ${meeting.conference_url}`, debug);
     }
 
     //creates formatted_address if necessary
@@ -411,7 +430,7 @@ export function loadMeetingData(data, capabilities) {
             meeting.formatted_address + ', ' + meeting.country;
         }
       } else {
-        warn(index, `no formatted_address or city`);
+        warn(index, `no formatted_address or city`, debug);
       }
     }
 
@@ -443,7 +462,7 @@ export function loadMeetingData(data, capabilities) {
     //if neither online nor in person, skip it
     if (!meeting.isOnline && !meeting.isInPerson) {
       if (!settings.show.inactive) {
-        warn(index, 'skipped because inactive');
+        warn(index, 'skipped because inactive', debug);
         return;
       }
       dataHasInactive = true;
@@ -517,18 +536,18 @@ export function loadMeetingData(data, capabilities) {
         .tz(
           `${meeting.day} ${meeting.time}`,
           'd hh:mm',
-          meeting.timezone || settings.timezone
+          meeting.timezone || timezone
         )
-        .tz(settings.timezone);
+        .tz(timezone);
 
       if (meeting.end_time) {
         meeting.end = moment
           .tz(
             `${meeting.day} ${meeting.end_time}`,
             'd hh:mm',
-            meeting.timezone || settings.timezone
+            meeting.timezone || timezone
           )
-          .tz(settings.timezone);
+          .tz(timezone);
       }
 
       //time differences for sorting
@@ -597,14 +616,14 @@ export function loadMeetingData(data, capabilities) {
     //7th tradition validation
     if (meeting.venmo) {
       if (!meeting.venmo.startsWith('@')) {
-        warn(index, `${meeting.venmo} is not a valid venmo`);
+        warn(index, `${meeting.venmo} is not a valid venmo`, debug);
         meeting.venmo = null;
       }
     }
 
     if (meeting.square) {
       if (!meeting.square.startsWith('$')) {
-        warn(index, `${meeting.square} is not a valid square`);
+        warn(index, `${meeting.square} is not a valid square`, debug);
         meeting.square = null;
       }
     }
@@ -614,7 +633,7 @@ export function loadMeetingData(data, capabilities) {
         !meeting.paypal.startsWith('https://www.paypal.me') &&
         !meeting.paypal.startsWith('https://paypal.me')
       ) {
-        warn(index, `${meeting.paypal} is not a valid paypal.me URL`);
+        warn(index, `${meeting.paypal} is not a valid paypal.me URL`, debug);
         meeting.paypal = null;
       }
     }
@@ -853,8 +872,8 @@ export function translateNoCodeAPI(data) {
   return meetings;
 }
 
-function warn(index, content) {
-  if (!settings.show.warnings) return;
+function warn(index, content, debug) {
+  if (!debug) return;
   console.warn(`#${index + 1}: ${content}`);
 }
 

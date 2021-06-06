@@ -219,7 +219,7 @@ export default function Meeting({ meeting, state, setState }) {
                   '%updated%',
                   moment
                     .tz(meeting.updated, 'UTC')
-                    .tz(settings.timezone)
+                    .tz(state.timezone)
                     .format('ll')
                 )}
               </div>
