@@ -89,11 +89,9 @@ const settings =
 
 //check that timezone is valid
 if (!moment.tz.zone(settings.timezone)) {
-  if (settings.show.warnings) {
-    console.warn(
-      `invalid timezone "${settings.timezone}", using ${defaults.timezone} as a fallback`
-    );
-  }
+  console.warn(
+    `invalid timezone "${settings.timezone}", using ${defaults.timezone} as a fallback`
+  );
   settings.timezone = defaults.timezone;
 }
 
