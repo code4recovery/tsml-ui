@@ -38,6 +38,94 @@ export default function Meeting({ meeting, state, setState }) {
     }`;
   }
 
+  const contactButtons = [];
+
+  if (meeting.email) {
+    contactButtons.push(
+      <Button
+        href={`mailto:${meeting.email}`}
+        icon="email"
+        text={meeting.email}
+      />
+    );
+  }
+  if (meeting.website) {
+    contactButtons.push(
+      <Button
+        href={meeting.website}
+        target="_blank"
+        icon="link"
+        text={new URL(meeting.website).host.replace('www.', '')}
+      />
+    );
+  }
+  if (meeting.phone) {
+    contactButtons.push(
+      <Button href={meeting.phone} icon="tel" text={meeting.phone} />
+    );
+  }
+  if (meeting.venmo) {
+    contactButtons.push(
+      <Button
+        href={`https://venmo.com/${meeting.venmo.substr(1)}`}
+        icon="cash"
+        text="Venmo"
+      />
+    );
+  }
+  if (meeting.square) {
+    contactButtons.push(
+      <Button
+        href={`https://cash.app/${meeting.square}`}
+        icon="cash"
+        text="Cash App"
+      />
+    );
+  }
+  if (meeting.paypal) {
+    contactButtons.push(
+      <Button href={meeting.paypal} icon="cash" text="PayPal" />
+    );
+  }
+
+  const weekdays = settings.weekdays
+    .map((weekday, index) => ({
+      name: strings[weekday],
+      meetings: Object.values(state.meetings)
+        .filter(m => m.start?.day() === index)
+        .filter(
+          m =>
+            (meeting.formatted_address &&
+              m.formatted_address === meeting.formatted_address) ||
+            (meeting.group && m.group === meeting.group)
+        ),
+    }))
+    .filter(e => e.meetings.length)
+    .map((weekday, index) => (
+      <div key={index}>
+        <h6 className="mt-2 mb-1">{weekday.name}</h6>
+        <ol className="list-unstyled">
+          {weekday.meetings.map((m, index) => (
+            <li key={index} style={{ paddingLeft: '5.25rem' }}>
+              <span
+                className="position-absolute text-muted text-nowrap text-right"
+                style={{
+                  left: '1.25rem',
+                  width: '4.5rem',
+                }}
+              >
+                {m.start.format('h:mm a')}
+              </span>
+              {m.slug === meeting.slug && <Link meeting={m} />}
+              {m.slug !== meeting.slug && (
+                <Link meeting={m} setState={setState} state={state} />
+              )}
+            </li>
+          ))}
+        </ol>
+      </div>
+    ));
+
   return (
     <div
       className={cx('d-flex flex-column flex-grow-1 meeting', {
@@ -91,12 +179,7 @@ export default function Meeting({ meeting, state, setState }) {
               {meeting.notes && <Paragraphs text={meeting.notes} />}
               {(meeting.conference_provider ||
                 meeting.conference_phone ||
-                meeting.email ||
-                meeting.website ||
-                meeting.phone ||
-                meeting.venmo ||
-                meeting.paypal ||
-                meeting.square) && (
+                (!meeting.group && !!contactButtons.length)) && (
                 <div className="d-grid gap-3 mt-2">
                   {meeting.conference_provider && (
                     <div className="d-grid gap-1">
@@ -130,45 +213,7 @@ export default function Meeting({ meeting, state, setState }) {
                       )}
                     </div>
                   )}
-                  {meeting.email && (
-                    <Button
-                      href={`mailto:${meeting.email}`}
-                      icon="email"
-                      text={meeting.email}
-                    />
-                  )}
-                  {meeting.website && (
-                    <Button
-                      href={meeting.website}
-                      target="_blank"
-                      icon="link"
-                      text={new URL(meeting.website).host.replace('www.', '')}
-                    />
-                  )}
-                  {meeting.phone && (
-                    <Button
-                      href={meeting.phone}
-                      icon="tel"
-                      text={meeting.phone}
-                    />
-                  )}
-                  {meeting.venmo && (
-                    <Button
-                      href={`https://venmo.com/${meeting.venmo.substr(1)}`}
-                      icon="cash"
-                      text="Venmo"
-                    />
-                  )}
-                  {meeting.square && (
-                    <Button
-                      href={`https://cash.app/${meeting.square}`}
-                      icon="cash"
-                      text="Cash App"
-                    />
-                  )}
-                  {meeting.paypal && (
-                    <Button href={meeting.paypal} icon="cash" text="PayPal" />
-                  )}
+                  {!meeting.group && contactButtons}
                 </div>
               )}
             </div>
@@ -188,31 +233,26 @@ export default function Meeting({ meeting, state, setState }) {
                 {meeting.location_notes && (
                   <Paragraphs text={meeting.location_notes} />
                 )}
-                <Weekdays
-                  formattedAddress={meeting.formatted_address}
-                  state={state}
-                  slug={meeting.slug}
-                  setState={setState}
-                />
+                {weekdays}
               </div>
             )}
-            {(meeting.group || meeting.group_notes || meeting.district) && (
-              <div className="d-grid gap-2 list-group-item py-3">
-                {meeting.group && <h5>{meeting.group}</h5>}
-                {meeting.group_notes && (
-                  <Paragraphs text={meeting.group_notes} />
-                )}
-                {meeting.district && <p>{meeting.district}</p>}
-                {!meeting.address && meeting.group && (
-                  <Weekdays
-                    group={meeting.group}
-                    state={state}
-                    slug={meeting.slug}
-                    setState={setState}
-                  />
-                )}
-              </div>
-            )}
+            {meeting.group &&
+              (!meeting.address ||
+                meeting.group_notes ||
+                meeting.district ||
+                !!contactButtons.length) && (
+                <div className="d-grid gap-2 list-group-item py-3">
+                  {meeting.group && <h5>{meeting.group}</h5>}
+                  {meeting.group_notes && (
+                    <Paragraphs text={meeting.group_notes} />
+                  )}
+                  {meeting.district && <p>{meeting.district}</p>}
+                  {meeting.group && !!contactButtons.length && (
+                    <div className="d-grid gap-3 mt-2">{contactButtons}</div>
+                  )}
+                  {!meeting.address && weekdays}
+                </div>
+              )}
             {meeting.updated && (
               <div className="list-group-item">
                 {strings.updated.replace(
@@ -266,43 +306,4 @@ function Paragraphs({ text, className }) {
         ))}
     </div>
   );
-}
-
-function Weekdays({ formattedAddress, group, state, slug, setState }) {
-  return settings.weekdays
-    .map((weekday, index) => ({
-      name: strings[weekday],
-      meetings: Object.values(state.meetings)
-        .filter(m => m.start?.day() === index)
-        .filter(
-          m =>
-            (formattedAddress && m.formatted_address === formattedAddress) ||
-            (group && m.group === group)
-        ),
-    }))
-    .filter(e => e.meetings.length)
-    .map((weekday, index) => (
-      <div key={index}>
-        <h6 className="mt-2 mb-1">{weekday.name}</h6>
-        <ol className="list-unstyled">
-          {weekday.meetings.map((m, index) => (
-            <li key={index} style={{ paddingLeft: '5.25rem' }}>
-              <span
-                className="position-absolute text-muted text-nowrap text-right"
-                style={{
-                  left: '1.25rem',
-                  width: '4.5rem',
-                }}
-              >
-                {m.start.format('h:mm a')}
-              </span>
-              {m.slug === slug && <Link meeting={m} />}
-              {m.slug !== slug && (
-                <Link meeting={m} setState={setState} state={state} />
-              )}
-            </li>
-          ))}
-        </ol>
-      </div>
-    ));
 }
