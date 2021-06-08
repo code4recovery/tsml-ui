@@ -164,6 +164,7 @@ export default function Controls({ state, setState }) {
                   setDropdown(dropdown === 'search' ? null : 'search')
                 }
                 type="button"
+                aria-label={strings.modes[state.input.mode]}
               />
             </form>
             <div
@@ -171,19 +172,19 @@ export default function Controls({ state, setState }) {
                 show: dropdown === 'search',
               })}
             >
-              {modes.map(x => (
+              {modes.map(mode => (
                 <a
-                  key={x}
+                  key={mode}
                   className={cx(
                     'align-items-center dropdown-item d-flex justify-content-between',
                     {
-                      'active bg-secondary': state.input.mode === x,
+                      'active bg-secondary': state.input.mode === mode,
                     }
                   )}
                   href="#"
-                  onClick={e => setMode(e, x)}
+                  onClick={e => setMode(e, mode)}
                 >
-                  {strings.modes[x]}
+                  {strings.modes[mode]}
                 </a>
               ))}
             </div>
