@@ -103,7 +103,7 @@ export default function Meeting({ meeting, state, setState }) {
     .filter(e => e.meetings.length)
     .map((weekday, index) => (
       <div key={index}>
-        <h6 className="mt-2 mb-1">{weekday.name}</h6>
+        <h3 className="h6 mt-2 mb-1">{weekday.name}</h3>
         <ol className="list-unstyled">
           {weekday.meetings.map((m, index) => (
             <li key={index} style={{ paddingLeft: '5.25rem' }}>
@@ -137,7 +137,7 @@ export default function Meeting({ meeting, state, setState }) {
       <h1 className="fw-light mb-1">
         <Link meeting={meeting} />
       </h1>
-      <h6 className="align-items-center border-bottom d-flex mb-3 pb-2">
+      <div className="align-items-center border-bottom d-flex h6 b-3 pb-2">
         <Icon icon="back" />
         <a
           href={window.location.pathname}
@@ -154,7 +154,7 @@ export default function Meeting({ meeting, state, setState }) {
         >
           {strings.back_to_meetings}
         </a>
-      </h6>
+      </div>
       <div className="flex-grow-1 row">
         <div className="align-content-start col-md-4 d-grid gap-3 mb-3 mb-md-0">
           {directionsUrl && (
@@ -167,7 +167,7 @@ export default function Meeting({ meeting, state, setState }) {
           )}
           <div className="list-group">
             <div className="d-grid gap-2 list-group-item py-3">
-              <h5>{strings.meeting_information}</h5>
+              <h2 className="h5">{strings.meeting_information}</h2>
               <p>{timeString}</p>
               {meeting.types && (
                 <ul className="ms-4">
@@ -219,7 +219,7 @@ export default function Meeting({ meeting, state, setState }) {
             </div>
             {meeting.address && (
               <div className="d-grid gap-2 list-group-item py-3">
-                {meeting.location && <h5>{meeting.location}</h5>}
+                {meeting.location && <h2 className="h5">{meeting.location}</h2>}
                 {meeting.formatted_address && (
                   <p
                     className={cx({
@@ -242,7 +242,7 @@ export default function Meeting({ meeting, state, setState }) {
                 meeting.district ||
                 !!contactButtons.length) && (
                 <div className="d-grid gap-2 list-group-item py-3">
-                  {meeting.group && <h5>{meeting.group}</h5>}
+                  {meeting.group && <h2 className="h5">{meeting.group}</h2>}
                   {meeting.group_notes && (
                     <Paragraphs text={meeting.group_notes} />
                   )}
