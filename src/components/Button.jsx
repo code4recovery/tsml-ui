@@ -12,7 +12,7 @@ export default function Button({
   className,
 }) {
   return (
-    <button
+    <a
       className={cx(
         'align-items-center btn btn-outline-secondary d-flex justify-content-center',
         { 'btn-block overflow-hidden': block, 'btn-sm': small },
@@ -23,6 +23,6 @@ export default function Button({
     >
       {icon && <Icon icon={icon} className="me-2" />}
       <div className="text-truncate">{text}</div>
-    </button>
+    </a>
   );
 }
