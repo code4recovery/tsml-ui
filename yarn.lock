@@ -938,58 +938,58 @@
 
 "@mapbox/geojson-rewind@^0.5.0":
   version "0.5.1"
-  resolved "https://registry.yarnpkg.com/@mapbox/geojson-rewind/-/geojson-rewind-0.5.1.tgz#adbe16dc683eb40e90934c51a5e28c7bbf44f4e1"
-  integrity sha512-eL7fMmfTBKjrb+VFHXCGv9Ot0zc3C0U+CwXo1IrP+EPwDczLoXv34Tgq3y+2mPSFNVUXgU42ILWJTC7145KPTA==
+  resolved "https://packages.atlassian.com/api/npm/npm-remote/@mapbox/geojson-rewind/-/geojson-rewind-0.5.1.tgz#adbe16dc683eb40e90934c51a5e28c7bbf44f4e1"
+  integrity sha1-rb4W3Gg+tA6Qk0xRpeKMe79E9OE=
   dependencies:
     get-stream "^6.0.1"
     minimist "^1.2.5"
 
 "@mapbox/geojson-types@^1.0.2":
   version "1.0.2"
-  resolved "https://registry.yarnpkg.com/@mapbox/geojson-types/-/geojson-types-1.0.2.tgz#9aecf642cb00eab1080a57c4f949a65b4a5846d6"
-  integrity sha512-e9EBqHHv3EORHrSfbR9DqecPNn+AmuAoQxV6aL8Xu30bJMJR1o8PZLZzpk1Wq7/NfCbuhmakHTPYRhoqLsXRnw==
+  resolved "https://packages.atlassian.com/api/npm/npm-remote/@mapbox/geojson-types/-/geojson-types-1.0.2.tgz#9aecf642cb00eab1080a57c4f949a65b4a5846d6"
+  integrity sha1-muz2QssA6rEIClfE+UmmW0pYRtY=
 
 "@mapbox/jsonlint-lines-primitives@^2.0.2":
   version "2.0.2"
-  resolved "https://registry.yarnpkg.com/@mapbox/jsonlint-lines-primitives/-/jsonlint-lines-primitives-2.0.2.tgz#ce56e539f83552b58d10d672ea4d6fc9adc7b234"
+  resolved "https://packages.atlassian.com/api/npm/npm-remote/@mapbox/jsonlint-lines-primitives/-/jsonlint-lines-primitives-2.0.2.tgz#ce56e539f83552b58d10d672ea4d6fc9adc7b234"
   integrity sha1-zlblOfg1UrWNENZy6k1vya3HsjQ=
 
 "@mapbox/mapbox-gl-supported@^2.0.0":
   version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@mapbox/mapbox-gl-supported/-/mapbox-gl-supported-2.0.0.tgz#bb133cd91e562c006713fbc83f21e4b6f711a388"
-  integrity sha512-zu4udqYiBrKMQKwpKJ4hhPON7tz0QR/JZ3iGpHnNWFmH3Sv/ysxlICATUtGCFpsyJf2v1WpFhlzaZ3GhhKmPMA==
+  resolved "https://packages.atlassian.com/api/npm/npm-remote/@mapbox/mapbox-gl-supported/-/mapbox-gl-supported-2.0.0.tgz#bb133cd91e562c006713fbc83f21e4b6f711a388"
+  integrity sha1-uxM82R5WLABnE/vIPyHktvcRo4g=
 
 "@mapbox/point-geometry@0.1.0", "@mapbox/point-geometry@^0.1.0", "@mapbox/point-geometry@~0.1.0":
   version "0.1.0"
-  resolved "https://registry.yarnpkg.com/@mapbox/point-geometry/-/point-geometry-0.1.0.tgz#8a83f9335c7860effa2eeeca254332aa0aeed8f2"
+  resolved "https://packages.atlassian.com/api/npm/npm-remote/@mapbox/point-geometry/-/point-geometry-0.1.0.tgz#8a83f9335c7860effa2eeeca254332aa0aeed8f2"
   integrity sha1-ioP5M1x4YO/6Lu7KJUMyqgru2PI=
 
 "@mapbox/tiny-sdf@^1.2.5":
   version "1.2.5"
-  resolved "https://registry.yarnpkg.com/@mapbox/tiny-sdf/-/tiny-sdf-1.2.5.tgz#424c620a96442b20402552be70a7f62a8407cc59"
-  integrity sha512-cD8A/zJlm6fdJOk6DqPUV8mcpyJkRz2x2R+/fYcWDYG3oWbG7/L7Yl/WqQ1VZCjnL9OTIMAn6c+BC5Eru4sQEw==
+  resolved "https://packages.atlassian.com/api/npm/npm-remote/@mapbox/tiny-sdf/-/tiny-sdf-1.2.5.tgz#424c620a96442b20402552be70a7f62a8407cc59"
+  integrity sha1-QkxiCpZEKyBAJVK+cKf2KoQHzFk=
 
 "@mapbox/unitbezier@^0.0.0":
   version "0.0.0"
-  resolved "https://registry.yarnpkg.com/@mapbox/unitbezier/-/unitbezier-0.0.0.tgz#15651bd553a67b8581fb398810c98ad86a34524e"
+  resolved "https://packages.atlassian.com/api/npm/npm-remote/@mapbox/unitbezier/-/unitbezier-0.0.0.tgz#15651bd553a67b8581fb398810c98ad86a34524e"
   integrity sha1-FWUb1VOme4WB+zmIEMmK2Go0Uk4=
 
 "@mapbox/vector-tile@^1.3.1":
   version "1.3.1"
-  resolved "https://registry.yarnpkg.com/@mapbox/vector-tile/-/vector-tile-1.3.1.tgz#d3a74c90402d06e89ec66de49ec817ff53409666"
-  integrity sha512-MCEddb8u44/xfQ3oD+Srl/tNcQoqTw3goGk2oLsrFxOTc3dUp+kAnby3PvAeeBYSMSjSPD1nd1AJA6W49WnoUw==
+  resolved "https://packages.atlassian.com/api/npm/npm-remote/@mapbox/vector-tile/-/vector-tile-1.3.1.tgz#d3a74c90402d06e89ec66de49ec817ff53409666"
+  integrity sha1-06dMkEAtBuiexm3knsgX/1NAlmY=
   dependencies:
     "@mapbox/point-geometry" "~0.1.0"
 
 "@mapbox/whoots-js@^3.1.0":
   version "3.1.0"
-  resolved "https://registry.yarnpkg.com/@mapbox/whoots-js/-/whoots-js-3.1.0.tgz#497c67a1cef50d1a2459ba60f315e448d2ad87fe"
-  integrity sha512-Es6WcD0nO5l+2BOQS4uLfNPYQaNDfbot3X1XUoloz+x0mPDS3eeORZJl06HXjwBG1fOGwCRnzK88LMdxKRrd6Q==
+  resolved "https://packages.atlassian.com/api/npm/npm-remote/@mapbox/whoots-js/-/whoots-js-3.1.0.tgz#497c67a1cef50d1a2459ba60f315e448d2ad87fe"
+  integrity sha1-SXxnoc71DRokWbpg8xXkSNKth/4=
 
-"@math.gl/web-mercator@^3.2.0":
-  version "3.4.2"
-  resolved "https://registry.yarnpkg.com/@math.gl/web-mercator/-/web-mercator-3.4.2.tgz#72c7c7e698bcf8d1d1d60c0ec4c5a4698c9b960e"
-  integrity sha512-Az/WI8vxbqnrTEcYgqDQ3CgCRoFA2a4XT9mkjVrT7iIlfrUF5lrIXcmpljjKvoFNBldKrng7hFSeHHM2ghgSrg==
+"@math.gl/web-mercator@^3.4.3":
+  version "3.4.3"
+  resolved "https://packages.atlassian.com/api/npm/npm-remote/@math.gl/web-mercator/-/web-mercator-3.4.3.tgz#6bcb262a92453399229b173bc9a825ebd3356f38"
+  integrity sha1-a8smKpJFM5kimxc7yagl69M1bzg=
   dependencies:
     "@babel/runtime" "^7.12.0"
     gl-matrix "^3.0.0"
@@ -1096,8 +1096,8 @@
 
 "@types/geojson@*", "@types/geojson@^7946.0.7":
   version "7946.0.7"
-  resolved "https://registry.yarnpkg.com/@types/geojson/-/geojson-7946.0.7.tgz#c8fa532b60a0042219cdf173ca21a975ef0666ad"
-  integrity sha512-wE2v81i4C4Ol09RtsWFAqg3BUitWbHSpSlIo+bNdsCJijO9sjme+zm+73ZMCa/qMC8UEERxzGbvmr1cffo2SiQ==
+  resolved "https://packages.atlassian.com/api/npm/npm-remote/@types/geojson/-/geojson-7946.0.7.tgz#c8fa532b60a0042219cdf173ca21a975ef0666ad"
+  integrity sha1-yPpTK2CgBCIZzfFzyiGpde8GZq0=
 
 "@types/glob@^7.1.1":
   version "7.1.3"
@@ -1156,9 +1156,9 @@
   integrity sha512-cxWFQVseBm6O9Gbw1IWb8r6OS4OhSt3hPZLkFApLjM8TEXROBuQGLAH2i2gZpcXdLBIrpXuTDhH7Vbm1iXmNGA==
 
 "@types/mapbox-gl@^2.0.3":
-  version "2.1.2"
-  resolved "https://registry.yarnpkg.com/@types/mapbox-gl/-/mapbox-gl-2.1.2.tgz#d5a4a8fe5e939f99ded4ac88695aa65f2ce00eb8"
-  integrity sha512-dwlJt2U2qllS3Z8+AfhZEK2Kt07Hjuf8kzxQ6Ip2L0haVNKkYP3BfdVdT2JVwSMIQGVHWq4Gru8Jro4+1WW0MQ==
+  version "2.3.0"
+  resolved "https://packages.atlassian.com/api/npm/npm-remote/@types/mapbox-gl/-/mapbox-gl-2.3.0.tgz#8a88784b1e5e332c9e609a32fe4299789279ed47"
+  integrity sha1-ioh4Sx5eMyyeYJoy/kKZeJJ57Uc=
   dependencies:
     "@types/geojson" "*"
 
@@ -1688,8 +1688,8 @@ boolbase@^1.0.0, boolbase@~1.0.0:
 
 bootstrap@^5.0.1:
   version "5.0.1"
-  resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-5.0.1.tgz#e7939d599119dc818a90478a2a299bdaff037e09"
-  integrity sha512-Fl79+wsLOZKoiU345KeEaWD0ik8WKRI5zm0YSPj2oF1Qr+BO7z0fco6GbUtqjoG1h4VI89PeKJnMsMMVQdKKTw==
+  resolved "https://packages.atlassian.com/api/npm/npm-remote/bootstrap/-/bootstrap-5.0.1.tgz#e7939d599119dc818a90478a2a299bdaff037e09"
+  integrity sha1-55OdWZEZ3IGKkEeKKimb2v8Dfgk=
 
 brace-expansion@^1.1.7:
   version "1.1.11"
@@ -1999,8 +1999,8 @@ class-utils@^0.3.5:
 
 classnames@^2.3.1:
   version "2.3.1"
-  resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.3.1.tgz#dfcfa3891e306ec1dad105d0e88f4417b8535e8e"
-  integrity sha512-OlQdbZ7gLfGarSqxesMesDa5uz7KFbID8Kpq/SxIoNGDqY8lSYs0D+hhtBXhcdB3rcbXArFr7vlHheLk1voeNA==
+  resolved "https://packages.atlassian.com/api/npm/npm-remote/classnames/-/classnames-2.3.1.tgz#dfcfa3891e306ec1dad105d0e88f4417b8535e8e"
+  integrity sha1-38+jiR4wbsHa0QXQ6I9EF7hTXo4=
 
 clean-css@^4.2.3:
   version "4.2.3"
@@ -2396,7 +2396,7 @@ css-what@^3.2.1:
 
 csscolorparser@~1.0.3:
   version "1.0.3"
-  resolved "https://registry.yarnpkg.com/csscolorparser/-/csscolorparser-1.0.3.tgz#b34f391eea4da8f3e98231e2ccd8df9c041f171b"
+  resolved "https://packages.atlassian.com/api/npm/npm-remote/csscolorparser/-/csscolorparser-1.0.3.tgz#b34f391eea4da8f3e98231e2ccd8df9c041f171b"
   integrity sha1-s085HupNqPPpgjHizNjfnAQfFxs=
 
 cssesc@^3.0.0:
@@ -2721,8 +2721,8 @@ dotenv@^8.2.0:
 
 earcut@^2.2.2:
   version "2.2.2"
-  resolved "https://registry.yarnpkg.com/earcut/-/earcut-2.2.2.tgz#41b0bc35f63e0fe80da7cddff28511e7e2e80d11"
-  integrity sha512-eZoZPPJcUHnfRZ0PjLvx2qBordSiO8ofC3vt+qACLM95u+4DovnbYNpQtJh0DNsWj8RnxrQytD4WA8gj5cRIaQ==
+  resolved "https://packages.atlassian.com/api/npm/npm-remote/earcut/-/earcut-2.2.2.tgz#41b0bc35f63e0fe80da7cddff28511e7e2e80d11"
+  integrity sha1-QbC8NfY+D+gNp83f8oUR5+LoDRE=
 
 ee-first@1.1.1:
   version "1.1.1"
@@ -3179,8 +3179,8 @@ gensync@^1.0.0-beta.2:
 
 geojson-vt@^3.2.1:
   version "3.2.1"
-  resolved "https://registry.yarnpkg.com/geojson-vt/-/geojson-vt-3.2.1.tgz#f8adb614d2c1d3f6ee7c4265cad4bbf3ad60c8b7"
-  integrity sha512-EvGQQi/zPrDA6zr6BnJD/YhwAkBP8nnJ9emh3EnHQKVMfg/MRVtPbMYdgVy/IaEmn4UfagD2a6fafPDL5hbtwg==
+  resolved "https://packages.atlassian.com/api/npm/npm-remote/geojson-vt/-/geojson-vt-3.2.1.tgz#f8adb614d2c1d3f6ee7c4265cad4bbf3ad60c8b7"
+  integrity sha1-+K22FNLB0/bufEJlytS7861gyLc=
 
 get-caller-file@^2.0.5:
   version "2.0.5"
@@ -3208,8 +3208,8 @@ get-value@^2.0.3, get-value@^2.0.6:
 
 gl-matrix@^3.0.0, gl-matrix@^3.3.0:
   version "3.3.0"
-  resolved "https://registry.yarnpkg.com/gl-matrix/-/gl-matrix-3.3.0.tgz#232eef60b1c8b30a28cbbe75b2caf6c48fd6358b"
-  integrity sha512-COb7LDz+SXaHtl/h4LeaFcNdJdAQSDeVqjiIihSXNrkWObZLhDI4hIkZC11Aeqp7bcE72clzB0BnDXr2SmslRA==
+  resolved "https://packages.atlassian.com/api/npm/npm-remote/gl-matrix/-/gl-matrix-3.3.0.tgz#232eef60b1c8b30a28cbbe75b2caf6c48fd6358b"
+  integrity sha1-Iy7vYLHIswooy751ssr2xI/WNYs=
 
 glob-parent@^3.1.0:
   version "3.1.0"
@@ -3281,8 +3281,8 @@ graceful-fs@^4.1.11, graceful-fs@^4.1.2, graceful-fs@^4.1.6, graceful-fs@^4.2.0,
 
 grid-index@^1.1.0:
   version "1.1.0"
-  resolved "https://registry.yarnpkg.com/grid-index/-/grid-index-1.1.0.tgz#97f8221edec1026c8377b86446a7c71e79522ea7"
-  integrity sha512-HZRwumpOGUrHyxO5bqKZL0B0GlUpwtCAzZ42sgxUPniu33R1LSFH5yrIcBCHjkctCAh3mtWKcKd9J4vDDdeVHA==
+  resolved "https://packages.atlassian.com/api/npm/npm-remote/grid-index/-/grid-index-1.1.0.tgz#97f8221edec1026c8377b86446a7c71e79522ea7"
+  integrity sha1-l/giHt7BAmyDd7hkRqfHHnlSLqc=
 
 growly@^1.3.0:
   version "1.3.0"
@@ -3291,7 +3291,7 @@ growly@^1.3.0:
 
 hammerjs@^2.0.8:
   version "2.0.8"
-  resolved "https://registry.yarnpkg.com/hammerjs/-/hammerjs-2.0.8.tgz#04ef77862cff2bb79d30f7692095930222bf60f1"
+  resolved "https://packages.atlassian.com/api/npm/npm-remote/hammerjs/-/hammerjs-2.0.8.tgz#04ef77862cff2bb79d30f7692095930222bf60f1"
   integrity sha1-BO93hiz/K7edMPdpIJWTAiK/YPE=
 
 handle-thing@^2.0.0:
@@ -4052,8 +4052,8 @@ junk@^3.1.0:
 
 kdbush@^3.0.0:
   version "3.0.0"
-  resolved "https://registry.yarnpkg.com/kdbush/-/kdbush-3.0.0.tgz#f8484794d47004cc2d85ed3a79353dbe0abc2bf0"
-  integrity sha512-hRkd6/XW4HTsA9vjVpY9tuXJYLSlelnkTmVFu4M9/7MIYQtFcHpbugAU7UbOfjOiVSVYl2fqgBuJ32JUmRo5Ew==
+  resolved "https://packages.atlassian.com/api/npm/npm-remote/kdbush/-/kdbush-3.0.0.tgz#f8484794d47004cc2d85ed3a79353dbe0abc2bf0"
+  integrity sha1-+EhHlNRwBMwthe06eTU9vgq8K/A=
 
 killable@^1.0.1:
   version "1.0.1"
@@ -4204,8 +4204,8 @@ lodash@^4.17.14, lodash@^4.17.20:
 
 loose-envify@^1.1.0, loose-envify@^1.4.0:
   version "1.4.0"
-  resolved "https://registry.yarnpkg.com/loose-envify/-/loose-envify-1.4.0.tgz#71ee51fa7be4caec1a63839f7e682d8132d30caf"
-  integrity sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==
+  resolved "https://packages.atlassian.com/api/npm/npm-remote/loose-envify/-/loose-envify-1.4.0.tgz#71ee51fa7be4caec1a63839f7e682d8132d30caf"
+  integrity sha1-ce5R+nvkyuwaY4OffmgtgTLTDK8=
   dependencies:
     js-tokens "^3.0.0 || ^4.0.0"
 
@@ -4249,39 +4249,10 @@ map-visit@^1.0.0:
   dependencies:
     object-visit "^1.0.0"
 
-mapbox-gl@^2.0.1:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/mapbox-gl/-/mapbox-gl-2.2.0.tgz#f0228a251c5fb733a341528be0114612bfc5a982"
-  integrity sha512-/9OQjaOIpQcZfXMFMxnjjAjhVGPjuAxQFAbdvG6CXD5aLhm1j2D3zxCCfxxMCEuILRBCbkxEAhVf3JoT+aFXEQ==
-  dependencies:
-    "@mapbox/geojson-rewind" "^0.5.0"
-    "@mapbox/geojson-types" "^1.0.2"
-    "@mapbox/jsonlint-lines-primitives" "^2.0.2"
-    "@mapbox/mapbox-gl-supported" "^2.0.0"
-    "@mapbox/point-geometry" "^0.1.0"
-    "@mapbox/tiny-sdf" "^1.2.5"
-    "@mapbox/unitbezier" "^0.0.0"
-    "@mapbox/vector-tile" "^1.3.1"
-    "@mapbox/whoots-js" "^3.1.0"
-    csscolorparser "~1.0.3"
-    earcut "^2.2.2"
-    geojson-vt "^3.2.1"
-    gl-matrix "^3.3.0"
-    grid-index "^1.1.0"
-    minimist "^1.2.5"
-    murmurhash-js "^1.0.0"
-    pbf "^3.2.1"
-    potpack "^1.0.1"
-    quickselect "^2.0.0"
-    rw "^1.3.3"
-    supercluster "^7.1.2"
-    tinyqueue "^2.0.3"
-    vt-pbf "^3.1.1"
-
 mapbox-gl@^2.3.0:
   version "2.3.0"
-  resolved "https://registry.yarnpkg.com/mapbox-gl/-/mapbox-gl-2.3.0.tgz#2f8243da89ff639497963d7f865d12523d9b96de"
-  integrity sha512-0ssKvbxNnvkenzmJCS0kbXGTYtFtlaX/UdOFGnGdR0nBW3cB2sXwx3yCK8b+SmvsTt6qumpkxeZy7ahspSCA8A==
+  resolved "https://packages.atlassian.com/api/npm/npm-remote/mapbox-gl/-/mapbox-gl-2.3.0.tgz#2f8243da89ff639497963d7f865d12523d9b96de"
+  integrity sha1-L4JD2on/Y5SXlj1/hl0SUj2blt4=
   dependencies:
     "@mapbox/geojson-rewind" "^0.5.0"
     "@mapbox/geojson-types" "^1.0.2"
@@ -4478,8 +4449,8 @@ mixin-deep@^1.2.0:
 
 mjolnir.js@^2.5.0:
   version "2.5.1"
-  resolved "https://registry.yarnpkg.com/mjolnir.js/-/mjolnir.js-2.5.1.tgz#822e5168bfe306ca49672e17f1af14733c109961"
-  integrity sha512-nwqN1llv2i9V4hfwcbxk2ZywG5ViCqhaoHrotRJgxyd2mI1GXDQ3/L2NBkoyX/w+bpcw3LvrYHzPQIN/7LNocQ==
+  resolved "https://packages.atlassian.com/api/npm/npm-remote/mjolnir.js/-/mjolnir.js-2.5.1.tgz#822e5168bfe306ca49672e17f1af14733c109961"
+  integrity sha1-gi5RaL/jBspJZy4X8a8UczwQmWE=
   dependencies:
     "@babel/runtime" "^7.0.0"
     hammerjs "^2.0.8"
@@ -4493,15 +4464,15 @@ mkdirp@^0.5.5, mkdirp@~0.5.1:
 
 moment-timezone@^0.5.33:
   version "0.5.33"
-  resolved "https://registry.yarnpkg.com/moment-timezone/-/moment-timezone-0.5.33.tgz#b252fd6bb57f341c9b59a5ab61a8e51a73bbd22c"
-  integrity sha512-PTc2vcT8K9J5/9rDEPe5czSIKgLoGsH8UNpA4qZTVw0Vd/Uz19geE9abbIOQKaAQFcnQ3v5YEXrbSc5BpshH+w==
+  resolved "https://packages.atlassian.com/api/npm/npm-remote/moment-timezone/-/moment-timezone-0.5.33.tgz#b252fd6bb57f341c9b59a5ab61a8e51a73bbd22c"
+  integrity sha1-slL9a7V/NBybWaWrYajlGnO70iw=
   dependencies:
     moment ">= 2.9.0"
 
 "moment@>= 2.9.0":
   version "2.29.1"
-  resolved "https://registry.yarnpkg.com/moment/-/moment-2.29.1.tgz#b2be769fa31940be9eeea6469c075e35006fa3d3"
-  integrity sha512-kHmoybcPV8Sqy59DwNDY3Jefr64lK/by/da0ViFcuA4DH0vQg5Q6Ze5VimxkfQNSC+Mls/Kx53s7TjP1RhFEDQ==
+  resolved "https://packages.atlassian.com/api/npm/npm-remote/moment/-/moment-2.29.1.tgz#b2be769fa31940be9eeea6469c075e35006fa3d3"
+  integrity sha1-sr52n6MZQL6e7qZGnAdeNQBvo9M=
 
 ms@2.0.0:
   version "2.0.0"
@@ -4538,7 +4509,7 @@ multicast-dns@^6.0.1:
 
 murmurhash-js@^1.0.0:
   version "1.0.0"
-  resolved "https://registry.yarnpkg.com/murmurhash-js/-/murmurhash-js-1.0.0.tgz#b06278e21fc6c37fa5313732b0412bcb6ae15f51"
+  resolved "https://packages.atlassian.com/api/npm/npm-remote/murmurhash-js/-/murmurhash-js-1.0.0.tgz#b06278e21fc6c37fa5313732b0412bcb6ae15f51"
   integrity sha1-sGJ44h/Gw3+lMTcysEEry2rhX1E=
 
 nan@^2.12.1:
@@ -4971,8 +4942,8 @@ path-type@^4.0.0:
 
 pbf@^3.2.1:
   version "3.2.1"
-  resolved "https://registry.yarnpkg.com/pbf/-/pbf-3.2.1.tgz#b4c1b9e72af966cd82c6531691115cc0409ffe2a"
-  integrity sha512-ClrV7pNOn7rtmoQVF4TS1vyU0WhYRnP92fzbfF75jAIwpnzdJXf8iTd4CMEqO4yUenH6NDqLiwjqlh6QgZzgLQ==
+  resolved "https://packages.atlassian.com/api/npm/npm-remote/pbf/-/pbf-3.2.1.tgz#b4c1b9e72af966cd82c6531691115cc0409ffe2a"
+  integrity sha1-tMG55yr5Zs2CxlMWkRFcwECf/io=
   dependencies:
     ieee754 "^1.1.12"
     resolve-protobuf-schema "^2.1.0"
@@ -5352,8 +5323,8 @@ postcss@^8.1, postcss@^8.2.10:
 
 potpack@^1.0.1:
   version "1.0.1"
-  resolved "https://registry.yarnpkg.com/potpack/-/potpack-1.0.1.tgz#d1b1afd89e4c8f7762865ec30bd112ab767e2ebf"
-  integrity sha512-15vItUAbViaYrmaB/Pbw7z6qX2xENbFSTA7Ii4tgbPtasxm5v6ryKhKtL91tpWovDJzTiZqdwzhcFBCwiMVdVw==
+  resolved "https://packages.atlassian.com/api/npm/npm-remote/potpack/-/potpack-1.0.1.tgz#d1b1afd89e4c8f7762865ec30bd112ab767e2ebf"
+  integrity sha1-0bGv2J5Mj3dihl7DC9ESq3Z+Lr8=
 
 pretty-time@^1.1.0:
   version "1.1.0"
@@ -5372,8 +5343,8 @@ process@^0.11.10:
 
 prop-types@^15.5.8, prop-types@^15.7.2:
   version "15.7.2"
-  resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
-  integrity sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==
+  resolved "https://packages.atlassian.com/api/npm/npm-remote/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
+  integrity sha1-UsQedbjIfnK52TYOAga5ncv/psU=
   dependencies:
     loose-envify "^1.4.0"
     object-assign "^4.1.1"
@@ -5381,8 +5352,8 @@ prop-types@^15.5.8, prop-types@^15.7.2:
 
 protocol-buffers-schema@^3.3.1:
   version "3.5.1"
-  resolved "https://registry.yarnpkg.com/protocol-buffers-schema/-/protocol-buffers-schema-3.5.1.tgz#8388e768d383ac8cbea23e1280dfadb79f4122ad"
-  integrity sha512-YVCvdhxWNDP8/nJDyXLuM+UFsuPk4+1PB7WGPVDzm3HTHbzFLxQYeW2iZpS4mmnXrQJGBzt230t/BbEb7PrQaw==
+  resolved "https://packages.atlassian.com/api/npm/npm-remote/protocol-buffers-schema/-/protocol-buffers-schema-3.5.1.tgz#8388e768d383ac8cbea23e1280dfadb79f4122ad"
+  integrity sha1-g4jnaNODrIy+oj4SgN+tt59BIq0=
 
 proxy-addr@~2.0.5:
   version "2.0.6"
@@ -5446,8 +5417,8 @@ queue-microtask@^1.2.2:
 
 quickselect@^2.0.0:
   version "2.0.0"
-  resolved "https://registry.yarnpkg.com/quickselect/-/quickselect-2.0.0.tgz#f19680a486a5eefb581303e023e98faaf25dd018"
-  integrity sha512-RKJ22hX8mHe3Y6wH/N3wCM6BWtjaxIyyUIkpHOvfFnxdI4yD4tBXEBKSbriGujF6jnSVkJrffuo6vxACiSSxIw==
+  resolved "https://packages.atlassian.com/api/npm/npm-remote/quickselect/-/quickselect-2.0.0.tgz#f19680a486a5eefb581303e023e98faaf25dd018"
+  integrity sha1-8ZaApIal7vtYEwPgI+mPqvJd0Bg=
 
 randombytes@^2.0.0, randombytes@^2.0.1, randombytes@^2.0.5, randombytes@^2.1.0:
   version "2.1.0"
@@ -5481,8 +5452,8 @@ raw-body@2.4.0:
 
 react-dom@^17.0.2:
   version "17.0.2"
-  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-17.0.2.tgz#ecffb6845e3ad8dbfcdc498f0d0a939736502c23"
-  integrity sha512-s4h96KtLDUQlsENhMn1ar8t2bEa+q/YAtj8pPPdIjPDGBDIVNsrD9aXNWqspUe6AzKCIG0C1HZZLqLV7qpOBGA==
+  resolved "https://packages.atlassian.com/api/npm/npm-remote/react-dom/-/react-dom-17.0.2.tgz#ecffb6845e3ad8dbfcdc498f0d0a939736502c23"
+  integrity sha1-7P+2hF462Nv83EmPDQqTlzZQLCM=
   dependencies:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
@@ -5490,34 +5461,34 @@ react-dom@^17.0.2:
 
 react-infinite-scroller@^1.2.4:
   version "1.2.4"
-  resolved "https://registry.yarnpkg.com/react-infinite-scroller/-/react-infinite-scroller-1.2.4.tgz#f67eaec4940a4ce6417bebdd6e3433bfc38826e9"
-  integrity sha512-/oOa0QhZjXPqaD6sictN2edFMsd3kkMiE19Vcz5JDgHpzEJVqYcmq+V3mkwO88087kvKGe1URNksHEOt839Ubw==
+  resolved "https://packages.atlassian.com/api/npm/npm-remote/react-infinite-scroller/-/react-infinite-scroller-1.2.4.tgz#f67eaec4940a4ce6417bebdd6e3433bfc38826e9"
+  integrity sha1-9n6uxJQKTOZBe+vdbjQzv8OIJuk=
   dependencies:
     prop-types "^15.5.8"
 
 react-is@^16.8.1:
   version "16.13.1"
-  resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
-  integrity sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==
+  resolved "https://packages.atlassian.com/api/npm/npm-remote/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
+  integrity sha1-eJcppNw23imZ3BVt1sHZwYzqVqQ=
 
-react-map-gl@^6.1.15:
-  version "6.1.15"
-  resolved "https://registry.yarnpkg.com/react-map-gl/-/react-map-gl-6.1.15.tgz#94010b59f177a9a1240b1b6903f965e366fb528f"
-  integrity sha512-U5wuxnH2DBUMX8UtcaFv+KaH6Qlx9d0ZpbjkA/eFH/P3NYvsHSR+vr8RKxtrnZp1t7Pl1n0H75pVFLgGqovXHQ==
+react-map-gl@^6.1.16:
+  version "6.1.16"
+  resolved "https://packages.atlassian.com/api/npm/npm-remote/react-map-gl/-/react-map-gl-6.1.16.tgz#47e1a200b4dea7f981f2be36f96933f202e6bd7e"
+  integrity sha1-R+GiALTep/mB8r42+Wkz8gLmvX4=
   dependencies:
     "@babel/runtime" "^7.0.0"
     "@types/geojson" "^7946.0.7"
     "@types/mapbox-gl" "^2.0.3"
-    mapbox-gl "^2.0.1"
+    mapbox-gl "^2.3.0"
     mjolnir.js "^2.5.0"
     prop-types "^15.7.2"
     resize-observer-polyfill "^1.5.1"
-    viewport-mercator-project "^6.2.3 || ^7.0.2"
+    viewport-mercator-project "^7.0.3"
 
 react@^17.0.2:
   version "17.0.2"
-  resolved "https://registry.yarnpkg.com/react/-/react-17.0.2.tgz#d0b5cc516d29eb3eee383f75b62864cfb6800037"
-  integrity sha512-gnhPt75i/dq/z3/6q/0asP78D0u592D5L1pd7M8P+dck6Fu/jJeL6iVVK23fptSUZj8Vjf++7wXA8UNclGQcbA==
+  resolved "https://packages.atlassian.com/api/npm/npm-remote/react/-/react-17.0.2.tgz#d0b5cc516d29eb3eee383f75b62864cfb6800037"
+  integrity sha1-0LXMUW0p6z7uOD91tihkz7aAADc=
   dependencies:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
@@ -5668,8 +5639,8 @@ requires-port@^1.0.0:
 
 resize-observer-polyfill@^1.5.1:
   version "1.5.1"
-  resolved "https://registry.yarnpkg.com/resize-observer-polyfill/-/resize-observer-polyfill-1.5.1.tgz#0e9020dd3d21024458d4ebd27e23e40269810464"
-  integrity sha512-LwZrotdHOo12nQuZlHEmtuXdqGoOD0OhaxopaNFxWzInpEgaLWoVuAMbTzixuosCx2nEG58ngzW3vxdWoxIgdg==
+  resolved "https://packages.atlassian.com/api/npm/npm-remote/resize-observer-polyfill/-/resize-observer-polyfill-1.5.1.tgz#0e9020dd3d21024458d4ebd27e23e40269810464"
+  integrity sha1-DpAg3T0hAkRY1OvSfiPkAmmBBGQ=
 
 resolve-cwd@^3.0.0:
   version "3.0.0"
@@ -5695,8 +5666,8 @@ resolve-from@^5.0.0:
 
 resolve-protobuf-schema@^2.1.0:
   version "2.1.0"
-  resolved "https://registry.yarnpkg.com/resolve-protobuf-schema/-/resolve-protobuf-schema-2.1.0.tgz#9ca9a9e69cf192bbdaf1006ec1973948aa4a3758"
-  integrity sha512-kI5ffTiZWmJaS/huM8wZfEMer1eRd7oJQhDuxeCLe3t7N7mX3z94CN0xPxBQxFYQTSNz9T0i+v6inKqSdK8xrQ==
+  resolved "https://packages.atlassian.com/api/npm/npm-remote/resolve-protobuf-schema/-/resolve-protobuf-schema-2.1.0.tgz#9ca9a9e69cf192bbdaf1006ec1973948aa4a3758"
+  integrity sha1-nKmp5pzxkrva8QBuwZc5SKpKN1g=
   dependencies:
     protocol-buffers-schema "^3.3.1"
 
@@ -5762,7 +5733,7 @@ run-parallel@^1.1.9:
 
 rw@^1.3.3:
   version "1.3.3"
-  resolved "https://registry.yarnpkg.com/rw/-/rw-1.3.3.tgz#3f862dfa91ab766b14885ef4d01124bfda074fb4"
+  resolved "https://packages.atlassian.com/api/npm/npm-remote/rw/-/rw-1.3.3.tgz#3f862dfa91ab766b14885ef4d01124bfda074fb4"
   integrity sha1-P4Yt+pGrdmsUiF700BEkv9oHT7Q=
 
 safe-buffer@5.1.2, safe-buffer@~5.1.0, safe-buffer@~5.1.1:
@@ -5809,8 +5780,8 @@ sax@~1.2.4:
 
 scheduler@^0.20.2:
   version "0.20.2"
-  resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.20.2.tgz#4baee39436e34aa93b4874bddcbf0fe8b8b50e91"
-  integrity sha512-2eWfGgAqqWFGqtdMmcL5zCMK1U8KlXv8SQFGglL3CEtd0aDVDWgeF/YoCmvln55m5zSk3J/20hTaSBeSObsQDQ==
+  resolved "https://packages.atlassian.com/api/npm/npm-remote/scheduler/-/scheduler-0.20.2.tgz#4baee39436e34aa93b4874bddcbf0fe8b8b50e91"
+  integrity sha1-S67jlDbjSqk7SHS93L8P6Li1DpE=
   dependencies:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
@@ -6215,10 +6186,10 @@ stylehacks@^4.0.0:
     postcss "^7.0.0"
     postcss-selector-parser "^3.0.0"
 
-supercluster@^7.1.2, supercluster@^7.1.3:
+supercluster@^7.1.3:
   version "7.1.3"
-  resolved "https://registry.yarnpkg.com/supercluster/-/supercluster-7.1.3.tgz#8c5412c7d7e53b010f7514e87f279544babc3425"
-  integrity sha512-7+bR4FbF5SYsmkHfDp61QiwCKtwNDyPsddk9TzfsDA5DQr5Goii5CVD2SXjglweFCxjrzVZf945ahqYfUIk8UA==
+  resolved "https://packages.atlassian.com/api/npm/npm-remote/supercluster/-/supercluster-7.1.3.tgz#8c5412c7d7e53b010f7514e87f279544babc3425"
+  integrity sha1-jFQSx9flOwEPdRTofyeVRLq8NCU=
   dependencies:
     kdbush "^3.0.0"
 
@@ -6321,8 +6292,8 @@ timsort@^0.3.0:
 
 tinyqueue@^2.0.3:
   version "2.0.3"
-  resolved "https://registry.yarnpkg.com/tinyqueue/-/tinyqueue-2.0.3.tgz#64d8492ebf39e7801d7bd34062e29b45b2035f08"
-  integrity sha512-ppJZNDuKGgxzkHihX8v9v9G5f+18gzaTfrukGrq6ueg0lmH4nqVnA2IPG0AEH3jKEk2GRJCUhDoqpoiw3PHLBA==
+  resolved "https://packages.atlassian.com/api/npm/npm-remote/tinyqueue/-/tinyqueue-2.0.3.tgz#64d8492ebf39e7801d7bd34062e29b45b2035f08"
+  integrity sha1-ZNhJLr8554Ade9NAYuKbRbIDXwg=
 
 to-arraybuffer@^1.0.0:
   version "1.0.1"
@@ -6559,12 +6530,12 @@ vendors@^1.0.0:
   resolved "https://registry.yarnpkg.com/vendors/-/vendors-1.0.4.tgz#e2b800a53e7a29b93506c3cf41100d16c4c4ad8e"
   integrity sha512-/juG65kTL4Cy2su4P8HjtkTxk6VmJDiOPBufWniqQ6wknac6jNiXS9vU+hO3wgusiyqWlzTbVHi0dyJqRONg3w==
 
-"viewport-mercator-project@^6.2.3 || ^7.0.2", viewport-mercator-project@^7.0.2:
-  version "7.0.2"
-  resolved "https://registry.yarnpkg.com/viewport-mercator-project/-/viewport-mercator-project-7.0.2.tgz#8b37ae5614be139010631fde14d1583cf742abaf"
-  integrity sha512-gH0pBO4Y5McGCPaKulkpL9MPDg+wtOSXtndwh0467T/WLMerfBi7EkHYw1pp9HE2VeqFqUaAfot98cQPGaIjEA==
+viewport-mercator-project@^7.0.3:
+  version "7.0.3"
+  resolved "https://packages.atlassian.com/api/npm/npm-remote/viewport-mercator-project/-/viewport-mercator-project-7.0.3.tgz#6c7cf15cbfd490003d99d68ff5cbb2443237c79a"
+  integrity sha1-bHzxXL/UkAA9mdaP9cuyRDI3x5o=
   dependencies:
-    "@math.gl/web-mercator" "^3.2.0"
+    "@math.gl/web-mercator" "^3.4.3"
 
 vm-browserify@^1.0.1:
   version "1.1.2"
@@ -6572,9 +6543,9 @@ vm-browserify@^1.0.1:
   integrity sha512-2ham8XPWTONajOR0ohOKOHXkm3+gaBmGut3SRuu75xLd/RRaY6vqgh8NBYYk7+RW3u5AtzPQZG8F10LHkl0lAQ==
 
 vt-pbf@^3.1.1:
-  version "3.1.2"
-  resolved "https://registry.yarnpkg.com/vt-pbf/-/vt-pbf-3.1.2.tgz#0ba9c07b73d74024e56c6372837897f6630f040a"
-  integrity sha512-2+WbhabeHzcCfyw4KpxlB1DD1Kvg+aJRgNFBetGww3TnSX/YMfkvJBt8/+1cz9aF4mEgzcc8poeoMclK27xRjg==
+  version "3.1.3"
+  resolved "https://packages.atlassian.com/api/npm/npm-remote/vt-pbf/-/vt-pbf-3.1.3.tgz#68fd150756465e2edae1cc5c048e063916dcfaac"
+  integrity sha1-aP0VB1ZGXi7a4cxcBI4GORbc+qw=
   dependencies:
     "@mapbox/point-geometry" "0.1.0"
     "@mapbox/vector-tile" "^1.3.1"
