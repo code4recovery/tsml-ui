@@ -11,7 +11,7 @@ import Map from './Map';
 export default function Meeting({ meeting, state, setState }) {
   //scroll to top when you navigate to this page
   useEffect(() => {
-    window.scroll(0, 0);
+    document.getElementById('tsml-ui').scrollIntoView();
   }, [state.input.meeting]);
 
   //directions URL link
@@ -32,7 +32,7 @@ export default function Meeting({ meeting, state, setState }) {
     : strings.appointment;
 
   //feedback URL link
-  if (!meeting.feedback_url && settings.feedback_emails) {
+  if (!meeting.feedback_url && settings.feedback_emails.length) {
     meeting.feedback_url = `mailto:${settings.feedback_emails.join()}?subject=${
       window.location.href
     }`;
