@@ -41,51 +41,47 @@ export default function Meeting({ meeting, state, setState }) {
   const contactButtons = [];
 
   if (meeting.email) {
-    contactButtons.push(
-      <Button
-        href={`mailto:${meeting.email}`}
-        icon="email"
-        text={meeting.email}
-      />
-    );
+    contactButtons.push({
+      href: `mailto:${meeting.email}`,
+      icon: 'email',
+      text: meeting.email,
+    });
   }
   if (meeting.website) {
-    contactButtons.push(
-      <Button
-        href={meeting.website}
-        target="_blank"
-        icon="link"
-        text={new URL(meeting.website).host.replace('www.', '')}
-      />
-    );
+    contactButtons.push({
+      href: meeting.website,
+      target: '_blank',
+      icon: 'link',
+      text: new URL(meeting.website).host.replace('www.', ''),
+    });
   }
   if (meeting.phone) {
-    contactButtons.push(
-      <Button href={meeting.phone} icon="tel" text={meeting.phone} />
-    );
+    contactButtons.push({
+      href: meeting.phone,
+      icon: 'tel',
+      text: meeting.phone,
+    });
   }
   if (meeting.venmo) {
-    contactButtons.push(
-      <Button
-        href={`https://venmo.com/${meeting.venmo.substr(1)}`}
-        icon="cash"
-        text="Venmo"
-      />
-    );
+    contactButtons.push({
+      href: `https://venmo.com/${meeting.venmo.substr(1)}`,
+      icon: 'cash',
+      text: 'Venmo',
+    });
   }
   if (meeting.square) {
-    contactButtons.push(
-      <Button
-        href={`https://cash.app/${meeting.square}`}
-        icon="cash"
-        text="Cash App"
-      />
-    );
+    contactButtons.push({
+      href: `https://cash.app/${meeting.square}`,
+      icon: 'cash',
+      text: 'Cash App',
+    });
   }
   if (meeting.paypal) {
-    contactButtons.push(
-      <Button href={meeting.paypal} icon="cash" text="PayPal" />
-    );
+    contactButtons.push({
+      href: meeting.paypal,
+      icon: 'cash',
+      text: 'PayPal',
+    });
   }
 
   const weekdays = settings.weekdays
@@ -213,7 +209,10 @@ export default function Meeting({ meeting, state, setState }) {
                       )}
                     </div>
                   )}
-                  {!meeting.group && contactButtons}
+                  {!meeting.group &&
+                    contactButtons.map((button, index) => (
+                      <Button {...button} key={index} />
+                    ))}
                 </div>
               )}
             </div>
@@ -248,7 +247,11 @@ export default function Meeting({ meeting, state, setState }) {
                   )}
                   {meeting.district && <p>{meeting.district}</p>}
                   {meeting.group && !!contactButtons.length && (
-                    <div className="d-grid gap-3 mt-2">{contactButtons}</div>
+                    <div className="d-grid gap-3 mt-2">
+                      {contactButtons.map((button, index) => (
+                        <Button {...button} key={index} />
+                      ))}
+                    </div>
                   )}
                   {!meeting.address && weekdays}
                 </div>

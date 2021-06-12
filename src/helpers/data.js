@@ -685,7 +685,18 @@ export function loadMeetingData(data, capabilities, debug, timezone) {
 
   //remove active type if no inactive meetings
   if (!dataHasInactive) {
+    //...from the indexes
     indexes.type = indexes.type.filter(type => type.key !== 'active');
+
+    //...from each meeting
+    Object.keys(meetings).forEach(slug => {
+      meetings[slug] = {
+        ...meetings[slug],
+        types: meetings[slug].types.filter(
+          type => type !== strings.types.active
+        ),
+      };
+    });
   }
 
   //determine search modes
