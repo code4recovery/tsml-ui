@@ -115,7 +115,7 @@ export function formatIcs(meeting, timezone) {
     window.navigator.msSaveBlob(blob, 'download.ics');
   } else {
     //open/save link in modern browsers
-    window.open(encodeURI(`data:text/calendar;charset=utf8,${urlString}`));
+    window.location = encodeURI(`data:text/calendar;charset=utf8,${urlString}`);
   }
 }
 
