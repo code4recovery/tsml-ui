@@ -1,4 +1,5 @@
 export default {
+  add_to_calendar: 'Ajouter au calendrier',
   address: 'Adresse',
   alerts: {
     bad_data:

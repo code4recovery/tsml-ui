@@ -2,7 +2,13 @@ import React, { useEffect } from 'react';
 import cx from 'classnames/bind';
 import moment from 'moment-timezone';
 
-import { formatDirectionsUrl, settings, setTitle, strings } from '../helpers';
+import {
+  formatDirectionsUrl,
+  formatIcs,
+  settings,
+  setTitle,
+  strings,
+} from '../helpers';
 import Button from './Button';
 import Icon from './Icon';
 import Link from './Link';
@@ -173,8 +179,8 @@ export default function Meeting({ meeting, state, setState }) {
                 </ul>
               )}
               {meeting.notes && <Paragraphs text={meeting.notes} />}
-              {(meeting.conference_provider ||
-                meeting.conference_phone ||
+              {(meeting.isInPerson ||
+                meeting.isOnline ||
                 (!meeting.group && !!contactButtons.length)) && (
                 <div className="d-grid gap-3 mt-2">
                   {meeting.conference_provider && (
@@ -209,6 +215,14 @@ export default function Meeting({ meeting, state, setState }) {
                       )}
                     </div>
                   )}
+                  {meeting.start &&
+                    (meeting.isInPerson || meeting.isOnline) && (
+                      <Button
+                        onClick={() => formatIcs(meeting, state.timezone)}
+                        icon="calendar"
+                        text={strings.add_to_calendar}
+                      />
+                    )}
                   {!meeting.group &&
                     contactButtons.map((button, index) => (
                       <Button {...button} key={index} />
