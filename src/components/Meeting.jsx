@@ -108,11 +108,15 @@ export default function Meeting({ meeting, state, setState }) {
         <h3 className="h6 mt-2 mb-1">{weekday.name}</h3>
         <ol className="list-unstyled">
           {weekday.meetings.map((m, index) => (
-            <li key={index} style={{ paddingLeft: '5.25rem' }}>
+            <li
+              className="m-0 position-relative"
+              key={index}
+              style={{ paddingLeft: '5.25rem' }}
+            >
               <span
-                className="position-absolute text-muted text-nowrap text-right"
+                className="position-absolute text-muted text-nowrap text-end"
                 style={{
-                  left: '1.25rem',
+                  left: 0,
                   width: '4.5rem',
                 }}
               >
@@ -174,7 +178,9 @@ export default function Meeting({ meeting, state, setState }) {
               {meeting.types && (
                 <ul className="ms-4">
                   {meeting.types.sort().map((type, index) => (
-                    <li key={index}>{type}</li>
+                    <li className="m-0" key={index}>
+                      {type}
+                    </li>
                   ))}
                 </ul>
               )}
