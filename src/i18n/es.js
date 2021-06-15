@@ -1,4 +1,5 @@
 export default {
+  add_to_calendar: 'Añadir al calendario',
   address: 'Dirección',
   alerts: {
     bad_data: 'Se encontró un error al cargar la fuente de datos.',

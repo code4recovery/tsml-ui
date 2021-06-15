@@ -1,4 +1,5 @@
 export default {
+  add_to_calendar: 'Add to Calendar',
   address: 'Address / Platform',
   alerts: {
     bad_data: 'An error was encountered loading the data source.',

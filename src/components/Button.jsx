@@ -10,6 +10,7 @@ export default function Button({
   small = false,
   text,
   className,
+  onClick,
 }) {
   return (
     <a
@@ -19,6 +20,7 @@ export default function Button({
         className
       )}
       href={href}
+      onClick={onClick}
       target="_blank"
     >
       {icon && <Icon icon={icon} className="me-2" />}
