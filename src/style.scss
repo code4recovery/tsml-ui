@@ -85,6 +85,22 @@ div#tsml-ui {
       min-height: 100%;
     }
 
+    .label-online {
+      //background-color: #2d8cff !important;
+      background-color: $blue-100;
+      color: $blue-600;
+    }
+
+    .label-in-person {
+      background-color: $green-100;
+      color: $green-600;
+    }
+
+    .label-inactive {
+      background-color: $red-100;
+      color: $red-600;
+    }
+
     //to prevent double border
     .list-group {
       overflow-x: hidden;
@@ -220,22 +236,6 @@ div#tsml-ui {
 
       .distance {
         text-align: right;
-      }
-
-      .label-online {
-        //background-color: #2d8cff !important;
-        background-color: $blue-100;
-        color: $blue-600;
-      }
-
-      .label-in-person {
-        background-color: $green-100;
-        color: $green-600;
-      }
-
-      .label-inactive {
-        background-color: $red-100;
-        color: $red-600;
       }
 
       //align edges
