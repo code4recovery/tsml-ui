@@ -90,47 +90,25 @@ export default function Meeting({ meeting, state, setState }) {
     });
   }
 
-  const weekdays = settings.weekdays
-    .map((weekday, index) => ({
-      name: strings[weekday],
-      meetings: Object.values(state.meetings)
-        .filter(m => m.start?.day() === index)
-        .filter(
-          m =>
-            (meeting.formatted_address &&
-              m.formatted_address === meeting.formatted_address) ||
-            (meeting.group && m.group === meeting.group)
-        ),
-    }))
-    .filter(e => e.meetings.length)
-    .map((weekday, index) => (
-      <div key={index}>
-        <h3 className="h6 mt-2 mb-1">{weekday.name}</h3>
-        <ol className="list-unstyled">
-          {weekday.meetings.map((m, index) => (
-            <li
-              className="m-0 position-relative"
-              key={index}
-              style={{ paddingLeft: '5.25rem' }}
-            >
-              <span
-                className="position-absolute text-muted text-nowrap text-end"
-                style={{
-                  left: 0,
-                  width: '4.5rem',
-                }}
-              >
-                {m.start.format('h:mm a')}
-              </span>
-              {m.slug === meeting.slug && <Link meeting={m} />}
-              {m.slug !== meeting.slug && (
-                <Link meeting={m} setState={setState} state={state} />
-              )}
-            </li>
-          ))}
-        </ol>
-      </div>
-    ));
+  const locationWeekdays = settings.weekdays.map((weekday, index) => ({
+    name: strings[weekday],
+    meetings: Object.values(state.meetings)
+      .filter(m => m.start?.day() === index)
+      .filter(
+        m =>
+          meeting.isInPerson &&
+          meeting.address &&
+          m.isInPerson &&
+          m.formatted_address === meeting.formatted_address
+      ),
+  }));
+
+  const groupWeekdays = settings.weekdays.map((weekday, index) => ({
+    name: strings[weekday],
+    meetings: Object.values(state.meetings)
+      .filter(m => m.start?.day() === index)
+      .filter(m => meeting.group && m.isOnline && m.group === meeting.group),
+  }));
 
   return (
     <div
@@ -252,20 +230,26 @@ export default function Meeting({ meeting, state, setState }) {
                 {meeting.location_notes && (
                   <Paragraphs text={meeting.location_notes} />
                 )}
-                {weekdays}
+                {formatWeekdays(
+                  locationWeekdays,
+                  meeting.slug,
+                  state,
+                  setState
+                )}
               </div>
             )}
             {meeting.group &&
               (!meeting.address ||
-                meeting.group_notes ||
                 meeting.district ||
+                meeting.group_notes ||
+                !!groupWeekdays.length ||
                 !!contactButtons.length) && (
                 <div className="d-grid gap-2 list-group-item py-3">
-                  {meeting.group && <h2 className="h5">{meeting.group}</h2>}
+                  <h2 className="h5">{meeting.group}</h2>
+                  {meeting.district && <p>{meeting.district}</p>}
                   {meeting.group_notes && (
                     <Paragraphs text={meeting.group_notes} />
                   )}
-                  {meeting.district && <p>{meeting.district}</p>}
                   {meeting.group && !!contactButtons.length && (
                     <div className="d-grid gap-3 mt-2">
                       {contactButtons.map((button, index) => (
@@ -273,7 +257,7 @@ export default function Meeting({ meeting, state, setState }) {
                       ))}
                     </div>
                   )}
-                  {!meeting.address && weekdays}
+                  {formatWeekdays(groupWeekdays, meeting.slug, state, setState)}
                 </div>
               )}
             {meeting.updated && (
@@ -329,4 +313,48 @@ function Paragraphs({ text, className }) {
         ))}
     </div>
   );
+}
+
+function formatWeekdays(weekday, slug, state, setState) {
+  return weekday
+    .filter(e => e.meetings.length)
+    .map((weekday, index) => (
+      <div key={index}>
+        <h3 className="h6 mt-2 mb-1">{weekday.name}</h3>
+        <ol className="list-unstyled">
+          {weekday.meetings.map((m, index) => (
+            <li
+              className="m-0 d-flex flex-row justify-content-between"
+              key={index}
+            >
+              <div
+                className="text-muted text-nowrap pe-2"
+                style={{ minWidth: 78 }}
+              >
+                {m.start.format('h:mm a')}
+              </div>
+              <div className="flex-grow-1">
+                {m.slug === slug && <Link meeting={m} />}
+                {m.slug !== slug && (
+                  <Link meeting={m} setState={setState} state={state} />
+                )}
+              </div>
+              <div className="text-end" style={{ width: 100 }}>
+                {m.isOnline && (
+                  <small className="align-items-center d-flex flex-row float-end gap-2 mx-1 px-2 py-1 rounded text-sm label-online">
+                    {m.conference_provider && <Icon icon="camera" size={13} />}
+                    {m.conference_phone && <Icon icon="phone" size={13} />}
+                  </small>
+                )}
+                {m.isInPerson && (
+                  <small className="align-items-center d-flex flex-row float-end gap-2 mx-1 px-2 py-1 rounded text-sm label-in-person">
+                    <Icon icon="geo" size={13} />
+                  </small>
+                )}
+              </div>
+            </li>
+          ))}
+        </ol>
+      </div>
+    ));
 }
