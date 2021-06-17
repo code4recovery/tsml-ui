@@ -112,33 +112,33 @@ export default function Meeting({ meeting, state, setState }) {
 
   return (
     <div
-      className={cx('d-flex flex-column flex-grow-1 meeting', {
+      className={cx('d-flex flex-column flex-grow-1 gap-3 meeting', {
         'in-person': meeting.isInPerson,
         'inactive': !meeting.isInPerson && !meeting.isOnline,
         'online': meeting.isOnline,
       })}
     >
-      <h1 className="fw-light mb-1">
+      <h1 className="fw-light border-bottom d-flex flex-column pb-2">
         <Link meeting={meeting} />
+        <div className="align-items-center d-flex h6">
+          <Icon icon="back" />
+          <a
+            href={window.location.pathname}
+            onClick={e => {
+              e.preventDefault();
+              setState({
+                ...state,
+                input: {
+                  ...state.input,
+                  meeting: null,
+                },
+              });
+            }}
+          >
+            {strings.back_to_meetings}
+          </a>
+        </div>
       </h1>
-      <div className="align-items-center border-bottom d-flex h6 b-3 pb-2">
-        <Icon icon="back" />
-        <a
-          href={window.location.pathname}
-          onClick={e => {
-            e.preventDefault();
-            setState({
-              ...state,
-              input: {
-                ...state.input,
-                meeting: null,
-              },
-            });
-          }}
-        >
-          {strings.back_to_meetings}
-        </a>
-      </div>
       <div className="flex-grow-1 row">
         <div className="align-content-start col-md-4 d-grid gap-3 mb-3 mb-md-0">
           {directionsUrl && (
