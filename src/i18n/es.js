@@ -54,6 +54,10 @@ export default {
   },
   tuesday: 'Martes',
   type_any: 'Cualquier tipo',
+  type_descriptions: {
+    C: 'Las reuniones cerradas son para A.A. solo para miembros, o para aquellos que tienen un problema con la bebida y "desean dejar de beber".',
+    O: 'Las reuniones abiertas están disponibles para cualquier persona interesada en el programa de recuperación del alcoholismo de Alcohólicos Anónimos. Los no alcohólicos pueden asistir a reuniones abiertas como observadores.',
+  },
   types: {
     '11': 'Meditación del 11º paso',
     '12x12': '12 pasos y 12 tradiciones',

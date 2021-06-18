@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import cx from 'classnames/bind';
 import moment from 'moment-timezone';
 
@@ -15,6 +15,9 @@ import Link from './Link';
 import Map from './Map';
 
 export default function Meeting({ meeting, state, setState }) {
+  //open types
+  const [shownTypeDefinition, setShownTypeDefinition] = useState(null);
+
   //scroll to top when you navigate to this page
   useEffect(() => {
     document.getElementById('tsml-ui').scrollIntoView();
@@ -155,11 +158,47 @@ export default function Meeting({ meeting, state, setState }) {
               <p>{timeString}</p>
               {meeting.types && (
                 <ul className="ms-4">
-                  {meeting.types.sort().map((type, index) => (
-                    <li className="m-0" key={index}>
-                      {type}
-                    </li>
-                  ))}
+                  {meeting.types
+                    .sort((a, b) =>
+                      strings.types[a].localeCompare(strings.types[b])
+                    )
+                    .map((type, index) =>
+                      strings.type_descriptions[type] ? (
+                        <li
+                          className="cursor-pointer m-0"
+                          key={index}
+                          onClick={() =>
+                            setShownTypeDefinition(
+                              shownTypeDefinition === type ? null : type
+                            )
+                          }
+                        >
+                          <div className="d-flex align-items-center gap-1">
+                            <span>{strings.types[type]}</span>
+                            <Icon
+                              icon="info"
+                              size={14}
+                              style={
+                                shownTypeDefinition === type
+                                  ? { opacity: 0.5 }
+                                  : {}
+                              }
+                            />
+                          </div>
+                          <div
+                            className={cx({
+                              'd-none': shownTypeDefinition !== type,
+                            })}
+                          >
+                            {strings.type_descriptions[type]}
+                          </div>
+                        </li>
+                      ) : (
+                        <li className="m-0" key={index}>
+                          {strings.types[type]}
+                        </li>
+                      )
+                    )}
                 </ul>
               )}
               {meeting.notes && <Paragraphs text={meeting.notes} />}

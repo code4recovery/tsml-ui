@@ -85,6 +85,10 @@ div#tsml-ui {
       min-height: 100%;
     }
 
+    .cursor-pointer {
+      cursor: pointer;
+    }
+
     .label-online {
       //background-color: #2d8cff !important;
       background-color: $blue-100;
