@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import cx from 'classnames/bind';
 import moment from 'moment-timezone';
 
@@ -15,6 +15,9 @@ import Link from './Link';
 import Map from './Map';
 
 export default function Meeting({ meeting, state, setState }) {
+  //open types
+  const [define, setDefine] = useState(null);
+
   //scroll to top when you navigate to this page
   useEffect(() => {
     document.getElementById('tsml-ui').scrollIntoView();
@@ -155,11 +158,39 @@ export default function Meeting({ meeting, state, setState }) {
               <p>{timeString}</p>
               {meeting.types && (
                 <ul className="ms-4">
-                  {meeting.types.sort().map((type, index) => (
-                    <li className="m-0" key={index}>
-                      {type}
-                    </li>
-                  ))}
+                  {meeting.types
+                    .sort((a, b) =>
+                      strings.types[a].localeCompare(strings.types[b])
+                    )
+                    .map((type, index) =>
+                      strings.type_descriptions[type] ? (
+                        <li
+                          className="cursor-pointer m-0"
+                          key={index}
+                          onClick={() =>
+                            setDefine(define === type ? null : type)
+                          }
+                        >
+                          <div className="d-flex align-items-center gap-2">
+                            <span>{strings.types[type]}</span>
+                            <Icon
+                              icon="info"
+                              size={13}
+                              className={define === type && 'text-muted'}
+                            />
+                          </div>
+                          {define === type && (
+                            <small className="d-block mt-1 mb-2">
+                              {strings.type_descriptions[type]}
+                            </small>
+                          )}
+                        </li>
+                      ) : (
+                        <li className="m-0" key={index}>
+                          {strings.types[type]}
+                        </li>
+                      )
+                    )}
                 </ul>
               )}
               {meeting.notes && <Paragraphs text={meeting.notes} />}
@@ -215,17 +246,18 @@ export default function Meeting({ meeting, state, setState }) {
               )}
             </div>
             {meeting.address && (
-              <div className="d-grid gap-2 list-group-item py-3">
+              <div
+                className={cx(
+                  {
+                    'text-decoration-line-through text-muted':
+                      meeting.isTempClosed,
+                  },
+                  'd-grid gap-2 list-group-item py-3'
+                )}
+              >
                 {meeting.location && <h2 className="h5">{meeting.location}</h2>}
                 {meeting.formatted_address && (
-                  <p
-                    className={cx({
-                      'text-decoration-line-through text-muted':
-                        meeting.isTempClosed,
-                    })}
-                  >
-                    {meeting.formatted_address}
-                  </p>
+                  <p>{meeting.formatted_address}</p>
                 )}
                 {meeting.location_notes && (
                   <Paragraphs text={meeting.location_notes} />
