@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function Icon({ icon, size = 20, className, style = {} }) {
+export default function Icon({ icon, size = 20, className }) {
   const icons = {
     back: [
       'M7.854 4.646a.5.5 0 0 1 0 .708L5.207 8l2.647 2.646a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 0 1 .708 0z',
@@ -55,7 +55,6 @@ export default function Icon({ icon, size = 20, className, style = {} }) {
       height={size}
       viewBox="0 0 16 16"
       width={size}
-      style={style}
     >
       {icons[icon].map((path, index) => (
         <path key={index} fillRule="evenodd" d={path} />

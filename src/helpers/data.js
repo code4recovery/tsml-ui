@@ -607,8 +607,8 @@ export function loadMeetingData(data, capabilities, debug, timezone) {
     meeting.types.forEach(type => {
       if (!indexes.type.hasOwnProperty(type)) {
         indexes.type[type] = {
-          key: formatSlug(type),
-          name: type,
+          key: formatSlug(strings.types[type]),
+          name: strings.types[type],
           slugs: [],
         };
       }

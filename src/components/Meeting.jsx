@@ -16,7 +16,7 @@ import Map from './Map';
 
 export default function Meeting({ meeting, state, setState }) {
   //open types
-  const [shownTypeDefinition, setShownTypeDefinition] = useState(null);
+  const [define, setDefine] = useState(null);
 
   //scroll to top when you navigate to this page
   useEffect(() => {
@@ -168,30 +168,22 @@ export default function Meeting({ meeting, state, setState }) {
                           className="cursor-pointer m-0"
                           key={index}
                           onClick={() =>
-                            setShownTypeDefinition(
-                              shownTypeDefinition === type ? null : type
-                            )
+                            setDefine(define === type ? null : type)
                           }
                         >
-                          <div className="d-flex align-items-center gap-1">
+                          <div className="d-flex align-items-center gap-2">
                             <span>{strings.types[type]}</span>
                             <Icon
                               icon="info"
-                              size={14}
-                              style={
-                                shownTypeDefinition === type
-                                  ? { opacity: 0.5 }
-                                  : {}
-                              }
+                              size={13}
+                              className={define === type && 'text-muted'}
                             />
                           </div>
-                          <div
-                            className={cx({
-                              'd-none': shownTypeDefinition !== type,
-                            })}
-                          >
-                            {strings.type_descriptions[type]}
-                          </div>
+                          {define === type && (
+                            <small className="d-block mt-1 mb-2">
+                              {strings.type_descriptions[type]}
+                            </small>
+                          )}
                         </li>
                       ) : (
                         <li className="m-0" key={index}>
@@ -254,17 +246,18 @@ export default function Meeting({ meeting, state, setState }) {
               )}
             </div>
             {meeting.address && (
-              <div className="d-grid gap-2 list-group-item py-3">
+              <div
+                className={cx(
+                  {
+                    'text-decoration-line-through text-muted':
+                      meeting.isTempClosed,
+                  },
+                  'd-grid gap-2 list-group-item py-3'
+                )}
+              >
                 {meeting.location && <h2 className="h5">{meeting.location}</h2>}
                 {meeting.formatted_address && (
-                  <p
-                    className={cx({
-                      'text-decoration-line-through text-muted':
-                        meeting.isTempClosed,
-                    })}
-                  >
-                    {meeting.formatted_address}
-                  </p>
+                  <p>{meeting.formatted_address}</p>
                 )}
                 {meeting.location_notes && (
                   <Paragraphs text={meeting.location_notes} />
