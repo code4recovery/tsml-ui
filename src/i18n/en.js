@@ -53,6 +53,10 @@ export default {
   },
   tuesday: 'Tuesday',
   type_any: 'Any Type',
+  type_descriptions: {
+    C: 'Closed meetings are for A.A. members only, or for those who have a drinking problem and “have a desire to stop drinking.”',
+    O: 'Open meetings are available to anyone interested in Alcoholics Anonymous’ program of recovery from alcoholism. Nonalcoholics may attend open meetings as observers.',
+  },
   types: {
     '11': '11th Step Meditation',
     '12x12': '12 Steps & 12 Traditions',

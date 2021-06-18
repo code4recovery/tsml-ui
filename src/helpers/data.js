@@ -373,6 +373,10 @@ export function loadMeetingData(data, capabilities, debug, timezone) {
   const lookup_weekday = settings.weekdays.map(weekday => strings[weekday]);
   const lookup_type_codes = Object.keys(strings.types);
   const lookup_type_values = Object.values(strings.types);
+  const decode_types = {};
+  lookup_type_codes.forEach(key => {
+    decode_types[strings.types[key]] = key;
+  });
 
   //for geo capabilities
   let dataHasInactive = false;
@@ -595,7 +599,7 @@ export function loadMeetingData(data, capabilities, debug, timezone) {
               lookup_type_values.includes(type)
           )
           .map(type =>
-            lookup_type_codes.includes(type) ? strings.types[type] : type
+            lookup_type_values.includes(type) ? decode_types[type] : type
           )
       : [];
 
@@ -603,8 +607,8 @@ export function loadMeetingData(data, capabilities, debug, timezone) {
     meeting.types.forEach(type => {
       if (!indexes.type.hasOwnProperty(type)) {
         indexes.type[type] = {
-          key: formatSlug(type),
-          name: type,
+          key: formatSlug(strings.types[type]),
+          name: strings.types[type],
           slugs: [],
         };
       }

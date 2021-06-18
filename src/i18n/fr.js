@@ -54,6 +54,10 @@ export default {
   },
   tuesday: 'Mardi',
   type_any: 'N’importe quel type',
+  type_descriptions: {
+    C: 'Les réunions fermées sont réservées aux AA. membres seulement, ou pour ceux qui ont un problème d’alcool et « ont le désir d’arrêter de boire ».',
+    O: 'Des réunions ouvertes sont disponibles pour toute personne intéressée par le programme de rétablissement des Alcooliques anonymes. Les non-alcooliques peuvent assister aux réunions publiques en tant qu’observateurs.',
+  },
   types: {
     '11': 'Méditation sur la 11e Étape',
     '12x12': '12 Étapes et 12 Traditions,',
