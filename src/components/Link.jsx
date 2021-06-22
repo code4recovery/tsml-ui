@@ -1,10 +1,11 @@
 import React from 'react';
 
-import { settings } from '../helpers';
+import { settings, strings } from '../helpers';
 
 export default function Link({ state, meeting, setState }) {
   const flags = settings.flags
     .filter(flag => meeting.types.includes(flag))
+    .map(flag => strings.types[flag])
     .sort()
     .join(', ');
 
