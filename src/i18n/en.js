@@ -9,6 +9,7 @@ export default {
   },
   appointment: 'Appointment',
   back_to_meetings: 'Back to Meetings',
+  contribute_with: 'Contribute with %service%',
   distance: 'Distance',
   distance_any: 'Any Distance',
   evening: 'Evening',

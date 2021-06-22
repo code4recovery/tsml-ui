@@ -10,6 +10,7 @@ export default {
   },
   appointment: 'Cita',
   back_to_meetings: 'Volver a las reuniones',
+  contribute_with: 'Contribuya con %service%',
   distance: 'Distancia',
   distance_any: 'Cualquier distancia',
   evening: 'Noche',

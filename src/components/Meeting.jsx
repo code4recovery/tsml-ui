@@ -75,21 +75,21 @@ export default function Meeting({ meeting, state, setState }) {
     contactButtons.push({
       href: `https://venmo.com/${meeting.venmo.substr(1)}`,
       icon: 'cash',
-      text: 'Venmo',
+      text: strings.contribute_with.replace('%service%', 'Venmo'),
     });
   }
   if (meeting.square) {
     contactButtons.push({
       href: `https://cash.app/${meeting.square}`,
       icon: 'cash',
-      text: 'Cash App',
+      text: strings.contribute_with.replace('%service%', 'Cash App'),
     });
   }
   if (meeting.paypal) {
     contactButtons.push({
       href: meeting.paypal,
       icon: 'cash',
-      text: 'PayPal',
+      text: strings.contribute_with.replace('%service%', 'PayPal'),
     });
   }
 
