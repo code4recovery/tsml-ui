@@ -10,6 +10,7 @@ export default {
   },
   appointment: 'Rendez-vous',
   back_to_meetings: 'Retour aux réunions',
+  contribute_with: 'Contribuer avec %service%',
   distance: 'Distance',
   distance_any: 'Toute distance',
   evening: 'Soir',
