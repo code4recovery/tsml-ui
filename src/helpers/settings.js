@@ -36,7 +36,7 @@ const defaults = {
   feedback_emails: [], //email addresses for update meeting info button
   filters: ['region', 'distance', 'weekday', 'time', 'type'],
   filter_special_types: ['active', 'in-person', 'online'],
-  flags: ['Men', 'Women'],
+  flags: ['M', 'W'],
   language: 'en', //fallback language
   map: {
     key: null, //access token
