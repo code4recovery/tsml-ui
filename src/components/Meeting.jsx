@@ -110,7 +110,12 @@ export default function Meeting({ meeting, state, setState }) {
     name: strings[weekday],
     meetings: Object.values(state.meetings)
       .filter(m => m.start?.day() === index)
-      .filter(m => meeting.group && m.isOnline && m.group === meeting.group),
+      .filter(
+        m =>
+          meeting.group &&
+          (m.isOnline || meeting.isInPerson) &&
+          m.group === meeting.group
+      ),
   }));
 
   return (
