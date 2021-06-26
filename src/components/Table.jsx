@@ -2,9 +2,8 @@ import React, { useState } from 'react';
 import cx from 'classnames/bind';
 import InfiniteScroll from 'react-infinite-scroller';
 
-import { settings, strings } from '../helpers';
+import { formatDirectionsUrl, settings, strings } from '../helpers';
 import Button from './Button';
-import Icon from './Icon';
 import Link from './Link';
 
 export default function Table({ state, setState, filteredSlugs }) {
@@ -17,92 +16,49 @@ export default function Table({ state, setState, filteredSlugs }) {
 
   const getValue = (meeting, key) => {
     if (key === 'address') {
-      if (settings.show.listButtons) {
-        const buttons = [];
-        if (meeting.conference_provider) {
-          buttons.push(
-            <Button
-              block={false}
-              href={meeting.conference_url}
-              icon="camera"
-              key="url"
-              small={true}
-              text={meeting.conference_provider}
-            />
-          );
-        }
-        if (meeting.conference_phone) {
-          buttons.push(
-            <Button
-              block={false}
-              href={`tel:${meeting.conference_phone}`}
-              icon="phone"
-              key="phone"
-              small={true}
-              text={strings.phone}
-            />
-          );
-        }
-        return buttons.length ? (
-          <div className="btn-group my-1 w-100">{buttons}</div>
-        ) : (
-          <span
-            className={cx({
-              'text-decoration-line-through text-muted': !meeting.isInPerson,
-            })}
-          >
-            {meeting.address}
-          </span>
-        );
-      } else {
-        const labels = [];
-        if (meeting.isInPerson) {
-          labels.push({
-            label: meeting.address,
-            icon: 'geo',
-            className: 'label-in-person',
-          });
-        }
-        if (meeting.conference_provider) {
-          labels.push({
-            label: meeting.conference_provider,
-            icon: 'camera',
-            className: 'label-online',
-          });
-        }
-        if (meeting.conference_phone) {
-          labels.push({
-            label: strings.phone,
-            icon: 'phone',
-            className: 'label-online',
-          });
-        }
-        if (!meeting.isInPerson && !meeting.isOnline) {
-          labels.push({
-            label: strings.types.inactive,
-            icon: 'close',
-            className: 'label-inactive',
-          });
-        }
-        return (
-          <div className="overflow-auto">
-            {labels.map((label, index) => (
-              <small
-                className={cx(
-                  label.className,
-                  'align-items-center d-flex float-start me-1 my-1 px-2 py-1 rounded'
-                )}
-                key={index}
-              >
-                {label.icon && (
-                  <Icon icon={label.icon} className="me-1" size={18} />
-                )}
-                {label.label}
-              </small>
-            ))}
-          </div>
-        );
+      const buttons = [];
+      if (meeting.isInPerson) {
+        buttons.push({
+          className: 'in-person',
+          href: settings.show.listButtons
+            ? formatDirectionsUrl(meeting)
+            : undefined,
+          icon: 'geo',
+          text: meeting.address,
+        });
       }
+      if (meeting.conference_provider) {
+        buttons.push({
+          className: 'online',
+          href: settings.show.listButtons ? meeting.conference_url : undefined,
+          icon: 'camera',
+          text: meeting.conference_provider,
+        });
+      }
+      if (meeting.conference_phone) {
+        buttons.push({
+          className: 'online',
+          href: settings.show.listButtons
+            ? `tel:${meeting.conference_phone}`
+            : undefined,
+          icon: 'phone',
+          text: strings.phone,
+        });
+      }
+      if (!meeting.isInPerson && !meeting.isOnline) {
+        buttons.push({
+          className: 'inactive',
+          icon: 'close',
+          text: strings.types.inactive,
+        });
+      }
+      return (
+        <div className="d-flex flex-wrap gap-1">
+          {buttons.map((button, index) => (
+            <Button key={index} small={true} {...button} />
+          ))}
+        </div>
+      );
     } else if (key === 'distance') {
       return meeting.distance ? (
         <>
