@@ -57,14 +57,6 @@ div#tsml-ui {
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: rgba($black, 0);
 
-  a {
-    color: $blue-600;
-    text-decoration: underline;
-    &:hover {
-      color: $blue-700;
-    }
-  }
-
   h1,
   h2,
   h3,
@@ -80,227 +72,232 @@ div#tsml-ui {
     text-transform: none;
   }
 
+  .btn {
+    cursor: inherit;
+    &.online {
+      background-color: $blue-100;
+      border-color: $blue-100;
+      color: $blue-600 !important;
+      &[href] {
+        border-color: $blue-200;
+        cursor: pointer;
+        &:hover {
+          background-color: $blue-400;
+          color: white !important;
+        }
+      }
+    }
+
+    &.in-person {
+      background-color: $green-100;
+      border-color: $green-100;
+      color: $green-600 !important;
+      &[href] {
+        border-color: $green-200;
+        cursor: pointer;
+        &:hover {
+          background-color: $green-400;
+          color: white !important;
+        }
+      }
+    }
+
+    &.inactive {
+      background-color: $red-100;
+      border-color: $red-100;
+      color: $red-600 !important;
+      &[href] {
+        border-color: $red-200;
+        cursor: pointer;
+        &:hover {
+          background-color: $red-400;
+          color: white !important;
+        }
+      }
+    }
+  }
+
   .container-fluid {
     @include media-breakpoint-up(md) {
       min-height: 100%;
     }
+  }
 
-    .cursor-pointer {
-      cursor: pointer;
+  .cursor-pointer {
+    cursor: pointer;
+  }
+
+  .list-group {
+    overflow-x: hidden;
+    .list-group-item + .list-group-item {
+      //to prevent double border
+      border-top-width: 0;
+    }
+  }
+
+  .controls {
+    //to allow map to fill available space
+    flex: none;
+
+    //show search cancel button
+    input[type='search']::-webkit-search-cancel-button {
+      -webkit-appearance: searchfield-cancel-button;
     }
 
-    .label-online {
-      //background-color: #2d8cff !important;
-      background-color: $blue-100;
-      color: $blue-600;
-    }
-
-    .label-in-person {
-      background-color: $green-100;
-      color: $green-600;
-    }
-
-    .label-inactive {
-      background-color: $red-100;
-      color: $red-600;
-    }
-
-    //to prevent double border
-    .list-group {
-      overflow-x: hidden;
-
-      .list-group-item + .list-group-item {
-        border-top-width: 0;
-      }
-    }
-
-    .btn {
-      &.online {
-        //background-color: #2d8cff !important;
-        background-color: $blue-100;
-        color: $blue-600;
-        border-color: $blue-200 !important;
-        &:hover {
-          background-color: $blue-400;
-          color: white;
-        }
+    .dropdown {
+      .dropdown button {
+        overflow: hidden;
       }
 
-      &.in-person {
-        background-color: $green-100;
-        color: $green-600;
-        border-color: $green-200 !important;
-        &:hover {
-          background-color: $green-400;
-          color: white;
-        }
-      }
-    }
-
-    .controls {
-      //to allow map to fill available space
-      flex: none;
-
-      //show search cancel button
-      input[type='search']::-webkit-search-cancel-button {
-        -webkit-appearance: searchfield-cancel-button;
+      .dropdown-menu {
+        min-width: 100%;
       }
 
-      .dropdown {
-        .dropdown button {
-          overflow: hidden;
+      //indentation todo make recursive with sass?
+      .children {
+        a {
+          padding-left: 2rem;
         }
 
-        .dropdown-menu {
-          min-width: 100%;
-        }
-
-        //indentation todo make recursive with sass?
         .children {
           a {
-            padding-left: 2rem;
+            padding-left: 4rem;
           }
 
           .children {
             a {
-              padding-left: 4rem;
-            }
-
-            .children {
-              a {
-                padding-left: 6rem;
-              }
+              padding-left: 6rem;
             }
           }
         }
       }
+    }
 
-      .dropdown-menu-end {
-        right: 0;
+    .dropdown-menu-end {
+      right: 0;
+    }
+  }
+
+  .meeting .map {
+    height: 100%;
+    max-height: 1000px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .map {
+    min-height: 500px; //maps should fill at least 500, but up to entire space
+
+    .mapboxgl-popup {
+      max-width: 85%;
+      width: 320px;
+      z-index: 100; //above the pins
+
+      .mapboxgl-popup-content {
+        padding: 0.75rem;
+        position: relative;
+
+        .list-group {
+          max-height: 250px;
+          .list-group-item {
+            font-size: 0.9rem;
+            padding: 0.5rem;
+          }
+        }
+
+        .mapboxgl-popup-close-button {
+          background: white;
+          border-radius: 100%;
+          border: 1px solid #eee;
+          color: $gray-500;
+          font-size: 1.5rem;
+          height: 30px;
+          line-height: 1;
+          padding: 0 0.25rem 0.25rem 0.25rem;
+          position: absolute;
+          right: -10px;
+          top: -10px;
+          width: 30px;
+
+          &:hover {
+            background-color: inherit;
+            color: $gray-800;
+          }
+        }
+      }
+    }
+  }
+
+  table {
+    //was seeing interference from themes
+    border-width: 0;
+
+    td {
+      vertical-align: middle;
+    }
+
+    .distance {
+      text-align: right;
+    }
+
+    //align edges
+    tr th:first-child,
+    td:first-child {
+      padding-left: 1rem;
+    }
+
+    //necessary as of v5 to prevent overlapping bg
+    &.table-striped > tbody > tr:nth-of-type(odd) {
+      background-color: $gray-100;
+      td,
+      time {
+        box-shadow: none;
       }
     }
 
-    .meeting .map {
-      height: 100%;
-      max-height: 1000px;
-      overflow: hidden;
-      position: relative;
+    //when whole row is clickable
+    &.clickable-rows tbody tr:hover {
+      cursor: pointer;
+      a {
+        color: #024dbc;
+      }
     }
 
-    .map {
-      min-height: 500px; //maps should fill at least 500, but up to entire space
+    //mobile view
+    @include media-breakpoint-down(md) {
+      tr {
+        border-top: 1px solid $table-border-color;
+        padding: 0.5rem 1rem;
+        position: relative;
 
-      .mapboxgl-popup {
-        max-width: 85%;
-        width: 320px;
-        z-index: 100; //above the pins
+        td {
+          border: 0;
+          padding: 0 0 0 7rem;
 
-        .mapboxgl-popup-content {
-          padding: 0.75rem;
-          position: relative;
-
-          .list-group {
-            max-height: 250px;
-            .list-group-item {
-              font-size: 0.9rem;
-              padding: 0.5rem;
-            }
-          }
-
-          .mapboxgl-popup-close-button {
-            background: white;
-            border-radius: 100%;
-            border: 1px solid #eee;
-            color: $gray-500;
-            font-size: 1.5rem;
-            height: 30px;
-            line-height: 1;
-            padding: 0 0.25rem 0.25rem 0.25rem;
+          &.time {
+            left: 1rem;
+            padding-left: 0;
             position: absolute;
-            right: -10px;
-            top: -10px;
-            width: 30px;
+          }
 
-            &:hover {
-              background-color: inherit;
-              color: $gray-800;
-            }
+          &.distance {
+            left: 1rem;
+            top: 3.5rem;
+            padding-left: 0;
+            font-size: 1.5rem;
+            position: absolute;
           }
         }
       }
     }
 
-    table {
-      //was seeing interference from themes
-      border-width: 0;
-
-      td {
-        vertical-align: middle;
-      }
-
-      .distance {
-        text-align: right;
-      }
-
-      //align edges
-      tr th:first-child,
-      td:first-child {
-        padding-left: 1rem;
-      }
-
-      //necessary as of v5 to prevent overlapping bg
-      &.table-striped > tbody > tr:nth-of-type(odd) {
-        background-color: $gray-100;
-        td,
-        time {
-          box-shadow: none;
-        }
-      }
-
-      //when whole row is clickable
-      &.clickable-rows tbody tr:hover {
-        cursor: pointer;
-        a {
-          color: #024dbc;
-        }
-      }
-
-      //mobile view
-      @include media-breakpoint-down(md) {
-        tr {
-          border-top: 1px solid $table-border-color;
-          padding: 0.5rem 1rem;
-          position: relative;
-
-          td {
-            border: 0;
-            padding: 0 0 0 7rem;
-
-            &.time {
-              left: 1rem;
-              padding-left: 0;
-              position: absolute;
-            }
-
-            &.distance {
-              left: 1rem;
-              top: 3.5rem;
-              padding-left: 0;
-              font-size: 1.5rem;
-              position: absolute;
-            }
-          }
-        }
-      }
-
-      //regular column widths
-      @include media-breakpoint-up(md) {
-        .name,
-        .location,
-        .address,
-        .region {
-          width: 25%;
-        }
+    //regular column widths
+    @include media-breakpoint-up(md) {
+      .name,
+      .location,
+      .address,
+      .region {
+        width: 25%;
       }
     }
   }

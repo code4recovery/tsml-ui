@@ -4,7 +4,6 @@ import cx from 'classnames/bind';
 import Icon from './Icon';
 
 export default function Button({
-  block = true,
   href,
   icon,
   small = false,
@@ -15,16 +14,25 @@ export default function Button({
   return (
     <a
       className={cx(
-        'align-items-center btn btn-outline-secondary d-flex justify-content-center',
-        { 'btn-block overflow-hidden': block, 'btn-sm': small },
+        'align-items-center btn btn-outline-secondary justify-content-center',
+        {
+          'd-flex overflow-hidden': !small,
+          'btn-sm d-inline-flex': small,
+        },
         className
       )}
       href={href}
       onClick={onClick}
       target="_blank"
     >
-      {icon && <Icon icon={icon} className="me-2" />}
-      <div className="text-truncate">{text}</div>
+      {icon && (
+        <Icon
+          icon={icon}
+          size={small ? 18 : undefined}
+          className={small ? 'me-1' : 'me-2'}
+        />
+      )}
+      {small ? text : <div className="text-truncate">{text}</div>}
     </a>
   );
 }
