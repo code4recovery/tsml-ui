@@ -164,6 +164,7 @@ export default function Meeting({ meeting, state, setState }) {
               {meeting.types && (
                 <ul className="ms-4">
                   {meeting.types
+                    .filter(type => type !== 'active')
                     .sort((a, b) =>
                       strings.types[a].localeCompare(strings.types[b])
                     )
