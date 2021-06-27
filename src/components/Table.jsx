@@ -10,6 +10,10 @@ export default function Table({ state, setState, filteredSlugs }) {
   const meetingsPerPage = 10;
   const [limit, setLimit] = useState(meetingsPerPage);
 
+  //region might not be present in the data
+  const columns = ['time', 'distance', 'name', 'location', 'address'];
+  if (state.capabilities.region) columns.push('region');
+
   const canShowColumn = column => {
     return column !== 'distance' || state.capabilities.distance;
   };
@@ -97,7 +101,7 @@ export default function Table({ state, setState, filteredSlugs }) {
         >
           <thead>
             <tr className="d-none d-md-table-row">
-              {settings.columns.map(
+              {columns.map(
                 (column, index) =>
                   canShowColumn(column) && (
                     <th key={index} className={column}>
@@ -131,7 +135,7 @@ export default function Table({ state, setState, filteredSlugs }) {
                     });
                   }}
                 >
-                  {settings.columns.map(
+                  {columns.map(
                     (column, index) =>
                       canShowColumn(column) && (
                         <td

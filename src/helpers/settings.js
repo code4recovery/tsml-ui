@@ -6,7 +6,6 @@ import fr from '../i18n/fr';
 
 //override these on your page with tsml_react_config
 const defaults = {
-  columns: ['time', 'distance', 'name', 'location', 'address', 'region'],
   conference_providers: {
     'bluejeans.com': 'Bluejeans',
     'freeconference.com': 'Free Conference',
@@ -56,7 +55,6 @@ const defaults = {
   now_offset: -10, //"now" includes meetings that started in the last 10 minutes
   params: ['search', 'mode', 'view', 'meeting', 'debug'], //input other than filters
   show: {
-    cityAsRegionFallback: true, //whether to use city if region is empty and city is not
     controls: true, //whether to show search + dropdowns + list/map
     inactive: true, //whether to show inactive meetings at all
     listButtons: false, //show conference buttons in list or show labels

@@ -178,7 +178,8 @@ export default function Controls({ state, setState }) {
                   className={cx(
                     'align-items-center dropdown-item d-flex justify-content-between',
                     {
-                      'active bg-secondary': state.input.mode === mode,
+                      'active bg-secondary text-white':
+                        state.input.mode === mode,
                     }
                   )}
                   href="#"

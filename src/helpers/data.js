@@ -481,21 +481,20 @@ export function loadMeetingData(data, capabilities, debug, timezone) {
     //using array for regions now, but legacy region, sub_region, etc still supported
     //todo remove if/when tsml implements regions array format
     if (!meeting.regions) {
+      meeting.regions = [];
       if (meeting.region) {
-        meeting.regions = [meeting.region];
+        meeting.regions.push(meeting.region);
         if (meeting.sub_region) {
           meeting.regions.push(meeting.sub_region);
           if (meeting.sub_sub_region) {
             meeting.regions.push(meeting.sub_sub_region);
           }
         }
-      } else if (settings.show.cityAsRegionFallback && meeting.city) {
-        meeting.regions = [meeting.city];
       }
     }
 
     //build region index
-    if (meeting.regions) {
+    if (!!meeting.regions.length) {
       indexes.region = populateRegionsIndex(
         meeting.regions,
         0,
@@ -644,7 +643,8 @@ export function loadMeetingData(data, capabilities, debug, timezone) {
     }
 
     //build search string
-    let search_array = [
+    meeting.search = [
+      meeting.district,
       meeting.formatted_address,
       meeting.group,
       meeting.group_notes,
@@ -652,11 +652,9 @@ export function loadMeetingData(data, capabilities, debug, timezone) {
       meeting.location_notes,
       meeting.name,
       meeting.notes,
-    ];
-    if (meeting.regions) {
-      search_array = search_array.concat(meeting.regions);
-    }
-    meeting.search = search_array
+      meeting.regions,
+    ]
+      .flat()
       .filter(e => e)
       .join('\t')
       .toLowerCase();
