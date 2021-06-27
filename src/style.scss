@@ -235,7 +235,7 @@ div#tsml-ui {
     }
   }
 
-  table {
+  table.table {
     //was seeing interference from themes
     border-width: 0;
 
@@ -279,7 +279,7 @@ div#tsml-ui {
 
         td {
           border: 0;
-          padding: 0 0 0 7rem;
+          padding: 0 0 0 6rem;
 
           &.time {
             left: 1rem;
