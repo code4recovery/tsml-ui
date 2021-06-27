@@ -382,13 +382,13 @@ function formatWeekdays(weekday, slug, state, setState) {
               </div>
               <div className="text-end" style={{ width: 100 }}>
                 {m.isOnline && (
-                  <small className="align-items-center d-flex flex-row float-end gap-2 mx-1 px-2 py-1 rounded text-sm label-online">
+                  <small className="align-items-center d-flex flex-row float-end gap-2 ms-1 px-2 py-1 rounded text-sm online">
                     {m.conference_provider && <Icon icon="camera" size={13} />}
                     {m.conference_phone && <Icon icon="phone" size={13} />}
                   </small>
                 )}
                 {m.isInPerson && (
-                  <small className="align-items-center d-flex flex-row float-end gap-2 mx-1 px-2 py-1 rounded text-sm label-in-person">
+                  <small className="align-items-center d-flex flex-row float-end gap-2 px-2 py-1 rounded text-sm in-person">
                     <Icon icon="geo" size={13} />
                   </small>
                 )}

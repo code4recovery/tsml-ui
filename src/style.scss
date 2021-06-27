@@ -48,14 +48,14 @@ div#tsml-ui {
   @import '~bootstrap/scss/utilities/api';
 
   //styles that bootstrap normally puts on the body
+  background-color: $body-bg !important;
+  color: $body-color !important;
   font-family: $font-family-sans-serif !important;
   font-weight: $font-weight-base !important;
   line-height: $line-height-base !important;
-  color: $body-color !important;
   text-align: $body-text-align !important;
-  background-color: $body-bg !important;
-  -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: rgba($black, 0);
+  -webkit-text-size-adjust: 100%;
 
   h1,
   h2,
@@ -74,13 +74,18 @@ div#tsml-ui {
 
   .btn {
     cursor: inherit;
+    &[href] {
+      cursor: pointer;
+    }
+  }
+
+  a.btn, small {
     &.online {
       background-color: $blue-100;
       border-color: $blue-100;
       color: $blue-600 !important;
       &[href] {
         border-color: $blue-200;
-        cursor: pointer;
         &:hover {
           background-color: $blue-400;
           color: white !important;
@@ -94,7 +99,6 @@ div#tsml-ui {
       color: $green-600 !important;
       &[href] {
         border-color: $green-200;
-        cursor: pointer;
         &:hover {
           background-color: $green-400;
           color: white !important;
@@ -108,7 +112,6 @@ div#tsml-ui {
       color: $red-600 !important;
       &[href] {
         border-color: $red-200;
-        cursor: pointer;
         &:hover {
           background-color: $red-400;
           color: white !important;
