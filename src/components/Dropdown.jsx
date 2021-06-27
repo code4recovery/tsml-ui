@@ -19,7 +19,7 @@ export default function Dropdown({
         className={cx(
           'align-items-center d-flex dropdown-item justify-content-between',
           {
-            'active bg-secondary': values.indexOf(option.key) !== -1,
+            'active bg-secondary text-white': values.indexOf(option.key) !== -1,
           }
         )}
         href="#"
@@ -56,7 +56,7 @@ export default function Dropdown({
       >
         <a
           className={cx('dropdown-item', {
-            'active bg-secondary': !values.length,
+            'active bg-secondary text-white': !values.length,
           })}
           onClick={e => setFilter(e, filter, null)}
           href="#"
