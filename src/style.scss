@@ -118,6 +118,10 @@ div#tsml-ui {
   }
 
   .container-fluid {
+    //for sepia's codered theme
+    padding-right: var(--bs-gutter-x,.75rem) !important;
+    padding-left: var(--bs-gutter-x,.75rem) !important;
+    
     @include media-breakpoint-up(md) {
       min-height: 100%;
     }
