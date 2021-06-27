@@ -14,6 +14,7 @@ const defaults = {
     'meet.google.com': 'Google Hangouts',
     'gotomeet.me': 'GoToMeeting',
     'gotomeeting.com': 'GoToMeeting',
+    'meet.jit.si': 'Jitsi Meet',
     'skype.com': 'Skype',
     'webex.com': 'WebEx',
     'zoho.com': 'Zoho',
@@ -54,7 +55,6 @@ const defaults = {
   },
   now_offset: -10, //"now" includes meetings that started in the last 10 minutes
   params: ['search', 'mode', 'view', 'meeting', 'debug'], //input other than filters
-  search: 'default', //one of 'default', 'quoted' or 'or'
   show: {
     cityAsRegionFallback: true, //whether to use city if region is empty and city is not
     controls: true, //whether to show search + dropdowns + list/map

@@ -182,7 +182,9 @@ export default function Meeting({ meeting, state, setState }) {
                             <Icon
                               icon="info"
                               size={13}
-                              className={define === type && 'text-muted'}
+                              className={
+                                define === type ? 'text-muted' : undefined
+                              }
                             />
                           </div>
                           {define === type && (
@@ -265,6 +267,7 @@ export default function Meeting({ meeting, state, setState }) {
                 {meeting.formatted_address && (
                   <p>{meeting.formatted_address}</p>
                 )}
+                {meeting.regions && <p>{meeting.regions.join(' > ')}</p>}
                 {meeting.location_notes && (
                   <Paragraphs text={meeting.location_notes} />
                 )}

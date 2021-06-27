@@ -6,9 +6,7 @@ TSML UI is a React web app that makes the [12 Step Meeting List](https://github.
 
 To use TSML UI on your website you only need to add some HTML to your web page. To get started, use our [TSML UI configuration helper](https://tsml-ui-config.netlify.app).
 
-## Customize
-
-See [src/helpers/settings.js](settings.js) for options that can be set by extending your `tsml_react_config` object. You can customize many of the behaviors and any text string that the app uses. It's only necessary to specify those values you wish to override.
+## Configure
 
 ### Enable "Near Me" mode
 
@@ -31,36 +29,6 @@ Here is an example of extending the `tsml_react_config` object to include a defi
 
 A list of AA meeting types can be found in the [Meeting Guide format spec](https://github.com/code4recovery/spec).
 
-### Custom image instead of map on online meetings
-
-Maps are not shown on meetings that are not meeting in person, which results in a lot of empty space on large screens. If you'd like to display a custom graphic here specifically for online meetings, try adapting this CSS to your needs.
-
-    #tsml-ui .meeting.online .map::after {
-      background-image: url(https://images.unsplash.com/photo-1588196749597-9ff075ee6b5b?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=1440&ixid=MnwxfDB8MXxhbGx8fHx8fHx8fHwxNjIyMTIzODkw&ixlib=rb-1.2.1&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=1920);
-      background-position: center center;
-      background-repeat: no-repeat;
-      background-size: cover;
-      bottom: 0;
-      content: '';
-      left: 0;
-      opacity: 0.25;
-      position: absolute;
-      right: 0;
-      top: 0;
-    }
-
-### Changing the search
-
-The search function has three options:
-
-- `default`: west chester|brooklyn|manhattan
-- `or`: west chester OR brooklyn OR manhattan
-- `quoted`: "west chester" brooklyn manhattan
-
-The default requires the pipe character for search, but is also the most straight forward; most users will likely only be search for one town ("West Chester"), a ZIP code ("19147"), or a meeting name ("Happy Hour"). However, the two other search options allow for more precise searching; you can return multiple results for adjacent towns.
-
-For more details, please see: [Search: How It Works](README-search.md).
-
 ## Frequently asked questions
 
 ### How are metatypes like "Active" and "Online" calculated?
@@ -81,18 +49,6 @@ Second, while we can infer that a meeting is "online" if there is a Zoom URL (fo
 
 Web servants may [add their own meetimg types](#add-custom-types) of course.
 
-### Hide all "inactive" meetings?
-
-If you have inactive meetings in your data that you can't remove but you'd prefer not be shown at all, then you can extend your config object like so:
-
-    var tsml_react_config = {
-      show: {
-        inactive: false,
-      },
-    };
-
-This will also hide the "Active" and "Inactive" filtering options.
-
 ## Next steps
 
 - [x] Hierarchical region dropdown
@@ -103,8 +59,8 @@ This will also hide the "Active" and "Inactive" filtering options.
 - [x] Spanish
 - [x] French
 - [x] Near location mode with geocoding
+- [x] Accessibility improvements
 - [ ] Filter-clearing buttons when no results
-- [ ] Accessibility improvements
 - [ ] Select multiple dropdown items on mobile
 - [ ] Proper `href` attributes (instead of `#`) in controls for SEO
 
