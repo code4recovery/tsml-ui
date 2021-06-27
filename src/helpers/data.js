@@ -25,6 +25,7 @@ const spec_properties = [
   'country',
   'day',
   'district',
+  'edit_url',
   'email',
   'end_time',
   'feedback_url',
@@ -272,9 +273,11 @@ export function getTimeZone(debug) {
   const defaultTZ = 'America/New_York';
   if (!moment.tz.zone(settings.timezone)) {
     if (debug) {
-      console.warn(
-        `invalid timezone "${settings.timezone}", using ${defaultTZ} as a fallback`
-      );
+      if (settings.timezone) {
+        console.warn(`unknown tz "${settings.timezone}", using ${defaultTZ}`);
+      } else {
+        console.log(`using default tz ${defaultTZ}`);
+      }
     }
     return defaultTZ;
   } else if (debug) {
@@ -396,7 +399,9 @@ export function loadMeetingData(data, capabilities, debug, timezone) {
 
     //slug is required
     if (!meeting.slug) {
-      warn(index, 'no slug', debug);
+      if (debug) {
+        console.warn(meeting.edit_url, 'no slug');
+      }
       return;
     }
 
@@ -410,8 +415,11 @@ export function loadMeetingData(data, capabilities, debug, timezone) {
       ? formatConferenceProvider(meeting.conference_url)
       : null;
 
-    if (meeting.conference_url && !meeting.conference_provider) {
-      warn(index, `invalid conference_url ${meeting.conference_url}`, debug);
+    if (meeting.conference_url && !meeting.conference_provider && debug) {
+      console.warn(
+        meeting.edit_url,
+        `unknown conference_url: ${meeting.conference_url}`
+      );
     }
 
     //creates formatted_address if necessary
@@ -434,8 +442,8 @@ export function loadMeetingData(data, capabilities, debug, timezone) {
           meeting.formatted_address =
             meeting.formatted_address + ', ' + meeting.country;
         }
-      } else {
-        warn(index, `no formatted_address or city`, debug);
+      } else if (debug) {
+        console.warn(meeting.edit_url, 'no formatted_address or city');
       }
     }
 
@@ -467,7 +475,9 @@ export function loadMeetingData(data, capabilities, debug, timezone) {
     //if neither online nor in person, skip it
     if (!meeting.isOnline && !meeting.isInPerson) {
       if (!settings.show.inactive) {
-        warn(index, 'skipped because inactive', debug);
+        if (debug) {
+          console.warn(meeting.edit_url, 'skipped because inactive');
+        }
         return;
       }
       dataHasInactive = true;
@@ -620,14 +630,18 @@ export function loadMeetingData(data, capabilities, debug, timezone) {
     //7th tradition validation
     if (meeting.venmo) {
       if (!meeting.venmo.startsWith('@')) {
-        warn(index, `${meeting.venmo} is not a valid venmo`, debug);
+        if (debug) {
+          console.warn(meeting.edit_url, `invalid venmo: ${meeting.venmo}`);
+        }
         meeting.venmo = null;
       }
     }
 
     if (meeting.square) {
       if (!meeting.square.startsWith('$')) {
-        warn(index, `${meeting.square} is not a valid square`, debug);
+        if (debug) {
+          console.warn(meeting.edit_url, `invalid square: ${meeting.square}`);
+        }
         meeting.square = null;
       }
     }
@@ -637,7 +651,9 @@ export function loadMeetingData(data, capabilities, debug, timezone) {
         !meeting.paypal.startsWith('https://www.paypal.me') &&
         !meeting.paypal.startsWith('https://paypal.me')
       ) {
-        warn(index, `${meeting.paypal} is not a valid paypal.me URL`, debug);
+        if (debug) {
+          console.warn(meeting.edit_url, `invalid paypal: ${meeting.paypal}`);
+        }
         meeting.paypal = null;
       }
     }
@@ -821,7 +837,9 @@ export function setMinutesNow(meetings) {
 }
 
 //translates Google Sheet JSON into Meeting Guide format (example demo.html)
-export function translateGoogleSheet(data) {
+export function translateGoogleSheet(data, json) {
+  const sheetId = json.split('/')[5];
+
   const meetings = [];
 
   //properties with underscores (google doesn't support them)
@@ -829,7 +847,7 @@ export function translateGoogleSheet(data) {
     key.includes('_')
   );
 
-  data.feed.entry.forEach(entry => {
+  data.feed.entry.forEach((entry, index) => {
     //creates a meeting object
     const meeting = {};
 
@@ -852,6 +870,11 @@ export function translateGoogleSheet(data) {
     //use Google-generated slug if none was provided
     if (!meeting.slug) {
       meeting.slug = entry.id['$t'].split('/').pop();
+    }
+
+    if (!meeting.edit_url) {
+      const row = index + 2;
+      meeting.edit_url = `https://docs.google.com/spreadsheets/d/${sheetId}/edit#gid=0&range=${row}:${row}+`;
     }
 
     //convert time to HH:MM
@@ -884,11 +907,6 @@ export function translateNoCodeAPI(data) {
     meetings.push(record.fields);
   });
   return meetings;
-}
-
-function warn(index, content, debug) {
-  if (!debug) return;
-  console.warn(`#${index + 1}: ${content}`);
 }
 
 // Set the document title; originally was going ot set OpenGraph tags but
