@@ -4,20 +4,21 @@ import cx from 'classnames/bind';
 import Icon from './Icon';
 
 export default function Button({
+  className,
   href,
   icon,
+  onClick,
   small = false,
   text,
-  className,
-  onClick,
 }) {
   return (
     <a
       className={cx(
-        'align-items-center btn btn-outline-secondary justify-content-center',
+        'align-items-center btn justify-content-center',
         {
           'd-flex overflow-hidden': !small,
           'btn-sm d-inline-flex': small,
+          'btn-outline-secondary cursor-pointer': href || onClick,
         },
         className
       )}
