@@ -84,7 +84,7 @@ export default function TsmlUI({ json, mapbox }) {
           result => {
             //checks if src is google sheet and translates it if so
             if (json.includes('spreadsheets.google.com')) {
-              result = translateGoogleSheet(result);
+              result = translateGoogleSheet(result, json);
             } else if (json.includes('nocodeapi.com')) {
               result = translateNoCodeAPI(result);
             }

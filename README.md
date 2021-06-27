@@ -12,6 +12,12 @@ To use TSML UI on your website you only need to add some HTML to your web page. 
 
 You don't need to do anything other than enable HTTPS on your website. To ensure all users see this functionality, make sure that anyone who enters a `http://` address for your site is redirected to the `https://` address.
 
+### "Debug" mode
+
+Trusted servants can append `?debug=true` to see warnings about the data in their browser's javascript console. For example, there is a warning about a bad conference_url at [on this demo site](https://react.meetingguide.org/demo.html?debug=true).
+
+This mode also disables data caching so that changes may be observed after reloading.
+
 ### Add custom types
 
 Here is an example of extending the `tsml_react_config` object to include a definition for an additional meeting type.
