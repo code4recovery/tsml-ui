@@ -21,6 +21,7 @@ const defaults = {
   },
   defaults: {
     //default input
+    debug: false,
     distance: [],
     meeting: null,
     mode: 'search',

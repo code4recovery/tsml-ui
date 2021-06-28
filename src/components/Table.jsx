@@ -139,8 +139,8 @@ export default function Table({ state, setState, filteredSlugs }) {
                     (column, index) =>
                       canShowColumn(column) && (
                         <td
-                          key={index}
                           className={cx('d-block d-md-table-cell', column)}
+                          key={index}
                         >
                           {getValue(meeting, column)}
                         </td>

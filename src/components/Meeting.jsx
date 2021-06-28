@@ -2,13 +2,7 @@ import React, { useEffect, useState } from 'react';
 import cx from 'classnames/bind';
 import moment from 'moment-timezone';
 
-import {
-  formatDirectionsUrl,
-  formatIcs,
-  settings,
-  setTitle,
-  strings,
-} from '../helpers';
+import { formatDirectionsUrl, formatIcs, settings, strings } from '../helpers';
 import Button from './Button';
 import Icon from './Icon';
 import Link from './Link';
@@ -29,7 +23,7 @@ export default function Meeting({ meeting, state, setState }) {
     : undefined;
 
   //set page title
-  setTitle(meeting.name);
+  document.title = meeting.name;
 
   //format time string (duration? or appointment?)
   const timeString = meeting.start
