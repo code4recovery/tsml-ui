@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { getIndexByKey, setTitle, strings } from '../helpers';
+import { getIndexByKey, strings } from '../helpers';
 
 export default function Title({ state }) {
   //loading
@@ -28,7 +28,7 @@ export default function Title({ state }) {
       parts.push(
         strings.title.search_near.replace('%search%', `‘${state.input.search}’`)
       );
-    } else if (state.indexes[key] && state.input[key].length) {
+    } else if (state.indexes[key] && state.input[key]?.length) {
       const value = state.input[key]
         .map(value => getIndexByKey(state.indexes[key], value)?.name)
         .join(' + ');
@@ -39,7 +39,7 @@ export default function Title({ state }) {
   const title = parts.join(' ');
 
   //set window title
-  setTitle(title);
+  document.title = title;
 
   //return h1
   return <h1 className="fw-light mb-2">{title}</h1>;

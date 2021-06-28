@@ -123,7 +123,7 @@ export function filterMeetingData(state, setState) {
 
   //filter by distance, region, time, type, and weekday
   settings.filters.forEach(filter => {
-    if (state.input[filter].length && state.capabilities[filter]) {
+    if (state.input[filter]?.length && state.capabilities[filter]) {
       matchGroups[filter] = [].concat.apply(
         [],
         state.input[filter].map(key => {
@@ -299,8 +299,8 @@ function flattenAndSortIndexes(index, sortFn) {
 
 //look for data with multiple days and make them all single
 function flattenDays(data) {
-  let meetings_to_add = [];
-  let indexes_to_remove = [];
+  const meetings_to_add = [];
+  const indexes_to_remove = [];
 
   data.forEach((meeting, index) => {
     if (Array.isArray(meeting.day)) {
@@ -324,24 +324,7 @@ function flattenDays(data) {
 
 //get common matches between arrays (for meeting filtering)
 function getCommonElements(arrays) {
-  let currentValues = {};
-  let commonValues = {};
-  if (!arrays.length) return [];
-  for (let i = arrays[0].length - 1; i >= 0; i--) {
-    //Iterating backwards for efficiency
-    currentValues[arrays[0][i]] = 1; //Doesn't really matter what we set it to
-  }
-  for (let i = arrays.length - 1; i > 0; i--) {
-    const currentArray = arrays[i];
-    for (let j = currentArray.length - 1; j >= 0; j--) {
-      if (currentArray[j] in currentValues) {
-        commonValues[currentArray[j]] = 1; //Once again, the `1` doesn't matter
-      }
-    }
-    currentValues = commonValues;
-    commonValues = {};
-  }
-  return Object.keys(currentValues);
+  return arrays.shift().filter(v => arrays.every(a => a.indexOf(v) !== -1));
 }
 
 //get meetings, indexes, and capabilities from session storage, keyed by JSON URL
@@ -570,7 +553,7 @@ export function loadMeetingData(data, capabilities, debug, timezone) {
       meeting.minutes_week = minutes_midnight + meeting.day * 1440;
 
       //build time index (can be multiple)
-      let times = [];
+      const times = [];
       if (minutes_midnight >= 240 && minutes_midnight < 720) {
         //4am–12pm
         times.push(0); //morning
@@ -735,24 +718,6 @@ export function loadMeetingData(data, capabilities, debug, timezone) {
   return [meetings, indexes, capabilities];
 }
 
-//parse weird google sheet times - todo use moment
-function parseTime(timeString) {
-  if (!timeString.length) return null;
-
-  const time = timeString.match(/(\d+)(:(\d\d))?\s*(p?)/i);
-
-  if (time === null) return null;
-
-  let hours = parseInt(time[1], 10);
-  if (hours === 12 && !time[4]) {
-    hours = 0;
-  } else {
-    hours += hours < 12 && time[4] ? 12 : 0;
-  }
-
-  return String(hours).padStart(2, '0') + ':' + time[3];
-}
-
 //recursive function to build an index of regions from a flat array
 function populateRegionsIndex(regions, position, index, slug) {
   const region = regions[position];
@@ -784,7 +749,7 @@ function processSearchTerms(input) {
     .toLowerCase()
     .split('|')
     .map(phrase => {
-      let terms = [];
+      const terms = [];
 
       if (phrase.includes('"')) {
         if ((phrase.match(/"/g) || []).length % 2) {
@@ -805,11 +770,7 @@ function processSearchTerms(input) {
       }
 
       //add any remaining strings
-      if (phrase.length) {
-        terms = terms.concat(phrase.match(/[^ ]+/g));
-      }
-
-      return terms;
+      return phrase.length ? terms.concat(phrase.match(/[^ ]+/g)) : terms;
     });
 }
 
@@ -878,7 +839,7 @@ export function translateGoogleSheet(data, json) {
     }
 
     //convert time to HH:MM
-    meeting.time = parseTime(meeting.time);
+    meeting.time = moment(meeting.time, 'h:mm a').format('HH:mm');
 
     //array-ify types
     meeting.types = meeting.types
@@ -897,7 +858,7 @@ export function translateNoCodeAPI(data) {
   const meetings = [];
   data.records.forEach(record => {
     //fix time format
-    record.fields.time = parseTime(record.fields.time);
+    record.fields.time = moment(record.fields.time, 'h:mm a').format('HH:mm');
 
     //array-ify types
     record.fields.types = record.fields.types
@@ -907,10 +868,4 @@ export function translateNoCodeAPI(data) {
     meetings.push(record.fields);
   });
   return meetings;
-}
-
-// Set the document title; originally was going ot set OpenGraph tags but
-// they will have no effect since they are rendered after the main page.
-export function setTitle(title) {
-  document.title = title;
 }

@@ -63,7 +63,6 @@ export default function TsmlUI({ json, mapbox }) {
 
     const input = getQueryString();
     const timezone = getTimeZone(input.debug);
-
     const cache = getCache(json);
 
     if (cache && !input.debug) {
@@ -109,11 +108,13 @@ export default function TsmlUI({ json, mapbox }) {
             });
           },
           error => {
-            console.error('JSON fetch error: ' + error);
+            console.error(`JSON ${error}`);
             setState({
               ...state,
               error: json ? 'bad_data' : 'no_data',
+              input: input,
               loading: false,
+              timezone: timezone,
             });
           }
         );
@@ -139,10 +140,9 @@ export default function TsmlUI({ json, mapbox }) {
   state.alert = !filteredSlugs.length ? 'no_results' : null;
 
   //show error?
-  state.error =
-    state.input.meeting && !(state.input.meeting in state.meetings)
-      ? 'not_found'
-      : null;
+  if (state.input.meeting && !(state.input.meeting in state.meetings)) {
+    state.error = 'not_found';
+  }
 
   return (
     <div id="tsml-ui">

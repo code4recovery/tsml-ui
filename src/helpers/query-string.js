@@ -30,14 +30,14 @@ export function setQueryString(input) {
 
   //distance, region, time, type, and weekday
   settings.filters
-    .filter(filter => input[filter].length)
+    .filter(filter => input[filter]?.length)
     .forEach(filter => {
       query[filter] = input[filter].join('/');
     });
 
   //meeting, mode, search, view
   settings.params
-    .filter(param => input[param] != settings.defaults[param])
+    .filter(param => input[param] !== settings.defaults[param])
     .forEach(param => {
       query[param] = input[param];
     });
