@@ -68,7 +68,7 @@ function calculateDistances(
   setState
 ) {
   //build new index and meetings array
-  let distanceIndex = {};
+  const distances = {};
 
   //loop through and update or clear distances, and rebuild index
   filteredSlugs.forEach(slug => {
@@ -80,23 +80,23 @@ function calculateDistances(
       ),
     };
 
-    settings.distance_options.forEach(distance => {
+    [1, 2, 5, 10, 25].forEach(distance => {
       if (state.meetings[slug].distance <= distance) {
-        if (!distanceIndex.hasOwnProperty(distance)) {
-          distanceIndex[distance] = {
+        if (!distances.hasOwnProperty(distance)) {
+          distances[distance] = {
             key: distance.toString(),
             name: `${distance} ${settings.distance_unit}`,
             slugs: [],
           };
         }
-        distanceIndex[distance].slugs.push(slug);
+        distances[distance].slugs.push(slug);
       }
     });
   });
 
   //flatten index and set capability
-  distanceIndex = flattenAndSortIndexes(
-    distanceIndex,
+  const distanceIndex = flattenAndSortIndexes(
+    distances,
     (a, b) => parseInt(a.key) - parseInt(b.key)
   );
   state.capabilities.distance = !!distanceIndex.length;
@@ -362,9 +362,6 @@ export function loadMeetingData(data, capabilities, debug, timezone) {
     decode_types[strings.types[key]] = key;
   });
 
-  //for geo capabilities
-  let dataHasInactive = false;
-
   //check for meetings with multiple days and create an individual meeting for each
   data = flattenDays(data);
 
@@ -460,7 +457,7 @@ export function loadMeetingData(data, capabilities, debug, timezone) {
         }
         return;
       }
-      dataHasInactive = true;
+      capabilities.inactive = true;
       meeting.types.push('inactive');
     } else if (settings.show.inactive) {
       meeting.types.push('active');
@@ -683,7 +680,7 @@ export function loadMeetingData(data, capabilities, debug, timezone) {
   capabilities.type = !!indexes.type.length;
 
   //remove active type if no inactive meetings
-  if (!dataHasInactive) {
+  if (!capabilities.inactive) {
     //...from the indexes
     indexes.type = indexes.type.filter(type => type.key !== 'active');
 
@@ -745,30 +742,21 @@ function processSearchTerms(input) {
     .replaceAll(' OR ', '|')
     .toLowerCase()
     .split('|')
-    .map(phrase => {
-      const terms = [];
-
-      if (phrase.includes('"')) {
-        if ((phrase.match(/"/g) || []).length % 2) {
-          //odd number of matches, remove them all
-          phrase = phrase.replaceAll('"', '');
-        } else {
-          //grab any quoted strings, add them as terms, and remove from source string
-          const exp = /"(.*?)"/g;
-          for (
-            let match = exp.exec(phrase);
-            match != null;
-            match = exp.exec(phrase)
-          ) {
-            phrase = phrase.replace(match[0], '');
-            terms.push(match[0].replace(/"/g, ''));
-          }
-        }
-      }
-
-      //add any remaining strings
-      return phrase.length ? terms.concat(phrase.match(/[^ ]+/g)) : terms;
-    });
+    .map(phrase => phrase.split('"'))
+    .map(phrase => [
+      ...new Set(
+        phrase
+          .filter((_e, index) => index % 2)
+          .concat(
+            phrase
+              .filter((_e, index) => !(index % 2))
+              .join(' ')
+              .split(' ')
+          )
+          .filter(e => e)
+      ),
+    ])
+    .filter(e => e.length);
 }
 
 //set meetings, indexes, and capabilities to session storage, keyed by JSON URL

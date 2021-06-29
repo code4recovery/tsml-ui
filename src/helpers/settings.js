@@ -32,7 +32,6 @@ const defaults = {
     view: 'list',
     weekday: [],
   },
-  distance_options: [1, 2, 5, 10, 25],
   distance_unit: 'mi', //mi or km
   feedback_emails: [], //email addresses for update meeting info button
   filters: ['region', 'distance', 'weekday', 'time', 'type'],
