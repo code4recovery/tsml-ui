@@ -253,18 +253,15 @@ export function filterMeetingData(state, setState) {
   return filteredSlugs;
 }
 
-//find an index by key (todo refactor)
+//find an index by key
 export function getIndexByKey(indexes, key) {
-  const getFilterByKey = key => {
-    const searchFunc = (found, item) => {
-      const children = item.children || [];
-      return (
-        found || (item.key === key ? item : children.reduce(searchFunc, null))
-      );
-    };
-    return searchFunc;
-  };
-  return indexes?.reduce(getFilterByKey(key), null);
+  for (const index of indexes) {
+    if (index.key === key) return index;
+    if (index.children) {
+      const result = getIndexByKey(index.children, key);
+      if (result) return result;
+    }
+  }
 }
 
 //get time zone
@@ -854,18 +851,13 @@ export function translateGoogleSheet(data, json) {
 
 //translate result from nocodeapi.com (used by airtable instances)
 export function translateNoCodeAPI(data) {
-  if (!data.records) return data;
-  const meetings = [];
-  data.records.forEach(record => {
-    //fix time format
-    record.fields.time = moment(record.fields.time, 'h:mm a').format('HH:mm');
-
-    //array-ify types
-    record.fields.types = record.fields.types
-      ? record.fields.types.split(',').map(type => type.trim())
-      : [];
-
-    meetings.push(record.fields);
-  });
-  return meetings;
+  return data.records
+    ? data.records.map(record => ({
+        ...record.fields,
+        time: moment(record.fields.time, 'h:mm a').format('HH:mm'),
+        types: record.fields.types
+          ? record.fields.types.split(',').map(type => type.trim())
+          : [],
+      }))
+    : data;
 }
