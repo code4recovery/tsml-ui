@@ -6,7 +6,6 @@ import { settings, strings } from '../helpers';
 
 export default function Controls({ state, setState }) {
   const [dropdown, setDropdown] = useState(null);
-  //const [geocoding, setGeocoding] = useState(false);
   const [search, setSearch] = useState(state.input.search);
 
   const searchInput = useRef();
