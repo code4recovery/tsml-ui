@@ -107,7 +107,7 @@ export default function Meeting({ meeting, state, setState }) {
       .filter(
         m =>
           meeting.group &&
-          (m.isOnline || meeting.isInPerson) &&
+          (meeting.isOnline || meeting.isInPerson) &&
           m.group === meeting.group
       ),
   }));
