@@ -437,13 +437,14 @@ export function loadMeetingData(data, capabilities, debug, timezone) {
     }
 
     //add online and in-person metattypes
-    meeting.isOnline = meeting.conference_provider || meeting.conference_phone;
+    meeting.isOnline =
+      !!meeting.conference_provider || !!meeting.conference_phone;
     if (meeting.isOnline) meeting.types.push('online');
 
     meeting.isTempClosed =
       meeting.types.includes('TC') || meeting.types.includes(strings.types.TC);
 
-    meeting.isInPerson = !meeting.isTempClosed && meeting.address;
+    meeting.isInPerson = !meeting.isTempClosed && !!meeting.address;
 
     if (meeting.isInPerson) {
       meeting.types.push('in-person');
