@@ -107,7 +107,7 @@ export default function Meeting({ meeting, state, setState }) {
       .filter(
         m =>
           meeting.group &&
-          (meeting.isOnline || meeting.isInPerson) &&
+          (m.isOnline || m.isInPerson) &&
           m.group === meeting.group
       ),
   }));
@@ -319,7 +319,7 @@ export default function Meeting({ meeting, state, setState }) {
         {state.capabilities.map && (
           <div
             className={cx(
-              { 'd-none d-md-block': !meeting.isInPerson },
+              { 'd-md-block d-none': !meeting.isInPerson },
               'col-md-8'
             )}
           >
@@ -355,17 +355,14 @@ function formatWeekdays(weekday, slug, state, setState) {
     .filter(e => e.meetings.length)
     .map((weekday, index) => (
       <div key={index}>
-        <h3 className="h6 mt-2 mb-1">{weekday.name}</h3>
+        <h3 className="h6 mb-1 mt-2">{weekday.name}</h3>
         <ol className="list-unstyled">
           {weekday.meetings.map((m, index) => (
             <li
-              className="m-0 d-flex flex-row justify-content-between"
+              className="d-flex flex-row gap-2 justify-content-between m-0"
               key={index}
             >
-              <div
-                className="text-muted text-nowrap pe-2"
-                style={{ minWidth: 78 }}
-              >
+              <div className="text-muted text-nowrap">
                 {m.start.format('h:mm a')}
               </div>
               <div className="flex-grow-1">
@@ -374,16 +371,16 @@ function formatWeekdays(weekday, slug, state, setState) {
                   <Link meeting={m} setState={setState} state={state} />
                 )}
               </div>
-              <div className="text-end" style={{ width: 100 }}>
-                {m.isOnline && (
-                  <small className="align-items-center d-flex flex-row float-end gap-2 ms-1 px-2 py-1 rounded text-sm online">
-                    {m.conference_provider && <Icon icon="camera" size={13} />}
-                    {m.conference_phone && <Icon icon="phone" size={13} />}
-                  </small>
-                )}
+              <div className="align-items-start d-flex gap-1 justify-content-end pt-1">
                 {m.isInPerson && (
                   <small className="align-items-center d-flex flex-row float-end gap-2 px-2 py-1 rounded text-sm in-person">
                     <Icon icon="geo" size={13} />
+                  </small>
+                )}
+                {m.isOnline && (
+                  <small className="align-items-center d-flex flex-row float-end gap-2 px-2 py-1 rounded text-sm online">
+                    {m.conference_provider && <Icon icon="camera" size={13} />}
+                    {m.conference_phone && <Icon icon="phone" size={13} />}
                   </small>
                 )}
               </div>
