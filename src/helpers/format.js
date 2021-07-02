@@ -1,4 +1,3 @@
-import { createElement } from 'react';
 import { settings } from './settings';
 
 //get address from formatted_address

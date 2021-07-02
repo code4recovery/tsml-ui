@@ -232,6 +232,7 @@ export default function Meeting({ meeting, state, setState }) {
                     </div>
                   )}
                   {meeting.start &&
+                    meeting.timezone &&
                     (meeting.isInPerson || meeting.isOnline) && (
                       <Button
                         onClick={() => formatIcs(meeting)}
