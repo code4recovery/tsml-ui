@@ -5,7 +5,7 @@ import { TsmlUI } from './components';
 //locate element
 let element = document.getElementById('tsml-ui');
 
-//legacy support, can discontinue once current sites are migrated (as of Jul 1 2021)
+//legacy support, can remove once sites have had a chance to migrate (implemented Jul 1 2021)
 if (!element) {
   [element] = document.getElementsByTagName('meetings');
 }
