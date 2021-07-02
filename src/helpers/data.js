@@ -117,6 +117,11 @@ function calculateDistances(
   });
 }
 
+//confirm supplied timezone is valid
+function checkTimezone(timezone, fallback) {
+  return !!moment.tz.zone(timezone) ? timezone : fallback;
+}
+
 //run filters on meetings; this is run at every render
 export function filterMeetingData(state, setState) {
   const matchGroups = {};
@@ -264,25 +269,6 @@ export function getIndexByKey(indexes, key) {
   }
 }
 
-//get time zone
-export function getTimeZone(debug) {
-  //check that timezone is valid
-  const defaultTZ = 'America/New_York';
-  if (!moment.tz.zone(settings.timezone)) {
-    if (debug) {
-      if (settings.timezone) {
-        console.warn(`unknown tz "${settings.timezone}", using ${defaultTZ}`);
-      } else {
-        console.log(`using default tz ${defaultTZ}`);
-      }
-    }
-    return defaultTZ;
-  } else if (debug) {
-    console.log(`using supplied timezone ${settings.timezone}`);
-  }
-  return settings.timezone;
-}
-
 //recursive function to make sorted array from object index
 function flattenAndSortIndexes(index, sortFn) {
   return Object.values(index)
@@ -352,6 +338,9 @@ export function loadMeetingData(data, capabilities, debug, timezone) {
     type: {},
     weekday: {},
   };
+
+  //confirm timezone before normalizing, use Eastern USA time as default
+  timezone = checkTimezone(timezone, 'America/New_York');
 
   //define lookups we'll need later
   const lookup_weekday = settings.weekdays.map(weekday => strings[weekday]);
@@ -523,22 +512,17 @@ export function loadMeetingData(data, capabilities, debug, timezone) {
       }
       indexes.weekday[meeting.day].slugs.push(meeting.slug);
 
+      //timezone
+      meeting.timezone = checkTimezone(meeting.timezone, timezone);
+
       //make start/end moments
       meeting.start = moment
-        .tz(
-          `${meeting.day} ${meeting.time}`,
-          'd hh:mm',
-          meeting.timezone || timezone
-        )
+        .tz(`${meeting.day} ${meeting.time}`, 'd hh:mm', meeting.timezone)
         .tz(timezone);
 
       if (meeting.end_time) {
         meeting.end = moment
-          .tz(
-            `${meeting.day} ${meeting.end_time}`,
-            'd hh:mm',
-            meeting.timezone || timezone
-          )
+          .tz(`${meeting.day} ${meeting.end_time}`, 'd hh:mm', meeting.timezone)
           .tz(timezone);
       }
 
@@ -603,7 +587,10 @@ export function loadMeetingData(data, capabilities, debug, timezone) {
       indexes.type[type].slugs.push(meeting.slug);
     });
 
-    //console.log(meeting.types);
+    //optional updated date
+    meeting.updated = meeting.updated
+      ? moment.tz(meeting.updated, 'UTC').tz(timezone).format('ll')
+      : null;
 
     //7th tradition validation
     if (meeting.venmo) {

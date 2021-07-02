@@ -49,7 +49,7 @@ export default function Dropdown({
           : defaultValue}
       </button>
       <div
-        className={cx('dropdown-menu', {
+        className={cx('dropdown-menu my-1', {
           show: open,
           'dropdown-menu-end': right,
         })}

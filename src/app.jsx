@@ -2,19 +2,27 @@ import ReactDOM from 'react-dom';
 
 import { TsmlUI } from './components';
 
-//locate first <meetings> element
-const [element] = document.getElementsByTagName('meetings');
+//locate element
+let element = document.getElementById('tsml-ui');
 
-//if this is empty it'll be reported in fetch()s error handler
-const json = element.getAttribute('src');
-
-//this is the default way to specify a mapbox key
-const mapbox = element.getAttribute('mapbox')
-  ? element.getAttribute('mapbox')
-  : undefined;
+//legacy support, can remove once sites have had a chance to migrate (implemented Jul 1 2021)
+if (!element) {
+  [element] = document.getElementsByTagName('meetings');
+}
 
 if (element) {
-  ReactDOM.render(<TsmlUI json={json} mapbox={mapbox} />, element);
+  ReactDOM.render(
+    <TsmlUI
+      {...{
+        json: element.getAttribute('data-src') || element.getAttribute('src'),
+        mapbox:
+          element.getAttribute('data-mapbox') || element.getAttribute('mapbox'),
+        timezone:
+          element.getAttribute('data-timezone') || tsml_react_config?.timezone,
+      }}
+    />,
+    element
+  );
 } else {
-  console.warn('Could not find a <meetings> element in your HTML');
+  console.warn('Could not find a div#tsml-ui element in your HTML');
 }

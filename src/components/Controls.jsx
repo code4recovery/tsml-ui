@@ -167,7 +167,7 @@ export default function Controls({ state, setState }) {
               />
             </form>
             <div
-              className={cx('dropdown-menu dropdown-menu-end', {
+              className={cx('dropdown-menu dropdown-menu-end my-1', {
                 show: dropdown === 'search',
               })}
             >
