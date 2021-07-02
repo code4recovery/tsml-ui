@@ -589,7 +589,7 @@ export function loadMeetingData(data, capabilities, debug, timezone) {
 
     //optional updated date
     meeting.updated = meeting.updated
-      ? moment.tz(meeting.updated, 'UTC').tz(meeting.timezone).format('ll')
+      ? moment.tz(meeting.updated, 'UTC').tz(timezone).format('ll')
       : null;
 
     //7th tradition validation

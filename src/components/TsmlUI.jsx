@@ -116,7 +116,7 @@ export default function TsmlUI({ json, mapbox, timezone }) {
     }
 
     return (
-      <div id="tsml-ui">
+      <div className="tsml-ui">
         <Loading />
       </div>
     );
@@ -140,7 +140,7 @@ export default function TsmlUI({ json, mapbox, timezone }) {
   }
 
   return (
-    <div id="tsml-ui">
+    <div className="tsml-ui">
       <div className="container-fluid d-flex flex-column py-3">
         {state.input.meeting && state.input.meeting in state.meetings ? (
           <Meeting
