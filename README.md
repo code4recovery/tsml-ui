@@ -2,7 +2,7 @@
 
 TSML UI is a React web app that makes the [12 Step Meeting List](https://github.com/code4recovery/12-step-meeting-list) interface available for use on any web page, regardless of platform.
 
-[Here's a demo](https://react.meetingguide.org/) of what the meeting finder looks like with no styling, [here's another demo](https://react.meetingguide.org/demo.html) embedded into a different design.
+[Here's a demo](https://react.meetingguide.org/) of what the meeting finder looks like with no styling. [Here's another demo](https://react.meetingguide.org/demo.html) embedded into a different design, with a Google Sheet as a data source.
 
 To use TSML UI on your website you only need to add some HTML to your web page. To get started, use our [TSML UI configuration helper](https://tsml-ui-config.netlify.app).
 
@@ -12,11 +12,11 @@ To use TSML UI on your website you only need to add some HTML to your web page. 
 
 You don't need to do anything other than enable HTTPS on your website. To ensure all users see this functionality, make sure that anyone who enters a `http://` address for your site is redirected to the `https://` address.
 
-### "Debug" mode
+### Debug mode
 
-Trusted servants can append `?debug=true` to see warnings about the data in their browser's javascript console. For example, there is a warning about a bad conference_url at [on this demo site](https://react.meetingguide.org/demo.html?debug=true).
+Trusted servants can append `?debug=true` to the web address to see warnings in their browser's javascript console. For example, there is a warning about a bad conference_url at [on this demo site](https://react.meetingguide.org/demo.html?debug=true).
 
-This mode also disables data caching so that changes may be observed after reloading.
+This mode also disables caching so that changes may be observed by reloading.
 
 ### Add custom types
 
@@ -74,7 +74,7 @@ Web servants may [add their own meetimg types](#add-custom-types) of course.
 
 Pull requests are welcome. To get started, clone this repository, run `yarn`, and point your web root at the `public` folder.
 
-While developing, run `yarn watch` to compile assets as you edit them. When you're ready to commit, run `yarn prod` to prepare them for production.
+While developing, run `yarn watch` to compile assets as you edit them. When you're ready to commit, run `yarn prod` to minify them for production.
 
 ## Credits
 

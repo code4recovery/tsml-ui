@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import cx from 'classnames/bind';
-import moment from 'moment-timezone';
 
 import { formatDirectionsUrl, formatIcs, settings, strings } from '../helpers';
 import Button from './Button';
@@ -233,9 +232,10 @@ export default function Meeting({ meeting, state, setState }) {
                     </div>
                   )}
                   {meeting.start &&
+                    meeting.timezone &&
                     (meeting.isInPerson || meeting.isOnline) && (
                       <Button
-                        onClick={() => formatIcs(meeting, state.timezone)}
+                        onClick={() => formatIcs(meeting)}
                         icon="calendar"
                         text={strings.add_to_calendar}
                       />
@@ -297,13 +297,7 @@ export default function Meeting({ meeting, state, setState }) {
               )}
             {meeting.updated && (
               <div className="list-group-item">
-                {strings.updated.replace(
-                  '%updated%',
-                  moment
-                    .tz(meeting.updated, 'UTC')
-                    .tz(state.timezone)
-                    .format('ll')
-                )}
+                {strings.updated.replace('%updated%', meeting.updated)}
               </div>
             )}
           </div>

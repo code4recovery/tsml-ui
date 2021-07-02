@@ -9,7 +9,6 @@ import {
   filterMeetingData,
   getCache,
   getQueryString,
-  getTimeZone,
   loadMeetingData,
   setCache,
   setMinutesNow,
@@ -19,7 +18,7 @@ import {
   settings,
 } from '../helpers';
 
-export default function TsmlUI({ json, mapbox }) {
+export default function TsmlUI({ json, mapbox, timezone }) {
   const [state, setState] = useState({
     alert: null,
     capabilities: {
@@ -44,7 +43,6 @@ export default function TsmlUI({ json, mapbox }) {
     },
     loading: true,
     meetings: [],
-    timezone: '',
   });
 
   //enable forward & back buttons
@@ -63,7 +61,6 @@ export default function TsmlUI({ json, mapbox }) {
     settings.map.key = mapbox;
 
     const input = getQueryString();
-    const timezone = getTimeZone(input.debug);
     const cache = getCache(json);
 
     if (cache && !input.debug) {
@@ -71,10 +68,9 @@ export default function TsmlUI({ json, mapbox }) {
         ...state,
         capabilities: cache.capabilities,
         indexes: cache.indexes,
-        meetings: cache.meetings,
-        loading: false,
         input: input,
-        timezone: timezone,
+        loading: false,
+        meetings: cache.meetings,
       });
     } else {
       //fetch json data file and build indexes
@@ -105,7 +101,6 @@ export default function TsmlUI({ json, mapbox }) {
               meetings: meetings,
               loading: false,
               input: input,
-              timezone: timezone,
             });
           },
           error => {
@@ -115,14 +110,13 @@ export default function TsmlUI({ json, mapbox }) {
               error: json ? 'bad_data' : 'no_data',
               input: input,
               loading: false,
-              timezone: timezone,
             });
           }
         );
     }
 
     return (
-      <div id="tsml-ui">
+      <div className="tsml-ui">
         <Loading />
       </div>
     );
@@ -146,7 +140,7 @@ export default function TsmlUI({ json, mapbox }) {
   }
 
   return (
-    <div id="tsml-ui">
+    <div className="tsml-ui">
       <div className="container-fluid d-flex flex-column py-3">
         {state.input.meeting && state.input.meeting in state.meetings ? (
           <Meeting
