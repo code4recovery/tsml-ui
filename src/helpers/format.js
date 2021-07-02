@@ -37,7 +37,7 @@ export function formatDirectionsUrl({
 }
 
 //format ICS file for add to calendar
-export function formatIcs(meeting, timezone) {
+export function formatIcs(meeting) {
   const fmt = 'YYYYMMDDTHHmmss';
 
   const url = [
@@ -46,7 +46,7 @@ export function formatIcs(meeting, timezone) {
     'BEGIN:VEVENT',
     `SUMMARY:${meeting.name}`,
     `DTSTART:${meeting.start.clone().tz('UTC').format(fmt)}Z`,
-    `DTSTART;TZID=/${timezone}:${meeting.start.format(fmt)}`,
+    `DTSTART;TZID=/${meeting.timezone}:${meeting.start.format(fmt)}`,
     'END:VEVENT',
     'END:VCALENDAR',
   ];
@@ -56,14 +56,14 @@ export function formatIcs(meeting, timezone) {
       -2,
       0,
       `DTEND:${meeting.end.clone().tz('UTC').format(fmt)}Z`,
-      `DTEND;TZID=/${timezone}:${meeting.end.format(fmt)}`
+      `DTEND;TZID=/${meeting.timezone}:${meeting.end.format(fmt)}`
     );
   } else {
     url.splice(
       -2,
       0,
       `DTEND:${meeting.start.clone().add(1, 'hour').tz('UTC').format(fmt)}Z`,
-      `DTEND;TZID=/${timezone}:${meeting.start
+      `DTEND;TZID=/${meeting.timezone}:${meeting.start
         .clone()
         .add(1, 'hour')
         .format(fmt)}`
