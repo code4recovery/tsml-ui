@@ -13,7 +13,7 @@ export default function Meeting({ meeting, state, setState }) {
 
   //scroll to top when you navigate to this page
   useEffect(() => {
-    document.getElementById('tsml-ui').scrollIntoView();
+    document.getElementById('tsml-ui')?.scrollIntoView();
   }, [state.input.meeting]);
 
   //directions URL link
