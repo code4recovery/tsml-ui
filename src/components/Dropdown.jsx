@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import cx from 'classnames/bind';
 
-import { getIndexByKey, settings } from '../helpers';
+import { getIndexByKey } from '../helpers';
 
 export default function Dropdown({
   filter,
@@ -38,6 +38,14 @@ export default function Dropdown({
     </Fragment>
   );
 
+  const specialTypes =
+    filter === 'type' ? ['active', 'in-person', 'online'] : [];
+  const specialOptions = options
+    ?.filter(option => specialTypes.includes(option.key))
+    .sort((a, b) => specialTypes.indexOf(a.key) - specialTypes.indexOf(b.key));
+
+  options = options?.filter(option => !specialTypes.includes(option.key));
+
   return (
     <div className="dropdown">
       <button
@@ -63,27 +71,18 @@ export default function Dropdown({
         >
           {defaultValue}
         </a>
-        {filter === 'type' && (
+        {!!specialOptions.length && (
           <>
             <div className="dropdown-divider" />
-            {options
-              ?.filter(option =>
-                settings.filter_special_types.includes(option.key)
-              )
-              .sort(
-                (a, b) =>
-                  settings.filter_special_types.indexOf(a.key) -
-                  settings.filter_special_types.indexOf(b.key)
-              )
-              .map(option => renderDropdownItem(option))}
+            {specialOptions.map(option => renderDropdownItem(option))}
           </>
         )}
-        <div className="dropdown-divider" />
-        {options
-          ?.filter(
-            option => !settings.filter_special_types.includes(option.key)
-          )
-          .map(option => renderDropdownItem(option))}
+        {!!options.length && (
+          <>
+            <div className="dropdown-divider" />
+            {options.map(option => renderDropdownItem(option))}
+          </>
+        )}
       </div>
     </div>
   );

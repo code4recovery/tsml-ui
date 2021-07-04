@@ -7,9 +7,12 @@ import Icon from './Icon';
 import Link from './Link';
 import Map from './Map';
 
-export default function Meeting({ meeting, state, setState }) {
+export default function Meeting({ state, setState }) {
   //open types
   const [define, setDefine] = useState(null);
+
+  //existence checked in the parent component
+  const meeting = state.meetings[state.input.meeting];
 
   //scroll to top when you navigate to this page
   useEffect(() => {
@@ -154,7 +157,7 @@ export default function Meeting({ meeting, state, setState }) {
             <div className="d-grid gap-2 list-group-item py-3">
               <h2 className="h5">{strings.meeting_information}</h2>
               <p>{timeString}</p>
-              {meeting.types && (
+              {state.capabilities.type && meeting.types && (
                 <ul className="ms-4">
                   {meeting.types
                     .filter(type => type !== 'active')

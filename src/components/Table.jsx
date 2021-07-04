@@ -10,13 +10,11 @@ export default function Table({ state, setState, filteredSlugs }) {
   const meetingsPerPage = 10;
   const [limit, setLimit] = useState(meetingsPerPage);
 
-  //region might not be present in the data
-  const columns = ['time', 'distance', 'name', 'location', 'address'];
-  if (state.capabilities.region) columns.push('region');
-
-  const canShowColumn = column => {
-    return column !== 'distance' || state.capabilities.distance;
-  };
+  //show columns based on capabilities
+  const columns = ['time', 'distance', 'name', 'location', 'address', 'region']
+    .filter(column => column !== 'region' || state.capabilities.region)
+    .filter(column => column !== 'location' || state.capabilities.location)
+    .filter(column => column !== 'distance' || state.capabilities.distance);
 
   const getValue = (meeting, key) => {
     if (key === 'address') {
@@ -78,11 +76,11 @@ export default function Table({ state, setState, filteredSlugs }) {
       return meeting.regions[meeting.regions.length - 1];
     } else if (key === 'time') {
       return meeting.start ? (
-        <time className="text-nowrap">
-          {meeting.start.format('h:mm a')}
-          <div className="d-xl-inline ms-xl-1">
+        <time className="d-flex flex-column flex-lg-row gap-lg-1">
+          <span className="text-nowrap">{meeting.start.format('h:mm a')}</span>
+          <span className="text-nowrap">
             {strings[settings.weekdays[meeting.start?.format('d')]]}
-          </div>
+          </span>
         </time>
       ) : (
         strings.appointment
@@ -101,14 +99,11 @@ export default function Table({ state, setState, filteredSlugs }) {
         >
           <thead>
             <tr className="d-none d-md-table-row">
-              {columns.map(
-                (column, index) =>
-                  canShowColumn(column) && (
-                    <th key={index} className={column}>
-                      {strings[column]}
-                    </th>
-                  )
-              )}
+              {columns.map((column, index) => (
+                <th key={index} className={column}>
+                  {strings[column]}
+                </th>
+              ))}
             </tr>
           </thead>
           <InfiniteScroll
@@ -135,17 +130,14 @@ export default function Table({ state, setState, filteredSlugs }) {
                     });
                   }}
                 >
-                  {columns.map(
-                    (column, index) =>
-                      canShowColumn(column) && (
-                        <td
-                          className={cx('d-block d-md-table-cell', column)}
-                          key={index}
-                        >
-                          {getValue(meeting, column)}
-                        </td>
-                      )
-                  )}
+                  {columns.map((column, index) => (
+                    <td
+                      className={cx('d-block d-md-table-cell', column)}
+                      key={index}
+                    >
+                      {getValue(meeting, column)}
+                    </td>
+                  ))}
                 </tr>
               );
             })}

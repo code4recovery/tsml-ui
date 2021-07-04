@@ -287,6 +287,7 @@ div.tsml-ui {
             left: 1rem;
             padding-left: 0;
             position: absolute;
+            width: 5.5rem;
           }
 
           &.distance {
@@ -297,16 +298,6 @@ div.tsml-ui {
             position: absolute;
           }
         }
-      }
-    }
-
-    //regular column widths
-    @include media-breakpoint-up(md) {
-      .name,
-      .location,
-      .address,
-      .region {
-        width: 25%;
       }
     }
   }
