@@ -35,7 +35,6 @@ const defaults = {
   distance_unit: 'mi', //mi or km
   feedback_emails: [], //email addresses for update meeting info button
   filters: ['region', 'distance', 'weekday', 'time', 'type'],
-  filter_special_types: ['active', 'in-person', 'online'],
   flags: ['M', 'W'],
   language: 'en', //fallback language
   map: {
@@ -56,7 +55,6 @@ const defaults = {
   params: ['search', 'mode', 'view', 'meeting', 'debug'], //input other than filters
   show: {
     controls: true, //whether to show search + dropdowns + list/map
-    inactive: true, //whether to show inactive meetings at all
     listButtons: false, //show conference buttons in list or show labels
     title: true, //whether to display the title h1
   },

@@ -157,37 +157,41 @@ export default function Controls({ state, setState }) {
                 disabled={state.input.mode === 'me'}
                 spellCheck="false"
               />
-              <button
-                className="btn btn-outline-secondary dropdown-toggle"
-                onClick={() =>
-                  setDropdown(dropdown === 'search' ? null : 'search')
-                }
-                type="button"
-                aria-label={strings.modes[state.input.mode]}
-              />
+              {modes.length > 1 && (
+                <button
+                  className="btn btn-outline-secondary dropdown-toggle"
+                  onClick={() =>
+                    setDropdown(dropdown === 'search' ? null : 'search')
+                  }
+                  type="button"
+                  aria-label={strings.modes[state.input.mode]}
+                />
+              )}
             </form>
-            <div
-              className={cx('dropdown-menu dropdown-menu-end my-1', {
-                show: dropdown === 'search',
-              })}
-            >
-              {modes.map(mode => (
-                <a
-                  key={mode}
-                  className={cx(
-                    'align-items-center dropdown-item d-flex justify-content-between',
-                    {
-                      'active bg-secondary text-white':
-                        state.input.mode === mode,
-                    }
-                  )}
-                  href="#"
-                  onClick={e => setMode(e, mode)}
-                >
-                  {strings.modes[mode]}
-                </a>
-              ))}
-            </div>
+            {modes.length > 1 && (
+              <div
+                className={cx('dropdown-menu dropdown-menu-end my-1', {
+                  show: dropdown === 'search',
+                })}
+              >
+                {modes.map(mode => (
+                  <a
+                    key={mode}
+                    className={cx(
+                      'align-items-center dropdown-item d-flex justify-content-between',
+                      {
+                        'active bg-secondary text-white':
+                          state.input.mode === mode,
+                      }
+                    )}
+                    href="#"
+                    onClick={e => setMode(e, mode)}
+                  >
+                    {strings.modes[mode]}
+                  </a>
+                ))}
+              </div>
+            )}
           </div>
         </div>
         {settings.filters.map(

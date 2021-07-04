@@ -311,8 +311,10 @@ function getCommonElements(arrays) {
 }
 
 //get meetings, indexes, and capabilities from session storage, keyed by JSON URL
-export function getCache(json) {
-  const cache = JSON.parse(window.sessionStorage.getItem(json));
+export function getCache(json, version) {
+  const cache = JSON.parse(
+    window.sessionStorage.getItem(getCacheName(json, version))
+  );
   if (!cache) return null;
   const keys = Object.keys(cache.meetings);
   keys.forEach(key => {
@@ -324,6 +326,11 @@ export function getCache(json) {
     }
   });
   return cache;
+}
+
+//version the cache name in case computations have changed since the last version
+function getCacheName(json, version) {
+  return `${json}${json.includes('?') ? '&' : '?'}v=${version}`;
 }
 
 //set up meeting data; this is only run once when the app loads
@@ -408,8 +415,6 @@ export function loadMeetingData(data, capabilities, debug, timezone) {
           meeting.formatted_address =
             meeting.formatted_address + ', ' + meeting.country;
         }
-      } else if (debug) {
-        console.warn(meeting.edit_url, 'no formatted_address or city');
       }
     }
 
@@ -439,25 +444,28 @@ export function loadMeetingData(data, capabilities, debug, timezone) {
       meeting.types.push('in-person');
     }
 
-    //if neither online nor in person, skip it
+    //if neither online nor in person apply inactive
     if (!meeting.isOnline && !meeting.isInPerson) {
-      if (!settings.show.inactive) {
-        if (debug) {
-          console.warn(meeting.edit_url, 'skipped because inactive');
-        }
-        return;
-      }
       capabilities.inactive = true;
       meeting.types.push('inactive');
-    } else if (settings.show.inactive) {
+    } else {
       meeting.types.push('active');
+    }
+
+    //check location/group capability
+    if (
+      !capabilities.location &&
+      ((meeting.isOnline && meeting.group) ||
+        (meeting.isInPerson && meeting.location))
+    ) {
+      capabilities.location = true;
     }
 
     //last chance to exit. now we're going to populate some indexes with the meeting slug
 
     //using array for regions now, but legacy region, sub_region, etc still supported
     //todo remove if/when tsml implements regions array format
-    if (!meeting.regions) {
+    if (!meeting.regions || !Array.isArray(meeting.regions)) {
       meeting.regions = [];
       if (meeting.region) {
         meeting.regions.push(meeting.region);
@@ -644,28 +652,34 @@ export function loadMeetingData(data, capabilities, debug, timezone) {
   });
 
   //convert region to array, sort by name
-  indexes.region = flattenAndSortIndexes(indexes.region, (a, b) => {
-    return a.name > b.name ? 1 : b.name > a.name ? -1 : 0;
-  });
-  capabilities.region = !!indexes.region.length;
+  indexes.region = flattenAndSortIndexes(indexes.region, (a, b) =>
+    a.name > b.name ? 1 : b.name > a.name ? -1 : 0
+  );
 
   //convert weekday to array and sort by ordinal
-  indexes.weekday = flattenAndSortIndexes(indexes.weekday, (a, b) => {
-    return parseInt(a.key) - parseInt(b.key);
-  });
-  capabilities.weekday = !!indexes.weekday.length;
+  indexes.weekday = flattenAndSortIndexes(
+    indexes.weekday,
+    (a, b) => parseInt(a.key) - parseInt(b.key)
+  );
 
   //convert time to array and sort by ordinal
-  indexes.time = flattenAndSortIndexes(indexes.time, (a, b) => {
-    return settings.times.indexOf(a.key) - settings.times.indexOf(b.key);
-  });
-  capabilities.time = !!indexes.time.length;
+  indexes.time = flattenAndSortIndexes(
+    indexes.time,
+    (a, b) => settings.times.indexOf(a.key) - settings.times.indexOf(b.key)
+  );
 
   //convert type to array and sort by name
-  indexes.type = flattenAndSortIndexes(indexes.type, (a, b) => {
-    return a.name > b.name ? 1 : b.name > a.name ? -1 : 0;
+  indexes.type = flattenAndSortIndexes(indexes.type, (a, b) =>
+    a.name > b.name ? 1 : b.name > a.name ? -1 : 0
+  );
+
+  //determine capabilities (filter out options that apply to every meeting)
+  const meetingsCount = Object.keys(meetings).length;
+  ['region', 'weekday', 'time', 'type'].forEach(indexKey => {
+    capabilities[indexKey] = !!indexes[indexKey].filter(
+      index => index.slugs.length !== meetingsCount
+    ).length;
   });
-  capabilities.type = !!indexes.type.length;
 
   //remove active type if no inactive meetings
   if (!capabilities.inactive) {
@@ -748,9 +762,9 @@ function processSearchTerms(input) {
 }
 
 //set meetings, indexes, and capabilities to session storage, keyed by JSON URL
-export function setCache(json, meetings, indexes, capabilities) {
+export function setCache(json, version, meetings, indexes, capabilities) {
   window.sessionStorage.setItem(
-    json,
+    getCacheName(json, version),
     JSON.stringify({ meetings, indexes, capabilities })
   );
 }
@@ -781,7 +795,7 @@ export function translateGoogleSheet(data, json) {
     key.includes('_')
   );
 
-  data.feed.entry.forEach((entry, index) => {
+  data.feed.entry?.forEach((entry, index) => {
     //creates a meeting object
     const meeting = {};
 

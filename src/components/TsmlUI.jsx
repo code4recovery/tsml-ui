@@ -26,6 +26,7 @@ export default function TsmlUI({ json, mapbox, timezone }) {
       distance: false,
       geolocation: false,
       inactive: false,
+      location: false,
       map: false,
       region: false,
       time: false,
@@ -45,6 +46,9 @@ export default function TsmlUI({ json, mapbox, timezone }) {
     meetings: [],
   });
 
+  //used for versioning cache
+  const version = '1.1.2';
+
   //enable forward & back buttons
   useEffect(() => {
     const popstateListener = () => {
@@ -61,7 +65,7 @@ export default function TsmlUI({ json, mapbox, timezone }) {
     settings.map.key = mapbox;
 
     const input = getQueryString();
-    const cache = getCache(json);
+    const cache = getCache(json, version);
 
     if (cache && !input.debug) {
       setState({
@@ -92,7 +96,7 @@ export default function TsmlUI({ json, mapbox, timezone }) {
               timezone
             );
 
-            setCache(json, meetings, indexes, capabilities);
+            setCache(json, version, meetings, indexes, capabilities);
 
             setState({
               ...state,
@@ -143,11 +147,7 @@ export default function TsmlUI({ json, mapbox, timezone }) {
     <div className="tsml-ui">
       <div className="container-fluid d-flex flex-column py-3">
         {state.input.meeting && state.input.meeting in state.meetings ? (
-          <Meeting
-            state={state}
-            setState={setState}
-            meeting={state.meetings[state.input.meeting]}
-          />
+          <Meeting state={state} setState={setState} />
         ) : (
           <>
             {settings.show.title && <Title state={state} />}
