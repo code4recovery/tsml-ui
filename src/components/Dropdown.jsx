@@ -38,13 +38,10 @@ export default function Dropdown({
     </Fragment>
   );
 
-  const specialTypes =
-    filter === 'type' ? ['active', 'in-person', 'online'] : [];
-  const specialOptions = options
-    ?.filter(option => specialTypes.includes(option.key))
-    .sort((a, b) => specialTypes.indexOf(a.key) - specialTypes.indexOf(b.key));
-
-  options = options?.filter(option => !specialTypes.includes(option.key));
+  //separate section above the other items
+  const special = {
+    type: ['active', 'in-person', 'online'],
+  };
 
   return (
     <div className="dropdown">
@@ -71,18 +68,23 @@ export default function Dropdown({
         >
           {defaultValue}
         </a>
-        {!!specialOptions.length && (
-          <>
-            <div className="dropdown-divider" />
-            {specialOptions.map(option => renderDropdownItem(option))}
-          </>
-        )}
-        {!!options.length && (
-          <>
-            <div className="dropdown-divider" />
-            {options.map(option => renderDropdownItem(option))}
-          </>
-        )}
+        {[
+          options
+            ?.filter(option => special[filter]?.includes(option.key))
+            .sort(
+              (a, b) =>
+                special[filter]?.indexOf(a.key) -
+                special[filter]?.indexOf(b.key)
+            ),
+          options?.filter(option => !special[filter]?.includes(option.key)),
+        ]
+          .filter(e => e.length)
+          .map((group, index) => (
+            <Fragment key={index}>
+              <div className="dropdown-divider" />
+              {group.map(option => renderDropdownItem(option))}
+            </Fragment>
+          ))}
       </div>
     </div>
   );

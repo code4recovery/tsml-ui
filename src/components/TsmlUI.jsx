@@ -47,7 +47,7 @@ export default function TsmlUI({ json, mapbox, timezone }) {
   });
 
   //used for versioning cache
-  const version = '1.1.2';
+  const version = '1.1.3';
 
   //enable forward & back buttons
   useEffect(() => {
