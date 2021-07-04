@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import '../../public/style.css';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
-import { Alert, Controls, Loading, Map, Meeting, Table, Title } from './';
+import { Alert, Controls, Grid, Loading, Map, Meeting, Table, Title } from './';
 
 import {
   filterMeetingData,
@@ -155,7 +155,7 @@ export default function TsmlUI({ json, mapbox, timezone }) {
               <Controls state={state} setState={setState} />
             )}
             <Alert alert={state.alert} error={state.error} />
-            {filteredSlugs && state.input.view === 'list' && (
+            {filteredSlugs && state.input.view === 'table' && (
               <Table
                 state={state}
                 setState={setState}
@@ -164,6 +164,13 @@ export default function TsmlUI({ json, mapbox, timezone }) {
             )}
             {filteredSlugs && state.input.view === 'map' && (
               <Map
+                state={state}
+                setState={setState}
+                filteredSlugs={filteredSlugs}
+              />
+            )}
+            {filteredSlugs && state.input.view === 'grid' && (
+              <Grid
                 state={state}
                 setState={setState}
                 filteredSlugs={filteredSlugs}

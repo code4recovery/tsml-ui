@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import cx from 'classnames/bind';
 
 import Dropdown from './Dropdown';
+import Icon from './Icon';
 import { settings, strings } from '../helpers';
 
 export default function Controls({ state, setState }) {
@@ -211,30 +212,27 @@ export default function Controls({ state, setState }) {
               </div>
             )
         )}
-        {state.capabilities.map && (
-          <div className="col-sm-6 col-lg mb-3">
-            <div className="btn-group w-100" role="group">
-              <button
-                type="button"
-                className={cx('btn btn-outline-secondary w-100', {
-                  active: state.input.view === 'list',
-                })}
-                onClick={e => setView(e, 'list')}
-              >
-                {strings.list}
-              </button>
-              <button
-                type="button"
-                className={cx('btn btn-outline-secondary w-100', {
-                  active: state.input.view === 'map',
-                })}
-                onClick={e => setView(e, 'map')}
-              >
-                {strings.map}
-              </button>
-            </div>
+        <div className="col-sm-6 col-lg mb-3">
+          <div className="btn-group h-100  w-100" role="group">
+            {['table', 'grid', 'map']
+              .filter(view => view !== 'map' || state.capabilities.map)
+              .map(view => (
+                <button
+                  className={cx(
+                    'btn btn-outline-secondary d-flex align-items-center justify-content-center w-100',
+                    {
+                      active: state.input.view === view,
+                    }
+                  )}
+                  key={view}
+                  onClick={e => setView(e, view)}
+                  type="button"
+                >
+                  <Icon icon={view} />
+                </button>
+              ))}
           </div>
-        )}
+        </div>
       </div>
     )
   );
