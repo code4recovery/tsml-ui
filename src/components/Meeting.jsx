@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import cx from 'classnames/bind';
 
-import { formatDirectionsUrl, formatIcs, settings, strings } from '../helpers';
+import {
+  formatDirectionsUrl,
+  formatIcs,
+  formatUrl,
+  settings,
+  strings,
+} from '../helpers';
 import Button from './Button';
 import Icon from './Icon';
 import Link from './Link';
@@ -128,7 +134,10 @@ export default function Meeting({ state, setState }) {
       <div className="align-items-center border-bottom d-flex h6 mb-3 pb-2">
         <Icon icon="back" />
         <a
-          href={window.location.pathname}
+          href={formatUrl({
+            ...state.input,
+            meeting: null,
+          })}
           onClick={e => {
             e.preventDefault();
             setState({

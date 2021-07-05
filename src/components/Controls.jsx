@@ -3,7 +3,7 @@ import cx from 'classnames/bind';
 
 import Dropdown from './Dropdown';
 import Icon from './Icon';
-import { settings, strings } from '../helpers';
+import { formatUrl, settings, strings } from '../helpers';
 
 export default function Controls({ state, setState }) {
   const [dropdown, setDropdown] = useState(null);
@@ -62,38 +62,6 @@ export default function Controls({ state, setState }) {
     }
   };
 
-  //set filter: pass it up to parent
-  const setFilter = (e, filter, value) => {
-    e.preventDefault();
-
-    //add or remove from filters
-    if (value) {
-      if (e.metaKey) {
-        const index = state.input[filter].indexOf(value);
-        if (index === -1) {
-          state.input[filter].push(value);
-        } else {
-          state.input[filter].splice(index, 1);
-        }
-      } else {
-        state.input[filter] = [value];
-      }
-    } else {
-      state.input[filter] = [];
-    }
-
-    //sort filters
-    state.input[filter].sort((a, b) => {
-      return (
-        state.indexes[filter].findIndex(x => a === x.key) -
-        state.indexes[filter].findIndex(x => b === x.key)
-      );
-    });
-
-    //pass it up to app controller
-    setState({ ...state, input: state.input });
-  };
-
   //set search mode dropdown and clear all distances
   const setMode = (e, mode) => {
     e.preventDefault();
@@ -149,23 +117,23 @@ export default function Controls({ state, setState }) {
           <div className="position-relative">
             <form className="input-group" onSubmit={locationSearch}>
               <input
-                type="search"
                 className="form-control"
-                onChange={keywordSearch}
-                value={search}
-                ref={searchInput}
-                placeholder={strings.modes[state.input.mode]}
                 disabled={state.input.mode === 'me'}
+                onChange={keywordSearch}
+                placeholder={strings.modes[state.input.mode]}
+                ref={searchInput}
                 spellCheck="false"
+                type="search"
+                value={search}
               />
               {modes.length > 1 && (
                 <button
+                  aria-label={strings.modes[state.input.mode]}
                   className="btn btn-outline-secondary dropdown-toggle"
                   onClick={() =>
                     setDropdown(dropdown === 'search' ? null : 'search')
                   }
                   type="button"
-                  aria-label={strings.modes[state.input.mode]}
                 />
               )}
             </form>
@@ -177,7 +145,6 @@ export default function Controls({ state, setState }) {
               >
                 {modes.map(mode => (
                   <a
-                    key={mode}
                     className={cx(
                       'align-items-center dropdown-item d-flex justify-content-between',
                       {
@@ -185,7 +152,8 @@ export default function Controls({ state, setState }) {
                           state.input.mode === mode,
                       }
                     )}
-                    href="#"
+                    href={formatUrl({ ...state.input, mode: mode })}
+                    key={mode}
                     onClick={e => setMode(e, mode)}
                   >
                     {strings.modes[mode]}
@@ -206,14 +174,19 @@ export default function Controls({ state, setState }) {
                   options={state.indexes[filter]}
                   right={filter === 'type' && !state.capabilities.map}
                   setDropdown={setDropdown}
-                  setFilter={setFilter}
+                  state={state}
+                  setState={setState}
                   values={state.input[filter]}
                 />
               </div>
             )
         )}
         <div className="col-sm-6 col-lg mb-3">
-          <div className="btn-group h-100  w-100" role="group">
+          <div
+            aria-label="Layout options"
+            className="btn-group h-100  w-100"
+            role="group"
+          >
             {['table', 'grid', 'map']
               .filter(view => view !== 'map' || state.capabilities.map)
               .map(view => (
