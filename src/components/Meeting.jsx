@@ -13,7 +13,7 @@ import Icon from './Icon';
 import Link from './Link';
 import Map from './Map';
 
-export default function Meeting({ state, setState }) {
+export default function Meeting({ state, setState, mapbox }) {
   //open types
   const [define, setDefine] = useState(null);
 
@@ -322,7 +322,7 @@ export default function Meeting({ state, setState }) {
             />
           )}
         </div>
-        {state.capabilities.map && (
+        {!!mapbox && (
           <div
             className={cx(
               { 'd-md-block d-none': !meeting.isInPerson },
@@ -334,6 +334,7 @@ export default function Meeting({ state, setState }) {
               listMeetingsInPopup={false}
               state={state}
               setState={setState}
+              mapbox={mapbox}
             />
           </div>
         )}

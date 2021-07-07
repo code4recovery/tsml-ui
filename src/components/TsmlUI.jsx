@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import '../../public/style.css';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
-import { Alert, Controls, Grid, Loading, Map, Meeting, Table, Title } from './';
+import { Alert, Controls, Loading, Map, Meeting, Table, Title } from './';
 
 import {
   filterMeetingData,
@@ -27,7 +27,6 @@ export default function TsmlUI({ json, mapbox, timezone }) {
       geolocation: false,
       inactive: false,
       location: false,
-      map: false,
       region: false,
       time: false,
       type: false,
@@ -62,8 +61,6 @@ export default function TsmlUI({ json, mapbox, timezone }) {
 
   //load data once from json
   if (state.loading) {
-    settings.map.key = mapbox;
-
     const input = getQueryString();
     const cache = getCache(json, version);
 
@@ -133,7 +130,7 @@ export default function TsmlUI({ json, mapbox, timezone }) {
   state.meetings = setMinutesNow(state.meetings);
 
   //filter data
-  const filteredSlugs = filterMeetingData(state, setState);
+  const filteredSlugs = filterMeetingData(state, setState, mapbox);
 
   //show alert?
   state.alert = !filteredSlugs.length ? 'no_results' : null;
@@ -147,12 +144,12 @@ export default function TsmlUI({ json, mapbox, timezone }) {
     <div className="tsml-ui">
       <div className="container-fluid d-flex flex-column py-3">
         {state.input.meeting && state.input.meeting in state.meetings ? (
-          <Meeting state={state} setState={setState} />
+          <Meeting state={state} setState={setState} mapbox={mapbox} />
         ) : (
           <>
             {settings.show.title && <Title state={state} />}
             {settings.show.controls && (
-              <Controls state={state} setState={setState} />
+              <Controls state={state} setState={setState} mapbox={mapbox} />
             )}
             <Alert alert={state.alert} error={state.error} />
             {filteredSlugs && state.input.view === 'table' && (
@@ -167,13 +164,7 @@ export default function TsmlUI({ json, mapbox, timezone }) {
                 state={state}
                 setState={setState}
                 filteredSlugs={filteredSlugs}
-              />
-            )}
-            {filteredSlugs && state.input.view === 'grid' && (
-              <Grid
-                state={state}
-                setState={setState}
-                filteredSlugs={filteredSlugs}
+                mapbox={mapbox}
               />
             )}
           </>

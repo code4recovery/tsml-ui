@@ -5,11 +5,20 @@ import Dropdown from './Dropdown';
 import Icon from './Icon';
 import { formatUrl, settings, strings } from '../helpers';
 
-export default function Controls({ state, setState }) {
+export default function Controls({ state, setState, mapbox }) {
   const [dropdown, setDropdown] = useState(null);
   const [search, setSearch] = useState(state.input.search);
 
   const searchInput = useRef();
+
+  //options based on capabilities
+  const modes = ['search', 'location', 'me']
+    .filter(
+      mode => mode !== 'location' || (state.capabilities.coordinates && mapbox)
+    )
+    .filter(mode => mode !== 'me' || state.capabilities.geolocation);
+
+  const views = ['table', 'map'].filter(view => view !== 'map' || mapbox);
 
   useEffect(() => {
     //add click listener for dropdowns (in lieu of including bootstrap js + jquery)
@@ -25,11 +34,6 @@ export default function Controls({ state, setState }) {
     if (e.srcElement.classList.contains('dropdown-toggle')) return;
     setDropdown(null);
   };
-
-  //search modes
-  const modes = ['search'];
-  if (state.capabilities.coordinates) modes.push('location');
-  if (state.capabilities.geolocation) modes.push('me');
 
   //keyword search
   const keywordSearch = e => {
@@ -172,7 +176,7 @@ export default function Controls({ state, setState }) {
                   filter={filter}
                   open={dropdown === filter}
                   options={state.indexes[filter]}
-                  right={filter === 'type' && !state.capabilities.map}
+                  right={filter === 'type' && !mapbox}
                   setDropdown={setDropdown}
                   state={state}
                   setState={setState}
@@ -181,15 +185,14 @@ export default function Controls({ state, setState }) {
               </div>
             )
         )}
-        <div className="col-sm-6 col-lg mb-3">
-          <div
-            aria-label="Layout options"
-            className="btn-group h-100  w-100"
-            role="group"
-          >
-            {['table', 'grid', 'map']
-              .filter(view => view !== 'map' || state.capabilities.map)
-              .map(view => (
+        {views.length > 1 && (
+          <div className="col-sm-6 col-lg mb-3">
+            <div
+              aria-label="Layout options"
+              className="btn-group h-100  w-100"
+              role="group"
+            >
+              {views.map(view => (
                 <button
                   className={cx(
                     'btn btn-outline-secondary d-flex align-items-center justify-content-center w-100',
@@ -204,8 +207,9 @@ export default function Controls({ state, setState }) {
                   <Icon icon={view} />
                 </button>
               ))}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     )
   );

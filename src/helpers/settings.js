@@ -37,7 +37,6 @@ const defaults = {
   flags: ['M', 'W'],
   language: 'en', //fallback language
   map: {
-    key: null, //access token
     markers: {
       location: {
         backgroundImage: `url(data:image/svg+xml;base64,${window.btoa(
