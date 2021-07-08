@@ -66,9 +66,9 @@ Web servants may [add their own meetimg types](#add-custom-types) of course.
 - [x] French
 - [x] Near location mode with geocoding
 - [x] Accessibility improvements
+- [x] Proper `href` attributes (instead of `#`) in controls for SEO
 - [ ] Filter-clearing buttons when no results
 - [ ] Select multiple dropdown items on mobile
-- [ ] Proper `href` attributes (instead of `#`) in controls for SEO
 
 ## Contributing
 

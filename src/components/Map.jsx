@@ -11,6 +11,7 @@ export default function Map({
   listMeetingsInPopup = true,
   state,
   setState,
+  mapbox,
 }) {
   const [popup, setPopup] = useState(null);
   const [viewport, setViewport] = useState(null);
@@ -121,7 +122,7 @@ export default function Map({
       {viewport && !!data.locationKeys.length && (
         <ReactMapGL
           mapStyle={settings.map.style}
-          mapboxApiAccessToken={settings.map.key}
+          mapboxApiAccessToken={mapbox}
           onViewportChange={setViewport}
           {...viewport}
         >

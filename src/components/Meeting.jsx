@@ -1,13 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import cx from 'classnames/bind';
 
-import { formatDirectionsUrl, formatIcs, settings, strings } from '../helpers';
+import {
+  formatDirectionsUrl,
+  formatIcs,
+  formatUrl,
+  settings,
+  strings,
+} from '../helpers';
 import Button from './Button';
 import Icon from './Icon';
 import Link from './Link';
 import Map from './Map';
 
-export default function Meeting({ state, setState }) {
+export default function Meeting({ state, setState, mapbox }) {
   //open types
   const [define, setDefine] = useState(null);
 
@@ -128,7 +134,10 @@ export default function Meeting({ state, setState }) {
       <div className="align-items-center border-bottom d-flex h6 mb-3 pb-2">
         <Icon icon="back" />
         <a
-          href={window.location.pathname}
+          href={formatUrl({
+            ...state.input,
+            meeting: null,
+          })}
           onClick={e => {
             e.preventDefault();
             setState({
@@ -313,7 +322,7 @@ export default function Meeting({ state, setState }) {
             />
           )}
         </div>
-        {state.capabilities.map && (
+        {!!mapbox && (
           <div
             className={cx(
               { 'd-md-block d-none': !meeting.isInPerson },
@@ -325,6 +334,7 @@ export default function Meeting({ state, setState }) {
               listMeetingsInPopup={false}
               state={state}
               setState={setState}
+              mapbox={mapbox}
             />
           </div>
         )}

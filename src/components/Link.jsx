@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { settings, strings } from '../helpers';
+import { formatUrl, settings, strings } from '../helpers';
 
 export default function Link({ state, meeting, setState }) {
   const flags = settings.flags
@@ -23,7 +23,7 @@ export default function Link({ state, meeting, setState }) {
   return (
     <>
       <a
-        href={`${window.location.pathname}?meeting=${meeting.slug}`}
+        href={formatUrl({ ...state.input, meeting: meeting.slug })}
         onClick={e => {
           e.preventDefault();
           setState({
