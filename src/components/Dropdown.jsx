@@ -7,7 +7,7 @@ export default function Dropdown({
   filter,
   options,
   open,
-  right,
+  end,
   values,
   defaultValue,
   setDropdown,
@@ -92,7 +92,7 @@ export default function Dropdown({
       <div
         className={cx('dropdown-menu my-1', {
           show: open,
-          'dropdown-menu-end': right,
+          'dropdown-menu-end': end,
         })}
       >
         <a
@@ -100,7 +100,10 @@ export default function Dropdown({
             'active bg-secondary text-white': !values.length,
           })}
           onClick={e => setFilter(e, filter, null)}
-          href="#"
+          href={formatUrl({
+            ...state.input,
+            [filter]: [],
+          })}
         >
           {defaultValue}
         </a>

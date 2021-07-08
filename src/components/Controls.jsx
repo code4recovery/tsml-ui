@@ -11,14 +11,24 @@ export default function Controls({ state, setState, mapbox }) {
 
   const searchInput = useRef();
 
-  //options based on capabilities
+  //get available search options based on capabilities
   const modes = ['search', 'location', 'me']
     .filter(
       mode => mode !== 'location' || (state.capabilities.coordinates && mapbox)
     )
     .filter(mode => mode !== 'me' || state.capabilities.geolocation);
 
+  //get available filters
+  const filters = settings.filters
+    .filter(filter => state.capabilities[filter])
+    .filter(filter => filter !== 'region' || state.input.mode !== 'me')
+    .filter(filter => filter !== 'distance' || state.input.mode !== 'search');
+
+  //get available views
   const views = ['table', 'map'].filter(view => view !== 'map' || mapbox);
+
+  //whether to show the views segmented button
+  const canShowViews = views.length > 1;
 
   useEffect(() => {
     //add click listener for dropdowns (in lieu of including bootstrap js + jquery)
@@ -106,17 +116,6 @@ export default function Controls({ state, setState, mapbox }) {
     setState({ ...state, input: { ...state.input, view: view } });
   };
 
-  //decide whether to show filter
-  const canShowFilter = filter => {
-    if (!state.capabilities[filter]) return false;
-    if (filter === 'region' && state.input.mode === 'me') return false;
-    if (filter === 'distance' && state.input.mode === 'search') return false;
-    return true;
-  };
-
-  //whether to show the views segmented button
-  const canShowViews = views.length > 1;
-
   return (
     !!Object.keys(state.meetings).length && (
       <div className="row d-print-none controls">
@@ -170,31 +169,24 @@ export default function Controls({ state, setState, mapbox }) {
             )}
           </div>
         </div>
-        {settings.filters.map(
-          (filter, index) =>
-            canShowFilter(filter) && (
-              <div className="col-sm-6 col-lg mb-3" key={filter}>
-                <Dropdown
-                  defaultValue={strings[filter + '_any']}
-                  filter={filter}
-                  open={dropdown === filter}
-                  options={state.indexes[filter]}
-                  right={!canShowViews && !settings.filters[index + 1]}
-                  setDropdown={setDropdown}
-                  state={state}
-                  setState={setState}
-                  values={state.input[filter]}
-                />
-              </div>
-            )
-        )}
+        {filters.map((filter, index) => (
+          <div className="col-sm-6 col-lg mb-3" key={filter}>
+            <Dropdown
+              defaultValue={strings[filter + '_any']}
+              end={!canShowViews && !filters[index + 1]}
+              filter={filter}
+              open={dropdown === filter}
+              options={state.indexes[filter]}
+              setDropdown={setDropdown}
+              state={state}
+              setState={setState}
+              values={state.input[filter]}
+            />
+          </div>
+        ))}
         {canShowViews && (
-          <div className="col-sm-6 col-lg mb-3">
-            <div
-              aria-label="Layout options"
-              className="btn-group h-100  w-100"
-              role="group"
-            >
+          <div aria-hidden="true" className="col-sm-6 col-lg mb-3">
+            <div className="btn-group h-100 w-100" role="group">
               {views.map(view => (
                 <button
                   className={cx(
