@@ -114,6 +114,9 @@ export default function Controls({ state, setState, mapbox }) {
     return true;
   };
 
+  //whether to show the views segmented button
+  const canShowViews = views.length > 1;
+
   return (
     !!Object.keys(state.meetings).length && (
       <div className="row d-print-none controls">
@@ -168,7 +171,7 @@ export default function Controls({ state, setState, mapbox }) {
           </div>
         </div>
         {settings.filters.map(
-          filter =>
+          (filter, index) =>
             canShowFilter(filter) && (
               <div className="col-sm-6 col-lg mb-3" key={filter}>
                 <Dropdown
@@ -176,7 +179,7 @@ export default function Controls({ state, setState, mapbox }) {
                   filter={filter}
                   open={dropdown === filter}
                   options={state.indexes[filter]}
-                  right={filter === 'type' && !mapbox}
+                  right={!canShowViews && !settings.filters[index + 1]}
                   setDropdown={setDropdown}
                   state={state}
                   setState={setState}
@@ -185,7 +188,7 @@ export default function Controls({ state, setState, mapbox }) {
               </div>
             )
         )}
-        {views.length > 1 && (
+        {canShowViews && (
           <div className="col-sm-6 col-lg mb-3">
             <div
               aria-label="Layout options"
