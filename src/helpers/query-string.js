@@ -1,4 +1,5 @@
 import { settings } from './settings';
+import { formatUrl } from './format';
 
 //load input values from query string
 export function getQueryString() {
@@ -26,35 +27,10 @@ export function getQueryString() {
 
 //save input values to query string
 export function setQueryString(input) {
-  const query = {};
-
-  //distance, region, time, type, and weekday
-  settings.filters
-    .filter(filter => input[filter]?.length)
-    .forEach(filter => {
-      query[filter] = input[filter].join('/');
-    });
-
-  //meeting, mode, search, view
-  settings.params
-    .filter(param => input[param] !== settings.defaults[param])
-    .forEach(param => {
-      query[param] = input[param];
-    });
-
-  //create a query string with only values in use
-  const queryString = new URLSearchParams(query)
-    .toString()
-    .replace(/%2F/g, '/')
-    .replace(/%20/g, '+')
-    .replace(/%2C/g, ',');
+  const url = formatUrl(input);
 
   //set the query string with the history api
-  if (window.location.search.substr(1) != queryString) {
-    window.history.pushState(
-      '',
-      '',
-      queryString.length ? '?' + queryString : window.location.pathname
-    );
+  if (window.location.href !== url) {
+    window.history.pushState('', '', url);
   }
 }

@@ -20,7 +20,6 @@ const defaults = {
     'zoom.us': 'Zoom',
   },
   defaults: {
-    //default input
     debug: false,
     distance: [],
     meeting: null,
@@ -29,7 +28,7 @@ const defaults = {
     search: '',
     time: [],
     type: [],
-    view: 'list',
+    view: 'table',
     weekday: [],
   },
   distance_unit: 'mi', //mi or km
@@ -38,7 +37,6 @@ const defaults = {
   flags: ['M', 'W'],
   language: 'en', //fallback language
   map: {
-    key: null, //access token
     markers: {
       location: {
         backgroundImage: `url(data:image/svg+xml;base64,${window.btoa(

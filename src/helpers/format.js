@@ -139,3 +139,33 @@ export function formatSlug(str, separator = '-') {
     .replace(/-+$/, '') // trim - from end of text
     .replace(/-/g, separator);
 }
+
+//format an internal link with correct query params
+export function formatUrl(input) {
+  const query = {};
+
+  //distance, region, time, type, and weekday
+  settings.filters
+    .filter(filter => input[filter]?.length)
+    .forEach(filter => {
+      query[filter] = input[filter].join('/');
+    });
+
+  //meeting, mode, search, view
+  settings.params
+    .filter(param => input[param] !== settings.defaults[param])
+    .forEach(param => {
+      query[param] = input[param];
+    });
+
+  //create a query string with only values in use
+  const queryString = new URLSearchParams(query)
+    .toString()
+    .replace(/%2F/g, '/')
+    .replace(/%20/g, '+')
+    .replace(/%2C/g, ',');
+
+  return `${window.location.pathname}${
+    !!queryString.length ? `?${queryString}` : ''
+  }`;
+}

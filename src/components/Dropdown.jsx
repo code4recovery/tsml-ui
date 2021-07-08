@@ -1,18 +1,51 @@
 import React, { Fragment } from 'react';
 import cx from 'classnames/bind';
 
-import { getIndexByKey } from '../helpers';
+import { getIndexByKey, formatUrl } from '../helpers';
 
 export default function Dropdown({
   filter,
   options,
   open,
-  right,
+  end,
   values,
   defaultValue,
   setDropdown,
-  setFilter,
+  state,
+  setState,
 }) {
+  //set filter: pass it up to parent
+  const setFilter = (e, filter, value) => {
+    e.preventDefault();
+
+    //add or remove from filters
+    if (value) {
+      if (e.metaKey) {
+        const index = state.input[filter].indexOf(value);
+        if (index === -1) {
+          state.input[filter].push(value);
+        } else {
+          state.input[filter].splice(index, 1);
+        }
+      } else {
+        state.input[filter] = [value];
+      }
+    } else {
+      state.input[filter] = [];
+    }
+
+    //sort filters
+    state.input[filter].sort((a, b) => {
+      return (
+        state.indexes[filter].findIndex(x => a === x.key) -
+        state.indexes[filter].findIndex(x => b === x.key)
+      );
+    });
+
+    //pass it up to app controller
+    setState({ ...state, input: state.input });
+  };
+
   const renderDropdownItem = option => (
     <Fragment key={option.key}>
       <a
@@ -22,7 +55,10 @@ export default function Dropdown({
             'active bg-secondary text-white': values.indexOf(option.key) !== -1,
           }
         )}
-        href="#"
+        href={formatUrl({
+          ...state.input,
+          [filter]: values.indexOf(option.key) === -1 ? [option.key] : [],
+        })}
         onClick={e => setFilter(e, filter, option.key)}
       >
         <span>{option.name}</span>
@@ -56,7 +92,7 @@ export default function Dropdown({
       <div
         className={cx('dropdown-menu my-1', {
           show: open,
-          'dropdown-menu-end': right,
+          'dropdown-menu-end': end,
         })}
       >
         <a
@@ -64,7 +100,10 @@ export default function Dropdown({
             'active bg-secondary text-white': !values.length,
           })}
           onClick={e => setFilter(e, filter, null)}
-          href="#"
+          href={formatUrl({
+            ...state.input,
+            [filter]: [],
+          })}
         >
           {defaultValue}
         </a>

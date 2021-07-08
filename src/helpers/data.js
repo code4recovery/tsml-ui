@@ -123,7 +123,7 @@ function checkTimezone(timezone, fallback) {
 }
 
 //run filters on meetings; this is run at every render
-export function filterMeetingData(state, setState) {
+export function filterMeetingData(state, setState, mapbox) {
   const matchGroups = {};
 
   //filter by distance, region, time, type, and weekday
@@ -164,7 +164,7 @@ export function filterMeetingData(state, setState) {
           `https://api.mapbox.com/geocoding/v5/mapbox.places/${
             state.input.search
           }.json?${new URLSearchParams({
-            access_token: settings.map.key,
+            access_token: mapbox,
             autocomplete: false,
             language: settings.language,
           })}`
@@ -705,9 +705,6 @@ export function loadMeetingData(data, capabilities, debug, timezone) {
         window.location.hostname === 'localhost')
     ) {
       capabilities.geolocation = true;
-    }
-    if (settings.map.key) {
-      capabilities.map = true;
     }
   }
 

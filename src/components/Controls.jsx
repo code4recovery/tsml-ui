@@ -2,13 +2,33 @@ import React, { useEffect, useRef, useState } from 'react';
 import cx from 'classnames/bind';
 
 import Dropdown from './Dropdown';
-import { settings, strings } from '../helpers';
+import Icon from './Icon';
+import { formatUrl, settings, strings } from '../helpers';
 
-export default function Controls({ state, setState }) {
+export default function Controls({ state, setState, mapbox }) {
   const [dropdown, setDropdown] = useState(null);
   const [search, setSearch] = useState(state.input.search);
 
   const searchInput = useRef();
+
+  //get available search options based on capabilities
+  const modes = ['search', 'location', 'me']
+    .filter(
+      mode => mode !== 'location' || (state.capabilities.coordinates && mapbox)
+    )
+    .filter(mode => mode !== 'me' || state.capabilities.geolocation);
+
+  //get available filters
+  const filters = settings.filters
+    .filter(filter => state.capabilities[filter])
+    .filter(filter => filter !== 'region' || state.input.mode !== 'me')
+    .filter(filter => filter !== 'distance' || state.input.mode !== 'search');
+
+  //get available views
+  const views = ['table', 'map'].filter(view => view !== 'map' || mapbox);
+
+  //whether to show the views segmented button
+  const canShowViews = views.length > 1;
 
   useEffect(() => {
     //add click listener for dropdowns (in lieu of including bootstrap js + jquery)
@@ -24,11 +44,6 @@ export default function Controls({ state, setState }) {
     if (e.srcElement.classList.contains('dropdown-toggle')) return;
     setDropdown(null);
   };
-
-  //search modes
-  const modes = ['search'];
-  if (state.capabilities.coordinates) modes.push('location');
-  if (state.capabilities.geolocation) modes.push('me');
 
   //keyword search
   const keywordSearch = e => {
@@ -59,38 +74,6 @@ export default function Controls({ state, setState }) {
         },
       });
     }
-  };
-
-  //set filter: pass it up to parent
-  const setFilter = (e, filter, value) => {
-    e.preventDefault();
-
-    //add or remove from filters
-    if (value) {
-      if (e.metaKey) {
-        const index = state.input[filter].indexOf(value);
-        if (index === -1) {
-          state.input[filter].push(value);
-        } else {
-          state.input[filter].splice(index, 1);
-        }
-      } else {
-        state.input[filter] = [value];
-      }
-    } else {
-      state.input[filter] = [];
-    }
-
-    //sort filters
-    state.input[filter].sort((a, b) => {
-      return (
-        state.indexes[filter].findIndex(x => a === x.key) -
-        state.indexes[filter].findIndex(x => b === x.key)
-      );
-    });
-
-    //pass it up to app controller
-    setState({ ...state, input: state.input });
   };
 
   //set search mode dropdown and clear all distances
@@ -133,14 +116,6 @@ export default function Controls({ state, setState }) {
     setState({ ...state, input: { ...state.input, view: view } });
   };
 
-  //decide whether to show filter
-  const canShowFilter = filter => {
-    if (!state.capabilities[filter]) return false;
-    if (filter === 'region' && state.input.mode === 'me') return false;
-    if (filter === 'distance' && state.input.mode === 'search') return false;
-    return true;
-  };
-
   return (
     !!Object.keys(state.meetings).length && (
       <div className="row d-print-none controls">
@@ -148,23 +123,23 @@ export default function Controls({ state, setState }) {
           <div className="position-relative">
             <form className="input-group" onSubmit={locationSearch}>
               <input
-                type="search"
                 className="form-control"
-                onChange={keywordSearch}
-                value={search}
-                ref={searchInput}
-                placeholder={strings.modes[state.input.mode]}
                 disabled={state.input.mode === 'me'}
+                onChange={keywordSearch}
+                placeholder={strings.modes[state.input.mode]}
+                ref={searchInput}
                 spellCheck="false"
+                type="search"
+                value={search}
               />
               {modes.length > 1 && (
                 <button
+                  aria-label={strings.modes[state.input.mode]}
                   className="btn btn-outline-secondary dropdown-toggle"
                   onClick={() =>
                     setDropdown(dropdown === 'search' ? null : 'search')
                   }
                   type="button"
-                  aria-label={strings.modes[state.input.mode]}
                 />
               )}
             </form>
@@ -176,7 +151,6 @@ export default function Controls({ state, setState }) {
               >
                 {modes.map(mode => (
                   <a
-                    key={mode}
                     className={cx(
                       'align-items-center dropdown-item d-flex justify-content-between',
                       {
@@ -184,7 +158,8 @@ export default function Controls({ state, setState }) {
                           state.input.mode === mode,
                       }
                     )}
-                    href="#"
+                    href={formatUrl({ ...state.input, mode: mode })}
+                    key={mode}
                     onClick={e => setMode(e, mode)}
                   >
                     {strings.modes[mode]}
@@ -194,44 +169,39 @@ export default function Controls({ state, setState }) {
             )}
           </div>
         </div>
-        {settings.filters.map(
-          filter =>
-            canShowFilter(filter) && (
-              <div className="col-sm-6 col-lg mb-3" key={filter}>
-                <Dropdown
-                  defaultValue={strings[filter + '_any']}
-                  filter={filter}
-                  open={dropdown === filter}
-                  options={state.indexes[filter]}
-                  right={filter === 'type' && !state.capabilities.map}
-                  setDropdown={setDropdown}
-                  setFilter={setFilter}
-                  values={state.input[filter]}
-                />
-              </div>
-            )
-        )}
-        {state.capabilities.map && (
-          <div className="col-sm-6 col-lg mb-3">
-            <div className="btn-group w-100" role="group">
-              <button
-                type="button"
-                className={cx('btn btn-outline-secondary w-100', {
-                  active: state.input.view === 'list',
-                })}
-                onClick={e => setView(e, 'list')}
-              >
-                {strings.list}
-              </button>
-              <button
-                type="button"
-                className={cx('btn btn-outline-secondary w-100', {
-                  active: state.input.view === 'map',
-                })}
-                onClick={e => setView(e, 'map')}
-              >
-                {strings.map}
-              </button>
+        {filters.map((filter, index) => (
+          <div className="col-sm-6 col-lg mb-3" key={filter}>
+            <Dropdown
+              defaultValue={strings[filter + '_any']}
+              end={!canShowViews && !filters[index + 1]}
+              filter={filter}
+              open={dropdown === filter}
+              options={state.indexes[filter]}
+              setDropdown={setDropdown}
+              state={state}
+              setState={setState}
+              values={state.input[filter]}
+            />
+          </div>
+        ))}
+        {canShowViews && (
+          <div aria-hidden="true" className="col-sm-6 col-lg mb-3">
+            <div className="btn-group h-100 w-100" role="group">
+              {views.map(view => (
+                <button
+                  className={cx(
+                    'btn btn-outline-secondary d-flex align-items-center justify-content-center w-100',
+                    {
+                      active: state.input.view === view,
+                    }
+                  )}
+                  key={view}
+                  onClick={e => setView(e, view)}
+                  type="button"
+                >
+                  <Icon icon={view} />
+                </button>
+              ))}
             </div>
           </div>
         )}
