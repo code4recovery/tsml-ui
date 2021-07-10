@@ -1,6 +1,6 @@
 {
   "name": "tsml-ui",
-  "version": "1.1.6",
+  "version": "1.1.7",
   "private": false,
   "license": "MIT",
   "scripts": {
@@ -13,14 +13,13 @@
     "watch-poll": "mix watch -- --watch-options-poll=1000"
   },
   "devDependencies": {
-    "@babel/preset-react": "^7.13.13",
-    "laravel-mix": "^6.0.19",
-    "postcss": "^8.1",
-    "sass": "^1.32.13",
-    "sass-loader": "^11.0.1"
+    "@babel/preset-react": "^7.14.5",
+    "laravel-mix": "^6.0.25",
+    "sass": "^1.35.2",
+    "sass-loader": "^12.1.0"
   },
   "dependencies": {
-    "bootstrap": "^5.0.1",
+    "bootstrap": "^5.0.2",
     "deepmerge": "^4.2.2",
     "moment-timezone": "^0.5.33",
     "react": "^17.0.2",

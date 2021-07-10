@@ -1,5 +1,8 @@
 //for dropdown blur
-html, body, div#tsml-ui, div.tsml-ui {
+html,
+body,
+div#tsml-ui,
+div.tsml-ui {
   height: 100%;
   margin: 0;
 }
@@ -80,7 +83,8 @@ div.tsml-ui {
     }
   }
 
-  a.btn, small {
+  a.btn,
+  small {
     &.online {
       background-color: $blue-100;
       border-color: $blue-100;
@@ -121,11 +125,18 @@ div.tsml-ui {
     }
   }
 
+  //needed as of bootstrap 5.0.2
+  @include media-breakpoint-up(lg) {
+    .col-lg {
+      flex: 1 0 0% !important;
+    }
+  }
+
   .container-fluid {
     //for sepia's codered theme
-    padding-right: var(--bs-gutter-x,.75rem) !important;
-    padding-left: var(--bs-gutter-x,.75rem) !important;
-    
+    padding-right: var(--bs-gutter-x, 0.75rem) !important;
+    padding-left: var(--bs-gutter-x, 0.75rem) !important;
+
     @include media-breakpoint-up(md) {
       min-height: 100%;
     }
