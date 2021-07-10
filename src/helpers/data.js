@@ -572,7 +572,13 @@ export function loadMeetingData(data, capabilities, debug, timezone) {
     //clean up and sort types
     meeting.types = Array.isArray(meeting.types)
       ? meeting.types
-          .map(type => type.trim())
+          .map(type =>
+            typeof type === 'number'
+              ? type.toString()
+              : typeof type === 'string'
+              ? type.trim()
+              : null
+          )
           .filter(
             type =>
               lookup_type_codes.includes(type) ||

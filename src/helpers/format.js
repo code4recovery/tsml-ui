@@ -119,9 +119,8 @@ export function formatIcs(meeting) {
 }
 
 //turn Mountain View into mountain-view
-export function formatSlug(str, separator = '-') {
-  str = str.trim();
-  str = str.toLowerCase();
+export function formatSlug(str) {
+  str = str.trim().toLowerCase();
 
   // remove accents, swap ñ for n, etc
   const from = 'åàáãäâèéëêìíïîòóöôùúüûñç·/_,:;';
@@ -136,8 +135,7 @@ export function formatSlug(str, separator = '-') {
     .replace(/\s+/g, '-') // collapse whitespace and replace by -
     .replace(/-+/g, '-') // collapse dashes
     .replace(/^-+/, '') // trim - from start of text
-    .replace(/-+$/, '') // trim - from end of text
-    .replace(/-/g, separator);
+    .replace(/-+$/, ''); // trim - from end of text
 }
 
 //format an internal link with correct query params
