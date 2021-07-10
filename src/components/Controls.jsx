@@ -1,9 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
-import cx from 'classnames/bind';
 
 import Dropdown from './Dropdown';
 import Icon from './Icon';
-import { formatUrl, settings, strings } from '../helpers';
+import { formatClasses as cx, formatUrl, settings, strings } from '../helpers';
 
 export default function Controls({ state, setState, mapbox }) {
   const [dropdown, setDropdown] = useState(null);
@@ -16,7 +15,11 @@ export default function Controls({ state, setState, mapbox }) {
     .filter(
       mode => mode !== 'location' || (state.capabilities.coordinates && mapbox)
     )
-    .filter(mode => mode !== 'me' || state.capabilities.geolocation);
+    .filter(
+      mode =>
+        mode !== 'me' ||
+        (state.capabilities.coordinates && state.capabilities.geolocation)
+    );
 
   //get available filters
   const filters = settings.filters
@@ -25,7 +28,9 @@ export default function Controls({ state, setState, mapbox }) {
     .filter(filter => filter !== 'distance' || state.input.mode !== 'search');
 
   //get available views
-  const views = ['table', 'map'].filter(view => view !== 'map' || mapbox);
+  const views = ['table', 'map'].filter(
+    view => view !== 'map' || (state.capabilities.coordinates && mapbox)
+  );
 
   //whether to show the views segmented button
   const canShowViews = views.length > 1;

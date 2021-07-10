@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import cx from 'classnames/bind';
 
 import {
+  formatClasses as cx,
   formatDirectionsUrl,
   formatIcs,
   formatUrl,
