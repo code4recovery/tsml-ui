@@ -16,6 +16,24 @@ export function formatConferenceProvider(url) {
   return provider.length ? settings.conference_providers[provider[0]] : null;
 }
 
+//inspired by the functionality of jedwatson/classnames
+export function formatClasses() {
+  return Object.values(arguments)
+    .map(arg =>
+      typeof arg === 'string'
+        ? arg
+        : Array.isArray(arg)
+        ? arg.join(' ')
+        : typeof arg === 'object'
+        ? Object.keys(arg)
+            .filter(key => !!arg[key])
+            .join(' ')
+        : null
+    )
+    .filter(e => e)
+    .join(' ');
+}
+
 //send back a string url to get directions with the appropriate provider
 export function formatDirectionsUrl({
   formatted_address,

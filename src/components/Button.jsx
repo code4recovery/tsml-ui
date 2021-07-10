@@ -1,6 +1,6 @@
 import React from 'react';
-import cx from 'classnames/bind';
 
+import { formatClasses as cx } from '../helpers/format';
 import Icon from './Icon';
 
 export default function Button({

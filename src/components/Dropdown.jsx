@@ -1,7 +1,6 @@
 import React, { Fragment } from 'react';
-import cx from 'classnames/bind';
 
-import { getIndexByKey, formatUrl } from '../helpers';
+import { formatClasses as cx, getIndexByKey, formatUrl } from '../helpers';
 
 export default function Dropdown({
   filter,

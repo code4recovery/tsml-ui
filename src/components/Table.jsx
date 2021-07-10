@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
-import cx from 'classnames/bind';
 import InfiniteScroll from 'react-infinite-scroller';
 
-import { formatDirectionsUrl, settings, strings } from '../helpers';
+import {
+  formatClasses as cx,
+  formatDirectionsUrl,
+  settings,
+  strings,
+} from '../helpers';
 import Button from './Button';
 import Link from './Link';
 
