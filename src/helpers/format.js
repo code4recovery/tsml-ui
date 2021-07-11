@@ -1,9 +1,19 @@
-import { settings } from './settings';
+import { getQueryString } from './query-string';
+import { settings, strings } from './settings';
 
 //get address from formatted_address
 export function formatAddress(formatted_address = '') {
   const address = formatted_address.split(', ');
   return address.length > 3 ? address[0] : null;
+}
+
+//ensure array-ness for formatFeedbackEmail()
+function formatArray(unknown) {
+  if (Array.isArray(unknown)) return unknown;
+  const type = typeof unknown;
+  if (type === 'string') return [unknown];
+  if (type === 'object') return Object.values(unknown);
+  return [];
 }
 
 //get name of provider from url
@@ -51,6 +61,33 @@ export function formatDirectionsUrl({
     params['daddr'] = formatted_address;
   }
   return `${baseURL}?${new URLSearchParams(params)}`;
+}
+
+//send back a mailto link to a feedback email
+export function formatFeedbackEmail(feedback_emails, meeting) {
+  //remove extra query params from meeting URL
+  const input = getQueryString();
+  const meetingUrl = formatUrl({ meeting: input.meeting });
+
+  //build message
+  const lines = [
+    ``,
+    '',
+    '',
+    '-----',
+    strings.email_public_url.replace('%url%', meetingUrl),
+  ];
+  if (meeting.edit_url) {
+    lines.push(strings.email_edit_url.replace('%url%', meeting.edit_url));
+  }
+
+  //build mailto link
+  return `mailto:${formatArray(feedback_emails).join()}?${new URLSearchParams({
+    subject: strings.email_subject.replace('%name%', meeting.name),
+    body: lines.join('\n'),
+  })
+    .toString()
+    .replaceAll('+', ' ')}`;
 }
 
 //format ICS file for add to calendar
@@ -162,6 +199,7 @@ export function formatUrl(input) {
 
   //distance, region, time, type, and weekday
   settings.filters
+    .filter(filter => typeof input[filter] !== 'undefined')
     .filter(filter => input[filter]?.length)
     .forEach(filter => {
       query[filter] = input[filter].join('/');
@@ -169,6 +207,7 @@ export function formatUrl(input) {
 
   //meeting, mode, search, view
   settings.params
+    .filter(param => typeof input[param] !== 'undefined')
     .filter(param => input[param] !== settings.defaults[param])
     .forEach(param => {
       query[param] = input[param];
@@ -181,7 +220,7 @@ export function formatUrl(input) {
     .replace(/%20/g, '+')
     .replace(/%2C/g, ',');
 
-  return `${window.location.pathname}${
-    !!queryString.length ? `?${queryString}` : ''
-  }`;
+  const [path] = window.location.href.split('?');
+
+  return `${path}${!!queryString.length ? `?${queryString}` : ''}`;
 }
