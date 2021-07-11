@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import {
   formatClasses as cx,
   formatDirectionsUrl,
+  formatFeedbackEmail,
   formatIcs,
   formatUrl,
   settings,
@@ -44,9 +45,10 @@ export default function Meeting({ state, setState, mapbox }) {
 
   //feedback URL link
   if (!meeting.feedback_url && settings.feedback_emails.length) {
-    meeting.feedback_url = `mailto:${settings.feedback_emails.join()}?subject=${
-      window.location.href
-    }`;
+    meeting.feedback_url = formatFeedbackEmail(
+      settings.feedback_emails,
+      meeting
+    );
   }
 
   const contactButtons = [];
