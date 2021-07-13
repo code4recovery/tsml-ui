@@ -2,7 +2,13 @@ import React, { useEffect, useRef, useState } from 'react';
 
 import Dropdown from './Dropdown';
 import Icon from './Icon';
-import { formatClasses as cx, formatUrl, settings, strings } from '../helpers';
+import {
+  analyticsEvent,
+  formatClasses as cx,
+  formatUrl,
+  settings,
+  strings,
+} from '../helpers';
 
 export default function Controls({ state, setState, mapbox }) {
   const [dropdown, setDropdown] = useState(null);
@@ -35,6 +41,7 @@ export default function Controls({ state, setState, mapbox }) {
   //whether to show the views segmented button
   const canShowViews = views.length > 1;
 
+  //document effect
   useEffect(() => {
     //add click listener for dropdowns (in lieu of including bootstrap js + jquery)
     document.body.addEventListener('click', closeDropdown);
@@ -43,6 +50,20 @@ export default function Controls({ state, setState, mapbox }) {
       document.body.removeEventListener('click', closeDropdown);
     };
   }, [document]);
+
+  //search effect
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (!search) return;
+      analyticsEvent({
+        category: 'search',
+        action: state.input.mode,
+        label: 'search_term',
+        value: search,
+      });
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, [search]);
 
   //close current dropdown (on body click)
   const closeDropdown = e => {
