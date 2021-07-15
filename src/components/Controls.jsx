@@ -60,6 +60,7 @@ export default function Controls({ state, setState, mapbox }) {
         action: state.input.mode,
         label: 'search_term',
         value: search,
+        debug: state.input.debug,
       });
     }, 2000);
     return () => clearTimeout(timer);

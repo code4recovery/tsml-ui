@@ -1,6 +1,12 @@
 //send analytics to google (other providers possible)
 //category = 'search', action = 'search' or 'location', label = 'search_term', value = 'odaat'
-export function analyticsEvent({ category, action, label, value }) {
+export function analyticsEvent({
+  category,
+  action,
+  label,
+  value,
+  debug = false,
+}) {
   if (typeof ga === 'function') {
     //https://developers.google.com/analytics/devguides/collection/analyticsjs/events
     ga('send', {
@@ -10,6 +16,9 @@ export function analyticsEvent({ category, action, label, value }) {
       eventLabel: label,
       eventValue: value,
     });
+    if (debug) {
+      console.log(`recorded ga event for "${value}"`);
+    }
   } else if (typeof gtag === 'function') {
     //https://developers.google.com/analytics/devguides/collection/gtagjs/events
     gtag('event', action, {
@@ -17,5 +26,10 @@ export function analyticsEvent({ category, action, label, value }) {
       event_label: label,
       value: value,
     });
+    if (debug) {
+      console.log(`recorded gtag event for "${value}"`);
+    }
+  } else if (debug) {
+    console.log('did not record analytics event');
   }
 }
