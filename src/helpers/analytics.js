@@ -7,7 +7,17 @@ export function analyticsEvent({
   value,
   debug = false,
 }) {
-  if (typeof ga === 'function') {
+  if (typeof gtag === 'function') {
+    //https://developers.google.com/analytics/devguides/collection/gtagjs/events
+    gtag('event', action, {
+      event_category: category,
+      event_label: label,
+      value: value,
+    });
+    if (debug) {
+      console.log(`recorded gtag event for "${value}"`);
+    }
+  } else if (typeof ga === 'function') {
     //https://developers.google.com/analytics/devguides/collection/analyticsjs/events
     ga('send', {
       hitType: 'event',
@@ -18,16 +28,6 @@ export function analyticsEvent({
     });
     if (debug) {
       console.log(`recorded ga event for "${value}"`);
-    }
-  } else if (typeof gtag === 'function') {
-    //https://developers.google.com/analytics/devguides/collection/gtagjs/events
-    gtag('event', action, {
-      event_category: category,
-      event_label: label,
-      value: value,
-    });
-    if (debug) {
-      console.log(`recorded gtag event for "${value}"`);
     }
   } else if (debug) {
     console.log('did not record analytics event');
