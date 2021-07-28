@@ -34,7 +34,6 @@ const defaults = {
   distance_unit: 'mi', //mi or km
   feedback_emails: [], //email addresses for update meeting info button
   filters: ['region', 'distance', 'weekday', 'time', 'type'],
-  flags: ['M', 'W'],
   language: 'en', //fallback language
   map: {
     markers: {
@@ -77,6 +76,11 @@ const settings =
   typeof tsml_react_config === 'object'
     ? merge(defaults, tsml_react_config)
     : defaults;
+
+//flags can be specified to override the default. also [] means unset
+if (!Array.isArray(settings.flags)) {
+  settings.flags = ['M', 'W'];
+}
 
 const preferredLanguage = navigator.language.substr(0, 2);
 
