@@ -58,8 +58,7 @@ export default function Controls({ state, setState, mapbox }) {
       analyticsEvent({
         category: 'search',
         action: state.input.mode,
-        label: 'search_term',
-        value: search,
+        label: search,
         debug: state.input.debug,
       });
     }, 2000);
