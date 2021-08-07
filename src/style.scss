@@ -48,6 +48,7 @@ div.tsml-ui {
   //@import '~bootstrap/scss/carousel';
   @import '~bootstrap/scss/spinners';
   @import '~bootstrap/scss/offcanvas';
+  //@import '~bootstrap/scss/placeholders';
   @import '~bootstrap/scss/helpers';
   @import '~bootstrap/scss/utilities/api';
 
@@ -125,11 +126,9 @@ div.tsml-ui {
     }
   }
 
-  //needed as of bootstrap 5.0.2
-  @include media-breakpoint-up(lg) {
-    .col-lg {
-      flex: 1 0 0% !important;
-    }
+  //needed as of bootstrap 5.1
+  .bg-light {
+    background-color: $gray-100 !important;
   }
 
   .container-fluid {
