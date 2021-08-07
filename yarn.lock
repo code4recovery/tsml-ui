@@ -1565,10 +1565,10 @@ boolbase@^1.0.0:
   resolved "https://packages.atlassian.com/api/npm/npm-remote/boolbase/-/boolbase-1.0.0.tgz#68dff5fbe60c51eb37725ea9e3ed310dcc1e776e"
   integrity sha1-aN/1++YMUes3cl6p4+0xDcwed24=
 
-bootstrap@^5.0.2:
-  version "5.0.2"
-  resolved "https://packages.atlassian.com/api/npm/npm-remote/bootstrap/-/bootstrap-5.0.2.tgz#aff23d5e0e03c31255ad437530ee6556e78e728e"
-  integrity sha1-r/I9Xg4DwxJVrUN1MO5lVueOco4=
+bootstrap@^5.1.0:
+  version "5.1.0"
+  resolved "https://packages.atlassian.com/api/npm/npm-remote/bootstrap/-/bootstrap-5.1.0.tgz#543ef8f44f4b9af67b0230f19508542fec38ef55"
+  integrity sha1-VD749E9LmvZ7AjDxlQhUL+w471U=
 
 brace-expansion@^1.1.7:
   version "1.1.11"
@@ -3394,10 +3394,10 @@ klona@^2.0.4:
   resolved "https://packages.atlassian.com/api/npm/npm-remote/klona/-/klona-2.0.4.tgz#7bb1e3affb0cb8624547ef7e8f6708ea2e39dfc0"
   integrity sha1-e7Hjr/sMuGJFR+9+j2cI6i4538A=
 
-laravel-mix@^6.0.25:
-  version "6.0.25"
-  resolved "https://packages.atlassian.com/api/npm/npm-remote/laravel-mix/-/laravel-mix-6.0.25.tgz#6989f3e1a6d4cc0b73732bf02e5355a8f3696156"
-  integrity sha1-aYnz4abUzAtzcyvwLlNVqPNpYVY=
+laravel-mix@^6.0.27:
+  version "6.0.27"
+  resolved "https://packages.atlassian.com/api/npm/npm-remote/laravel-mix/-/laravel-mix-6.0.27.tgz#56f7902a1162312844fce4f0cd60b86e7b07770c"
+  integrity sha1-VveQKhFiMShE/OTwzWC4bnsHdww=
   dependencies:
     "@babel/core" "^7.14.5"
     "@babel/plugin-proposal-object-rest-spread" "^7.14.5"
@@ -4812,10 +4812,10 @@ sass-loader@^12.1.0:
     klona "^2.0.4"
     neo-async "^2.6.2"
 
-sass@^1.35.2:
-  version "1.35.2"
-  resolved "https://packages.atlassian.com/api/npm/npm-remote/sass/-/sass-1.35.2.tgz#b732314fcdaf7ef8d0f1698698adc378043cb821"
-  integrity sha1-tzIxT82vfvjQ8WmGmK3DeAQ8uCE=
+sass@^1.37.5:
+  version "1.37.5"
+  resolved "https://packages.atlassian.com/api/npm/npm-remote/sass/-/sass-1.37.5.tgz#f6838351f7cc814c4fcfe1d9a20e0cabbd1e7b3c"
+  integrity sha1-9oODUffMgUxPz+HZog4Mq70eezw=
   dependencies:
     chokidar ">=3.0.0 <4.0.0"
 

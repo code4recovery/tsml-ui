@@ -26,6 +26,11 @@ export default function Meeting({ state, setState, mapbox }) {
     document.getElementById('tsml-ui')?.scrollIntoView();
   }, [state.input.meeting]);
 
+  //log meeting record in debug mode
+  if (state.input.debug) {
+    console.log(meeting);
+  }
+
   //directions URL link
   const directionsUrl = meeting.isInPerson
     ? formatDirectionsUrl(meeting)
@@ -104,7 +109,7 @@ export default function Meeting({ state, setState, mapbox }) {
       .filter(
         m =>
           meeting.isInPerson &&
-          meeting.address &&
+          !meeting.approximate &&
           m.isInPerson &&
           m.formatted_address === meeting.formatted_address
       ),
@@ -261,7 +266,7 @@ export default function Meeting({ state, setState, mapbox }) {
                 </div>
               )}
             </div>
-            {meeting.address && (
+            {!meeting.approximate && (
               <div
                 className={cx(
                   {
@@ -288,7 +293,7 @@ export default function Meeting({ state, setState, mapbox }) {
               </div>
             )}
             {meeting.group &&
-              (!meeting.address ||
+              (meeting.approximate ||
                 meeting.district ||
                 meeting.group_notes ||
                 !!groupWeekdays.length ||

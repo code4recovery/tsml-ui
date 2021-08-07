@@ -7,6 +7,7 @@ import { settings, strings } from './settings';
 //all the fields in the meeting guide spec
 const spec_properties = [
   'address',
+  'approximate',
   'city',
   'conference_phone',
   'conference_phone_notes',
@@ -418,10 +419,20 @@ export function loadMeetingData(data, capabilities, debug, timezone) {
       }
     }
 
-    //used in table, and for knowing if location is approximate
+    //used in table
     if (!meeting.address) {
       meeting.address = formatAddress(meeting.formatted_address);
     }
+
+    //check if approximate
+    meeting.approximate = meeting.approximate
+      ? meeting.approximate.toLowerCase() === 'yes'
+      : meeting.address
+      ? false
+      : true;
+
+    //if approximate is specified, it overrules formatAddress
+    if (meeting.approximate) meeting.address = null;
 
     //check for types
     if (!meeting.types) {
@@ -438,7 +449,7 @@ export function loadMeetingData(data, capabilities, debug, timezone) {
     meeting.isTempClosed =
       meeting.types.includes('TC') || meeting.types.includes(strings.types.TC);
 
-    meeting.isInPerson = !meeting.isTempClosed && !!meeting.address;
+    meeting.isInPerson = !meeting.isTempClosed && !meeting.approximate;
 
     if (meeting.isInPerson) {
       meeting.types.push('in-person');
