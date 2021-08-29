@@ -218,8 +218,8 @@ export function filterMeetingData(state, setState, mapbox) {
     const meetingB = state.meetings[b];
 
     //sort appointment meetings to the end
-    if (meetingA.minutes_week && !meetingB.minutes_week) return -1;
-    if (!meetingA.minutes_week && meetingB.minutes_week) return 1;
+    if (meetingA.time && !meetingB.time) return -1;
+    if (!meetingA.time && meetingB.time) return 1;
 
     if (!state.input.weekday.length) {
       //if upcoming, sort by time_diff
@@ -370,6 +370,11 @@ export function loadMeetingData(data, capabilities, debug, timezone) {
       .forEach(key => {
         delete meeting[key];
       });
+
+    //default edit_url
+    if (!meeting.edit_url) {
+      meeting.edit_url = `row ${index}`;
+    }
 
     //slug is required
     if (!meeting.slug) {
@@ -614,7 +619,7 @@ export function loadMeetingData(data, capabilities, debug, timezone) {
 
     //optional updated date
     meeting.updated = meeting.updated
-      ? moment.tz(meeting.updated, 'UTC').tz(timezone).format('ll')
+      ? moment.tz(new Date(meeting.updated), 'UTC').tz(timezone).format('ll')
       : null;
 
     //7th tradition validation
