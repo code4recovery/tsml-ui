@@ -73,6 +73,7 @@ export default {
     B: 'Libro grande',
     BA: 'Servicio de canguro disponible',
     BE: 'Recién llegado',
+    BI: 'Bisexual',
     BRK: 'Desayuno',
     C: 'Cerrado',
     CF: 'Niño amigable',
