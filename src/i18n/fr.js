@@ -73,6 +73,7 @@ export default {
     B: 'Gros Livre',
     BA: 'Garderie d’enfants disponible',
     BE: 'Nouveau/nouvelle',
+    BI: 'Bisexuel',
     BRK: 'Petit déjeuner',
     C: 'Fermé',
     CF: 'Enfants acceptés',

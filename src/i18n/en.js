@@ -73,6 +73,7 @@ export default {
     BA: 'Babysitting Available',
     BE: 'Newcomer',
     BRK: 'Breakfast',
+    BI: 'Bisexual',
     C: 'Closed',
     CF: 'Child-friendly',
     D: 'Discussion',
