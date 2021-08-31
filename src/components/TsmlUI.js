@@ -17,6 +17,8 @@ import {
   settings,
 } from '../helpers';
 
+import pkg from "../../package.json";
+
 export default function TsmlUI({ json, mapbox, timezone }) {
   const [state, setState] = useState({
     alert: null,
@@ -45,7 +47,7 @@ export default function TsmlUI({ json, mapbox, timezone }) {
   });
 
   //used for versioning cache
-  const version = '1.1.9';
+  const version = pkg.version;
 
   //enable forward & back buttons
   useEffect(() => {

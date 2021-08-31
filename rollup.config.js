@@ -13,7 +13,8 @@ const input = "./src/index.js";
 const minifyExtension = pathToFile => pathToFile.replace(/\.js$/, ".min.js");
 const common_cfg = {
   namedExports: {
-    'node_modules/react/index.js': ['Component', 'PureComponent', 'Fragment', 'Children', 'createElement', 'useEffect', 'useRef', 'useState', 'createContext', 'useContext', 'useLayoutEffect', 'useCallback', 'useImperativeHandle', 'forwardRef', 'useMemo', 'cloneElement', 'createRef']
+    'node_modules/react/index.js': ['Component', 'PureComponent', 'Fragment', 'Children', 'createElement', 'useEffect', 'useRef', 'useState', 'createContext', 'useContext', 'useLayoutEffect', 'useCallback', 'useImperativeHandle', 'forwardRef', 'useMemo', 'cloneElement', 'createRef', 'memo'],
+    'node_modules/prop-types/index.js': ['bool', 'object', 'func', 'string', 'checkPropTypes', 'oneOf', 'number', 'instanceOf', 'array', 'oneOfType', 'arrayOf']
   }
 }
 
@@ -26,11 +27,11 @@ export default [
       format: "cjs"
     },
     plugins: [
+      external(),
+      resolve(),
       babel({
         exclude: "node_modules/**"
       }),
-      external(),
-      resolve(),
       commonjs(common_cfg),
       sass({ output: true }),
       css({ output: 'bundle.css' }),
@@ -44,11 +45,11 @@ export default [
       format: "cjs"
     },
     plugins: [
+      external(),
+      resolve(),
       babel({
         exclude: "node_modules/**"
       }),
-      external(),
-      resolve(),
       commonjs(common_cfg),
       sass({ output: true }),
       css({ output: 'bundle.css' }),
@@ -64,16 +65,14 @@ export default [
       name: "tsmlUI",
       globals: {
         react: "React",
-        "@emotion/styled": "styled",
-        "@emotion/core": "core"
       }
     },
     plugins: [
+      external(),
+      resolve(),
       babel({
         exclude: "node_modules/**"
       }),
-      external(),
-      resolve(),
       commonjs(common_cfg),
       sass({ output: true }),
       css({ output: 'bundle.css' }),
@@ -88,16 +87,14 @@ export default [
       name: "tsmlUI",
       globals: {
         react: "React",
-        "@emotion/styled": "styled",
-        "@emotion/core": "core"
       }
     },
     plugins: [
+      external(),
+      resolve(),
       babel({
         exclude: "node_modules/**"
       }),
-      external(),
-      resolve(),
       commonjs(common_cfg),
       sass({ output: true }),
       css({ output: 'bundle.css' }),
@@ -113,11 +110,11 @@ export default [
       exports: "named"
     },
     plugins: [
+      external(),
+      resolve(),
       babel({
         exclude: "node_modules/**"
       }),
-      external(),
-      resolve(),
       commonjs(common_cfg),
       sass({ output: true }),
       css({ output: 'bundle.css' }),
@@ -132,11 +129,11 @@ export default [
       exports: "named"
     },
     plugins: [
+      resolve(),
       babel({
         exclude: "node_modules/**"
       }),
       external(),
-      resolve(),
       commonjs(common_cfg),
       sass({ output: true }),
       css({ output: 'bundle.css' }),
