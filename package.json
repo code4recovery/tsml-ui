@@ -14,7 +14,9 @@
   },
   "devDependencies": {
     "@babel/preset-react": "^7.14.5",
+    "@pmmmwh/react-refresh-webpack-plugin": "^0.5.0-rc.0",
     "laravel-mix": "^6.0.27",
+    "react-refresh": "^0.10.0",
     "sass": "^1.37.5",
     "sass-loader": "^12.1.0"
   },
