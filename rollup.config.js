@@ -34,7 +34,7 @@ export default [
       }),
       commonjs(common_cfg),
       scss({ output: true }),
-      css({ output: 'bundle.css' }),
+      css({ output: true }),
       json()
     ]
   },
@@ -52,7 +52,7 @@ export default [
       }),
       commonjs(common_cfg),
       scss({ output: true }),
-      css({ output: 'bundle.css' }),
+      css({ output: true }),
       json(),
       uglify()
     ]
@@ -75,7 +75,7 @@ export default [
       }),
       commonjs(common_cfg),
       scss({ output: true }),
-      css({ output: 'bundle.css' }),
+      css({ output: true }),
       json()
     ]
   },
@@ -97,7 +97,7 @@ export default [
       }),
       commonjs(common_cfg),
       scss({ output: true }),
-      css({ output: 'bundle.css' }),
+      css({ output: true }),
       json(),
       terser()
     ]
@@ -117,7 +117,7 @@ export default [
       }),
       commonjs(common_cfg),
       scss({ output: true }),
-      css({ output: 'bundle.css' }),
+      css({ output: true }),
       json(),
     ]
   },
@@ -136,7 +136,7 @@ export default [
       external(),
       commonjs(common_cfg),
       scss({ output: true }),
-      css({ output: 'bundle.css' }),
+      css({ output: true }),
       json(),
       terser()
     ]
