@@ -2,7 +2,7 @@ import babel from "rollup-plugin-babel";
 import commonjs from "rollup-plugin-commonjs";
 import resolve from "rollup-plugin-node-resolve";
 import external from "rollup-plugin-peer-deps-external";
-import sass from 'rollup-plugin-sass';
+import scss from 'rollup-plugin-scss';
 import { terser } from "rollup-plugin-terser";
 import { uglify } from "rollup-plugin-uglify";
 import css from 'rollup-plugin-css-only';
@@ -33,7 +33,7 @@ export default [
         exclude: "node_modules/**"
       }),
       commonjs(common_cfg),
-      sass({ output: true }),
+      scss({ output: true }),
       css({ output: 'bundle.css' }),
       json()
     ]
@@ -51,7 +51,7 @@ export default [
         exclude: "node_modules/**"
       }),
       commonjs(common_cfg),
-      sass({ output: true }),
+      scss({ output: true }),
       css({ output: 'bundle.css' }),
       json(),
       uglify()
@@ -74,7 +74,7 @@ export default [
         exclude: "node_modules/**"
       }),
       commonjs(common_cfg),
-      sass({ output: true }),
+      scss({ output: true }),
       css({ output: 'bundle.css' }),
       json()
     ]
@@ -96,7 +96,7 @@ export default [
         exclude: "node_modules/**"
       }),
       commonjs(common_cfg),
-      sass({ output: true }),
+      scss({ output: true }),
       css({ output: 'bundle.css' }),
       json(),
       terser()
@@ -116,7 +116,7 @@ export default [
         exclude: "node_modules/**"
       }),
       commonjs(common_cfg),
-      sass({ output: true }),
+      scss({ output: true }),
       css({ output: 'bundle.css' }),
       json(),
     ]
@@ -135,7 +135,7 @@ export default [
       }),
       external(),
       commonjs(common_cfg),
-      sass({ output: true }),
+      scss({ output: true }),
       css({ output: 'bundle.css' }),
       json(),
       terser()

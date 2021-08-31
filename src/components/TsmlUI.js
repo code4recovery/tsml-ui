@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import 'mapbox-gl/dist/mapbox-gl.css';
+import '../style.scss'
 
 import { Alert, Controls, Loading, Map, Meeting, Table, Title } from './';
 
