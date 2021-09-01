@@ -161,7 +161,7 @@ export function filterMeetingData(state, setState, mapbox) {
     if (!state.input.latitude || !state.input.longitude) {
       if (state.input.search && state.input.mode === 'location') {
         //make mapbox API request https://docs.mapbox.com/api/search/
-        fetch(
+        typeof window !== 'undefined' && window.fetch(
           `https://api.mapbox.com/geocoding/v5/mapbox.places/${
             state.input.search
           }.json?${new URLSearchParams({
@@ -185,7 +185,7 @@ export function filterMeetingData(state, setState, mapbox) {
               //show error
             }
           });
-      } else if (state.input.mode === 'me') {
+      } else if (typeof window !== 'undefined' && state.input.mode === 'me') {
         navigator.geolocation.getCurrentPosition(
           position => {
             calculateDistances(
@@ -313,20 +313,25 @@ function getCommonElements(arrays) {
 
 //get meetings, indexes, and capabilities from session storage, keyed by JSON URL
 export function getCache(json, version) {
-  const cache = JSON.parse(
-    window.sessionStorage.getItem(getCacheName(json, version))
-  );
-  if (!cache) return null;
-  const keys = Object.keys(cache.meetings);
-  keys.forEach(key => {
-    if (typeof cache.meetings[key].start === 'string') {
-      cache.meetings[key].start = moment(cache.meetings[key].start);
-    }
-    if (typeof cache.meetings[key].end === 'string') {
-      cache.meetings[key].end = moment(cache.meetings[key].end);
-    }
-  });
-  return cache;
+  if (typeof window !== 'undefined') {
+    const cache = JSON.parse(
+      window.sessionStorage.getItem(getCacheName(json, version))
+    );
+
+    if (!cache) return null;
+    const keys = Object.keys(cache.meetings);
+    keys.forEach(key => {
+      if (typeof cache.meetings[key].start === 'string') {
+        cache.meetings[key].start = moment(cache.meetings[key].start);
+      }
+      if (typeof cache.meetings[key].end === 'string') {
+        cache.meetings[key].end = moment(cache.meetings[key].end);
+      }
+    });
+    return cache;
+  }
+  
+  return null;
 }
 
 //version the cache name in case computations have changed since the last version
@@ -722,7 +727,7 @@ export function loadMeetingData(data, capabilities, debug, timezone) {
   //determine search modes
   if (capabilities.coordinates) {
     if (
-      navigator.geolocation &&
+      typeof window !== 'undefined' && navigator.geolocation &&
       (window.location.protocol === 'https:' ||
         window.location.hostname === 'localhost')
     ) {
@@ -782,10 +787,12 @@ function processSearchTerms(input) {
 
 //set meetings, indexes, and capabilities to session storage, keyed by JSON URL
 export function setCache(json, version, meetings, indexes, capabilities) {
-  window.sessionStorage.setItem(
-    getCacheName(json, version),
-    JSON.stringify({ meetings, indexes, capabilities })
-  );
+  if (typeof window !== 'undefined') {
+    window.sessionStorage.setItem(
+      getCacheName(json, version),
+      JSON.stringify({ meetings, indexes, capabilities })
+    );
+  }
 }
 
 //set minutes

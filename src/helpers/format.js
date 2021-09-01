@@ -51,7 +51,7 @@ export function formatDirectionsUrl({
   longitude,
 }) {
   //create a link for directions
-  const iOS = navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
+  const iOS = typeof window !== 'undefined' && navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
   const baseURL = iOS ? 'maps://' : 'https://www.google.com/maps';
   const params = { saddr: 'Current Location' };
   if (latitude && longitude) {
@@ -163,13 +163,15 @@ export function formatIcs(meeting) {
 
   const urlString = url.join('\n');
 
-  if (/msie\s|trident\/|edge\//i.test(window.navigator.userAgent)) {
-    //open/save link in IE and Edge
-    const blob = new Blob([urlString], { type: 'text/calendar;charset=utf-8' });
-    window.navigator.msSaveBlob(blob, 'download.ics');
-  } else {
-    //open/save link in modern browsers
-    window.location = encodeURI(`data:text/calendar;charset=utf8,${urlString}`);
+  if (typeof window !== 'undefined') {
+    if (/msie\s|trident\/|edge\//i.test(window.navigator.userAgent)) {
+      //open/save link in IE and Edge
+      const blob = new Blob([urlString], { type: 'text/calendar;charset=utf-8' });
+      window.navigator.msSaveBlob(blob, 'download.ics');
+    } else {
+      //open/save link in modern browsers
+      window.location = encodeURI(`data:text/calendar;charset=utf8,${urlString}`);
+    }
   }
 }
 

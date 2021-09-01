@@ -51,15 +51,17 @@ export default function TsmlUI({ json, mapbox, timezone }) {
   const version = pkg.version;
 
   //enable forward & back buttons
-  useEffect(() => {
-    const popstateListener = () => {
-      setState({ ...state, input: getQueryString(window.location.search) });
-    };
-    window.addEventListener('popstate', popstateListener);
-    return () => {
-      window.removeEventListener('popstate', popstateListener);
-    };
-  }, [state, window.location.search]);
+  if (typeof window !== 'undefined') {
+    useEffect(() => {
+      const popstateListener = () => {
+        setState({ ...state, input: getQueryString(window.location.search) });
+      };
+      window.addEventListener('popstate', popstateListener);
+      return () => {
+        window.removeEventListener('popstate', popstateListener);
+      };
+    }, [state, window.location.search]);
+  }
 
   //load data once from json
   if (state.loading) {
@@ -77,7 +79,7 @@ export default function TsmlUI({ json, mapbox, timezone }) {
       });
     } else {
       //fetch json data file and build indexes
-      fetch(json)
+      typeof window !== 'undefined' && window.fetch(json)
         .then(result => result.json())
         .then(
           result => {

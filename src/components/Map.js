@@ -32,10 +32,13 @@ export default function Map({
       });
     };
     resizeListener();
-    window.addEventListener('resize', resizeListener);
-    return () => {
-      window.removeEventListener('resize', resizeListener);
-    };
+
+    if (typeof window !== 'undefined') {
+      window.addEventListener('resize', resizeListener);
+      return () => {
+        window.removeEventListener('resize', resizeListener);
+      };
+    }
   }, []);
 
   //reset bounds and locations when filteredSlugs changes
