@@ -7,6 +7,7 @@ import replace from '@rollup/plugin-replace';
 import json from '@rollup/plugin-json';
 import scss from 'rollup-plugin-scss';
 import css from 'rollup-plugin-css-only';
+import webWorkerLoader from 'rollup-plugin-web-worker-loader';
 
 import packageJSON from "./package.json";
 const input = "./src/index.js";
@@ -24,7 +25,7 @@ export default // LiveReload
   output: {
     file: "dist/bundle.js",
     format: "iife",
-    sourcemap: true,
+    sourcemap: true
   },
   plugins: [
     resolve({
@@ -36,6 +37,7 @@ export default // LiveReload
     babel({
       presets: ["@babel/preset-react"],
     }),
+    webWorkerLoader(),
     commonjs(),
     json(),
     scss({ output: true }),

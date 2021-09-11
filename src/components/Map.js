@@ -1,10 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import ReactMapGL, { Marker, NavigationControl, Popup } from 'react-map-gl';
+import mapboxgl from 'mapbox-gl'; // This is a dependency of react-map-gl even if you didn't explicitly install it
+import MapboxWorker from 'web-worker:mapbox-gl/dist/mapbox-gl-csp-worker'
 import WebMercatorViewport from 'viewport-mercator-project';
-
 import { formatDirectionsUrl, settings, strings } from '../helpers';
 import Button from './Button';
 import Link from './Link';
+
+mapboxgl.workerClass = MapboxWorker
 
 export default function Map({
   filteredSlugs,
@@ -120,13 +123,15 @@ export default function Map({
     );
   }, [data, dimensions]);
 
+  console.log(viewport, mapbox)
+
   return (
     <div className="border rounded bg-light flex-grow-1 map" ref={mapFrame}>
       {viewport && !!data.locationKeys.length && (
         <ReactMapGL
           mapStyle={settings.map.style}
           mapboxApiAccessToken={mapbox}
-          onViewportChange={setViewport}
+          onViewportChange={nextViewport => setViewport(nextViewport)}
           {...viewport}
         >
           {data.locationKeys.map(key => (
@@ -197,7 +202,7 @@ export default function Map({
           ))}
           <NavigationControl
             className="d-none d-md-block"
-            onViewportChange={setViewport}
+            onViewportChange={nextViewport => setViewport(nextViewport)}
             showCompass={false}
             style={{ top: 10, right: 10 }}
           />
