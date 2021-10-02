@@ -112,7 +112,8 @@ export default function Meeting({ state, setState, mapbox }) {
           !meeting.approximate &&
           m.isInPerson &&
           m.formatted_address === meeting.formatted_address
-      ),
+      )
+      .sort((a, b) => a.start - b.start),
   }));
 
   const groupWeekdays = settings.weekdays.map((weekday, index) => ({
@@ -124,7 +125,8 @@ export default function Meeting({ state, setState, mapbox }) {
           meeting.group &&
           (m.isOnline || m.isInPerson) &&
           m.group === meeting.group
-      ),
+      )
+      .sort((a, b) => a.start - b.start),
   }));
 
   return (
