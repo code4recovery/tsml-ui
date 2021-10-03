@@ -456,16 +456,24 @@ export function loadMeetingData(data, capabilities, debug, timezone) {
 
     meeting.isInPerson = !meeting.isTempClosed && !meeting.approximate;
 
+    meeting.isActive = meeting.isOnline || meeting.isInPerson;
+
     if (meeting.isInPerson) {
       meeting.types.push('in-person');
     }
 
-    //if neither online nor in person apply inactive
-    if (!meeting.isOnline && !meeting.isInPerson) {
+    if (meeting.isActive) {
+      meeting.types.push('active');
+    } else {
       capabilities.inactive = true;
       meeting.types.push('inactive');
-    } else {
-      meeting.types.push('active');
+    }
+
+    //if meeting is not in person, remove types that only apply to in-person meetings
+    if (!meeting.isInPerson) {
+      meeting.types = meeting.types.filter(
+        type => !settings.in_person_types.includes(type)
+      );
     }
 
     //check location/group capability
@@ -495,7 +503,7 @@ export function loadMeetingData(data, capabilities, debug, timezone) {
     }
 
     //build region index
-    if (!!meeting.regions.length) {
+    if (meeting.isActive && !!meeting.regions.length) {
       indexes.region = populateRegionsIndex(
         meeting.regions,
         0,
@@ -526,15 +534,17 @@ export function loadMeetingData(data, capabilities, debug, timezone) {
 
     //handle day and time
     if (meeting.day && meeting.time) {
-      //build day index
-      if (!indexes.weekday.hasOwnProperty(meeting.day)) {
-        indexes.weekday[meeting.day] = {
-          key: meeting.day,
-          name: strings[settings.weekdays[meeting.day]],
-          slugs: [],
-        };
+      if (meeting.isActive) {
+        //build day index
+        if (!indexes.weekday.hasOwnProperty(meeting.day)) {
+          indexes.weekday[meeting.day] = {
+            key: meeting.day,
+            name: strings[settings.weekdays[meeting.day]],
+            slugs: [],
+          };
+        }
+        indexes.weekday[meeting.day].slugs.push(meeting.slug);
       }
-      indexes.weekday[meeting.day].slugs.push(meeting.slug);
 
       //timezone
       meeting.timezone = checkTimezone(meeting.timezone, timezone);
@@ -550,39 +560,41 @@ export function loadMeetingData(data, capabilities, debug, timezone) {
           .tz(timezone);
       }
 
-      //time differences for sorting
-      const minutes_midnight =
-        meeting.start.get('hour') * 60 + meeting.start.get('minutes');
-      meeting.minutes_week = minutes_midnight + meeting.day * 1440;
-
       //build time index (can be multiple)
-      const times = [];
-      if (minutes_midnight >= 240 && minutes_midnight < 720) {
-        //4am–12pm
-        times.push(0); //morning
-      }
-      if (minutes_midnight >= 660 && minutes_midnight < 1020) {
-        //11am–5pm
-        times.push(1); //midday
-      }
-      if (minutes_midnight >= 960 && minutes_midnight < 1260) {
-        //4–9pm
-        times.push(2); //evening
-      }
-      if (minutes_midnight >= 1200 || minutes_midnight < 300) {
-        //8pm–5am
-        times.push(3); //night
-      }
-      times.forEach(time => {
-        if (!indexes.time.hasOwnProperty(time)) {
-          indexes.time[time] = {
-            key: settings.times[time],
-            name: strings[settings.times[time]],
-            slugs: [],
-          };
+      if (meeting.isActive) {
+        //time differences for sorting
+        const minutes_midnight =
+          meeting.start.get('hour') * 60 + meeting.start.get('minutes');
+        meeting.minutes_week = minutes_midnight + meeting.day * 1440;
+
+        const times = [];
+        if (minutes_midnight >= 240 && minutes_midnight < 720) {
+          //4am–12pm
+          times.push(0); //morning
         }
-        indexes.time[time].slugs.push(meeting.slug);
-      });
+        if (minutes_midnight >= 660 && minutes_midnight < 1020) {
+          //11am–5pm
+          times.push(1); //midday
+        }
+        if (minutes_midnight >= 960 && minutes_midnight < 1260) {
+          //4–9pm
+          times.push(2); //evening
+        }
+        if (minutes_midnight >= 1200 || minutes_midnight < 300) {
+          //8pm–5am
+          times.push(3); //night
+        }
+        times.forEach(time => {
+          if (!indexes.time.hasOwnProperty(time)) {
+            indexes.time[time] = {
+              key: settings.times[time],
+              name: strings[settings.times[time]],
+              slugs: [],
+            };
+          }
+          indexes.time[time].slugs.push(meeting.slug);
+        });
+      }
     }
 
     //clean up and sort types
@@ -605,8 +617,9 @@ export function loadMeetingData(data, capabilities, debug, timezone) {
           )
       : [];
 
-    //build type index (can be multiple)
-    meeting.types.forEach(type => {
+    //build type index (can be multiple) -- if inactive, only index the 'inactive' type
+    const typesToIndex = meeting.isActive ? meeting.types : ['inactive'];
+    typesToIndex.forEach(type => {
       if (!indexes.type.hasOwnProperty(type)) {
         indexes.type[type] = {
           key: formatSlug(strings.types[type]),
