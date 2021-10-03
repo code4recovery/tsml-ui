@@ -34,6 +34,19 @@ const defaults = {
   distance_unit: 'mi', //mi or km
   feedback_emails: [], //email addresses for update meeting info button
   filters: ['region', 'distance', 'weekday', 'time', 'type'],
+  in_person_types: [
+    'BA',
+    'BRK',
+    'CAN',
+    'CF',
+    'AL-AN',
+    'AL',
+    'FF',
+    'OUT',
+    'SM',
+    'X',
+    'XB',
+  ],
   language: 'en', //fallback language
   map: {
     markers: {
