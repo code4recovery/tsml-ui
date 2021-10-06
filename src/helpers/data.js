@@ -384,6 +384,14 @@ export function loadMeetingData(data, capabilities, debug, timezone) {
       return;
     }
 
+    //slug must be unique
+    if (meeting.slug in meetings) {
+      if (debug) {
+        console.warn(meeting.edit_url, `${meeting.slug} is a duplicate slug`);
+      }
+      return;
+    }
+
     //meeting name is required
     if (!meeting.name) {
       meeting.name = strings.unnamed_meeting;
