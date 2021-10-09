@@ -1,5 +1,9 @@
 import React, { useEffect, useRef, useState, useContext } from 'react';
-import mapboxgl from 'mapbox-gl';
+import mapboxgl from 'mapbox-gl/dist/mapbox-gl-csp';
+import MapboxWorker from 'web-worker:mapbox-gl/dist/mapbox-gl-csp-worker'; // Load worker code separately with worker-loader
+
+mapboxgl.workerClass = MapboxWorker;
+
 import ReactMapGL, { Marker, NavigationControl, Popup, MapContext } from 'react-map-gl';
 import WebMercatorViewport from 'viewport-mercator-project';
 import { formatDirectionsUrl, settings, strings } from '../helpers';

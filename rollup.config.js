@@ -23,10 +23,14 @@ export default [
     plugins: [
       external(),
       resolve(),
+      commonjs({
+        exclude: [
+          "src/**"
+        ]
+      }),
       babel({
         exclude: "node_modules/**"
       }),
-      commonjs(),
       scss({ output: true }),
       json()
     ]
@@ -40,10 +44,14 @@ export default [
     plugins: [
       external(),
       resolve(),
+      commonjs({
+        exclude: [
+          "src/**"
+        ]
+      }),
       babel({
         exclude: "node_modules/**"
       }),
-      commonjs(),
       scss({ output: true }),
       json(),
       uglify()
@@ -62,10 +70,14 @@ export default [
     plugins: [
       external(),
       resolve(),
+      commonjs({
+        exclude: [
+          "src/**"
+        ]
+      }),
       babel({
         exclude: "node_modules/**"
       }),
-      commonjs(),
       scss({ output: true }),
       json()
     ]
@@ -83,10 +95,14 @@ export default [
     plugins: [
       external(),
       resolve(),
+      commonjs({
+        exclude: [
+          "src/**"
+        ]
+      }),
       babel({
         exclude: "node_modules/**"
       }),
-      commonjs(),
       scss({ output: true }),
       json(),
       terser()
@@ -102,10 +118,14 @@ export default [
     plugins: [
       external(),
       resolve(),
+      commonjs({
+        exclude: [
+          "src/**"
+        ]
+      }),
       babel({
         exclude: "node_modules/**"
       }),
-      commonjs(),
       scss({ output: true }),
       json(),
     ]
@@ -119,11 +139,15 @@ export default [
     },
     plugins: [
       resolve(),
+      commonjs({
+        exclude: [
+          "src/**"
+        ]
+      }),
       babel({
         exclude: "node_modules/**"
       }),
       external(),
-      commonjs(),
       scss({ output: true }),
       json(),
       terser()

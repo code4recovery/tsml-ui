@@ -19,19 +19,24 @@ export default // LiveReload
     sourcemap: true
   },
   plugins: [
-    resolve({
-      extensions: [".js"],
-    }),
+    resolve(),
     replace({
       'process.env.NODE_ENV': JSON.stringify( 'development' )
     }),
-    babel({
-      exclude: "node_modules/**",
+    commonjs({
+      exclude: [
+        "src/**"
+      ]
     }),
-    commonjs(),
+    babel({
+      babelHelpers: 'bundled',
+      exclude: [
+        "node_modules/**"
+      ]
+    }),
+    webWorkerLoader(),
     json(),
     scss({ output: false }),
-    webWorkerLoader(),
     serve({
       open: true,
       verbose: true,
