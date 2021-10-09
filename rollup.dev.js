@@ -7,7 +7,6 @@ import replace from '@rollup/plugin-replace';
 import json from '@rollup/plugin-json';
 import scss from 'rollup-plugin-scss';
 import css from 'rollup-plugin-css-only';
-import webWorkerLoader from 'rollup-plugin-web-worker-loader';
 
 
 export default // LiveReload
@@ -26,9 +25,8 @@ export default // LiveReload
       'process.env.NODE_ENV': JSON.stringify( 'development' )
     }),
     babel({
-      presets: ["@babel/preset-react"],
+      exclude: "node_modules/**"
     }),
-    webWorkerLoader(),
     commonjs(),
     json(),
     scss({ output: true }),
