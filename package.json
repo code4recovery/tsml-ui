@@ -41,7 +41,7 @@
     "@popperjs/core": "^2.9.3",
     "bootstrap": "^5.1.0",
     "deepmerge": "^4.2.2",
-    "mapbox-gl": "1.13.2",
+    "mapbox-gl": "^2.5.1",
     "moment-timezone": "^0.5.33",
     "react-infinite-scroller": "^1.2.4",
     "react-map-gl": "^6.1.17"

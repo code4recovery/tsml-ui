@@ -135,10 +135,10 @@ export default function Map({
     <div className="border rounded bg-light flex-grow-1 map" ref={mapFrame}>
       {viewport && data.locationKeys.length ?
         <ReactMapGL
+          {...viewport}
           mapStyle={settings.map.style}
           mapboxApiAccessToken={mapbox}
           onViewportChange={nextViewport => setViewport(nextViewport)}
-          {...viewport}
         >
           <MapDebug />
           {data.locationKeys.map(key => (

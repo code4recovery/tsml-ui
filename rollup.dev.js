@@ -31,6 +31,7 @@ export default // LiveReload
     commonjs(),
     json(),
     scss({ output: false }),
+    webWorkerLoader(),
     serve({
       open: true,
       verbose: true,
