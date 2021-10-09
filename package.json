@@ -45,7 +45,7 @@
     "mapbox-gl": "1.13.2",
     "moment-timezone": "^0.5.33",
     "react-infinite-scroller": "^1.2.4",
-    "react-map-gl": "5.3.17"
+    "react-map-gl": "^6.1.17"
   },
   "peerDependencies": {
     "react": "^17.0.2",
