@@ -54,7 +54,9 @@ export default function TsmlUI({ json, mapbox, timezone }) {
   if (typeof window !== 'undefined') {
     useEffect(() => {
       const popstateListener = () => {
-        setState({ ...state, input: getQueryString(window.location.search) });
+        setState(prevState => {
+          return { ...prevState, input: getQueryString(window.location.search) }
+        });
       };
       window.addEventListener('popstate', popstateListener);
       return () => {
@@ -69,13 +71,15 @@ export default function TsmlUI({ json, mapbox, timezone }) {
     const cache = getCache(json, version);
 
     if (cache && !input.debug) {
-      setState({
-        ...state,
-        capabilities: cache.capabilities,
-        indexes: cache.indexes,
-        input: input,
-        loading: false,
-        meetings: cache.meetings,
+      setState(prevState => {
+        return {
+          ...prevState,
+          capabilities: cache.capabilities,
+          indexes: cache.indexes,
+          input: input,
+          loading: false,
+          meetings: cache.meetings,
+        }
       });
     } else {
       //fetch json data file and build indexes
@@ -83,7 +87,16 @@ export default function TsmlUI({ json, mapbox, timezone }) {
         .then(result => result.json())
         .then(
           result => {
-            //checks if src is google sheet and translates it if so
+       prevState => {
+        return {
+        ...state,
+        capabilities: cache.capabilities,
+        indexes: cache.indexes,
+        input: input,
+        loading: false,
+        meetings: cache.meetings,
+      }
+       }     //checks if src is google sheet and translates it if so
             if (json.includes('spreadsheets.google.com')) {
               result = translateGoogleSheet(result, json);
             } else if (json.includes('nocodeapi.com')) {

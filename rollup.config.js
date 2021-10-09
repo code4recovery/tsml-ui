@@ -1,22 +1,16 @@
-import babel from "rollup-plugin-babel";
-import commonjs from "rollup-plugin-commonjs";
-import resolve from "rollup-plugin-node-resolve";
+import babel from "@rollup/plugin-babel";
+import commonjs from "@rollup/plugin-commonjs";
+import resolve from "@rollup/plugin-node-resolve";
 import external from "rollup-plugin-peer-deps-external";
 import scss from 'rollup-plugin-scss';
 import { terser } from "rollup-plugin-terser";
 import { uglify } from "rollup-plugin-uglify";
-import css from 'rollup-plugin-css-only';
 import json from '@rollup/plugin-json';
+import webWorkerLoader from 'rollup-plugin-web-worker-loader';
 
 import packageJSON from "./package.json";
 const input = "./src/index.js";
 const minifyExtension = pathToFile => pathToFile.replace(/\.js$/, ".min.js");
-const common_cfg = {
-  namedExports: {
-    'node_modules/react/index.js': ['Component', 'PureComponent', 'Fragment', 'Children', 'createElement', 'useEffect', 'useRef', 'useState', 'createContext', 'useContext', 'useLayoutEffect', 'useCallback', 'useImperativeHandle', 'forwardRef', 'useMemo', 'cloneElement', 'createRef', 'memo'],
-    'node_modules/prop-types/index.js': ['bool', 'object', 'func', 'string', 'checkPropTypes', 'oneOf', 'number', 'instanceOf', 'array', 'oneOfType', 'arrayOf']
-  }
-}
 
 export default [
   // CommonJS
@@ -29,12 +23,15 @@ export default [
     plugins: [
       external(),
       resolve(),
+      commonjs({
+        exclude: [
+          "src/**"
+        ]
+      }),
       babel({
         exclude: "node_modules/**"
       }),
-      commonjs(common_cfg),
       scss({ output: true }),
-      css({ output: true }),
       json()
     ]
   },
@@ -47,12 +44,15 @@ export default [
     plugins: [
       external(),
       resolve(),
+      commonjs({
+        exclude: [
+          "src/**"
+        ]
+      }),
       babel({
         exclude: "node_modules/**"
       }),
-      commonjs(common_cfg),
       scss({ output: true }),
-      css({ output: true }),
       json(),
       uglify()
     ]
@@ -70,12 +70,15 @@ export default [
     plugins: [
       external(),
       resolve(),
+      commonjs({
+        exclude: [
+          "src/**"
+        ]
+      }),
       babel({
         exclude: "node_modules/**"
       }),
-      commonjs(common_cfg),
       scss({ output: true }),
-      css({ output: true }),
       json()
     ]
   },
@@ -92,12 +95,15 @@ export default [
     plugins: [
       external(),
       resolve(),
+      commonjs({
+        exclude: [
+          "src/**"
+        ]
+      }),
       babel({
         exclude: "node_modules/**"
       }),
-      commonjs(common_cfg),
       scss({ output: true }),
-      css({ output: true }),
       json(),
       terser()
     ]
@@ -112,12 +118,15 @@ export default [
     plugins: [
       external(),
       resolve(),
+      commonjs({
+        exclude: [
+          "src/**"
+        ]
+      }),
       babel({
         exclude: "node_modules/**"
       }),
-      commonjs(common_cfg),
       scss({ output: true }),
-      css({ output: true }),
       json(),
     ]
   },
@@ -130,13 +139,16 @@ export default [
     },
     plugins: [
       resolve(),
+      commonjs({
+        exclude: [
+          "src/**"
+        ]
+      }),
       babel({
         exclude: "node_modules/**"
       }),
       external(),
-      commonjs(common_cfg),
       scss({ output: true }),
-      css({ output: true }),
       json(),
       terser()
     ]

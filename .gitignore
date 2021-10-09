@@ -1,6 +1,7 @@
+yarn-error.log
 /node_modules
-/public
 /lib
+/dist
 mix-manifest.json
 npm-debug.log
 package-lock.json
