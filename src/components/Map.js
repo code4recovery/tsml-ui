@@ -1,4 +1,7 @@
 import React, { useEffect, useRef, useState, useContext } from 'react';
+import mapboxgl from 'mapbox-gl'; // This is a dependency of react-map-gl even if you didn't explicitly install it
+import MapboxWorker from 'web-worker:mapbox-gl/dist/mapbox-gl-csp-worker'
+mapboxgl.workerClass = MapboxWorker
 import ReactMapGL, { Marker, NavigationControl, Popup, MapContext } from 'react-map-gl';
 import WebMercatorViewport from 'viewport-mercator-project';
 import { formatDirectionsUrl, settings, strings } from '../helpers';
@@ -128,17 +131,18 @@ export default function Map({
     );
   }, [data, dimensions]);
 
-  console.log(mapbox, viewport)
+  console.log(viewport, mapbox)
 
   return (
     <div className="border rounded bg-light flex-grow-1 map" ref={mapFrame}>
       {viewport && data.locationKeys.length ?
         <ReactMapGL
-          {...viewport}
           mapStyle={settings.map.style}
           mapboxApiAccessToken={mapbox}
           onViewportChange={nextViewport => setViewport(nextViewport)}
+          {...viewport}
         >
+          <MapDebug />
           {data.locationKeys.map(key => (
             <div key={key}>
               <Marker
