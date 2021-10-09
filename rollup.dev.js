@@ -26,12 +26,11 @@ export default // LiveReload
       'process.env.NODE_ENV': JSON.stringify( 'development' )
     }),
     babel({
-      presets: ["@babel/preset-react"],
+      exclude: "node_modules/**",
     }),
-    webWorkerLoader(),
     commonjs(),
     json(),
-    scss({ output: true }),
+    scss({ output: false }),
     serve({
       open: true,
       verbose: true,

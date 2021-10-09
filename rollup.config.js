@@ -21,7 +21,6 @@ export default [
       format: "cjs"
     },
     plugins: [
-      webWorkerLoader(),
       external(),
       resolve(),
       babel({
@@ -39,7 +38,6 @@ export default [
       format: "cjs"
     },
     plugins: [
-      webWorkerLoader(),
       external(),
       resolve(),
       babel({
@@ -62,7 +60,6 @@ export default [
       }
     },
     plugins: [
-      webWorkerLoader(),
       external(),
       resolve(),
       babel({
@@ -84,7 +81,6 @@ export default [
       }
     },
     plugins: [
-      webWorkerLoader(),
       external(),
       resolve(),
       babel({
@@ -104,7 +100,6 @@ export default [
       exports: "named"
     },
     plugins: [
-      webWorkerLoader(),
       external(),
       resolve(),
       babel({
@@ -127,7 +122,6 @@ export default [
       babel({
         exclude: "node_modules/**"
       }),
-      webWorkerLoader(),
       external(),
       commonjs(),
       scss({ output: true }),

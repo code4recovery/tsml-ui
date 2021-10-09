@@ -1,7 +1,5 @@
 import React, { useEffect, useRef, useState, useContext } from 'react';
-import mapboxgl from 'mapbox-gl'; // This is a dependency of react-map-gl even if you didn't explicitly install it
-import MapboxWorker from 'web-worker:mapbox-gl/dist/mapbox-gl-csp-worker'
-mapboxgl.workerClass = MapboxWorker
+import mapboxgl from 'mapbox-gl';
 import ReactMapGL, { Marker, NavigationControl, Popup, MapContext } from 'react-map-gl';
 import WebMercatorViewport from 'viewport-mercator-project';
 import { formatDirectionsUrl, settings, strings } from '../helpers';
