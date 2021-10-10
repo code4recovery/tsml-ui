@@ -64,7 +64,7 @@ export default function TsmlUI({ json, mapbox, timezone }) {
     const input = getQueryString();
     const cache = getCache(json, version);
 
-    if (cache && !input.debug) {
+    if (cache) {
       setState({
         ...state,
         capabilities: cache.capabilities,
@@ -89,7 +89,6 @@ export default function TsmlUI({ json, mapbox, timezone }) {
             const [meetings, indexes, capabilities] = loadMeetingData(
               result,
               state.capabilities,
-              input.debug,
               timezone
             );
 

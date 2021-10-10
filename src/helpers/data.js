@@ -197,9 +197,7 @@ export function filterMeetingData(state, setState, mapbox) {
             );
           },
           error => {
-            if (state.input.debug) {
-              console.warn('getCurrentPosition() error', error);
-            }
+            console.warn('getCurrentPosition() error', error);
           },
           { timeout: 5000 }
         );
@@ -313,6 +311,7 @@ function getCommonElements(arrays) {
 
 //get meetings, indexes, and capabilities from session storage, keyed by JSON URL
 export function getCache(json, version) {
+  if (!settings.cache) return;
   const cache = JSON.parse(
     window.sessionStorage.getItem(getCacheName(json, version))
   );
@@ -335,7 +334,7 @@ function getCacheName(json, version) {
 }
 
 //set up meeting data; this is only run once when the app loads
-export function loadMeetingData(data, capabilities, debug, timezone) {
+export function loadMeetingData(data, capabilities, timezone) {
   //meetings is a lookup
   const meetings = {};
 
@@ -378,17 +377,13 @@ export function loadMeetingData(data, capabilities, debug, timezone) {
 
     //slug is required
     if (!meeting.slug) {
-      if (debug) {
-        console.warn(meeting.edit_url, 'no slug');
-      }
+      console.warn(meeting.edit_url, 'no slug');
       return;
     }
 
     //slug must be unique
     if (meeting.slug in meetings) {
-      if (debug) {
-        console.warn(meeting.edit_url, `${meeting.slug} is a duplicate slug`);
-      }
+      console.warn(meeting.edit_url, `${meeting.slug} is a duplicate slug`);
       return;
     }
 
@@ -402,7 +397,7 @@ export function loadMeetingData(data, capabilities, debug, timezone) {
       ? formatConferenceProvider(meeting.conference_url)
       : null;
 
-    if (meeting.conference_url && !meeting.conference_provider && debug) {
+    if (meeting.conference_url && !meeting.conference_provider) {
       console.warn(
         meeting.edit_url,
         `unknown conference_url: ${meeting.conference_url}`
@@ -646,18 +641,14 @@ export function loadMeetingData(data, capabilities, debug, timezone) {
     //7th tradition validation
     if (meeting.venmo) {
       if (!meeting.venmo.startsWith('@')) {
-        if (debug) {
-          console.warn(meeting.edit_url, `invalid venmo: ${meeting.venmo}`);
-        }
+        console.warn(meeting.edit_url, `invalid venmo: ${meeting.venmo}`);
         meeting.venmo = null;
       }
     }
 
     if (meeting.square) {
       if (!meeting.square.startsWith('$')) {
-        if (debug) {
-          console.warn(meeting.edit_url, `invalid square: ${meeting.square}`);
-        }
+        console.warn(meeting.edit_url, `invalid square: ${meeting.square}`);
         meeting.square = null;
       }
     }
@@ -667,9 +658,7 @@ export function loadMeetingData(data, capabilities, debug, timezone) {
         !meeting.paypal.startsWith('https://www.paypal.me') &&
         !meeting.paypal.startsWith('https://paypal.me')
       ) {
-        if (debug) {
-          console.warn(meeting.edit_url, `invalid paypal: ${meeting.paypal}`);
-        }
+        console.warn(meeting.edit_url, `invalid paypal: ${meeting.paypal}`);
         meeting.paypal = null;
       }
     }
@@ -803,6 +792,7 @@ function processSearchTerms(input) {
 
 //set meetings, indexes, and capabilities to session storage, keyed by JSON URL
 export function setCache(json, version, meetings, indexes, capabilities) {
+  if (!settings.cache) return;
   window.sessionStorage.setItem(
     getCacheName(json, version),
     JSON.stringify({ meetings, indexes, capabilities })
