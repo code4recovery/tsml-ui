@@ -311,6 +311,7 @@ function getCommonElements(arrays) {
   return arrays.shift().filter(v => arrays.every(a => a.indexOf(v) !== -1));
 }
 
+/*
 //get meetings, indexes, and capabilities from session storage, keyed by JSON URL
 export function getCache(json, version) {
   const cache = JSON.parse(
@@ -333,6 +334,7 @@ export function getCache(json, version) {
 function getCacheName(json, version) {
   return `${json}${json.includes('?') ? '&' : '?'}v=${version}`;
 }
+*/
 
 //set up meeting data; this is only run once when the app loads
 export function loadMeetingData(data, capabilities, debug, timezone) {
@@ -801,6 +803,7 @@ function processSearchTerms(input) {
     .filter(e => e.length);
 }
 
+/*
 //set meetings, indexes, and capabilities to session storage, keyed by JSON URL
 export function setCache(json, version, meetings, indexes, capabilities) {
   window.sessionStorage.setItem(
@@ -808,6 +811,7 @@ export function setCache(json, version, meetings, indexes, capabilities) {
     JSON.stringify({ meetings, indexes, capabilities })
   );
 }
+*/
 
 //set minutes
 export function setMinutesNow(meetings) {

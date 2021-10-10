@@ -7,10 +7,10 @@ import { Alert, Controls, Loading, Map, Meeting, Table, Title } from './';
 
 import {
   filterMeetingData,
-  getCache,
+  //getCache,
   getQueryString,
   loadMeetingData,
-  setCache,
+  //setCache,
   setMinutesNow,
   translateGoogleSheet,
   translateNoCodeAPI,
@@ -62,6 +62,7 @@ export default function TsmlUI({ json, mapbox, timezone }) {
   //load data once from json
   if (state.loading) {
     const input = getQueryString();
+    /*
     const cache = getCache(json, version);
 
     if (cache && !input.debug) {
@@ -74,47 +75,48 @@ export default function TsmlUI({ json, mapbox, timezone }) {
         meetings: cache.meetings,
       });
     } else {
-      //fetch json data file and build indexes
-      fetch(json)
-        .then(result => result.json())
-        .then(
-          result => {
-            //checks if src is google sheet and translates it if so
-            if (json.includes('spreadsheets.google.com')) {
-              result = translateGoogleSheet(result, json);
-            } else if (json.includes('nocodeapi.com')) {
-              result = translateNoCodeAPI(result);
-            }
-
-            const [meetings, indexes, capabilities] = loadMeetingData(
-              result,
-              state.capabilities,
-              input.debug,
-              timezone
-            );
-
-            setCache(json, version, meetings, indexes, capabilities);
-
-            setState({
-              ...state,
-              capabilities: capabilities,
-              indexes: indexes,
-              meetings: meetings,
-              loading: false,
-              input: input,
-            });
-          },
-          error => {
-            console.error(`JSON ${error}`);
-            setState({
-              ...state,
-              error: json ? 'bad_data' : 'no_data',
-              input: input,
-              loading: false,
-            });
+      */
+    //fetch json data file and build indexes
+    fetch(json)
+      .then(result => result.json())
+      .then(
+        result => {
+          //checks if src is google sheet and translates it if so
+          if (json.includes('spreadsheets.google.com')) {
+            result = translateGoogleSheet(result, json);
+          } else if (json.includes('nocodeapi.com')) {
+            result = translateNoCodeAPI(result);
           }
-        );
-    }
+
+          const [meetings, indexes, capabilities] = loadMeetingData(
+            result,
+            state.capabilities,
+            input.debug,
+            timezone
+          );
+
+          //setCache(json, version, meetings, indexes, capabilities);
+
+          setState({
+            ...state,
+            capabilities: capabilities,
+            indexes: indexes,
+            meetings: meetings,
+            loading: false,
+            input: input,
+          });
+        },
+        error => {
+          console.error(`JSON ${error}`);
+          setState({
+            ...state,
+            error: json ? 'bad_data' : 'no_data',
+            input: input,
+            loading: false,
+          });
+        }
+      );
+    //}
 
     return (
       <div className="tsml-ui">
