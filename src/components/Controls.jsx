@@ -59,7 +59,6 @@ export default function Controls({ state, setState, mapbox }) {
         category: 'search',
         action: state.input.mode,
         label: search,
-        debug: state.input.debug,
       });
     }, 2000);
     return () => clearTimeout(timer);

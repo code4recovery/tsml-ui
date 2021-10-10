@@ -26,11 +26,6 @@ export default function Meeting({ state, setState, mapbox }) {
     document.getElementById('tsml-ui')?.scrollIntoView();
   }, [state.input.meeting]);
 
-  //log meeting record in debug mode
-  if (state.input.debug) {
-    console.log(meeting);
-  }
-
   //directions URL link
   const directionsUrl = meeting.isInPerson
     ? formatDirectionsUrl(meeting)

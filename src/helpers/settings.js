@@ -6,6 +6,7 @@ import fr from '../i18n/fr';
 
 //override these on your page with tsml_react_config
 const defaults = {
+  cache: false,
   conference_providers: {
     'bluejeans.com': 'Bluejeans',
     'freeconference.com': 'Free Conference',
@@ -20,7 +21,6 @@ const defaults = {
     'zoom.us': 'Zoom',
   },
   defaults: {
-    debug: false,
     distance: [],
     meeting: null,
     mode: 'search',
@@ -62,7 +62,7 @@ const defaults = {
     style: 'mapbox://styles/mapbox/streets-v9',
   },
   now_offset: -10, //"now" includes meetings that started in the last 10 minutes
-  params: ['search', 'mode', 'view', 'meeting', 'debug'], //input other than filters
+  params: ['search', 'mode', 'view', 'meeting'], //input other than filters
   show: {
     controls: true, //whether to show search + dropdowns + list/map
     listButtons: false, //show conference buttons in list or show labels
