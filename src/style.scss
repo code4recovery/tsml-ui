@@ -278,6 +278,10 @@ div.tsml-ui {
       }
     }
 
+    tbody.tsml-in-progress {
+      opacity: .5;
+    }
+
     //mobile view
     @include media-breakpoint-down(md) {
       tr {

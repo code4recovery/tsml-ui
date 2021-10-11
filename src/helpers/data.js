@@ -257,6 +257,15 @@ export function filterMeetingData(state, setState, mapbox) {
   return filteredSlugs;
 }
 
+//get any inprogress meetings
+export function inProgressSlugs(state) {
+  return Object.keys(state.meetings).filter(
+    slug =>
+      state.meetings[slug].start.isBefore() &&
+      state.meetings[slug].end.isAfter()
+  );
+}
+
 //find an index by key
 export function getIndexByKey(indexes, key) {
   for (const index of indexes) {

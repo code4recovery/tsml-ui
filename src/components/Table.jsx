@@ -10,7 +10,7 @@ import {
 import Button from './Button';
 import Link from './Link';
 
-export default function Table({ state, setState, filteredSlugs }) {
+export default function Table({ state, setState, filteredSlugs, inProgress }) {
   const meetingsPerPage = 10;
   const [limit, setLimit] = useState(meetingsPerPage);
 
@@ -93,6 +93,32 @@ export default function Table({ state, setState, filteredSlugs }) {
     return meeting[key];
   };
 
+  const Row = ({ slug, index }) => {
+    const meeting = state.meetings[slug];
+    return (
+      <tr
+        className="d-block d-md-table-row"
+        key={index}
+        onClick={() => {
+          if (settings.show.listButtons) return;
+          setState({
+            ...state,
+            input: {
+              ...state.input,
+              meeting: meeting.slug,
+            },
+          });
+        }}
+      >
+        {columns.map((column, index) => (
+          <td className={cx('d-block d-md-table-cell', column)} key={index}>
+            {getValue(meeting, column)}
+          </td>
+        ))}
+      </tr>
+    );
+  };
+
   return (
     !!filteredSlugs.length && (
       <div className="row">
@@ -110,6 +136,14 @@ export default function Table({ state, setState, filteredSlugs }) {
               ))}
             </tr>
           </thead>
+          {inProgress && (
+            <tbody className="tsml-in-progress">
+              {inProgress &&
+                inProgress.map((slug, index) => (
+                  <Row slug={slug} index={index} />
+                ))}
+            </tbody>
+          )}
           <InfiniteScroll
             element="tbody"
             loadMore={() => {
@@ -117,34 +151,9 @@ export default function Table({ state, setState, filteredSlugs }) {
             }}
             hasMore={filteredSlugs.length > limit}
           >
-            {filteredSlugs.slice(0, limit).map((slug, index) => {
-              const meeting = state.meetings[slug];
-              return (
-                <tr
-                  className="d-block d-md-table-row"
-                  key={index}
-                  onClick={() => {
-                    if (settings.show.listButtons) return;
-                    setState({
-                      ...state,
-                      input: {
-                        ...state.input,
-                        meeting: meeting.slug,
-                      },
-                    });
-                  }}
-                >
-                  {columns.map((column, index) => (
-                    <td
-                      className={cx('d-block d-md-table-cell', column)}
-                      key={index}
-                    >
-                      {getValue(meeting, column)}
-                    </td>
-                  ))}
-                </tr>
-              );
-            })}
+            {filteredSlugs.slice(0, limit).map((slug, index) => (
+              <Row slug={slug} index={index} />
+            ))}
           </InfiniteScroll>
         </table>
       </div>
