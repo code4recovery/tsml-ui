@@ -222,7 +222,7 @@ div.tsml-ui {
         .mapboxgl-popup-close-button {
           background: white;
           border-radius: 100%;
-          border: 1px solid #eee;
+          border: 1px solid $gray-300;
           color: $gray-500;
           font-size: 1.5rem;
           height: 30px;
@@ -274,23 +274,42 @@ div.tsml-ui {
     &.clickable-rows tbody tr:hover {
       cursor: pointer;
       a {
-        color: #024dbc;
+        color: $blue-700;
       }
     }
 
-    tbody.tsml-in-progress {
-      tr:last-child td {
-        border-bottom-color: $cyan-100;
+    //when whole row is clickable
+    &.clickable-rows tbody.tsml-in-progress tr:hover {
+      a {
+        color: $yellow-800;
       }
-      tr:nth-of-type(odd) {
-        background-color: tint-color($cyan, 90%);
-      }      
+    }
+
+    //in-progress meetings
+    tbody.tsml-in-progress {
+      tr {
+        background-color: tint-color($cyan, 95%);
+        border-bottom-color: $cyan-200;
+        td {
+          border-bottom-color: $cyan-200 !important;
+        }
+        a {
+          color: $cyan-700;
+          &:hover a {
+            color: $cyan-800;
+          }
+        }
+        &:nth-of-type(odd) {
+          background-color: tint-color($cyan, 90%);
+        }
+      }
     }
 
     //mobile view
     @include media-breakpoint-down(md) {
+      border-top: 1px solid $secondary;
       tr {
-        border-top: 1px solid $table-border-color;
+        border-bottom: 1px solid $table-border-color;
         padding: 0.5rem 1rem;
         position: relative;
 

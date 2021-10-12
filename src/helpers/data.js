@@ -257,12 +257,15 @@ export function filterMeetingData(state, setState, mapbox) {
   //sort slugs
   filteredSlugs.sort(sortMeetings);
 
+  //find in-progress meetings
   const now = moment();
-  const inProgress = Object.keys(state.meetings)
+  const inProgress = filteredSlugs
     .filter(
       slug =>
-        state.meetings[slug].start.diff(now, 'minutes') <
-          0 - settings.now_offset && state.meetings[slug].end.isAfter()
+        state.meetings[slug].start?.diff(now, 'minutes') <
+          settings.now_offset &&
+        state.meetings[slug].end?.isAfter() &&
+        !state.meetings[slug].types.includes('inactive')
     )
     .sort(sortMeetings);
 

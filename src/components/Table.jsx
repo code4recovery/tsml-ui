@@ -13,6 +13,7 @@ import Link from './Link';
 export default function Table({ state, setState, filteredSlugs, inProgress }) {
   const meetingsPerPage = 10;
   const [limit, setLimit] = useState(meetingsPerPage);
+  const [showInProgress, setShowInProgress] = useState(false);
 
   //show columns based on capabilities
   const columns = ['time', 'distance', 'name', 'location', 'address', 'region']
@@ -135,12 +136,27 @@ export default function Table({ state, setState, filteredSlugs, inProgress }) {
               ))}
             </tr>
           </thead>
-          {inProgress && (
+          {!!inProgress.length && (
             <tbody className="tsml-in-progress">
-              {inProgress &&
-                inProgress.map((slug, index) => (
-                  <Row slug={slug} key={index} />
-                ))}
+              {showInProgress ? (
+                inProgress.map((slug, index) => <Row slug={slug} key={index} />)
+              ) : (
+                <tr>
+                  <td colspan={columns.length}>
+                    <a
+                      onClick={() => setShowInProgress(true)}
+                      className="d-block text-center py-3 py-md-1"
+                    >
+                      {inProgress.length === 1
+                        ? strings.in_progress_single
+                        : strings.in_progress_multiple.replace(
+                            '%count%',
+                            inProgress.length
+                          )}
+                    </a>
+                  </td>
+                </tr>
+              )}
             </tbody>
           )}
           <InfiniteScroll
