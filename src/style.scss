@@ -279,7 +279,12 @@ div.tsml-ui {
     }
 
     tbody.tsml-in-progress {
-      opacity: .5;
+      tr:last-child td {
+        border-bottom-color: $cyan-100;
+      }
+      tr:nth-of-type(odd) {
+        background-color: tint-color($cyan, 90%);
+      }      
     }
 
     //mobile view

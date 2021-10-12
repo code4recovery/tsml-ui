@@ -9,7 +9,6 @@ import {
   filterMeetingData,
   getCache,
   getQueryString,
-  inProgressSlugs,
   loadMeetingData,
   setCache,
   setMinutesNow,
@@ -130,10 +129,11 @@ export default function TsmlUI({ json, mapbox, timezone }) {
   state.meetings = setMinutesNow(state.meetings);
 
   //filter data
-  const filteredSlugs = filterMeetingData(state, setState, mapbox);
-
-  //get in-progress meetings
-  const inProgress = inProgressSlugs(state);
+  const [filteredSlugs, inProgress] = filterMeetingData(
+    state,
+    setState,
+    mapbox
+  );
 
   //show alert?
   state.alert = !filteredSlugs.length ? 'no_results' : null;

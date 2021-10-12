@@ -93,12 +93,11 @@ export default function Table({ state, setState, filteredSlugs, inProgress }) {
     return meeting[key];
   };
 
-  const Row = ({ slug, index }) => {
+  const Row = ({ slug }) => {
     const meeting = state.meetings[slug];
     return (
       <tr
         className="d-block d-md-table-row"
-        key={index}
         onClick={() => {
           if (settings.show.listButtons) return;
           setState({
@@ -140,7 +139,7 @@ export default function Table({ state, setState, filteredSlugs, inProgress }) {
             <tbody className="tsml-in-progress">
               {inProgress &&
                 inProgress.map((slug, index) => (
-                  <Row slug={slug} index={index} />
+                  <Row slug={slug} key={index} />
                 ))}
             </tbody>
           )}
@@ -152,7 +151,7 @@ export default function Table({ state, setState, filteredSlugs, inProgress }) {
             hasMore={filteredSlugs.length > limit}
           >
             {filteredSlugs.slice(0, limit).map((slug, index) => (
-              <Row slug={slug} index={index} />
+              <Row slug={slug} key={index} />
             ))}
           </InfiniteScroll>
         </table>
