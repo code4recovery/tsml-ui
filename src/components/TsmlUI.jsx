@@ -129,7 +129,11 @@ export default function TsmlUI({ json, mapbox, timezone }) {
   state.meetings = setMinutesNow(state.meetings);
 
   //filter data
-  const filteredSlugs = filterMeetingData(state, setState, mapbox);
+  const [filteredSlugs, inProgress] = filterMeetingData(
+    state,
+    setState,
+    mapbox
+  );
 
   //show alert?
   state.alert = !filteredSlugs.length ? 'no_results' : null;
@@ -156,6 +160,7 @@ export default function TsmlUI({ json, mapbox, timezone }) {
                 state={state}
                 setState={setState}
                 filteredSlugs={filteredSlugs}
+                inProgress={inProgress}
               />
             )}
             {filteredSlugs && state.input.view === 'map' && (
