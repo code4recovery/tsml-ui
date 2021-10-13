@@ -271,36 +271,37 @@ div.tsml-ui {
     }
 
     //when whole row is clickable
-    &.clickable-rows tbody tr:hover {
-      cursor: pointer;
-      a {
-        color: $blue-700;
+    &.clickable-rows tbody {
+      tr:hover {
+        cursor: pointer;
+        a {
+          color: $blue-700;
+        }
       }
-    }
-
-    //when whole row is clickable
-    &.clickable-rows tbody.tsml-in-progress tr:hover {
-      a {
-        color: $yellow-800;
+      &.tsml-in-progress tr:hover {
+        a {
+          color: $yellow-800;
+        }
       }
     }
 
     //in-progress meetings
     tbody.tsml-in-progress {
       tr {
-        background-color: tint-color($cyan, 95%);
-        border-bottom-color: $cyan-200;
+        background-color: tint-color($yellow, 95%);
+        border-bottom-color: $yellow-200;
         td {
-          border-bottom-color: $cyan-200 !important;
+          border-bottom-color: $yellow-200 !important;
         }
         a {
-          color: $cyan-700;
-          &:hover a {
-            color: $cyan-800;
+          color: $yellow-700;
+          cursor: pointer;
+          &:hover {
+            color: $yellow-800;
           }
         }
         &:nth-of-type(odd) {
-          background-color: tint-color($cyan, 90%);
+          background-color: tint-color($yellow, 90%);
         }
       }
     }
