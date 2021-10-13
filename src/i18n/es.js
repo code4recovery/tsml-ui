@@ -20,6 +20,8 @@ export default {
   feedback: 'Actualizar la información de la reunión',
   friday: 'Viernes',
   get_directions: 'Obtener las direcciones',
+  in_progress_single: '1 reunión en curso',
+  in_progress_multiple: '%count% reuniones en curso',
   location: 'Ubicación / Grupo',
   meeting_information: 'Información de la reunión',
   meetings: 'Reuniones',

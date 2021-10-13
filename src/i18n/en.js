@@ -19,6 +19,8 @@ export default {
   feedback: 'Update Meeting Info',
   friday: 'Friday',
   get_directions: 'Get Directions',
+  in_progress_single: '1 meeting in progress',
+  in_progress_multiple: '%count% meetings in progress',
   location: 'Location / Group',
   meeting_information: 'Meeting Information',
   meetings: 'Meetings',

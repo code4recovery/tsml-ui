@@ -210,8 +210,8 @@ export function filterMeetingData(state, setState, mapbox) {
     ? getCommonElements(Object.values(matchGroups)) //get intersection of slug arrays
     : Object.keys(state.meetings); //get everything
 
-  //sort slugs
-  filteredSlugs.sort((a, b) => {
+  //custom sort function
+  const sortMeetings = (a, b) => {
     const meetingA = state.meetings[a];
     const meetingB = state.meetings[b];
 
@@ -252,9 +252,24 @@ export function filterMeetingData(state, setState, mapbox) {
     }
 
     return 0;
-  });
+  };
 
-  return filteredSlugs;
+  //sort slugs
+  filteredSlugs.sort(sortMeetings);
+
+  //find in-progress meetings
+  const now = moment();
+  const inProgress = filteredSlugs
+    .filter(
+      slug =>
+        state.meetings[slug].start?.diff(now, 'minutes') <
+          settings.now_offset &&
+        state.meetings[slug].end?.isAfter() &&
+        !state.meetings[slug].types.includes('inactive')
+    )
+    .sort(sortMeetings);
+
+  return [filteredSlugs, inProgress];
 }
 
 //find an index by key
