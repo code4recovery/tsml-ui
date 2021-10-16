@@ -482,6 +482,8 @@ export function loadMeetingData(data, capabilities, timezone) {
 
     if (meeting.isActive) {
       meeting.types.push('active');
+    } else if (!settings.show.inactive) {
+      return;
     } else {
       capabilities.inactive = true;
       meeting.types.push('inactive');
