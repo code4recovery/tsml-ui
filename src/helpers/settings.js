@@ -7,6 +7,7 @@ import fr from '../i18n/fr';
 //override these on your page with tsml_react_config
 const defaults = {
   cache: false,
+  columns: ['time', 'distance', 'name', 'location_group', 'address', 'region'],
   conference_providers: {
     'bluejeans.com': 'Bluejeans',
     'freeconference.com': 'Free Conference',
@@ -94,6 +95,11 @@ const settings =
 //flags can be specified to override the default. also [] means unset
 if (!Array.isArray(settings.flags)) {
   settings.flags = ['M', 'W'];
+}
+
+//columns can be specified to override the default
+if (Array.isArray(tsml_react_config?.columns)) {
+  settings.columns = tsml_react_config.columns;
 }
 
 const preferredLanguage = navigator.language.substr(0, 2);

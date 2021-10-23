@@ -16,9 +16,13 @@ export default function Table({ state, setState, filteredSlugs, inProgress }) {
   const [showInProgress, setShowInProgress] = useState(false);
 
   //show columns based on capabilities
-  const columns = ['time', 'distance', 'name', 'location', 'address', 'region']
+  const columns = settings.columns
     .filter(column => column !== 'region' || state.capabilities.region)
-    .filter(column => column !== 'location' || state.capabilities.location)
+    .filter(
+      column =>
+        (column !== 'location' && column !== 'location_group') ||
+        state.capabilities.location
+    )
     .filter(column => column !== 'distance' || state.capabilities.distance);
 
   const getValue = (meeting, key) => {
@@ -73,7 +77,7 @@ export default function Table({ state, setState, filteredSlugs, inProgress }) {
           <small className="ms-1 text-muted">{settings.distance_unit}</small>
         </>
       ) : null;
-    } else if (key === 'location') {
+    } else if (key === 'location_group') {
       return meeting.isInPerson ? meeting.location : meeting.group;
     } else if (key === 'name' && meeting.slug) {
       return <Link meeting={meeting} state={state} setState={setState} />;
