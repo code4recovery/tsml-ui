@@ -15,8 +15,9 @@ export default // LiveReload
   input: "src/app.js",
   output: {
     file: "dist/bundle.js",
-    format: "esm",
-    sourcemap: true
+    format: "cjs",
+    sourcemap: true,
+    inlineDynamicImports: true,
   },
   plugins: [
     resolve(),
