@@ -66,7 +66,6 @@ const defaults = {
   params: ['search', 'mode', 'view', 'meeting'], //input other than filters
   show: {
     controls: true, //whether to show search + dropdowns + list/map
-    inactive: true, //whether to show inactive meetings
     listButtons: false, //show conference buttons in list or show labels
     title: true, //whether to display the title h1
   },
@@ -98,7 +97,10 @@ if (!Array.isArray(settings.flags)) {
 }
 
 //columns can be specified to override the default
-if (Array.isArray(tsml_react_config?.columns)) {
+if (
+  typeof tsml_react_config === 'object' &&
+  Array.isArray(tsml_react_config?.columns)
+) {
   settings.columns = tsml_react_config.columns;
 }
 
