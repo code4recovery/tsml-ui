@@ -74,7 +74,7 @@ export default function TsmlUI({ json, mapbox, timezone, google }) {
         meetings: cache.meetings,
       });
     } else {
-      if (json.includes('docs.google.com')) {
+      if (json.startsWith('https://docs.google.com/spreadsheets/d/')) {
         json = `https://sheets.googleapis.com/v4/spreadsheets/${
           json.split('/')[5]
         }/values/A1:ZZ?key=${google}`;
