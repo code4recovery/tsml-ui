@@ -835,48 +835,29 @@ export function translateGoogleSheet(data, json) {
 
   const meetings = [];
 
-  //properties with underscores (google doesn't support them)
-  const spec_properties_phrases = spec_properties.filter(key =>
-    key.includes('_')
-  );
+  const headers = data.values
+    .shift()
+    .map(header => formatSlug(header).replaceAll('-', '_'))
+    .map(header => (header === 'id' ? 'slug' : header));
 
-  data.feed.entry?.forEach((entry, index) => {
-    //creates a meeting object
+  data.values.forEach((row, index) => {
+    //skip empty rows
+    if (!row.filter(e => e).length) return;
+
     const meeting = {};
 
-    //with a property for each column
-    Object.keys(entry)
-      .filter(key => key.startsWith('gsx$'))
-      .forEach(key => {
-        meeting[key.substr(4)] = entry[key]['$t'];
-      });
-
-    //google sheets don't do underscores
-    spec_properties_phrases.forEach(key => {
-      const google_key = key.replaceAll('_', '');
-      if (meeting.hasOwnProperty(google_key)) {
-        meeting[key] = meeting[google_key];
-        delete meeting[google_key];
-      }
+    //fill values
+    headers.forEach((header, index) => {
+      meeting[header] = row[index];
     });
-
-    //use Google-generated slug if none was provided
-    if (!meeting.slug) {
-      meeting.slug = entry.id['$t'].split('/').pop();
-    }
-
-    if (!meeting.edit_url) {
-      const row = index + 2;
-      meeting.edit_url = `https://docs.google.com/spreadsheets/d/${sheetId}/edit#gid=0&range=${row}:${row}+`;
-    }
 
     //convert time to HH:MM
     meeting.time = moment(meeting.time, 'h:mm a').format('HH:mm');
 
-    //array-ify types
-    meeting.types = meeting.types
-      ? meeting.types.split(',').map(type => type.trim())
-      : [];
+    //edit url link
+    meeting.edit_url = `https://docs.google.com/spreadsheets/d/${sheetId}/edit#gid=0&range=${
+      index + 2
+    }:${index + 2}+`;
 
     meetings.push(meeting);
   });
