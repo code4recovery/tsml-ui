@@ -18,28 +18,45 @@
 
     <title>TSML UI</title>
   </head>
-  <body>
+  <body class="bg-light">
     <div class="container-md my-5">
-      <h1 class="border-bottom pb-2 mb-3">TSML UI</h1>
-      <p>
-        TSML UI (12 Step Meeting List User Interface) is an interactive recovery
-        meeting finder that can be embedded on any type of website.
+      <h1 class="mb-3">TSML UI</h1>
+      <p class="lead">
+        TSML UI (12 Step Meeting List User Interface) is an open source
+        interactive recovery meeting finder that can be embedded on any website.
       </p>
       <section class="my-4">
         <p>
           <a class="btn btn-primary" href="/demo.html">Plain demo</a>
-          <a class="btn btn-primary" href="/sheets.html">Google sheet demo</a>
-          <a class="btn btn-primary" href="/minimal.html">Minimal demo</a>
+          <a class="btn btn-primary" href="/sheet.html">Google Sheet demo</a>
+          <a
+            href="https://github.com/code4recovery/tsml-ui"
+            target="_blank"
+            class="
+              btn btn-outline-secondary
+              d-inline-flex
+              align-items-center
+              gap-2
+            "
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="currentColor"
+              class="bi bi-github"
+              viewBox="0 0 16 16"
+            >
+              <path
+                d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"
+              />
+            </svg>
+            GitHub
+          </a>
         </p>
       </section>
-      <p class="mb-5">
-        More information is available on the
-        <a href="https://github.com/code4recovery/tsml-ui" target="_blank"
-          >project page on Github</a
-        >, but here are some basic configuration instructions:
-      </p>
       <section class="my-5">
-        <h4 class="border-bottom pb-2 mb-2">12 Step Meeting List</h4>
+        <h4>12 Step Meeting List</h4>
         <p>
           Using the
           <a
@@ -50,11 +67,13 @@
           WordPress plugin, use this built-in shortcode to embed it in a
           WordPress post or page.
         </p>
-        <pre class="rounded bg-light border p-3">[tsml_ui]</pre>
+        <pre class="rounded bg-dark text-light p-3 overflow-hidden">
+[tsml_ui]</pre
+        >
       </section>
 
       <section class="my-5">
-        <h4 class="border-bottom pb-2 mb-2">Custom JSON feed</h4>
+        <h4>Custom JSON feed</h4>
         <p>
           If you can generate a
           <a href="https://github.com/code4recovery/spec" target="_blank"
@@ -72,7 +91,7 @@
           >
           for your location.
         </p>
-        <pre class="rounded bg-light border p-3 overflow-hidden">
+        <pre class="rounded bg-dark text-light p-3 overflow-hidden">
 &lt;div
   id="tsml-ui"
   data-src="/path/to/your.json"
@@ -84,7 +103,7 @@
       </section>
 
       <section class="my-5">
-        <h4 class="border-bottom pb-2 mb-2">Google Sheets</h4>
+        <h4>Google Sheets</h4>
         <p>
           You can use a Google Sheet as the data source for TSML UI. Use
           <a
@@ -93,16 +112,18 @@
             >this sheet</a
           >
           as an example. Paste the URL of the sheet when you're editing it into
-          the <code>data-src</code> attribute. You will also need a
+          the <code>data-src</code> attribute. Make sure anyone with the link
+          can view the sheet. You will need a
           <a href="https://console.cloud.google.com/">Google API key</a>. Make
           sure it has the Google Sheets API enabled.
         </p>
-        <pre class="rounded bg-light border p-3 overflow-hidden">
+        <pre class="rounded bg-dark text-light p-3 overflow-hidden">
 &lt;div
   id="tsml-ui"
   data-src="https://docs.google.com/spreadsheets/d/1-sDB7TIXXa9hlIO71sYOV_X_64jjs4WdAjtmOWv26CA/edit#gid=0"
   data-google="thisIsYourGoogleSheetsApiKey"
   data-mapbox="pk.your.mapbox.access.token.goes.here"
+  data-timezone="America/Los_Angeles"
 &gt;&lt;/div&gt;
 &lt;script src="https://tsml-ui.code4recovery.org/app.js" async&gt;&lt;/script&gt;</pre
         >
@@ -110,7 +131,7 @@
       <p class="mb-5">
         More information is available on the
         <a href="https://github.com/code4recovery/tsml-ui" target="_blank"
-          >project page on Github</a
+          >project page on GitHub</a
         >, including advanced configuration options.
       </p>
     </div>
