@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta name="description" content="React JS recovery meeting finder demo" />
+    <link rel="icon" href="#" />
+    <title>Demo AA Website</title>
+    <style>
+      body {
+        background: linen;
+        color: gray;
+        font-family: Georgia, serif;
+        font-size: 18px;
+        line-height: 1.4;
+      }
+
+      main {
+        background: white;
+        border: 1px solid lightgray;
+        margin: 1rem auto;
+        padding: 1rem 1rem 0;
+      }
+
+      main > h1 {
+        border-bottom: 1px solid lightgray;
+        color: firebrick;
+        margin: 0;
+      }
+
+      p {
+        margin-top: 15px;
+      }
+
+      a {
+        color: firebrick !important;
+      }
+
+      a.btn-outline-secondary:hover {
+        color: white !important;
+      }
+
+      #tsml-ui {
+        margin-left: -1rem !important;
+        margin-right: -1rem !important;
+      }
+
+      @media (min-width: 620px) {
+        main {
+          width: 90%;
+        }
+      }
+
+      @media (min-width: 800px) {
+        main {
+          width: 80%;
+        }
+      }
+
+      @media (min-width: 1400px) {
+        main {
+          width: 1300px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <main>
+      <h1>Meeting Finder Demo</h1>
+      <p>
+        Embeds
+        <a href="https://github.com/code4recovery/tsml-ui">TSML UI</a>
+        on a site with a random design. The data source is
+        <a
+          href="https://docs.google.com/spreadsheets/d/1-sDB7TIXXa9hlIO71sYOV_X_64jjs4WdAjtmOWv26CA/edit#gid=0"
+          target="_blank"
+          >this Google Sheet</a
+        >.
+      </p>
+      <script>
+        var tsml_react_config = {
+          flags: ['O', 'C'],
+          show: { title: false },
+          feedback_emails: 'test@intergroup.org',
+        };
+      </script>
+      <div
+        id="tsml-ui"
+        data-src="https://docs.google.com/spreadsheets/d/1-sDB7TIXXa9hlIO71sYOV_X_64jjs4WdAjtmOWv26CA/edit#gid=0"
+        data-google="AIzaSyDPUBpbLh8VlqjR3n_PnVVnzvXukrR-8CQ"
+        data-mapbox="pk.eyJ1Ijoiam9zaHJlaXNuZXIiLCJhIjoiY2tvYXA0YnZxMGRldDJxbzdta25uNGphdiJ9.eay-UKgIT99ALmdw08xBPw"
+      ></div>
+    </main>
+    <script src="/app.js" async></script>
+  </body>
+</html>

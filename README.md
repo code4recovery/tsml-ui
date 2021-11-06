@@ -1,10 +1,10 @@
 # TSML UI
 
-TSML UI is a React web app that makes the [12 Step Meeting List](https://github.com/code4recovery/12-step-meeting-list) interface available for use on any web page, regardless of platform.
+TSML UI (12 Step Meeting List User Interface) is an interactive meeting finder makes the [12 Step Meeting List](https://github.com/code4recovery/12-step-meeting-list) interface available for use on any web page, regardless of platform.
 
-[Here's a demo](https://react.meetingguide.org/) of what the meeting finder looks like with no styling. [Here's another demo](https://react.meetingguide.org/demo.html) embedded into a different design, with a Google Sheet as a data source.
+[Here's a demo](https://tsml-ui.meetingguide.org/demo.html) of what the meeting finder looks like with no styling. [Here's another demo](https://react.meetingguide.org/sheets.html) embedded into a different design, with a Google Sheet as a data source.
 
-To use TSML UI on your website you only need to add some HTML to your web page. To get started, use our [TSML UI configuration helper](https://tsml-ui-config.netlify.app).
+To use TSML UI on your website you only need to add some HTML to your web page. To get started, use our [configuration instructions](https://tsml-ui.code4recovery.org).
 
 ## Configure
 
@@ -14,7 +14,7 @@ You don't need to do anything other than enable HTTPS on your website. To ensure
 
 ### Caching
 
-TSML UI can cache data in session storage, which can speed up performance, but it is turned off by default. To enable it, add 
+TSML UI can cache data in session storage, which can speed up performance, but it is turned off by default. To enable it, add
 
     var tsml_react_config = {
       cache: true,
@@ -58,6 +58,10 @@ This app exists to help people find AA meetings, and after much discussion we de
 Second, while we can infer that a meeting is "online" if there is a Zoom URL (for example) in the listing, the app should not assume that, when there are online and in-person options, that means it is an actual "hybrid" meeting with a video screen and speakers in the room.
 
 Web servants may [add their own meetimg types](#add-custom-types) of course.
+
+### Can I import TSML UI from NPM for use in a NextJS or Gatsby project?
+
+Not yet! Please open a pull request and walk us through the process of adding it to NPM and we'll give it a shot.
 
 ## Next steps
 

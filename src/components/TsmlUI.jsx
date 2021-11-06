@@ -18,7 +18,7 @@ import {
   settings,
 } from '../helpers';
 
-export default function TsmlUI({ json, mapbox, timezone }) {
+export default function TsmlUI({ json, mapbox, timezone, google }) {
   const [state, setState] = useState({
     alert: null,
     capabilities: {
@@ -46,7 +46,7 @@ export default function TsmlUI({ json, mapbox, timezone }) {
   });
 
   //used for versioning cache
-  const version = '1.1.9';
+  const version = '1.3';
 
   //enable forward & back buttons
   useEffect(() => {
@@ -74,13 +74,19 @@ export default function TsmlUI({ json, mapbox, timezone }) {
         meetings: cache.meetings,
       });
     } else {
+      if (json.startsWith('https://docs.google.com/spreadsheets/d/')) {
+        json = `https://sheets.googleapis.com/v4/spreadsheets/${
+          json.split('/')[5]
+        }/values/A1:ZZ?key=${google}`;
+      }
+
       //fetch json data file and build indexes
       fetch(json)
         .then(result => result.json())
         .then(
           result => {
             //checks if src is google sheet and translates it if so
-            if (json.includes('spreadsheets.google.com')) {
+            if (json.includes('sheets.googleapis.com')) {
               result = translateGoogleSheet(result, json);
             } else if (json.includes('nocodeapi.com')) {
               result = translateNoCodeAPI(result);
