@@ -461,7 +461,7 @@ export function loadMeetingData(data, capabilities, timezone) {
     if (!meeting.types) {
       meeting.types = [];
     } else if (typeof meeting.types === 'string') {
-      meeting.types = meeting.types.split(',');
+      meeting.types = meeting.types.split(',').map(type => type.trim());
     }
 
     //add online and in-person metattypes
