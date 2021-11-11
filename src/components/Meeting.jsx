@@ -71,7 +71,7 @@ export default function Meeting({ state, setState, mapbox }) {
   if (meeting.phone) {
     contactButtons.push({
       href: meeting.phone,
-      icon: 'tel',
+      icon: 'phone',
       text: meeting.phone,
     });
   }
