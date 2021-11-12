@@ -838,7 +838,8 @@ export function translateGoogleSheet(data, json) {
   const headers = data.values
     .shift()
     .map(header => formatSlug(header).replaceAll('-', '_'))
-    .map(header => (header === 'id' ? 'slug' : header));
+    .map(header => (header === 'id' ? 'slug' : header))
+    .map(header => (header === 'full_address' ? 'formatted_address' : header));
 
   data.values.forEach((row, index) => {
     //skip empty rows
