@@ -852,7 +852,12 @@ export function translateGoogleSheet(data, json) {
     });
 
     //convert time to HH:MM
-    meeting.time = moment(meeting.time, 'h:mm a').format('HH:mm');
+    if (meeting.time) {
+      meeting.time = moment(meeting.time, 'h:mm a').format('HH:mm');
+    }
+    if (meeting.end_time) {
+      meeting.end_time = moment(meeting.end_time, 'h:mm a').format('HH:mm');
+    }
 
     //edit url link
     meeting.edit_url = `https://docs.google.com/spreadsheets/d/${sheetId}/edit#gid=0&range=${
