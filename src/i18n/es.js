@@ -2,10 +2,12 @@ export default {
   add_to_calendar: 'Añadir al calendario',
   address: 'Dirección',
   alerts: {
-    bad_data: 'Se encontró un error al cargar la fuente de datos.',
-    no_data: 'Se debe especificar un parámetro de fuente de datos.',
+    bad_data: 'Se encontró un error al cargar los datos.',
+    google_key: 'Error de configuración: se requiere una clave API de Google.',
+    no_data_src:
+      'Error de configuración: se debe especificar una fuente de datos.',
     no_results:
-      'No se encontraron reuniones que coincidan con los criterios seleccionados.',
+      'No se encontraron reuniones que coincidieran con los criterios seleccionados.',
     not_found: 'Reunión no encontrada.',
   },
   appointment: 'Cita',

@@ -2,8 +2,9 @@ export default {
   add_to_calendar: 'Add to Calendar',
   address: 'Address / Platform',
   alerts: {
-    bad_data: 'An error was encountered loading the data source.',
-    no_data: 'A data source parameter must be specified.',
+    bad_data: 'An error was encountered loading the data.',
+    google_key: 'Configuration error: a Google API key is required.',
+    no_data_src: 'Configuration error: a data source must be specified.',
     no_results: 'No meetings were found matching the selected criteria.',
     not_found: 'Meeting not found.',
   },

@@ -146,7 +146,7 @@ export default function Table({ state, setState, filteredSlugs, inProgress }) {
                 inProgress.map((slug, index) => <Row slug={slug} key={index} />)
               ) : (
                 <tr>
-                  <td colspan={columns.length}>
+                  <td colSpan={columns.length}>
                     <a
                       onClick={() => setShowInProgress(true)}
                       className="d-block text-center py-3 py-md-1"

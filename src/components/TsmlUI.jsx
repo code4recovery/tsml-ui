@@ -7,10 +7,8 @@ import { Alert, Controls, Loading, Map, Meeting, Table, Title } from './';
 
 import {
   filterMeetingData,
-  getCache,
   getQueryString,
   loadMeetingData,
-  setCache,
   setMinutesNow,
   translateGoogleSheet,
   translateNoCodeAPI,
@@ -45,9 +43,6 @@ export default function TsmlUI({ json, mapbox, timezone, google }) {
     meetings: [],
   });
 
-  //used for versioning cache
-  const version = '1.3.3';
-
   //enable forward & back buttons
   useEffect(() => {
     const popstateListener = () => {
@@ -62,64 +57,64 @@ export default function TsmlUI({ json, mapbox, timezone, google }) {
   //load data once from json
   if (state.loading) {
     const input = getQueryString();
-    const cache = getCache(json, version);
 
-    if (cache) {
-      setState({
-        ...state,
-        capabilities: cache.capabilities,
-        indexes: cache.indexes,
-        input: input,
-        loading: false,
-        meetings: cache.meetings,
-      });
-    } else {
-      if (json.startsWith('https://docs.google.com/spreadsheets/d/')) {
-        json = `https://sheets.googleapis.com/v4/spreadsheets/${
-          json.split('/')[5]
-        }/values/A1:ZZ?key=${google}`;
+    if (json?.startsWith('https://docs.google.com/spreadsheets/d/')) {
+      if (!google) {
+        return setState({
+          ...state,
+          error: 'google_key',
+          loading: false,
+        });
       }
-
-      //fetch json data file and build indexes
-      fetch(json)
-        .then(result => result.json())
-        .then(
-          result => {
-            //checks if src is google sheet and translates it if so
-            if (json.includes('sheets.googleapis.com')) {
-              result = translateGoogleSheet(result, json);
-            } else if (json.includes('nocodeapi.com')) {
-              result = translateNoCodeAPI(result);
-            }
-
-            const [meetings, indexes, capabilities] = loadMeetingData(
-              result,
-              state.capabilities,
-              timezone
-            );
-
-            setCache(json, version, meetings, indexes, capabilities);
-
-            setState({
-              ...state,
-              capabilities: capabilities,
-              indexes: indexes,
-              meetings: meetings,
-              loading: false,
-              input: input,
-            });
-          },
-          error => {
-            console.error(`JSON ${error}`);
-            setState({
-              ...state,
-              error: json ? 'bad_data' : 'no_data',
-              input: input,
-              loading: false,
-            });
-          }
-        );
+      json = `https://sheets.googleapis.com/v4/spreadsheets/${
+        json.split('/')[5]
+      }/values/A1:ZZ?key=${google}`;
     }
+
+    //fetch json data file and build indexes
+    fetch(json)
+      .then(result => result.json())
+      .then(result => {
+        //checks if src is google sheet and translates it if so
+        if (json?.includes('sheets.googleapis.com')) {
+          result = translateGoogleSheet(result, json);
+        } else if (json?.includes('nocodeapi.com')) {
+          result = translateNoCodeAPI(result);
+        }
+
+        if (!Array.isArray(result) || !result.length) {
+          return setState({
+            ...state,
+            error: 'bad_data',
+            loading: false,
+          });
+        }
+
+        const [meetings, indexes, capabilities] = loadMeetingData(
+          result,
+          state.capabilities,
+          timezone
+        );
+
+        setState({
+          ...state,
+          capabilities: capabilities,
+          indexes: indexes,
+          meetings: meetings,
+          loading: false,
+          input: input,
+        });
+      })
+      .catch(error => {
+        if (json) {
+          console.error(error);
+        }
+        setState({
+          ...state,
+          error: json ? 'bad_data' : 'no_data_src',
+          loading: false,
+        });
+      });
 
     return (
       <div className="tsml-ui">

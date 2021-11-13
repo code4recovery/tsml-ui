@@ -2,10 +2,12 @@ export default {
   add_to_calendar: 'Ajouter au calendrier',
   address: 'Adresse',
   alerts: {
-    bad_data:
-      'Une erreur s’est produite lors du chargement de la source de données.',
-    no_data: 'Un paramètre de source de données doit être spécifié.',
-    no_results: 'Aucune réunion ne correspond aux critères sélectionnés.',
+    bad_data: "Une erreur s'est produite lors du chargement des données.",
+    google_key: 'Erreur de configuration : une clé API Google est requise.',
+    no_data_src:
+      'Erreur de configuration : une source de données doit être spécifiée.',
+    no_results:
+      "Aucune réunion n'a été trouvée correspondant aux critères sélectionnés.",
     not_found: 'Réunion introuvable.',
   },
   appointment: 'Rendez-vous',

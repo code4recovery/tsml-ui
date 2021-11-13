@@ -24,7 +24,7 @@ export default function Button({
       )}
       href={href}
       onClick={onClick}
-      target="_blank"
+      target={href && '_blank'}
     >
       {icon && (
         <Icon

@@ -18,16 +18,6 @@ To use TSML UI on your website you only need to add some HTML to your web page. 
 
 You don't need to do anything other than enable HTTPS on your website. To ensure all users see this functionality, make sure that anyone who enters a `http://` address for your site is redirected to the `https://` address.
 
-### Caching
-
-TSML UI can cache data in session storage, which can speed up performance, but it is turned off by default. To enable it, add
-
-    var tsml_react_config = {
-      cache: true,
-    };
-
-Your mileage may vary. It has been known to encounter a `QuotaExceededError` with large datasets. Also when editing meetings, changes will not appear until you restart your browser or run `window.sessionStorage.clear()` in the console.
-
 ### Add custom types
 
 Here is an example of extending the `tsml_react_config` object to include a definition for an additional meeting type.
