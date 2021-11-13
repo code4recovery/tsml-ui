@@ -2,7 +2,13 @@
 
 TSML UI (12 Step Meeting List User Interface) is an interactive meeting finder makes the [12 Step Meeting List](https://github.com/code4recovery/12-step-meeting-list) interface available for use on any web page, regardless of platform.
 
-[Here's a demo](https://tsml-ui.meetingguide.org/demo.html) of what the meeting finder looks like with no styling. [Here's another demo](https://react.meetingguide.org/sheets.html) embedded into a different design, with a Google Sheet as a data source.
+Here are three demos:
+
+- [San Francisco / Marin](https://aasfmarin.org/meetings) (uses a custom database as a data source)
+
+- [San Jose](https://aasfmarin.org/meetings) (Google Sheet as a data source)
+
+- [Santa Cruz](https://aasantacruz.org/meetings) (WordPress / 12 Step Meeting List data source)
 
 To use TSML UI on your website you only need to add some HTML to your web page. To get started, use our [configuration instructions](https://tsml-ui.code4recovery.org).
 
@@ -62,21 +68,6 @@ Web servants may [add their own meetimg types](#add-custom-types) of course.
 ### Can I import TSML UI from NPM for use in a NextJS or Gatsby project?
 
 Not yet! Please open a pull request and walk us through the process of adding it to NPM and we'll give it a shot.
-
-## Next steps
-
-- [x] Hierarchical region dropdown
-- [x] Alternate appearance of `TC` meetings (hide directions and cross out address)
-- [x] Alternate appearance of approximate addresses (no location list group, zoom out map, no popup)
-- [x] Display group info on inside page
-- [x] Distance dropdown instead of regions when in near me or location mode
-- [x] Spanish
-- [x] French
-- [x] Near location mode with geocoding
-- [x] Accessibility improvements
-- [x] Proper `href` attributes (instead of `#`) in controls for SEO
-- [ ] Filter-clearing buttons when no results
-- [ ] Select multiple dropdown items on mobile
 
 ## Contributing
 
