@@ -324,30 +324,6 @@ function getCommonElements(arrays) {
   return arrays.shift().filter(v => arrays.every(a => a.indexOf(v) !== -1));
 }
 
-//get meetings, indexes, and capabilities from session storage, keyed by JSON URL
-export function getCache(json, version) {
-  if (!settings.cache) return;
-  const cache = JSON.parse(
-    window.sessionStorage.getItem(getCacheName(json, version))
-  );
-  if (!cache) return null;
-  const keys = Object.keys(cache.meetings);
-  keys.forEach(key => {
-    if (typeof cache.meetings[key].start === 'string') {
-      cache.meetings[key].start = moment(cache.meetings[key].start);
-    }
-    if (typeof cache.meetings[key].end === 'string') {
-      cache.meetings[key].end = moment(cache.meetings[key].end);
-    }
-  });
-  return cache;
-}
-
-//version the cache name in case computations have changed since the last version
-function getCacheName(json, version) {
-  return `${json}${json.includes('?') ? '&' : '?'}v=${version}`;
-}
-
 //set up meeting data; this is only run once when the app loads
 export function loadMeetingData(data, capabilities, timezone) {
   //meetings is a lookup
@@ -805,15 +781,6 @@ function processSearchTerms(input) {
     .filter(e => e.length);
 }
 
-//set meetings, indexes, and capabilities to session storage, keyed by JSON URL
-export function setCache(json, version, meetings, indexes, capabilities) {
-  if (!settings.cache) return;
-  window.sessionStorage.setItem(
-    getCacheName(json, version),
-    JSON.stringify({ meetings, indexes, capabilities })
-  );
-}
-
 //set minutes
 export function setMinutesNow(meetings) {
   const now = moment();
@@ -831,6 +798,8 @@ export function setMinutesNow(meetings) {
 
 //translates Google Sheet JSON into Meeting Guide format (example demo.html)
 export function translateGoogleSheet(data, json) {
+  if (!data.values) return;
+
   const sheetId = json.split('/')[5];
 
   const meetings = [];
