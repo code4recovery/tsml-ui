@@ -130,6 +130,15 @@ div.tsml-ui {
   .bg-light {
     background-color: $gray-100 !important;
   }
+  .bg-secondary {
+    background-color: $gray-600 !important;
+  }
+  .text-white {
+    color: $white !important;
+  }
+  .text-dark {
+    color: $gray-800 !important;
+  }
 
   .container-fluid {
     //for sepia's codered theme
@@ -259,6 +268,10 @@ div.tsml-ui {
     tr th:first-child,
     td:first-child {
       padding-left: 1rem;
+    }
+
+    > tbody {
+      border-top: 2px solid $gray-400 !important;
     }
 
     //necessary as of v5 to prevent overlapping bg

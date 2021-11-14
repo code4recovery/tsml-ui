@@ -155,7 +155,9 @@ export default function TsmlUI({ json, mapbox, timezone, google }) {
             {settings.show.controls && (
               <Controls state={state} setState={setState} mapbox={mapbox} />
             )}
-            <Alert alert={state.alert} error={state.error} />
+            {(state.alert || state.error) && (
+              <Alert state={state} setState={setState} />
+            )}
             {filteredSlugs && state.input.view === 'table' && (
               <Table
                 state={state}
