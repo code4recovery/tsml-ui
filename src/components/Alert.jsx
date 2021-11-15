@@ -4,15 +4,6 @@ import Button from './Button';
 import { strings, settings } from '../helpers';
 
 export default function Alert({ state, setState }) {
-  const removeFilterValue = (filter, value) => {
-    state.input[filter] = state.input[filter].filter(e => e !== value);
-    setState({ ...state });
-  };
-
-  const getFilterName = (filter, value) => {
-    return state.indexes[filter].find(index => index.key === value)?.name;
-  };
-
   return state.error ? (
     <div className="d-flex flex-column gap-3">
       <div className="alert alert-danger text-center m-0">
@@ -32,8 +23,16 @@ export default function Alert({ state, setState }) {
           state.input[filter].map(value => (
             <Button
               key={value}
-              onClick={() => removeFilterValue(filter, value)}
-              text={`Remove ${getFilterName(filter, value)}`}
+              onClick={() => {
+                state.input[filter] = state.input[filter].filter(
+                  e => e !== value
+                );
+                setState({ ...state });
+              }}
+              text={strings.remove.replace(
+                '%filter%',
+                state.indexes[filter].find(index => index.key === value)?.name
+              )}
               icon="close"
             />
           ))
