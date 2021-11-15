@@ -41,6 +41,7 @@ export default {
   phone: 'Phone',
   region: 'Region',
   region_any: 'Anywhere',
+  remove: 'Remove %filter%',
   saturday: 'Saturday',
   seventh_tradition: 'Seventh Tradition',
   sunday: 'Sunday',

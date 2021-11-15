@@ -43,6 +43,7 @@ export default {
   phone: 'Teléfono',
   region: 'Región',
   region_any: 'Todos lados',
+  remove: 'Quitar %filter%',
   saturday: 'Sábado',
   seventh_tradition: 'Séptima Tradición',
   sunday: 'Domingo',
