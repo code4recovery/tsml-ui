@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Button from './Button';
-import { strings, settings } from '../helpers';
+import { getIndexByKey, strings, settings } from '../helpers';
 
 export default function Alert({ state, setState }) {
   return state.error ? (
@@ -31,7 +31,7 @@ export default function Alert({ state, setState }) {
               }}
               text={strings.remove.replace(
                 '%filter%',
-                state.indexes[filter].find(index => index.key === value)?.name
+                getIndexByKey(state.indexes[filter], value)?.name
               )}
               icon="close"
             />
