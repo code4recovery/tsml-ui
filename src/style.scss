@@ -265,6 +265,10 @@ div.tsml-ui {
       border-bottom: 1px solid $table-border-color;
     }
 
+    thead tr {
+      border-bottom: 1px solid $gray-400;
+    }
+
     tbody {
       border: 0 !important;
       &.tsml-in-progress {
