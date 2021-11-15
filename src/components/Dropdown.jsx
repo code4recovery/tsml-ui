@@ -42,7 +42,7 @@ export default function Dropdown({
     });
 
     //pass it up to app controller
-    setState({ ...state, input: state.input });
+    setState({ ...state });
   };
 
   const renderDropdownItem = option => (
@@ -51,12 +51,12 @@ export default function Dropdown({
         className={cx(
           'align-items-center d-flex dropdown-item justify-content-between',
           {
-            'active bg-secondary text-white': values.indexOf(option.key) !== -1,
+            'bg-secondary text-white': values.includes(option.key),
           }
         )}
         href={formatUrl({
           ...state.input,
-          [filter]: values.indexOf(option.key) === -1 ? [option.key] : [],
+          [filter]: values.includes(option.key) ? [option.key] : [],
         })}
         onClick={e => setFilter(e, filter, option.key)}
       >

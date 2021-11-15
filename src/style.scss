@@ -130,6 +130,15 @@ div.tsml-ui {
   .bg-light {
     background-color: $gray-100 !important;
   }
+  .bg-secondary {
+    background-color: $gray-600 !important;
+  }
+  .text-white {
+    color: $white !important;
+  }
+  .text-dark {
+    color: $gray-800 !important;
+  }
 
   .container-fluid {
     //for sepia's codered theme
@@ -248,7 +257,35 @@ div.tsml-ui {
     table-layout: auto;
 
     td {
+      border: 0;
       vertical-align: middle;
+    }
+
+    tr {
+      border-bottom: 1px solid $table-border-color;
+    }
+
+    tbody {
+      border: 0 !important;
+      &.tsml-in-progress {
+        tr {
+          background-color: tint-color($yellow, 95%) !important;
+          border-bottom-color: $yellow-200;
+          td {
+            border-bottom-color: $yellow-200 !important;
+          }
+          a {
+            color: $yellow-700;
+            cursor: pointer;
+            &:hover {
+              color: $yellow-800 !important;
+            }
+          }
+          &:nth-of-type(odd) {
+            background-color: tint-color($yellow, 90%);
+          }
+        }
+      }
     }
 
     .distance {
@@ -285,32 +322,9 @@ div.tsml-ui {
       }
     }
 
-    //in-progress meetings
-    tbody.tsml-in-progress {
-      tr {
-        background-color: tint-color($yellow, 95%);
-        border-bottom-color: $yellow-200;
-        td {
-          border-bottom-color: $yellow-200 !important;
-        }
-        a {
-          color: $yellow-700;
-          cursor: pointer;
-          &:hover {
-            color: $yellow-800;
-          }
-        }
-        &:nth-of-type(odd) {
-          background-color: tint-color($yellow, 90%);
-        }
-      }
-    }
-
     //mobile view
     @include media-breakpoint-down(md) {
-      border-top: 1px solid $secondary;
       tr {
-        border-bottom: 1px solid $table-border-color;
         padding: 0.5rem 1rem;
         position: relative;
 
