@@ -12,8 +12,6 @@ import {
 
 export default function Controls({ state, setState, mapbox }) {
   const [dropdown, setDropdown] = useState(null);
-  const [search, setSearch] = useState(state.input.search);
-
   const searchInput = useRef();
 
   //get available search options based on capabilities
@@ -54,34 +52,20 @@ export default function Controls({ state, setState, mapbox }) {
   //search effect
   useEffect(() => {
     const timer = setTimeout(() => {
-      if (!search) return;
+      if (!state.input.search) return;
       analyticsEvent({
         category: 'search',
         action: state.input.mode,
-        label: search,
+        label: state.input.search,
       });
     }, 2000);
     return () => clearTimeout(timer);
-  }, [search]);
+  }, [state.input.search]);
 
   //close current dropdown (on body click)
   const closeDropdown = e => {
     if (e.srcElement.classList.contains('dropdown-toggle')) return;
     setDropdown(null);
-  };
-
-  //keyword search
-  const keywordSearch = e => {
-    setSearch(e.target.value);
-    if (state.input.mode === 'search') {
-      setState({
-        ...state,
-        input: {
-          ...state.input,
-          search: e.target.value,
-        },
-      });
-    }
   };
 
   //near location search
@@ -109,9 +93,6 @@ export default function Controls({ state, setState, mapbox }) {
       state.meetings[slug].distance = null;
     });
 
-    //clear search
-    setSearch('');
-
     //focus after waiting for disabled to clear
     setTimeout(() => searchInput.current.focus(), 100);
 
@@ -138,7 +119,8 @@ export default function Controls({ state, setState, mapbox }) {
   //toggle list/map view
   const setView = (e, view) => {
     e.preventDefault();
-    setState({ ...state, input: { ...state.input, view: view } });
+    state.input.view = view;
+    setState({ ...state });
   };
 
   return (
@@ -150,12 +132,17 @@ export default function Controls({ state, setState, mapbox }) {
               <input
                 className="form-control"
                 disabled={state.input.mode === 'me'}
-                onChange={keywordSearch}
+                onChange={e => {
+                  if (state.input.mode === 'search') {
+                    state.input.search = e.target.value;
+                    setState({ ...state });
+                  }
+                }}
                 placeholder={strings.modes[state.input.mode]}
                 ref={searchInput}
                 spellCheck="false"
                 type="search"
-                value={search}
+                value={state.input.search}
               />
               {modes.length > 1 && (
                 <button

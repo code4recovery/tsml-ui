@@ -18,6 +18,16 @@ export default function Alert({ state, setState }) {
       <div className="alert alert-warning text-center m-0">
         {strings.alerts[state.alert]}
       </div>
+      {state.alert === 'no_results' && state.input.search && (
+        <Button
+          onClick={() => {
+            state.input.search = '';
+            setState({ ...state });
+          }}
+          text={strings.remove.replace('%filter%', `‘${state.input.search}’`)}
+          icon="close"
+        />
+      )}
       {state.alert === 'no_results' &&
         settings.filters.map(filter =>
           state.input[filter].map(value => (
