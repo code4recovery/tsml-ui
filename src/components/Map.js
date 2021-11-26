@@ -1,7 +1,5 @@
 import React, { useEffect, useRef, useState, useContext } from 'react';
-import mapboxgl from "mapbox-gl"
-import MapboxWorker from "web-worker:mapbox-gl/dist/mapbox-gl-csp-worker"
-import ReactMapGL, { Marker, NavigationControl, Popup, MapContext } from 'react-map-gl';
+import ReactMapGL, { Marker, NavigationControl, Popup, MapContext } from 'react-map-gl/dist/esm/index.js';
 import WebMercatorViewport from 'viewport-mercator-project';
 import { formatDirectionsUrl, settings, strings } from '../helpers';
 import Button from './Button';
@@ -14,11 +12,6 @@ const MapDebug = () => {
 
   return null
 }
-
-mapboxgl.workerClass = MapboxWorker
-
-
-console.log(mapboxgl)
 
 export default function Map({
   filteredSlugs,
