@@ -8,7 +8,7 @@ Here are three demos:
 
 - [San Jose](https://aasfmarin.org/meetings) (Google Sheet as a data source)
 
-- [Santa Cruz](https://aasantacruz.org/meetings) (WordPress / 12 Step Meeting List data source)
+- [Santa Cruz](https://aasantacruz.org/meeting-guide/) (WordPress / 12 Step Meeting List data source)
 
 To use TSML UI on your website you only need to add some HTML to your web page. To get started, use our [configuration instructions](https://tsml-ui.code4recovery.org).
 
