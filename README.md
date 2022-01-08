@@ -2,11 +2,9 @@
 
 TSML UI (12 Step Meeting List User Interface) is an interactive meeting finder makes the [12 Step Meeting List](https://github.com/code4recovery/12-step-meeting-list) interface available for use on any web page, regardless of platform.
 
-Here are three demos:
+Here are two demos:
 
 - [San Francisco / Marin](https://aasfmarin.org/meetings) (uses a custom database as a data source)
-
-- [San Jose](https://aasfmarin.org/meetings) (Google Sheet as a data source)
 
 - [Santa Cruz](https://aasantacruz.org/meeting-guide/) (WordPress / 12 Step Meeting List data source)
 
