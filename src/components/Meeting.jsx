@@ -10,6 +10,7 @@ import {
   strings,
 } from '../helpers';
 import Button from './Button';
+import Form from './Form';
 import Icon from './Icon';
 import Link from './Link';
 import Map from './Map';
@@ -17,6 +18,9 @@ import Map from './Map';
 export default function Meeting({ state, setState, mapbox }) {
   //open types
   const [define, setDefine] = useState(null);
+
+  //open feedback form
+  const [formOpen, setFormOpen] = useState(false);
 
   //existence checked in the parent component
   const meeting = state.meetings[state.input.meeting];
@@ -318,29 +322,47 @@ export default function Meeting({ state, setState, mapbox }) {
             )}
           </div>
 
-          {meeting.feedback_url && (
+          {meeting.feedback_url ? (
             <Button
               href={meeting.feedback_url}
               icon="edit"
               text={strings.feedback}
             />
+          ) : (
+            <Button
+              onClick={() => setFormOpen(!formOpen)}
+              icon="edit"
+              text={strings.feedback}
+            />
           )}
         </div>
-        {!!mapbox && (
-          <div
-            className={cx(
-              { 'd-md-block d-none': !meeting.isInPerson },
-              'col-md-8'
-            )}
-          >
-            <Map
-              filteredSlugs={[meeting.slug]}
-              listMeetingsInPopup={false}
-              state={state}
-              setState={setState}
-              mapbox={mapbox}
+        {formOpen ? (
+          <div className="col-md-8">
+            <Form
+              meeting={meeting}
+              closeForm={() => setFormOpen(false)}
+              typesInUse={Object.values(state.indexes.type).map(
+                type => type.name
+              )}
             />
           </div>
+        ) : (
+          !!mapbox && (
+            <div
+              className={cx(
+                { 'd-md-block d-none': !meeting.isInPerson },
+                'col-md-8'
+              )}
+            >
+              <Map
+                filteredSlugs={[meeting.slug]}
+                listMeetingsInPopup={false}
+                state={state}
+                setState={setState}
+                mapbox={mapbox}
+              />
+            </div>
+          )
         )}
       </div>
     </div>
