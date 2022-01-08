@@ -3,7 +3,6 @@ export default {
   address: 'Dirección',
   alerts: {
     bad_data: 'Se encontró un error al cargar los datos.',
-    google_key: 'Error de configuración: se requiere una clave API de Google.',
     no_data_src:
       'Error de configuración: se debe especificar una fuente de datos.',
     no_results:

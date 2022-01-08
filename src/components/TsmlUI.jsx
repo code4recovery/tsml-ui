@@ -10,13 +10,12 @@ import {
   getQueryString,
   loadMeetingData,
   setMinutesNow,
-  translateGoogleSheet,
   translateNoCodeAPI,
   setQueryString,
   settings,
 } from '../helpers';
 
-export default function TsmlUI({ json, mapbox, timezone, google }) {
+export default function TsmlUI({ json, mapbox, timezone }) {
   const [state, setState] = useState({
     alert: null,
     capabilities: {
@@ -58,27 +57,11 @@ export default function TsmlUI({ json, mapbox, timezone, google }) {
   if (state.loading) {
     const input = getQueryString();
 
-    if (json?.startsWith('https://docs.google.com/spreadsheets/d/')) {
-      if (!google) {
-        return setState({
-          ...state,
-          error: 'google_key',
-          loading: false,
-        });
-      }
-      json = `https://sheets.googleapis.com/v4/spreadsheets/${
-        json.split('/')[5]
-      }/values/A1:ZZ?key=${google}`;
-    }
-
     //fetch json data file and build indexes
     fetch(json)
       .then(result => result.json())
       .then(result => {
-        //checks if src is google sheet and translates it if so
-        if (json?.includes('sheets.googleapis.com')) {
-          result = translateGoogleSheet(result, json);
-        } else if (json?.includes('nocodeapi.com')) {
+        if (json?.includes('nocodeapi.com')) {
           result = translateNoCodeAPI(result);
         }
 
