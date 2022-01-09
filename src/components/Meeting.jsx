@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import {
   formatClasses as cx,
   formatDirectionsUrl,
-  formatFeedbackEmail,
   formatIcs,
   formatUrl,
   settings,
@@ -24,6 +23,14 @@ export default function Meeting({ state, setState, mapbox }) {
 
   //existence checked in the parent component
   const meeting = state.meetings[state.input.meeting];
+
+  //form ref
+  const form = useRef();
+
+  //scroll to form when opening it
+  useEffect(() => {
+    form.current?.scrollIntoView();
+  }, [formOpen]);
 
   //scroll to top when you navigate to this page
   useEffect(() => {
@@ -46,14 +53,6 @@ export default function Meeting({ state, setState, mapbox }) {
         meeting.end ? ` – ${meeting.end.format('h:mm a')}` : ''
       )
     : strings.appointment;
-
-  //feedback URL link
-  if (!meeting.feedback_url && settings.feedback_emails.length) {
-    meeting.feedback_url = formatFeedbackEmail(
-      settings.feedback_emails,
-      meeting
-    );
-  }
 
   const contactButtons = [];
 
@@ -329,18 +328,21 @@ export default function Meeting({ state, setState, mapbox }) {
               text={strings.feedback}
             />
           ) : (
-            <Button
-              onClick={() => setFormOpen(!formOpen)}
-              icon="edit"
-              text={strings.feedback}
-            />
+            !!settings.feedback_emails.length && (
+              <Button
+                onClick={() => setFormOpen(!formOpen)}
+                icon="edit"
+                text={strings.feedback}
+              />
+            )
           )}
         </div>
         {formOpen ? (
-          <div className="col-md-8">
+          <div className="col-md-8" ref={form}>
             <Form
               meeting={meeting}
               closeForm={() => setFormOpen(false)}
+              feedbackEmails={settings.feedback_emails}
               typesInUse={Object.values(state.indexes.type).map(
                 type => type.name
               )}

@@ -1,362 +1,287 @@
-import React from 'react';
-import { settings, strings } from '../helpers';
+import React, { useState } from 'react';
+import { formatClasses as cx, settings, strings } from '../helpers';
+import Button from './Button';
 
-export default function Form({ meeting, closeForm, typesInUse }) {
-  console.log(meeting);
-  const verboseTypes = meeting.types.map(type => strings.types[type]);
+export default function Form({
+  closeForm,
+  feedbackEmails,
+  meeting,
+  typesInUse,
+}) {
+  const [fields, setFields] = useState({
+    'overview': {
+      autoFocus: true,
+      help: 'In a sentence or two, describe the change you want made.',
+      label: 'Overview',
+      required: true,
+      type: 'textarea',
+    },
+    'name': {
+      help: 'Meeting names are typically in Title Case.',
+      label: 'Meeting Name',
+      required: true,
+      type: 'text',
+      value: meeting.name,
+    },
+    'day': {
+      label: 'Day',
+      options: ['', ...settings.weekdays.map(weekday => strings[weekday])],
+      span: 4,
+      type: 'select',
+      value: meeting.day === '' ? '' : strings[settings.weekdays[meeting.day]],
+    },
+    'time': {
+      label: 'Time',
+      span: 4,
+      type: 'time',
+      value: meeting.time,
+    },
+    'end_time': {
+      label: 'End Time',
+      span: 4,
+      type: 'time',
+      value: meeting.end_time,
+    },
+    'types': {
+      label: 'Types',
+      options: typesInUse,
+      type: 'checkboxes',
+      value: meeting.types.map(type => strings.types[type]),
+    },
+    'notes': {
+      help: 'Additional information that could help someone find the meeting, eg “small house on west side of church.”',
+      label: 'Notes',
+      type: 'textarea',
+      value: meeting.notes,
+    },
+    'conference_url': {
+      help: 'This should be a full URL to join a video conference. Required for the meeting to be considered “online.”',
+      label: 'Conference URL',
+      span: 6,
+      type: 'url',
+      value: meeting.conference_url,
+    },
+    'conference_phone': {
+      help: 'Full phone number, starting with + and country code, to join the meeting. Use , and # to make it a one-tap link.',
+      label: 'Conference Phone',
+      span: 6,
+      type: 'text',
+      value: meeting.conference_phone,
+    },
+    'conference_url_notes': {
+      help: 'Meeting ID and password (if applicable).',
+      label: 'Conference URL Notes',
+      span: 6,
+      type: 'text',
+      value: meeting.conference_phone_notes,
+    },
+    'conference_phone_notes': {
+      help: 'Phone number, meeting ID, and password (if applicable).',
+      label: 'Conference Phone Notes',
+      span: 6,
+      type: 'text',
+      value: meeting.conference_phone_notes,
+    },
+    'location': {
+      help: 'For in-person and hybrid meetings, this is the building name, eg Community Center or First Congregational Church.',
+      label: 'Location',
+      type: 'text',
+      value: meeting.location,
+    },
+    'formatted_address': {
+      help: 'In-person meetings should have a full street address, while online meetings can have a general location, eg San Jose, CA, USA.',
+      label: 'Address',
+      type: 'text',
+      value: meeting.formatted_address,
+    },
+    'location_notes': {
+      help: 'Additional information that pertains to each meeting at this location.',
+      label: 'Location Notes',
+      showIfValueExists: true,
+      type: 'textarea',
+      value: meeting.location_notes,
+    },
+    'group': {
+      help: 'Optional. This is helpful when a single group is responsible for several meetings.',
+      label: 'Group',
+      span: 4,
+      type: 'text',
+      value: meeting.group,
+    },
+    'website': {
+      help: 'Optional website address for the group.',
+      label: 'Website',
+      span: 4,
+      type: 'url',
+      value: meeting.website,
+    },
+    'email': {
+      help: 'Optional public contact email, should not break personal anonymity.',
+      label: 'Group Email',
+      span: 4,
+      type: 'email',
+      value: meeting.email,
+    },
+    'venmo': {
+      help: 'Optional Venmo handle for 7th Tradition contributions.',
+      label: 'Venmo',
+      span: 4,
+      type: 'text',
+      value: meeting.venmo,
+    },
+    'paypal': {
+      help: 'Optional PayPal.me URL for 7th Tradition contributions.',
+      label: 'PayPal',
+      span: 4,
+      type: 'url',
+      value: meeting.paypal,
+    },
+    'square': {
+      help: 'Optional cashtag for 7th Tradition contributions.',
+      label: 'Cash App (Square)',
+      span: 4,
+      type: 'text',
+      value: meeting.square,
+    },
+    'group_notes': {
+      help: 'Additional information that pertains to each meeting of this group.',
+      label: 'Grop Notes',
+      showIfValueExists: true,
+      type: 'textarea',
+      value: meeting.group_notes,
+    },
+  });
   return (
-    <form>
+    <form
+      onSubmit={e => {
+        e.preventDefault();
+        const lines = [fields.overview.current, ''];
+        const fieldNames = Object.keys(fields);
+        const changes = fieldNames
+          .slice(1)
+          .filter(
+            field =>
+              typeof fields[field].current !== 'undefined' &&
+              fields[field].current !== fields[field].value
+          );
+        if (changes.length) {
+          lines.push('---', 'CHANGES:', '');
+          changes.forEach(field => {
+            lines.push(
+              `* ${field}: ~~${fields[field].value}~~ ${fields[field].current}`
+            );
+          });
+        }
+        window.location = `mailto:${feedbackEmails.join()}?subject=${encodeURI(
+          strings.email_subject.replace('%name%', meeting.name)
+        )}&body=${encodeURI(lines.join('\n'))}`;
+      }}
+    >
       <legend>Request Meeting Update</legend>
-      <div className="mb-3">
-        <label htmlFor="overview" className="form-label">
-          Overview
-        </label>
-        <textarea
-          className="form-control bg-light"
-          id="overview"
-          aria-describedby="overview-help"
-          required
-          autoFocus
-        />
-        <div id="overview-help" className="form-text">
-          In a sentence or two, describe the change you're trying to make.
-        </div>
-      </div>
-      <div className="mb-3">
-        <label htmlFor="name" className="form-label">
-          Meeting Name
-        </label>
-        <input
-          type="text"
-          className="form-control bg-light"
-          id="name"
-          aria-describedby="name-help"
-          defaultValue={meeting.name}
-          required
-        />
-        <div id="name-help" className="form-text">
-          Meeting names are typically in Title Case.
-        </div>
-      </div>
+      <p className="mb-3">
+        Use this form to generate an email to the meeting list coordinator. You
+        will need to be able to send email from your device for this to work.
+      </p>
       <div className="row">
-        <div className="mb-3 col-md-4">
-          <label htmlFor="time" className="form-label">
-            Day
-          </label>
-          <select
-            className="form-select bg-light"
-            id="day"
-            aria-describedby="day-help"
-            defaultValue={meeting.day}
-          >
-            <option value="" />
-            {settings.weekdays.map((weekday, index) => (
-              <option value={index} key={index}>
-                {strings[weekday]}
-              </option>
-            ))}
-          </select>
-          <div id="day-help" className="form-text"></div>
-        </div>
-        <div className="mb-3 col-md-4">
-          <label htmlFor="time" className="form-label">
-            Time
-          </label>
-          <input
-            type="time"
-            className="form-control bg-light"
-            id="time"
-            aria-describedby="time-help"
-            defaultValue={meeting.time}
-          />
-          <div id="time-help" className="form-text"></div>
-        </div>
-        <div className="mb-3 col-md-4">
-          <label htmlFor="end_time" className="form-label">
-            End Time
-          </label>
-          <input
-            type="time"
-            className="form-control bg-light"
-            id="end_time"
-            aria-describedby="end_time-help"
-            defaultValue={meeting.end_time}
-          />
-          <div id="end_time-help" className="form-text"></div>
-        </div>
-      </div>
-      <div className="mb-3">
-        <div className="row">
-          <div className="col-md-12">
-            <label className="form-label">Types</label>
-          </div>
-          {typesInUse.map((type, index) => (
-            <div className="col-md-3" key={index}>
-              <div className="form-check">
-                <input
-                  type="checkbox"
-                  className="form-check-input"
-                  id="exampleCheck1"
-                  defaultChecked={verboseTypes.includes(type)}
-                />
-                <label className="form-check-label" htmlFor="exampleCheck1">
-                  {type}
+        {Object.keys(fields).map((field, index) => {
+          const {
+            autoFocus,
+            current,
+            help,
+            label,
+            options,
+            required,
+            showIfValueExists,
+            span,
+            type,
+            value,
+          } = fields[field];
+          const props = {
+            'aria-describedby': `${field}-help`,
+            autoFocus: autoFocus,
+            className: cx('bg-light', {
+              'form-control': type !== 'select',
+              'form-select': type === 'select',
+              'is-valid':
+                typeof current !== 'undefined' &&
+                current !== value &&
+                (!required || current),
+            }),
+            id: field,
+            onChange: e => {
+              setFields({
+                ...fields,
+                [field]: {
+                  ...fields[field],
+                  current: e.target.value,
+                },
+              });
+            },
+            required: required,
+            value: current ?? value,
+          };
+          return (
+            (!showIfValueExists || value) && (
+              <div className={cx('mb-3', `col-md-${span ?? 12}`)} key={index}>
+                <label htmlFor={field} className="form-label">
+                  {label}
                 </label>
+                {['email', 'text', 'time', 'url'].includes(type) ? (
+                  <input {...props} type={type} />
+                ) : type === 'select' ? (
+                  <select {...props}>
+                    {options.map((option, index) => (
+                      <option key={index} value={option}>
+                        {option}
+                      </option>
+                    ))}
+                  </select>
+                ) : type === 'textarea' ? (
+                  <textarea {...props} rows={4} />
+                ) : type === 'checkboxes' ? (
+                  <div className="row">
+                    {options.map((option, index) => (
+                      <div className="col-md-6 col-lg-4 col-xl-3" key={index}>
+                        <div className="form-check">
+                          <input
+                            className="form-check-input"
+                            defaultChecked={value.includes(option)}
+                            id={option}
+                            type="checkbox"
+                          />
+                          <label className="form-check-label" htmlFor={option}>
+                            {option}
+                          </label>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : null}
+                <div id={`${field}-help`} className="form-text">
+                  {help}
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            )
+          );
+        })}
       </div>
-      <div className="mb-3">
-        <label htmlFor="notes" className="form-label">
-          Notes
-        </label>
-        <textarea
-          className="form-control bg-light"
-          id="notes"
-          aria-describedby="notes-help"
-          defaultValue={meeting.notes}
-        />
-        <div id="notes-help" className="form-text">
-          Additional information that could help someone find the meeting, eg{' '}
-          <em>Enter the church from rear</em>.
-        </div>
-      </div>
-      <div className="row">
+      <div className="row mt-4">
         <div className="col-md-6 mb-3">
-          <label htmlFor="conference_url" className="form-label">
-            Conference URL
-          </label>
-          <input
-            type="url"
-            className="form-control bg-light"
-            id="conference_url"
-            aria-describedby="conference_url-help"
-            defaultValue={meeting.conference_url}
-            placeholder="https://zoom.us/j/1234567890?pwd=A0a0B1b1C2c2D3d3E4e4F5f5G6g6H7h7"
-          />
-          <div id="conference_url-help" className="form-text">
-            This should be a full URL to join a video conference. Required for
-            the meeting to be considered "online."
-          </div>
+          <button className="btn btn-primary" type="submit">
+            Send Update Request
+          </button>
+          <p className="mt-2 mb-3 form-text">
+            Clicking this button will open a formatted email, just press "Send."
+          </p>
         </div>
-        <div className="col-md-6 mb-3">
-          <label htmlFor="conference_phone" className="form-label">
-            Conference Phone
-          </label>
-          <input
-            type="text"
-            className="form-control bg-light"
-            id="conference_phone"
-            aria-describedby="conference_phone-help"
-            defaultValue={meeting.conference_phone}
-            placeholder="+16699009128,,1234567890#,,#,,121212#"
+        <div className="col-md-3 offset-md-3 mb-3">
+          <Button
+            className="btn btn-outline-secondary"
+            onClick={() => closeForm()}
+            text="Cancel"
           />
-          <div id="conference_phone-help" className="form-text">
-            Full phone number, starting with + and country code, to join the
-            meeting. Use , and # to make it a one-tap link.
-          </div>
-        </div>
-        <div className="col-md-6 mb-3">
-          <label htmlFor="conference_url_notes" className="form-label">
-            Conference URL Notes
-          </label>
-          <input
-            type="url"
-            className="form-control bg-light"
-            id="conference_url_notes"
-            aria-describedby="conference_url_notes-help"
-            defaultValue={meeting.conference_url_notes}
-            placeholder="Meeting ID: 123 456 7890 Password: 121212"
-          />
-          <div id="conference_url_notes-help" className="form-text">
-            Meeting ID and password (if applicable).
-          </div>
-        </div>
-        <div className="col-md-6 mb-3">
-          <label htmlFor="conference_phone_notes" className="form-label">
-            Conference Phone Notes
-          </label>
-          <input
-            type="text"
-            className="form-control bg-light"
-            id="conference_phone_notes"
-            aria-describedby="conference_phone_notes-help"
-            defaultValue={meeting.conference_phone_notes}
-            placeholder="Dial-In: (669) 900-9128 Enter Meeting ID: 123 456 7890# Password: 121212"
-          />
-          <div id="conference_phone_notes-help" className="form-text">
-            Phone number, meeting ID, and password (if applicable).
-          </div>
         </div>
       </div>
-      <div className="mb-3">
-        <label htmlFor="location" className="form-label">
-          Location
-        </label>
-        <input
-          type="text"
-          className="form-control bg-light"
-          id="location"
-          aria-describedby="location-help"
-          defaultValue={meeting.location}
-          required
-        />
-        <div id="location-help" className="form-text">
-          For in-person and hybrid meetings, this is the building name, eg{' '}
-          <em>Community Center</em> or <em>First Congregational Church</em>.
-        </div>
-      </div>
-      <div className="mb-3">
-        <label htmlFor="formatted_address" className="form-label">
-          Address
-        </label>
-        <input
-          type="text"
-          className="form-control bg-light"
-          id="formatted_address"
-          aria-describedby="formatted_address-help"
-          defaultValue={meeting.formatted_address}
-          required
-        />
-        <div id="formatted_address-help" className="form-text">
-          In-person meetings should have a full street address, while online
-          meetings can have a general location, eg <em>San Jose, CA, USA</em>.
-        </div>
-      </div>
-      {meeting.location_notes && (
-        <div className="mb-3">
-          <label htmlFor="location_notes" className="form-label">
-            Location Notes
-          </label>
-          <textarea
-            className="form-control bg-light"
-            id="location_notes"
-            aria-describedby="location_notes-help"
-            defaultValue={meeting.location_notes}
-          />
-          <div id="location_notes-help" className="form-text"></div>
-        </div>
-      )}
-      <div className="row">
-        <div className="mb-3 col-md-4">
-          <label htmlFor="group" className="form-label">
-            Group
-          </label>
-          <input
-            type="text"
-            className="form-control bg-light"
-            id="group"
-            aria-describedby="group-help"
-            defaultValue={meeting.group}
-            required
-          />
-          <div id="group-help" className="form-text">
-            Optional. This is helpful when a single group is responsible for
-            several meetings.
-          </div>
-        </div>
-        <div className="mb-3 col-md-4">
-          <label htmlFor="website" className="form-label">
-            Group Website
-          </label>
-          <input
-            type="url"
-            className="form-control bg-light"
-            id="website"
-            aria-describedby="website-help"
-            defaultValue={meeting.website}
-            placeholder="https://groupname.org"
-          />
-          <div id="website-help" className="form-text">
-            Optional website address for the group.
-          </div>
-        </div>
-        <div className="mb-3 col-md-4">
-          <label htmlFor="email" className="form-label">
-            Group Email
-          </label>
-          <input
-            type="email"
-            className="form-control bg-light"
-            id="email"
-            aria-describedby="email-help"
-            defaultValue={meeting.email}
-            placeholder="groupname@gmail.com"
-          />
-          <div id="email-help" className="form-text">
-            Optional public contact information, should not break personal
-            anonymity.
-          </div>
-        </div>
-      </div>
-      <div className="row">
-        <div className="mb-3 col-md-4">
-          <label htmlFor="venmo" className="form-label">
-            Venmo
-          </label>
-          <input
-            type="text"
-            className="form-control bg-light"
-            id="venmo"
-            aria-describedby="venmo-help"
-            defaultValue={meeting.venmo}
-            placeholder="@GroupName"
-          />
-          <div id="venmo-help" className="form-text">
-            Optional Venmo handle for 7th Tradition contributions
-          </div>
-        </div>
-        <div className="mb-3 col-md-4">
-          <label htmlFor="paypal" className="form-label">
-            PayPal
-          </label>
-          <input
-            type="url"
-            className="form-control bg-light"
-            id="paypal"
-            aria-describedby="paypal-help"
-            defaultValue={meeting.paypal}
-            placeholder="https://paypal.me/groupname"
-          />
-          <div id="paypal-help" className="form-text">
-            Optional PayPal.me URL for 7th Tradition contributions.
-          </div>
-        </div>
-        <div className="mb-3 col-md-4">
-          <label htmlFor="email" className="form-label">
-            Cash App (Square)
-          </label>
-          <input
-            type="text"
-            className="form-control bg-light"
-            id="square"
-            aria-describedby="square-help"
-            defaultValue={meeting.square}
-            placeholder="$GroupName"
-          />
-          <div id="square-help" className="form-text">
-            Optional cashtag for 7th Tradition contributions.
-          </div>
-        </div>
-      </div>
-      {meeting.group_notes && (
-        <div className="mb-3">
-          <label htmlFor="group_notes" className="form-label">
-            Group Notes
-          </label>
-          <textarea
-            className="form-control bg-light"
-            id="group_notes"
-            aria-describedby="group_notes-help"
-            defaultValue={meeting.group_notes}
-          />
-          <div id="group_notes-help" className="form-text"></div>
-        </div>
-      )}
-      <button type="submit" className="btn btn-primary">
-        Send Update Request
-      </button>
     </form>
   );
 }
