@@ -1,13 +1,7 @@
 import React, { useState } from 'react';
 import { formatClasses as cx, settings, strings } from '../helpers';
-import Button from './Button';
 
-export default function Form({
-  closeForm,
-  feedbackEmails,
-  meeting,
-  typesInUse,
-}) {
+export default function Form({ feedbackEmails, meeting, typesInUse }) {
   const [fields, setFields] = useState({
     'overview': {
       autoFocus: true,
@@ -266,20 +260,13 @@ export default function Form({
         })}
       </div>
       <div className="row mt-4">
-        <div className="col-md-6 mb-3">
+        <div className="col-md-6 mb-3 d-grid gap-2">
           <button className="btn btn-primary" type="submit">
             Send Update Request
           </button>
-          <p className="mt-2 mb-3 form-text">
+          <p className="form-text">
             Clicking this button will open a formatted email, just press "Send."
           </p>
-        </div>
-        <div className="col-md-3 offset-md-3 mb-3">
-          <Button
-            className="btn btn-outline-secondary"
-            onClick={() => closeForm()}
-            text="Cancel"
-          />
         </div>
       </div>
     </form>

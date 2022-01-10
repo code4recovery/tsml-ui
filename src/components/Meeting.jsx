@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import {
   formatClasses as cx,
@@ -23,14 +23,6 @@ export default function Meeting({ state, setState, mapbox }) {
 
   //existence checked in the parent component
   const meeting = state.meetings[state.input.meeting];
-
-  //form ref
-  const form = useRef();
-
-  //scroll to form when opening it
-  useEffect(() => {
-    form.current?.scrollIntoView();
-  }, [formOpen]);
 
   //scroll to top when you navigate to this page
   useEffect(() => {
@@ -129,7 +121,7 @@ export default function Meeting({ state, setState, mapbox }) {
 
   return (
     <div
-      className={cx('d-flex flex-column flex-grow-1 meeting', {
+      className={cx('d-flex flex-column meeting', {
         'in-person': meeting.isInPerson,
         'inactive': !meeting.isInPerson && !meeting.isOnline,
         'online': meeting.isOnline,
@@ -159,7 +151,7 @@ export default function Meeting({ state, setState, mapbox }) {
           {strings.back_to_meetings}
         </a>
       </div>
-      <div className="flex-grow-1 row">
+      <div className="row">
         <div className="align-content-start col-md-4 d-grid gap-3 mb-3 mb-md-0">
           {directionsUrl && (
             <Button
@@ -320,6 +312,16 @@ export default function Meeting({ state, setState, mapbox }) {
               </div>
             )}
           </div>
+        </div>
+        <div className="col-md-8 d-flex flex-column gap-3">
+          <Map
+            className={cx({ 'd-md-block d-none': !meeting.isInPerson })}
+            filteredSlugs={[meeting.slug]}
+            listMeetingsInPopup={false}
+            state={state}
+            setState={setState}
+            mapbox={mapbox}
+          />
 
           {meeting.feedback_url ? (
             <Button
@@ -336,36 +338,17 @@ export default function Meeting({ state, setState, mapbox }) {
               />
             )
           )}
-        </div>
-        {formOpen ? (
-          <div className="col-md-8" ref={form}>
+
+          {formOpen && (
             <Form
-              meeting={meeting}
-              closeForm={() => setFormOpen(false)}
               feedbackEmails={settings.feedback_emails}
+              meeting={meeting}
               typesInUse={Object.values(state.indexes.type).map(
                 type => type.name
               )}
             />
-          </div>
-        ) : (
-          !!mapbox && (
-            <div
-              className={cx(
-                { 'd-md-block d-none': !meeting.isInPerson },
-                'col-md-8'
-              )}
-            >
-              <Map
-                filteredSlugs={[meeting.slug]}
-                listMeetingsInPopup={false}
-                state={state}
-                setState={setState}
-                mapbox={mapbox}
-              />
-            </div>
-          )
-        )}
+          )}
+        </div>
       </div>
     </div>
   );
