@@ -11,7 +11,7 @@ export default function Form({ feedbackEmails, meeting, typesInUse }) {
       type: 'textarea',
     },
     'name': {
-      help: 'Meeting names are typically in Title Case.',
+      help: 'Meeting names are typically in Title Case. Try to avoid using the words “AA” or “Meeting.”',
       label: 'Meeting Name',
       required: true,
       type: 'text',
@@ -173,8 +173,8 @@ export default function Form({ feedbackEmails, meeting, typesInUse }) {
     >
       <legend>Request Meeting Update</legend>
       <p className="mb-3">
-        Use this form to generate an email to the meeting list coordinator. You
-        will need to be able to send email from your device for this to work.
+        This form will help you compose an email to the meeting list
+        coordinator.
       </p>
       <div className="row">
         {Object.keys(fields).map((field, index) => {
@@ -262,10 +262,11 @@ export default function Form({ feedbackEmails, meeting, typesInUse }) {
       <div className="row mt-4">
         <div className="col-md-6 mb-3 d-grid gap-2">
           <button className="btn btn-primary" type="submit">
-            Send Update Request
+            Create Update Request
           </button>
           <p className="form-text">
-            Clicking this button will open a formatted email, just press "Send."
+            Clicking this button will open a formatted email on your device. You
+            will need to press “Send” to complete your submission.
           </p>
         </div>
       </div>
