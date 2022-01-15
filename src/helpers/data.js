@@ -761,6 +761,7 @@ function populateRegionsIndex(regions, position, index, slug) {
 //"term1 OR term2 term3" => ['term1', ['term2', 'term3']]
 function processSearchTerms(input) {
   return input
+    .replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
     .replaceAll(' OR ', '|')
     .toLowerCase()
     .split('|')
