@@ -18,9 +18,6 @@ export default function Meeting({ state, setState, mapbox }) {
   //open types
   const [define, setDefine] = useState(null);
 
-  //open feedback form
-  const [formOpen, setFormOpen] = useState(false);
-
   //existence checked in the parent component
   const meeting = state.meetings[state.input.meeting];
 
@@ -331,22 +328,14 @@ export default function Meeting({ state, setState, mapbox }) {
             />
           ) : (
             !!settings.feedback_emails.length && (
-              <Button
-                onClick={() => setFormOpen(!formOpen)}
-                icon="edit"
-                text={strings.feedback}
+              <Form
+                feedbackEmails={settings.feedback_emails}
+                meeting={meeting}
+                typesInUse={Object.values(state.indexes.type).map(
+                  type => type.name
+                )}
               />
             )
-          )}
-
-          {formOpen && (
-            <Form
-              feedbackEmails={settings.feedback_emails}
-              meeting={meeting}
-              typesInUse={Object.values(state.indexes.type).map(
-                type => type.name
-              )}
-            />
           )}
         </div>
       </div>
