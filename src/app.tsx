@@ -7,7 +7,9 @@ let element = document.getElementById('tsml-ui');
 
 //legacy support, can remove once sites have had a chance to migrate (implemented Jul 1 2021)
 if (!element) {
-  [element] = document.getElementsByTagName('meetings');
+  [element] = document.getElementsByTagName(
+    'meetings'
+  ) as unknown as HTMLElement[];
 }
 
 if (element) {
