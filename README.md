@@ -51,7 +51,7 @@ This app exists to help people find AA meetings, and after much discussion we de
 
 Second, while we can infer that a meeting is "online" if there is a Zoom URL (for example) in the listing, the app should not assume that, when there are online and in-person options, that means it is an actual "hybrid" meeting with a video screen and speakers in the room.
 
-Web servants may [add their own meetimg types](#add-custom-types) of course.
+Web servants may [add their own meeting types](#add-custom-types) of course.
 
 ### Can I import TSML UI from NPM for use in a NextJS or Gatsby project?
 
