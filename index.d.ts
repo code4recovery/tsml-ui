@@ -11,16 +11,16 @@ interface TSMLReactConfig {
   timezone: string;
   conference_providers: Record<string, string>;
   defaults: {
-    // TODO: Not sure about these types
+    // TODO: Not sure about this types
     distance: unknown[];
-    meeting: unknown;
-    mode: string;
-    region: unknown[];
+    meeting: string | null;
+    mode: 'search' | 'location';
+    region: string[];
     search: string;
-    time: unknown[];
-    type: unknown[];
-    view: string; // TODO: Probably a union
-    weekday: [];
+    time: TSMLReactConfig['times'];
+    type: MeetingType[];
+    view: 'table' | 'map';
+    weekday: TSMLReactConfig['weekdays'];
   };
   distance_unit: 'mi' | 'km';
   /** Email addresses for update meeting info button */
@@ -68,3 +68,8 @@ interface TSMLReactConfig {
 }
 
 declare var tsml_react_config: Readonly<TSMLReactConfig> | undefined;
+
+//declaration merge for IE compat
+interface Navigator {
+  msSaveBlob: (blob: Blob, name: string) => void;
+}
