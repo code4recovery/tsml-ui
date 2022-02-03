@@ -13,8 +13,7 @@
     "watch-poll": "mix watch -- --watch-options-poll=1000",
     "test": "jest",
     "test-watch": "jest --watch",
-    "test-coverage": "jest --coverage",
-    "coveralls": "jest --coverage && cat ./coverage/lcov.info | coveralls"
+    "test-coverage": "jest --coverage"
   },
   "devDependencies": {
     "@babel/preset-react": "^7.14.5",
