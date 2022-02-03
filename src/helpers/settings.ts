@@ -5,7 +5,8 @@ import es from '../i18n/es';
 import fr from '../i18n/fr';
 
 //override these on your page with tsml_react_config
-const defaults = {
+const defaults: TSMLReactConfig = {
+  timezone: '',
   cache: false,
   columns: ['time', 'distance', 'name', 'location_group', 'address', 'region'],
   conference_providers: {
@@ -35,6 +36,7 @@ const defaults = {
   distance_unit: 'mi', //mi or km
   feedback_emails: [], //email addresses for update meeting info button
   filters: ['region', 'distance', 'weekday', 'time', 'type'],
+  flags: null,
   in_person_types: [
     'BA',
     'BRK',
@@ -104,7 +106,7 @@ if (
   settings.columns = tsml_react_config.columns;
 }
 
-const preferredLanguage = navigator.language.substr(0, 2);
+const preferredLanguage = navigator.language.substr(0, 2) as Lang;
 
 const language = Object.keys(settings.strings).includes(preferredLanguage)
   ? preferredLanguage

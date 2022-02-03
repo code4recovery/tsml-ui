@@ -11,5 +11,5 @@
     "jsx": "preserve",
     "outDir": "public"
   },
-  "include": ["index.d.ts", "src/app.tsx"]
+  "include": ["index.d.ts", "src/app.tsx", "src/**/*.ts"]
 }
