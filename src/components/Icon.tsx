@@ -1,6 +1,12 @@
 import React from 'react';
 
-export default function Icon({ icon, size = 20, className }) {
+type IconProps = {
+  icon: string;
+  size: number;
+  className?: string;
+};
+
+export default function Icon({ icon, size = 20, className }: IconProps) {
   const icons = {
     back: [
       'M7.854 4.646a.5.5 0 0 1 0 .708L5.207 8l2.647 2.646a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 0 1 .708 0z',
@@ -51,7 +57,10 @@ export default function Icon({ icon, size = 20, className }) {
       'M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm15 2h-4v3h4V4zm0 4h-4v3h4V8zm0 4h-4v3h3a1 1 0 0 0 1-1v-2zm-5 3v-3H6v3h4zm-5 0v-3H1v2a1 1 0 0 0 1 1h3zm-4-4h4V8H1v3zm0-4h4V4H1v3zm5-3v3h4V4H6zm4 4H6v3h4V8z',
     ],
   };
-  return icons[icon] ? (
+
+  const paths = icons[icon as keyof typeof icons];
+
+  return paths ? (
     <svg
       className={className}
       fill="currentColor"
@@ -59,7 +68,7 @@ export default function Icon({ icon, size = 20, className }) {
       viewBox="0 0 16 16"
       width={size}
     >
-      {icons[icon].map((path, index) => (
+      {paths.map((path, index) => (
         <path key={index} fillRule="evenodd" d={path} />
       ))}
     </svg>
