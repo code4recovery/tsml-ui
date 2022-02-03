@@ -1,3 +1,4 @@
+import { Meeting } from '../types/Meeting';
 import { getQueryString } from './query-string';
 import { settings, strings } from './settings';
 
@@ -8,16 +9,17 @@ export function formatAddress(formatted_address = '') {
 }
 
 //ensure array-ness for formatFeedbackEmail()
-function formatArray(unknown) {
+function formatArray(unknown: unknown) {
   if (Array.isArray(unknown)) return unknown;
   const type = typeof unknown;
   if (type === 'string') return [unknown];
+  //@ts-expect-error TODO
   if (type === 'object') return Object.values(unknown);
   return [];
 }
 
 //get name of provider from url
-export function formatConferenceProvider(url) {
+export function formatConferenceProvider(url: string) {
   const urlParts = url.split('/');
   if (urlParts.length < 2) return null;
   const provider = Object.keys(settings.conference_providers).filter(domain =>
@@ -49,22 +51,33 @@ export function formatDirectionsUrl({
   formatted_address,
   latitude,
   longitude,
+}: {
+  formatted_address: string;
+  latitude: number;
+  longitude: number;
 }) {
   //create a link for directions
   const iOS = navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
   const baseURL = iOS ? 'maps://' : 'https://www.google.com/maps';
-  const params = { saddr: 'Current Location' };
+  const params: { saddr: string; daddr?: string; q?: string } = {
+    saddr: 'Current Location',
+  };
+
   if (latitude && longitude) {
     params['daddr'] = [latitude, longitude].join();
     params['q'] = formatted_address;
   } else {
     params['daddr'] = formatted_address;
   }
+
   return `${baseURL}?${new URLSearchParams(params)}`;
 }
 
 //send back a mailto link to a feedback email
-export function formatFeedbackEmail(feedback_emails, meeting) {
+export function formatFeedbackEmail(
+  feedback_emails: TSMLReactConfig['feedback_emails'],
+  meeting: Meeting
+) {
   //remove extra query params from meeting URL
   const input = getQueryString();
   const meetingUrl = formatUrl({ meeting: input.meeting });
@@ -91,7 +104,7 @@ export function formatFeedbackEmail(feedback_emails, meeting) {
 }
 
 //format ICS file for add to calendar
-export function formatIcs(meeting) {
+export function formatIcs(meeting: Meeting) {
   const fmt = 'YYYYMMDDTHHmmss';
 
   const url = [
@@ -169,12 +182,13 @@ export function formatIcs(meeting) {
     window.navigator.msSaveBlob(blob, 'download.ics');
   } else {
     //open/save link in modern browsers
-    window.location = encodeURI(`data:text/calendar;charset=utf8,${urlString}`);
+    const uri = `data:text/calendar;charset=utf8,${urlString}`;
+    window.location = encodeURI(uri) as unknown as Location;
   }
 }
 
 //turn Mountain View into mountain-view
-export function formatSlug(str) {
+export function formatSlug(str: string) {
   str = str.trim().toLowerCase();
 
   // remove accents, swap ñ for n, etc
@@ -194,7 +208,7 @@ export function formatSlug(str) {
 }
 
 //format an internal link with correct query params
-export function formatUrl(input) {
+export function formatUrl(input: Partial<TSMLReactConfig['defaults']>) {
   const query = {};
 
   //distance, region, time, type, and weekday
@@ -202,6 +216,7 @@ export function formatUrl(input) {
     .filter(filter => typeof input[filter] !== 'undefined')
     .filter(filter => input[filter]?.length)
     .forEach(filter => {
+      // @ts-expect-error TODO
       query[filter] = input[filter].join('/');
     });
 
@@ -210,6 +225,7 @@ export function formatUrl(input) {
     .filter(param => typeof input[param] !== 'undefined')
     .filter(param => input[param] !== settings.defaults[param])
     .forEach(param => {
+      // @ts-expect-error TODO
       query[param] = input[param];
     });
 
