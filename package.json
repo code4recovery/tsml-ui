@@ -10,12 +10,20 @@
     "postprod": "rm -f mix-manifest.json",
     "prod": "mix --production",
     "watch": "mix watch",
-    "watch-poll": "mix watch -- --watch-options-poll=1000"
+    "watch-poll": "mix watch -- --watch-options-poll=1000",
+    "test": "jest",
+    "test-watch": "jest --watch",
+    "test-coverage": "jest --coverage",
+    "coveralls": "jest --coverage && cat ./coverage/lcov.info | coveralls"
   },
   "devDependencies": {
     "@babel/preset-react": "^7.14.5",
+    "@babel/preset-typescript": "^7.16.7",
+    "@types/jest": "^27.4.0",
     "@types/react": "^17.0.38",
     "@types/react-dom": "^17.0.11",
+    "coveralls": "^3.1.1",
+    "jest": "^27.4.7",
     "laravel-mix": "^6.0.27",
     "sass": "^1.37.5",
     "sass-loader": "^12.1.0",
