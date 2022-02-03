@@ -30,8 +30,10 @@ describe('getQueryString', () => {
 
 describe('setQueryString', () => {
   it('calls formatUrl and pushState correctly', () => {
-    setQueryString('foo');
-    expect(formatUrl).toHaveBeenCalledWith('foo');
+    const params = { search: 'foo' };
+    setQueryString(params);
+
+    expect(formatUrl).toHaveBeenCalledWith(params);
     expect(window.history.pushState).toHaveBeenCalledWith('', '', 'foo');
   });
 });

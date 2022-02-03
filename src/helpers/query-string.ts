@@ -28,7 +28,7 @@ export function getQueryString() {
 }
 
 //save input values to query string
-export function setQueryString(input: TSMLReactConfig['defaults']) {
+export function setQueryString(input: Partial<TSMLReactConfig['defaults']>) {
   const url = formatUrl(input);
 
   //set the query string with the history api
