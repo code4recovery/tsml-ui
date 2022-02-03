@@ -12,6 +12,7 @@ export function getQueryString() {
   settings.filters
     .filter(filter => query.has(filter))
     .forEach(filter => {
+      //@ts-expect-error TODO
       input[filter] = query.get(filter).split('/');
     });
 
@@ -19,6 +20,7 @@ export function getQueryString() {
   settings.params
     .filter(param => query.has(param))
     .forEach(param => {
+      //@ts-expect-error TODO
       input[param] = query.get(param);
     });
 
@@ -26,7 +28,7 @@ export function getQueryString() {
 }
 
 //save input values to query string
-export function setQueryString(input) {
+export function setQueryString(input: TSMLReactConfig['defaults']) {
   const url = formatUrl(input);
 
   //set the query string with the history api
