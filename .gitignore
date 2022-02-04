@@ -2,3 +2,4 @@
 mix-manifest.json
 npm-debug.log
 package-lock.json
+coverage
