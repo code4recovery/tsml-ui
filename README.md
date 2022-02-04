@@ -1,4 +1,4 @@
-# TSML UI
+# TSML UI &nbsp; [![Coverage Status](https://coveralls.io/repos/github/code4recovery/tsml-ui/badge.svg?branch=main)](https://coveralls.io/github/code4recovery/tsml-ui?branch=main)
 
 TSML UI (12 Step Meeting List User Interface) is an interactive meeting finder makes the [12 Step Meeting List](https://github.com/code4recovery/12-step-meeting-list) interface available for use on any web page, regardless of platform.
 
@@ -19,18 +19,18 @@ You don't need to do anything other than enable HTTPS on your website. To ensure
 ### Add custom types
 
 Here is an example of extending the `tsml_react_config` object to include a definition for an additional meeting type.
-
-    var tsml_react_config = {
-      timezone: 'Pacific/Honolulu',
-      strings: {
-        en: {
-          types: {
-            BEACH: 'Beach Meeting',
-          },
-        },
+```js
+var tsml_react_config = {
+  timezone: 'Pacific/Honolulu',
+  strings: {
+    en: {
+      types: {
+        BEACH: 'Beach Meeting',
       },
-    };
-
+    },
+  },
+};
+```
 A list of AA meeting types can be found in the [Meeting Guide format spec](https://github.com/code4recovery/spec).
 
 ## Frequently asked questions
