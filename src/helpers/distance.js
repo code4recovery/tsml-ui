@@ -17,6 +17,7 @@ export function distance(a, b) {
       Math.sin(aRadLat) * Math.sin(bRadLat) +
       Math.cos(aRadLat) * Math.cos(bRadLat) * Math.cos(radTheta);
 
+    // TODO: How to test the scenario for this line?
     if (dist > 1) dist = 1;
 
     dist = Math.acos(dist);
