@@ -9,7 +9,7 @@ export function formatAddress(formatted_address = '') {
 }
 
 //ensure array-ness for formatFeedbackEmail()
-function formatArray(unknown: unknown) {
+export function formatArray(unknown: unknown) {
   if (Array.isArray(unknown)) return unknown;
   const type = typeof unknown;
   if (type === 'string') return [unknown];
@@ -29,7 +29,9 @@ export function formatConferenceProvider(url: string) {
 }
 
 //inspired by the functionality of jedwatson/classnames
-export function formatClasses() {
+export function formatClasses(
+  _args: Array<string | undefined | Record<string, boolean>>
+) {
   return Object.values(arguments)
     .map(arg =>
       typeof arg === 'string'
@@ -53,8 +55,8 @@ export function formatDirectionsUrl({
   longitude,
 }: {
   formatted_address: string;
-  latitude: number;
-  longitude: number;
+  latitude?: number;
+  longitude?: number;
 }) {
   //create a link for directions
   const iOS = navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
