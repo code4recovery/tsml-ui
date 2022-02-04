@@ -69,6 +69,30 @@ interface TSMLReactConfig {
 
 declare var tsml_react_config: Readonly<TSMLReactConfig> | undefined;
 
+//google analytics globals
+declare var gtag:
+  | ((
+      type: 'event',
+      action: string,
+      params: {
+        event_category: string;
+        event_label: string;
+      }
+    ) => void)
+  | undefined;
+
+declare var ga:
+  | ((
+      type: 'send',
+      params: {
+        hitType: 'event';
+        eventCategory: string;
+        eventAction: string;
+        eventLabel: string;
+      }
+    ) => void)
+  | undefined;
+
 //declaration merge for IE compat
 interface Navigator {
   msSaveBlob: (blob: Blob, name: string) => void;
