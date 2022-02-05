@@ -342,7 +342,9 @@ export function loadMeetingData(data, capabilities, timezone) {
 
   //define lookups we'll need later
   const lookup_weekday = settings.weekdays.map(weekday => strings[weekday]);
-  const lookup_type_codes = Object.keys(strings.types);
+  const lookup_type_codes = Object.keys(strings.types).filter(
+    type => type !== 'ONL' //duplicate of "online"
+  );
   const lookup_type_values = Object.values(strings.types);
   const decode_types = {};
   lookup_type_codes.forEach(key => {
