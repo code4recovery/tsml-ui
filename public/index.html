@@ -9,65 +9,61 @@
       integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
       crossorigin="anonymous"
     />
-
-    <style>
-      .container-md {
-        max-width: 720px;
-      }
-    </style>
-
     <title>TSML UI</title>
   </head>
   <body class="bg-light">
-    <div class="container-md my-5">
-      <h1>TSML UI</h1>
-      <p class="lead">
-        TSML UI (12 Step Meeting List User Interface) is an open source
-        interactive recovery meeting finder that can be embedded on any website.
-      </p>
-      <section class="my-5">
-        <h4>12 Step Meeting List</h4>
-        <p>
-          Using the
-          <a
-            href="https://wordpress.org/plugins/12-step-meeting-list/"
-            target="_blank"
-            >12 Step Meeting List</a
-          >
-          WordPress plugin, use this built-in shortcode to embed it in a
-          WordPress post or page.
-        </p>
-        <pre class="rounded bg-dark text-light p-3 overflow-hidden">
+    <main class="container my-5">
+      <div class="row">
+        <div class="col-md-6 offset-md-3">
+          <h1>TSML UI</h1>
+          <p class="lead">
+            TSML UI (12 Step Meeting List User Interface) is an open source
+            interactive recovery meeting finder that can be embedded on any
+            website.
+          </p>
+          <section class="my-5">
+            <h4>12 Step Meeting List</h4>
+            <p>
+              Using the
+              <a
+                href="https://wordpress.org/plugins/12-step-meeting-list/"
+                target="_blank"
+                >12 Step Meeting List</a
+              >
+              WordPress plugin, use this built-in shortcode to embed it in a
+              WordPress post or page.
+            </p>
+            <pre class="rounded bg-dark text-light p-3 overflow-hidden">
 [tsml_ui]</pre
-        >
-        <a
-          class="btn btn-outline-primary"
-          href="https://aasantacruz.org/meeting-guide/"
-          target="_blank"
-          >Demo: Santa Cruz</a
-        >
-      </section>
+            >
+            <a
+              class="btn btn-outline-primary"
+              href="https://aasantacruz.org/meeting-guide/"
+              target="_blank"
+              >Demo: Santa Cruz, CA</a
+            >
+          </section>
 
-      <section class="my-5">
-        <h4>Custom JSON feed</h4>
-        <p>
-          If you can generate a
-          <a href="https://github.com/code4recovery/spec" target="_blank"
-            >Meeting Guide-spec JSON feed</a
-          >, say, from a custom database, you can plug that info in to the
-          format below. To enable maps, add a
-          <a href="https://www.mapbox.com/" target="_blank"
-            >Mapbox API access token</a
-          >
-          (or remove that parameter). Be sure to add a
-          <a
-            href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones"
-            target="_blank"
-            >proper time zone</a
-          >
-          for your location.
-        </p>
-        <pre class="rounded bg-dark text-light p-3 overflow-hidden">
+          <section class="my-5">
+            <h4>Custom JSON feed</h4>
+            <p>
+              If you can generate a
+              <a href="https://github.com/code4recovery/spec" target="_blank"
+                >Meeting Guide-spec JSON feed</a
+              >, say, from a custom database, you can plug that info in to the
+              format below. To enable maps, add a
+              <a href="https://www.mapbox.com/" target="_blank"
+                >Mapbox API access token</a
+              >
+              (or remove that parameter). Be sure to add a
+              <a
+                href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones"
+                target="_blank"
+                >proper time zone</a
+              >
+              for your location.
+            </p>
+            <pre class="rounded bg-dark text-light p-3 overflow-hidden">
 &lt;div
   id="tsml-ui"
   data-src="/path/to/your.json"
@@ -75,36 +71,61 @@
   data-timezone="America/Los_Angeles"
 &gt;&lt;/div&gt;
 &lt;script src="https://tsml-ui.code4recovery.org/app.js" async&gt;&lt;/script&gt;</pre
-        >
-        <a
-          class="btn btn-outline-primary"
-          href="https://aasfmarin.org/meetings"
-          target="_blank"
-          >Demo: San Francisco & Marin</a
-        >
-      </section>
+            >
+            <a
+              class="btn btn-outline-primary"
+              href="https://aasfmarin.org/meetings"
+              target="_blank"
+              >Demo: San Francisco & Marin, CA</a
+            >
+          </section>
 
-      <p class="mb-4">
-        More information is available on the
-        <a href="https://github.com/code4recovery/tsml-ui" target="_blank"
-          >project page on GitHub</a
-        >, including advanced configuration options. To get help, please
-        <a
-          href="https://github.com/code4recovery/tsml-ui/issues/new"
-          target="_blank"
-          >file an issue</a
-        >.
-      </p>
-      <p class="text-center">
-        <a href="https://code4recovery.org" target="_blank">
-          <img
-            src="/logo.svg"
-            width="100"
-            height="100"
-            alt="Code for Recovery"
-          />
-        </a>
-      </p>
-    </div>
+          <section class="my-5">
+            <h4>Google Sheet</h4>
+            <p>
+              You can generate a JSON feed from a Google Sheet using the
+              <a href="https://sheets.code4recovery.org/" target="_blank"
+                >Google Sheet Importer</a
+              >. Use the URL you generate in conjunction with the Custom JSON
+              feed instructions above. Here is a
+              <a
+                href="https://docs.google.com/spreadsheets/d/12Ga8uwMG4WJ8pZ_SEU7vNETp_aQZ-2yNVsYDFqIwHyE/edit#gid=0"
+                target="_blank"
+                >sample Google Sheet</a
+              >
+              you can use to get started.
+            </p>
+            <a
+              class="btn btn-outline-primary"
+              href="https://aasanjose.org/meetings"
+              target="_blank"
+              >Demo: San Jose, CA</a
+            >
+          </section>
+
+          <p class="mb-4">
+            More information is available on the
+            <a href="https://github.com/code4recovery/tsml-ui" target="_blank"
+              >project page on GitHub</a
+            >, including advanced configuration options. To get help, please
+            <a
+              href="https://github.com/code4recovery/tsml-ui/issues"
+              target="_blank"
+              >file an issue</a
+            >.
+          </p>
+          <p class="text-center">
+            <a href="https://code4recovery.org" target="_blank">
+              <img
+                src="/logo.svg"
+                width="100"
+                height="100"
+                alt="Code for Recovery"
+              />
+            </a>
+          </p>
+        </div>
+      </div>
+    </main>
   </body>
 </html>

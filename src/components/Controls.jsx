@@ -12,6 +12,9 @@ import {
 
 export default function Controls({ state, setState, mapbox }) {
   const [dropdown, setDropdown] = useState(null);
+  const [search, setSearch] = useState(
+    state.input.mode === 'location' ? state.input.search : ''
+  );
   const searchInput = useRef();
 
   //get available search options based on capabilities
@@ -93,6 +96,8 @@ export default function Controls({ state, setState, mapbox }) {
       state.meetings[slug].distance = null;
     });
 
+    setSearch('');
+
     //focus after waiting for disabled to clear
     setTimeout(() => searchInput.current.focus(), 100);
 
@@ -136,13 +141,17 @@ export default function Controls({ state, setState, mapbox }) {
                   if (state.input.mode === 'search') {
                     state.input.search = e.target.value;
                     setState({ ...state });
+                  } else {
+                    setSearch(e.target.value);
                   }
                 }}
                 placeholder={strings.modes[state.input.mode]}
                 ref={searchInput}
                 spellCheck="false"
                 type="search"
-                value={state.input.search}
+                value={
+                  state.input.mode === 'location' ? search : state.input.search
+                }
               />
               {modes.length > 1 && (
                 <button

@@ -1,328 +1,8 @@
 import moment from 'moment-timezone';
 
-import { distance } from './distance';
-import { formatAddress, formatConferenceProvider, formatSlug } from './format';
-import { settings, strings } from './settings';
-
-//all the fields in the meeting guide spec
-const spec_properties = [
-  'address',
-  'approximate',
-  'city',
-  'conference_phone',
-  'conference_phone_notes',
-  'conference_provider',
-  'conference_url',
-  'conference_url_notes',
-  'contact_1_email',
-  'contact_1_name',
-  'contact_1_phone',
-  'contact_2_email',
-  'contact_2_name',
-  'contact_2_phone',
-  'contact_3_email',
-  'contact_3_name',
-  'contact_3_phone',
-  'country',
-  'day',
-  'district',
-  'edit_url',
-  'email',
-  'end_time',
-  'feedback_url',
-  'formatted_address',
-  'group',
-  'group_notes',
-  'image',
-  'latitude',
-  'location',
-  'location_notes',
-  'longitude',
-  'minutes_now',
-  'minutes_week',
-  'name',
-  'notes',
-  'paypal',
-  'phone',
-  'postal_code',
-  'region',
-  'regions',
-  'search',
-  'slug',
-  'square',
-  'state',
-  'sub_region',
-  'time',
-  'timezone',
-  'types',
-  'updated',
-  'venmo',
-  'website',
-];
-
-//calculate distances
-function calculateDistances(
-  latitude,
-  longitude,
-  filteredSlugs,
-  state,
-  setState
-) {
-  //build new index and meetings array
-  const distances = {};
-
-  //loop through and update or clear distances, and rebuild index
-  filteredSlugs.forEach(slug => {
-    state.meetings[slug] = {
-      ...state.meetings[slug],
-      distance: distance(
-        { latitude: latitude, longitude: longitude },
-        state.meetings[slug]
-      ),
-    };
-
-    [1, 2, 5, 10, 25].forEach(distance => {
-      if (state.meetings[slug].distance <= distance) {
-        if (!distances.hasOwnProperty(distance)) {
-          distances[distance] = {
-            key: distance.toString(),
-            name: `${distance} ${settings.distance_unit}`,
-            slugs: [],
-          };
-        }
-        distances[distance].slugs.push(slug);
-      }
-    });
-  });
-
-  //flatten index and set capability
-  const distanceIndex = flattenAndSortIndexes(
-    distances,
-    (a, b) => parseInt(a.key) - parseInt(b.key)
-  );
-  state.capabilities.distance = !!distanceIndex.length;
-
-  //this will cause a re-render with latitude and longitude now set
-  setState({
-    ...state,
-    capabilities: state.capabilities,
-    indexes: {
-      ...state.indexes,
-      distance: distanceIndex,
-    },
-    input: {
-      ...state.input,
-      latitude: parseFloat(latitude.toFixed(5)),
-      longitude: parseFloat(longitude.toFixed(5)),
-    },
-  });
-}
-
-//confirm supplied timezone is valid
-function checkTimezone(timezone, fallback) {
-  return !!moment.tz.zone(timezone) ? timezone : fallback;
-}
-
-//run filters on meetings; this is run at every render
-export function filterMeetingData(state, setState, mapbox) {
-  const matchGroups = {};
-
-  //filter by distance, region, time, type, and weekday
-  settings.filters.forEach(filter => {
-    if (state.input[filter]?.length && state.capabilities[filter]) {
-      matchGroups[filter] = [].concat.apply(
-        [],
-        state.input[filter].map(key => {
-          const match = getIndexByKey(state.indexes[filter], key);
-          return match ? match.slugs : [];
-        })
-      );
-    }
-  });
-
-  //handle keyword search or geolocation
-  if (state.input.mode === 'search') {
-    if (!!state.input.search) {
-      const orTerms = processSearchTerms(state.input.search);
-      const matches = Object.keys(state.meetings).filter(slug =>
-        orTerms.some(andTerm =>
-          andTerm.every(term => state.meetings[slug].search.search(term) !== -1)
-        )
-      );
-      matchGroups.search = [].concat.apply([], matches);
-    }
-  } else if (['me', 'location'].includes(state.input.mode)) {
-    //only show meetings with physical locations
-    const meetingsWithCoordinates = Object.keys(state.meetings).filter(
-      slug => state.meetings[slug].latitude && state.meetings[slug].latitude
-    );
-    matchGroups.coordinates = meetingsWithCoordinates;
-
-    if (!state.input.latitude || !state.input.longitude) {
-      if (state.input.search && state.input.mode === 'location') {
-        //make mapbox API request https://docs.mapbox.com/api/search/
-        fetch(
-          `https://api.mapbox.com/geocoding/v5/mapbox.places/${
-            state.input.search
-          }.json?${new URLSearchParams({
-            access_token: mapbox,
-            autocomplete: false,
-            language: settings.language,
-          })}`
-        )
-          .then(result => result.json())
-          .then(result => {
-            if (result.features && result.features.length) {
-              //re-render page with new params
-              calculateDistances(
-                result.features[0].center[1],
-                result.features[0].center[0],
-                filteredSlugs,
-                state,
-                setState
-              );
-            } else {
-              //show error
-            }
-          });
-      } else if (state.input.mode === 'me') {
-        navigator.geolocation.getCurrentPosition(
-          position => {
-            calculateDistances(
-              position.coords.latitude,
-              position.coords.longitude,
-              filteredSlugs,
-              state,
-              setState
-            );
-          },
-          error => {
-            console.warn('getCurrentPosition() error', error);
-          },
-          { timeout: 5000 }
-        );
-      }
-    }
-  }
-
-  //do the filtering, if necessary
-  const filteredSlugs = Object.keys(matchGroups).length
-    ? getCommonElements(Object.values(matchGroups)) //get intersection of slug arrays
-    : Object.keys(state.meetings); //get everything
-
-  //custom sort function
-  const sortMeetings = (a, b) => {
-    const meetingA = state.meetings[a];
-    const meetingB = state.meetings[b];
-
-    //sort appointment meetings to the end
-    if (meetingA.time && !meetingB.time) return -1;
-    if (!meetingA.time && meetingB.time) return 1;
-
-    if (!state.input.weekday.length) {
-      //if upcoming, sort by time_diff
-      if (meetingA.minutes_now !== meetingB.minutes_now) {
-        return meetingA.minutes_now - meetingB.minutes_now;
-      }
-    } else {
-      if (meetingA.minutes_week !== meetingB.minutes_week) {
-        return meetingA.minutes_week - meetingB.minutes_week;
-      }
-    }
-
-    //then by distance
-    if (meetingA.distance !== meetingB.distance) {
-      if (meetingA.distance === null) return -1;
-      if (meetingB.distance === null) return 1;
-      return meetingA.distance - meetingB.distance;
-    }
-
-    //then by location name
-    if (meetingA.location !== meetingB.location) {
-      if (!meetingA.location) return -1;
-      if (!meetingB.location) return 1;
-      return meetingA.location.localeCompare(meetingB.location);
-    }
-
-    //then by meeting name
-    if (meetingA.name !== meetingB.name) {
-      if (!meetingA.name) return -1;
-      if (!meetingB.name) return 1;
-      return meetingA.name.localeCompare(meetingB.location);
-    }
-
-    return 0;
-  };
-
-  //sort slugs
-  filteredSlugs.sort(sortMeetings);
-
-  //find in-progress meetings
-  const now = moment();
-  const inProgress = filteredSlugs
-    .filter(
-      slug =>
-        state.meetings[slug].start?.diff(now, 'minutes') <
-          settings.now_offset &&
-        state.meetings[slug].end?.isAfter() &&
-        !state.meetings[slug].types.includes('inactive')
-    )
-    .sort(sortMeetings);
-
-  return [filteredSlugs, inProgress];
-}
-
-//find an index by key
-export function getIndexByKey(indexes, key) {
-  for (const index of indexes) {
-    if (index.key === key) return index;
-    if (index.children) {
-      const result = getIndexByKey(index.children, key);
-      if (result) return result;
-    }
-  }
-}
-
-//recursive function to make sorted array from object index
-function flattenAndSortIndexes(index, sortFn) {
-  return Object.values(index)
-    .map(entry => {
-      if (entry.children)
-        entry.children = flattenAndSortIndexes(entry.children, sortFn);
-      return entry;
-    })
-    .sort(sortFn);
-}
-
-//look for data with multiple days and make them all single
-function flattenDays(data) {
-  const meetings_to_add = [];
-  const indexes_to_remove = [];
-
-  data.forEach((meeting, index) => {
-    if (Array.isArray(meeting.day)) {
-      indexes_to_remove.push(index);
-      meeting.day.forEach(day => {
-        meetings_to_add.push({
-          day: day,
-          slug: meeting.slug + '-' + day,
-          ...meeting,
-        });
-      });
-    }
-  });
-
-  indexes_to_remove.forEach(index => {
-    data = data.splice(index, 1);
-  });
-
-  return data.concat(meetings_to_add);
-}
-
-//get common matches between arrays (for meeting filtering)
-function getCommonElements(arrays) {
-  return arrays.shift().filter(v => arrays.every(a => a.indexOf(v) !== -1));
-}
+import { formatAddress, formatConferenceProvider, formatSlug } from '../format';
+import { settings, strings } from '../settings';
+import { flattenAndSortIndexes } from './flatten-and-sort-indexes';
 
 //set up meeting data; this is only run once when the app loads
 export function loadMeetingData(data, capabilities, timezone) {
@@ -337,12 +17,70 @@ export function loadMeetingData(data, capabilities, timezone) {
     weekday: {},
   };
 
+  //all the fields in the meeting guide spec
+  const spec_properties = [
+    'address',
+    'approximate',
+    'city',
+    'conference_phone',
+    'conference_phone_notes',
+    'conference_provider',
+    'conference_url',
+    'conference_url_notes',
+    'contact_1_email',
+    'contact_1_name',
+    'contact_1_phone',
+    'contact_2_email',
+    'contact_2_name',
+    'contact_2_phone',
+    'contact_3_email',
+    'contact_3_name',
+    'contact_3_phone',
+    'country',
+    'day',
+    'district',
+    'edit_url',
+    'email',
+    'end_time',
+    'feedback_url',
+    'formatted_address',
+    'group',
+    'group_notes',
+    'image',
+    'latitude',
+    'location',
+    'location_notes',
+    'longitude',
+    'minutes_now',
+    'minutes_week',
+    'name',
+    'notes',
+    'paypal',
+    'phone',
+    'postal_code',
+    'region',
+    'regions',
+    'search',
+    'slug',
+    'square',
+    'state',
+    'sub_region',
+    'time',
+    'timezone',
+    'types',
+    'updated',
+    'venmo',
+    'website',
+  ];
+
   //confirm timezone before normalizing, use Eastern USA time as default
   timezone = checkTimezone(timezone, 'America/New_York');
 
   //define lookups we'll need later
   const lookup_weekday = settings.weekdays.map(weekday => strings[weekday]);
-  const lookup_type_codes = Object.keys(strings.types);
+  const lookup_type_codes = Object.keys(strings.types).filter(
+    type => type !== 'ONL' //duplicate of "online"
+  );
   const lookup_type_values = Object.values(strings.types);
   const decode_types = {};
   lookup_type_codes.forEach(key => {
@@ -734,6 +472,36 @@ export function loadMeetingData(data, capabilities, timezone) {
   return [meetings, indexes, capabilities];
 }
 
+//confirm supplied timezone is valid
+function checkTimezone(timezone, fallback) {
+  return !!moment.tz.zone(timezone) ? timezone : fallback;
+}
+
+//look for data with multiple days and make them all single
+function flattenDays(data) {
+  const meetings_to_add = [];
+  const indexes_to_remove = [];
+
+  data.forEach((meeting, index) => {
+    if (Array.isArray(meeting.day)) {
+      indexes_to_remove.push(index);
+      meeting.day.forEach(day => {
+        meetings_to_add.push({
+          day: day,
+          slug: meeting.slug + '-' + day,
+          ...meeting,
+        });
+      });
+    }
+  });
+
+  indexes_to_remove.forEach(index => {
+    data = data.splice(index, 1);
+  });
+
+  return data.concat(meetings_to_add);
+}
+
 //recursive function to build an index of regions from a flat array
 function populateRegionsIndex(regions, position, index, slug) {
   const region = regions[position];
@@ -755,57 +523,4 @@ function populateRegionsIndex(regions, position, index, slug) {
     );
   }
   return index;
-}
-
-//converts search input string into nested arrays of search terms
-//"term1 OR term2 term3" => ['term1', ['term2', 'term3']]
-function processSearchTerms(input) {
-  return input
-    .replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-    .replaceAll(' OR ', '|')
-    .toLowerCase()
-    .split('|')
-    .map(phrase => phrase.split('"'))
-    .map(phrase => [
-      ...new Set(
-        phrase
-          .filter((_e, index) => index % 2)
-          .concat(
-            phrase
-              .filter((_e, index) => !(index % 2))
-              .join(' ')
-              .split(' ')
-          )
-          .filter(e => e)
-      ),
-    ])
-    .filter(e => e.length);
-}
-
-//set minutes
-export function setMinutesNow(meetings) {
-  const now = moment();
-  Object.keys(meetings).forEach(key => {
-    meetings[key].minutes_now = meetings[key].start
-      ? meetings[key].start.diff(now, 'minutes')
-      : -9999;
-    //if time is earlier than X minutes ago, increment diff by a week
-    if (meetings[key].minutes_now < settings.now_offset) {
-      meetings[key].minutes_now += 10080;
-    }
-  });
-  return meetings;
-}
-
-//translate result from nocodeapi.com (used by airtable instances)
-export function translateNoCodeAPI(data) {
-  return data.records
-    ? data.records.map(record => ({
-        ...record.fields,
-        time: moment(record.fields.time, 'h:mm a').format('HH:mm'),
-        types: record.fields.types
-          ? record.fields.types.split(',').map(type => type.trim())
-          : [],
-      }))
-    : data;
 }

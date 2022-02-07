@@ -17,8 +17,8 @@ jobs:
           node-version: '16'
           cache: 'yarn'
       - run: yarn install --immutable --immutable-cache --check-cache
-      - run: yarn prod
       - run: yarn test-coverage
+      - run: yarn prod
       - name: Coveralls
         uses: coverallsapp/github-action@master
         with:
