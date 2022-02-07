@@ -28,7 +28,7 @@ describe('<Button />', () => {
     expect(mockOnClick).toHaveBeenCalled();
   });
 
-  it('respons to small prop correctly', () => {
+  it('responds to small prop correctly', () => {
     render(
       // @ts-expect-error TODO: Fix params that should be optional in ts refactor.
       <Button small href="https://bar.com" icon="back" />
