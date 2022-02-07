@@ -473,12 +473,12 @@ export function loadMeetingData(data, capabilities, timezone) {
 }
 
 //confirm supplied timezone is valid
-function checkTimezone(timezone, fallback) {
+export function checkTimezone(timezone, fallback) {
   return !!moment.tz.zone(timezone) ? timezone : fallback;
 }
 
 //look for data with multiple days and make them all single
-function flattenDays(data) {
+export function flattenDays(data) {
   const meetings_to_add = [];
   const indexes_to_remove = [];
 
@@ -487,16 +487,16 @@ function flattenDays(data) {
       indexes_to_remove.push(index);
       meeting.day.forEach(day => {
         meetings_to_add.push({
+          ...meeting,
           day: day,
           slug: meeting.slug + '-' + day,
-          ...meeting,
         });
       });
     }
   });
 
   indexes_to_remove.forEach(index => {
-    data = data.splice(index, 1);
+    data.splice(index, 1);
   });
 
   return data.concat(meetings_to_add);

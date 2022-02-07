@@ -1,5 +1,6 @@
 type Translation = import('./src/types/Translation').Translation;
 type MeetingType = import('./src/types/MeetingType').MeetingType;
+type Timezone = import('./src/types/Timezone').Timezone;
 
 type Lang = 'en' | 'es' | 'fr';
 
@@ -8,7 +9,7 @@ interface TSMLReactConfig {
   columns: Array<
     'time' | 'distance' | 'name' | 'location_group' | 'address' | 'region'
   >;
-  timezone: string;
+  timezone: Timezone;
   conference_providers: Record<string, string>;
   defaults: {
     // TODO: Not sure about this types

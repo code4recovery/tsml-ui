@@ -1,4 +1,7 @@
-import { Moment } from 'moment-timezone';
+import type { Moment } from 'moment-timezone';
+import type { Timezone } from './Timezone';
+
+type Day = '0' | '1' | '2' | '3' | '4' | '5' | '6';
 
 export interface Meeting {
   address: string | null;
@@ -8,7 +11,7 @@ export interface Meeting {
   conference_provider: string | null;
   conference_url: string;
   conference_url_notes: string;
-  day: '0' | '1' | '2' | '3' | '4' | '5' | '6';
+  day: Day | Day[];
   edit_url: `row ${number}`;
   email: string;
   end: Moment;
@@ -34,7 +37,7 @@ export interface Meeting {
   slug: string;
   start: Moment;
   time: `${number}:${number}`;
-  timezone: string;
+  timezone: Timezone;
   types: MeetingType[];
   updated: string;
   venmo: string;
