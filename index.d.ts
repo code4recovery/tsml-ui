@@ -24,7 +24,7 @@ interface TSMLReactConfig {
   };
   distance_unit: 'mi' | 'km';
   /** Email addresses for update meeting info button */
-  feedback_emails: [];
+  feedback_emails: string[];
   filters: Array<'region' | 'distance' | 'weekday' | 'time' | 'type'>;
   flags: Array<'M' | 'W'> | undefined | null;
   in_person_types: MeetingType[];
