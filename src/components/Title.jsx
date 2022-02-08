@@ -4,7 +4,7 @@ import { getIndexByKey, strings } from '../helpers';
 
 export default function Title({ state }) {
   //loading
-  if (!state.indexes || !state.input) return;
+  if (!state.indexes || !state.input) return null;
 
   //build title from strings.title
   const parts = [];
