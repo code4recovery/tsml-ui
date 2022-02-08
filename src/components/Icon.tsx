@@ -58,8 +58,9 @@ type IconProps = {
 export default function Icon({ icon, size = 20, className }: IconProps) {
   const paths = icons[icon as keyof typeof icons];
 
-  return paths ? (
+  return (
     <svg
+      data-testid={`icon-${icon}`}
       className={className}
       fill="currentColor"
       height={size}
@@ -70,5 +71,5 @@ export default function Icon({ icon, size = 20, className }: IconProps) {
         <path key={index} fillRule="evenodd" d={path} />
       ))}
     </svg>
-  ) : null;
+  );
 }
