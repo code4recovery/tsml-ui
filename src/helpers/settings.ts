@@ -3,10 +3,11 @@ import merge from 'deepmerge';
 import en from '../i18n/en';
 import es from '../i18n/es';
 import fr from '../i18n/fr';
+import type { Timezone } from '../types/Timezone';
 
 //override these on your page with tsml_react_config
 const defaults: TSMLReactConfig = {
-  timezone: '',
+  timezone: '' as Timezone,
   cache: false,
   columns: ['time', 'distance', 'name', 'location_group', 'address', 'region'],
   conference_providers: {
