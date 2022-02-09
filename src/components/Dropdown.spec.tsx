@@ -26,24 +26,30 @@ describe('<Dropdown />', () => {
     expect(screen.getAllByText(defaultValue)).toHaveLength(2);
   });
 
-  /*
   it('opens', () => {
+    const filter = settings.filters[0];
+    const defaultValue = strings[`${filter}_any`];
+
     const { container } = render(
       <Dropdown
-        filter="region"
-        options={[]}
+        filter={filter}
+        options={[{ key: 'foo', name: 'Foo', slugs: ['foobar'], children: [] }]}
         open={false}
         end={false}
         values={[]}
-        defaultValue={undefined}
+        defaultValue={defaultValue}
         setDropdown={jest.fn()}
         state={{}}
         setState={jest.fn()}
       />
     );
-    expect(container.firstChild).toBeTruthy();
+
+    const button = screen.getByRole('button');
+    fireEvent.click(button);
+
+    const dropdown = screen.getByLabelText(defaultValue);
+    expect(dropdown).toBeVisible();
   });
-  */
 
   /*
   it('works with error state', () => {
