@@ -3,16 +3,17 @@ import React, { Fragment } from 'react';
 import { formatClasses as cx, getIndexByKey, formatUrl } from '../helpers';
 
 export default function Dropdown({
-  filter,
-  options,
-  open,
-  end,
-  values,
   defaultValue,
+  end,
+  filter,
+  open,
   setDropdown,
-  state,
   setState,
+  state,
 }) {
+  const options = state.indexes[filter];
+  const values = state.input[filter];
+
   //set filter: pass it up to parent
   const setFilter = (e, filter, value) => {
     e.preventDefault();
@@ -34,40 +35,39 @@ export default function Dropdown({
     }
 
     //sort filters
-    state.input[filter].sort((a, b) => {
-      return (
+    state.input[filter].sort(
+      (a, b) =>
         state.indexes[filter].findIndex(x => a === x.key) -
         state.indexes[filter].findIndex(x => b === x.key)
-      );
-    });
+    );
 
     //pass it up to app controller
     setState({ ...state });
   };
 
-  const renderDropdownItem = option => (
-    <Fragment key={option.key}>
+  const renderDropdownItem = ({ key, name, slugs, children }) => (
+    <Fragment key={key}>
       <a
         className={cx(
           'align-items-center d-flex dropdown-item justify-content-between',
           {
-            'bg-secondary text-white': values.includes(option.key),
+            'bg-secondary text-white': values.includes(key),
           }
         )}
         href={formatUrl({
           ...state.input,
-          [filter]: values.includes(option.key) ? [option.key] : [],
+          [filter]: values.includes(key) ? [key] : [],
         })}
-        onClick={e => setFilter(e, filter, option.key)}
+        onClick={e => setFilter(e, filter, key)}
       >
-        <span>{option.name}</span>
+        <span>{name}</span>
         <span className="badge bg-light border ms-3 text-dark">
-          {option.slugs.length}
+          {slugs.length}
         </span>
       </a>
-      {!!option.children?.length && (
+      {!!children?.length && (
         <div className="children">
-          {option.children.map(child => renderDropdownItem(child))}
+          {children.map(child => renderDropdownItem(child))}
         </div>
       )}
     </Fragment>
@@ -83,6 +83,7 @@ export default function Dropdown({
       <button
         className="btn btn-outline-secondary dropdown-toggle w-100"
         onClick={() => setDropdown(open ? null : filter)}
+        id={filter}
       >
         {values?.length && options?.length
           ? values.map(value => getIndexByKey(options, value)?.name).join(' + ')
@@ -93,6 +94,7 @@ export default function Dropdown({
           show: open,
           'dropdown-menu-end': end,
         })}
+        aria-labelledby={filter}
       >
         <a
           className={cx('dropdown-item', {
