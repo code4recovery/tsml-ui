@@ -3,16 +3,17 @@ import React, { Fragment } from 'react';
 import { formatClasses as cx, getIndexByKey, formatUrl } from '../helpers';
 
 export default function Dropdown({
-  filter,
-  options,
-  open,
-  end,
-  values,
   defaultValue,
+  end,
+  filter,
+  open,
   setDropdown,
-  state,
   setState,
+  state,
 }) {
+  const options = state.indexes[filter];
+  const values = state.input[filter];
+
   //set filter: pass it up to parent
   const setFilter = (e, filter, value) => {
     e.preventDefault();
@@ -34,12 +35,11 @@ export default function Dropdown({
     }
 
     //sort filters
-    state.input[filter].sort((a, b) => {
-      return (
+    state.input[filter].sort(
+      (a, b) =>
         state.indexes[filter].findIndex(x => a === x.key) -
         state.indexes[filter].findIndex(x => b === x.key)
-      );
-    });
+    );
 
     //pass it up to app controller
     setState({ ...state });

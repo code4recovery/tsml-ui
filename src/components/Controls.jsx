@@ -197,11 +197,9 @@ export default function Controls({ state, setState, mapbox }) {
               end={!canShowViews && !filters[index + 1]}
               filter={filter}
               open={dropdown === filter}
-              options={state.indexes[filter]}
               setDropdown={setDropdown}
               state={state}
               setState={setState}
-              values={state.input[filter]}
             />
           </div>
         ))}
