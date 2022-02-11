@@ -65,6 +65,10 @@ export interface Translation {
   types: Record<MeetingType, string>;
   unnamed_meeting: string;
   updated: string;
+  views: {
+    table: string;
+    map: string;
+  };
   wednesday: string;
   weekday_any: string;
 }
