@@ -135,6 +135,7 @@ export default function Controls({ state, setState, mapbox }) {
           <div className="position-relative">
             <form className="input-group" onSubmit={locationSearch}>
               <input
+                aria-label={strings.modes[state.input.mode]}
                 className="form-control"
                 disabled={state.input.mode === 'me'}
                 onChange={e => {
@@ -194,7 +195,7 @@ export default function Controls({ state, setState, mapbox }) {
           <div className="col-sm-6 col-lg mb-3" key={filter}>
             <Dropdown
               defaultValue={strings[filter + '_any']}
-              end={!canShowViews && !filters[index + 1]}
+              end={!canShowViews && index === filters.length - 1}
               filter={filter}
               open={dropdown === filter}
               setDropdown={setDropdown}
@@ -204,10 +205,11 @@ export default function Controls({ state, setState, mapbox }) {
           </div>
         ))}
         {canShowViews && (
-          <div aria-hidden="true" className="col-sm-6 col-lg mb-3">
+          <div className="col-sm-6 col-lg mb-3">
             <div className="btn-group h-100 w-100" role="group">
               {views.map(view => (
                 <button
+                  aria-label={strings.views[view]}
                   className={cx(
                     'btn btn-outline-secondary d-flex align-items-center justify-content-center w-100',
                     {
