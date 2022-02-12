@@ -81,9 +81,10 @@ export default function Dropdown({
   return (
     <div className="dropdown">
       <button
+        aria-expanded={open}
         className="btn btn-outline-secondary dropdown-toggle w-100"
-        onClick={() => setDropdown(open ? null : filter)}
         id={filter}
+        onClick={() => setDropdown(open ? null : filter)}
       >
         {values?.length && options?.length
           ? values.map(value => getIndexByKey(options, value)?.name).join(' + ')
