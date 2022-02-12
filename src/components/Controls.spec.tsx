@@ -4,6 +4,7 @@ import { strings } from '../helpers';
 
 describe('<Controls />', () => {
   jest.useFakeTimers();
+
   const mockState = {
     capabilities: {
       coordinates: true,
@@ -19,7 +20,7 @@ describe('<Controls />', () => {
       mode: 'search',
       distance: [],
       region: [],
-      search: 'foo',
+      search: '',
       view: 'list',
     },
     meetings: {
@@ -28,65 +29,93 @@ describe('<Controls />', () => {
     },
   };
 
+  const mockSetState = jest.fn();
+
+  const mapbox = 'pk.abc123';
+
+  const { region_any, modes, views } = strings;
+
   it('has clickable dropdowns', () => {
-    const mockSetState = jest.fn();
     render(
-      <Controls state={mockState} setState={mockSetState} mapbox="pk.abc123" />
+      <Controls state={mockState} setState={mockSetState} mapbox={mapbox} />
     );
 
-    const buttons = screen.getAllByText(strings.region_any);
-    fireEvent.click(buttons[0]);
+    //click a dropdown button
+    const button = screen.getByRole('button', { name: region_any });
+    fireEvent.click(button);
 
-    const dropdown = screen.getByLabelText(strings.region_any);
-    expect(dropdown).toBeVisible();
+    //dropdown opens
+    const dropdown = screen.getByLabelText(region_any);
+    expect(dropdown).toHaveClass('show');
 
+    //dropdown closes
     fireEvent.click(document.body);
-    //expect(dropdown).not.toBeVisible();
+    expect(dropdown).not.toHaveClass('show');
 
-    const locationLink = screen.getByText(strings.modes.location);
+    //change the search mode
+    const locationLink = screen.getByText(modes.location);
     fireEvent.click(locationLink);
-
-    jest.runAllTimers();
 
     //expect stateful thing to happen
     expect(mockSetState).toBeCalledTimes(1);
+
+    jest.runAllTimers();
   });
 
-  it('has working search', () => {
-    const mockSetState = jest.fn();
-
+  it('has working text search', () => {
     render(
-      <Controls state={mockState} setState={mockState} mapbox="pk.abc123" />
+      <Controls
+        state={{
+          ...mockState,
+          capabilities: { ...mockState.capabilities, coordinates: false },
+        }}
+        setState={mockSetState}
+        mapbox={mapbox}
+      />
     );
 
-    const input = screen.getAllByLabelText(strings.modes.search)[0];
-    fireEvent.change(input, { value: 'foo' });
+    //text search
+    const input = screen.getByRole('searchbox');
+    fireEvent.change(input, { target: { value: 'foo' } });
 
-    //expect(mockSetState).toBeCalledWith({ ...mockState });
+    //try submitting
+    const form = input.closest('form');
+    fireEvent.submit(form);
+
+    expect(mockSetState).toBeCalledTimes(2);
+
+    jest.runAllTimers();
   });
 
   it('has working location search', () => {
-    const mockSetState = jest.fn();
-    const { container } = render(
+    render(
       <Controls
         state={{
           ...mockState,
           input: { ...mockState.input, mode: 'location', view: 'map' },
         }}
         setState={mockSetState}
-        mapbox="pk.abc123"
+        mapbox={mapbox}
       />
     );
 
-    const input = screen.getAllByLabelText(strings.modes.search)[0];
-    fireEvent.change(input, { value: 'foo' });
+    //enter search values
+    const input = screen.getByRole('searchbox');
+    fireEvent.change(input, { target: { value: 'bar' } });
 
-    const mapButton = screen.getByLabelText(strings.views.map);
-    fireEvent.click(mapButton);
-
-    const form = screen.getByRole('form');
+    //submit form
+    const form = input.closest('form');
     fireEvent.submit(form);
 
-    //expect ?
+    //toggle
+    const button = screen.getByRole('button', { name: modes.location });
+    fireEvent.click(button);
+    fireEvent.click(button);
+
+    //toggle map button
+    const mapButton = screen.getByLabelText(views.map);
+    fireEvent.click(mapButton);
+
+    expect(mockSetState).toBeCalledTimes(4);
   });
 });
