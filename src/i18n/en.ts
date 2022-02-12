@@ -131,6 +131,10 @@ const en: Translation = {
   },
   unnamed_meeting: 'Unnamed meeting',
   updated: 'Updated %updated%',
+  views: {
+    table: 'List',
+    map: 'Map',
+  },
   wednesday: 'Wednesday',
   weekday_any: 'Any Day',
 };

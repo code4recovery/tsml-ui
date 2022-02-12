@@ -133,6 +133,10 @@ const es: Translation = {
   },
   unnamed_meeting: 'Reunión sin nombre',
   updated: 'Actualizado el %updated%',
+  views: {
+    table: 'Lista',
+    map: 'Mapa',
+  },
   wednesday: 'Miércoles',
   weekday_any: 'Cualquier día',
 };
