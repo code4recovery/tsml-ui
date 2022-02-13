@@ -8,4 +8,5 @@ module.exports = {
     '!<rootDir>/**/__snapshots__/*',
     '!<rootDir>/e2e/**/*',
   ],
+  testPathIgnorePatterns: ['e2e'],
 };
