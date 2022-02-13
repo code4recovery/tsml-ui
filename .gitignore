@@ -4,3 +4,5 @@ npm-debug.log
 package-lock.json
 coverage
 yarn-error.log
+test-results/
+playwright-report/

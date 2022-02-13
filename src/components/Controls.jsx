@@ -156,6 +156,7 @@ export default function Controls({ state, setState, mapbox }) {
               />
               {modes.length > 1 && (
                 <button
+                  id="mode"
                   aria-label={strings.modes[state.input.mode]}
                   className="btn btn-outline-secondary dropdown-toggle"
                   onClick={() =>
