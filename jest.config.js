@@ -5,5 +5,7 @@ module.exports = {
   collectCoverageFrom: [
     '<rootDir>/src/**/*.(j|t)s*',
     '!<rootDir>/src/(types|i18n)/*',
+    '!<rootDir>/**/__snapshots__/*',
+    '!<rootDir>/e2e/**/*',
   ],
 };
