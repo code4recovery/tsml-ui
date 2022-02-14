@@ -26,10 +26,11 @@ export default function Map({
   //window size listener (todo figure out why height can go up but not down)
   useEffect(() => {
     const resizeListener = () => {
-      if (mapFrame.current.offsetWidth && mapFrame.current.offsetHeight) {
+      const { width, height } = mapFrame.current.getBoundingClientRect();
+      if (width && height) {
         setDimensions({
-          width: mapFrame.current.offsetWidth - 2,
-          height: mapFrame.current.offsetHeight - 2,
+          width: width - 2,
+          height: height - 2,
         });
       }
     };
@@ -137,6 +138,7 @@ export default function Map({
                 offsetTop={-settings.map.markers.location.height}
               >
                 <div
+                  data-testid={key}
                   onClick={() => setPopup(key)}
                   style={settings.map.markers.location}
                   title={data.locations[key].name}
@@ -159,7 +161,7 @@ export default function Map({
                         {data.locations[key].meetings
                           .sort((a, b) => a.start.isAfter(b.start))
                           .map((meeting, index) => (
-                            <div key={meeting.slug} className="list-group-item">
+                            <div key={index} className="list-group-item">
                               <time className="d-block">
                                 {meeting.start.format('h:mm a')}
                                 <span className="ms-1">
