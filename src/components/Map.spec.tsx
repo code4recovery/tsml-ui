@@ -1,18 +1,7 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import moment from 'moment-timezone';
 
 import Map from './Map';
-
-interface Element {
-  getBoundingClientRect: () => {
-    width: number;
-    height: number;
-    top: number;
-    left: number;
-    bottom: number;
-    right: number;
-  };
-}
 
 describe('<Map />', () => {
   const mockState = {
