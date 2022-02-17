@@ -14,7 +14,12 @@ import Icon from './Icon';
 import Link from './Link';
 import Map from './Map';
 
-export default function Meeting({ state, setState, mapbox }) {
+export default function Meeting({
+  state,
+  setState,
+  mapbox,
+  feedback_emails = [],
+}) {
   //open types
   const [define, setDefine] = useState(null);
 
@@ -44,7 +49,7 @@ export default function Meeting({ state, setState, mapbox }) {
     : strings.appointment;
 
   //feedback URL link
-  if (!meeting.feedback_url && settings.feedback_emails.length) {
+  if (!meeting.feedback_url && feedback_emails.length) {
     meeting.feedback_url = formatFeedbackEmail(
       settings.feedback_emails,
       meeting
@@ -171,43 +176,42 @@ export default function Meeting({ state, setState, mapbox }) {
               <h2 className="h5">{strings.meeting_information}</h2>
               <p>{timeString}</p>
               {state.capabilities.type && meeting.types && (
-                <ul className="ms-4">
+                <ul className="ms-4 align-top">
                   {meeting.types
                     .filter(type => type !== 'active')
                     .sort((a, b) =>
                       strings.types[a].localeCompare(strings.types[b])
                     )
-                    .map((type, index) =>
-                      strings.type_descriptions[type] ? (
-                        <li
-                          className="cursor-pointer m-0"
-                          key={index}
-                          onClick={() =>
-                            setDefine(define === type ? null : type)
-                          }
-                        >
-                          <div className="d-flex align-items-center gap-2">
-                            <span>{strings.types[type]}</span>
-                            <Icon
-                              icon="info"
-                              size={13}
-                              className={
-                                define === type ? 'text-muted' : undefined
-                              }
-                            />
-                          </div>
-                          {define === type && (
-                            <small className="d-block mt-1 mb-2">
-                              {strings.type_descriptions[type]}
-                            </small>
-                          )}
-                        </li>
-                      ) : (
-                        <li className="m-0" key={index}>
-                          {strings.types[type]}
-                        </li>
-                      )
-                    )}
+                    .map((type, index) => (
+                      <li className="m-0" key={index}>
+                        {strings.type_descriptions[type] ? (
+                          <button
+                            className="d-block bg-transparent border-0 p-0 text-start"
+                            onClick={() =>
+                              setDefine(define === type ? null : type)
+                            }
+                          >
+                            <div className="d-flex align-items-center gap-2">
+                              <span>{strings.types[type]}</span>
+                              <Icon
+                                icon="info"
+                                size={13}
+                                className={
+                                  define === type ? 'text-muted' : undefined
+                                }
+                              />
+                            </div>
+                            {define === type && (
+                              <small className="d-block mt-1 mb-2">
+                                {strings.type_descriptions[type]}
+                              </small>
+                            )}
+                          </button>
+                        ) : (
+                          strings.types[type]
+                        )}
+                      </li>
+                    ))}
                 </ul>
               )}
               {meeting.notes && <Paragraphs text={meeting.notes} />}
@@ -377,8 +381,9 @@ function formatWeekdays(weekday, slug, state, setState) {
                 {m.start.format('h:mm a')}
               </div>
               <div className="flex-grow-1">
-                {m.slug === slug && <Link meeting={m} />}
-                {m.slug !== slug && (
+                {m.slug === slug ? (
+                  <Link meeting={m} />
+                ) : (
                   <Link meeting={m} setState={setState} state={state} />
                 )}
               </div>
