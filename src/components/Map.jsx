@@ -49,7 +49,7 @@ export default function Map({
     filteredSlugs.forEach(slug => {
       const meeting = state.meetings[slug];
 
-      if (meeting.latitude && meeting.longitude && meeting.isInPerson) {
+      if (meeting?.latitude && meeting?.longitude && meeting?.isInPerson) {
         const coords = meeting.latitude + ',' + meeting.longitude;
 
         //create a new pin
