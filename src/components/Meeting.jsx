@@ -41,11 +41,11 @@ export default function Meeting({
 
   //format time string (duration? or appointment?)
   const timeString = meeting.start
-    ? strings[settings.weekdays[meeting.start.format('d')]].concat(
-        ' ',
-        meeting.start.format('h:mm a'),
-        meeting.end ? ` – ${meeting.end.format('h:mm a')}` : ''
-      )
+    ? `${
+        strings[settings.weekdays[meeting.start.format('d')]]
+      } ${meeting.start.format('h:mm a')}${
+        meeting.end && ` – ${meeting.end.format('h:mm a')}`
+      }`
     : strings.appointment;
 
   //feedback URL link
@@ -109,7 +109,6 @@ export default function Meeting({
       .filter(
         m =>
           meeting.isInPerson &&
-          !meeting.approximate &&
           m.isInPerson &&
           m.formatted_address === meeting.formatted_address
       )
@@ -133,7 +132,7 @@ export default function Meeting({
     <div
       className={cx('d-flex flex-column flex-grow-1 meeting', {
         'in-person': meeting.isInPerson,
-        'inactive': !meeting.isInPerson && !meeting.isOnline,
+        'inactive': !meeting.isActive,
         'online': meeting.isOnline,
       })}
     >
@@ -215,8 +214,7 @@ export default function Meeting({
                 </ul>
               )}
               {meeting.notes && <Paragraphs text={meeting.notes} />}
-              {(meeting.isInPerson ||
-                meeting.isOnline ||
+              {(meeting.isActive ||
                 (!meeting.group && !!contactButtons.length)) && (
                 <div className="d-grid gap-3 mt-2">
                   {meeting.conference_provider && (
@@ -251,15 +249,13 @@ export default function Meeting({
                       )}
                     </div>
                   )}
-                  {meeting.start &&
-                    meeting.timezone &&
-                    (meeting.isInPerson || meeting.isOnline) && (
-                      <Button
-                        onClick={() => formatIcs(meeting)}
-                        icon="calendar"
-                        text={strings.add_to_calendar}
-                      />
-                    )}
+                  {meeting.start && meeting.isActive && (
+                    <Button
+                      onClick={() => formatIcs(meeting)}
+                      icon="calendar"
+                      text={strings.add_to_calendar}
+                    />
+                  )}
                   {!meeting.group &&
                     contactButtons.map((button, index) => (
                       <Button {...button} key={index} />
@@ -294,8 +290,7 @@ export default function Meeting({
               </div>
             )}
             {meeting.group &&
-              (meeting.approximate ||
-                meeting.district ||
+              (meeting.district ||
                 meeting.group_notes ||
                 !!groupWeekdays.length ||
                 !!contactButtons.length) && (
@@ -305,7 +300,7 @@ export default function Meeting({
                   {meeting.group_notes && (
                     <Paragraphs text={meeting.group_notes} />
                   )}
-                  {meeting.group && !!contactButtons.length && (
+                  {!!contactButtons.length && (
                     <div className="d-grid gap-3 mt-2">
                       {contactButtons.map((button, index) => (
                         <Button {...button} key={index} />
@@ -368,11 +363,11 @@ function Paragraphs({ text, className }) {
 function formatWeekdays(weekday, slug, state, setState) {
   return weekday
     .filter(e => e.meetings.length)
-    .map((weekday, index) => (
+    .map(({ meetings, name }, index) => (
       <div key={index}>
-        <h3 className="h6 mb-1 mt-2">{weekday.name}</h3>
+        <h3 className="h6 mb-1 mt-2">{name}</h3>
         <ol className="list-unstyled">
-          {weekday.meetings.map((m, index) => (
+          {meetings.map((m, index) => (
             <li
               className="d-flex flex-row gap-2 justify-content-between m-0"
               key={index}
