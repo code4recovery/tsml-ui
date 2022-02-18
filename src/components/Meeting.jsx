@@ -175,7 +175,7 @@ export default function Meeting({
               <h2 className="h5">{strings.meeting_information}</h2>
               <p>{timeString}</p>
               {state.capabilities.type && meeting.types && (
-                <ul className="ms-4 align-top">
+                <ul className="ms-4">
                   {meeting.types
                     .filter(type => type !== 'active')
                     .sort((a, b) =>
