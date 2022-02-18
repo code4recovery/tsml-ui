@@ -131,7 +131,12 @@ export default function TsmlUI({ json, mapbox, timezone }) {
     <div className="tsml-ui">
       <div className="container-fluid d-flex flex-column py-3">
         {state.input.meeting && state.input.meeting in state.meetings ? (
-          <Meeting state={state} setState={setState} mapbox={mapbox} />
+          <Meeting
+            state={state}
+            setState={setState}
+            mapbox={mapbox}
+            feedback_emails={settings.feedback_emails}
+          />
         ) : (
           <>
             {settings.show.title && <Title state={state} />}
