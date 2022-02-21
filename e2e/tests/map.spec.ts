@@ -10,7 +10,7 @@ test.describe('Map', () => {
   test('popup', async ({ page }) => {
     try {
       //Brittle, but the marker has to be one that isn't overlapped by another.
-      const marker = page.locator('div[title="Redwood Estates Pavilion"]');
+      const marker = page.locator('data-testid=37.1577738,-121.984212');
 
       const popup = page.locator('.mapboxgl-popup');
       const header = popup.locator('h4');
