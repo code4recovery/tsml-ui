@@ -185,7 +185,7 @@ export default function Meeting({
                       <li className="m-0" key={index}>
                         {strings.type_descriptions[type] ? (
                           <button
-                            className="d-block bg-transparent border-0 p-0 text-start"
+                            className="d-flex flex-column bg-transparent border-0 p-0 text-start"
                             onClick={() =>
                               setDefine(define === type ? null : type)
                             }
@@ -201,7 +201,7 @@ export default function Meeting({
                               />
                             </div>
                             {define === type && (
-                              <small className="d-block mt-1 mb-2">
+                              <small className="d-block mb-2">
                                 {strings.type_descriptions[type]}
                               </small>
                             )}
