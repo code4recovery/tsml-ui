@@ -44,7 +44,7 @@ export default function Meeting({
     ? `${
         strings[settings.weekdays[meeting.start.format('d')]]
       } ${meeting.start.format('h:mm a')}${
-        meeting.end && ` – ${meeting.end.format('h:mm a')}`
+        meeting.end ? ` – ${meeting.end.format('h:mm a')}` : ''
       }`
     : strings.appointment;
 
