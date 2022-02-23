@@ -10,7 +10,13 @@ import {
 import Button from './Button';
 import Link from './Link';
 
-export default function Table({ state, setState, filteredSlugs, inProgress }) {
+export default function Table({
+  state,
+  setState,
+  filteredSlugs,
+  inProgress,
+  listButtons,
+}) {
   const meetingsPerPage = 10;
   const [limit, setLimit] = useState(meetingsPerPage);
   const [showInProgress, setShowInProgress] = useState(false);
@@ -31,9 +37,7 @@ export default function Table({ state, setState, filteredSlugs, inProgress }) {
       if (meeting.isInPerson) {
         buttons.push({
           className: 'in-person',
-          href: settings.show.listButtons
-            ? formatDirectionsUrl(meeting)
-            : undefined,
+          href: listButtons ? formatDirectionsUrl(meeting) : undefined,
           icon: 'geo',
           text: meeting.address,
         });
@@ -41,7 +45,7 @@ export default function Table({ state, setState, filteredSlugs, inProgress }) {
       if (meeting.conference_provider) {
         buttons.push({
           className: 'online',
-          href: settings.show.listButtons ? meeting.conference_url : undefined,
+          href: listButtons ? meeting.conference_url : undefined,
           icon: 'camera',
           text: meeting.conference_provider,
         });
@@ -49,9 +53,7 @@ export default function Table({ state, setState, filteredSlugs, inProgress }) {
       if (meeting.conference_phone) {
         buttons.push({
           className: 'online',
-          href: settings.show.listButtons
-            ? `tel:${meeting.conference_phone}`
-            : undefined,
+          href: listButtons ? `tel:${meeting.conference_phone}` : undefined,
           icon: 'phone',
           text: strings.phone,
         });
@@ -104,7 +106,7 @@ export default function Table({ state, setState, filteredSlugs, inProgress }) {
       <tr
         className="d-block d-md-table-row"
         onClick={() => {
-          if (settings.show.listButtons) return;
+          if (listButtons) return;
           setState({
             ...state,
             input: {
@@ -128,7 +130,7 @@ export default function Table({ state, setState, filteredSlugs, inProgress }) {
       <div className="row">
         <table
           className={cx('table table-striped flex-grow-1 my-0', {
-            'clickable-rows': !settings.show.listButtons,
+            'clickable-rows': !listButtons,
           })}
         >
           <thead>
