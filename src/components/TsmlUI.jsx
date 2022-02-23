@@ -152,6 +152,7 @@ export default function TsmlUI({ json, mapbox, timezone }) {
                 setState={setState}
                 filteredSlugs={filteredSlugs}
                 inProgress={inProgress}
+                listButtons={settings.show.listButtons}
               />
             )}
             {filteredSlugs && state.input.view === 'map' && (
