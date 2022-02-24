@@ -13,9 +13,9 @@ import Link from './Link';
 export default function Table({
   state,
   setState,
-  filteredSlugs,
-  inProgress,
-  listButtons,
+  filteredSlugs = [],
+  inProgress = [],
+  listButtons = false,
 }) {
   const meetingsPerPage = 10;
   const [limit, setLimit] = useState(meetingsPerPage);

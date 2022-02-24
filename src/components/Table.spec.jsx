@@ -1,6 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import moment from 'moment-timezone';
 
+import { strings } from '../helpers';
 import Table from './Table';
 
 describe('<Table />', () => {
@@ -42,50 +43,96 @@ describe('<Table />', () => {
 
   const filteredSlugs = Object.keys(mockState.meetings);
 
-  it('renders', () => {
+  it('renders with clickable rows', () => {
+    const mockSetState = jest.fn();
     render(
       <Table
         state={mockState}
-        setState={jest.fn()}
+        setState={mockSetState}
         filteredSlugs={filteredSlugs}
-        inProgress={[]}
-        listButtons={false}
       />
     );
-    const anchors = screen.getAllByRole('link');
-    expect(anchors).toHaveLength(2);
-    anchors.forEach(anchor => fireEvent.click(anchor));
+
+    //clickable rows
+    const rows = screen.getAllByRole('row');
+    rows.forEach(row => fireEvent.click(row));
+    expect(mockSetState).toHaveBeenCalledTimes(filteredSlugs.length);
   });
 
-  it('renders with listButtons and single meeting in progress', () => {
+  it('renders with clickable listButtons', () => {
+    const mockSetState = jest.fn();
     render(
       <Table
         state={mockState}
-        setState={jest.fn()}
+        setState={mockSetState}
         filteredSlugs={filteredSlugs}
-        inProgress={['foo']}
         listButtons={true}
       />
     );
+
+    //clickable links
     const anchors = screen.getAllByRole('link');
-    expect(anchors).toHaveLength(5);
     anchors.forEach(anchor => fireEvent.click(anchor));
+    expect(mockSetState).toHaveBeenCalledTimes(filteredSlugs.length);
+
+    //unclickable rows
+    const rows = screen.getAllByRole('row');
+    rows.forEach(row => fireEvent.click(row));
+    expect(mockSetState).toHaveBeenCalledTimes(filteredSlugs.length);
   });
 
-  it('renders with multiple meetings in progress', () => {
+  it('displays single meeting in progress', () => {
+    const inProgress = [filteredSlugs[0]];
+
     render(
       <Table
         state={mockState}
         setState={jest.fn()}
         filteredSlugs={filteredSlugs}
-        inProgress={['foo', 'bar']}
-        listButtons={true}
+        inProgress={inProgress}
       />
     );
-    const anchors = screen.getAllByRole('link');
-    expect(anchors).toHaveLength(5);
+
+    //count rows (data rows + header + show in progress)
+    expect(screen.getAllByRole('row')).toHaveLength(filteredSlugs.length + 2);
 
     const button = screen.getByRole('button');
+    expect(button).toHaveTextContent(strings.in_progress_single);
+
     fireEvent.click(button);
+    expect(button).not.toBeVisible();
+
+    //recount rows
+    expect(screen.getAllByRole('row')).toHaveLength(
+      filteredSlugs.length + inProgress.length + 1
+    );
+  });
+
+  it('displays multiple meetings in progress', () => {
+    const inProgress = [...filteredSlugs];
+    render(
+      <Table
+        state={mockState}
+        setState={jest.fn()}
+        filteredSlugs={filteredSlugs}
+        inProgress={inProgress}
+      />
+    );
+
+    //count rows (data rows + header + show in progress)
+    expect(screen.getAllByRole('row')).toHaveLength(filteredSlugs.length + 2);
+
+    const button = screen.getByRole('button');
+    expect(button).toHaveTextContent(
+      strings.in_progress_multiple.replace('%count%', inProgress.length)
+    );
+
+    fireEvent.click(button);
+    expect(button).not.toBeVisible();
+
+    //recount rows
+    expect(screen.getAllByRole('row')).toHaveLength(
+      filteredSlugs.length + inProgress.length + 1
+    );
   });
 });
