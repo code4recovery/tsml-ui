@@ -10,7 +10,13 @@ import {
 import Button from './Button';
 import Link from './Link';
 
-export default function Table({ state, setState, filteredSlugs, inProgress }) {
+export default function Table({
+  state,
+  setState,
+  filteredSlugs = [],
+  inProgress = [],
+  listButtons = false,
+}) {
   const meetingsPerPage = 10;
   const [limit, setLimit] = useState(meetingsPerPage);
   const [showInProgress, setShowInProgress] = useState(false);
@@ -31,9 +37,7 @@ export default function Table({ state, setState, filteredSlugs, inProgress }) {
       if (meeting.isInPerson) {
         buttons.push({
           className: 'in-person',
-          href: settings.show.listButtons
-            ? formatDirectionsUrl(meeting)
-            : undefined,
+          href: listButtons ? formatDirectionsUrl(meeting) : undefined,
           icon: 'geo',
           text: meeting.address,
         });
@@ -41,7 +45,7 @@ export default function Table({ state, setState, filteredSlugs, inProgress }) {
       if (meeting.conference_provider) {
         buttons.push({
           className: 'online',
-          href: settings.show.listButtons ? meeting.conference_url : undefined,
+          href: listButtons ? meeting.conference_url : undefined,
           icon: 'camera',
           text: meeting.conference_provider,
         });
@@ -49,9 +53,7 @@ export default function Table({ state, setState, filteredSlugs, inProgress }) {
       if (meeting.conference_phone) {
         buttons.push({
           className: 'online',
-          href: settings.show.listButtons
-            ? `tel:${meeting.conference_phone}`
-            : undefined,
+          href: listButtons ? `tel:${meeting.conference_phone}` : undefined,
           icon: 'phone',
           text: strings.phone,
         });
@@ -70,13 +72,13 @@ export default function Table({ state, setState, filteredSlugs, inProgress }) {
           ))}
         </div>
       );
-    } else if (key === 'distance') {
-      return meeting.distance ? (
+    } else if (key === 'distance' && meeting.distance) {
+      return (
         <>
           {meeting.distance}
           <small className="ms-1 text-muted">{settings.distance_unit}</small>
         </>
-      ) : null;
+      );
     } else if (key === 'location_group') {
       return meeting.isInPerson ? meeting.location : meeting.group;
     } else if (key === 'name' && meeting.slug) {
@@ -95,7 +97,7 @@ export default function Table({ state, setState, filteredSlugs, inProgress }) {
         strings.appointment
       );
     }
-    return meeting[key];
+    return null;
   };
 
   const Row = ({ slug }) => {
@@ -104,7 +106,7 @@ export default function Table({ state, setState, filteredSlugs, inProgress }) {
       <tr
         className="d-block d-md-table-row"
         onClick={() => {
-          if (settings.show.listButtons) return;
+          if (listButtons) return;
           setState({
             ...state,
             input: {
@@ -128,7 +130,7 @@ export default function Table({ state, setState, filteredSlugs, inProgress }) {
       <div className="row">
         <table
           className={cx('table table-striped flex-grow-1 my-0', {
-            'clickable-rows': !settings.show.listButtons,
+            'clickable-rows': !listButtons,
           })}
         >
           <thead>
@@ -141,23 +143,25 @@ export default function Table({ state, setState, filteredSlugs, inProgress }) {
             </tr>
           </thead>
           {!!inProgress.length && (
-            <tbody className="tsml-in-progress">
+            <tbody className="border-0">
               {showInProgress ? (
                 inProgress.map((slug, index) => <Row slug={slug} key={index} />)
               ) : (
                 <tr>
-                  <td colSpan={columns.length}>
-                    <a
-                      onClick={() => setShowInProgress(true)}
-                      className="d-block text-center py-3 py-md-1"
-                    >
-                      {inProgress.length === 1
-                        ? strings.in_progress_single
-                        : strings.in_progress_multiple.replace(
-                            '%count%',
-                            inProgress.length
-                          )}
-                    </a>
+                  <td className="p-0" colSpan={columns.length}>
+                    <div className="alert alert-warning m-0 opacity-50 p-2 rounded-0">
+                      <button
+                        onClick={() => setShowInProgress(true)}
+                        className="alert-link bg-transparent border-0 d-block fw-normal mx-auto py-2 py-md-1 text-center text-decoration-underline"
+                      >
+                        {inProgress.length === 1
+                          ? strings.in_progress_single
+                          : strings.in_progress_multiple.replace(
+                              '%count%',
+                              inProgress.length
+                            )}
+                      </button>
+                    </div>
                   </td>
                 </tr>
               )}
@@ -165,6 +169,7 @@ export default function Table({ state, setState, filteredSlugs, inProgress }) {
           )}
           <InfiniteScroll
             element="tbody"
+            className="border-0"
             loadMore={() => {
               setLimit(limit + meetingsPerPage);
             }}
