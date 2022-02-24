@@ -104,7 +104,10 @@ export default function Table({
     const meeting = state.meetings[slug];
     return (
       <tr
-        className="d-block d-md-table-row"
+        className={cx(
+          { 'cursor-pointer': !listButtons },
+          'd-block d-md-table-row'
+        )}
         onClick={() => {
           if (listButtons) return;
           setState({
@@ -152,7 +155,7 @@ export default function Table({
                     <div className="alert alert-warning m-0 opacity-50 p-2 rounded-0">
                       <button
                         onClick={() => setShowInProgress(true)}
-                        className="alert-link bg-transparent border-0 d-block fw-normal mx-auto py-2 py-md-1 text-center text-decoration-underline"
+                        className="alert-link bg-transparent border-0 d-block fw-normal mx-auto py-2 py-md-1 text-center text-decoration-underline w-100"
                       >
                         {inProgress.length === 1
                           ? strings.in_progress_single
