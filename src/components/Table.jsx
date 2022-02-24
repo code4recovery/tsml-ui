@@ -72,13 +72,13 @@ export default function Table({
           ))}
         </div>
       );
-    } else if (key === 'distance') {
-      return meeting.distance ? (
+    } else if (key === 'distance' && meeting.distance) {
+      return (
         <>
           {meeting.distance}
           <small className="ms-1 text-muted">{settings.distance_unit}</small>
         </>
-      ) : null;
+      );
     } else if (key === 'location_group') {
       return meeting.isInPerson ? meeting.location : meeting.group;
     } else if (key === 'name' && meeting.slug) {
@@ -97,7 +97,7 @@ export default function Table({
         strings.appointment
       );
     }
-    return meeting[key];
+    return null;
   };
 
   const Row = ({ slug }) => {
@@ -143,23 +143,25 @@ export default function Table({
             </tr>
           </thead>
           {!!inProgress.length && (
-            <tbody className="tsml-in-progress">
+            <tbody>
               {showInProgress ? (
                 inProgress.map((slug, index) => <Row slug={slug} key={index} />)
               ) : (
                 <tr>
-                  <td colSpan={columns.length}>
-                    <a
-                      onClick={() => setShowInProgress(true)}
-                      className="d-block text-center py-3 py-md-1"
-                    >
-                      {inProgress.length === 1
-                        ? strings.in_progress_single
-                        : strings.in_progress_multiple.replace(
-                            '%count%',
-                            inProgress.length
-                          )}
-                    </a>
+                  <td colSpan={columns.length} className="p-0">
+                    <div className="alert alert-warning m-0 opacity-50 p-2 rounded-0">
+                      <button
+                        onClick={() => setShowInProgress(true)}
+                        className="alert-link bg-transparent border-0 d-block fw-normal mx-auto py-2 py-md-1 text-center text-decoration-underline"
+                      >
+                        {inProgress.length === 1
+                          ? strings.in_progress_single
+                          : strings.in_progress_multiple.replace(
+                              '%count%',
+                              inProgress.length
+                            )}
+                      </button>
+                    </div>
                   </td>
                 </tr>
               )}
