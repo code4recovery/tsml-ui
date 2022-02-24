@@ -143,12 +143,12 @@ export default function Table({
             </tr>
           </thead>
           {!!inProgress.length && (
-            <tbody>
+            <tbody className="border-0">
               {showInProgress ? (
                 inProgress.map((slug, index) => <Row slug={slug} key={index} />)
               ) : (
                 <tr>
-                  <td colSpan={columns.length} className="p-0">
+                  <td className="p-0" colSpan={columns.length}>
                     <div className="alert alert-warning m-0 opacity-50 p-2 rounded-0">
                       <button
                         onClick={() => setShowInProgress(true)}
@@ -169,6 +169,7 @@ export default function Table({
           )}
           <InfiniteScroll
             element="tbody"
+            className="border-0"
             loadMore={() => {
               setLimit(limit + meetingsPerPage);
             }}
