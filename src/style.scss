@@ -289,18 +289,8 @@ div.tsml-ui {
     }
 
     //when whole row is clickable
-    &.clickable-rows tbody {
-      tr:hover {
-        cursor: pointer;
-        a {
-          color: $blue-700;
-        }
-      }
-      &.tsml-in-progress tr:hover {
-        a {
-          color: $yellow-800;
-        }
-      }
+    &.clickable-rows tbody tr:hover a {
+      color: $blue-700;
     }
 
     //mobile view
