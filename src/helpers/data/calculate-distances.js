@@ -23,7 +23,7 @@ export function calculateDistances(
       ),
     };
 
-    [1, 2, 5, 10, 25].forEach(distance => {
+    [1, 2, 5, 10, 15, 25].forEach(distance => {
       if (state.meetings[slug].distance <= distance) {
         if (!distances.hasOwnProperty(distance)) {
           distances[distance] = {
