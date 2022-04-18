@@ -12,7 +12,7 @@ export interface Meeting {
   conference_url: string;
   conference_url_notes: string;
   day: Day | Day[];
-  edit_url: `row ${number}`;
+  edit_url: string | null;
   email: string;
   end: Moment;
   end_time: `${number}:${number}`;

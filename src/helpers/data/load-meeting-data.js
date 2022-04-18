@@ -99,11 +99,6 @@ export function loadMeetingData(data, capabilities, timezone) {
         delete meeting[key];
       });
 
-    //default edit_url
-    if (!meeting.edit_url) {
-      meeting.edit_url = `row ${index}`;
-    }
-
     //slug is required
     if (!meeting.slug) {
       console.warn(meeting.edit_url, 'no slug');

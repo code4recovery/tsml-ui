@@ -39,6 +39,11 @@ export default function Meeting({
   //set page title
   document.title = meeting.name;
 
+  //log edit_url
+  if (meeting.edit_url) {
+    console.log(`Link to edit ${meeting.name}:`, meeting.edit_url);
+  }
+
   //format time string (duration? or appointment?)
   const timeString = meeting.start
     ? `${
