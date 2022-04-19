@@ -55,6 +55,10 @@ export default function TsmlUI({ json, mapbox, timezone }) {
 
   //load data once from json
   if (state.loading) {
+    console.log(
+      'TSML UI meeting finder: https://github.com/code4recovery/tsml-ui'
+    );
+
     const input = getQueryString();
 
     //fetch json data file and build indexes
@@ -90,7 +94,7 @@ export default function TsmlUI({ json, mapbox, timezone }) {
       })
       .catch(error => {
         if (json) {
-          console.error(error);
+          console.error(`TSML UI data loading error: ${error}`, json);
         }
         setState({
           ...state,

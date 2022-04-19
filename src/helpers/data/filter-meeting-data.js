@@ -78,7 +78,7 @@ export function filterMeetingData(state, setState, mapbox) {
             );
           },
           error => {
-            console.warn('getCurrentPosition() error', error);
+            console.warn(`TSML UI geolocation error: ${error}`);
           },
           { timeout: 5000 }
         );
