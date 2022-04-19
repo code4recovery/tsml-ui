@@ -101,13 +101,15 @@ export function loadMeetingData(data, capabilities, timezone) {
 
     //slug is required
     if (!meeting.slug) {
-      console.warn(meeting.edit_url, 'no slug');
+      console.warn(`TSML no slug: ${meeting.edit_url}`);
       return;
     }
 
     //slug must be unique
     if (meeting.slug in meetings) {
-      console.warn(meeting.edit_url, `${meeting.slug} is a duplicate slug`);
+      console.warn(
+        `TSML UI ${meeting.slug} duplicate slug: ${meeting.edit_url}`
+      );
       return;
     }
 
@@ -123,8 +125,7 @@ export function loadMeetingData(data, capabilities, timezone) {
 
     if (meeting.conference_url && !meeting.conference_provider) {
       console.warn(
-        meeting.edit_url,
-        `unknown conference_url: ${meeting.conference_url}`
+        `unknown conference_url ${meeting.conference_url}: ${meeting.edit_url}`
       );
     }
 
@@ -358,22 +359,28 @@ export function loadMeetingData(data, capabilities, timezone) {
     });
 
     //optional updated date
-    const updated = moment(meeting.updated);
-    meeting.updated = updated.isValid()
-      ? updated.tz(timezone).format('ll')
-      : null;
+    if (meeting.updated) {
+      const updated = moment.utc(meeting.updated);
+      meeting.updated = updated.isValid()
+        ? updated.tz(timezone).format('ll')
+        : undefined;
+    }
 
     //7th tradition validation
     if (meeting.venmo) {
       if (!meeting.venmo.startsWith('@')) {
-        console.warn(meeting.edit_url, `invalid venmo: ${meeting.venmo}`);
+        console.warn(
+          `TSML UI invalid venmo ${meeting.venmo}: ${meeting.edit_url}`
+        );
         meeting.venmo = null;
       }
     }
 
     if (meeting.square) {
       if (!meeting.square.startsWith('$')) {
-        console.warn(meeting.edit_url, `invalid square: ${meeting.square}`);
+        console.warn(
+          `TSML UI invalid square ${meeting.square}: ${meeting.edit_url}`
+        );
         meeting.square = null;
       }
     }
@@ -383,7 +390,9 @@ export function loadMeetingData(data, capabilities, timezone) {
         !meeting.paypal.startsWith('https://www.paypal.me') &&
         !meeting.paypal.startsWith('https://paypal.me')
       ) {
-        console.warn(meeting.edit_url, `invalid paypal: ${meeting.paypal}`);
+        console.warn(
+          `TSML UI invalid paypal ${meeting.paypal}: ${meeting.edit_url}`
+        );
         meeting.paypal = null;
       }
     }

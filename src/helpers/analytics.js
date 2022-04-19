@@ -7,7 +7,7 @@ export function analyticsEvent({ category, action, label }) {
       event_category: category,
       event_label: label,
     });
-    //console.log(`recorded gtag event for "${label}"`);
+    //console.log(`TSML UI recorded gtag event for "${label}"`);
   } else if (typeof ga === 'function') {
     //https://developers.google.com/analytics/devguides/collection/analyticsjs/events
     ga('send', {
@@ -16,8 +16,8 @@ export function analyticsEvent({ category, action, label }) {
       eventAction: action,
       eventLabel: label,
     });
-    //console.log(`recorded ga event for "${label}"`);
+    //console.log(`TSML UI recorded ga event for "${label}"`);
   } else {
-    //console.log('did not record analytics event');
+    //console.log('TSML UI did not record analytics event');
   }
 }

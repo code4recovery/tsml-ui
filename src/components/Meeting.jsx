@@ -41,7 +41,7 @@ export default function Meeting({
 
   //log edit_url
   if (meeting.edit_url) {
-    console.log(`Link to edit ${meeting.name}:`, meeting.edit_url);
+    console.log(`TSML UI edit ${meeting.name}: ${meeting.edit_url}`);
   }
 
   //format time string (duration? or appointment?)

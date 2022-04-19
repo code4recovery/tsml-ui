@@ -39,7 +39,7 @@ export interface Meeting {
   time: `${number}:${number}`;
   timezone: Timezone;
   types: MeetingType[];
-  updated: string;
+  updated?: string;
   venmo: string;
   website: string;
 }
