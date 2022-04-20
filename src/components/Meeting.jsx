@@ -107,31 +107,48 @@ export default function Meeting({
     });
   }
 
-  const locationWeekdays = settings.weekdays.map((weekday, index) => ({
-    name: strings[weekday],
-    meetings: Object.values(state.meetings)
-      .filter(m => m.start?.day() === index)
-      .filter(
-        m =>
-          meeting.isInPerson &&
-          m.isInPerson &&
-          m.formatted_address === meeting.formatted_address
-      )
-      .sort((a, b) => a.start - b.start),
-  }));
+  const locationWeekdays = settings.weekdays
+    .map((weekday, index) => ({
+      name: strings[weekday],
+      meetings: Object.values(state.meetings)
+        .filter(m => m.start?.day() === index)
+        .filter(
+          m =>
+            meeting.isInPerson &&
+            m.isInPerson &&
+            m.formatted_address === meeting.formatted_address
+        )
+        .sort((a, b) => a.start - b.start),
+    }))
+    .filter(e => e.meetings.length);
 
-  const groupWeekdays = settings.weekdays.map((weekday, index) => ({
-    name: strings[weekday],
-    meetings: Object.values(state.meetings)
-      .filter(m => m.start?.day() === index)
-      .filter(
-        m =>
-          meeting.group &&
-          (m.isOnline || m.isInPerson) &&
-          m.group === meeting.group
-      )
-      .sort((a, b) => a.start - b.start),
-  }));
+  //don't display if only one meeting
+  if (
+    locationWeekdays.length === 1 &&
+    locationWeekdays[0].meetings.length === 1
+  ) {
+    locationWeekdays.splice(0, 1);
+  }
+
+  const groupWeekdays = settings.weekdays
+    .map((weekday, index) => ({
+      name: strings[weekday],
+      meetings: Object.values(state.meetings)
+        .filter(m => m.start?.day() === index)
+        .filter(
+          m =>
+            meeting.group &&
+            (m.isOnline || m.isInPerson) &&
+            m.group === meeting.group
+        )
+        .sort((a, b) => a.start - b.start),
+    }))
+    .filter(e => e.meetings.length);
+
+  //don't display if only one meeting
+  if (groupWeekdays.length === 1 && groupWeekdays[0].meetings.length === 1) {
+    groupWeekdays.splice(0, 1);
+  }
 
   return (
     <div
@@ -366,43 +383,41 @@ function Paragraphs({ text, className }) {
 }
 
 function formatWeekdays(weekday, slug, state, setState) {
-  return weekday
-    .filter(e => e.meetings.length)
-    .map(({ meetings, name }, index) => (
-      <div key={index}>
-        <h3 className="h6 mb-1 mt-2">{name}</h3>
-        <ol className="list-unstyled">
-          {meetings.map((m, index) => (
-            <li
-              className="d-flex flex-row gap-2 justify-content-between m-0"
-              key={index}
-            >
-              <div className="text-muted text-nowrap">
-                {m.start.format('h:mm a')}
-              </div>
-              <div className="flex-grow-1">
-                {m.slug === slug ? (
-                  <Link meeting={m} />
-                ) : (
-                  <Link meeting={m} setState={setState} state={state} />
-                )}
-              </div>
-              <div className="align-items-start d-flex gap-1 justify-content-end pt-1">
-                {m.isInPerson && (
-                  <small className="align-items-center d-flex flex-row float-end gap-2 px-2 py-1 rounded text-sm in-person">
-                    <Icon icon="geo" size={13} />
-                  </small>
-                )}
-                {m.isOnline && (
-                  <small className="align-items-center d-flex flex-row float-end gap-2 px-2 py-1 rounded text-sm online">
-                    {m.conference_provider && <Icon icon="camera" size={13} />}
-                    {m.conference_phone && <Icon icon="phone" size={13} />}
-                  </small>
-                )}
-              </div>
-            </li>
-          ))}
-        </ol>
-      </div>
-    ));
+  return weekday.map(({ meetings, name }, index) => (
+    <div key={index}>
+      <h3 className="h6 mb-1 mt-2">{name}</h3>
+      <ol className="list-unstyled">
+        {meetings.map((m, index) => (
+          <li
+            className="d-flex flex-row gap-2 justify-content-between m-0"
+            key={index}
+          >
+            <div className="text-muted text-nowrap">
+              {m.start.format('h:mm a')}
+            </div>
+            <div className="flex-grow-1">
+              {m.slug === slug ? (
+                <Link meeting={m} />
+              ) : (
+                <Link meeting={m} setState={setState} state={state} />
+              )}
+            </div>
+            <div className="align-items-start d-flex gap-1 justify-content-end pt-1">
+              {m.isInPerson && (
+                <small className="align-items-center d-flex flex-row float-end gap-2 px-2 py-1 rounded text-sm in-person">
+                  <Icon icon="geo" size={13} />
+                </small>
+              )}
+              {m.isOnline && (
+                <small className="align-items-center d-flex flex-row float-end gap-2 px-2 py-1 rounded text-sm online">
+                  {m.conference_provider && <Icon icon="camera" size={13} />}
+                  {m.conference_phone && <Icon icon="phone" size={13} />}
+                </small>
+              )}
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  ));
 }
