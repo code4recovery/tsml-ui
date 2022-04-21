@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
 
 import {
@@ -20,6 +20,14 @@ export default function Table({
   const meetingsPerPage = 10;
   const [limit, setLimit] = useState(meetingsPerPage);
   const [showInProgress, setShowInProgress] = useState(false);
+
+  //manage classes
+  useEffect(() => {
+    document.body.classList.add('tsml-ui-table');
+    return () => {
+      document.body.classList.remove('tsml-ui-table');
+    };
+  }, []);
 
   //show columns based on capabilities
   const columns = settings.columns
