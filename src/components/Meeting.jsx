@@ -31,6 +31,14 @@ export default function Meeting({
     document.getElementById('tsml-ui')?.scrollIntoView();
   }, [state.input.meeting]);
 
+  //manage classes
+  useEffect(() => {
+    document.body.classList.add('tsml-ui-meeting');
+    return () => {
+      document.body.classList.remove('tsml-ui-meeting');
+    };
+  }, []);
+
   //directions URL link
   const directionsUrl = meeting.isInPerson
     ? formatDirectionsUrl(meeting)

@@ -41,6 +41,16 @@ export default function Map({
     };
   }, []);
 
+  //manage classes
+  useEffect(() => {
+    if (!state.input.meeting) {
+      document.body.classList.add('tsml-ui-map');
+    }
+    return () => {
+      document.body.classList.remove('tsml-ui-map');
+    };
+  }, [state.input.meeting]);
+
   //reset bounds and locations when filteredSlugs changes
   useEffect(() => {
     const locations = {};

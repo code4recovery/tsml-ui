@@ -53,6 +53,14 @@ export default function TsmlUI({ json, mapbox, timezone }) {
     };
   }, [state, window.location.search]);
 
+  //manage classes
+  useEffect(() => {
+    document.body.classList.add('tsml-ui');
+    return () => {
+      document.body.classList.remove('tsml-ui');
+    };
+  }, []);
+
   //load data once from json
   if (state.loading) {
     console.log(
