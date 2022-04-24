@@ -69,6 +69,11 @@ export default function TsmlUI({ json, mapbox, timezone }) {
 
     const input = getQueryString();
 
+    //cache busting
+    if (json.endsWith('.json') && input.meeting) {
+      json = json.concat('?', new Date().getTime());
+    }
+
     //fetch json data file and build indexes
     fetch(json)
       .then(result => result.json())
