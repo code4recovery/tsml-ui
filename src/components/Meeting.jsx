@@ -29,6 +29,16 @@ export default function Meeting({
   //scroll to top when you navigate to this page
   useEffect(() => {
     document.getElementById('tsml-ui')?.scrollIntoView();
+
+    //log edit_url
+    if (meeting.edit_url) {
+      console.log(`TSML UI edit ${meeting.name}: ${meeting.edit_url}`);
+      wordPressEditLink(meeting.edit_url);
+    }
+
+    return () => {
+      wordPressEditLink();
+    };
   }, [state.input.meeting]);
 
   //manage classes
@@ -46,11 +56,6 @@ export default function Meeting({
 
   //set page title
   document.title = meeting.name;
-
-  //log edit_url
-  if (meeting.edit_url) {
-    console.log(`TSML UI edit ${meeting.name}: ${meeting.edit_url}`);
-  }
 
   //format time string (duration? or appointment?)
   const timeString = meeting.start
@@ -428,4 +433,28 @@ function formatWeekdays(weekday, slug, state, setState) {
       </ol>
     </div>
   ));
+}
+
+//add or remove an "edit meeting" link on WordPress
+function wordPressEditLink(url) {
+  const adminBar = document.getElementById('wp-admin-bar-root-default');
+  if (!adminBar) return;
+  const editButton = document.getElementById('wp-admin-bar-edit-meeting');
+  if (url) {
+    //create link
+    const link = document.createElement('a');
+    link.setAttribute('class', 'ab-item');
+    link.setAttribute('href', url);
+    link.appendChild(document.createTextNode('Edit Meeting'));
+
+    //create button
+    const button = document.createElement('li');
+    button.setAttribute('id', 'wp-admin-bar-edit-meeting');
+    button.appendChild(link);
+
+    //add button to menu bar
+    adminBar.appendChild(button);
+  } else if (editButton) {
+    editButton.parentNode.removeChild(editButton);
+  }
 }

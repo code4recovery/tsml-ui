@@ -87,6 +87,8 @@ export default function Table({
           <small className="ms-1 text-muted">{settings.distance_unit}</small>
         </>
       );
+    } else if (key === 'location') {
+      return meeting.location;
     } else if (key === 'location_group') {
       return meeting.isInPerson ? meeting.location : meeting.group;
     } else if (key === 'name' && meeting.slug) {

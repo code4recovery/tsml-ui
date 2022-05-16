@@ -322,3 +322,9 @@ div.tsml-ui {
     }
   }
 }
+
+//wordpress
+#wpadminbar #wp-admin-bar-edit-meeting > .ab-item:before {
+  content: '\f464';
+  top: 2px;
+}
