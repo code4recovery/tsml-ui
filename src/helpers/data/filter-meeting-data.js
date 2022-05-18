@@ -11,13 +11,21 @@ export function filterMeetingData(state, setState, mapbox) {
   //filter by distance, region, time, type, and weekday
   settings.filters.forEach(filter => {
     if (state.input[filter]?.length && state.capabilities[filter]) {
-      matchGroups[filter] = [].concat.apply(
-        [],
-        state.input[filter].map(key => {
-          const match = getIndexByKey(state.indexes[filter], key);
-          return match ? match.slugs : [];
-        })
-      );
+      if (filter === 'type') {
+        //get the intersection of types (Open AND Discussion)
+        state.input['type'].forEach(type => {
+          matchGroups[`type-${type}`] =
+            getIndexByKey(state.indexes[filter], type)?.slugs ?? [];
+        });
+      } else {
+        //get the union of other filters (Monday OR Tuesday)
+        matchGroups[filter] = [].concat.apply(
+          [],
+          state.input[filter].map(
+            key => getIndexByKey(state.indexes[filter], key)?.slugs ?? []
+          )
+        );
+      }
     }
   });
 
