@@ -7,7 +7,6 @@ import type { Timezone } from '../types/Timezone';
 
 //override these on your page with tsml_react_config
 const defaults: TSMLReactConfig = {
-  timezone: '' as Timezone,
   cache: false,
   columns: ['time', 'distance', 'name', 'location_group', 'address', 'region'],
   conference_providers: {
@@ -34,6 +33,7 @@ const defaults: TSMLReactConfig = {
     view: 'table',
     weekday: [],
   },
+  distance_options: [1, 2, 5, 10, 15, 25],
   distance_unit: 'mi', //mi or km
   feedback_emails: [], //email addresses for update meeting info button
   filters: ['region', 'distance', 'weekday', 'time', 'type'],
@@ -78,6 +78,7 @@ const defaults: TSMLReactConfig = {
     fr: fr,
   },
   times: ['morning', 'midday', 'evening', 'night'],
+  timezone: '' as Timezone,
   weekdays: [
     'sunday',
     'monday',
