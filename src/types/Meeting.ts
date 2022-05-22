@@ -27,7 +27,6 @@ export interface Meeting {
   location: string;
   location_notes?: string;
   longitude: number | null;
-  minutes_now: number;
   minutes_week: number;
   name: string;
   notes?: string;

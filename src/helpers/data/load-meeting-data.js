@@ -51,7 +51,6 @@ export function loadMeetingData(data, capabilities, timezone) {
     'location',
     'location_notes',
     'longitude',
-    'minutes_now',
     'minutes_week',
     'name',
     'notes',
@@ -297,20 +296,16 @@ export function loadMeetingData(data, capabilities, timezone) {
 
         const times = [];
         if (minutes_midnight >= 240 && minutes_midnight < 720) {
-          //4am–12pm
-          times.push(0); //morning
+          times.push(0); //morning (4am–11:59pm)
         }
         if (minutes_midnight >= 660 && minutes_midnight < 1020) {
-          //11am–5pm
-          times.push(1); //midday
+          times.push(1); //midday (11am–4:59pm)
         }
         if (minutes_midnight >= 960 && minutes_midnight < 1260) {
-          //4–9pm
-          times.push(2); //evening
+          times.push(2); //evening (4pm–8:59pm)
         }
         if (minutes_midnight >= 1200 || minutes_midnight < 300) {
-          //8pm–5am
-          times.push(3); //night
+          times.push(3); //night (8pm–4:59am)
         }
         times.forEach(time => {
           if (!indexes.time.hasOwnProperty(time)) {

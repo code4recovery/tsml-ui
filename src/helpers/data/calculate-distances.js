@@ -12,6 +12,13 @@ export function calculateDistances(
 ) {
   //build new index and meetings array
   const distances = {};
+  settings.distance_options.forEach(distance => {
+    distances[distance] = {
+      key: distance.toString(),
+      name: `${distance} ${settings.distance_unit}`,
+      slugs: [],
+    };
+  });
 
   //loop through and update or clear distances, and rebuild index
   filteredSlugs.forEach(slug => {
@@ -23,15 +30,8 @@ export function calculateDistances(
       ),
     };
 
-    [1, 2, 5, 10, 15, 25].forEach(distance => {
+    settings.distance_options.forEach(distance => {
       if (state.meetings[slug].distance <= distance) {
-        if (!distances.hasOwnProperty(distance)) {
-          distances[distance] = {
-            key: distance.toString(),
-            name: `${distance} ${settings.distance_unit}`,
-            slugs: [],
-          };
-        }
         distances[distance].slugs.push(slug);
       }
     });
@@ -57,5 +57,6 @@ export function calculateDistances(
       latitude: parseFloat(latitude.toFixed(5)),
       longitude: parseFloat(longitude.toFixed(5)),
     },
+    ready: true,
   });
 }

@@ -6,23 +6,29 @@ import { calculateDistances } from './calculate-distances';
 
 //run filters on meetings; this is run at every render
 export function filterMeetingData(state, setState, mapbox) {
-  const matchGroups = {};
+  const matchGroups = [];
+  const now = moment();
+  const slugs = Object.keys(state.meetings);
+  const timeDiff = {};
 
   //filter by distance, region, time, type, and weekday
   settings.filters.forEach(filter => {
     if (state.input[filter]?.length && state.capabilities[filter]) {
       if (filter === 'type') {
         //get the intersection of types (Open AND Discussion)
-        state.input['type'].forEach(type => {
-          matchGroups[`type-${type}`] =
-            getIndexByKey(state.indexes[filter], type)?.slugs ?? [];
-        });
+        state.input['type'].forEach(type =>
+          matchGroups.push(
+            getIndexByKey(state.indexes[filter], type)?.slugs ?? []
+          )
+        );
       } else {
         //get the union of other filters (Monday OR Tuesday)
-        matchGroups[filter] = [].concat.apply(
-          [],
-          state.input[filter].map(
-            key => getIndexByKey(state.indexes[filter], key)?.slugs ?? []
+        matchGroups.push(
+          [].concat.apply(
+            [],
+            state.input[filter].map(
+              key => getIndexByKey(state.indexes[filter], key)?.slugs ?? []
+            )
           )
         );
       }
@@ -31,21 +37,41 @@ export function filterMeetingData(state, setState, mapbox) {
 
   //handle keyword search or geolocation
   if (state.input.mode === 'search') {
-    if (!!state.input.search) {
-      const orTerms = processSearchTerms(state.input.search);
-      const matches = Object.keys(state.meetings).filter(slug =>
+    if (state.input.search) {
+      const orTerms = state.input.search
+        .replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+        .replaceAll(' OR ', '|')
+        .toLowerCase()
+        .split('|')
+        .map(phrase => phrase.split('"'))
+        .map(phrase => [
+          ...new Set(
+            phrase
+              .filter((_e, index) => index % 2)
+              .concat(
+                phrase
+                  .filter((_e, index) => !(index % 2))
+                  .join(' ')
+                  .split(' ')
+              )
+              .filter(e => e)
+          ),
+        ])
+        .filter(e => e.length);
+      const matches = slugs.filter(slug =>
         orTerms.some(andTerm =>
           andTerm.every(term => state.meetings[slug].search.search(term) !== -1)
         )
       );
-      matchGroups.search = [].concat.apply([], matches);
+      matchGroups.push([].concat.apply([], matches));
     }
   } else if (['me', 'location'].includes(state.input.mode)) {
     //only show meetings with physical locations
-    const meetingsWithCoordinates = Object.keys(state.meetings).filter(
-      slug => state.meetings[slug].latitude && state.meetings[slug].latitude
+    matchGroups.push(
+      slugs.filter(
+        slug => state.meetings[slug].latitude && state.meetings[slug].latitude
+      )
     );
-    matchGroups.coordinates = meetingsWithCoordinates;
 
     if (!state.input.latitude || !state.input.longitude) {
       if (state.input.search && state.input.mode === 'location') {
@@ -95,12 +121,21 @@ export function filterMeetingData(state, setState, mapbox) {
   }
 
   //do the filtering, if necessary
-  const filteredSlugs = Object.keys(matchGroups).length
-    ? getCommonElements(Object.values(matchGroups)) //get intersection of slug arrays
-    : Object.keys(state.meetings); //get everything
+  const filteredSlugs = matchGroups.length
+    ? matchGroups.shift().filter(v => matchGroups.every(a => a.includes(v))) //get intersection of slug arrays
+    : slugs; //get everything
 
-  //custom sort function
-  const sortMeetings = (a, b) => {
+  //build lookup for meeting times based on now
+  slugs.forEach(slug => {
+    timeDiff[slug] = state.meetings[slug].start?.diff(now, 'minutes') ?? -9999;
+    //if time is earlier than X minutes ago, increment diff by a week
+    if (timeDiff[slug] < settings.now_offset) {
+      timeDiff[slug] += 10080;
+    }
+  });
+
+  //sort slugs
+  filteredSlugs.sort((a, b) => {
     const meetingA = state.meetings[a];
     const meetingB = state.meetings[b];
 
@@ -108,10 +143,10 @@ export function filterMeetingData(state, setState, mapbox) {
     if (meetingA.time && !meetingB.time) return -1;
     if (!meetingA.time && meetingB.time) return 1;
 
+    //sort by time
     if (!state.input.weekday.length) {
-      //if upcoming, sort by time_diff
-      if (meetingA.minutes_now !== meetingB.minutes_now) {
-        return meetingA.minutes_now - meetingB.minutes_now;
+      if (timeDiff[a] !== timeDiff[b]) {
+        return timeDiff[a] - timeDiff[b];
       }
     } else {
       if (meetingA.minutes_week !== meetingB.minutes_week) {
@@ -141,52 +176,15 @@ export function filterMeetingData(state, setState, mapbox) {
     }
 
     return 0;
-  };
-
-  //sort slugs
-  filteredSlugs.sort(sortMeetings);
+  });
 
   //find in-progress meetings
-  const now = moment();
-  const inProgress = filteredSlugs
-    .filter(
-      slug =>
-        state.meetings[slug].start?.diff(now, 'minutes') <
-          settings.now_offset &&
-        state.meetings[slug].end?.isAfter() &&
-        !state.meetings[slug].types.includes('inactive')
-    )
-    .sort(sortMeetings);
+  const inProgress = filteredSlugs.filter(
+    slug =>
+      state.meetings[slug].start?.diff(now, 'minutes') < settings.now_offset &&
+      state.meetings[slug].end?.isAfter() &&
+      !state.meetings[slug].types.includes('inactive')
+  );
 
   return [filteredSlugs, inProgress];
-}
-
-//get common matches between arrays (for meeting filtering)
-function getCommonElements(arrays) {
-  return arrays.shift().filter(v => arrays.every(a => a.indexOf(v) !== -1));
-}
-
-//converts search input string into nested arrays of search terms
-//"term1 OR term2 term3" => ['term1', ['term2', 'term3']]
-function processSearchTerms(input) {
-  return input
-    .replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-    .replaceAll(' OR ', '|')
-    .toLowerCase()
-    .split('|')
-    .map(phrase => phrase.split('"'))
-    .map(phrase => [
-      ...new Set(
-        phrase
-          .filter((_e, index) => index % 2)
-          .concat(
-            phrase
-              .filter((_e, index) => !(index % 2))
-              .join(' ')
-              .split(' ')
-          )
-          .filter(e => e)
-      ),
-    ])
-    .filter(e => e.length);
 }
