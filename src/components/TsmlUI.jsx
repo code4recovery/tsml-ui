@@ -9,8 +9,6 @@ import {
   filterMeetingData,
   getQueryString,
   loadMeetingData,
-  setMinutesNow,
-  translateNoCodeAPI,
   setQueryString,
   settings,
 } from '../helpers';
@@ -78,10 +76,6 @@ export default function TsmlUI({ json, mapbox, timezone }) {
     fetch(json)
       .then(result => result.json())
       .then(result => {
-        if (json?.includes('nocodeapi.com')) {
-          result = translateNoCodeAPI(result);
-        }
-
         if (!Array.isArray(result) || !result.length) {
           return setState({
             ...state,
@@ -125,9 +119,6 @@ export default function TsmlUI({ json, mapbox, timezone }) {
 
   //apply input changes to query string
   setQueryString(state.input);
-
-  //update time for sorting
-  state.meetings = setMinutesNow(state.meetings);
 
   //filter data
   const [filteredSlugs, inProgress] = filterMeetingData(

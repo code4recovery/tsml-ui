@@ -7,7 +7,9 @@ import { calculateDistances } from './calculate-distances';
 //run filters on meetings; this is run at every render
 export function filterMeetingData(state, setState, mapbox) {
   const matchGroups = [];
+  const now = moment();
   const slugs = Object.keys(state.meetings);
+  const timeDiff = {};
 
   //filter by distance, region, time, type, and weekday
   settings.filters.forEach(filter => {
@@ -123,6 +125,15 @@ export function filterMeetingData(state, setState, mapbox) {
     ? matchGroups.shift().filter(v => matchGroups.every(a => a.includes(v))) //get intersection of slug arrays
     : slugs; //get everything
 
+  //build lookup for meeting times based on now
+  slugs.forEach(slug => {
+    timeDiff[slug] = state.meetings[slug].start?.diff(now, 'minutes') ?? -9999;
+    //if time is earlier than X minutes ago, increment diff by a week
+    if (timeDiff[slug] < settings.now_offset) {
+      timeDiff[slug] += 10080;
+    }
+  });
+
   //sort slugs
   filteredSlugs.sort((a, b) => {
     const meetingA = state.meetings[a];
@@ -132,10 +143,10 @@ export function filterMeetingData(state, setState, mapbox) {
     if (meetingA.time && !meetingB.time) return -1;
     if (!meetingA.time && meetingB.time) return 1;
 
+    //sort by time
     if (!state.input.weekday.length) {
-      //if upcoming, sort by time_diff
-      if (meetingA.minutes_now !== meetingB.minutes_now) {
-        return meetingA.minutes_now - meetingB.minutes_now;
+      if (timeDiff[a] !== timeDiff[b]) {
+        return timeDiff[a] - timeDiff[b];
       }
     } else {
       if (meetingA.minutes_week !== meetingB.minutes_week) {
@@ -168,7 +179,6 @@ export function filterMeetingData(state, setState, mapbox) {
   });
 
   //find in-progress meetings
-  const now = moment();
   const inProgress = filteredSlugs.filter(
     slug =>
       state.meetings[slug].start?.diff(now, 'minutes') < settings.now_offset &&

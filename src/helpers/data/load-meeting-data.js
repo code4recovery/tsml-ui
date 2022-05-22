@@ -51,7 +51,6 @@ export function loadMeetingData(data, capabilities, timezone) {
     'location',
     'location_notes',
     'longitude',
-    'minutes_now',
     'minutes_week',
     'name',
     'notes',
