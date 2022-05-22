@@ -23,6 +23,7 @@ interface TSMLReactConfig {
     view: 'table' | 'map';
     weekday: TSMLReactConfig['weekdays'];
   };
+  distance_options: number[];
   distance_unit: 'mi' | 'km';
   /** Email addresses for update meeting info button */
   feedback_emails: string[];
