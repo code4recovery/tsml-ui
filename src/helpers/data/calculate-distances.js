@@ -57,5 +57,6 @@ export function calculateDistances(
       latitude: parseFloat(latitude.toFixed(5)),
       longitude: parseFloat(longitude.toFixed(5)),
     },
+    ready: true,
   });
 }

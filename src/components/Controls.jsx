@@ -113,10 +113,11 @@ export default function Controls({ state, setState, mapbox }) {
       },
       input: {
         ...state.input,
-        search: '',
-        mode: mode,
+        distance: [],
         latitude: null,
         longitude: null,
+        mode: mode,
+        search: '',
       },
     });
   };

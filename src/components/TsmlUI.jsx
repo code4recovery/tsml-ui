@@ -38,6 +38,7 @@ export default function TsmlUI({ json, mapbox, timezone }) {
     },
     loading: true,
     meetings: [],
+    ready: false,
   });
 
   //enable forward & back buttons
@@ -81,6 +82,7 @@ export default function TsmlUI({ json, mapbox, timezone }) {
             ...state,
             error: 'bad_data',
             loading: false,
+            ready: true,
           });
         }
 
@@ -90,13 +92,18 @@ export default function TsmlUI({ json, mapbox, timezone }) {
           timezone
         );
 
+        const waitingForGeo =
+          (!input.latitude || !input.longitude) &&
+          ((input.mode === 'location' && input.search) || input.mode === 'me');
+
         setState({
           ...state,
           capabilities: capabilities,
           indexes: indexes,
-          meetings: meetings,
-          loading: false,
           input: input,
+          loading: false,
+          meetings: meetings,
+          ready: !waitingForGeo,
         });
       })
       .catch(error => {
@@ -107,14 +114,9 @@ export default function TsmlUI({ json, mapbox, timezone }) {
           ...state,
           error: json ? 'bad_data' : 'no_data_src',
           loading: false,
+          ready: true,
         });
       });
-
-    return (
-      <div className="tsml-ui">
-        <Loading />
-      </div>
-    );
   }
 
   //apply input changes to query string
@@ -135,7 +137,11 @@ export default function TsmlUI({ json, mapbox, timezone }) {
     state.error = 'not_found';
   }
 
-  return (
+  return !state.ready ? (
+    <div className="tsml-ui">
+      <Loading />
+    </div>
+  ) : (
     <div className="tsml-ui">
       <div className="container-fluid d-flex flex-column py-3">
         {state.input.meeting && state.input.meeting in state.meetings ? (
