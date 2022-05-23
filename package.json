@@ -4,13 +4,6 @@
   "private": false,
   "license": "MIT",
   "scripts": {
-    "dev": "mix",
-    "hot": "mix watch --hot",
-    "postdev": "rm -f mix-manifest.json",
-    "postprod": "rm -f mix-manifest.json",
-    "prod": "mix --production",
-    "watch": "mix watch",
-    "watch-poll": "mix watch -- --watch-options-poll=1000",
     "test": "jest",
     "test-watch": "jest --watch",
     "test-coverage": "jest --coverage",
@@ -29,13 +22,13 @@
     "@types/react-dom": "^17.0.11",
     "@types/react-test-renderer": "^17.0.1",
     "jest": "^27.4.7",
-    "laravel-mix": "^6.0.27",
+    "laravel-mix": "^6.0.43",
     "react-test-renderer": "^17.0.2",
-    "sass": "^1.37.5",
-    "sass-loader": "^12.1.0",
+    "sass": "^1.52.1",
+    "sass-loader": "^12.6.0",
     "serve": "^13.0.2",
-    "ts-loader": "^9.2.6",
-    "typescript": "^4.5.5"
+    "ts-loader": "^9.3.0",
+    "typescript": "^4.6.4"
   },
   "dependencies": {
     "bootstrap": "^5.1.3",
