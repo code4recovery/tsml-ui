@@ -15,10 +15,10 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: '16'
-          cache: 'yarn'
-      - run: yarn install --immutable --immutable-cache --check-cache
-      - run: yarn test-coverage
-      - run: yarn prod
+          cache: 'npm'
+      - run: npm install
+      - run: npm run test-coverage
+      - run: npx mix --production
       - name: Coveralls
         uses: coverallsapp/github-action@master
         with:
