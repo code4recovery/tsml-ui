@@ -78,9 +78,9 @@ Not yet! Please open a pull request and walk us through the process of adding it
 
 ## Contributing
 
-Pull requests are welcome. To get started, clone this repository, run `yarn`, and point your web root at the `public` folder.
+Pull requests are welcome. To get started, clone this repository, run `npm i`, and point your web root at the `public` folder.
 
-While developing, run `yarn watch` to compile assets as you edit them. When you're ready to commit, run `yarn prod` to minify them for production.
+While developing, run `npx mix watch` to compile assets as you edit them. When you're ready to commit, run `npx mix --production` to minify them for production.
 
 ## Credits
 
