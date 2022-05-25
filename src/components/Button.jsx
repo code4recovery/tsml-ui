@@ -18,7 +18,8 @@ export default function Button({
         {
           'd-flex overflow-hidden': !small,
           'btn-sm d-inline-flex': small,
-          'btn-outline-secondary cursor-pointer': href || onClick,
+          'cursor-pointer': href || onClick,
+          'btn-outline-secondary': !small && !className,
         },
         className
       )}
