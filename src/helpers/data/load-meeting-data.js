@@ -36,6 +36,7 @@ export function loadMeetingData(data, capabilities, timezone) {
     'contact_3_email',
     'contact_3_name',
     'contact_3_phone',
+    'coordinates',
     'country',
     'day',
     'district',
@@ -157,11 +158,16 @@ export function loadMeetingData(data, capabilities, timezone) {
     }
 
     //check if approximate
-    meeting.approximate = meeting.approximate
-      ? meeting.approximate.toLowerCase() === 'yes'
-      : meeting.address
-      ? false
-      : true;
+    if (meeting.coordinates) {
+      const coords = meeting.coordinates.split(',');
+      meeting.approximate = coords.length !== 2;
+      meeting.latitude = meeting.approximate ? null : coords[0];
+      meeting.longitude = meeting.approximate ? null : coords[1];
+    } else {
+      meeting.approximate = meeting.approximate
+        ? meeting.approximate.toLowerCase() === 'yes'
+        : !meeting.address;
+    }
 
     //if approximate is specified, it overrules formatAddress
     if (meeting.approximate) meeting.address = null;

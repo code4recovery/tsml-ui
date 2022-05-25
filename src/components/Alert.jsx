@@ -24,6 +24,7 @@ export default function Alert({ state, setState }) {
             state.input.search = '';
             setState({ ...state });
           }}
+          className="btn-light btn-outline-secondary"
           text={strings.remove.replace('%filter%', `‘${state.input.search}’`)}
           icon="close"
         />
@@ -33,6 +34,7 @@ export default function Alert({ state, setState }) {
           state.input[filter].map(value => (
             <Button
               key={value}
+              className="btn-light btn-outline-secondary"
               onClick={() => {
                 state.input[filter] = state.input[filter].filter(
                   e => e !== value
