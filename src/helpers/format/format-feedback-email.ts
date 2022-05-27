@@ -1,4 +1,4 @@
-import { Meeting } from '../../types/Meeting';
+import { Meeting } from '../../types';
 import { getQueryString } from '../query-string';
 import { strings } from '../settings';
 import { formatArray } from './format-array';

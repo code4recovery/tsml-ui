@@ -1,4 +1,4 @@
-import { Meeting } from '../../types/Meeting';
+import { Meeting } from '../../types';
 
 //format ICS file for add to calendar
 export function formatIcs(meeting: Meeting) {

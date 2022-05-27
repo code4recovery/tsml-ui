@@ -1,5 +1,5 @@
 import { screen, render, fireEvent } from '@testing-library/react';
-import { Meeting } from '../types/Meeting';
+import { Meeting } from '../types';
 import Link from './Link';
 import { settings } from '../helpers/settings';
 

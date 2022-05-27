@@ -1,9 +1,7 @@
 import merge from 'deepmerge';
 
-import en from '../i18n/en';
-import es from '../i18n/es';
-import fr from '../i18n/fr';
-import type { Timezone } from '../types/Timezone';
+import { en, es, fr } from '../i18n';
+import type { Timezone } from '../types';
 
 //override these on your page with tsml_react_config
 const defaults: TSMLReactConfig = {
