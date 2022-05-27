@@ -1,5 +1,4 @@
-import type { Meeting } from '../../types/Meeting';
-import type { Timezone } from '../../types/Timezone';
+import type { Meeting, Timezone } from '../../types';
 import { checkTimezone, flattenDays } from './load-meeting-data';
 
 test('checkTimezone', () => {

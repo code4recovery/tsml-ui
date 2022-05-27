@@ -1,6 +1,6 @@
 import moment from 'moment-timezone';
 import { formatIcs } from '.';
-import { Meeting } from '../../types/Meeting';
+import { Meeting } from '../../types';
 
 //TODO: Only requiring the parts needed for this test, should
 //probably integrate fixtures.
