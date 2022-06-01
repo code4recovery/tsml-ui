@@ -324,7 +324,50 @@ div.tsml-ui {
 }
 
 //wordpress
-#wpadminbar #wp-admin-bar-edit-meeting > .ab-item:before {
-  content: '\f464';
-  top: 2px;
+body.admin-bar #tsml-ui {
+  scroll-margin-top: 46px;
+
+  #wpadminbar #wp-admin-bar-edit-meeting > .ab-item:before {
+    content: '\f464';
+    top: 2px;
+  }
+
+  @media (min-width: 782px) {
+    scroll-margin-top: 32px;
+  }
+}
+
+body.theme-twentyfourteen {
+  #page::before,
+  .entry-header,
+  #secondary {
+    display: none;
+  }
+
+  #primary {
+    padding-top: 0;
+  }
+
+  #content {
+    margin-left: 0;
+  }
+
+  .entry-content {
+    max-width: none;
+    min-height: 100vh;
+    padding: 0 !important;
+  }
+
+  #tsml-ui {
+    table {
+      font-size: 1rem !important;
+      th {
+        text-transform: none;
+      }
+    }
+
+    button {
+      font-weight: inherit;
+    }
+  }
 }
