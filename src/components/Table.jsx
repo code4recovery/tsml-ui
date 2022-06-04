@@ -148,11 +148,14 @@ export default function Table({
         >
           <thead>
             <tr className="d-none d-md-table-row">
-              {columns.map((column, index) => (
-                <th key={index} className={column}>
-                  {strings[column]}
-                </th>
-              ))}
+              {columns.map(
+                (column, index) =>
+                  typeof strings[column] === 'string' && (
+                    <th key={index} className={column}>
+                      {strings[column]}
+                    </th>
+                  )
+              )}
             </tr>
           </thead>
           {!!inProgress.length && (
