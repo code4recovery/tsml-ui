@@ -1,9 +1,15 @@
 import React from 'react';
 
+import type { State } from '../types';
 import Button from './Button';
 import { getIndexByKey, strings, settings } from '../helpers';
 
-export default function Alert({ state, setState }) {
+type AlertProps = {
+  state: State;
+  setState: React.Dispatch<React.SetStateAction<State>>;
+};
+
+export default function Alert({ state, setState }: AlertProps) {
   return state.error ? (
     <div className="d-flex flex-column gap-3">
       <div className="alert alert-danger text-center m-0">
