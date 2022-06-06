@@ -35,17 +35,17 @@
     "rollup-plugin-terser": "^7.0.2",
     "rollup-plugin-uglify": "^6.0.4",
     "rollup-plugin-web-worker-loader": "^1.6.1",
-    "sass": "^1.37.5",
-    "viewport-mercator-project": "^7.0.4"
+    "sass": "^1.37.5"
   },
   "dependencies": {
     "@popperjs/core": "^2.9.3",
     "bootstrap": "^5.1.0",
     "deepmerge": "^4.2.2",
-    "mapbox-gl": "^2.5.1",
+    "mapbox-gl": "^2.8.2",
     "moment-timezone": "^0.5.33",
     "react-infinite-scroller": "^1.2.4",
-    "react-map-gl": "^6.1.17"
+    "react-map-gl": "^7.0.15",
+    "viewport-mercator-project": "^7.0.4"
   },
   "peerDependencies": {
     "react": "^17.0.2",

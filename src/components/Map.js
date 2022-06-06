@@ -1,17 +1,9 @@
 import React, { useEffect, useRef, useState, useContext } from 'react';
-import ReactMapGL, { Marker, NavigationControl, Popup, MapContext } from 'react-map-gl/dist/esm/index.js';
+import ReactMapGL, { Marker, NavigationControl, Popup } from 'react-map-gl';
 import WebMercatorViewport from 'viewport-mercator-project';
 import { formatDirectionsUrl, settings, strings } from '../helpers';
 import Button from './Button';
 import Link from './Link';
-
-const MapDebug = () => {
-  const context = useContext(MapContext);
-
-  console.log('react-map-gl.context', context)
-
-  return null
-}
 
 export default function Map({
   filteredSlugs,
@@ -107,7 +99,6 @@ export default function Map({
   //reset viewport when data or dimensions change
   useEffect(() => {
     if (!dimensions || !data.bounds) return;
-    console.log('setViewport called', data)
     setViewport(
       data.bounds.west === data.bounds.east
         ? {
@@ -128,18 +119,15 @@ export default function Map({
     );
   }, [data, dimensions]);
 
-  console.log(viewport, mapbox)
-
   return (
     <div className="border rounded bg-light flex-grow-1 map" ref={mapFrame}>
       {viewport && data.locationKeys.length ?
         <ReactMapGL
-          {...viewport}
+          initialViewState={viewport}
           mapStyle={settings.map.style}
-          mapboxApiAccessToken={mapbox}
+          mapboxAccessToken={mapbox}
           onViewportChange={nextViewport => setViewport(nextViewport)}
         >
-          <MapDebug />
           {data.locationKeys.map(key => (
             <div key={key}>
               <Marker
