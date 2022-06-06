@@ -14,8 +14,13 @@ export default [
     input,
     output: {
       dir: packageJSON.module,
-      format: "esm"
+      format: "esm",
+      globals: {
+        'react': 'React',
+        'react-dom': 'ReactDOM'
+      }
     },
+    external: ['react', 'react-dom'],
     plugins: [
       external(),
       resolve(),
@@ -39,8 +44,13 @@ export default [
     input,
     output: {
       dir: minifyExtension(packageJSON.module),
-      format: "esm"
+      format: "esm",
+      globals: {
+        'react': 'React',
+        'react-dom': 'ReactDOM'
+      }
     },
+    external: ['react', 'react-dom'],
     plugins: [
       external(),
       resolve(),
