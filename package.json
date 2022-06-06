@@ -1,11 +1,9 @@
 {
   "name": "tsml-ui-react",
-  "version": "1.2.0",
+  "version": "1.2.10",
   "private": false,
   "license": "MIT",
-  "main": "lib/index.js",
-  "browser": "lib/index.umd.js",
-  "module": "lib/index.es.js",
+  "module": "lib/esm",
   "scripts": {
     "build": "rollup -c",
     "prepublishOnly": "rm -rf lib && npm run build",

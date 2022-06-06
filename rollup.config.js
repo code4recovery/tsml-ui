@@ -4,20 +4,17 @@ import resolve from "@rollup/plugin-node-resolve";
 import external from "rollup-plugin-peer-deps-external";
 import scss from 'rollup-plugin-scss';
 import { terser } from "rollup-plugin-terser";
-import { uglify } from "rollup-plugin-uglify";
 import json from '@rollup/plugin-json';
 import packageJSON from "./package.json";
 const input = "./src/index.js";
 const minifyExtension = pathToFile => pathToFile.replace(/\.js$/, ".min.js");
 
 export default [
-  // CommonJS
   {
     input,
     output: {
-      file: packageJSON.main,
-      format: "cjs",
-      inlineDynamicImports: true
+      dir: packageJSON.module,
+      format: "esm"
     },
     plugins: [
       external(),
@@ -28,120 +25,24 @@ export default [
         ]
       }),
       babel({
-        exclude: "node_modules/**"
-      }),
-      scss({ output: true }),
-      json()
-    ]
-  },
-  {
-    input,
-    output: {
-      file: minifyExtension(packageJSON.main),
-      format: "cjs",
-      inlineDynamicImports: true
-    },
-    plugins: [
-      external(),
-      resolve(),
-      commonjs({
+        babelHelpers: 'bundled',
         exclude: [
-          "src/**"
-        ]
+          "node_modules/**",
+          "node_modules/mapbox-gl/dist/mapbox-gl.js"
+        ],
       }),
-      babel({
-        exclude: "node_modules/**"
-      }),
-      scss({ output: true }),
-      json(),
-      uglify()
-    ]
-  },
-  {
-    input,
-    output: {
-      file: packageJSON.browser,
-      inlineDynamicImports: true,
-      format: "umd",
-      name: "tsmlUI",
-      globals: {
-        react: "React",
-      }
-    },
-    plugins: [
-      external(),
-      resolve(),
-      commonjs({
-        exclude: [
-          "src/**"
-        ]
-      }),
-      babel({
-        exclude: "node_modules/**"
-      }),
-      scss({ output: true }),
-      json()
-    ]
-  },
-  {
-    input,
-    output: {
-      file: minifyExtension(packageJSON.browser),
-      inlineDynamicImports: true,
-      format: "umd",
-      name: "tsmlUI",
-      globals: {
-        react: "React",
-      }
-    },
-    plugins: [
-      external(),
-      resolve(),
-      commonjs({
-        exclude: [
-          "src/**"
-        ]
-      }),
-      babel({
-        exclude: "node_modules/**"
-      }),
-      scss({ output: true }),
-      json(),
-      terser()
-    ]
-  },
-  {
-    input,
-    output: {
-      file: packageJSON.module,
-      inlineDynamicImports: true,
-      format: "es",
-      exports: "named"
-    },
-    plugins: [
-      external(),
-      resolve(),
-      commonjs({
-        exclude: [
-          "src/**"
-        ]
-      }),
-      babel({
-        exclude: "node_modules/**"
-      }),
-      scss({ output: true }),
+      scss({ output: 'lib/styles.css' }),
       json(),
     ]
   },
   {
     input,
     output: {
-      file: minifyExtension(packageJSON.module),
-      inlineDynamicImports: true,
-      format: "es",
-      exports: "named"
+      dir: minifyExtension(packageJSON.module),
+      format: "esm"
     },
     plugins: [
+      external(),
       resolve(),
       commonjs({
         exclude: [
@@ -149,10 +50,13 @@ export default [
         ]
       }),
       babel({
-        exclude: "node_modules/**"
+        babelHelpers: 'bundled',
+        exclude: [
+          "node_modules/**",
+          "node_modules/mapbox-gl/dist/mapbox-gl.js"
+        ],
       }),
-      external(),
-      scss({ output: true }),
+      scss({ output: 'lib/styles.css' }),
       json(),
       terser()
     ]
