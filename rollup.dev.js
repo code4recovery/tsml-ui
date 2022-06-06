@@ -7,7 +7,6 @@ import replace from '@rollup/plugin-replace';
 import json from '@rollup/plugin-json';
 import scss from 'rollup-plugin-scss';
 import css from 'rollup-plugin-css-only';
-import webWorkerLoader from 'rollup-plugin-web-worker-loader';
 
 
 export default // LiveReload
@@ -35,7 +34,6 @@ export default // LiveReload
         "node_modules/**"
       ]
     }),
-    webWorkerLoader(),
     json(),
     scss({ output: false }),
     serve({

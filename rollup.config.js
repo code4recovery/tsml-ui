@@ -6,8 +6,6 @@ import scss from 'rollup-plugin-scss';
 import { terser } from "rollup-plugin-terser";
 import { uglify } from "rollup-plugin-uglify";
 import json from '@rollup/plugin-json';
-import webWorkerLoader from 'rollup-plugin-web-worker-loader';
-
 import packageJSON from "./package.json";
 const input = "./src/index.js";
 const minifyExtension = pathToFile => pathToFile.replace(/\.js$/, ".min.js");
@@ -18,7 +16,8 @@ export default [
     input,
     output: {
       file: packageJSON.main,
-      format: "cjs"
+      format: "cjs",
+      inlineDynamicImports: true
     },
     plugins: [
       external(),
@@ -39,7 +38,8 @@ export default [
     input,
     output: {
       file: minifyExtension(packageJSON.main),
-      format: "cjs"
+      format: "cjs",
+      inlineDynamicImports: true
     },
     plugins: [
       external(),
@@ -61,6 +61,7 @@ export default [
     input,
     output: {
       file: packageJSON.browser,
+      inlineDynamicImports: true,
       format: "umd",
       name: "tsmlUI",
       globals: {
@@ -86,6 +87,7 @@ export default [
     input,
     output: {
       file: minifyExtension(packageJSON.browser),
+      inlineDynamicImports: true,
       format: "umd",
       name: "tsmlUI",
       globals: {
@@ -112,6 +114,7 @@ export default [
     input,
     output: {
       file: packageJSON.module,
+      inlineDynamicImports: true,
       format: "es",
       exports: "named"
     },
@@ -134,6 +137,7 @@ export default [
     input,
     output: {
       file: minifyExtension(packageJSON.module),
+      inlineDynamicImports: true,
       format: "es",
       exports: "named"
     },
