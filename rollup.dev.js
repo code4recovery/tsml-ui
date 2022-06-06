@@ -35,7 +35,7 @@ export default // LiveReload
       ]
     }),
     json(),
-    scss({ output: false }),
+    scss({ output: true }),
     serve({
       open: true,
       verbose: true,
