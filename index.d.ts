@@ -12,10 +12,9 @@ interface TSMLReactConfig {
   timezone: Timezone;
   conference_providers: Record<string, string>;
   defaults: {
-    // TODO: Not sure about this types
-    distance: unknown[];
+    distance: string[];
     meeting: string | null;
-    mode: 'search' | 'location';
+    mode: 'search' | 'location' | 'me';
     region: string[];
     search: string;
     time: TSMLReactConfig['times'];

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import type { State } from '../types';
+import type { MeetingType, State } from '../types';
 import Button from './Button';
 import { getIndexByKey, strings, settings } from '../helpers';
 
@@ -42,9 +42,24 @@ export default function Alert({ state, setState }: AlertProps) {
               key={value}
               className="btn-light btn-outline-secondary"
               onClick={() => {
-                state.input[filter] = state.input[filter].filter(
-                  e => e !== value
-                );
+                //todo fix how ugly this is
+                if (filter === 'weekday') {
+                  state.input[filter] = state.input[filter].filter(
+                    e => e !== value
+                  ) as TSMLReactConfig['weekdays'];
+                } else if (filter === 'time') {
+                  state.input[filter] = state.input[filter].filter(
+                    e => e !== value
+                  ) as TSMLReactConfig['times'];
+                } else if (filter === 'type') {
+                  state.input[filter] = state.input[filter].filter(
+                    e => e !== value
+                  ) as MeetingType[];
+                } else {
+                  state.input[filter] = state.input[filter].filter(
+                    e => e !== value
+                  );
+                }
                 setState({ ...state });
               }}
               text={strings.remove.replace(
