@@ -9,16 +9,24 @@ import {
   settings,
   strings,
 } from '../helpers';
+import type { State } from '../types';
 
-export default function Controls({ state, setState, mapbox }) {
-  const [dropdown, setDropdown] = useState(null);
+type ControlsProps = {
+  state: State;
+  setState: React.Dispatch<React.SetStateAction<State>>;
+  mapbox?: string;
+};
+
+export default function Controls({ state, setState, mapbox }: ControlsProps) {
+  const [dropdown, setDropdown] = useState<string>();
   const [search, setSearch] = useState(
     state.input.mode === 'location' ? state.input.search : ''
   );
-  const searchInput = useRef();
+  const searchInput = useRef<HTMLInputElement>(null);
 
   //get available search options based on capabilities
-  const modes = ['search', 'location', 'me']
+  const allModes = ['search', 'location', 'me'] as const;
+  const modes = allModes
     .filter(
       mode => mode !== 'location' || (state.capabilities.coordinates && mapbox)
     )
@@ -35,19 +43,18 @@ export default function Controls({ state, setState, mapbox }) {
     .filter(filter => filter !== 'distance' || state.input.mode !== 'search');
 
   //get available views
-  const views = ['table', 'map'].filter(
+  const allViews = ['table', 'map'] as const;
+  const views = allViews.filter(
     view => view !== 'map' || (state.capabilities.coordinates && mapbox)
   );
 
   //whether to show the views segmented button
   const canShowViews = views.length > 1;
 
-  //document effect
+  //add click listener for dropdowns (in lieu of including bootstrap js + jquery)
   useEffect(() => {
-    //add click listener for dropdowns (in lieu of including bootstrap js + jquery)
     document.body.addEventListener('click', closeDropdown);
     return () => {
-      //remove click listener for dropdowns (in lieu of including bootstrap js + jquery)
       document.body.removeEventListener('click', closeDropdown);
     };
   }, [document]);
@@ -66,13 +73,13 @@ export default function Controls({ state, setState, mapbox }) {
   }, [state.input.search]);
 
   //close current dropdown (on body click)
-  const closeDropdown = e => {
-    if (e.srcElement.classList.contains('dropdown-toggle')) return;
-    setDropdown(null);
+  const closeDropdown = (e: MouseEvent) => {
+    if ((e.target as HTMLElement).classList.contains('dropdown-toggle')) return;
+    setDropdown(undefined);
   };
 
   //near location search
-  const locationSearch = e => {
+  const locationSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (state.input.mode === 'location') {
@@ -80,8 +87,8 @@ export default function Controls({ state, setState, mapbox }) {
         ...state,
         input: {
           ...state.input,
-          latitude: null,
-          longitude: null,
+          latitude: undefined,
+          longitude: undefined,
           search: search,
         },
       });
@@ -89,17 +96,17 @@ export default function Controls({ state, setState, mapbox }) {
   };
 
   //set search mode dropdown and clear all distances
-  const setMode = (e, mode) => {
+  const setMode = (e: React.MouseEvent, mode: 'search' | 'location' | 'me') => {
     e.preventDefault();
 
     Object.keys(state.meetings).forEach(slug => {
-      state.meetings[slug].distance = null;
+      state.meetings[slug].distance = undefined;
     });
 
     setSearch('');
 
     //focus after waiting for disabled to clear
-    setTimeout(() => searchInput.current.focus(), 100);
+    setTimeout(() => searchInput.current?.focus(), 100);
 
     setState({
       ...state,
@@ -114,8 +121,8 @@ export default function Controls({ state, setState, mapbox }) {
       input: {
         ...state.input,
         distance: [],
-        latitude: null,
-        longitude: null,
+        latitude: undefined,
+        longitude: undefined,
         mode: mode,
         search: '',
       },
@@ -123,7 +130,7 @@ export default function Controls({ state, setState, mapbox }) {
   };
 
   //toggle list/map view
-  const setView = (e, view) => {
+  const setView = (e: React.MouseEvent, view: 'table' | 'map') => {
     e.preventDefault();
     state.input.view = view;
     setState({ ...state });
@@ -161,7 +168,7 @@ export default function Controls({ state, setState, mapbox }) {
                   aria-label={strings.modes[state.input.mode]}
                   className="btn btn-outline-secondary dropdown-toggle"
                   onClick={() =>
-                    setDropdown(dropdown === 'search' ? null : 'search')
+                    setDropdown(dropdown === 'search' ? undefined : 'search')
                   }
                   type="button"
                 />
@@ -182,7 +189,7 @@ export default function Controls({ state, setState, mapbox }) {
                           state.input.mode === mode,
                       }
                     )}
-                    href={formatUrl({ ...state.input, mode: mode })}
+                    href={formatUrl({ ...state.input, mode })}
                     key={mode}
                     onClick={e => setMode(e, mode)}
                   >
@@ -196,7 +203,7 @@ export default function Controls({ state, setState, mapbox }) {
         {filters.map((filter, index) => (
           <div className="col-sm-6 col-lg mb-3" key={filter}>
             <Dropdown
-              defaultValue={strings[filter + '_any']}
+              defaultValue={strings[`${filter}_any` as keyof typeof strings]}
               end={!canShowViews && index === filters.length - 1}
               filter={filter}
               open={dropdown === filter}
