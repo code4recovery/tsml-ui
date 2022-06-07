@@ -28,7 +28,22 @@ export default function Meeting({
 
   //scroll to top when you navigate to this page
   useEffect(() => {
-    document.getElementById('tsml-ui')?.scrollIntoView();
+    const el = document.getElementById('tsml-ui');
+    if (el) {
+      el.style.scrollMarginTop = `${Math.max(
+        0,
+        ...[...document.body.getElementsByTagName('*')]
+          .filter(x => {
+            const style = getComputedStyle(x, null);
+            return (
+              style.getPropertyValue('position') === 'fixed' &&
+              style.getPropertyValue('top')
+            );
+          })
+          .map(x => x.offsetTop + x.offsetHeight)
+      )}px`;
+      el.scrollIntoView();
+    }
 
     //log edit_url
     if (meeting.edit_url) {

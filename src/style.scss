@@ -324,17 +324,9 @@ div.tsml-ui {
 }
 
 //wordpress
-body.admin-bar #tsml-ui {
-  scroll-margin-top: 46px;
-
-  #wpadminbar #wp-admin-bar-edit-meeting > .ab-item:before {
-    content: '\f464';
-    top: 2px;
-  }
-
-  @media (min-width: 782px) {
-    scroll-margin-top: 32px;
-  }
+#wpadminbar #wp-admin-bar-edit-meeting > .ab-item::before {
+  content: '\f464';
+  top: 2px;
 }
 
 body.theme-twentyfourteen {
