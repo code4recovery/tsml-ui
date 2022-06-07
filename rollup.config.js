@@ -13,36 +13,6 @@ export default [
   {
     input,
     output: {
-      dir: packageJSON.module,
-      format: "esm",
-      globals: {
-        'react': 'React',
-        'react-dom': 'ReactDOM'
-      }
-    },
-    external: ['react', 'react-dom'],
-    plugins: [
-      external(),
-      resolve(),
-      commonjs({
-        exclude: [
-          "src/**"
-        ]
-      }),
-      babel({
-        babelHelpers: 'bundled',
-        exclude: [
-          "node_modules/**",
-          "node_modules/mapbox-gl/dist/mapbox-gl.js"
-        ],
-      }),
-      scss({ output: 'lib/styles.css' }),
-      json(),
-    ]
-  },
-  {
-    input,
-    output: {
       dir: minifyExtension(packageJSON.module),
       format: "esm",
       globals: {
