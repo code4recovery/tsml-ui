@@ -35,7 +35,7 @@ export default // LiveReload
       ]
     }),
     json(),
-    scss({ output: false }),
+    scss({ output: 'dist/bundle.css' }),
     serve({
       open: true,
       verbose: true,
