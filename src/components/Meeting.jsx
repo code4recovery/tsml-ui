@@ -30,18 +30,19 @@ export default function Meeting({
   useEffect(() => {
     const el = document.getElementById('tsml-ui');
     if (el) {
-      el.style.scrollMarginTop = `${Math.max(
+      const headerHeight = Math.max(
         0,
         ...[...document.body.getElementsByTagName('*')]
-          .filter(x => {
-            const style = getComputedStyle(x, null);
-            return (
-              style.getPropertyValue('position') === 'fixed' &&
-              style.getPropertyValue('top')
-            );
-          })
+          .filter(
+            x =>
+              getComputedStyle(x, null).getPropertyValue('position') ===
+                'fixed' && x.offsetTop < 100
+          )
           .map(x => x.offsetTop + x.offsetHeight)
-      )}px`;
+      );
+      if (headerHeight) {
+        el.style.scrollMarginTop = `${headerHeight}px`;
+      }
       el.scrollIntoView();
     }
 
