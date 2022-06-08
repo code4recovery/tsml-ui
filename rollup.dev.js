@@ -7,7 +7,6 @@ import replace from '@rollup/plugin-replace';
 import json from '@rollup/plugin-json';
 import scss from 'rollup-plugin-scss';
 import css from 'rollup-plugin-css-only';
-import webWorkerLoader from 'rollup-plugin-web-worker-loader';
 
 
 export default // LiveReload
@@ -15,8 +14,9 @@ export default // LiveReload
   input: "src/app.js",
   output: {
     file: "dist/bundle.js",
-    format: "esm",
-    sourcemap: true
+    format: "cjs",
+    sourcemap: true,
+    inlineDynamicImports: true,
   },
   plugins: [
     resolve(),
@@ -34,9 +34,8 @@ export default // LiveReload
         "node_modules/**"
       ]
     }),
-    webWorkerLoader(),
     json(),
-    scss({ output: false }),
+    scss({ output: 'dist/bundle.css' }),
     serve({
       open: true,
       verbose: true,

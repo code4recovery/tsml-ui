@@ -1,16 +1,15 @@
 {
   "name": "tsml-ui-react",
-  "version": "1.1.21",
+  "version": "1.2.19",
   "private": false,
   "license": "MIT",
-  "main": "lib/index.js",
-  "browser": "lib/index.umd.js",
-  "module": "lib/index.es.js",
+  "module": "lib/",
   "scripts": {
     "build": "rollup -c",
     "prepublishOnly": "rm -rf lib && npm run build",
-    "postbuild": "npm pack && tar -xvzf *.tgz && rm -rf package *.tgz",
-    "dev": "rollup -c rollup.dev.js -w"
+    "postbuild": "yarn pack && tar -xvzf *.tgz && rm -rf package *.tgz",
+    "dev": "rollup -c rollup.dev.js -w",
+    "browserslist": "npx browserslist@latest --update-db"
   },
   "devDependencies": {
     "@babel/core": "^7.15.0",
@@ -34,30 +33,22 @@
     "rollup-plugin-serve": "^1.1.0",
     "rollup-plugin-terser": "^7.0.2",
     "rollup-plugin-uglify": "^6.0.4",
-    "rollup-plugin-web-worker-loader": "^1.6.1",
-    "sass": "^1.37.5",
-    "viewport-mercator-project": "^7.0.4"
+    "sass": "^1.37.5"
   },
   "dependencies": {
     "@popperjs/core": "^2.9.3",
     "bootstrap": "^5.1.0",
     "deepmerge": "^4.2.2",
-    "mapbox-gl": "^2.5.1",
+    "mapbox-gl": "^2.8.2",
     "moment-timezone": "^0.5.33",
     "react-infinite-scroller": "^1.2.4",
-    "react-map-gl": "^6.1.17"
+    "react-map-gl": "^7.0.15",
+    "viewport-mercator-project": "^7.0.4"
   },
   "peerDependencies": {
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
   },
-  "babel": {
-    "presets": [
-      "@babel/preset-react",
-      "@babel/preset-env"
-    ]
-  },
-  "browserslist": ">0.2%, not dead, not ie 11, not chrome < 51, not safari < 10",
   "files": [
     "/lib"
   ]
