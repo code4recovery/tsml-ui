@@ -18,8 +18,18 @@ export default function Table({
   listButtons = false,
 }) {
   const meetingsPerPage = 10;
+  const supported_columns = [
+    'address',
+    'distance',
+    'location',
+    'location_group',
+    'name',
+    'region',
+    'time',
+  ];
   const [limit, setLimit] = useState(meetingsPerPage);
   const [showInProgress, setShowInProgress] = useState(false);
+  const { distance, location, region } = state.capabilities;
 
   //manage classes
   useEffect(() => {
@@ -31,13 +41,10 @@ export default function Table({
 
   //show columns based on capabilities
   const columns = settings.columns
-    .filter(column => column !== 'region' || state.capabilities.region)
-    .filter(
-      column =>
-        (column !== 'location' && column !== 'location_group') ||
-        state.capabilities.location
-    )
-    .filter(column => column !== 'distance' || state.capabilities.distance);
+    .filter(col => supported_columns.includes(col))
+    .filter(col => region || col !== 'region')
+    .filter(col => distance || col !== 'distance')
+    .filter(col => location || !['location', 'location_group'].includes(col));
 
   const getValue = (meeting, key) => {
     if (key === 'address') {
@@ -148,14 +155,11 @@ export default function Table({
         >
           <thead>
             <tr className="d-none d-md-table-row">
-              {columns.map(
-                (column, index) =>
-                  typeof strings[column] === 'string' && (
-                    <th key={index} className={column}>
-                      {strings[column]}
-                    </th>
-                  )
-              )}
+              {columns.map((column, index) => (
+                <th key={index} className={column}>
+                  {strings[column]}
+                </th>
+              ))}
             </tr>
           </thead>
           {!!inProgress.length && (
