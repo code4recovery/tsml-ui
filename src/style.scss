@@ -329,6 +329,7 @@ div.tsml-ui {
   top: 2px;
 }
 
+body.twentyfourteen,
 body.theme-twentyfourteen {
   #page::before,
   .entry-header,
@@ -361,5 +362,41 @@ body.theme-twentyfourteen {
     button {
       font-weight: inherit;
     }
+  }
+}
+
+body.twentytwenty #tsml-ui {
+  h1,
+  .h1 {
+    font-size: 40px !important;
+  }
+  h2,
+  .h2 {
+    font-size: 36px !important;
+  }
+  h3,
+  .h3 {
+    font-size: 32px !important;
+  }
+  h4,
+  .h4 {
+    font-size: 24px !important;
+  }
+  h5,
+  .h5 {
+    font-size: 20px !important;
+  }
+  *,
+  h6,
+  .h6 {
+    font-size: 16px !important;
+    letter-spacing: normal !important;
+  }
+  .btn-sm {
+    font-size: 14px !important;
+  }
+  .badge,
+  .mapboxgl-ctrl-attrib-inner {
+    font-size: 12px !important;
   }
 }

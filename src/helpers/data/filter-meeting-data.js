@@ -161,18 +161,18 @@ export function filterMeetingData(state, setState, mapbox) {
       return meetingA.distance - meetingB.distance;
     }
 
+    //then by meeting name
+    if (meetingA.name !== meetingB.name) {
+      if (!meetingA.name) return -1;
+      if (!meetingB.name) return 1;
+      return meetingA.name.localeCompare(meetingB.name);
+    }
+
     //then by location name
     if (meetingA.location !== meetingB.location) {
       if (!meetingA.location) return -1;
       if (!meetingB.location) return 1;
       return meetingA.location.localeCompare(meetingB.location);
-    }
-
-    //then by meeting name
-    if (meetingA.name !== meetingB.name) {
-      if (!meetingA.name) return -1;
-      if (!meetingB.name) return 1;
-      return meetingA.name.localeCompare(meetingB.location);
     }
 
     return 0;
