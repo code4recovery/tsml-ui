@@ -234,7 +234,7 @@ export default function Meeting({
                     )
                     .map((type, index) => (
                       <li className="m-0" key={index}>
-                        {strings.type_descriptions[type] ? (
+                        {strings.type_descriptions?.[type] ? (
                           <button
                             className="d-flex flex-column bg-transparent border-0 p-0 text-start text-reset"
                             onClick={() =>
