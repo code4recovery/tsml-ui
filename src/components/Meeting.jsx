@@ -321,7 +321,7 @@ export default function Meeting({
                     'text-decoration-line-through text-muted':
                       meeting.isTempClosed,
                   },
-                  'd-grid gap-2 list-group-item py-3'
+                  'd-grid gap-2 list-group-item py-3 location'
                 )}
               >
                 {meeting.location && <h2 className="h5">{meeting.location}</h2>}
@@ -332,12 +332,14 @@ export default function Meeting({
                 {meeting.location_notes && (
                   <Paragraphs text={meeting.location_notes} />
                 )}
-                {formatWeekdays(
-                  locationWeekdays,
-                  meeting.slug,
-                  state,
-                  setState
-                )}
+                <div className="meetings d-grid gap-2">
+                  {formatWeekdays(
+                    locationWeekdays,
+                    meeting.slug,
+                    state,
+                    setState
+                  )}
+                </div>
               </div>
             )}
             {meeting.group &&
@@ -345,7 +347,7 @@ export default function Meeting({
                 meeting.group_notes ||
                 !!groupWeekdays.length ||
                 !!contactButtons.length) && (
-                <div className="d-grid gap-2 list-group-item py-3">
+                <div className="d-grid gap-2 list-group-item py-3 group">
                   <h2 className="h5">{meeting.group}</h2>
                   {meeting.district && <p>{meeting.district}</p>}
                   {meeting.group_notes && (
@@ -358,7 +360,14 @@ export default function Meeting({
                       ))}
                     </div>
                   )}
-                  {formatWeekdays(groupWeekdays, meeting.slug, state, setState)}
+                  <div className="meetings d-grid gap-2">
+                    {formatWeekdays(
+                      groupWeekdays,
+                      meeting.slug,
+                      state,
+                      setState
+                    )}
+                  </div>
                 </div>
               )}
             {meeting.updated && (
