@@ -1,4 +1,5 @@
 import { Meeting } from '../../types';
+import { iOS } from '../user-agent';
 
 //format ICS file for add to calendar
 export function formatIcs(meeting: Meeting) {
@@ -73,12 +74,21 @@ export function formatIcs(meeting: Meeting) {
     'END:VCALENDAR',
   ].join('\n');
 
-  //create temporary link to download
-  const url = window.URL.createObjectURL(new Blob([blob]));
-  const link = document.createElement('a');
-  link.href = url;
-  link.setAttribute('download', `${meeting.name}.ics`);
-  document.body.appendChild(link);
-  link.click();
-  link.parentNode?.removeChild(link);
+  if (iOS()) {
+    //create data url for ios
+    const uri = `data:text/calendar;charset=utf8,${blob.replaceAll(
+      '#',
+      '%23'
+    )}`;
+    window.location = encodeURI(uri) as unknown as Location;
+  } else {
+    //create temporary link to download
+    const url = window.URL.createObjectURL(new Blob([blob]));
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `${meeting.name}.ics`);
+    document.body.appendChild(link);
+    link.click();
+    link.parentNode?.removeChild(link);
+  }
 }
