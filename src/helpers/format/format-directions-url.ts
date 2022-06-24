@@ -1,3 +1,5 @@
+import { iOS } from '../user-agent';
+
 //send back a string url to get directions with the appropriate provider
 export function formatDirectionsUrl({
   formatted_address,
@@ -9,8 +11,7 @@ export function formatDirectionsUrl({
   longitude?: number;
 }) {
   //create a link for directions
-  const iOS = navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
-  const baseURL = iOS ? 'maps://' : 'https://www.google.com/maps';
+  const baseURL = iOS() ? 'maps://' : 'https://www.google.com/maps';
   const params: { saddr: string; daddr?: string; q?: string } = {
     saddr: 'Current Location',
   };
