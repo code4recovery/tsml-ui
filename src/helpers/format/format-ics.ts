@@ -76,10 +76,7 @@ export function formatIcs(meeting: Meeting) {
 
   if (iOS()) {
     //create data url for ios
-    const uri = `data:text/calendar;charset=utf8,${blob.replaceAll(
-      '#',
-      '%23'
-    )}`;
+    const uri = `data:text/calendar;charset=utf8,${blob}`;
     window.location = encodeURI(uri) as unknown as Location;
   } else {
     //create temporary link to download
