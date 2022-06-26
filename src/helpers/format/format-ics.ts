@@ -10,6 +10,12 @@ export function formatIcs(meeting: Meeting) {
     meeting.end = meeting.start.clone().add(1, 'hour');
   }
 
+  //make sure it's in the future
+  if (meeting.start.isBefore()) {
+    meeting.start.add(1, 'week');
+    meeting.end.add(1, 'week');
+  }
+
   //start building event
   const event = [
     `SUMMARY:${meeting.name}`,
