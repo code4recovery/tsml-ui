@@ -5,6 +5,8 @@ import { iOS } from '../user-agent';
 export function formatIcs(meeting: Meeting) {
   const fmt = 'YYYYMMDDTHHmmss';
 
+  if (!meeting.start) return;
+
   //need an end time. guess one hour if none specified
   if (!meeting.end) {
     meeting.end = meeting.start.clone().add(1, 'hour');

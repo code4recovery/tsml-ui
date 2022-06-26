@@ -1,6 +1,14 @@
 //send analytics to google (other providers possible)
 //category = 'search', action = 'search' or 'location', label = 'odaat'
-export function analyticsEvent({ category, action, label }) {
+export function analyticsEvent({
+  category,
+  action,
+  label,
+}: {
+  category: string;
+  action: string;
+  label: string;
+}) {
   if (typeof gtag === 'function') {
     //https://developers.google.com/analytics/devguides/collection/gtagjs/events
     gtag('event', action, {

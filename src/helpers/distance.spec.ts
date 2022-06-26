@@ -1,5 +1,6 @@
 import { distance } from './distance';
 import { settings } from './settings';
+import type { Meeting } from '../types';
 
 jest.mock('./settings', () => ({
   settings: { distance_unit: 'mi' },
@@ -8,8 +9,8 @@ jest.mock('./settings', () => ({
 describe('distance', () => {
   //exact
   it('returns 0 for exact location', () => {
-    const obj = { latitude: 1, longitude: 1 };
-    expect(distance(obj, obj)).toStrictEqual(0);
+    const meeting: Meeting = { slug: '', latitude: 1, longitude: 1 };
+    expect(distance(meeting, meeting)).toStrictEqual(0);
   });
 
   //miles
@@ -29,7 +30,7 @@ describe('distance', () => {
     ${{ latitude: 10, longitude: 10 }}   | ${{ latitude: 20, longitude: 20 }}   | ${1544.68}
     ${{ latitude: 100, longitude: 100 }} | ${{ latitude: 200, longitude: 200 }} | ${12388.45}
   `('kilometers: yields $expected with $a and $b', ({ a, b, expected }) => {
-    settings.distance_unit = 'km';
+    //settings.distance_unit = 'km';
     expect(distance(a, b)).toStrictEqual(expected);
   });
 
