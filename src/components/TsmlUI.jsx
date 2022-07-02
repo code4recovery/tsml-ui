@@ -7,6 +7,7 @@ import { Alert, Controls, Loading, Map, Meeting, Table, Title } from './';
 
 import {
   filterMeetingData,
+  formatUrl,
   getQueryString,
   loadMeetingData,
   setQueryString,
@@ -47,6 +48,21 @@ export default function TsmlUI({ json, mapbox, timezone }) {
       setState({ ...state, input: getQueryString(window.location.search) });
     };
     window.addEventListener('popstate', popstateListener);
+
+    //update canonical
+    let canonical = document.querySelector('link[rel="canonical"]');
+    if (!canonical) {
+      canonical = document.createElement('link');
+      canonical.setAttribute('rel', 'canonical');
+      document.getElementsByTagName('head')[0]?.appendChild(canonical);
+    }
+    canonical.setAttribute(
+      'href',
+      formatUrl(
+        state.input.meeting ? { meeting: state.input.meeting } : state.input
+      )
+    );
+
     return () => {
       window.removeEventListener('popstate', popstateListener);
     };
