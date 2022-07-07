@@ -11,17 +11,14 @@ export function formatDirectionsUrl({
   longitude?: number;
 }) {
   //create a link for directions
-  const baseURL = iOS() ? 'maps://' : 'https://www.google.com/maps';
-  const params: { saddr: string; daddr?: string; q?: string } = {
-    saddr: 'Current Location',
+  const baseURL = iOS() ? 'maps://' : 'https://www.google.com/maps/dir/';
+  const destination = (latitude && longitude) 
+    ? [latitude, longitude].join() 
+    : formatted_address;
+  const params = {
+    api: "1",
+    destination
   };
-
-  if (latitude && longitude) {
-    params['daddr'] = [latitude, longitude].join();
-    params['q'] = formatted_address;
-  } else {
-    params['daddr'] = formatted_address;
-  }
 
   return `${baseURL}?${new URLSearchParams(params)}`;
 }
