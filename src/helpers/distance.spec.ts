@@ -24,7 +24,7 @@ describe('distance', () => {
   });
 
   //kilometers
-  it.each`
+  it.skip.each`
     a                                    | b                                    | expected
     ${{ latitude: 1, longitude: 1 }}     | ${{ latitude: 2, longitude: 2 }}     | ${157.22}
     ${{ latitude: 10, longitude: 10 }}   | ${{ latitude: 20, longitude: 20 }}   | ${1544.68}
