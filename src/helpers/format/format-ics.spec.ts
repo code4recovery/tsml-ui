@@ -11,63 +11,52 @@ const mockMeeting = {
 } as Meeting;
 
 describe('formatIcs', () => {
-  it.skip('works with minimal data', () => {
-    formatIcs(mockMeeting);
-
-    expect(location).toStrictEqual(
-      'data:text/calendar;charset=utf8,BEGIN:VCALENDAR%0AVERSION:2.0%0ABEGIN:VEVENT%0ASUMMARY:Foo%20Meeting%0ADTSTART:20220101T000000Z%0ADTSTART;TZID=/America/New_York:20211231T190000%0ADTEND:20220101T010000Z%0ADTEND;TZID=/America/New_York:20211231T200000%0AEND:VEVENT%0AEND:VCALENDAR'
-    );
+  beforeEach(() => {
+    window.URL.createObjectURL = jest.fn() as jest.Mock;
   });
 
-  it.skip('works with end time', () => {
+  it('works with minimal data', () => {
+    formatIcs(mockMeeting);
+    expect(window.URL.createObjectURL).toHaveBeenCalledTimes(1);
+  });
+
+  it('works with end time', () => {
     formatIcs({
       ...mockMeeting,
       end: moment('2022-01-01T00:00:00.000Z'),
     });
-
-    expect(location).toStrictEqual(
-      'data:text/calendar;charset=utf8,BEGIN:VCALENDAR%0AVERSION:2.0%0ABEGIN:VEVENT%0ASUMMARY:Foo%20Meeting%0ADTSTART:20220101T000000Z%0ADTSTART;TZID=/America/New_York:20211231T190000%0ADTEND:20220101T000000Z%0ADTEND;TZID=/America/New_York:20211231T190000%0AEND:VEVENT%0AEND:VCALENDAR'
-    );
+    expect(window.URL.createObjectURL).toHaveBeenCalledTimes(1);
   });
 
-  it.skip('works with isInPerson', () => {
+  it('works with isInPerson', () => {
     formatIcs({
       ...mockMeeting,
       isInPerson: true,
       formatted_address: '123 Foo Street',
     });
-
-    expect(location).toStrictEqual(
-      'data:text/calendar;charset=utf8,BEGIN:VCALENDAR%0AVERSION:2.0%0ABEGIN:VEVENT%0ASUMMARY:Foo%20Meeting%0ADTSTART:20220101T000000Z%0ADTSTART;TZID=/America/New_York:20211231T190000%0ADTEND:20220101T010000Z%0ADTEND;TZID=/America/New_York:20211231T200000%0ALOCATION:123%20Foo%20Street%0AEND:VEVENT%0AEND:VCALENDAR'
-    );
+    expect(window.URL.createObjectURL).toHaveBeenCalledTimes(1);
   });
 
-  it.skip('works with location NOT in person', () => {
+  it('works with location NOT in person', () => {
     formatIcs({
       ...mockMeeting,
       formatted_address: '123 Foo Street',
       location: 'Foo Location',
     });
-
-    expect(location).toStrictEqual(
-      'data:text/calendar;charset=utf8,BEGIN:VCALENDAR%0AVERSION:2.0%0ABEGIN:VEVENT%0ASUMMARY:Foo%20Meeting%0ADTSTART:20220101T000000Z%0ADTSTART;TZID=/America/New_York:20211231T190000%0ADTEND:20220101T010000Z%0ADTEND;TZID=/America/New_York:20211231T200000%0ALOCATION:Foo%20Location%0AEND:VEVENT%0AEND:VCALENDAR'
-    );
+    expect(window.URL.createObjectURL).toHaveBeenCalledTimes(1);
   });
 
-  it.skip('works with location AND in person', () => {
+  it('works with location AND in person', () => {
     formatIcs({
       ...mockMeeting,
       isInPerson: true,
       formatted_address: '123 Foo Street',
       location: 'Foo Location',
     });
-
-    expect(location).toStrictEqual(
-      'data:text/calendar;charset=utf8,BEGIN:VCALENDAR%0AVERSION:2.0%0ABEGIN:VEVENT%0ASUMMARY:Foo%20Meeting%0ADTSTART:20220101T000000Z%0ADTSTART;TZID=/America/New_York:20211231T190000%0ADTEND:20220101T010000Z%0ADTEND;TZID=/America/New_York:20211231T200000%0ALOCATION:123%20Foo%20Street%0ADESCRIPTION:Foo%20Location%0AEND:VEVENT%0AEND:VCALENDAR'
-    );
+    expect(window.URL.createObjectURL).toHaveBeenCalledTimes(1);
   });
 
-  it.skip('works with lat/long', () => {
+  it('works with lat/long', () => {
     formatIcs({
       ...mockMeeting,
       isInPerson: true,
@@ -76,24 +65,15 @@ describe('formatIcs', () => {
       latitude: 1,
       longitude: 1,
     });
-
-    expect(location).toStrictEqual(
-      'data:text/calendar;charset=utf8,BEGIN:VCALENDAR%0AVERSION:2.0%0ABEGIN:VEVENT%0ASUMMARY:Foo%20Meeting%0ADTSTART:20220101T000000Z%0ADTSTART;TZID=/America/New_York:20211231T190000%0ADTEND:20220101T010000Z%0ADTEND;TZID=/America/New_York:20211231T200000%0ALOCATION:123%20Foo%20Street%0AGEO:1;1%0ADESCRIPTION:Foo%20Location%0AEND:VEVENT%0AEND:VCALENDAR'
-    );
+    expect(window.URL.createObjectURL).toHaveBeenCalledTimes(1);
   });
 
-  it.skip('works with conference provider', () => {
+  it('works with conference provider', () => {
     formatIcs({
       ...mockMeeting,
       conference_provider: 'foo',
       conference_url: 'https://foo.com',
     });
-
-    expect(location).toStrictEqual(
-      'data:text/calendar;charset=utf8,BEGIN:VCALENDAR%0AVERSION:2.0%0ABEGIN:VEVENT%0ASUMMARY:Foo%20Meeting%0ADTSTART:20220101T000000Z%0ADTSTART;TZID=/America/New_York:20211231T190000%0ADTEND:20220101T010000Z%0ADTEND;TZID=/America/New_York:20211231T200000%0AURL:https://foo.com%0AEND:VEVENT%0AEND:VCALENDAR'
-    );
+    expect(window.URL.createObjectURL).toHaveBeenCalledTimes(1);
   });
-
-  //TODO: Want to be tactful with other tests dealing with user agent here
-  it.todo('works in IE');
 });
