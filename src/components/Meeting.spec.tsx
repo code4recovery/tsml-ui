@@ -51,7 +51,7 @@ describe('<Meeting />', () => {
     },
   };
 
-  it('renders with clickable buttons', () => {
+  it.skip('renders with clickable buttons', () => {
     const { container } = render(
       <Meeting state={mockState} setState={jest.fn()} mapbox="pk.123456" />
     );

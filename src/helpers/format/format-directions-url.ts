@@ -1,6 +1,6 @@
 import { iOS } from '../user-agent';
 
-//send back a string url to get directions with the appropriate provider
+//create a link for directions
 export function formatDirectionsUrl({
   formatted_address,
   latitude,
@@ -10,18 +10,19 @@ export function formatDirectionsUrl({
   latitude?: number;
   longitude?: number;
 }) {
-  //create a link for directions
-  const baseURL = iOS() ? 'maps://' : 'https://www.google.com/maps';
-  const params: { saddr: string; daddr?: string; q?: string } = {
-    saddr: 'Current Location',
-  };
-
-  if (latitude && longitude) {
-    params['daddr'] = [latitude, longitude].join();
-    params['q'] = formatted_address;
-  } else {
-    params['daddr'] = formatted_address;
+  if (iOS()) {
+    //iOS devices use Apple - https://developer.apple.com/library/archive/featuredarticles/iPhoneURLScheme_Reference/MapLinks/MapLinks.html
+    const params: { daddr: string; q?: string } =
+      latitude && longitude
+        ? { daddr: [latitude, longitude].join(), q: formatted_address }
+        : { daddr: formatted_address };
+    return `maps://?${new URLSearchParams(params)}`;
   }
 
-  return `${baseURL}?${new URLSearchParams(params)}`;
+  //other platforms use Google - https://developers.google.com/maps/documentation/urls/get-started#directions-action
+  return `https://www.google.com/maps/dir/?${new URLSearchParams({
+    api: '1',
+    destination:
+      latitude && longitude ? [latitude, longitude].join() : formatted_address,
+  })}`;
 }
