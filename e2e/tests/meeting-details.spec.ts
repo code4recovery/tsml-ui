@@ -26,10 +26,14 @@ test.describe('Meeting Details', () => {
     const emailLink = root.locator('a:has-text("mondabear35@yahoo.com")');
     const venmoLink = root.locator('a:has-text("Contribute with Venmo")');
 
+    const getUA = await page.evaluate(() => navigator.userAgent);
+
     await expect(directionsLink).toHaveAttribute('target', '_blank');
     await expect(directionsLink).toHaveAttribute(
       'href',
-      'https://www.google.com/maps?saddr=Current+Location&daddr=37.1577738%2C-121.984212&q=21450+Madrone+Dr%2C+Los+Gatos%2C+CA+95033%2C+USA'
+      getUA.includes('iPhone')
+        ? 'maps://?daddr=37.15777%2C-121.98421&q=21450+Madrone+Dr%2C+Los+Gatos%2C+CA+95033%2C+USA'
+        : 'https://www.google.com/maps/dir/?api=1&destination=37.15777%2C-121.98421'
     );
 
     await expect(time).toHaveText('Thursday 7:30 pm – 8:30 pm');
@@ -65,14 +69,10 @@ test.describe('Meeting Details', () => {
     const header = root.locator('h2');
     const address = root.locator('p').nth(0);
     const details = root.locator('div');
-    const detailsDay = details.locator('h3');
-    const detailsInfo = details.locator('ol');
 
     await expect(header).toHaveText('Redwood Estates Pavilion');
     await expect(address).toHaveText(
       '21450 Madrone Dr, Los Gatos, CA 95033, USA'
     );
-    await expect(detailsDay).toHaveText('Thursday');
-    await expect(detailsInfo).toHaveText('7:30 pmMountain Miracles');
   });
 });
