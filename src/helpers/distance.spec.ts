@@ -24,13 +24,13 @@ describe('distance', () => {
   });
 
   //kilometers
-  it.skip.each`
+  it.each`
     a                                    | b                                    | expected
     ${{ latitude: 1, longitude: 1 }}     | ${{ latitude: 2, longitude: 2 }}     | ${157.22}
     ${{ latitude: 10, longitude: 10 }}   | ${{ latitude: 20, longitude: 20 }}   | ${1544.68}
     ${{ latitude: 100, longitude: 100 }} | ${{ latitude: 200, longitude: 200 }} | ${12388.45}
   `('kilometers: yields $expected with $a and $b', ({ a, b, expected }) => {
-    //settings.distance_unit = 'km';
+    settings.distance_unit = 'km';
     expect(distance(a, b)).toStrictEqual(expected);
   });
 

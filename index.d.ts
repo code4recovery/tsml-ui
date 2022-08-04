@@ -68,7 +68,7 @@ interface TSMLReactConfig {
   >;
 }
 
-declare var tsml_react_config: Readonly<TSMLReactConfig> | undefined;
+declare var tsml_react_config: TSMLReactConfig | undefined;
 
 //google analytics globals
 declare var gtag:
