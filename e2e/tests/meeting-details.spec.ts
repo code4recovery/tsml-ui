@@ -68,7 +68,6 @@ test.describe('Meeting Details', () => {
     const root = page.locator('.list-group .list-group-item').nth(1);
     const header = root.locator('h2');
     const address = root.locator('p').nth(0);
-    const details = root.locator('div');
 
     await expect(header).toHaveText('Redwood Estates Pavilion');
     await expect(address).toHaveText(
