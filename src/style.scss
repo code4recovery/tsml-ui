@@ -399,3 +399,16 @@ body.theme-twentyfourteen {
     }
   }
 }
+
+body[class*='avada-'] {
+  .fusion-tb-header {
+    margin-bottom: 0 !important;
+  }
+  .post-content,
+  main#main {
+    padding: 0 !important;
+  }
+  .avada-page-titlebar-wrapper {
+    display: none;
+  }
+}
