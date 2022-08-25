@@ -19,6 +19,7 @@ You don't need to do anything other than enable HTTPS on your website. To ensure
 ### Add custom types
 
 Here is an example of extending the `tsml_react_config` object to include a definition for an additional meeting type.
+
 ```js
 var tsml_react_config = {
   timezone: 'Pacific/Honolulu',
@@ -31,7 +32,25 @@ var tsml_react_config = {
   },
 };
 ```
-A list of AA meeting types can be found in the [Meeting Guide format spec](https://github.com/code4recovery/spec).
+
+AA groups that wish to participate in the Meeting Guide app should be careful not to repurpose types already in use. A full list of AA meeting types can be found in the [Meeting Guide format spec](https://github.com/code4recovery/spec).
+
+### Override type descriptions
+
+AA meeting type descriptions are automatically applied to Open and Closed types. These can be unset or overwritten as needed.
+
+```js
+var tsml_react_config = {
+  strings: {
+    en: {
+      type_descriptions: {
+        O: 'This is a custom Open description',
+        C: undefined, //this type description has been unset
+      },
+    },
+  },
+};
+```
 
 ## Frequently asked questions
 
@@ -59,9 +78,9 @@ Not yet! Please open a pull request and walk us through the process of adding it
 
 ## Contributing
 
-Pull requests are welcome. To get started, clone this repository, run `yarn`, and point your web root at the `public` folder.
+Pull requests are welcome. To get started, clone this repository, run `npm i`, and point your web root at the `public` folder.
 
-While developing, run `yarn watch` to compile assets as you edit them. When you're ready to commit, run `yarn prod` to minify them for production.
+While developing, run `npx mix watch` to compile assets as you edit them. When you're ready to commit, run `npx mix --production` to minify them for production.
 
 ## Credits
 

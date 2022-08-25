@@ -1,6 +1,6 @@
-import { Translation } from '../types/Translation';
+import { Translation } from '../types';
 
-const en: Translation = {
+export const en: Translation = {
   add_to_calendar: 'Add to Calendar',
   address: 'Address / Platform',
   alerts: {
@@ -138,5 +138,3 @@ const en: Translation = {
   wednesday: 'Wednesday',
   weekday_any: 'Any Day',
 };
-
-export default en;

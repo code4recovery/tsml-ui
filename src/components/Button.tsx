@@ -1,7 +1,16 @@
 import React from 'react';
 
 import { formatClasses as cx } from '../helpers/format';
-import Icon from './Icon';
+import Icon, { icons } from './Icon';
+
+type ButtonProps = {
+  className?: string;
+  href?: string;
+  icon?: keyof typeof icons;
+  onClick?: () => void;
+  small?: boolean;
+  text?: string;
+};
 
 export default function Button({
   className,
@@ -10,7 +19,7 @@ export default function Button({
   onClick,
   small = false,
   text,
-}) {
+}: ButtonProps) {
   return (
     <a
       className={cx(
@@ -18,7 +27,8 @@ export default function Button({
         {
           'd-flex overflow-hidden': !small,
           'btn-sm d-inline-flex': small,
-          'btn-outline-secondary cursor-pointer': href || onClick,
+          'cursor-pointer': !!(href || onClick),
+          'btn-outline-secondary': !small && !className,
         },
         className
       )}

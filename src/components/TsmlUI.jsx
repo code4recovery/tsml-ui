@@ -7,10 +7,9 @@ import { Alert, Controls, Loading, Map, Meeting, Table, Title } from './';
 
 import {
   filterMeetingData,
+  formatUrl,
   getQueryString,
   loadMeetingData,
-  setMinutesNow,
-  translateNoCodeAPI,
   setQueryString,
   settings,
 } from '../helpers';
@@ -40,6 +39,7 @@ export default function TsmlUI({ json, mapbox, timezone }) {
     },
     loading: true,
     meetings: [],
+    ready: false,
   });
 
   //enable forward & back buttons
@@ -48,28 +48,57 @@ export default function TsmlUI({ json, mapbox, timezone }) {
       setState({ ...state, input: getQueryString(window.location.search) });
     };
     window.addEventListener('popstate', popstateListener);
+
+    //update canonical
+    let canonical = document.querySelector('link[rel="canonical"]');
+    if (!canonical) {
+      canonical = document.createElement('link');
+      canonical.setAttribute('rel', 'canonical');
+      document.getElementsByTagName('head')[0]?.appendChild(canonical);
+    }
+    canonical.setAttribute(
+      'href',
+      formatUrl(
+        state.input.meeting ? { meeting: state.input.meeting } : state.input
+      )
+    );
+
     return () => {
       window.removeEventListener('popstate', popstateListener);
     };
   }, [state, window.location.search]);
 
+  //manage classes
+  useEffect(() => {
+    document.body.classList.add('tsml-ui');
+    return () => {
+      document.body.classList.remove('tsml-ui');
+    };
+  }, []);
+
   //load data once from json
   if (state.loading) {
+    console.log(
+      'TSML UI meeting finder: https://github.com/code4recovery/tsml-ui'
+    );
+
     const input = getQueryString();
+
+    //cache busting
+    if (json.endsWith('.json') && input.meeting) {
+      json = json.concat('?', new Date().getTime());
+    }
 
     //fetch json data file and build indexes
     fetch(json)
       .then(result => result.json())
       .then(result => {
-        if (json?.includes('nocodeapi.com')) {
-          result = translateNoCodeAPI(result);
-        }
-
         if (!Array.isArray(result) || !result.length) {
           return setState({
             ...state,
             error: 'bad_data',
             loading: false,
+            ready: true,
           });
         }
 
@@ -79,38 +108,35 @@ export default function TsmlUI({ json, mapbox, timezone }) {
           timezone
         );
 
+        const waitingForGeo =
+          (!input.latitude || !input.longitude) &&
+          ((input.mode === 'location' && input.search) || input.mode === 'me');
+
         setState({
           ...state,
           capabilities: capabilities,
           indexes: indexes,
-          meetings: meetings,
-          loading: false,
           input: input,
+          loading: false,
+          meetings: meetings,
+          ready: !waitingForGeo,
         });
       })
       .catch(error => {
         if (json) {
-          console.error(error);
+          console.error(`TSML UI data loading error: ${error}`, json);
         }
         setState({
           ...state,
           error: json ? 'bad_data' : 'no_data_src',
           loading: false,
+          ready: true,
         });
       });
-
-    return (
-      <div className="tsml-ui">
-        <Loading />
-      </div>
-    );
   }
 
   //apply input changes to query string
   setQueryString(state.input);
-
-  //update time for sorting
-  state.meetings = setMinutesNow(state.meetings);
 
   //filter data
   const [filteredSlugs, inProgress] = filterMeetingData(
@@ -127,7 +153,11 @@ export default function TsmlUI({ json, mapbox, timezone }) {
     state.error = 'not_found';
   }
 
-  return (
+  return !state.ready ? (
+    <div className="tsml-ui">
+      <Loading />
+    </div>
+  ) : (
     <div className="tsml-ui">
       <div className="container-fluid d-flex flex-column py-3">
         {state.input.meeting && state.input.meeting in state.meetings ? (
@@ -152,6 +182,7 @@ export default function TsmlUI({ json, mapbox, timezone }) {
                 setState={setState}
                 filteredSlugs={filteredSlugs}
                 inProgress={inProgress}
+                listButtons={settings.show.listButtons}
               />
             )}
             {filteredSlugs && state.input.view === 'map' && (

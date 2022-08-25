@@ -8,7 +8,7 @@ describe('formatUrl', () => {
   it('works with filters', () => {
     expect(
       formatUrl({
-        distance: [1],
+        distance: ['1'],
         region: ['foo'],
         time: ['night'],
         type: ['online'],

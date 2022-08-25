@@ -1,8 +1,8 @@
 //inspired by the functionality of jedwatson/classnames
 export function formatClasses(
-  _args: Array<string | undefined | Record<string, boolean>>
+  ...args: Array<string | undefined | Record<string, boolean>>
 ) {
-  return Object.values(arguments)
+  return Object.values(args)
     .map(arg =>
       typeof arg === 'string'
         ? arg

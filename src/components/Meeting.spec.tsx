@@ -1,3 +1,4 @@
+import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import moment from 'moment-timezone';
 
@@ -5,6 +6,10 @@ import { strings } from '../helpers';
 import Meeting from './Meeting';
 
 describe('<Meeting />', () => {
+  beforeEach(() => {
+    window.URL.createObjectURL = jest.fn() as jest.Mock;
+  });
+
   const mockMeeting = {
     isInPerson: true,
     isOnline: true,

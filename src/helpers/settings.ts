@@ -1,13 +1,10 @@
 import merge from 'deepmerge';
 
-import en from '../i18n/en';
-import es from '../i18n/es';
-import fr from '../i18n/fr';
-import type { Timezone } from '../types/Timezone';
+import { en, es, fr } from '../i18n';
+import type { Timezone } from '../types';
 
 //override these on your page with tsml_react_config
 const defaults: TSMLReactConfig = {
-  timezone: '' as Timezone,
   cache: false,
   columns: ['time', 'distance', 'name', 'location_group', 'address', 'region'],
   conference_providers: {
@@ -17,7 +14,7 @@ const defaults: TSMLReactConfig = {
     'meet.google.com': 'Google Hangouts',
     'gotomeet.me': 'GoToMeeting',
     'gotomeeting.com': 'GoToMeeting',
-    'meet.jit.si': 'Jitsi Meet',
+    'meet.jit.si': 'Jitsi',
     'skype.com': 'Skype',
     'webex.com': 'WebEx',
     'zoho.com': 'Zoho',
@@ -34,6 +31,7 @@ const defaults: TSMLReactConfig = {
     view: 'table',
     weekday: [],
   },
+  distance_options: [1, 2, 5, 10, 15, 25],
   distance_unit: 'mi', //mi or km
   feedback_emails: [], //email addresses for update meeting info button
   filters: ['region', 'distance', 'weekday', 'time', 'type'],
@@ -78,6 +76,7 @@ const defaults: TSMLReactConfig = {
     fr: fr,
   },
   times: ['morning', 'midday', 'evening', 'night'],
+  timezone: '' as Timezone,
   weekdays: [
     'sunday',
     'monday',

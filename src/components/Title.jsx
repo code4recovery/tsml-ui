@@ -2,9 +2,9 @@ import React from 'react';
 
 import { getIndexByKey, strings } from '../helpers';
 
-export default function Title({ state }) {
+export default function Title({ state: { indexes, input } }) {
   //loading
-  if (!state.indexes || !state.input) return null;
+  if (!indexes || !input) return null;
 
   //build title from strings.title
   const parts = [];
@@ -14,23 +14,23 @@ export default function Title({ state }) {
       parts.push(strings.meetings);
     } else if (
       key === 'search_with' &&
-      state.input.mode === 'search' &&
-      state.input.search
+      input.mode === 'search' &&
+      input.search
     ) {
       parts.push(
-        strings.title.search_with.replace('%search%', `‘${state.input.search}’`)
+        strings.title.search_with.replace('%search%', `‘${input.search}’`)
       );
     } else if (
       key === 'search_near' &&
-      state.input.mode === 'location' &&
-      state.input.search
+      input.mode === 'location' &&
+      input.search
     ) {
       parts.push(
-        strings.title.search_near.replace('%search%', `‘${state.input.search}’`)
+        strings.title.search_near.replace('%search%', `‘${input.search}’`)
       );
-    } else if (state.indexes[key] && state.input[key]?.length) {
-      const value = state.input[key]
-        .map(value => getIndexByKey(state.indexes[key], value)?.name)
+    } else if (indexes[key] && input[key]?.length) {
+      const value = input[key]
+        .map(value => getIndexByKey(indexes[key], value)?.name)
         .join(' + ');
       parts.push(strings.title[key].replace(`%${key}%`, value));
     }

@@ -57,6 +57,7 @@ div.tsml-ui {
   color: $body-color !important;
   font-family: $font-family-sans-serif !important;
   font-weight: $font-weight-base !important;
+  font-size: 1rem !important;
   line-height: $line-height-base !important;
   text-align: $body-text-align !important;
   -webkit-tap-highlight-color: rgba($black, 0);
@@ -75,6 +76,40 @@ div.tsml-ui {
     padding: 0;
     text-align: left;
     text-transform: none;
+  }
+
+  //standardize font sizes
+  h1,
+  .h1 {
+    font-size: 2.5rem !important;
+  }
+  h2,
+  .h2 {
+    font-size: 2.25rem !important;
+  }
+  h3,
+  .h3 {
+    font-size: 2rem !important;
+  }
+  h4,
+  .h4 {
+    font-size: 1.5rem !important;
+  }
+  h5,
+  .h5 {
+    font-size: 1.25rem !important;
+  }
+  h6,
+  .h6 {
+    font-size: 1rem !important;
+    letter-spacing: normal !important;
+  }
+  .btn-sm {
+    font-size: 0.875rem !important;
+  }
+  .badge,
+  .mapboxgl-ctrl-attrib-inner {
+    font-size: 0.75rem !important;
   }
 
   .btn {
@@ -269,29 +304,6 @@ div.tsml-ui {
       border-bottom: 1px solid $gray-400;
     }
 
-    tbody {
-      border: 0 !important;
-      &.tsml-in-progress {
-        tr {
-          background-color: tint-color($yellow, 95%) !important;
-          border-bottom-color: $yellow-200;
-          td {
-            border-bottom-color: $yellow-200 !important;
-          }
-          a {
-            color: $yellow-700;
-            cursor: pointer;
-            &:hover {
-              color: $yellow-800 !important;
-            }
-          }
-          &:nth-of-type(odd) {
-            background-color: tint-color($yellow, 90%);
-          }
-        }
-      }
-    }
-
     .distance {
       text-align: right;
     }
@@ -312,18 +324,8 @@ div.tsml-ui {
     }
 
     //when whole row is clickable
-    &.clickable-rows tbody {
-      tr:hover {
-        cursor: pointer;
-        a {
-          color: $blue-700;
-        }
-      }
-      &.tsml-in-progress tr:hover {
-        a {
-          color: $yellow-800;
-        }
-      }
+    &.clickable-rows tbody tr:hover a {
+      color: $blue-700;
     }
 
     //mobile view
@@ -353,5 +355,60 @@ div.tsml-ui {
         }
       }
     }
+  }
+}
+
+//wordpress
+#wpadminbar #wp-admin-bar-edit-meeting > .ab-item::before {
+  content: '\f464';
+  top: 2px;
+}
+
+body.twentyfourteen,
+body.theme-twentyfourteen {
+  #page::before,
+  .entry-header,
+  #secondary {
+    display: none;
+  }
+
+  #primary {
+    padding-top: 0;
+  }
+
+  #content {
+    margin-left: 0;
+  }
+
+  .entry-content {
+    max-width: none;
+    min-height: 100vh;
+    padding: 0 !important;
+  }
+
+  #tsml-ui {
+    table {
+      font-size: 1rem !important;
+      th {
+        text-transform: none;
+      }
+    }
+
+    button {
+      font-weight: inherit;
+    }
+  }
+}
+
+body[class*='avada-'] {
+  .fusion-tb-header {
+    margin-bottom: 0 !important;
+  }
+  .post-content,
+  main#main {
+    padding: 0 !important;
+  }
+  .avada-page-titlebar-wrapper {
+    display: none;
   }
 }

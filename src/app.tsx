@@ -26,5 +26,5 @@ if (element) {
     element
   );
 } else {
-  console.warn('Could not find a div#tsml-ui element in your HTML');
+  console.warn('TSML UI could not find a div#tsml-ui element');
 }

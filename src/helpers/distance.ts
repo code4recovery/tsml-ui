@@ -1,8 +1,9 @@
 import { settings } from './settings';
+import type { Meeting } from '../types';
 
 // Calculate the distance as the crow flies between two geometric points
 // Adapted from: https://www.geodatasource.com/developers/javascript
-export function distance(a, b) {
+export function distance(a: Meeting, b: Meeting) {
   if (!a?.latitude || !b?.latitude || !a?.longitude || !b?.longitude)
     return null;
 

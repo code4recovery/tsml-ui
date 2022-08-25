@@ -36,6 +36,7 @@ export function loadMeetingData(data, capabilities, timezone) {
     'contact_3_email',
     'contact_3_name',
     'contact_3_phone',
+    'coordinates',
     'country',
     'day',
     'district',
@@ -51,7 +52,6 @@ export function loadMeetingData(data, capabilities, timezone) {
     'location',
     'location_notes',
     'longitude',
-    'minutes_now',
     'minutes_week',
     'name',
     'notes',
@@ -99,20 +99,17 @@ export function loadMeetingData(data, capabilities, timezone) {
         delete meeting[key];
       });
 
-    //default edit_url
-    if (!meeting.edit_url) {
-      meeting.edit_url = `row ${index}`;
-    }
-
     //slug is required
     if (!meeting.slug) {
-      console.warn(meeting.edit_url, 'no slug');
+      console.warn(`TSML no slug: ${meeting.edit_url}`);
       return;
     }
 
     //slug must be unique
     if (meeting.slug in meetings) {
-      console.warn(meeting.edit_url, `${meeting.slug} is a duplicate slug`);
+      console.warn(
+        `TSML UI ${meeting.slug} duplicate slug: ${meeting.edit_url}`
+      );
       return;
     }
 
@@ -128,8 +125,7 @@ export function loadMeetingData(data, capabilities, timezone) {
 
     if (meeting.conference_url && !meeting.conference_provider) {
       console.warn(
-        meeting.edit_url,
-        `unknown conference_url: ${meeting.conference_url}`
+        `unknown conference_url ${meeting.conference_url}: ${meeting.edit_url}`
       );
     }
 
@@ -162,11 +158,16 @@ export function loadMeetingData(data, capabilities, timezone) {
     }
 
     //check if approximate
-    meeting.approximate = meeting.approximate
-      ? meeting.approximate.toLowerCase() === 'yes'
-      : meeting.address
-      ? false
-      : true;
+    if (meeting.coordinates) {
+      const coords = meeting.coordinates.split(',');
+      meeting.approximate = coords.length !== 2;
+      meeting.latitude = meeting.approximate ? null : coords[0];
+      meeting.longitude = meeting.approximate ? null : coords[1];
+    } else {
+      meeting.approximate = meeting.approximate
+        ? meeting.approximate.toLowerCase() === 'yes'
+        : !meeting.address;
+    }
 
     //if approximate is specified, it overrules formatAddress
     if (meeting.approximate) meeting.address = null;
@@ -301,20 +302,16 @@ export function loadMeetingData(data, capabilities, timezone) {
 
         const times = [];
         if (minutes_midnight >= 240 && minutes_midnight < 720) {
-          //4am–12pm
-          times.push(0); //morning
+          times.push(0); //morning (4am–11:59pm)
         }
         if (minutes_midnight >= 660 && minutes_midnight < 1020) {
-          //11am–5pm
-          times.push(1); //midday
+          times.push(1); //midday (11am–4:59pm)
         }
         if (minutes_midnight >= 960 && minutes_midnight < 1260) {
-          //4–9pm
-          times.push(2); //evening
+          times.push(2); //evening (4pm–8:59pm)
         }
         if (minutes_midnight >= 1200 || minutes_midnight < 300) {
-          //8pm–5am
-          times.push(3); //night
+          times.push(3); //night (8pm–4:59am)
         }
         times.forEach(time => {
           if (!indexes.time.hasOwnProperty(time)) {
@@ -363,21 +360,28 @@ export function loadMeetingData(data, capabilities, timezone) {
     });
 
     //optional updated date
-    meeting.updated = meeting.updated
-      ? moment.tz(new Date(meeting.updated), 'UTC').tz(timezone).format('ll')
-      : null;
+    if (meeting.updated) {
+      const updated = moment.utc(meeting.updated);
+      meeting.updated = updated.isValid()
+        ? updated.tz(timezone).format('ll')
+        : undefined;
+    }
 
     //7th tradition validation
     if (meeting.venmo) {
       if (!meeting.venmo.startsWith('@')) {
-        console.warn(meeting.edit_url, `invalid venmo: ${meeting.venmo}`);
+        console.warn(
+          `TSML UI invalid venmo ${meeting.venmo}: ${meeting.edit_url}`
+        );
         meeting.venmo = null;
       }
     }
 
     if (meeting.square) {
       if (!meeting.square.startsWith('$')) {
-        console.warn(meeting.edit_url, `invalid square: ${meeting.square}`);
+        console.warn(
+          `TSML UI invalid square ${meeting.square}: ${meeting.edit_url}`
+        );
         meeting.square = null;
       }
     }
@@ -387,7 +391,9 @@ export function loadMeetingData(data, capabilities, timezone) {
         !meeting.paypal.startsWith('https://www.paypal.me') &&
         !meeting.paypal.startsWith('https://paypal.me')
       ) {
-        console.warn(meeting.edit_url, `invalid paypal: ${meeting.paypal}`);
+        console.warn(
+          `TSML UI invalid paypal ${meeting.paypal}: ${meeting.edit_url}`
+        );
         meeting.paypal = null;
       }
     }

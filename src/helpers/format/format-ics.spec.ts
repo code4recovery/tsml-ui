@@ -1,6 +1,6 @@
 import moment from 'moment-timezone';
 import { formatIcs } from '.';
-import { Meeting } from '../../types/Meeting';
+import { Meeting } from '../../types';
 
 //TODO: Only requiring the parts needed for this test, should
 //probably integrate fixtures.
@@ -11,12 +11,13 @@ const mockMeeting = {
 } as Meeting;
 
 describe('formatIcs', () => {
+  beforeEach(() => {
+    window.URL.createObjectURL = jest.fn() as jest.Mock;
+  });
+
   it('works with minimal data', () => {
     formatIcs(mockMeeting);
-
-    expect(location).toStrictEqual(
-      'data:text/calendar;charset=utf8,BEGIN:VCALENDAR%0AVERSION:2.0%0ABEGIN:VEVENT%0ASUMMARY:Foo%20Meeting%0ADTSTART:20220101T000000Z%0ADTSTART;TZID=/America/New_York:20211231T190000%0ADTEND:20220101T010000Z%0ADTEND;TZID=/America/New_York:20211231T200000%0AEND:VEVENT%0AEND:VCALENDAR'
-    );
+    expect(window.URL.createObjectURL).toHaveBeenCalledTimes(1);
   });
 
   it('works with end time', () => {
@@ -24,10 +25,7 @@ describe('formatIcs', () => {
       ...mockMeeting,
       end: moment('2022-01-01T00:00:00.000Z'),
     });
-
-    expect(location).toStrictEqual(
-      'data:text/calendar;charset=utf8,BEGIN:VCALENDAR%0AVERSION:2.0%0ABEGIN:VEVENT%0ASUMMARY:Foo%20Meeting%0ADTSTART:20220101T000000Z%0ADTSTART;TZID=/America/New_York:20211231T190000%0ADTEND:20220101T000000Z%0ADTEND;TZID=/America/New_York:20211231T190000%0AEND:VEVENT%0AEND:VCALENDAR'
-    );
+    expect(window.URL.createObjectURL).toHaveBeenCalledTimes(1);
   });
 
   it('works with isInPerson', () => {
@@ -36,10 +34,7 @@ describe('formatIcs', () => {
       isInPerson: true,
       formatted_address: '123 Foo Street',
     });
-
-    expect(location).toStrictEqual(
-      'data:text/calendar;charset=utf8,BEGIN:VCALENDAR%0AVERSION:2.0%0ABEGIN:VEVENT%0ASUMMARY:Foo%20Meeting%0ADTSTART:20220101T000000Z%0ADTSTART;TZID=/America/New_York:20211231T190000%0ADTEND:20220101T010000Z%0ADTEND;TZID=/America/New_York:20211231T200000%0ALOCATION:123%20Foo%20Street%0AEND:VEVENT%0AEND:VCALENDAR'
-    );
+    expect(window.URL.createObjectURL).toHaveBeenCalledTimes(1);
   });
 
   it('works with location NOT in person', () => {
@@ -48,10 +43,7 @@ describe('formatIcs', () => {
       formatted_address: '123 Foo Street',
       location: 'Foo Location',
     });
-
-    expect(location).toStrictEqual(
-      'data:text/calendar;charset=utf8,BEGIN:VCALENDAR%0AVERSION:2.0%0ABEGIN:VEVENT%0ASUMMARY:Foo%20Meeting%0ADTSTART:20220101T000000Z%0ADTSTART;TZID=/America/New_York:20211231T190000%0ADTEND:20220101T010000Z%0ADTEND;TZID=/America/New_York:20211231T200000%0ALOCATION:Foo%20Location%0AEND:VEVENT%0AEND:VCALENDAR'
-    );
+    expect(window.URL.createObjectURL).toHaveBeenCalledTimes(1);
   });
 
   it('works with location AND in person', () => {
@@ -61,10 +53,7 @@ describe('formatIcs', () => {
       formatted_address: '123 Foo Street',
       location: 'Foo Location',
     });
-
-    expect(location).toStrictEqual(
-      'data:text/calendar;charset=utf8,BEGIN:VCALENDAR%0AVERSION:2.0%0ABEGIN:VEVENT%0ASUMMARY:Foo%20Meeting%0ADTSTART:20220101T000000Z%0ADTSTART;TZID=/America/New_York:20211231T190000%0ADTEND:20220101T010000Z%0ADTEND;TZID=/America/New_York:20211231T200000%0ALOCATION:123%20Foo%20Street%0ADESCRIPTION:Foo%20Location%0AEND:VEVENT%0AEND:VCALENDAR'
-    );
+    expect(window.URL.createObjectURL).toHaveBeenCalledTimes(1);
   });
 
   it('works with lat/long', () => {
@@ -76,10 +65,7 @@ describe('formatIcs', () => {
       latitude: 1,
       longitude: 1,
     });
-
-    expect(location).toStrictEqual(
-      'data:text/calendar;charset=utf8,BEGIN:VCALENDAR%0AVERSION:2.0%0ABEGIN:VEVENT%0ASUMMARY:Foo%20Meeting%0ADTSTART:20220101T000000Z%0ADTSTART;TZID=/America/New_York:20211231T190000%0ADTEND:20220101T010000Z%0ADTEND;TZID=/America/New_York:20211231T200000%0ALOCATION:123%20Foo%20Street%0AGEO:1;1%0ADESCRIPTION:Foo%20Location%0AEND:VEVENT%0AEND:VCALENDAR'
-    );
+    expect(window.URL.createObjectURL).toHaveBeenCalledTimes(1);
   });
 
   it('works with conference provider', () => {
@@ -88,12 +74,6 @@ describe('formatIcs', () => {
       conference_provider: 'foo',
       conference_url: 'https://foo.com',
     });
-
-    expect(location).toStrictEqual(
-      'data:text/calendar;charset=utf8,BEGIN:VCALENDAR%0AVERSION:2.0%0ABEGIN:VEVENT%0ASUMMARY:Foo%20Meeting%0ADTSTART:20220101T000000Z%0ADTSTART;TZID=/America/New_York:20211231T190000%0ADTEND:20220101T010000Z%0ADTEND;TZID=/America/New_York:20211231T200000%0AURL:https://foo.com%0AEND:VEVENT%0AEND:VCALENDAR'
-    );
+    expect(window.URL.createObjectURL).toHaveBeenCalledTimes(1);
   });
-
-  //TODO: Want to be tactful with other tests dealing with user agent here
-  it.todo('works in IE');
 });

@@ -12,10 +12,9 @@ interface TSMLReactConfig {
   timezone: Timezone;
   conference_providers: Record<string, string>;
   defaults: {
-    // TODO: Not sure about this types
-    distance: unknown[];
+    distance: string[];
     meeting: string | null;
-    mode: 'search' | 'location';
+    mode: 'search' | 'location' | 'me';
     region: string[];
     search: string;
     time: TSMLReactConfig['times'];
@@ -23,6 +22,7 @@ interface TSMLReactConfig {
     view: 'table' | 'map';
     weekday: TSMLReactConfig['weekdays'];
   };
+  distance_options: number[];
   distance_unit: 'mi' | 'km';
   /** Email addresses for update meeting info button */
   feedback_emails: string[];
@@ -68,7 +68,7 @@ interface TSMLReactConfig {
   >;
 }
 
-declare var tsml_react_config: Readonly<TSMLReactConfig> | undefined;
+declare var tsml_react_config: TSMLReactConfig | undefined;
 
 //google analytics globals
 declare var gtag:
