@@ -47,24 +47,26 @@ export default function Dropdown({
 
   const renderDropdownItem = ({ key, name, slugs, children }) => (
     <Fragment key={key}>
-      <a
-        className={cx(
-          'align-items-center d-flex dropdown-item justify-content-between',
-          {
-            'bg-secondary text-white': values.includes(key),
-          }
-        )}
-        href={formatUrl({
-          ...state.input,
-          [filter]: values.includes(key) ? [key] : [],
-        })}
-        onClick={e => setFilter(e, filter, key)}
-      >
-        <span>{name}</span>
-        <span className="badge bg-light border ms-3 text-dark">
-          {slugs.length}
-        </span>
-      </a>
+      <li>
+        <a
+          className={cx(
+            'align-items-center d-flex dropdown-item justify-content-between',
+            {
+              'bg-secondary text-white': values.includes(key),
+            }
+          )}
+          href={formatUrl({
+            ...state.input,
+            [filter]: values.includes(key) ? [key] : [],
+          })}
+          onClick={e => setFilter(e, filter, key)}
+        >
+          <span>{name}</span>
+          <span className="badge bg-light border ms-3 text-dark">
+            {slugs.length}
+          </span>
+        </a>
+      </li>
       {!!children?.length && (
         <div className="children">
           {children.map(child => renderDropdownItem(child))}
@@ -90,25 +92,27 @@ export default function Dropdown({
           ? values.map(value => getIndexByKey(options, value)?.name).join(' + ')
           : defaultValue}
       </button>
-      <div
+      <ul
         className={cx('dropdown-menu my-1', {
           show: open,
           'dropdown-menu-end': end,
         })}
         aria-labelledby={filter}
       >
-        <a
-          className={cx('dropdown-item', {
-            'active bg-secondary text-white': !values.length,
-          })}
-          onClick={e => setFilter(e, filter, null)}
-          href={formatUrl({
-            ...state.input,
-            [filter]: [],
-          })}
-        >
-          {defaultValue}
-        </a>
+        <li>
+          <a
+            className={cx('dropdown-item', {
+              'active bg-secondary text-white': !values.length,
+            })}
+            onClick={e => setFilter(e, filter, null)}
+            href={formatUrl({
+              ...state.input,
+              [filter]: [],
+            })}
+          >
+            {defaultValue}
+          </a>
+        </li>
         {[
           options
             ?.filter(option => special[filter]?.includes(option.key))
@@ -122,11 +126,13 @@ export default function Dropdown({
           .filter(e => e.length)
           .map((group, index) => (
             <Fragment key={index}>
-              <div className="dropdown-divider" />
+              <li>
+                <hr className="dropdown-divider" />
+              </li>
               {group.map(option => renderDropdownItem(option))}
             </Fragment>
           ))}
-      </div>
+      </ul>
     </div>
   );
 }

@@ -1,11 +1,8 @@
-import ReactDOM from 'react-dom';
-
+import { createRoot } from 'react-dom/client';
 import { TsmlUI } from './components';
 
 //locate element
 let element = document.getElementById('tsml-ui');
-
-console.log('hi josh');
 
 //legacy support, can remove once sites have had a chance to migrate (implemented Jul 1 2021)
 if (!element) {
@@ -15,7 +12,7 @@ if (!element) {
 }
 
 if (element) {
-  ReactDOM.render(
+  createRoot(element).render(
     <TsmlUI
       {...{
         json: element.getAttribute('data-src') || element.getAttribute('src'),
@@ -24,8 +21,7 @@ if (element) {
         timezone:
           element.getAttribute('data-timezone') || tsml_react_config?.timezone,
       }}
-    />,
-    element
+    />
   );
 } else {
   console.warn('TSML UI could not find a div#tsml-ui element');

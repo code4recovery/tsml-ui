@@ -1,12 +1,10 @@
+$container-padding-x: 1rem;
+
 //for dropdown blur
 html,
 body,
 div#tsml-ui,
 div.tsml-ui {
-  height: 100%;
-  margin: 0;
-}
-meetings {
   height: 100%;
   margin: 0;
 }
@@ -16,16 +14,26 @@ div.tsml-ui {
   //import only what we need from bootstrap
   @import '~bootstrap/scss/_functions.scss';
   @import '~bootstrap/scss/_variables.scss';
+
+  $dropdown-border-color: $gray-400;
+  $dropdown-divider-bg: $gray-400;
+  $badge-border-radius: 0.25rem;
+
+  @import '~bootstrap/scss/_maps.scss';
   @import '~bootstrap/scss/_mixins.scss';
+
   @import '~bootstrap/scss/_utilities.scss';
+
   @import '~bootstrap/scss/_root.scss';
   @import '~bootstrap/scss/_reboot.scss';
   @import '~bootstrap/scss/_type.scss';
   //@import '~bootstrap/scss/_images.scss';
   @import '~bootstrap/scss/_containers.scss';
+
   @import '~bootstrap/scss/_grid.scss';
   @import '~bootstrap/scss/_tables.scss';
   @import '~bootstrap/scss/_forms.scss';
+
   @import '~bootstrap/scss/_buttons.scss';
   //@import '~bootstrap/scss/_transitions.scss';
   @import '~bootstrap/scss/_dropdown.scss';
@@ -50,6 +58,7 @@ div.tsml-ui {
   @import '~bootstrap/scss/_offcanvas.scss';
   //@import '~bootstrap/scss/_placeholders.scss';
   @import '~bootstrap/scss/_helpers.scss';
+  @import '~bootstrap/scss/utilities/_api.scss';
 
   //styles that bootstrap normally puts on the body
   background-color: $body-bg !important;
@@ -111,11 +120,19 @@ div.tsml-ui {
     font-size: 0.75rem !important;
   }
 
+  .border {
+    border: 1px solid $gray-300 !important;
+  }
+
   .btn {
     cursor: inherit;
     &[href] {
       cursor: pointer;
     }
+  }
+
+  a {
+    color: $primary;
   }
 
   a.btn,
@@ -296,7 +313,7 @@ div.tsml-ui {
     }
 
     tr {
-      border-bottom: 1px solid $table-border-color;
+      border-bottom: 1px solid $gray-300;
     }
 
     thead tr {
