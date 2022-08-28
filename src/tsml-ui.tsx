@@ -3,14 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { TsmlUI } from './components';
 
 //locate element
-let element = document.getElementById('tsml-ui');
-
-//legacy support, can remove once sites have had a chance to migrate (implemented Jul 1 2021)
-if (!element) {
-  [element] = document.getElementsByTagName(
-    'meetings'
-  ) as unknown as HTMLElement[];
-}
+const element = document.getElementById('tsml-ui');
 
 if (element) {
   createRoot(element).render(

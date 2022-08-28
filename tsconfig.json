@@ -10,7 +10,7 @@
     "strictNullChecks": true,
     "noImplicitAny": true,
     "jsx": "preserve",
-    "outDir": "public"
+    "outDir": "dist"
   },
   "include": ["index.d.ts", "src/tsml-ui.tsx", "src/**/*.ts"]
 }
