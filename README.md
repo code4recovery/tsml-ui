@@ -78,10 +78,10 @@ Not yet! Please open a pull request and walk us through the process of adding it
 
 ## Contributing
 
-Pull requests are welcome. To get started, clone this repository, run `npm i`, and point your web root at the `public` folder.
+Pull requests are welcome. To get started, clone this repository, and run `npm i`.
 
-While developing, run `npx mix watch` to compile assets as you edit them. When you're ready to commit, run `npx mix --production` to minify them for production.
+While developing, run `npm run dev` and navigate to [http://127.0.0.1:5173/tests/aasanjose.html](http://127.0.0.1:5173/tests/aasanjose.html). When you're ready to commit, run `npm run build` to minify them for production.
 
 ## Credits
 
-This project uses [React JS](https://reactjs.org/) and [Bootstrap CSS](https://getbootstrap.com/).
+This project uses [React JS](https://reactjs.org/), [Bootstrap CSS](https://getbootstrap.com/), and the [Vite build system](https://vitejs.dev/).
