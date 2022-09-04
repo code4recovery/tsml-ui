@@ -38,7 +38,7 @@ export default function TsmlUI({ json, mapbox, timezone }) {
       weekday: [],
     },
     loading: true,
-    meetings: [],
+    meetings: {},
     ready: false,
   });
 

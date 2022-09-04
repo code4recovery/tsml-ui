@@ -1,4 +1,5 @@
-import moment from 'moment-timezone';
+import { DateTime } from 'luxon';
+
 import { formatIcs } from '.';
 import { Meeting } from '../../types';
 
@@ -6,7 +7,7 @@ import { Meeting } from '../../types';
 //probably integrate fixtures.
 const mockMeeting = {
   name: 'Foo Meeting',
-  start: moment('2022-01-01T00:00:00.000Z'),
+  start: DateTime.fromISO('2022-01-01T00:00:00.000Z'),
   timezone: 'America/New_York',
 } as Meeting;
 
@@ -23,7 +24,7 @@ describe('formatIcs', () => {
   it('works with end time', () => {
     formatIcs({
       ...mockMeeting,
-      end: moment('2022-01-01T00:00:00.000Z'),
+      end: DateTime.fromISO('2022-01-01T00:00:00.000Z'),
     });
     expect(window.URL.createObjectURL).toHaveBeenCalledTimes(1);
   });

@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import moment from 'moment-timezone';
+import { DateTime } from 'luxon';
 
 import { strings } from '../helpers';
 import Meeting from './Meeting';
@@ -17,8 +17,8 @@ describe('<Meeting />', () => {
     latitude: 40.712776,
     longitude: -74.005974,
     name: 'First Meeting',
-    start: moment(),
-    end: moment(),
+    start: DateTime.now(),
+    end: DateTime.now(),
     types: ['O', 'M', 'X'],
     timezone: 'America/New_York',
     approximate: false,
@@ -116,7 +116,7 @@ describe('<Meeting />', () => {
             },
             bar: {
               ...mockMeeting,
-              start: moment().add(1, 'day'),
+              start: DateTime.now().plus({ day: 1 }),
             },
           },
         }}

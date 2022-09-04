@@ -314,8 +314,32 @@ div.tsml-ui {
       padding-left: 1rem;
     }
 
+    tbody.tsml-in-progress {
+      background-color: rgba($warning, 0.25);
+      border-top: 1px solid $gray-300;
+
+      tr {
+        background-color: rgba($white, 0.75) !important;
+
+        a,
+        button {
+          color: shade-color($yellow-200, 40);
+        }
+
+        a:hover,
+        button:hover,
+        &:hover a:not(.btn-sm) {
+          color: $yellow-800 !important;
+        }
+
+        &:nth-of-type(odd) {
+          background-color: rgba($gray-100, 0.5) !important;
+        }
+      }
+    }
+
     //necessary as of v5 to prevent overlapping bg
-    &.table-striped > tbody > tr:nth-of-type(odd) {
+    tbody > tr:nth-of-type(odd) {
       background-color: $gray-100;
       td,
       time {

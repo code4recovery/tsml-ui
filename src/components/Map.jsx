@@ -169,19 +169,13 @@ export default function Map({
                     {listMeetingsInPopup && (
                       <div className="list-group mb-1">
                         {data.locations[key].meetings
-                          .sort((a, b) => a.start.isAfter(b.start))
+                          .sort((a, b) => a.start > b.start)
                           .map((meeting, index) => (
                             <div key={index} className="list-group-item">
                               <time className="d-block">
-                                {meeting.start.format('h:mm a')}
+                                {meeting.start.toFormat('t')}
                                 <span className="ms-1">
-                                  {
-                                    strings[
-                                      settings.weekdays[
-                                        meeting.start.format('d')
-                                      ]
-                                    ]
-                                  }
+                                  {meeting.start.toFormat('cccc')}
                                 </span>
                               </time>
                               <Link

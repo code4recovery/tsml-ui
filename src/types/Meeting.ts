@@ -1,5 +1,4 @@
-import type { Moment } from 'moment-timezone';
-import type { Timezone } from './Timezone';
+import type { DateTime } from 'luxon';
 
 type Day = '0' | '1' | '2' | '3' | '4' | '5' | '6';
 
@@ -15,7 +14,7 @@ export interface Meeting {
   distance?: number;
   edit_url?: string | null;
   email?: string;
-  end?: Moment;
+  end?: DateTime;
   end_time?: `${number}:${number}`;
   feedback_url?: string;
   formatted_address?: string;
@@ -35,9 +34,9 @@ export interface Meeting {
   regions?: string[];
   search?: string;
   slug: string;
-  start?: Moment;
+  start?: DateTime;
   time?: `${number}:${number}`;
-  timezone?: Timezone;
+  timezone?: string;
   types?: MeetingType[];
   updated?: string;
   venmo?: string;
