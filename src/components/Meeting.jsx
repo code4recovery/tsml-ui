@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Info } from 'luxon';
 
 import {
   formatClasses as cx,
@@ -75,10 +76,8 @@ export default function Meeting({
 
   //format time string (duration? or appointment?)
   const timeString = meeting.start
-    ? `${
-        strings[settings.weekdays[meeting.start.format('d')]]
-      } ${meeting.start.format('h:mm a')}${
-        meeting.end ? ` – ${meeting.end.format('h:mm a')}` : ''
+    ? `${meeting.start.toFormat('cccc t')}${
+        meeting.end ? ` – ${meeting.end.toFormat('t')}` : ''
       }`
     : strings.appointment;
 
@@ -136,11 +135,11 @@ export default function Meeting({
     });
   }
 
-  const locationWeekdays = settings.weekdays
+  const locationWeekdays = Info.weekdays()
     .map((weekday, index) => ({
-      name: strings[weekday],
+      name: weekday,
       meetings: Object.values(state.meetings)
-        .filter(m => m.start?.day() === index)
+        .filter(m => m.start?.weekday === index + 1)
         .filter(
           m =>
             meeting.isInPerson &&
@@ -159,11 +158,11 @@ export default function Meeting({
     locationWeekdays.splice(0, 1);
   }
 
-  const groupWeekdays = settings.weekdays
+  const groupWeekdays = Info.weekdays()
     .map((weekday, index) => ({
-      name: strings[weekday],
+      name: weekday,
       meetings: Object.values(state.meetings)
-        .filter(m => m.start?.day() === index)
+        .filter(m => m.start?.weekday === index + 1)
         .filter(
           m =>
             meeting.group &&
@@ -224,7 +223,7 @@ export default function Meeting({
           <div className="list-group">
             <div className="d-grid gap-2 list-group-item py-3">
               <h2 className="h5">{strings.meeting_information}</h2>
-              <p>{timeString}</p>
+              <p className="text-lowercase">{timeString}</p>
               {state.capabilities.type && meeting.types && (
                 <ul className="ms-4">
                   {meeting.types
@@ -431,7 +430,7 @@ function formatWeekdays(weekday, slug, state, setState) {
             key={index}
           >
             <div className="text-muted text-nowrap">
-              {m.start.format('h:mm a')}
+              {m.start.toFormat('t')}
             </div>
             <div className="flex-grow-1">
               {m.slug === slug ? (

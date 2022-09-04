@@ -1,4 +1,4 @@
-import moment from 'moment-timezone';
+import { DateTime } from 'luxon';
 
 import { settings } from '../settings';
 import { getIndexByKey } from './get-index-by-key';
@@ -7,7 +7,8 @@ import { calculateDistances } from './calculate-distances';
 //run filters on meetings; this is run at every render
 export function filterMeetingData(state, setState, mapbox) {
   const matchGroups = [];
-  const now = moment();
+  const now = DateTime.now();
+  const now_offset = now.minus({ minute: settings.now_offset });
   const slugs = Object.keys(state.meetings);
   const timeDiff = {};
 
@@ -127,7 +128,8 @@ export function filterMeetingData(state, setState, mapbox) {
 
   //build lookup for meeting times based on now
   slugs.forEach(slug => {
-    timeDiff[slug] = state.meetings[slug].start?.diff(now, 'minutes') ?? -9999;
+    timeDiff[slug] =
+      state.meetings[slug].start?.diff(now, 'minutes').minutes ?? -9999;
     //if time is earlier than X minutes ago, increment diff by a week
     if (timeDiff[slug] < settings.now_offset) {
       timeDiff[slug] += 10080;
@@ -181,8 +183,8 @@ export function filterMeetingData(state, setState, mapbox) {
   //find in-progress meetings
   const inProgress = filteredSlugs.filter(
     slug =>
-      state.meetings[slug].start?.diff(now, 'minutes') < settings.now_offset &&
-      state.meetings[slug].end?.isAfter() &&
+      state.meetings[slug].start < now_offset &&
+      state.meetings[slug].end > now &&
       !state.meetings[slug].types.includes('inactive')
   );
 

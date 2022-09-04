@@ -1,7 +1,6 @@
 import merge from 'deepmerge';
 
 import { en, es, fr } from '../i18n';
-import type { Timezone } from '../types';
 
 //override these on your page with tsml_react_config
 const defaults: TSMLReactConfig = {
@@ -76,7 +75,7 @@ const defaults: TSMLReactConfig = {
     fr: fr,
   },
   times: ['morning', 'midday', 'evening', 'night'],
-  timezone: '' as Timezone,
+  timezone: '',
   weekdays: [
     'sunday',
     'monday',

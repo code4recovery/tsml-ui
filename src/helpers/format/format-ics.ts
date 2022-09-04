@@ -1,3 +1,5 @@
+import { DateTime } from 'luxon';
+
 import { Meeting } from '../../types';
 import { iOS } from '../user-agent';
 
@@ -9,21 +11,21 @@ export function formatIcs(meeting: Meeting) {
 
   //need an end time. guess one hour if none specified
   if (!meeting.end) {
-    meeting.end = meeting.start.clone().add(1, 'hour');
+    meeting.end = meeting.start.plus({ hour: 1 });
   }
 
   //make sure it's in the future
-  if (meeting.start.isBefore()) {
-    meeting.start.add(1, 'week');
-    meeting.end.add(1, 'week');
+  if (meeting.start < DateTime.now()) {
+    meeting.start.plus({ week: 1 });
+    meeting.end.plus({ week: 1 });
   }
 
   //start building event
   const event = [
     `SUMMARY:${meeting.name}`,
-    `DTSTAMP:${meeting.start.clone().tz('UTC').format(fmt)}Z`,
-    `DTSTART;TZID=${meeting.timezone}:${meeting.start.format(fmt)}`,
-    `DTEND;TZID=${meeting.timezone}:${meeting.end.format(fmt)}`,
+    `DTSTAMP:${meeting.start.setZone('UTC').toFormat(fmt)}Z`,
+    `DTSTART;TZID=${meeting.timezone}:${meeting.start.toFormat(fmt)}`,
+    `DTEND;TZID=${meeting.timezone}:${meeting.end.toFormat(fmt)}`,
   ];
 
   //start building description

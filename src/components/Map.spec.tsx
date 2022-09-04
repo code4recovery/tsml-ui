@@ -1,5 +1,6 @@
+import React from 'react';
 import { render } from '@testing-library/react';
-import moment from 'moment-timezone';
+import { DateTime } from 'luxon';
 
 import Map from './Map';
 
@@ -11,7 +12,7 @@ describe('<Map />', () => {
         latitude: 40.712776,
         longitude: -74.005974,
         name: 'First Meeting',
-        start: moment(),
+        start: DateTime.now(),
       },
     },
   };
@@ -62,7 +63,7 @@ describe('<Map />', () => {
           latitude: 34.052235,
           longitude: -118.243683,
           name: 'Second Meeting',
-          start: moment(),
+          start: DateTime.now(),
         },
       },
     };
