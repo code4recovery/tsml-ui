@@ -1,0 +1,78 @@
+[
+  {
+    "slug": "monday-7pm",
+    "name": "Monday 7pm",
+    "day": "1",
+    "time": "19:00",
+    "end_time": "21:00",
+    "group": "Online Group",
+    "types": ["O", "M"],
+    "conference_url": "https://zoom.us/d/1234567"
+  },
+  {
+    "slug": "saturday-8pm",
+    "name": "Saturday 8pm",
+    "day": "6",
+    "time": "20:00",
+    "end_time": "21:00",
+    "group": "Online Group",
+    "types": ["O", "SM"],
+    "conference_url": "https://zoom.us/d/1234567"
+  },
+  {
+    "slug": "saturday-10am",
+    "name": "Saturday 10am",
+    "day": "6",
+    "time": "10:00",
+    "end_time": "11:00",
+    "group": "Online Group",
+    "types": ["O", "SM"],
+    "conference_url": "https://zoom.us/d/1234567"
+  },
+  {
+    "slug": "saturday-7pm",
+    "name": "Saturday 7pm",
+    "day": "6",
+    "time": "19:00",
+    "end_time": "21:00",
+    "group": "Online Group",
+    "types": ["O", "SM"],
+    "conference_url": "https://zoom.us/d/1234567"
+  },
+  {
+    "slug": "appointment",
+    "name": "Appt",
+    "group": "Online Group",
+    "types": ["O", "SM"],
+    "conference_url": "https://zoom.us/d/1234567"
+  },
+  {
+    "slug": "monday-7am",
+    "name": "Monday 7am",
+    "day": "1",
+    "time": "07:00",
+    "group": "Online Group",
+    "types": ["O", "D"],
+    "conference_url": "https://zoom.us/d/1234567"
+  },
+  {
+    "slug": "sunday-8pm",
+    "name": "Sunday 8pm",
+    "day": "7",
+    "time": "20:00",
+    "end_time": "21:00",
+    "group": "Online Group",
+    "types": ["O", "SM"],
+    "conference_url": "https://zoom.us/d/1234567"
+  },
+  {
+    "slug": "sunday-8am",
+    "name": "Sunday 8am",
+    "day": "7",
+    "time": "08:00",
+    "end_time": "12:00",
+    "group": "Online Group",
+    "types": ["O", "SM"],
+    "conference_url": "https://zoom.us/d/1234567"
+  }
+]

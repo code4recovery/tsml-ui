@@ -82,6 +82,8 @@ Pull requests are welcome. To get started, clone this repository, run `npm i`, a
 
 While developing, run `npx mix watch` to compile assets as you edit them. When you're ready to commit, run `npx mix --production` to minify them for production.
 
-## Credits
+## Changelog
 
-This project uses [React JS](https://reactjs.org/) and [Bootstrap CSS](https://getbootstrap.com/).
+| Version | Date        | Changes                                                                   |
+| ------- | ----------- | ------------------------------------------------------------------------- |
+| 1.4     | Sep 4, 2022 | Replaced `moment-timezone` with `luxon`<br/>Restyled in-progress meetings |

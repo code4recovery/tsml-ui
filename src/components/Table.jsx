@@ -105,10 +105,10 @@ export default function Table({
     } else if (key === 'time') {
       return meeting.start ? (
         <time className="d-flex flex-column flex-lg-row gap-lg-1">
-          <span className="text-nowrap">{meeting.start.format('h:mm a')}</span>
-          <span className="text-nowrap">
-            {strings[settings.weekdays[meeting.start?.format('d')]]}
+          <span className="text-nowrap text-lowercase">
+            {meeting.start.toFormat('t')}
           </span>
+          <span className="text-nowrap">{meeting.start.toFormat('cccc')}</span>
         </time>
       ) : (
         strings.appointment
@@ -163,25 +163,26 @@ export default function Table({
             </tr>
           </thead>
           {!!inProgress.length && (
-            <tbody className="border-0">
+            <tbody className="tsml-in-progress">
               {showInProgress ? (
                 inProgress.map((slug, index) => <Row slug={slug} key={index} />)
               ) : (
                 <tr>
-                  <td className="p-0" colSpan={columns.length}>
-                    <div className="alert alert-warning m-0 opacity-50 p-2 rounded-0">
-                      <button
-                        onClick={() => setShowInProgress(true)}
-                        className="alert-link bg-transparent border-0 d-block fw-normal mx-auto py-2 py-md-1 text-center text-decoration-underline w-100"
-                      >
-                        {inProgress.length === 1
-                          ? strings.in_progress_single
-                          : strings.in_progress_multiple.replace(
-                              '%count%',
-                              inProgress.length
-                            )}
-                      </button>
-                    </div>
+                  <td
+                    className="p-2 text-center rounded-0"
+                    colSpan={columns.length}
+                  >
+                    <button
+                      onClick={() => setShowInProgress(true)}
+                      className="alert-link bg-transparent border-0 d-block fw-normal mx-auto p-2 text-center text-decoration-underline w-100"
+                    >
+                      {inProgress.length === 1
+                        ? strings.in_progress_single
+                        : strings.in_progress_multiple.replace(
+                            '%count%',
+                            inProgress.length
+                          )}
+                    </button>
                   </td>
                 </tr>
               )}

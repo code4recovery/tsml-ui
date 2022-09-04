@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import moment from 'moment-timezone';
+import { DateTime } from 'luxon';
 
 import { strings } from '../helpers';
 import Table from './Table';
@@ -26,7 +26,7 @@ describe('<Table />', () => {
         conference_provider: 'Zoom',
         conference_phone: '+12121234123',
         regions: ['Anytown'],
-        start: moment(),
+        start: DateTime.now(),
       },
       bar: {
         slug: 'bar',

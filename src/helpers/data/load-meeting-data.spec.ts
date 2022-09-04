@@ -1,12 +1,5 @@
-import type { Meeting, Timezone } from '../../types';
-import { checkTimezone, flattenDays } from './load-meeting-data';
-
-test('checkTimezone', () => {
-  const realTz: Timezone = 'America/New_York';
-
-  expect(checkTimezone('foo', 'bar')).toStrictEqual('bar');
-  expect(checkTimezone(realTz, 'bar')).toStrictEqual(realTz);
-});
+import type { Meeting } from '../../types';
+import { flattenDays } from './load-meeting-data';
 
 test('flattenDays', () => {
   const input: Array<Partial<Meeting>> = [

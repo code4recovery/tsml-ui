@@ -1,4 +1,4 @@
-import moment from 'moment-timezone';
+import { DateTime } from 'luxon';
 
 import { formatAddress, formatConferenceProvider, formatSlug } from '../format';
 import { settings, strings } from '../settings';
@@ -72,9 +72,6 @@ export function loadMeetingData(data, capabilities, timezone) {
     'venmo',
     'website',
   ];
-
-  //confirm timezone before normalizing, use Eastern USA time as default
-  timezone = checkTimezone(timezone, 'America/New_York');
 
   //define lookups we'll need later
   const lookup_weekday = settings.weekdays.map(weekday => strings[weekday]);
@@ -272,32 +269,41 @@ export function loadMeetingData(data, capabilities, timezone) {
         if (!indexes.weekday.hasOwnProperty(meeting.day)) {
           indexes.weekday[meeting.day] = {
             key: meeting.day,
-            name: strings[settings.weekdays[meeting.day]],
+            name:
+              strings[settings.weekdays[meeting.day]] ?? strings.appointment,
             slugs: [],
           };
         }
         indexes.weekday[meeting.day].slugs.push(meeting.slug);
       }
 
-      //timezone
-      meeting.timezone = checkTimezone(meeting.timezone, timezone);
+      //luxon uses iso day
+      const weekday = meeting.day === 0 ? 7 : meeting.day;
+      const [hour, minute] = meeting.time.split(':').map(num => parseInt(num));
 
-      //make start/end moments
-      meeting.start = moment
-        .tz(`${meeting.day} ${meeting.time}`, 'd hh:mm', meeting.timezone)
-        .tz(timezone);
+      //timezone
+      if (!meeting.timezone) meeting.timezone = timezone;
+
+      //make start/end datetimes
+      meeting.start = DateTime.fromObject(
+        { weekday, hour, minute },
+        { zone: meeting.timezone }
+      );
 
       if (meeting.end_time) {
-        meeting.end = moment
-          .tz(`${meeting.day} ${meeting.end_time}`, 'd hh:mm', meeting.timezone)
-          .tz(timezone);
+        const endTimeParts = meeting.end_time
+          .split(':')
+          .map(num => parseInt(num));
+        meeting.end = DateTime.fromObject(
+          { weekday, hour: endTimeParts[0], minute: endTimeParts[1] },
+          { zone: meeting.timezone }
+        );
       }
 
       //build time index (can be multiple)
       if (meeting.isActive) {
         //time differences for sorting
-        const minutes_midnight =
-          meeting.start.get('hour') * 60 + meeting.start.get('minutes');
+        const minutes_midnight = meeting.start.hour * 60 + meeting.start.minute;
         meeting.minutes_week = minutes_midnight + meeting.day * 1440;
 
         const times = [];
@@ -361,10 +367,8 @@ export function loadMeetingData(data, capabilities, timezone) {
 
     //optional updated date
     if (meeting.updated) {
-      const updated = moment.utc(meeting.updated);
-      meeting.updated = updated.isValid()
-        ? updated.tz(timezone).format('ll')
-        : undefined;
+      const updated = DateTime.fromISO(meeting.updated).setZone(timezone);
+      meeting.updated = updated.isValid ? updated.toLocaleString() : undefined;
     }
 
     //7th tradition validation
@@ -476,11 +480,6 @@ export function loadMeetingData(data, capabilities, timezone) {
   }
 
   return [meetings, indexes, capabilities];
-}
-
-//confirm supplied timezone is valid
-export function checkTimezone(timezone, fallback) {
-  return !!moment.tz.zone(timezone) ? timezone : fallback;
 }
 
 //look for data with multiple days and make them all single
