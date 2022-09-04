@@ -1,4 +1,5 @@
 import merge from 'deepmerge';
+import { Settings } from 'luxon';
 
 import { en, es, fr } from '../i18n';
 
@@ -112,5 +113,7 @@ const language = Object.keys(settings.strings).includes(preferredLanguage)
   : settings.language;
 
 const strings = settings.strings[language];
+
+Settings.defaultLocale = language;
 
 export { settings, strings };

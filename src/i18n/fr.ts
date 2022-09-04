@@ -22,7 +22,7 @@ export const fr: Translation = {
   evening: 'Soir',
   feedback: 'Mettre à jour les informations sur la réunion',
   friday: 'Vendredi',
-  get_directions: 'Directions',
+  get_directions: 'Obtenir des itinéraires',
   in_progress_single: '1 réunion en cours',
   in_progress_multiple: '%count% rendez-vous en cours',
   location: 'Emplacement',
