@@ -8,7 +8,7 @@ import { calculateDistances } from './calculate-distances';
 export function filterMeetingData(state, setState, mapbox) {
   const matchGroups = [];
   const now = DateTime.now();
-  const now_offset = now.minus({ minute: settings.now_offset });
+  const now_offset = now.plus({ minute: settings.now_offset });
   const slugs = Object.keys(state.meetings);
   const timeDiff = {};
 
