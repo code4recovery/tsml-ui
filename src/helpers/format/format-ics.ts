@@ -16,8 +16,8 @@ export function formatIcs(meeting: Meeting) {
 
   //make sure it's in the future
   if (meeting.start < DateTime.now()) {
-    meeting.start.plus({ week: 1 });
-    meeting.end.plus({ week: 1 });
+    meeting.start = meeting.start.plus({ week: 1 });
+    meeting.end = meeting.end.plus({ week: 1 });
   }
 
   //start building event
