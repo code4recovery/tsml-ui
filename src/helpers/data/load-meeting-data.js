@@ -284,8 +284,8 @@ export function loadMeetingData(data, capabilities, timezone) {
       //make start/end datetimes
       meeting.start = DateTime.fromObject(
         { weekday, hour, minute },
-        { zone: meeting.timezone }
-      ).setZone(timezone);
+        { zone: meeting.timezone ?? timezone }
+      );
 
       if (meeting.end_time) {
         const endTimeParts = meeting.end_time
@@ -293,8 +293,8 @@ export function loadMeetingData(data, capabilities, timezone) {
           .map(num => parseInt(num));
         meeting.end = DateTime.fromObject(
           { weekday, hour: endTimeParts[0], minute: endTimeParts[1] },
-          { zone: meeting.timezone }
-        ).setZone(timezone);
+          { zone: meeting.timezone ?? timezone }
+        );
       }
 
       //build time index (can be multiple)
