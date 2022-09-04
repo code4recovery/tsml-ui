@@ -181,12 +181,14 @@ export function filterMeetingData(state, setState, mapbox) {
   });
 
   //find in-progress meetings
-  const inProgress = filteredSlugs.filter(
-    slug =>
-      state.meetings[slug].start < now_offset &&
-      state.meetings[slug].end > now &&
-      !state.meetings[slug].types.includes('inactive')
-  );
+  const inProgress = state.input.weekday?.length
+    ? []
+    : filteredSlugs.filter(
+        slug =>
+          state.meetings[slug].start < now_offset &&
+          state.meetings[slug].end > now &&
+          !state.meetings[slug].types.includes('inactive')
+      );
 
   return [filteredSlugs, inProgress];
 }

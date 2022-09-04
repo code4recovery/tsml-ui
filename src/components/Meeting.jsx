@@ -223,7 +223,7 @@ export default function Meeting({
           <div className="list-group">
             <div className="d-grid gap-2 list-group-item py-3">
               <h2 className="h5">{strings.meeting_information}</h2>
-              <p className="text-lowercase">{timeString}</p>
+              <p>{timeString}</p>
               {state.capabilities.type && meeting.types && (
                 <ul className="ms-4">
                   {meeting.types

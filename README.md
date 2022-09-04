@@ -84,6 +84,6 @@ While developing, run `npx mix watch` to compile assets as you edit them. When y
 
 ## Changelog
 
-| Version | Date        | Changes                                                                                    |
-| ------- | ----------- | ------------------------------------------------------------------------------------------ |
-| 1.4     | Sep 4, 2020 | Replaced moment-timezone with Luxon / Smaller package size / Restyled in-progress meetings |
+| Version | Date        | Changes                                                                   |
+| ------- | ----------- | ------------------------------------------------------------------------- |
+| 1.4     | Sep 4, 2020 | Replaced `moment-timezone` with `luxon`<br/>Restyled in-progress meetings |
