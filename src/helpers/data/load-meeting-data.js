@@ -281,10 +281,13 @@ export function loadMeetingData(data, capabilities, timezone) {
       const weekday = meeting.day === 0 ? 7 : meeting.day;
       const [hour, minute] = meeting.time.split(':').map(num => parseInt(num));
 
+      //timezone
+      if (!meeting.timezone) meeting.timezone = timezone;
+
       //make start/end datetimes
       meeting.start = DateTime.fromObject(
         { weekday, hour, minute },
-        { zone: meeting.timezone ?? timezone }
+        { zone: meeting.timezone }
       );
 
       if (meeting.end_time) {
@@ -293,7 +296,7 @@ export function loadMeetingData(data, capabilities, timezone) {
           .map(num => parseInt(num));
         meeting.end = DateTime.fromObject(
           { weekday, hour: endTimeParts[0], minute: endTimeParts[1] },
-          { zone: meeting.timezone ?? timezone }
+          { zone: meeting.timezone }
         );
       }
 

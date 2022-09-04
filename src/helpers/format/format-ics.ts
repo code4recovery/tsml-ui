@@ -5,7 +5,7 @@ import { iOS } from '../user-agent';
 
 //format ICS file for add to calendar
 export function formatIcs(meeting: Meeting) {
-  const fmt = 'YYYYMMDDTHHmmss';
+  const fmt = "yyyyLLdd'T'HHmmss";
 
   if (!meeting.start) return;
 
