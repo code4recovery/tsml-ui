@@ -301,6 +301,15 @@ export function loadMeetingData(data, capabilities, timezone) {
           { weekday, hour: endTimeParts[0], minute: endTimeParts[1] },
           { zone: meeting.timezone }
         );
+
+        const duration = meeting.end
+          .diff(meeting.start, 'minutes')
+          .toObject().minutes;
+        if (duration > 120) {
+          console.warn(
+            `TSML-UI ${meeting.slug} is unusually long (${duration} mins): ${meeting.edit_url}`
+          );
+        }
       }
 
       //build time index (can be multiple)

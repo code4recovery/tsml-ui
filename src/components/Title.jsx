@@ -42,5 +42,5 @@ export default function Title({ state: { indexes, input } }) {
   document.title = title;
 
   //return h1
-  return <h1 className="fw-light mb-n2">{title}</h1>;
+  return <h1 className="fw-light mb-n1">{title}</h1>;
 }
