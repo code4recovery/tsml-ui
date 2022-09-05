@@ -8,7 +8,7 @@ export type Index = {
 };
 
 export type State = {
-  alert?: 'no_results' | 'not_found';
+  alert?: string;
   capabilities: {
     coordinates: boolean;
     distance: boolean;
@@ -18,7 +18,7 @@ export type State = {
     type: boolean;
     weekday: boolean;
   };
-  error?: 'bad_data' | 'no_data_src';
+  error?: string;
   indexes: {
     distance: Index[];
     region: Index[];

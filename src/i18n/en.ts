@@ -3,12 +3,6 @@ import { Translation } from '../types';
 export const en: Translation = {
   add_to_calendar: 'Add to Calendar',
   address: 'Address / Platform',
-  alerts: {
-    bad_data: 'An error was encountered loading the data.',
-    no_data_src: 'Configuration error: a data source must be specified.',
-    no_results: 'No meetings were found matching the selected criteria.',
-    not_found: 'Meeting not found.',
-  },
   appointment: 'Appointment',
   back_to_meetings: 'Back to Meetings',
   contribute_with: 'Contribute with %service%',
@@ -32,7 +26,9 @@ export const en: Translation = {
   monday: 'Monday',
   morning: 'Morning',
   name: 'Name',
+  no_results: 'No meetings were found matching the selected criteria.',
   noon: 'Noon',
+  not_found: 'Meeting not found.',
   modes: {
     location: 'Near Location',
     me: 'Near Me',

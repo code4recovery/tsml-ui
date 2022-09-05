@@ -1,5 +1,7 @@
+import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import Alert from './Alert';
+import { strings } from '../helpers';
 
 //TODO: These types can be much better once AppState types are defined.
 
@@ -10,21 +12,21 @@ describe('<Alert />', () => {
   });
 
   it('works with error state', () => {
-    render(<Alert state={{ error: 'bad_data' }} setState={jest.fn()} />);
-
-    const reloadSpy = jest.spyOn(location, 'reload');
+    render(
+      <Alert
+        state={{ error: 'an error was encountered loading the data' }}
+        setState={jest.fn()}
+      />
+    );
 
     const text = /an error was encountered loading the data/i;
-    const button = screen.getByText(/reload/i);
 
     expect(screen.getByText(text)).toBeInTheDocument();
-    fireEvent.click(button);
-    expect(reloadSpy).toHaveBeenCalled();
   });
 
   it('works with clearing filters with no results', async () => {
     const mockState = {
-      alert: 'no_results',
+      alert: strings.no_results,
       input: {
         distance: [],
         region: ['foo'],

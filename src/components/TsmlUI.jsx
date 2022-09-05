@@ -12,11 +12,12 @@ import {
   loadMeetingData,
   setQueryString,
   settings,
+  strings,
+  translateGoogleSheet,
 } from '../helpers';
 
-export default function TsmlUI({ json, mapbox, timezone }) {
+export default function TsmlUI({ json, mapbox, google, timezone }) {
   const [state, setState] = useState({
-    alert: null,
     capabilities: {
       coordinates: false,
       distance: false,
@@ -28,7 +29,6 @@ export default function TsmlUI({ json, mapbox, timezone }) {
       type: false,
       weekday: false,
     },
-    error: null,
     input: {},
     indexes: {
       distance: [],
@@ -84,55 +84,97 @@ export default function TsmlUI({ json, mapbox, timezone }) {
 
     const input = getQueryString();
 
-    //cache busting
-    if (json.endsWith('.json') && input.meeting) {
-      json = json.concat('?', new Date().getTime());
-    }
+    if (!json) {
+      setState({
+        ...state,
+        error: 'Configuration error: a data source must be specified.',
+        loading: false,
+        ready: true,
+      });
+    } else {
+      const sheetId = json.startsWith('https://docs.google.com/spreadsheets/d/')
+        ? json.split('/')[5]
+        : undefined;
 
-    //fetch json data file and build indexes
-    fetch(json)
-      .then(result => result.json())
-      .then(result => {
-        if (!Array.isArray(result) || !result.length) {
-          return setState({
+      //google sheet
+      if (sheetId) {
+        if (!google) {
+          setState({
             ...state,
-            error: 'bad_data',
+            error: 'Configuration error: a Google API key is required.',
+            loading: false,
+          });
+        }
+        json = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/A1:ZZ?key=${google}`;
+      }
+
+      //cache busting
+      if (json.endsWith('.json') && input.meeting) {
+        json = `${json}?${new Date().getTime()}`;
+      }
+
+      //fetch json data file and build indexes
+      fetch(json)
+        .then(res => (res.ok ? res.json() : Promise.reject(res.status)))
+        .then(data => {
+          if (sheetId) {
+            data = translateGoogleSheet(data, sheetId);
+          }
+
+          if (!Array.isArray(data) || !data.length) {
+            return setState({
+              ...state,
+              error: 'Data is not in the correct format.',
+              loading: false,
+              ready: true,
+            });
+          }
+
+          const [meetings, indexes, capabilities] = loadMeetingData(
+            data,
+            state.capabilities,
+            timezone
+          );
+
+          const waitingForGeo =
+            (!input.latitude || !input.longitude) &&
+            ((input.mode === 'location' && input.search) ||
+              input.mode === 'me');
+
+          setState({
+            ...state,
+            capabilities: capabilities,
+            indexes: indexes,
+            input: input,
+            loading: false,
+            meetings: meetings,
+            ready: !waitingForGeo,
+          });
+        })
+        .catch(error => {
+          const errors = {
+            400: 'bad request',
+            401: 'unauthorized',
+            403: 'forbidden',
+            404: 'not found',
+            429: 'too many requests',
+            500: 'internal server',
+            502: 'bad gateway',
+            503: 'service unavailable',
+            504: 'gateway timeout',
+          };
+          setState({
+            ...state,
+            error: errors[error]
+              ? `Error: ${errors[error]} (${error}) when ${
+                  sheetId ? 'contacting Google' : 'loading data'
+                }.`
+              : error.toString(),
             loading: false,
             ready: true,
           });
-        }
-
-        const [meetings, indexes, capabilities] = loadMeetingData(
-          result,
-          state.capabilities,
-          timezone
-        );
-
-        const waitingForGeo =
-          (!input.latitude || !input.longitude) &&
-          ((input.mode === 'location' && input.search) || input.mode === 'me');
-
-        setState({
-          ...state,
-          capabilities: capabilities,
-          indexes: indexes,
-          input: input,
-          loading: false,
-          meetings: meetings,
-          ready: !waitingForGeo,
         });
-      })
-      .catch(error => {
-        if (json) {
-          console.error(`TSML UI data loading error: ${error}`, json);
-        }
-        setState({
-          ...state,
-          error: json ? 'bad_data' : 'no_data_src',
-          loading: false,
-          ready: true,
-        });
-      });
+    }
   }
 
   //apply input changes to query string
@@ -146,11 +188,11 @@ export default function TsmlUI({ json, mapbox, timezone }) {
   );
 
   //show alert?
-  state.alert = !filteredSlugs.length ? 'no_results' : null;
+  state.alert = !filteredSlugs.length ? strings.no_results : undefined;
 
   //show error?
-  if (state.input.meeting && !(state.input.meeting in state.meetings)) {
-    state.error = 'not_found';
+  if (state.input.meeting && !state.meetings[state.input.meeting]) {
+    state.error = strings.not_found;
   }
 
   return !state.ready ? (
@@ -168,7 +210,7 @@ export default function TsmlUI({ json, mapbox, timezone }) {
             feedback_emails={settings.feedback_emails}
           />
         ) : (
-          <>
+          <div className="d-grid gap-3">
             {settings.show.title && <Title state={state} />}
             {settings.show.controls && (
               <Controls state={state} setState={setState} mapbox={mapbox} />
@@ -193,7 +235,7 @@ export default function TsmlUI({ json, mapbox, timezone }) {
                 mapbox={mapbox}
               />
             )}
-          </>
+          </div>
         )}
       </div>
     </div>

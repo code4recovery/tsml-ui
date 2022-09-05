@@ -19,6 +19,8 @@ if (element) {
         json: element.getAttribute('data-src') || element.getAttribute('src'),
         mapbox:
           element.getAttribute('data-mapbox') || element.getAttribute('mapbox'),
+        google:
+          element.getAttribute('data-google') || element.getAttribute('google'),
         timezone:
           element.getAttribute('data-timezone') || tsml_react_config?.timezone,
       }}

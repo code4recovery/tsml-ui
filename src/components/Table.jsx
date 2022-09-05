@@ -156,7 +156,7 @@ export default function Table({
           <thead>
             <tr className="d-none d-md-table-row">
               {columns.map((column, index) => (
-                <th key={index} className={column}>
+                <th key={index} className={cx('pt-0', column)}>
                   {strings[column]}
                 </th>
               ))}
@@ -190,7 +190,6 @@ export default function Table({
           )}
           <InfiniteScroll
             element="tbody"
-            className="border-0"
             loadMore={() => {
               setLimit(limit + meetingsPerPage);
             }}

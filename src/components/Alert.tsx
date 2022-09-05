@@ -11,20 +11,11 @@ type AlertProps = {
 
 export default function Alert({ state, setState }: AlertProps) {
   return state.error ? (
-    <div className="d-flex flex-column gap-3">
-      <div className="alert alert-danger text-center m-0">
-        {strings.alerts[state.error]}
-      </div>
-      {state.error === 'bad_data' && (
-        <Button onClick={() => location.reload()} text="Reload" />
-      )}
-    </div>
+    <div className="alert alert-danger text-center m-0">{state.error}</div>
   ) : state.alert ? (
     <div className="d-flex flex-column gap-3">
-      <div className="alert alert-warning text-center m-0">
-        {strings.alerts[state.alert]}
-      </div>
-      {state.alert === 'no_results' && state.input.search && (
+      <div className="alert alert-warning text-center m-0">{state.alert}</div>
+      {state.alert === strings.no_results && state.input.search && (
         <Button
           onClick={() => {
             state.input.search = '';
@@ -35,7 +26,7 @@ export default function Alert({ state, setState }: AlertProps) {
           icon="close"
         />
       )}
-      {state.alert === 'no_results' &&
+      {state.alert === strings.no_results &&
         settings.filters.map(filter =>
           state.input[filter].map(value => (
             <Button

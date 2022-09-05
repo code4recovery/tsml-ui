@@ -3,14 +3,6 @@ import { Translation } from '../types';
 export const es: Translation = {
   add_to_calendar: 'Añadir al calendario',
   address: 'Dirección',
-  alerts: {
-    bad_data: 'Se encontró un error al cargar los datos.',
-    no_data_src:
-      'Error de configuración: se debe especificar una fuente de datos.',
-    no_results:
-      'No se encontraron reuniones que coincidieran con los criterios seleccionados.',
-    not_found: 'Reunión no encontrada.',
-  },
   appointment: 'Cita',
   back_to_meetings: 'Volver a las reuniones',
   contribute_with: 'Contribuya con %service%',
@@ -34,7 +26,9 @@ export const es: Translation = {
   monday: 'Lunes',
   morning: 'Mañana',
   name: 'Nombre',
+  no_results: 'No se encontraron reuniones que coincidieran con los criterios.',
   noon: 'Mediodía',
+  not_found: 'Reunión no encontrada.',
   modes: {
     location: 'Ubicación cercana',
     me: 'Cerca de mí',
