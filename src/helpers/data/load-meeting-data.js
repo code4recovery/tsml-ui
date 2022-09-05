@@ -73,8 +73,6 @@ export function loadMeetingData(data, capabilities, timezone) {
     'website',
   ];
 
-  //define lookups we'll need later
-  const lookup_weekday = settings.weekdays.map(weekday => strings[weekday]);
   const lookup_type_codes = Object.keys(strings.types).filter(
     type => type !== 'ONL' //duplicate of "online"
   );
@@ -245,11 +243,14 @@ export function loadMeetingData(data, capabilities, timezone) {
     }
 
     //format day
+    meeting.day = meeting.day.toLowerCase();
     if (Number.isInteger(meeting.day)) {
       //convert day to string if integer
       meeting.day = meeting.day.toString();
-    } else if (lookup_weekday.includes(meeting.day)) {
-      meeting.day = lookup_weekday.indexOf(meeting.day).toString();
+    } else if (settings.weekdays.includes(meeting.day)) {
+      meeting.day = settings.weekdays.indexOf(meeting.day).toString();
+    } else {
+      meeting.day = undefined;
     }
 
     //format latitude + longitude
