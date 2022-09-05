@@ -5,7 +5,15 @@ export interface Translation {
   address: string;
   alerts: {
     bad_data: string;
+    400: string;
+    401: string;
+    403: string;
+    404: string;
+    429: string;
+    500: string;
+    502: string;
     google_key: string;
+    network_error: string;
     no_data_src: string;
     no_results: string;
     not_found: string;

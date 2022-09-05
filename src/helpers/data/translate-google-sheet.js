@@ -3,10 +3,8 @@ import { DateTime } from 'luxon';
 import { formatSlug } from '../format';
 
 //translates Google Sheet JSON into Meeting Guide format (example puget-sound.html)
-export function translateGoogleSheet(data, json) {
+export function translateGoogleSheet(data, sheetId) {
   if (!data.values) return;
-
-  const sheetId = json.split('/')[5];
 
   const meetings = [];
 

@@ -5,11 +5,18 @@ export const es: Translation = {
   address: 'Dirección',
   alerts: {
     bad_data: 'Se encontró un error al cargar los datos.',
+    400: 'Se encontró un error de solicitud incorrecta 400 al cargar datos.',
+    401: 'Se encontró un error no autorizado 401 al cargar datos.',
+    403: '403 error prohibido encontrado cargando datos.',
+    404: '404 error no encontrado al cargar datos.',
+    429: '429 se encontraron demasiadas solicitudes de error.',
+    500: '500 error interno del servidor encontrado.',
+    502: '502 se encontró un error de puerta de enlace incorrecta.',
     google_key: 'Error de configuración: se requiere una clave API de Google.',
-    no_data_src:
-      'Error de configuración: se debe especificar una fuente de datos.',
+    network_error: 'Se encontró un error de red al obtener datos.',
+    no_data_src: 'Se debe especificar una fuente de datos.',
     no_results:
-      'No se encontraron reuniones que coincidieran con los criterios seleccionados.',
+      'No se encontraron reuniones que coincidieran con los criterios.',
     not_found: 'Reunión no encontrada.',
   },
   appointment: 'Cita',

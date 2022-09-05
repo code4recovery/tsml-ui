@@ -11,13 +11,8 @@ type AlertProps = {
 
 export default function Alert({ state, setState }: AlertProps) {
   return state.error ? (
-    <div className="d-flex flex-column gap-3">
-      <div className="alert alert-danger text-center m-0">
-        {strings.alerts[state.error]}
-      </div>
-      {state.error === 'bad_data' && (
-        <Button onClick={() => location.reload()} text="Reload" />
-      )}
+    <div className="alert alert-danger text-center m-0">
+      {strings.alerts[state.error]}
     </div>
   ) : state.alert ? (
     <div className="d-flex flex-column gap-3">

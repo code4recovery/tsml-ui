@@ -12,6 +12,7 @@ import {
   loadMeetingData,
   setQueryString,
   settings,
+  strings,
   translateGoogleSheet,
 } from '../helpers';
 
@@ -85,73 +86,86 @@ export default function TsmlUI({ json, mapbox, google, timezone }) {
 
     const input = getQueryString();
 
-    //google sheet
-    if (json?.startsWith('https://docs.google.com/spreadsheets/d/')) {
-      if (!google) {
-        setState({
-          ...state,
-          error: 'google_key',
-          loading: false,
-        });
-      }
-      json = `https://sheets.googleapis.com/v4/spreadsheets/${
-        json.split('/')[5]
-      }/values/A1:ZZ?key=${google}`;
-    }
+    if (!json) {
+      setState({
+        ...state,
+        error: 'no_data_src',
+        loading: false,
+        ready: true,
+      });
+    } else {
+      const sheetId = json.startsWith('https://docs.google.com/spreadsheets/d/')
+        ? json.split('/')[5]
+        : undefined;
 
-    //cache busting
-    if (json.endsWith('.json') && input.meeting) {
-      json = json.concat('?', new Date().getTime());
-    }
-
-    //fetch json data file and build indexes
-    fetch(json)
-      .then(result => result.json())
-      .then(result => {
-        if (json?.includes('sheets.googleapis.com')) {
-          result = translateGoogleSheet(result, json);
-        }
-
-        if (!Array.isArray(result) || !result.length) {
-          return setState({
+      //google sheet
+      if (sheetId) {
+        if (!google) {
+          setState({
             ...state,
-            error: 'bad_data',
+            error: 'google_key',
+            loading: false,
+          });
+        }
+        json = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/A1:ZZ?key=${google}`;
+      }
+
+      //cache busting
+      if (json.endsWith('.json') && input.meeting) {
+        json = `${json}?${new Date().getTime()}`;
+      }
+
+      //fetch json data file and build indexes
+      fetch(json)
+        .then(res => (res.ok ? res.json() : Promise.reject(res.status)))
+        .then(data => {
+          if (sheetId) {
+            data = translateGoogleSheet(data, sheetId);
+          }
+
+          if (!Array.isArray(data) || !data.length) {
+            return setState({
+              ...state,
+              error: 'bad_data',
+              loading: false,
+              ready: true,
+            });
+          }
+
+          const [meetings, indexes, capabilities] = loadMeetingData(
+            data,
+            state.capabilities,
+            timezone
+          );
+
+          const waitingForGeo =
+            (!input.latitude || !input.longitude) &&
+            ((input.mode === 'location' && input.search) ||
+              input.mode === 'me');
+
+          setState({
+            ...state,
+            capabilities: capabilities,
+            indexes: indexes,
+            input: input,
+            loading: false,
+            meetings: meetings,
+            ready: !waitingForGeo,
+          });
+        })
+        .catch(error => {
+          console.error(error);
+          if (error.toString().includes('NetworkError')) {
+            error = 'network_error';
+          }
+          setState({
+            ...state,
+            error: strings.alerts[error] ? error : 'bad_data',
             loading: false,
             ready: true,
           });
-        }
-
-        const [meetings, indexes, capabilities] = loadMeetingData(
-          result,
-          state.capabilities,
-          timezone
-        );
-
-        const waitingForGeo =
-          (!input.latitude || !input.longitude) &&
-          ((input.mode === 'location' && input.search) || input.mode === 'me');
-
-        setState({
-          ...state,
-          capabilities: capabilities,
-          indexes: indexes,
-          input: input,
-          loading: false,
-          meetings: meetings,
-          ready: !waitingForGeo,
         });
-      })
-      .catch(error => {
-        if (json) {
-          console.error(`TSML UI data loading error: ${error}`, json);
-        }
-        setState({
-          ...state,
-          error: json ? 'bad_data' : 'no_data_src',
-          loading: false,
-          ready: true,
-        });
-      });
+    }
   }
 
   //apply input changes to query string
