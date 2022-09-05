@@ -5,6 +5,7 @@ export const fr: Translation = {
   address: 'Adresse',
   alerts: {
     bad_data: "Une erreur s'est produite lors du chargement des données.",
+    google_key: 'Erreur de configuration : une clé API Google est requise.',
     no_data_src:
       'Erreur de configuration : une source de données doit être spécifiée.',
     no_results:

@@ -5,6 +5,7 @@ export interface Translation {
   address: string;
   alerts: {
     bad_data: string;
+    google_key: string;
     no_data_src: string;
     no_results: string;
     not_found: string;

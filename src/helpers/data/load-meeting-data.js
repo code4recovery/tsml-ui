@@ -229,6 +229,8 @@ export function loadMeetingData(data, capabilities, timezone) {
             meeting.regions.push(meeting.sub_sub_region);
           }
         }
+      } else if (meeting.city) {
+        meeting.regions.push(meeting.city);
       }
     }
 

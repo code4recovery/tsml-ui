@@ -12,9 +12,10 @@ import {
   loadMeetingData,
   setQueryString,
   settings,
+  translateGoogleSheet,
 } from '../helpers';
 
-export default function TsmlUI({ json, mapbox, timezone }) {
+export default function TsmlUI({ json, mapbox, google, timezone }) {
   const [state, setState] = useState({
     alert: null,
     capabilities: {
@@ -84,6 +85,20 @@ export default function TsmlUI({ json, mapbox, timezone }) {
 
     const input = getQueryString();
 
+    //google sheet
+    if (json?.startsWith('https://docs.google.com/spreadsheets/d/')) {
+      if (!google) {
+        setState({
+          ...state,
+          error: 'google_key',
+          loading: false,
+        });
+      }
+      json = `https://sheets.googleapis.com/v4/spreadsheets/${
+        json.split('/')[5]
+      }/values/A1:ZZ?key=${google}`;
+    }
+
     //cache busting
     if (json.endsWith('.json') && input.meeting) {
       json = json.concat('?', new Date().getTime());
@@ -93,6 +108,10 @@ export default function TsmlUI({ json, mapbox, timezone }) {
     fetch(json)
       .then(result => result.json())
       .then(result => {
+        if (json?.includes('sheets.googleapis.com')) {
+          result = translateGoogleSheet(result, json);
+        }
+
         if (!Array.isArray(result) || !result.length) {
           return setState({
             ...state,
