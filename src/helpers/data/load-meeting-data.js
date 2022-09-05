@@ -73,8 +73,6 @@ export function loadMeetingData(data, capabilities, timezone) {
     'website',
   ];
 
-  //define lookups we'll need later
-  const lookup_weekday = settings.weekdays.map(weekday => strings[weekday]);
   const lookup_type_codes = Object.keys(strings.types).filter(
     type => type !== 'ONL' //duplicate of "online"
   );
@@ -229,6 +227,8 @@ export function loadMeetingData(data, capabilities, timezone) {
             meeting.regions.push(meeting.sub_sub_region);
           }
         }
+      } else if (meeting.city) {
+        meeting.regions.push(meeting.city);
       }
     }
 
@@ -246,8 +246,11 @@ export function loadMeetingData(data, capabilities, timezone) {
     if (Number.isInteger(meeting.day)) {
       //convert day to string if integer
       meeting.day = meeting.day.toString();
-    } else if (lookup_weekday.includes(meeting.day)) {
-      meeting.day = lookup_weekday.indexOf(meeting.day).toString();
+    } else if (meeting.day) {
+      meeting.day = meeting.day.toLowerCase();
+      if (settings.weekdays.includes(meeting.day)) {
+        meeting.day = settings.weekdays.indexOf(meeting.day).toString();
+      }
     }
 
     //format latitude + longitude
@@ -298,6 +301,15 @@ export function loadMeetingData(data, capabilities, timezone) {
           { weekday, hour: endTimeParts[0], minute: endTimeParts[1] },
           { zone: meeting.timezone }
         );
+
+        const duration = meeting.end
+          .diff(meeting.start, 'minutes')
+          .toObject().minutes;
+        if (duration > 120) {
+          console.warn(
+            `TSML-UI ${meeting.slug} is unusually long (${duration} mins): ${meeting.edit_url}`
+          );
+        }
       }
 
       //build time index (can be multiple)

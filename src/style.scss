@@ -119,6 +119,11 @@ div.tsml-ui {
     }
   }
 
+  /* saves .02 mb not to enable negative margins in bootstrap */
+  .mb-n1 {
+    margin-bottom: -0.25rem !important;
+  }
+
   a.btn,
   small {
     &.online {
@@ -314,9 +319,15 @@ div.tsml-ui {
       padding-left: 1rem;
     }
 
+    tbody {
+      border-top: 0 !important;
+      &:first-of-type {
+        border-top: 1px solid $gray-300 !important;
+      }
+    }
+
     tbody.tsml-in-progress {
       background-color: rgba($warning, 0.25);
-      border-top: 1px solid $gray-300;
 
       tr {
         background-color: rgba($white, 0.75) !important;

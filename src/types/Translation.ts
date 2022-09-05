@@ -3,12 +3,6 @@ import { MeetingType } from './MeetingType';
 export interface Translation {
   add_to_calendar: string;
   address: string;
-  alerts: {
-    bad_data: string;
-    no_data_src: string;
-    no_results: string;
-    not_found: string;
-  };
   appointment: string;
   back_to_meetings: string;
   contribute_with: string;
@@ -32,7 +26,9 @@ export interface Translation {
   monday: string;
   morning: string;
   name: string;
+  no_results: string;
   noon: string;
+  not_found: string;
   modes: {
     location: string;
     me: string;

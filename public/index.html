@@ -21,41 +21,28 @@
             interactive recovery meeting finder that can be embedded on any
             website.
           </p>
+          <p>
+            Setup instructions follow. More information is available on the
+            <a href="https://github.com/code4recovery/tsml-ui" target="_blank"
+              >project page on GitHub</a
+            >, including advanced configuration options. To get help, please
+            <a
+              href="https://github.com/code4recovery/tsml-ui/issues"
+              target="_blank"
+              >file an issue</a
+            >.
+          </p>
           <section class="my-5">
-            <h4>12 Step Meeting List</h4>
+            <h2 class="h4">12 Step Meeting List</h2>
             <p>
-              Go to Dashboard > Meetings > Import & Settings > Settings and
-              change <code>User Interface Display</code> &rarr;
-              <code>TSML UI</code>
+              If you are using the <a href="https://wordpress.org/plugins/12-step-meeting-list/" target="_blank">12 
+              Step Meeting List plugin</a> for WordPress, setup is simple. Go to Dashboard > Meetings > Import & 
+              Settings > Settings and change <code>User Interface Display</code> &rarr; <code>TSML UI</code>
             </p>
-            <!--
-            <div
-              style="
-                position: relative;
-                padding-bottom: 69.76744186046511%;
-                height: 0;
-              "
-            >
-              <iframe
-                src="https://www.loom.com/embed/7b080b54d4674be0959277f148b7b87f"
-                frameborder="0"
-                webkitallowfullscreen
-                mozallowfullscreen
-                allowfullscreen
-                style="
-                  position: absolute;
-                  top: 0;
-                  left: 0;
-                  width: 100%;
-                  height: 100%;
-                "
-              ></iframe>
-            </div>
-            -->
           </section>
 
           <section class="my-5">
-            <h4>Custom JSON feed</h4>
+            <h2 class="h4">Custom JSON feed</h2>
             <p>
               If you can generate a
               <a href="https://github.com/code4recovery/spec" target="_blank"
@@ -91,7 +78,42 @@
           </section>
 
           <section class="my-5">
-            <h4>Google Sheet</h4>
+            <h2 class="h4">Google Sheet (direct)</h2>
+            <p>
+              You can connect TSML UI directly to a Google Sheet. To do this,
+              just use your Google Sheet URL as the
+              <code>data-src</code> attribute, get a Google Sheets API Key
+              (<a
+                href="https://developers.google.com/sheets/api/guides/authorizing#APIKey"
+                target="_blank"
+                >here are instructions</a
+              >), and enter it as the <code>data-google</code> attribute.
+            </p>
+            <pre class="rounded bg-dark text-light p-3 overflow-hidden">
+&lt;div
+  id="tsml-ui"
+  data-src="https://docs.google.com/spreadsheets/d/your.google.sheet.id/edit#gid=more.stuff.here"
+  data-google="your.google.api.key"
+  data-mapbox="pk.your.mapbox.access.token.goes.here"
+  data-timezone="America/Los_Angeles"
+&gt;&lt;/div&gt;
+&lt;script src="https://tsml-ui.code4recovery.org/app.js" async&gt;&lt;/script&gt;</pre
+            >
+            <!-- <button class="btn btn-outline-primary mb-3" href="" disabled>Demo coming soon</button> -->
+            <p>Some caveats about connecting directly to Google Sheets:
+              <ol>
+                <li>Although it is free, Google imposes <a href="https://developers.google.com/sheets/api/limits" target="_blank">rate limits on its Sheets API</a>, and if that limit is exceeded, your users may see a 429 (too many requests) error when accessing the meeting finder.</li>
+                <li>Depending on how your sheet is set up, the request from Google can be pretty bulky, and page performance may vary.</li>
+                <li>Users may see incomplete data if they request the page while data is being entered.</li>
+                <li>Some users may have privacy-oriented content blockers that block their access to Google, which will cause an error.</li>
+                <li>If you choose to enter personally identifiable information (such as meeting contact information) this will be exposed to users who know how to look for it.</li>
+              </ol>
+            </p>
+            <p>The Sheets Importer option below mitigates these issues and does not require you to have a Google API key.</p>
+          </section>
+
+          <section class="my-5">
+            <h2 class="h4">Google Sheet (via Sheet Importer)</h2>
             <p>
               You can generate a JSON feed from a Google Sheet using the
               <a href="https://sheets.code4recovery.org/" target="_blank"
@@ -113,17 +135,6 @@
             >
           </section>
 
-          <p class="mb-4">
-            More information is available on the
-            <a href="https://github.com/code4recovery/tsml-ui" target="_blank"
-              >project page on GitHub</a
-            >, including advanced configuration options. To get help, please
-            <a
-              href="https://github.com/code4recovery/tsml-ui/issues"
-              target="_blank"
-              >file an issue</a
-            >.
-          </p>
           <p class="text-center">
             <a href="https://code4recovery.org" target="_blank">
               <img
