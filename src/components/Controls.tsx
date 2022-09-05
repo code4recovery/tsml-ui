@@ -138,8 +138,8 @@ export default function Controls({ state, setState, mapbox }: ControlsProps) {
 
   return (
     !!Object.keys(state.meetings).length && (
-      <div className="row d-print-none controls">
-        <div className="col-sm-6 col-lg mb-3">
+      <div className="row d-print-none controls gy-3">
+        <div className="col-sm-6 col-lg">
           <div className="position-relative">
             <form className="input-group" onSubmit={locationSearch}>
               <input
@@ -201,7 +201,7 @@ export default function Controls({ state, setState, mapbox }: ControlsProps) {
           </div>
         </div>
         {filters.map((filter, index) => (
-          <div className="col-sm-6 col-lg mb-3" key={filter}>
+          <div className="col-sm-6 col-lg" key={filter}>
             <Dropdown
               defaultValue={strings[`${filter}_any` as keyof typeof strings]}
               end={!canShowViews && index === filters.length - 1}
@@ -214,7 +214,7 @@ export default function Controls({ state, setState, mapbox }: ControlsProps) {
           </div>
         ))}
         {canShowViews && (
-          <div className="col-sm-6 col-lg mb-3">
+          <div className="col-sm-6 col-lg">
             <div className="btn-group h-100 w-100" role="group">
               {views.map(view => (
                 <button

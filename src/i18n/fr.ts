@@ -3,22 +3,6 @@ import { Translation } from '../types';
 export const fr: Translation = {
   add_to_calendar: 'Ajouter au calendrier',
   address: 'Adresse',
-  alerts: {
-    bad_data: "Une erreur s'est produite lors du chargement des données.",
-    400: '400 erreur de demande incorrecte rencontrée lors du chargement des données.',
-    401: "Une erreur 401 non autorisée s'est produite lors du chargement des données.",
-    403: 'Erreur interdite 403 rencontrée lors du chargement des données.',
-    404: "Une erreur 404 introuvable s'est produite lors du chargement des données.",
-    429: 'Erreur 429 trop de requêtes rencontrée.',
-    500: '500 erreur de serveur interne rencontrée.',
-    502: 'Erreur de passerelle 502 incorrecte rencontrée.',
-    google_key: 'Erreur de configuration : une clé API Google est requise.',
-    network_error:
-      'Erreur réseau rencontrée lors de la récupération des données.',
-    no_data_src: 'Une source de données doit être spécifiée.',
-    no_results: "Aucune réunion n'a été trouvée.",
-    not_found: 'Réunion introuvable.',
-  },
   appointment: 'Rendez-vous',
   back_to_meetings: 'Retour aux réunions',
   contribute_with: 'Contribuer avec %service%',
@@ -42,7 +26,9 @@ export const fr: Translation = {
   monday: 'Lundi',
   morning: 'Matin',
   name: 'Nom',
+  no_results: "Aucune réunion n'a été trouvée.",
   noon: 'Le midi',
+  not_found: 'Réunion introuvable.',
   modes: {
     location: 'Près de l’emplacement',
     me: 'Proche de moi',

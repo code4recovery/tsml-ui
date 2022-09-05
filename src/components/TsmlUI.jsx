@@ -18,7 +18,6 @@ import {
 
 export default function TsmlUI({ json, mapbox, google, timezone }) {
   const [state, setState] = useState({
-    alert: null,
     capabilities: {
       coordinates: false,
       distance: false,
@@ -30,7 +29,6 @@ export default function TsmlUI({ json, mapbox, google, timezone }) {
       type: false,
       weekday: false,
     },
-    error: null,
     input: {},
     indexes: {
       distance: [],
@@ -89,7 +87,7 @@ export default function TsmlUI({ json, mapbox, google, timezone }) {
     if (!json) {
       setState({
         ...state,
-        error: 'no_data_src',
+        error: 'Configuration error: a data source must be specified.',
         loading: false,
         ready: true,
       });
@@ -103,7 +101,7 @@ export default function TsmlUI({ json, mapbox, google, timezone }) {
         if (!google) {
           setState({
             ...state,
-            error: 'google_key',
+            error: 'Configuration error: a Google API key is required.',
             loading: false,
           });
         }
@@ -126,7 +124,7 @@ export default function TsmlUI({ json, mapbox, google, timezone }) {
           if (!Array.isArray(data) || !data.length) {
             return setState({
               ...state,
-              error: 'bad_data',
+              error: 'Data is not in the correct format.',
               loading: false,
               ready: true,
             });
@@ -154,13 +152,24 @@ export default function TsmlUI({ json, mapbox, google, timezone }) {
           });
         })
         .catch(error => {
-          console.error(error);
-          if (error.toString().includes('NetworkError')) {
-            error = 'network_error';
-          }
+          const errors = {
+            400: 'bad request',
+            401: 'unauthorized',
+            403: 'forbidden',
+            404: 'not found',
+            429: 'too many requests',
+            500: 'internal server',
+            502: 'bad gateway',
+            503: 'service unavailable',
+            504: 'gateway timeout',
+          };
           setState({
             ...state,
-            error: strings.alerts[error] ? error : 'bad_data',
+            error: errors[error]
+              ? `Error: ${errors[error]} (${error}) when ${
+                  sheetId ? 'contacting Google' : 'loading data'
+                }.`
+              : error.toString(),
             loading: false,
             ready: true,
           });
@@ -179,11 +188,11 @@ export default function TsmlUI({ json, mapbox, google, timezone }) {
   );
 
   //show alert?
-  state.alert = !filteredSlugs.length ? 'no_results' : null;
+  state.alert = !filteredSlugs.length ? strings.no_results : undefined;
 
   //show error?
-  if (state.input.meeting && !(state.input.meeting in state.meetings)) {
-    state.error = 'not_found';
+  if (state.input.meeting && !state.meetings[state.input.meeting]) {
+    state.error = strings.not_found;
   }
 
   return !state.ready ? (
@@ -201,7 +210,7 @@ export default function TsmlUI({ json, mapbox, google, timezone }) {
             feedback_emails={settings.feedback_emails}
           />
         ) : (
-          <>
+          <div className="d-grid gap-3">
             {settings.show.title && <Title state={state} />}
             {settings.show.controls && (
               <Controls state={state} setState={setState} mapbox={mapbox} />
@@ -226,7 +235,7 @@ export default function TsmlUI({ json, mapbox, google, timezone }) {
                 mapbox={mapbox}
               />
             )}
-          </>
+          </div>
         )}
       </div>
     </div>

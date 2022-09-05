@@ -246,12 +246,10 @@ export function loadMeetingData(data, capabilities, timezone) {
     if (Number.isInteger(meeting.day)) {
       //convert day to string if integer
       meeting.day = meeting.day.toString();
-    } else {
+    } else if (meeting.day) {
       meeting.day = meeting.day.toLowerCase();
       if (settings.weekdays.includes(meeting.day)) {
         meeting.day = settings.weekdays.indexOf(meeting.day).toString();
-      } else {
-        meeting.day = undefined;
       }
     }
 
