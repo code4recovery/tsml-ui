@@ -278,7 +278,7 @@ export function loadMeetingData(data, capabilities, timezone) {
       }
 
       //luxon uses iso day
-      const weekday = meeting.day === 0 ? 7 : meeting.day;
+      const weekday = meeting.day === '0' ? '7' : meeting.day;
       const [hour, minute] = meeting.time.split(':').map(num => parseInt(num));
 
       //timezone
