@@ -297,6 +297,14 @@ export function loadMeetingData(data, capabilities, timezone) {
         { zone: meeting.timezone }
       );
 
+      //check valid start time
+      if (!meeting.start.isValid) {
+        console.warn(
+          `TSML UI invalid start time (${meeting.start.invalid.explanation}): ${meeting.edit_url}`
+        );
+        return;
+      }
+
       if (meeting.end_time) {
         const endTimeParts = meeting.end_time
           .split(':')
@@ -305,6 +313,14 @@ export function loadMeetingData(data, capabilities, timezone) {
           { weekday, hour: endTimeParts[0], minute: endTimeParts[1] },
           { zone: meeting.timezone }
         );
+
+        //check valid end time
+        if (!meeting.end.isValid) {
+          console.warn(
+            `TSML UI invalid end time (${meeting.end.invalid.explanation}): ${meeting.edit_url}`
+          );
+          return;
+        }
 
         const duration = meeting.end
           .diff(meeting.start, 'minutes')
