@@ -7,7 +7,6 @@ interface TSMLReactConfig {
   columns: Array<
     'time' | 'distance' | 'name' | 'location_group' | 'address' | 'region'
   >;
-  timezone: string;
   conference_providers: Record<string, string>;
   defaults: {
     distance: string[];

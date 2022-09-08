@@ -53,9 +53,6 @@ export function translateGoogleSheet(data, sheetId) {
       }
     }
 
-    //types
-    meeting.types = meeting.types.split(',').map(e => e.trim());
-
     //edit url link
     meeting.edit_url = `https://docs.google.com/spreadsheets/d/${sheetId}/edit#gid=0&range=${
       index + 2
