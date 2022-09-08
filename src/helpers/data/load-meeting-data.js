@@ -86,13 +86,11 @@ export function loadMeetingData(data, capabilities, timezone) {
   data = flattenDays(data);
 
   //loop through each entry
-  data.forEach((meeting, index) => {
+  data.forEach(meeting => {
     //strip out extra fields not in the spec
     Object.keys(meeting)
       .filter(key => !spec_properties.includes(key))
-      .forEach(key => {
-        delete meeting[key];
-      });
+      .forEach(key => delete meeting[key]);
 
     //slug is required
     if (!meeting.slug) {
@@ -108,6 +106,12 @@ export function loadMeetingData(data, capabilities, timezone) {
       return;
     }
 
+    //either tz setting or meeting tz is required
+    if (!timezone && !meeting.timezone) {
+      console.warn(`TSML no timezone: ${meeting.edit_url}`);
+      return;
+    }
+
     //meeting name is required
     if (!meeting.name) {
       meeting.name = strings.unnamed_meeting;
@@ -116,11 +120,11 @@ export function loadMeetingData(data, capabilities, timezone) {
     //conference provider
     meeting.conference_provider = meeting.conference_url
       ? formatConferenceProvider(meeting.conference_url)
-      : null;
+      : undefined;
 
     if (meeting.conference_url && !meeting.conference_provider) {
       console.warn(
-        `unknown conference_url ${meeting.conference_url}: ${meeting.edit_url}`
+        `TSML UI unknown conference_url ${meeting.conference_url}: ${meeting.edit_url}`
       );
     }
 
@@ -293,6 +297,14 @@ export function loadMeetingData(data, capabilities, timezone) {
         { zone: meeting.timezone }
       );
 
+      //check valid start time
+      if (!meeting.start.isValid) {
+        console.warn(
+          `TSML UI invalid start time (${meeting.start.invalid.explanation}): ${meeting.edit_url}`
+        );
+        return;
+      }
+
       if (meeting.end_time) {
         const endTimeParts = meeting.end_time
           .split(':')
@@ -302,13 +314,36 @@ export function loadMeetingData(data, capabilities, timezone) {
           { zone: meeting.timezone }
         );
 
+        //check valid end time
+        if (!meeting.end.isValid) {
+          console.warn(
+            `TSML UI invalid end time (${meeting.end.invalid.explanation}): ${meeting.edit_url}`
+          );
+          return;
+        }
+
         const duration = meeting.end
           .diff(meeting.start, 'minutes')
           .toObject().minutes;
         if (duration > 120) {
           console.warn(
-            `TSML-UI ${meeting.slug} is unusually long (${duration} mins): ${meeting.edit_url}`
+            `TSML UI ${meeting.slug} is unusually long (${duration} mins): ${meeting.edit_url}`
           );
+        }
+      }
+
+      //normalize timezones
+      if (timezone) {
+        if (meeting.timezone !== timezone) {
+          meeting.start = meeting.start.setZone(timezone);
+          if (meeting.end) {
+            meeting.end = meeting.end.setZone(timezone);
+          }
+        }
+      } else {
+        meeting.start = meeting.start.setZone('local');
+        if (meeting.end) {
+          meeting.end = meeting.end.setZone('local');
         }
       }
 

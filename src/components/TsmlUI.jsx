@@ -16,7 +16,7 @@ import {
   translateGoogleSheet,
 } from '../helpers';
 
-export default function TsmlUI({ json, mapbox, google, timezone }) {
+export default function TsmlUI({ src, mapbox, google, timezone }) {
   const [state, setState] = useState({
     capabilities: {
       coordinates: false,
@@ -76,7 +76,7 @@ export default function TsmlUI({ json, mapbox, google, timezone }) {
     };
   }, []);
 
-  //load data once from json
+  //load data once
   if (state.loading) {
     console.log(
       'TSML UI meeting finder: https://github.com/code4recovery/tsml-ui'
@@ -84,7 +84,7 @@ export default function TsmlUI({ json, mapbox, google, timezone }) {
 
     const input = getQueryString();
 
-    if (!json) {
+    if (!src) {
       setState({
         ...state,
         error: 'Configuration error: a data source must be specified.',
@@ -92,8 +92,8 @@ export default function TsmlUI({ json, mapbox, google, timezone }) {
         ready: true,
       });
     } else {
-      const sheetId = json.startsWith('https://docs.google.com/spreadsheets/d/')
-        ? json.split('/')[5]
+      const sheetId = src.startsWith('https://docs.google.com/spreadsheets/d/')
+        ? src.split('/')[5]
         : undefined;
 
       //google sheet
@@ -105,16 +105,16 @@ export default function TsmlUI({ json, mapbox, google, timezone }) {
             loading: false,
           });
         }
-        json = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/A1:ZZ?key=${google}`;
+        src = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/A1:ZZ?key=${google}`;
       }
 
       //cache busting
-      if (json.endsWith('.json') && input.meeting) {
-        json = `${json}?${new Date().getTime()}`;
+      if (src.endsWith('.json') && input.meeting) {
+        src = `${src}?${new Date().getTime()}`;
       }
 
       //fetch json data file and build indexes
-      fetch(json)
+      fetch(src)
         .then(res => (res.ok ? res.json() : Promise.reject(res.status)))
         .then(data => {
           if (sheetId) {
