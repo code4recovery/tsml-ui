@@ -59,6 +59,8 @@ If you are only listing meetings in a single timezone, eg Philadelphia, PA, then
 
 However if your site lists meetings in a variety of timezones, and you have a timezone key/column in your meeting data, then you may omit the `data-timezone` attribute and times will be translated into the user's timezone.
 
+Note: The WordPress plugin 12 Step Meeting List does not yet support timezone keys in meeting data.
+
 ### How are metatypes like "Active" and "Online" calculated?
 
 Metatypes are types that are not specified explicitly in the data, they are inferred from the data based on this logic:
