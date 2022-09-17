@@ -333,14 +333,7 @@ export function loadMeetingData(data, capabilities, timezone) {
       }
 
       //normalize timezones
-      if (timezone) {
-        if (meeting.timezone !== timezone) {
-          meeting.start = meeting.start.setZone(timezone);
-          if (meeting.end) {
-            meeting.end = meeting.end.setZone(timezone);
-          }
-        }
-      } else {
+      if (!timezone) {
         meeting.start = meeting.start.setZone('local');
         if (meeting.end) {
           meeting.end = meeting.end.setZone('local');

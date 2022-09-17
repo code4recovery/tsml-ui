@@ -22,7 +22,6 @@ Here is an example of extending the `tsml_react_config` object to include a defi
 
 ```js
 var tsml_react_config = {
-  timezone: 'Pacific/Honolulu',
   strings: {
     en: {
       types: {
@@ -53,6 +52,12 @@ var tsml_react_config = {
 ```
 
 ## Frequently asked questions
+
+### How do timezones work?
+
+If you are only listing meetings in a single timezone, eg Philadelphia, PA, then you should specify a `data-timezone` attribute in your embed code. This must be in the proper [IANA timezone format](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) e.g. `America/New_York`. TSML UI will assume that any meetings without a specified timezone are in that zone.
+
+However if your site lists meetings in a variety of timezones, and you have a timezone key/column in your meeting data, then you may omit the `data-timezone` attribute and times will be translated into the user's timezone.
 
 ### How are metatypes like "Active" and "Online" calculated?
 

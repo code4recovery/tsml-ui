@@ -74,13 +74,6 @@ export default function Meeting({
   //set page title
   document.title = meeting.name;
 
-  //format time string (duration? or appointment?)
-  const timeString = meeting.start
-    ? `${meeting.start.toFormat('cccc t')}${
-        meeting.end ? ` – ${meeting.end.toFormat('t')}` : ''
-      }`
-    : strings.appointment;
-
   //feedback URL link
   if (!meeting.feedback_url && feedback_emails.length) {
     meeting.feedback_url = formatFeedbackEmail(
@@ -223,7 +216,18 @@ export default function Meeting({
           <div className="list-group">
             <div className="d-grid gap-2 list-group-item py-3">
               <h2 className="h5">{strings.meeting_information}</h2>
-              <p>{timeString}</p>
+              <p>{formatTime(meeting.start, meeting.end)}</p>
+
+              {meeting.start.zoneName !== meeting.timezone && (
+                <p className="text-muted">
+                  (
+                  {formatTime(
+                    meeting.start.setZone(meeting.timezone),
+                    meeting.end.setZone(meeting.timezone)
+                  )}
+                  )
+                </p>
+              )}
               {state.capabilities.type && meeting.types && (
                 <ul className="ms-4">
                   {meeting.types
@@ -457,6 +461,23 @@ function formatWeekdays(weekday, slug, state, setState) {
       </ol>
     </div>
   ));
+}
+
+//format time string (duration? or appointment?)
+function formatTime(start, end) {
+  if (!start) {
+    return strings.appointment;
+  }
+
+  if (end) {
+    if (start.weekday === end.weekday) {
+      return `${start.toFormat('cccc t')} – ${end.toFormat('t ZZZZ')}`;
+    }
+
+    return `${start.toFormat('cccc t')} – ${end.toFormat('cccc t ZZZZ')}`;
+  }
+
+  return start.toFormat('cccc t ZZZZ');
 }
 
 //add or remove an "edit meeting" link on WordPress
