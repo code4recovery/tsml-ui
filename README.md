@@ -55,7 +55,7 @@ var tsml_react_config = {
 
 ### How do timezones work?
 
-If you are only listing meetings in a single timezone, eg Philadelphia, PA, then you should specify a `data-timezone` attribute in your embed code. This must be in the proper [IANA timezone format](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) e.g. `America/New_York`. TSML UI will assume that any meetings without a specified timezone are in that zone.
+If you are only listing meetings in a single timezone, e.g. Philadelphia, PA, then you should specify a `data-timezone` attribute in your embed code. This must be in the proper [IANA timezone format](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) e.g. `America/New_York`. TSML UI will assume that any meetings without a specified timezone are in that zone.
 
 However if your site lists meetings in a variety of timezones, and you have a timezone key/column in your meeting data, then you may omit the `data-timezone` attribute and times will be translated into the user's timezone.
 
