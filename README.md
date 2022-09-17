@@ -88,11 +88,3 @@ Not yet! Please open a pull request and walk us through the process of adding it
 Pull requests are welcome. To get started, clone this repository, run `npm i`, and point your web root at the `public` folder.
 
 While developing, run `npx mix watch` to compile assets as you edit them. When you're ready to commit, run `npx mix --production` to minify them for production.
-
-## Changelog
-
-| Version | Date         | Changes                                                                   |
-| ------- | ------------ | ------------------------------------------------------------------------- |
-| 1.4.2   | Sep 17, 2022 | Timezone improvements                                                     |
-| 1.4.1   | Sep 5, 2022  | Google Sheet support<br/>Better error handling<br/>Mobile layout tweaks   |
-| 1.4     | Sep 4, 2022  | Replaced `moment-timezone` with `luxon`<br/>Restyled in-progress meetings |

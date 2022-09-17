@@ -218,7 +218,7 @@ export default function Meeting({
               <h2 className="h5">{strings.meeting_information}</h2>
               <p>{formatTime(meeting.start, meeting.end)}</p>
 
-              {meeting.start.zoneName !== meeting.timezone && (
+              {meeting.start && meeting.start.zoneName !== meeting.timezone && (
                 <p className="text-muted">
                   (
                   {formatTime(

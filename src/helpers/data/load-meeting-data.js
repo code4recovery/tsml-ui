@@ -510,15 +510,11 @@ export function loadMeetingData(data, capabilities, timezone) {
   }
 
   //determine search modes
-  if (capabilities.coordinates) {
-    if (
-      navigator.geolocation &&
-      (window.location.protocol === 'https:' ||
-        window.location.hostname === 'localhost')
-    ) {
-      capabilities.geolocation = true;
-    }
-  }
+  capabilities.geolocation =
+    navigator.geolocation &&
+    capabilities.coordinates &&
+    (window.location.protocol === 'https:' ||
+      window.location.hostname === 'localhost');
 
   return [meetings, indexes, capabilities];
 }
