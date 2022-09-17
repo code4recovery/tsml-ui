@@ -25,6 +25,11 @@ export function translateGoogleSheet(data, sheetId) {
       meeting[header] = row[index];
     });
 
+    //edit url link
+    meeting.edit_url = `https://docs.google.com/spreadsheets/d/${sheetId}/edit#gid=0&range=${
+      index + 2
+    }:${index + 2}+`;
+
     //convert time to HH:MM
     if (meeting.time) {
       const time = DateTime.fromFormat(meeting.time, 'h:mm a', {
@@ -35,7 +40,7 @@ export function translateGoogleSheet(data, sheetId) {
       } else {
         meeting.time = undefined;
         console.warn(
-          `TSML UI error parsing ${meeting.time}: ${time.invalidReason}`
+          `TSML UI error parsing ${meeting.time} (${time.invalidExplanation}): ${meeting.edit_url}`
         );
       }
     }
@@ -48,18 +53,10 @@ export function translateGoogleSheet(data, sheetId) {
       } else {
         meeting.end_time = undefined;
         console.warn(
-          `TSML UI error parsing ${meeting.end_time}: ${end_time.invalidReason}`
+          `TSML UI error parsing ${meeting.end_time} (${end_time.invalidExplanation}): ${meeting.edit_url}`
         );
       }
     }
-
-    //types
-    meeting.types = meeting.types.split(',').map(e => e.trim());
-
-    //edit url link
-    meeting.edit_url = `https://docs.google.com/spreadsheets/d/${sheetId}/edit#gid=0&range=${
-      index + 2
-    }:${index + 2}+`;
 
     meetings.push(meeting);
   });

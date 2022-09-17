@@ -76,7 +76,6 @@ const defaults: TSMLReactConfig = {
     fr: fr,
   },
   times: ['morning', 'midday', 'evening', 'night'],
-  timezone: '',
   weekdays: [
     'sunday',
     'monday',
@@ -101,12 +100,12 @@ if (!Array.isArray(settings.flags)) {
 //columns can be specified to override the default
 if (
   typeof tsml_react_config === 'object' &&
-  Array.isArray(tsml_react_config?.columns)
+  Array.isArray(tsml_react_config.columns)
 ) {
   settings.columns = tsml_react_config.columns;
 }
 
-const preferredLanguage = navigator.language.substr(0, 2) as Lang;
+const preferredLanguage = navigator.language.substring(0, 2) as Lang;
 
 const language = Object.keys(settings.strings).includes(preferredLanguage)
   ? preferredLanguage

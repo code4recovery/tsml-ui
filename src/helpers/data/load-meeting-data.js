@@ -86,13 +86,11 @@ export function loadMeetingData(data, capabilities, timezone) {
   data = flattenDays(data);
 
   //loop through each entry
-  data.forEach((meeting, index) => {
+  data.forEach(meeting => {
     //strip out extra fields not in the spec
     Object.keys(meeting)
       .filter(key => !spec_properties.includes(key))
-      .forEach(key => {
-        delete meeting[key];
-      });
+      .forEach(key => delete meeting[key]);
 
     //slug is required
     if (!meeting.slug) {
@@ -116,11 +114,11 @@ export function loadMeetingData(data, capabilities, timezone) {
     //conference provider
     meeting.conference_provider = meeting.conference_url
       ? formatConferenceProvider(meeting.conference_url)
-      : null;
+      : undefined;
 
     if (meeting.conference_url && !meeting.conference_provider) {
       console.warn(
-        `unknown conference_url ${meeting.conference_url}: ${meeting.edit_url}`
+        `TSML UI unknown conference_url ${meeting.conference_url}: ${meeting.edit_url}`
       );
     }
 
@@ -213,7 +211,140 @@ export function loadMeetingData(data, capabilities, timezone) {
       capabilities.location = true;
     }
 
-    //last chance to exit. now we're going to populate some indexes with the meeting slug
+    //format latitude + longitude
+    if (meeting.latitude && meeting.longitude) {
+      if (meeting.isInPerson) {
+        capabilities.coordinates = true;
+        meeting.latitude = parseFloat(meeting.latitude);
+        meeting.longitude = parseFloat(meeting.longitude);
+      } else {
+        meeting.latitude = null;
+        meeting.longitude = null;
+      }
+    }
+
+    //format day
+    if (Number.isInteger(meeting.day)) {
+      //convert day to string if integer
+      meeting.day = meeting.day.toString();
+    } else if (meeting.day) {
+      meeting.day = meeting.day.toLowerCase();
+      if (settings.weekdays.includes(meeting.day)) {
+        meeting.day = settings.weekdays.indexOf(meeting.day).toString();
+      }
+    }
+
+    //handle day and time
+    if (meeting.day && meeting.time) {
+      //luxon uses iso day
+      const weekday = meeting.day === '0' ? '7' : meeting.day;
+      const [hour, minute] = meeting.time.split(':').map(num => parseInt(num));
+
+      //timezone
+      if (!meeting.timezone) {
+        if (timezone) {
+          meeting.timezone = timezone;
+        } else {
+          //either tz setting or meeting tz is required
+          console.warn(
+            `TSML UI ${meeting.slug} has no timezone: ${meeting.edit_url}`
+          );
+          return;
+        }
+      }
+
+      //make start/end datetimes
+      meeting.start = DateTime.fromObject(
+        { weekday, hour, minute },
+        { zone: meeting.timezone }
+      );
+
+      //check valid start time
+      if (!meeting.start.isValid) {
+        console.warn(
+          `TSML UI invalid start time (${meeting.start.invalid.explanation}): ${meeting.edit_url}`
+        );
+        return;
+      }
+
+      if (meeting.end_time) {
+        const endTimeParts = meeting.end_time
+          .split(':')
+          .map(num => parseInt(num));
+        meeting.end = DateTime.fromObject(
+          { weekday, hour: endTimeParts[0], minute: endTimeParts[1] },
+          { zone: meeting.timezone }
+        );
+
+        //check valid end time
+        if (!meeting.end.isValid) {
+          console.warn(
+            `TSML UI invalid end time (${meeting.end.invalid.explanation}): ${meeting.edit_url}`
+          );
+          return;
+        }
+
+        const duration = meeting.end
+          .diff(meeting.start, 'minutes')
+          .toObject().minutes;
+        if (duration > 120) {
+          console.warn(
+            `TSML UI ${meeting.slug} is unusually long (${duration} mins): ${meeting.edit_url}`
+          );
+        }
+      }
+
+      //normalize timezones
+      if (!timezone) {
+        meeting.start = meeting.start.setZone('local');
+        if (meeting.end) {
+          meeting.end = meeting.end.setZone('local');
+        }
+      }
+
+      //day & time indexes
+      if (meeting.isActive) {
+        //day index
+        if (!indexes.weekday.hasOwnProperty(meeting.day)) {
+          indexes.weekday[meeting.day] = {
+            key: meeting.day,
+            name:
+              strings[settings.weekdays[meeting.day]] ?? strings.appointment,
+            slugs: [],
+          };
+        }
+        indexes.weekday[meeting.day].slugs.push(meeting.slug);
+
+        //time differences for sorting
+        const minutes_midnight = meeting.start.hour * 60 + meeting.start.minute;
+        meeting.minutes_week = minutes_midnight + meeting.day * 1440;
+
+        //time index (can be multiple)
+        const times = [];
+        if (minutes_midnight >= 240 && minutes_midnight < 720) {
+          times.push(0); //morning (4am–11:59pm)
+        }
+        if (minutes_midnight >= 660 && minutes_midnight < 1020) {
+          times.push(1); //midday (11am–4:59pm)
+        }
+        if (minutes_midnight >= 960 && minutes_midnight < 1260) {
+          times.push(2); //evening (4pm–8:59pm)
+        }
+        if (minutes_midnight >= 1200 || minutes_midnight < 300) {
+          times.push(3); //night (8pm–4:59am)
+        }
+        times.forEach(time => {
+          if (!indexes.time.hasOwnProperty(time)) {
+            indexes.time[time] = {
+              key: settings.times[time],
+              name: strings[settings.times[time]],
+              slugs: [],
+            };
+          }
+          indexes.time[time].slugs.push(meeting.slug);
+        });
+      }
+    }
 
     //using array for regions now, but legacy region, sub_region, etc still supported
     //todo remove if/when tsml implements regions array format
@@ -240,108 +371,6 @@ export function loadMeetingData(data, capabilities, timezone) {
         indexes.region,
         meeting.slug
       );
-    }
-
-    //format day
-    if (Number.isInteger(meeting.day)) {
-      //convert day to string if integer
-      meeting.day = meeting.day.toString();
-    } else if (meeting.day) {
-      meeting.day = meeting.day.toLowerCase();
-      if (settings.weekdays.includes(meeting.day)) {
-        meeting.day = settings.weekdays.indexOf(meeting.day).toString();
-      }
-    }
-
-    //format latitude + longitude
-    if (meeting.latitude && meeting.longitude) {
-      if (meeting.isInPerson) {
-        capabilities.coordinates = true;
-        meeting.latitude = parseFloat(meeting.latitude);
-        meeting.longitude = parseFloat(meeting.longitude);
-      } else {
-        meeting.latitude = null;
-        meeting.longitude = null;
-      }
-    }
-
-    //handle day and time
-    if (meeting.day && meeting.time) {
-      if (meeting.isActive) {
-        //build day index
-        if (!indexes.weekday.hasOwnProperty(meeting.day)) {
-          indexes.weekday[meeting.day] = {
-            key: meeting.day,
-            name:
-              strings[settings.weekdays[meeting.day]] ?? strings.appointment,
-            slugs: [],
-          };
-        }
-        indexes.weekday[meeting.day].slugs.push(meeting.slug);
-      }
-
-      //luxon uses iso day
-      const weekday = meeting.day === '0' ? '7' : meeting.day;
-      const [hour, minute] = meeting.time.split(':').map(num => parseInt(num));
-
-      //timezone
-      if (!meeting.timezone) meeting.timezone = timezone;
-
-      //make start/end datetimes
-      meeting.start = DateTime.fromObject(
-        { weekday, hour, minute },
-        { zone: meeting.timezone }
-      );
-
-      if (meeting.end_time) {
-        const endTimeParts = meeting.end_time
-          .split(':')
-          .map(num => parseInt(num));
-        meeting.end = DateTime.fromObject(
-          { weekday, hour: endTimeParts[0], minute: endTimeParts[1] },
-          { zone: meeting.timezone }
-        );
-
-        const duration = meeting.end
-          .diff(meeting.start, 'minutes')
-          .toObject().minutes;
-        if (duration > 120) {
-          console.warn(
-            `TSML-UI ${meeting.slug} is unusually long (${duration} mins): ${meeting.edit_url}`
-          );
-        }
-      }
-
-      //build time index (can be multiple)
-      if (meeting.isActive) {
-        //time differences for sorting
-        const minutes_midnight = meeting.start.hour * 60 + meeting.start.minute;
-        meeting.minutes_week = minutes_midnight + meeting.day * 1440;
-
-        const times = [];
-        if (minutes_midnight >= 240 && minutes_midnight < 720) {
-          times.push(0); //morning (4am–11:59pm)
-        }
-        if (minutes_midnight >= 660 && minutes_midnight < 1020) {
-          times.push(1); //midday (11am–4:59pm)
-        }
-        if (minutes_midnight >= 960 && minutes_midnight < 1260) {
-          times.push(2); //evening (4pm–8:59pm)
-        }
-        if (minutes_midnight >= 1200 || minutes_midnight < 300) {
-          times.push(3); //night (8pm–4:59am)
-        }
-        times.forEach(time => {
-          if (!indexes.time.hasOwnProperty(time)) {
-            indexes.time[time] = {
-              key: settings.times[time],
-              name: strings[settings.times[time]],
-              slugs: [],
-            };
-          }
-          indexes.time[time].slugs.push(meeting.slug);
-        });
-      }
     }
 
     //clean up and sort types
@@ -481,15 +510,11 @@ export function loadMeetingData(data, capabilities, timezone) {
   }
 
   //determine search modes
-  if (capabilities.coordinates) {
-    if (
-      navigator.geolocation &&
-      (window.location.protocol === 'https:' ||
-        window.location.hostname === 'localhost')
-    ) {
-      capabilities.geolocation = true;
-    }
-  }
+  capabilities.geolocation =
+    navigator.geolocation &&
+    capabilities.coordinates &&
+    (window.location.protocol === 'https:' ||
+      window.location.hostname === 'localhost');
 
   return [meetings, indexes, capabilities];
 }
