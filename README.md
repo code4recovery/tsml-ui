@@ -91,7 +91,8 @@ While developing, run `npx mix watch` to compile assets as you edit them. When y
 
 ## Changelog
 
-| Version | Date        | Changes                                                                   |
-| ------- | ----------- | ------------------------------------------------------------------------- |
-| 1.4.1   | Sep 5, 2022 | Google Sheet support<br/>Better error handling<br/>Mobile layout tweaks   |
-| 1.4     | Sep 4, 2022 | Replaced `moment-timezone` with `luxon`<br/>Restyled in-progress meetings |
+| Version | Date         | Changes                                                                   |
+| ------- | ------------ | ------------------------------------------------------------------------- |
+| 1.4.2   | Sep 17, 2022 | Timezone improvements                                                     |
+| 1.4.1   | Sep 5, 2022  | Google Sheet support<br/>Better error handling<br/>Mobile layout tweaks   |
+| 1.4     | Sep 4, 2022  | Replaced `moment-timezone` with `luxon`<br/>Restyled in-progress meetings |
