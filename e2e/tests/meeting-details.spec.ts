@@ -36,7 +36,7 @@ test.describe('Meeting Details', () => {
         : 'https://www.google.com/maps/dir/?api=1&destination=37.15777%2C-121.98421'
     );
 
-    await expect(time).toHaveText('Thursday 7:30 PM – 8:30 PM');
+    await expect(time).toHaveText('Thursday 7:30 PM – 8:30 PM PDT');
 
     await expect(await types.allTextContents()).toStrictEqual([
       'Birthday',
