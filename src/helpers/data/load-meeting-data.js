@@ -106,12 +106,6 @@ export function loadMeetingData(data, capabilities, timezone) {
       return;
     }
 
-    //either tz setting or meeting tz is required
-    if (!timezone && !meeting.timezone) {
-      console.warn(`TSML no timezone: ${meeting.edit_url}`);
-      return;
-    }
-
     //meeting name is required
     if (!meeting.name) {
       meeting.name = strings.unnamed_meeting;
@@ -217,33 +211,16 @@ export function loadMeetingData(data, capabilities, timezone) {
       capabilities.location = true;
     }
 
-    //last chance to exit. now we're going to populate some indexes with the meeting slug
-
-    //using array for regions now, but legacy region, sub_region, etc still supported
-    //todo remove if/when tsml implements regions array format
-    if (!meeting.regions || !Array.isArray(meeting.regions)) {
-      meeting.regions = [];
-      if (meeting.region) {
-        meeting.regions.push(meeting.region);
-        if (meeting.sub_region) {
-          meeting.regions.push(meeting.sub_region);
-          if (meeting.sub_sub_region) {
-            meeting.regions.push(meeting.sub_sub_region);
-          }
-        }
-      } else if (meeting.city) {
-        meeting.regions.push(meeting.city);
+    //format latitude + longitude
+    if (meeting.latitude && meeting.longitude) {
+      if (meeting.isInPerson) {
+        capabilities.coordinates = true;
+        meeting.latitude = parseFloat(meeting.latitude);
+        meeting.longitude = parseFloat(meeting.longitude);
+      } else {
+        meeting.latitude = null;
+        meeting.longitude = null;
       }
-    }
-
-    //build region index
-    if (meeting.isActive && !!meeting.regions.length) {
-      indexes.region = populateRegionsIndex(
-        meeting.regions,
-        0,
-        indexes.region,
-        meeting.slug
-      );
     }
 
     //format day
@@ -257,39 +234,24 @@ export function loadMeetingData(data, capabilities, timezone) {
       }
     }
 
-    //format latitude + longitude
-    if (meeting.latitude && meeting.longitude) {
-      if (meeting.isInPerson) {
-        capabilities.coordinates = true;
-        meeting.latitude = parseFloat(meeting.latitude);
-        meeting.longitude = parseFloat(meeting.longitude);
-      } else {
-        meeting.latitude = null;
-        meeting.longitude = null;
-      }
-    }
-
     //handle day and time
     if (meeting.day && meeting.time) {
-      if (meeting.isActive) {
-        //build day index
-        if (!indexes.weekday.hasOwnProperty(meeting.day)) {
-          indexes.weekday[meeting.day] = {
-            key: meeting.day,
-            name:
-              strings[settings.weekdays[meeting.day]] ?? strings.appointment,
-            slugs: [],
-          };
-        }
-        indexes.weekday[meeting.day].slugs.push(meeting.slug);
-      }
-
       //luxon uses iso day
       const weekday = meeting.day === '0' ? '7' : meeting.day;
       const [hour, minute] = meeting.time.split(':').map(num => parseInt(num));
 
       //timezone
-      if (!meeting.timezone) meeting.timezone = timezone;
+      if (!meeting.timezone) {
+        if (timezone) {
+          meeting.timezone = timezone;
+        } else {
+          //either tz setting or meeting tz is required
+          console.warn(
+            `TSML UI ${meeting.slug} has no timezone: ${meeting.edit_url}`
+          );
+          return;
+        }
+      }
 
       //make start/end datetimes
       meeting.start = DateTime.fromObject(
@@ -340,12 +302,24 @@ export function loadMeetingData(data, capabilities, timezone) {
         }
       }
 
-      //build time index (can be multiple)
+      //day & time indexes
       if (meeting.isActive) {
+        //day index
+        if (!indexes.weekday.hasOwnProperty(meeting.day)) {
+          indexes.weekday[meeting.day] = {
+            key: meeting.day,
+            name:
+              strings[settings.weekdays[meeting.day]] ?? strings.appointment,
+            slugs: [],
+          };
+        }
+        indexes.weekday[meeting.day].slugs.push(meeting.slug);
+
         //time differences for sorting
         const minutes_midnight = meeting.start.hour * 60 + meeting.start.minute;
         meeting.minutes_week = minutes_midnight + meeting.day * 1440;
 
+        //time index (can be multiple)
         const times = [];
         if (minutes_midnight >= 240 && minutes_midnight < 720) {
           times.push(0); //morning (4am–11:59pm)
@@ -370,6 +344,33 @@ export function loadMeetingData(data, capabilities, timezone) {
           indexes.time[time].slugs.push(meeting.slug);
         });
       }
+    }
+
+    //using array for regions now, but legacy region, sub_region, etc still supported
+    //todo remove if/when tsml implements regions array format
+    if (!meeting.regions || !Array.isArray(meeting.regions)) {
+      meeting.regions = [];
+      if (meeting.region) {
+        meeting.regions.push(meeting.region);
+        if (meeting.sub_region) {
+          meeting.regions.push(meeting.sub_region);
+          if (meeting.sub_sub_region) {
+            meeting.regions.push(meeting.sub_sub_region);
+          }
+        }
+      } else if (meeting.city) {
+        meeting.regions.push(meeting.city);
+      }
+    }
+
+    //build region index
+    if (meeting.isActive && !!meeting.regions.length) {
+      indexes.region = populateRegionsIndex(
+        meeting.regions,
+        0,
+        indexes.region,
+        meeting.slug
+      );
     }
 
     //clean up and sort types
