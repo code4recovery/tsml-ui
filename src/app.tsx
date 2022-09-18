@@ -3,15 +3,26 @@ import ReactDOM from 'react-dom';
 import { TsmlUI } from './components';
 
 //locate element
-const element = document.getElementById('tsml-ui');
+let element = document.getElementById('tsml-ui');
+
+//legacy support, can remove once sites have had a chance to migrate (implemented Jul 1 2021)
+if (!element) {
+  [element] = document.getElementsByTagName(
+    'meetings'
+  ) as unknown as HTMLElement[];
+}
 
 if (element) {
   ReactDOM.render(
     <TsmlUI
-      google={element.getAttribute('data-google')}
-      mapbox={element.getAttribute('data-mapbox')}
-      src={element.getAttribute('data-src')}
-      timezone={element.getAttribute('data-timezone')}
+      {...{
+        src: element.getAttribute('data-src') || element.getAttribute('src'),
+        mapbox:
+          element.getAttribute('data-mapbox') || element.getAttribute('mapbox'),
+        google:
+          element.getAttribute('data-google') || element.getAttribute('google'),
+        timezone: element.getAttribute('data-timezone'),
+      }}
     />,
     element
   );
