@@ -74,14 +74,6 @@ export default function Meeting({
   //set page title
   document.title = meeting.name;
 
-  //feedback URL link
-  if (!meeting.feedback_url && feedback_emails.length) {
-    meeting.feedback_url = formatFeedbackEmail(
-      settings.feedback_emails,
-      meeting
-    );
-  }
-
   const contactButtons = [];
 
   if (meeting.email) {
