@@ -127,6 +127,27 @@ export default function Meeting({
       text: strings.contribute_with.replace('%service%', 'PayPal'),
     });
   }
+  for (let i = 1; i < 4; i++) {
+    if (!meeting[`contact_${i}_name`]) continue;
+    if (meeting[`contact_${i}_email`])
+      contactButtons.push({
+        href: `mailto:${meeting[`contact_${i}_email`]}`,
+        icon: 'email',
+        text: strings.contact_email.replace(
+          '%contact%',
+          meeting[`contact_${i}_name`]
+        ),
+      });
+    if (meeting[`contact_${i}_phone`])
+      contactButtons.push({
+        href: `tel:${meeting[`contact_${i}_phone`]}`,
+        icon: 'phone',
+        text: strings.contact_call.replace(
+          '%contact%',
+          meeting[`contact_${i}_name`]
+        ),
+      });
+  }
 
   const locationWeekdays = Info.weekdays()
     .map((weekday, index) => ({
