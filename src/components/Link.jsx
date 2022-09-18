@@ -26,6 +26,7 @@ export default function Link({ state, meeting, setState }) {
         href={formatUrl({ ...state.input, meeting: meeting.slug })}
         onClick={e => {
           e.preventDefault();
+          e.stopPropagation();
           setState({
             ...state,
             input: {

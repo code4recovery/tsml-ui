@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
 
 import {
@@ -10,20 +10,41 @@ import {
 import Button from './Button';
 import Link from './Link';
 
-export default function Table({ state, setState, filteredSlugs, inProgress }) {
+export default function Table({
+  state,
+  setState,
+  filteredSlugs = [],
+  inProgress = [],
+  listButtons = false,
+}) {
   const meetingsPerPage = 10;
+  const supported_columns = [
+    'address',
+    'distance',
+    'location',
+    'location_group',
+    'name',
+    'region',
+    'time',
+  ];
   const [limit, setLimit] = useState(meetingsPerPage);
   const [showInProgress, setShowInProgress] = useState(false);
+  const { distance, location, region } = state.capabilities;
+
+  //manage classes
+  useEffect(() => {
+    document.body.classList.add('tsml-ui-table');
+    return () => {
+      document.body.classList.remove('tsml-ui-table');
+    };
+  }, []);
 
   //show columns based on capabilities
   const columns = settings.columns
-    .filter(column => column !== 'region' || state.capabilities.region)
-    .filter(
-      column =>
-        (column !== 'location' && column !== 'location_group') ||
-        state.capabilities.location
-    )
-    .filter(column => column !== 'distance' || state.capabilities.distance);
+    .filter(col => supported_columns.includes(col))
+    .filter(col => region || col !== 'region')
+    .filter(col => distance || col !== 'distance')
+    .filter(col => location || !['location', 'location_group'].includes(col));
 
   const getValue = (meeting, key) => {
     if (key === 'address') {
@@ -31,9 +52,7 @@ export default function Table({ state, setState, filteredSlugs, inProgress }) {
       if (meeting.isInPerson) {
         buttons.push({
           className: 'in-person',
-          href: settings.show.listButtons
-            ? formatDirectionsUrl(meeting)
-            : undefined,
+          href: listButtons ? formatDirectionsUrl(meeting) : undefined,
           icon: 'geo',
           text: meeting.address,
         });
@@ -41,7 +60,7 @@ export default function Table({ state, setState, filteredSlugs, inProgress }) {
       if (meeting.conference_provider) {
         buttons.push({
           className: 'online',
-          href: settings.show.listButtons ? meeting.conference_url : undefined,
+          href: listButtons ? meeting.conference_url : undefined,
           icon: 'camera',
           text: meeting.conference_provider,
         });
@@ -49,9 +68,7 @@ export default function Table({ state, setState, filteredSlugs, inProgress }) {
       if (meeting.conference_phone) {
         buttons.push({
           className: 'online',
-          href: settings.show.listButtons
-            ? `tel:${meeting.conference_phone}`
-            : undefined,
+          href: listButtons ? `tel:${meeting.conference_phone}` : undefined,
           icon: 'phone',
           text: strings.phone,
         });
@@ -70,13 +87,15 @@ export default function Table({ state, setState, filteredSlugs, inProgress }) {
           ))}
         </div>
       );
-    } else if (key === 'distance') {
-      return meeting.distance ? (
+    } else if (key === 'distance' && meeting.distance) {
+      return (
         <>
           {meeting.distance}
           <small className="ms-1 text-muted">{settings.distance_unit}</small>
         </>
-      ) : null;
+      );
+    } else if (key === 'location') {
+      return meeting.location;
     } else if (key === 'location_group') {
       return meeting.isInPerson ? meeting.location : meeting.group;
     } else if (key === 'name' && meeting.slug) {
@@ -86,25 +105,28 @@ export default function Table({ state, setState, filteredSlugs, inProgress }) {
     } else if (key === 'time') {
       return meeting.start ? (
         <time className="d-flex flex-column flex-lg-row gap-lg-1">
-          <span className="text-nowrap">{meeting.start.format('h:mm a')}</span>
-          <span className="text-nowrap">
-            {strings[settings.weekdays[meeting.start?.format('d')]]}
+          <span className="text-nowrap text-lowercase">
+            {meeting.start.toFormat('t')}
           </span>
+          <span className="text-nowrap">{meeting.start.toFormat('cccc')}</span>
         </time>
       ) : (
         strings.appointment
       );
     }
-    return meeting[key];
+    return null;
   };
 
   const Row = ({ slug }) => {
     const meeting = state.meetings[slug];
     return (
       <tr
-        className="d-block d-md-table-row"
+        className={cx(
+          { 'cursor-pointer': !listButtons },
+          'd-block d-md-table-row'
+        )}
         onClick={() => {
-          if (settings.show.listButtons) return;
+          if (listButtons) return;
           setState({
             ...state,
             input: {
@@ -128,13 +150,13 @@ export default function Table({ state, setState, filteredSlugs, inProgress }) {
       <div className="row">
         <table
           className={cx('table table-striped flex-grow-1 my-0', {
-            'clickable-rows': !settings.show.listButtons,
+            'clickable-rows': !listButtons,
           })}
         >
           <thead>
             <tr className="d-none d-md-table-row">
               {columns.map((column, index) => (
-                <th key={index} className={column}>
+                <th key={index} className={cx('pt-0', column)}>
                   {strings[column]}
                 </th>
               ))}
@@ -146,10 +168,13 @@ export default function Table({ state, setState, filteredSlugs, inProgress }) {
                 inProgress.map((slug, index) => <Row slug={slug} key={index} />)
               ) : (
                 <tr>
-                  <td colSpan={columns.length}>
-                    <a
+                  <td
+                    className="p-2 text-center rounded-0"
+                    colSpan={columns.length}
+                  >
+                    <button
                       onClick={() => setShowInProgress(true)}
-                      className="d-block text-center py-3 py-md-1"
+                      className="alert-link bg-transparent border-0 d-block fw-normal mx-auto p-2 text-center text-decoration-underline w-100"
                     >
                       {inProgress.length === 1
                         ? strings.in_progress_single
@@ -157,7 +182,7 @@ export default function Table({ state, setState, filteredSlugs, inProgress }) {
                             '%count%',
                             inProgress.length
                           )}
-                    </a>
+                    </button>
                   </td>
                 </tr>
               )}

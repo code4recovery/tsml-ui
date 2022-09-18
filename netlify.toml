@@ -1,0 +1,6 @@
+[build]
+  publish = "public/"
+  command = "npx mix --production"
+
+[[plugins]]
+  package = "@netlify/plugin-lighthouse"

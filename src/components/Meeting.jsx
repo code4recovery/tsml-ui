@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Info } from 'luxon';
 
 import {
   formatClasses as cx,
@@ -14,7 +15,12 @@ import Icon from './Icon';
 import Link from './Link';
 import Map from './Map';
 
-export default function Meeting({ state, setState, mapbox }) {
+export default function Meeting({
+  state,
+  setState,
+  mapbox,
+  feedback_emails = [],
+}) {
   //open types
   const [define, setDefine] = useState(null);
 
@@ -23,8 +29,42 @@ export default function Meeting({ state, setState, mapbox }) {
 
   //scroll to top when you navigate to this page
   useEffect(() => {
-    document.getElementById('tsml-ui')?.scrollIntoView();
+    const el = document.getElementById('tsml-ui');
+    if (el) {
+      const headerHeight = Math.max(
+        0,
+        ...[...document.body.getElementsByTagName('*')]
+          .filter(
+            x =>
+              getComputedStyle(x, null).getPropertyValue('position') ===
+                'fixed' && x.offsetTop < 100
+          )
+          .map(x => x.offsetTop + x.offsetHeight)
+      );
+      if (headerHeight) {
+        el.style.scrollMarginTop = `${headerHeight}px`;
+      }
+      el.scrollIntoView();
+    }
+
+    //log edit_url
+    if (meeting.edit_url) {
+      console.log(`TSML UI edit ${meeting.name}: ${meeting.edit_url}`);
+      wordPressEditLink(meeting.edit_url);
+    }
+
+    return () => {
+      wordPressEditLink();
+    };
   }, [state.input.meeting]);
+
+  //manage classes
+  useEffect(() => {
+    document.body.classList.add('tsml-ui-meeting');
+    return () => {
+      document.body.classList.remove('tsml-ui-meeting');
+    };
+  }, []);
 
   //directions URL link
   const directionsUrl = meeting.isInPerson
@@ -34,14 +74,13 @@ export default function Meeting({ state, setState, mapbox }) {
   //set page title
   document.title = meeting.name;
 
-  //format time string (duration? or appointment?)
-  const timeString = meeting.start
-    ? strings[settings.weekdays[meeting.start.format('d')]].concat(
-        ' ',
-        meeting.start.format('h:mm a'),
-        meeting.end ? ` – ${meeting.end.format('h:mm a')}` : ''
-      )
-    : strings.appointment;
+  //feedback URL link
+  if (!meeting.feedback_url && feedback_emails.length) {
+    meeting.feedback_url = formatFeedbackEmail(
+      settings.feedback_emails,
+      meeting
+    );
+  }
 
   const contactButtons = [];
 
@@ -89,38 +128,54 @@ export default function Meeting({ state, setState, mapbox }) {
     });
   }
 
-  const locationWeekdays = settings.weekdays.map((weekday, index) => ({
-    name: strings[weekday],
-    meetings: Object.values(state.meetings)
-      .filter(m => m.start?.day() === index)
-      .filter(
-        m =>
-          meeting.isInPerson &&
-          !meeting.approximate &&
-          m.isInPerson &&
-          m.formatted_address === meeting.formatted_address
-      )
-      .sort((a, b) => a.start - b.start),
-  }));
+  const locationWeekdays = Info.weekdays()
+    .map((weekday, index) => ({
+      name: weekday,
+      meetings: Object.values(state.meetings)
+        .filter(m => m.start?.weekday === index + 1)
+        .filter(
+          m =>
+            meeting.isInPerson &&
+            m.isInPerson &&
+            m.formatted_address === meeting.formatted_address
+        )
+        .sort((a, b) => a.start - b.start),
+    }))
+    .filter(e => e.meetings.length);
 
-  const groupWeekdays = settings.weekdays.map((weekday, index) => ({
-    name: strings[weekday],
-    meetings: Object.values(state.meetings)
-      .filter(m => m.start?.day() === index)
-      .filter(
-        m =>
-          meeting.group &&
-          (m.isOnline || m.isInPerson) &&
-          m.group === meeting.group
-      )
-      .sort((a, b) => a.start - b.start),
-  }));
+  //don't display if only one meeting
+  if (
+    locationWeekdays.length === 1 &&
+    locationWeekdays[0].meetings.length === 1
+  ) {
+    locationWeekdays.splice(0, 1);
+  }
+
+  const groupWeekdays = Info.weekdays()
+    .map((weekday, index) => ({
+      name: weekday,
+      meetings: Object.values(state.meetings)
+        .filter(m => m.start?.weekday === index + 1)
+        .filter(
+          m =>
+            meeting.group &&
+            (m.isOnline || m.isInPerson) &&
+            m.group === meeting.group
+        )
+        .sort((a, b) => a.start - b.start),
+    }))
+    .filter(e => e.meetings.length);
+
+  //don't display if only one meeting
+  if (groupWeekdays.length === 1 && groupWeekdays[0].meetings.length === 1) {
+    groupWeekdays.splice(0, 1);
+  }
 
   return (
     <div
       className={cx('d-flex flex-column meeting', {
         'in-person': meeting.isInPerson,
-        'inactive': !meeting.isInPerson && !meeting.isOnline,
+        'inactive': !meeting.isActive,
         'online': meeting.isOnline,
       })}
     >
@@ -161,7 +216,18 @@ export default function Meeting({ state, setState, mapbox }) {
           <div className="list-group">
             <div className="d-grid gap-2 list-group-item py-3">
               <h2 className="h5">{strings.meeting_information}</h2>
-              <p>{timeString}</p>
+              <p>{formatTime(meeting.start, meeting.end)}</p>
+
+              {meeting.start && meeting.start.zoneName !== meeting.timezone && (
+                <p className="text-muted">
+                  (
+                  {formatTime(
+                    meeting.start.setZone(meeting.timezone),
+                    meeting.end.setZone(meeting.timezone)
+                  )}
+                  )
+                </p>
+              )}
               {state.capabilities.type && meeting.types && (
                 <ul className="ms-4">
                   {meeting.types
@@ -169,42 +235,40 @@ export default function Meeting({ state, setState, mapbox }) {
                     .sort((a, b) =>
                       strings.types[a].localeCompare(strings.types[b])
                     )
-                    .map((type, index) =>
-                      strings.type_descriptions[type] ? (
-                        <li
-                          className="cursor-pointer m-0"
-                          key={index}
-                          onClick={() =>
-                            setDefine(define === type ? null : type)
-                          }
-                        >
-                          <div className="d-flex align-items-center gap-2">
-                            <span>{strings.types[type]}</span>
-                            <Icon
-                              icon="info"
-                              size={13}
-                              className={
-                                define === type ? 'text-muted' : undefined
-                              }
-                            />
-                          </div>
-                          {define === type && (
-                            <small className="d-block mt-1 mb-2">
-                              {strings.type_descriptions[type]}
-                            </small>
-                          )}
-                        </li>
-                      ) : (
-                        <li className="m-0" key={index}>
-                          {strings.types[type]}
-                        </li>
-                      )
-                    )}
+                    .map((type, index) => (
+                      <li className="m-0" key={index}>
+                        {strings.type_descriptions?.[type] ? (
+                          <button
+                            className="d-flex flex-column bg-transparent border-0 p-0 text-start text-reset"
+                            onClick={() =>
+                              setDefine(define === type ? null : type)
+                            }
+                          >
+                            <div className="d-flex align-items-center gap-2">
+                              <span>{strings.types[type]}</span>
+                              <Icon
+                                icon="info"
+                                size={13}
+                                className={
+                                  define === type ? 'text-muted' : undefined
+                                }
+                              />
+                            </div>
+                            {define === type && (
+                              <small className="d-block mb-2">
+                                {strings.type_descriptions[type]}
+                              </small>
+                            )}
+                          </button>
+                        ) : (
+                          strings.types[type]
+                        )}
+                      </li>
+                    ))}
                 </ul>
               )}
               {meeting.notes && <Paragraphs text={meeting.notes} />}
-              {(meeting.isInPerson ||
-                meeting.isOnline ||
+              {(meeting.isActive ||
                 (!meeting.group && !!contactButtons.length)) && (
                 <div className="d-grid gap-3 mt-2">
                   {meeting.conference_provider && (
@@ -239,15 +303,13 @@ export default function Meeting({ state, setState, mapbox }) {
                       )}
                     </div>
                   )}
-                  {meeting.start &&
-                    meeting.timezone &&
-                    (meeting.isInPerson || meeting.isOnline) && (
-                      <Button
-                        onClick={() => formatIcs(meeting)}
-                        icon="calendar"
-                        text={strings.add_to_calendar}
-                      />
-                    )}
+                  {meeting.start && meeting.isActive && (
+                    <Button
+                      onClick={() => formatIcs(meeting)}
+                      icon="calendar"
+                      text={strings.add_to_calendar}
+                    />
+                  )}
                   {!meeting.group &&
                     contactButtons.map((button, index) => (
                       <Button {...button} key={index} />
@@ -262,7 +324,7 @@ export default function Meeting({ state, setState, mapbox }) {
                     'text-decoration-line-through text-muted':
                       meeting.isTempClosed,
                   },
-                  'd-grid gap-2 list-group-item py-3'
+                  'd-grid gap-2 list-group-item py-3 location'
                 )}
               >
                 {meeting.location && <h2 className="h5">{meeting.location}</h2>}
@@ -273,34 +335,42 @@ export default function Meeting({ state, setState, mapbox }) {
                 {meeting.location_notes && (
                   <Paragraphs text={meeting.location_notes} />
                 )}
-                {formatWeekdays(
-                  locationWeekdays,
-                  meeting.slug,
-                  state,
-                  setState
-                )}
+                <div className="meetings d-grid gap-2">
+                  {formatWeekdays(
+                    locationWeekdays,
+                    meeting.slug,
+                    state,
+                    setState
+                  )}
+                </div>
               </div>
             )}
             {meeting.group &&
-              (meeting.approximate ||
-                meeting.district ||
+              (meeting.district ||
                 meeting.group_notes ||
                 !!groupWeekdays.length ||
                 !!contactButtons.length) && (
-                <div className="d-grid gap-2 list-group-item py-3">
+                <div className="d-grid gap-2 list-group-item py-3 group">
                   <h2 className="h5">{meeting.group}</h2>
                   {meeting.district && <p>{meeting.district}</p>}
                   {meeting.group_notes && (
                     <Paragraphs text={meeting.group_notes} />
                   )}
-                  {meeting.group && !!contactButtons.length && (
+                  {!!contactButtons.length && (
                     <div className="d-grid gap-3 mt-2">
                       {contactButtons.map((button, index) => (
                         <Button {...button} key={index} />
                       ))}
                     </div>
                   )}
-                  {formatWeekdays(groupWeekdays, meeting.slug, state, setState)}
+                  <div className="meetings d-grid gap-2">
+                    {formatWeekdays(
+                      groupWeekdays,
+                      meeting.slug,
+                      state,
+                      setState
+                    )}
+                  </div>
                 </div>
               )}
             {meeting.updated && (
@@ -358,42 +428,82 @@ function Paragraphs({ text, className }) {
 }
 
 function formatWeekdays(weekday, slug, state, setState) {
-  return weekday
-    .filter(e => e.meetings.length)
-    .map((weekday, index) => (
-      <div key={index}>
-        <h3 className="h6 mb-1 mt-2">{weekday.name}</h3>
-        <ol className="list-unstyled">
-          {weekday.meetings.map((m, index) => (
-            <li
-              className="d-flex flex-row gap-2 justify-content-between m-0"
-              key={index}
-            >
-              <div className="text-muted text-nowrap">
-                {m.start.format('h:mm a')}
-              </div>
-              <div className="flex-grow-1">
-                {m.slug === slug && <Link meeting={m} />}
-                {m.slug !== slug && (
-                  <Link meeting={m} setState={setState} state={state} />
-                )}
-              </div>
-              <div className="align-items-start d-flex gap-1 justify-content-end pt-1">
-                {m.isInPerson && (
-                  <small className="align-items-center d-flex flex-row float-end gap-2 px-2 py-1 rounded text-sm in-person">
-                    <Icon icon="geo" size={13} />
-                  </small>
-                )}
-                {m.isOnline && (
-                  <small className="align-items-center d-flex flex-row float-end gap-2 px-2 py-1 rounded text-sm online">
-                    {m.conference_provider && <Icon icon="camera" size={13} />}
-                    {m.conference_phone && <Icon icon="phone" size={13} />}
-                  </small>
-                )}
-              </div>
-            </li>
-          ))}
-        </ol>
-      </div>
-    ));
+  return weekday.map(({ meetings, name }, index) => (
+    <div key={index}>
+      <h3 className="h6 mb-1 mt-2">{name}</h3>
+      <ol className="list-unstyled">
+        {meetings.map((m, index) => (
+          <li
+            className="d-flex flex-row gap-2 justify-content-between m-0"
+            key={index}
+          >
+            <div className="text-muted text-nowrap">
+              {m.start.toFormat('t')}
+            </div>
+            <div className="flex-grow-1">
+              {m.slug === slug ? (
+                <Link meeting={m} />
+              ) : (
+                <Link meeting={m} setState={setState} state={state} />
+              )}
+            </div>
+            <div className="align-items-start d-flex gap-1 justify-content-end pt-1">
+              {m.isInPerson && (
+                <small className="align-items-center d-flex flex-row float-end gap-2 px-2 py-1 rounded text-sm in-person">
+                  <Icon icon="geo" size={13} />
+                </small>
+              )}
+              {m.isOnline && (
+                <small className="align-items-center d-flex flex-row float-end gap-2 px-2 py-1 rounded text-sm online">
+                  {m.conference_provider && <Icon icon="camera" size={13} />}
+                  {m.conference_phone && <Icon icon="phone" size={13} />}
+                </small>
+              )}
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  ));
+}
+
+//format time string (duration? or appointment?)
+function formatTime(start, end) {
+  if (!start) {
+    return strings.appointment;
+  }
+
+  if (end) {
+    if (start.weekday === end.weekday) {
+      return `${start.toFormat('cccc t')} – ${end.toFormat('t ZZZZ')}`;
+    }
+
+    return `${start.toFormat('cccc t')} – ${end.toFormat('cccc t ZZZZ')}`;
+  }
+
+  return start.toFormat('cccc t ZZZZ');
+}
+
+//add or remove an "edit meeting" link on WordPress
+function wordPressEditLink(url) {
+  const adminBar = document.getElementById('wp-admin-bar-root-default');
+  if (!adminBar) return;
+  const editButton = document.getElementById('wp-admin-bar-edit-meeting');
+  if (url) {
+    //create link
+    const link = document.createElement('a');
+    link.setAttribute('class', 'ab-item');
+    link.setAttribute('href', url);
+    link.appendChild(document.createTextNode('Edit Meeting'));
+
+    //create button
+    const button = document.createElement('li');
+    button.setAttribute('id', 'wp-admin-bar-edit-meeting');
+    button.appendChild(link);
+
+    //add button to menu bar
+    adminBar.appendChild(button);
+  } else if (editButton) {
+    editButton.parentNode.removeChild(editButton);
+  }
 }

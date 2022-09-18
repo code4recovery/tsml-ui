@@ -26,10 +26,13 @@ export default function Map({
   //window size listener (todo figure out why height can go up but not down)
   useEffect(() => {
     const resizeListener = () => {
-      setDimensions({
-        width: mapFrame.current.offsetWidth - 2,
-        height: mapFrame.current.offsetHeight - 2,
-      });
+      const { width, height } = mapFrame.current.getBoundingClientRect();
+      if (width && height) {
+        setDimensions({
+          width: width - 2,
+          height: height - 2,
+        });
+      }
     };
     resizeListener();
     window.addEventListener('resize', resizeListener);
@@ -37,6 +40,16 @@ export default function Map({
       window.removeEventListener('resize', resizeListener);
     };
   }, []);
+
+  //manage classes
+  useEffect(() => {
+    if (!state.input?.meeting) {
+      document.body.classList.add('tsml-ui-map');
+    }
+    return () => {
+      document.body.classList.remove('tsml-ui-map');
+    };
+  }, [state.input?.meeting]);
 
   //reset bounds and locations when filteredSlugs changes
   useEffect(() => {
@@ -46,7 +59,7 @@ export default function Map({
     filteredSlugs.forEach(slug => {
       const meeting = state.meetings[slug];
 
-      if (meeting.latitude && meeting.longitude && meeting.isInPerson) {
+      if (meeting?.latitude && meeting?.longitude && meeting?.isInPerson) {
         const coords = meeting.latitude + ',' + meeting.longitude;
 
         //create a new pin
@@ -136,6 +149,7 @@ export default function Map({
                 offsetTop={-settings.map.markers.location.height}
               >
                 <div
+                  data-testid={key}
                   onClick={() => setPopup(key)}
                   style={settings.map.markers.location}
                   title={data.locations[key].name}
@@ -156,19 +170,13 @@ export default function Map({
                     {listMeetingsInPopup && (
                       <div className="list-group mb-1">
                         {data.locations[key].meetings
-                          .sort((a, b) => a.start.isAfter(b.start))
-                          .map(meeting => (
-                            <div key={meeting.slug} className="list-group-item">
+                          .sort((a, b) => a.start > b.start)
+                          .map((meeting, index) => (
+                            <div key={index} className="list-group-item">
                               <time className="d-block">
-                                {meeting.start.format('h:mm a')}
+                                {meeting.start.toFormat('t')}
                                 <span className="ms-1">
-                                  {
-                                    strings[
-                                      settings.weekdays[
-                                        meeting.start.format('d')
-                                      ]
-                                    ]
-                                  }
+                                  {meeting.start.toFormat('cccc')}
                                 </span>
                               </time>
                               <Link

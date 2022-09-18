@@ -7,17 +7,17 @@ import { Alert, Controls, Loading, Map, Meeting, Table, Title } from './';
 
 import {
   filterMeetingData,
+  formatUrl,
   getQueryString,
   loadMeetingData,
-  setMinutesNow,
-  translateNoCodeAPI,
   setQueryString,
   settings,
+  strings,
+  translateGoogleSheet,
 } from '../helpers';
 
-export default function TsmlUI({ json, mapbox, timezone }) {
+export default function TsmlUI({ src, mapbox, google, timezone }) {
   const [state, setState] = useState({
-    alert: null,
     capabilities: {
       coordinates: false,
       distance: false,
@@ -29,7 +29,6 @@ export default function TsmlUI({ json, mapbox, timezone }) {
       type: false,
       weekday: false,
     },
-    error: null,
     input: {},
     indexes: {
       distance: [],
@@ -39,7 +38,8 @@ export default function TsmlUI({ json, mapbox, timezone }) {
       weekday: [],
     },
     loading: true,
-    meetings: [],
+    meetings: {},
+    ready: false,
   });
 
   //enable forward & back buttons
@@ -48,69 +48,137 @@ export default function TsmlUI({ json, mapbox, timezone }) {
       setState({ ...state, input: getQueryString(window.location.search) });
     };
     window.addEventListener('popstate', popstateListener);
+
+    //update canonical
+    let canonical = document.querySelector('link[rel="canonical"]');
+    if (!canonical) {
+      canonical = document.createElement('link');
+      canonical.setAttribute('rel', 'canonical');
+      document.getElementsByTagName('head')[0]?.appendChild(canonical);
+    }
+    canonical.setAttribute(
+      'href',
+      formatUrl(
+        state.input.meeting ? { meeting: state.input.meeting } : state.input
+      )
+    );
+
     return () => {
       window.removeEventListener('popstate', popstateListener);
     };
   }, [state, window.location.search]);
 
-  //load data once from json
+  //manage classes
+  useEffect(() => {
+    document.body.classList.add('tsml-ui');
+    return () => {
+      document.body.classList.remove('tsml-ui');
+    };
+  }, []);
+
+  //load data once
   if (state.loading) {
+    console.log(
+      'TSML UI meeting finder: https://github.com/code4recovery/tsml-ui'
+    );
+
     const input = getQueryString();
 
-    //fetch json data file and build indexes
-    fetch(json)
-      .then(result => result.json())
-      .then(result => {
-        if (json?.includes('nocodeapi.com')) {
-          result = translateNoCodeAPI(result);
-        }
+    if (!src) {
+      setState({
+        ...state,
+        error: 'Configuration error: a data source must be specified.',
+        loading: false,
+        ready: true,
+      });
+    } else {
+      const sheetId = src.startsWith('https://docs.google.com/spreadsheets/d/')
+        ? src.split('/')[5]
+        : undefined;
 
-        if (!Array.isArray(result) || !result.length) {
-          return setState({
+      //google sheet
+      if (sheetId) {
+        if (!google) {
+          setState({
             ...state,
-            error: 'bad_data',
+            error: 'Configuration error: a Google API key is required.',
             loading: false,
           });
         }
+        src = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/A1:ZZ?key=${google}`;
+      }
 
-        const [meetings, indexes, capabilities] = loadMeetingData(
-          result,
-          state.capabilities,
-          timezone
-        );
+      //cache busting
+      if (src.endsWith('.json') && input.meeting) {
+        src = `${src}?${new Date().getTime()}`;
+      }
 
-        setState({
-          ...state,
-          capabilities: capabilities,
-          indexes: indexes,
-          meetings: meetings,
-          loading: false,
-          input: input,
+      //fetch json data file and build indexes
+      fetch(src)
+        .then(res => (res.ok ? res.json() : Promise.reject(res.status)))
+        .then(data => {
+          if (sheetId) {
+            data = translateGoogleSheet(data, sheetId);
+          }
+
+          if (!Array.isArray(data) || !data.length) {
+            return setState({
+              ...state,
+              error: 'Data is not in the correct format.',
+              loading: false,
+              ready: true,
+            });
+          }
+
+          const [meetings, indexes, capabilities] = loadMeetingData(
+            data,
+            state.capabilities,
+            timezone
+          );
+
+          const waitingForGeo =
+            (!input.latitude || !input.longitude) &&
+            ((input.mode === 'location' && input.search) ||
+              input.mode === 'me');
+
+          setState({
+            ...state,
+            capabilities: capabilities,
+            indexes: indexes,
+            input: input,
+            loading: false,
+            meetings: meetings,
+            ready: !waitingForGeo,
+          });
+        })
+        .catch(error => {
+          const errors = {
+            400: 'bad request',
+            401: 'unauthorized',
+            403: 'forbidden',
+            404: 'not found',
+            429: 'too many requests',
+            500: 'internal server',
+            502: 'bad gateway',
+            503: 'service unavailable',
+            504: 'gateway timeout',
+          };
+          setState({
+            ...state,
+            error: errors[error]
+              ? `Error: ${errors[error]} (${error}) when ${
+                  sheetId ? 'contacting Google' : 'loading data'
+                }.`
+              : error.toString(),
+            loading: false,
+            ready: true,
+          });
         });
-      })
-      .catch(error => {
-        if (json) {
-          console.error(error);
-        }
-        setState({
-          ...state,
-          error: json ? 'bad_data' : 'no_data_src',
-          loading: false,
-        });
-      });
-
-    return (
-      <div className="tsml-ui">
-        <Loading />
-      </div>
-    );
+    }
   }
 
   //apply input changes to query string
   setQueryString(state.input);
-
-  //update time for sorting
-  state.meetings = setMinutesNow(state.meetings);
 
   //filter data
   const [filteredSlugs, inProgress] = filterMeetingData(
@@ -120,20 +188,29 @@ export default function TsmlUI({ json, mapbox, timezone }) {
   );
 
   //show alert?
-  state.alert = !filteredSlugs.length ? 'no_results' : null;
+  state.alert = !filteredSlugs.length ? strings.no_results : undefined;
 
   //show error?
-  if (state.input.meeting && !(state.input.meeting in state.meetings)) {
-    state.error = 'not_found';
+  if (state.input.meeting && !state.meetings[state.input.meeting]) {
+    state.error = strings.not_found;
   }
 
-  return (
+  return !state.ready ? (
+    <div className="tsml-ui">
+      <Loading />
+    </div>
+  ) : (
     <div className="tsml-ui">
       <div className="container-fluid d-flex flex-column py-3">
         {state.input.meeting && state.input.meeting in state.meetings ? (
-          <Meeting state={state} setState={setState} mapbox={mapbox} />
+          <Meeting
+            state={state}
+            setState={setState}
+            mapbox={mapbox}
+            feedback_emails={settings.feedback_emails}
+          />
         ) : (
-          <>
+          <div className="d-grid gap-3">
             {settings.show.title && <Title state={state} />}
             {settings.show.controls && (
               <Controls state={state} setState={setState} mapbox={mapbox} />
@@ -147,6 +224,7 @@ export default function TsmlUI({ json, mapbox, timezone }) {
                 setState={setState}
                 filteredSlugs={filteredSlugs}
                 inProgress={inProgress}
+                listButtons={settings.show.listButtons}
               />
             )}
             {filteredSlugs && state.input.view === 'map' && (
@@ -157,7 +235,7 @@ export default function TsmlUI({ json, mapbox, timezone }) {
                 mapbox={mapbox}
               />
             )}
-          </>
+          </div>
         )}
       </div>
     </div>
