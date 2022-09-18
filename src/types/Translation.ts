@@ -5,6 +5,8 @@ export interface Translation {
   address: string;
   appointment: string;
   back_to_meetings: string;
+  contact_call: string;
+  contact_email: string;
   contribute_with: string;
   distance: string;
   distance_any: string;

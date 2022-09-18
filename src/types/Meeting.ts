@@ -10,6 +10,15 @@ export interface Meeting {
   conference_provider?: string;
   conference_url?: string;
   conference_url_notes?: string;
+  contact_1_name?: string;
+  contact_1_email?: string;
+  contact_1_phone?: string;
+  contact_2_name?: string;
+  contact_2_email?: string;
+  contact_2_phone?: string;
+  contact_3_name?: string;
+  contact_3_email?: string;
+  contact_3_phone?: string;
   day?: Day | Day[];
   distance?: number;
   edit_url?: string | null;
