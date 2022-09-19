@@ -124,7 +124,7 @@ export default function TsmlUI({ src, mapbox, google, timezone }) {
           if (!Array.isArray(data) || !data.length) {
             return setState({
               ...state,
-              error: 'Data is not in the correct format.',
+              error: 'Configuration error: data is not in the correct format.',
               loading: false,
               ready: true,
             });
@@ -135,6 +135,15 @@ export default function TsmlUI({ src, mapbox, google, timezone }) {
             state.capabilities,
             timezone
           );
+
+          if (!timezone && !Object.keys(meetings).length) {
+            return setState({
+              ...state,
+              error: 'Configuration error: time zone is not set.',
+              loading: false,
+              ready: true,
+            });
+          }
 
           const waitingForGeo =
             (!input.latitude || !input.longitude) &&
