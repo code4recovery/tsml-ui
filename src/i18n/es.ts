@@ -5,6 +5,8 @@ export const es: Translation = {
   address: 'Dirección',
   appointment: 'Cita',
   back_to_meetings: 'Volver a las reuniones',
+  contact_call: 'Llamar a %contact%',
+  contact_email: 'Correo a %contact%',
   contribute_with: 'Contribuya con %service%',
   distance: 'Distancia',
   distance_any: 'Cualquier distancia',
