@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { formatClasses as cx, settings, strings } from '../helpers';
 import type { Meeting } from '../types';
 
@@ -36,7 +36,7 @@ export default function Form({
   meeting,
   typesInUse,
 }: FormProps) {
-  const [mode, setMode] = useState<string | undefined>('update');
+  const [mode, setMode] = useState<string | undefined>();
   const modes = {
     update: {
       title: 'Request Update',
@@ -236,8 +236,18 @@ export default function Form({
       ? Array.isArray(fields.types.current) &&
         fields.types.current?.includes('Online')
       : true;
+
+  const form = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (mode && form.current) {
+      window.scrollTo({
+        top: form.current.getBoundingClientRect().top - 16,
+        behavior: 'smooth',
+      });
+    }
+  }, [mode]);
   return (
-    <div className="d-flex flex-column gap-3">
+    <div className="d-flex flex-column gap-3" ref={form}>
       <div className="btn-group h-100 w-100" role="group">
         {Object.keys(modes).map(m => (
           <button

@@ -204,49 +204,49 @@ export default function TsmlUI({ src, mapbox, google, timezone }) {
     state.error = strings.not_found;
   }
 
-  return !state.ready ? (
+  return (
     <div className="tsml-ui">
-      <Loading />
-    </div>
-  ) : (
-    <div className="tsml-ui">
-      <div className="container-fluid d-flex flex-column py-3">
-        {state.input.meeting && state.input.meeting in state.meetings ? (
-          <Meeting
-            state={state}
-            setState={setState}
-            mapbox={mapbox}
-            feedback_emails={settings.feedback_emails}
-          />
-        ) : (
-          <div className="d-grid gap-3">
-            {settings.show.title && <Title state={state} />}
-            {settings.show.controls && (
-              <Controls state={state} setState={setState} mapbox={mapbox} />
-            )}
-            {(state.alert || state.error) && (
-              <Alert state={state} setState={setState} />
-            )}
-            {filteredSlugs && state.input.view === 'table' && (
-              <Table
-                state={state}
-                setState={setState}
-                filteredSlugs={filteredSlugs}
-                inProgress={inProgress}
-                listButtons={settings.show.listButtons}
-              />
-            )}
-            {filteredSlugs && state.input.view === 'map' && (
-              <Map
-                state={state}
-                setState={setState}
-                filteredSlugs={filteredSlugs}
-                mapbox={mapbox}
-              />
-            )}
-          </div>
-        )}
-      </div>
+      {!state.ready ? (
+        <Loading />
+      ) : (
+        <div className="container-fluid d-flex flex-column gap-3 py-3">
+          {state.input.meeting && state.input.meeting in state.meetings ? (
+            <Meeting
+              state={state}
+              setState={setState}
+              mapbox={mapbox}
+              feedback_emails={settings.feedback_emails}
+            />
+          ) : (
+            <>
+              {settings.show.title && <Title state={state} />}
+              {settings.show.controls && (
+                <Controls state={state} setState={setState} mapbox={mapbox} />
+              )}
+              {(state.alert || state.error) && (
+                <Alert state={state} setState={setState} />
+              )}
+              {filteredSlugs && state.input.view === 'table' && (
+                <Table
+                  state={state}
+                  setState={setState}
+                  filteredSlugs={filteredSlugs}
+                  inProgress={inProgress}
+                  listButtons={settings.show.listButtons}
+                />
+              )}
+              {filteredSlugs && state.input.view === 'map' && (
+                <Map
+                  state={state}
+                  setState={setState}
+                  filteredSlugs={filteredSlugs}
+                  mapbox={mapbox}
+                />
+              )}
+            </>
+          )}
+        </div>
+      )}
     </div>
   );
 }

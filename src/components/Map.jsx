@@ -131,7 +131,7 @@ export default function Map({
   }, [data, dimensions]);
 
   return (
-    <div className="border rounded bg-light flex-grow-1 map" ref={mapFrame}>
+    <div className="border rounded bg-light map" ref={mapFrame}>
       {viewport && !!data.locationKeys.length && (
         <ReactMapGL
           mapStyle={settings.map.style}

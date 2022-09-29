@@ -217,9 +217,13 @@ div.tsml-ui {
     }
   }
 
+  .meeting .map {
+    height: 700px;
+    flex-grow: 0;
+  }
+
   .map {
-    min-height: 500px; //maps should fill at least 500, but up to entire space
-    max-height: calc(100vh - 130px);
+    flex-grow: 1;
 
     .mapboxgl-popup {
       max-width: 85%;
