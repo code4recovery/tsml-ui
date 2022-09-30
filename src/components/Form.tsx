@@ -53,6 +53,24 @@ export default function Form({
   };
 
   const formFields: FormFields = {
+    your_name: {
+      label: 'Your Name',
+      required: true,
+      type: 'text',
+      span: 6,
+    },
+    your_email: {
+      label: 'Your Email',
+      required: true,
+      type: 'email',
+      span: 6,
+    },
+    comments: {
+      help: 'In a sentence or two, please describe the change you’re requesting.',
+      label: 'Comments',
+      required: true,
+      type: 'textarea',
+    },
     name: {
       help: 'Meeting names are typically in Title Case. Try to avoid using the words “AA” or “Meeting.”',
       label: 'Meeting Name',
@@ -177,25 +195,6 @@ export default function Form({
       label: 'Grop Notes',
       type: 'textarea',
     },
-    your_name: {
-      label: 'Your Name',
-      required: true,
-      type: 'text',
-      span: 5,
-    },
-    your_email: {
-      label: 'Your Email',
-      required: true,
-      type: 'email',
-      span: 5,
-    },
-    comments: {
-      help: 'In a sentence or two, please describe the change you’re requesting.',
-      label: 'Comments',
-      required: true,
-      span: 10,
-      type: 'textarea',
-    },
   };
   const getDefaultValue = (field: keyof FormFields): string | string[] => {
     if (meeting.types && field === 'types') {
@@ -224,24 +223,35 @@ export default function Form({
       })
   );
   const [fields, setFields] = useState(formFields);
-  const canShow = (field: keyof Meeting) =>
-    ['location_notes', 'group_notes'].includes(field)
-      ? !!meeting[field]
-      : [
-          'conference_url',
-          'conference_url_notes',
-          'conference_phone',
-          'conference_phone_notes',
-        ].includes(field)
-      ? Array.isArray(fields.types.current) &&
+  const canShow = (field: keyof Meeting, mode: string) => {
+    if (['your_name', 'your_email', 'comments'].includes(field)) {
+      return true;
+    } else if (mode === 'remove') {
+      return false;
+    } else if (['location_notes', 'group_notes'].includes(field)) {
+      return !!meeting[field];
+    } else if (
+      [
+        'conference_url',
+        'conference_url_notes',
+        'conference_phone',
+        'conference_phone_notes',
+      ].includes(field)
+    ) {
+      return (
+        Array.isArray(fields.types.current) &&
         fields.types.current?.includes('Online')
-      : true;
+      );
+    }
+
+    return true;
+  };
 
   const form = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (mode && form.current) {
       window.scrollTo({
-        top: form.current.getBoundingClientRect().top - 16,
+        top: form.current.offsetTop - 16,
         behavior: 'smooth',
       });
     }
@@ -286,115 +296,105 @@ export default function Form({
             */
           }}
         >
-          {mode !== 'remove' && (
-            <div className="row">
-              {Object.keys(fields).map((field, index) => {
-                const {
-                  current,
-                  help,
-                  label,
-                  options,
-                  placeholder,
-                  required,
-                  span,
-                  type,
-                  value,
-                } = fields[field];
-                const props = {
-                  'aria-describedby': `${field}-help`,
-                  className: cx('bg-light', {
-                    'form-control': type !== 'select',
-                    'form-select': type === 'select',
-                    'is-valid': current !== value && (!required || !!current),
+          <div className="row">
+            {Object.keys(fields).map((field, index) => {
+              const {
+                current,
+                help,
+                label,
+                options,
+                placeholder,
+                required,
+                span,
+                type,
+                value,
+              } = fields[field];
+              const props = {
+                'aria-describedby': `${field}-help`,
+                className: cx('bg-light', {
+                  'form-control': type !== 'select',
+                  'form-select': type === 'select',
+                  'is-valid': current !== value && (!required || !!current),
+                }),
+                id: field,
+                onChange: (
+                  e: ChangeEvent<
+                    HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+                  >
+                ) =>
+                  setFields({
+                    ...fields,
+                    [field]: {
+                      ...fields[field],
+                      current: e.target.value,
+                    },
                   }),
-                  id: field,
-                  onChange: (
-                    e: ChangeEvent<
-                      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-                    >
-                  ) =>
-                    setFields({
-                      ...fields,
-                      [field]: {
-                        ...fields[field],
-                        current: e.target.value,
-                      },
-                    }),
-                  placeholder: placeholder,
-                  required: required,
-                  value: mode === 'update' ? current ?? value : undefined,
-                };
-                return (
-                  canShow(field as keyof Meeting) && (
-                    <div
-                      className={cx('mb-3', `col-md-${span ?? 12}`)}
-                      key={index}
-                    >
-                      <label className="form-label" htmlFor={field}>
-                        {label}
-                      </label>
-                      {['email', 'text', 'time', 'url'].includes(type) &&
-                      typeof value === 'string' ? (
-                        <input type={type} {...props} />
-                      ) : type === 'select' && typeof value === 'string' ? (
-                        <select {...props}>
-                          {options?.map((option, index) => (
-                            <option key={index} value={option}>
-                              {option}
-                            </option>
-                          ))}
-                        </select>
-                      ) : type === 'textarea' && typeof value === 'string' ? (
-                        <textarea {...props} rows={4} />
-                      ) : type === 'checkboxes' && Array.isArray(current) ? (
-                        <div className="row">
-                          {options?.map((option, index) => (
-                            <div
-                              className="col-sm-6 col-lg-4 col-xl-3"
-                              key={index}
+                placeholder: placeholder,
+                required: required,
+                value: mode === 'update' ? current ?? value : '',
+              };
+              return canShow(field as keyof Meeting, mode) ? (
+                <div className={cx('mb-3', `col-md-${span ?? 12}`)} key={index}>
+                  <label className="form-label" htmlFor={field}>
+                    {label}
+                  </label>
+                  {['email', 'text', 'time', 'url'].includes(type) &&
+                  typeof value === 'string' ? (
+                    <input type={type} {...props} />
+                  ) : type === 'select' && typeof value === 'string' ? (
+                    <select {...props}>
+                      {options?.map((option, index) => (
+                        <option key={index} value={option}>
+                          {option}
+                        </option>
+                      ))}
+                    </select>
+                  ) : type === 'textarea' && typeof value === 'string' ? (
+                    <textarea {...props} rows={4} />
+                  ) : type === 'checkboxes' && Array.isArray(current) ? (
+                    <div className="row">
+                      {options?.map((option, index) => (
+                        <div className="col-sm-6 col-lg-4 col-xl-3" key={index}>
+                          <div className="form-check">
+                            <input
+                              checked={current?.includes(option)}
+                              className="form-check-input"
+                              id={option}
+                              name={field}
+                              onChange={e =>
+                                setFields({
+                                  ...fields,
+                                  [field]: {
+                                    ...fields[field],
+                                    current: e.target.checked
+                                      ? [...current, e.target.value]
+                                      : current?.filter(
+                                          val => val !== e.target.value
+                                        ),
+                                  },
+                                })
+                              }
+                              value={option}
+                              type="checkbox"
+                            />
+                            <label
+                              className="form-check-label"
+                              htmlFor={option}
                             >
-                              <div className="form-check">
-                                <input
-                                  checked={current?.includes(option)}
-                                  className="form-check-input"
-                                  id={option}
-                                  name={field}
-                                  onChange={e =>
-                                    setFields({
-                                      ...fields,
-                                      [field]: {
-                                        ...fields[field],
-                                        current: e.target.checked
-                                          ? [...current, e.target.value]
-                                          : current?.filter(
-                                              val => val !== e.target.value
-                                            ),
-                                      },
-                                    })
-                                  }
-                                  value={option}
-                                  type="checkbox"
-                                />
-                                <label
-                                  className="form-check-label"
-                                  htmlFor={option}
-                                >
-                                  {option}
-                                </label>
-                              </div>
-                            </div>
-                          ))}
+                              {option}
+                            </label>
+                          </div>
                         </div>
-                      ) : null}
-                      <div className="form-text" id={`${field}-help`}>
-                        {help}
-                      </div>
+                      ))}
                     </div>
-                  )
-                );
-              })}
-            </div>
-          )}
+                  ) : null}
+                  <div className="form-text" id={`${field}-help`}>
+                    {help}
+                  </div>
+                </div>
+              ) : null;
+            })}
+          </div>
           <button className="btn btn-primary mt-4 btn-lg" type="submit">
             {modes[mode as keyof typeof modes].button}
           </button>
