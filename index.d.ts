@@ -18,6 +18,7 @@ interface TSMLReactConfig {
     type: MeetingType[];
     view: 'table' | 'map';
     weekday: TSMLReactConfig['weekdays'];
+    duration: number;
   };
   distance_options: number[];
   distance_unit: 'mi' | 'km';
