@@ -277,24 +277,27 @@ export function loadMeetingData(data, capabilities, timezone) {
           { weekday, hour: endTimeParts[0], minute: endTimeParts[1] },
           { zone: meeting.timezone }
         );
-
-        //check valid end time
-        if (!meeting.end.isValid) {
-          console.warn(
-            `TSML UI invalid end time (${meeting.end.invalid.explanation}): ${meeting.edit_url}`
-          );
-          return;
-        }
-
-        const duration = meeting.end
-          .diff(meeting.start, 'minutes')
-          .toObject().minutes;
-        if (duration > 120) {
-          console.warn(
-            `TSML UI ${meeting.slug} is unusually long (${duration} mins): ${meeting.edit_url}`
-          );
-        }
+      } else {
+        meeting.end = meeting.start.plus( {minutes: settings.defaults.duration})
       }
+
+      //check valid end time
+      if (!meeting.end.isValid) {
+        console.warn(
+          `TSML UI invalid end time (${meeting.end.invalid.explanation}): ${meeting.edit_url}`
+        );
+        return;
+      }
+
+      const duration = meeting.end
+        .diff(meeting.start, 'minutes')
+        .toObject().minutes;
+      if (duration > 120) {
+        console.warn(
+          `TSML UI ${meeting.slug} is unusually long (${duration} mins): ${meeting.edit_url}`
+        );
+      }
+
 
       //normalize timezones
       if (!timezone) {

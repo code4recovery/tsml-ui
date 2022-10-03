@@ -44,22 +44,22 @@ export function translateGoogleSheet(data, sheetId) {
         );
       }
     }
-    if (meeting.end_time) {
-      const end_time = DateTime.fromFormat(meeting.end_time, 'h:mm a', {
-        locale: 'en',
-      });
-      if (end_time.isValid) {
-        meeting.end_time = end_time.toFormat('HH:mm');
-      } else {
-        meeting.end_time = undefined;
-        console.warn(
-          `TSML UI error parsing ${meeting.end_time} (${end_time.invalidExplanation}): ${meeting.edit_url}`
-        );
-      }
+    if (!meeting.end_time) {
+      meeting.end_time = meeting.start.plus( {minutes: settings.defaults.duration});
+    }
+    const end_time = DateTime.fromFormat(meeting.end_time, 'h:mm a', {
+      locale: 'en',
+    });
+    if (end_time.isValid) {
+      meeting.end_time = end_time.toFormat('HH:mm');
+    } else {
+      meeting.end_time = undefined;
+      console.warn(
+        `TSML UI error parsing ${meeting.end_time} (${end_time.invalidExplanation}): ${meeting.edit_url}`
+      );
     }
 
     meetings.push(meeting);
   });
-
   return meetings;
 }
