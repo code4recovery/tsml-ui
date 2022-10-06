@@ -1,19 +1,13 @@
 import { DateTime } from 'luxon';
 
 import { Meeting } from '../../types';
-import { settings } from '../settings';
 import { iOS } from '../user-agent';
 
 //format ICS file for add to calendar
 export function formatIcs(meeting: Meeting) {
   const fmt = "yyyyLLdd'T'HHmmss";
 
-  if (!meeting.start) return;
-
-  //need an end time. use default if none specified
-  if (!meeting.end) {
-    meeting.end = meeting.start.plus({ minutes: settings.defaults.duration });
-  }
+  if (!meeting.start || !meeting.end) return;
 
   //make sure it's in the future
   if (meeting.start < DateTime.now()) {

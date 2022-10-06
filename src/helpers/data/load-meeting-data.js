@@ -300,7 +300,6 @@ export function loadMeetingData(data, capabilities, timezone) {
         );
       }
 
-
       //normalize timezones
       if (!timezone) {
         meeting.start = meeting.start.setZone('local');

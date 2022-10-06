@@ -60,5 +60,6 @@ export function translateGoogleSheet(data, sheetId) {
 
     meetings.push(meeting);
   });
+
   return meetings;
 }
