@@ -30,6 +30,7 @@ const defaults: TSMLReactConfig = {
     type: [],
     view: 'table',
     weekday: [],
+    duration: 60,
   },
   distance_options: [1, 2, 5, 10, 15, 25],
   distance_unit: 'mi', //mi or km
