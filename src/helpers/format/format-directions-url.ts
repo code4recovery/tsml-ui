@@ -1,3 +1,4 @@
+import type { Meeting } from '../../types';
 import { iOS } from '../user-agent';
 
 //create a link for directions
@@ -5,11 +6,7 @@ export function formatDirectionsUrl({
   formatted_address,
   latitude,
   longitude,
-}: {
-  formatted_address: string;
-  latitude?: number;
-  longitude?: number;
-}) {
+}: Meeting) {
   if (iOS()) {
     //iOS devices use Apple - https://developer.apple.com/library/archive/featuredarticles/iPhoneURLScheme_Reference/MapLinks/MapLinks.html
     const params: { daddr: string; q?: string } =

@@ -30,6 +30,7 @@ export type State = {
     distance: string[];
     latitude?: number;
     longitude?: number;
+    meeting?: string;
     mode: 'search' | 'location' | 'me';
     region: string[];
     search?: string;

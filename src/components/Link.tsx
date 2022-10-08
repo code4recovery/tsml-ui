@@ -1,17 +1,27 @@
 import React from 'react';
 
+import type { State, Meeting } from '../types';
+
 import { formatUrl, settings, strings } from '../helpers';
 
-export default function Link({ state, meeting, setState }) {
+type LinkProps = {
+  state: State;
+  meeting: Meeting;
+  setState: (state: State) => void;
+};
+
+export default function Link({ state, meeting, setState }: LinkProps) {
   const flags = settings.flags
-    .filter(flag => meeting.types.includes(flag))
-    .map(flag => strings.types[flag])
-    .sort()
-    .join(', ');
+    ? settings.flags
+        .filter(flag => meeting.types?.includes(flag))
+        .map(flag => strings.types[flag])
+        .sort()
+        .join(', ')
+    : [];
 
   if (!state || !setState) {
     return !flags ? (
-      meeting.name
+      <>{meeting.name}</>
     ) : (
       <>
         <span>{meeting.name}</span>

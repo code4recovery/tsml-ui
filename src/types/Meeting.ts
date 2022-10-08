@@ -26,7 +26,7 @@ export interface Meeting {
   end?: DateTime;
   end_time?: `${number}:${number}`;
   feedback_url?: string;
-  formatted_address?: string;
+  formatted_address: string;
   group?: string;
   isActive?: boolean;
   isInPerson?: boolean;

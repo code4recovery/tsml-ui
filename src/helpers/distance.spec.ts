@@ -9,7 +9,12 @@ jest.mock('./settings', () => ({
 describe('distance', () => {
   //exact
   it('returns 0 for exact location', () => {
-    const meeting: Meeting = { slug: '', latitude: 1, longitude: 1 };
+    const meeting: Meeting = {
+      slug: '',
+      latitude: 1,
+      longitude: 1,
+      formatted_address: '123 Main St, Anytown, OK 12345, USA',
+    };
     expect(distance(meeting, meeting)).toStrictEqual(0);
   });
 
