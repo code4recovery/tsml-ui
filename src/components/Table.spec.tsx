@@ -1,15 +1,38 @@
+import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { DateTime } from 'luxon';
 
+import { State } from '../types';
 import { strings } from '../helpers';
 import Table from './Table';
 
 describe('<Table />', () => {
-  const mockState = {
+  const mockState: State = {
     capabilities: {
-      region: true,
-      location: true,
+      coordinates: true,
       distance: true,
+      geolocation: false,
+      location: true,
+      region: true,
+      time: true,
+      type: true,
+      weekday: true,
+    },
+    indexes: {
+      distance: [],
+      region: [],
+      time: [],
+      type: [],
+      weekday: [],
+    },
+    input: {
+      distance: [],
+      mode: 'search',
+      region: [],
+      time: [],
+      type: [],
+      view: 'table',
+      weekday: [],
     },
     meetings: {
       foo: {
@@ -47,9 +70,11 @@ describe('<Table />', () => {
     const mockSetState = jest.fn();
     render(
       <Table
-        state={mockState}
-        setState={mockSetState}
         filteredSlugs={filteredSlugs}
+        inProgress={[]}
+        listButtons={false}
+        setState={mockSetState}
+        state={mockState}
       />
     );
 
@@ -63,10 +88,11 @@ describe('<Table />', () => {
     const mockSetState = jest.fn();
     render(
       <Table
-        state={mockState}
-        setState={mockSetState}
         filteredSlugs={filteredSlugs}
-        listButtons={true}
+        inProgress={[]}
+        listButtons={false}
+        setState={mockSetState}
+        state={mockState}
       />
     );
 
@@ -83,13 +109,15 @@ describe('<Table />', () => {
 
   it('displays single meeting in progress', () => {
     const inProgress = [filteredSlugs[0]];
+    const mockSetState = jest.fn();
 
     render(
       <Table
-        state={mockState}
-        setState={jest.fn()}
         filteredSlugs={filteredSlugs}
-        inProgress={inProgress}
+        inProgress={[]}
+        listButtons={false}
+        setState={mockSetState}
+        state={mockState}
       />
     );
 
@@ -110,12 +138,15 @@ describe('<Table />', () => {
 
   it('displays multiple meetings in progress', () => {
     const inProgress = [...filteredSlugs];
+    const mockSetState = jest.fn();
+
     render(
       <Table
-        state={mockState}
-        setState={jest.fn()}
         filteredSlugs={filteredSlugs}
-        inProgress={inProgress}
+        inProgress={[]}
+        listButtons={false}
+        setState={mockSetState}
+        state={mockState}
       />
     );
 

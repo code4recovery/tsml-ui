@@ -21,6 +21,7 @@ export interface Meeting {
   contact_3_phone?: string;
   day?: Day | Day[];
   distance?: number;
+  district?: string;
   edit_url?: string | null;
   email?: string;
   end?: DateTime;
@@ -28,6 +29,7 @@ export interface Meeting {
   feedback_url?: string;
   formatted_address: string;
   group?: string;
+  group_notes?: string;
   isActive?: boolean;
   isInPerson?: boolean;
   isOnline?: boolean;
@@ -39,10 +41,13 @@ export interface Meeting {
   minutes_week?: number;
   name?: string;
   notes?: string;
+  paypal?: string;
+  phone?: string;
   region?: string;
   regions?: string[];
   search?: string;
   slug: string;
+  square?: string;
   start?: DateTime;
   time?: `${number}:${number}`;
   timezone?: string;

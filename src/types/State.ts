@@ -13,6 +13,7 @@ export type State = {
     coordinates: boolean;
     distance: boolean;
     geolocation: boolean;
+    location: boolean;
     region: boolean;
     time: boolean;
     type: boolean;

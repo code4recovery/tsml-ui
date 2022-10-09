@@ -5,12 +5,12 @@ import type { State, Meeting } from '../types';
 import { formatUrl, settings, strings } from '../helpers';
 
 type LinkProps = {
-  state: State;
   meeting: Meeting;
-  setState: (state: State) => void;
+  setState?: (state: State) => void;
+  state?: State;
 };
 
-export default function Link({ state, meeting, setState }: LinkProps) {
+export default function Link({ meeting, setState, state }: LinkProps) {
   const flags = settings.flags
     ? settings.flags
         .filter(flag => meeting.types?.includes(flag))
