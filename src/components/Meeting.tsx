@@ -17,17 +17,17 @@ import Link from './Link';
 import Map from './Map';
 
 type MeetingProps = {
-  state: State;
+  feedback_emails?: string[];
+  mapbox?: string;
   setState: (state: State) => void;
-  mapbox: string;
-  feedback_emails: string[];
+  state: State;
 };
 
 export default function Meeting({
-  state,
-  setState,
-  mapbox,
   feedback_emails = [],
+  mapbox,
+  setState,
+  state,
 }: MeetingProps) {
   //open types
   const [define, setDefine] = useState<string | undefined>();
@@ -38,12 +38,15 @@ export default function Meeting({
 
   //scroll to top when you navigate to this page
   useEffect(() => {
-    /*
     const el = document.getElementById('tsml-ui');
     if (el) {
       const headerHeight = Math.max(
         0,
-        ...[...document.body.getElementsByTagName('*')]
+        ...[
+          ...Array.prototype.slice.call(
+            document.body.getElementsByTagName('*')
+          ),
+        ]
           .filter(
             x =>
               getComputedStyle(x, null).getPropertyValue('position') ===
@@ -56,7 +59,6 @@ export default function Meeting({
       }
       el.scrollIntoView();
     }
-    */
 
     //log edit_url
     if (meeting.edit_url) {
@@ -230,7 +232,7 @@ export default function Meeting({
         <a
           href={formatUrl({
             ...state.input,
-            meeting: null,
+            meeting: undefined,
           })}
           onClick={e => {
             e.preventDefault();

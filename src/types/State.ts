@@ -13,6 +13,7 @@ export type State = {
     coordinates: boolean;
     distance: boolean;
     geolocation: boolean;
+    inactive: boolean;
     location: boolean;
     region: boolean;
     time: boolean;
@@ -40,7 +41,9 @@ export type State = {
     view: 'table' | 'map';
     weekday: TSMLReactConfig['weekdays'];
   };
+  loading: boolean;
   meetings: {
     [index: string]: Meeting;
   };
+  ready: boolean;
 };

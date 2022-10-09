@@ -1,6 +1,24 @@
 import React, { Fragment } from 'react';
 
+import type { State } from '../types';
 import { formatClasses as cx, getIndexByKey, formatUrl } from '../helpers';
+
+type DropdownProps = {
+  defaultValue: string;
+  end: boolean;
+  filter: keyof State['indexes'];
+  open: boolean;
+  setDropdown: (dropdown?: string) => void;
+  setState: (state: State) => void;
+  state: State;
+};
+
+type DropdownItem = {
+  key: string;
+  name: string;
+  slugs: string[];
+  children: DropdownItem[];
+};
 
 export default function Dropdown({
   defaultValue,
@@ -10,24 +28,31 @@ export default function Dropdown({
   setDropdown,
   setState,
   state,
-}) {
+}: DropdownProps) {
   const options = state.indexes[filter];
   const values = state.input[filter];
 
   //set filter: pass it up to parent
-  const setFilter = (e, filter, value) => {
+  const setFilter = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    filter: keyof typeof state.indexes,
+    value?: string
+  ) => {
     e.preventDefault();
 
     //add or remove from filters
     if (value) {
       if (e.metaKey) {
+        // @ts-expect-error TODO
         const index = state.input[filter].indexOf(value);
         if (index === -1) {
+          // @ts-expect-error TODO
           state.input[filter].push(value);
         } else {
           state.input[filter].splice(index, 1);
         }
       } else {
+        // @ts-expect-error TODO
         state.input[filter] = [value];
       }
     } else {
@@ -45,17 +70,19 @@ export default function Dropdown({
     setState({ ...state });
   };
 
-  const renderDropdownItem = ({ key, name, slugs, children }) => (
+  const renderDropdownItem = ({ key, name, slugs, children }: DropdownItem) => (
     <Fragment key={key}>
       <a
         className={cx(
           'align-items-center d-flex dropdown-item justify-content-between',
           {
+            // @ts-expect-error TODO
             'bg-secondary text-white': values.includes(key),
           }
         )}
         href={formatUrl({
           ...state.input,
+          // @ts-expect-error TODO
           [filter]: values.includes(key) ? [key] : [],
         })}
         onClick={e => setFilter(e, filter, key)}
@@ -84,7 +111,7 @@ export default function Dropdown({
         aria-expanded={open}
         className="btn btn-outline-secondary dropdown-toggle w-100"
         id={filter}
-        onClick={() => setDropdown(open ? null : filter)}
+        onClick={() => setDropdown(open ? undefined : filter)}
       >
         {values?.length && options?.length
           ? values.map(value => getIndexByKey(options, value)?.name).join(' + ')
@@ -101,7 +128,7 @@ export default function Dropdown({
           className={cx('dropdown-item', {
             'active bg-secondary text-white': !values.length,
           })}
-          onClick={e => setFilter(e, filter, null)}
+          onClick={e => setFilter(e, filter, undefined)}
           href={formatUrl({
             ...state.input,
             [filter]: [],
@@ -111,13 +138,18 @@ export default function Dropdown({
         </a>
         {[
           options
-            ?.filter(option => special[filter]?.includes(option.key))
+            ?.filter(option =>
+              special[filter as keyof typeof special]?.includes(option.key)
+            )
             .sort(
               (a, b) =>
-                special[filter]?.indexOf(a.key) -
-                special[filter]?.indexOf(b.key)
+                special[filter as keyof typeof special]?.indexOf(a.key) -
+                special[filter as keyof typeof special]?.indexOf(b.key)
             ),
-          options?.filter(option => !special[filter]?.includes(option.key)),
+          options?.filter(
+            option =>
+              !special[filter as keyof typeof special]?.includes(option.key)
+          ),
         ]
           .filter(e => e.length)
           .map((group, index) => (

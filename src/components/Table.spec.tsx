@@ -12,6 +12,7 @@ describe('<Table />', () => {
       coordinates: true,
       distance: true,
       geolocation: false,
+      inactive: true,
       location: true,
       region: true,
       time: true,
@@ -34,6 +35,8 @@ describe('<Table />', () => {
       view: 'table',
       weekday: [],
     },
+    ready: true,
+    loading: false,
     meetings: {
       foo: {
         slug: 'foo',

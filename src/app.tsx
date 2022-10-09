@@ -8,10 +8,10 @@ const element = document.getElementById('tsml-ui');
 if (element) {
   ReactDOM.render(
     <TsmlUI
-      google={element.getAttribute('data-google')}
-      mapbox={element.getAttribute('data-mapbox')}
-      src={element.getAttribute('data-src')}
-      timezone={element.getAttribute('data-timezone')}
+      google={element.getAttribute('data-google') || undefined}
+      mapbox={element.getAttribute('data-mapbox') || undefined}
+      src={element.getAttribute('data-src') || undefined}
+      timezone={element.getAttribute('data-timezone') || undefined}
     />,
     element
   );

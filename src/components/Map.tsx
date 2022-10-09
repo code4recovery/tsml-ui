@@ -10,9 +10,9 @@ import Link from './Link';
 type MapProps = {
   filteredSlugs: string[];
   listMeetingsInPopup: boolean;
-  state: State;
+  mapbox?: string;
   setState: (state: State) => void;
-  mapbox: string;
+  state: State;
 };
 
 type Locations = {

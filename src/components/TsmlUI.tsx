@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import '../../public/style.css';
 import 'mapbox-gl/dist/mapbox-gl.css';
-
+import type { State } from '../types';
 import { Alert, Controls, Loading, Map, Meeting, Table, Title } from './';
 
 import {
@@ -16,8 +16,15 @@ import {
   translateGoogleSheet,
 } from '../helpers';
 
-export default function TsmlUI({ src, mapbox, google, timezone }) {
-  const [state, setState] = useState({
+type TsmlUIProps = {
+  google?: string;
+  mapbox?: string;
+  src?: string;
+  timezone?: string;
+};
+
+export default function TsmlUI({ google, mapbox, src, timezone }: TsmlUIProps) {
+  const [state, setState] = useState<State>({
     capabilities: {
       coordinates: false,
       distance: false,
@@ -29,7 +36,15 @@ export default function TsmlUI({ src, mapbox, google, timezone }) {
       type: false,
       weekday: false,
     },
-    input: {},
+    input: {
+      distance: [],
+      mode: 'search',
+      region: [],
+      time: [],
+      type: [],
+      view: 'table',
+      weekday: [],
+    },
     indexes: {
       distance: [],
       region: [],
@@ -45,7 +60,7 @@ export default function TsmlUI({ src, mapbox, google, timezone }) {
   //enable forward & back buttons
   useEffect(() => {
     const popstateListener = () => {
-      setState({ ...state, input: getQueryString(window.location.search) });
+      setState({ ...state, input: getQueryString() });
     };
     window.addEventListener('popstate', popstateListener);
 
@@ -152,11 +167,11 @@ export default function TsmlUI({ src, mapbox, google, timezone }) {
 
           setState({
             ...state,
-            capabilities: capabilities,
-            indexes: indexes,
-            input: input,
+            capabilities,
+            indexes,
+            input,
             loading: false,
-            meetings: meetings,
+            meetings,
             ready: !waitingForGeo,
           });
         })
@@ -174,8 +189,10 @@ export default function TsmlUI({ src, mapbox, google, timezone }) {
           };
           setState({
             ...state,
-            error: errors[error]
-              ? `Error: ${errors[error]} (${error}) when ${
+            error: errors[error as keyof typeof errors]
+              ? `Error: ${
+                  errors[error as keyof typeof errors]
+                } (${error}) when ${
                   sheetId ? 'contacting Google' : 'loading data'
                 }.`
               : error.toString(),
@@ -229,19 +246,20 @@ export default function TsmlUI({ src, mapbox, google, timezone }) {
             )}
             {filteredSlugs && state.input.view === 'table' && (
               <Table
-                state={state}
-                setState={setState}
                 filteredSlugs={filteredSlugs}
                 inProgress={inProgress}
                 listButtons={settings.show.listButtons}
+                setState={setState}
+                state={state}
               />
             )}
             {filteredSlugs && state.input.view === 'map' && (
               <Map
-                state={state}
-                setState={setState}
                 filteredSlugs={filteredSlugs}
+                listMeetingsInPopup={true}
                 mapbox={mapbox}
+                setState={setState}
+                state={state}
               />
             )}
           </div>
