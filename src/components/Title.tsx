@@ -1,13 +1,18 @@
 import React from 'react';
 
+import type { State } from '../types';
 import { getIndexByKey, strings } from '../helpers';
 
-export default function Title({ state: { indexes, input } }) {
+type TitleProps = {
+  state: State;
+};
+
+export default function Title({ state: { indexes, input } }: TitleProps) {
   //loading
   if (!indexes || !input) return null;
 
   //build title from strings.title
-  const parts = [];
+  const parts: string[] = [];
 
   Object.keys(strings.title).forEach(key => {
     if (key === 'meetings') {
@@ -28,11 +33,21 @@ export default function Title({ state: { indexes, input } }) {
       parts.push(
         strings.title.search_near.replace('%search%', `‘${input.search}’`)
       );
-    } else if (indexes[key] && input[key]?.length) {
-      const value = input[key]
-        .map(value => getIndexByKey(indexes[key], value)?.name)
+    } else if (indexes[key as keyof typeof indexes]) {
+      const value = input[key as keyof typeof indexes]
+        .map(
+          value =>
+            getIndexByKey(indexes[key as keyof typeof indexes], value)?.name
+        )
         .join(' + ');
-      parts.push(strings.title[key].replace(`%${key}%`, value));
+      if (value.length) {
+        parts.push(
+          strings.title[key as keyof typeof strings.title].replace(
+            `%${key}%`,
+            value
+          )
+        );
+      }
     }
   });
 

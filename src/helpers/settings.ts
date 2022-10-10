@@ -22,7 +22,6 @@ const defaults: TSMLReactConfig = {
   },
   defaults: {
     distance: [],
-    meeting: null,
     mode: 'search',
     region: [],
     search: '',
@@ -30,10 +29,10 @@ const defaults: TSMLReactConfig = {
     type: [],
     view: 'table',
     weekday: [],
-    duration: 60,
   },
   distance_options: [1, 2, 5, 10, 15, 25],
   distance_unit: 'mi', //mi or km
+  duration: 60,
   feedback_emails: [], //email addresses for update meeting info button
   filters: ['region', 'distance', 'weekday', 'time', 'type'],
   flags: null,

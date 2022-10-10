@@ -1,14 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
 
+import { Meeting, State } from '../types';
 import {
   formatClasses as cx,
   formatDirectionsUrl,
   settings,
   strings,
 } from '../helpers';
+import { icons } from './Icon';
+
 import Button from './Button';
 import Link from './Link';
+
+type TableProps = {
+  state: State;
+  setState: (state: State) => void;
+  filteredSlugs: string[];
+  inProgress: string[];
+  listButtons: boolean;
+};
 
 export default function Table({
   state,
@@ -16,7 +27,7 @@ export default function Table({
   filteredSlugs = [],
   inProgress = [],
   listButtons = false,
-}) {
+}: TableProps) {
   const meetingsPerPage = 10;
   const supported_columns = [
     'address',
@@ -46,9 +57,14 @@ export default function Table({
     .filter(col => distance || col !== 'distance')
     .filter(col => location || !['location', 'location_group'].includes(col));
 
-  const getValue = (meeting, key) => {
+  const getValue = (meeting: Meeting, key: string) => {
     if (key === 'address') {
-      const buttons = [];
+      const buttons: {
+        className: string;
+        href?: string;
+        icon: keyof typeof icons;
+        text?: string;
+      }[] = [];
       if (meeting.isInPerson) {
         buttons.push({
           className: 'in-person',
@@ -117,7 +133,7 @@ export default function Table({
     return null;
   };
 
-  const Row = ({ slug }) => {
+  const Row = ({ slug }: { slug: keyof typeof state.meetings }) => {
     const meeting = state.meetings[slug];
     return (
       <tr
@@ -145,62 +161,60 @@ export default function Table({
     );
   };
 
-  return (
-    !!filteredSlugs.length && (
-      <div className="row">
-        <table
-          className={cx('table table-striped flex-grow-1 my-0', {
-            'clickable-rows': !listButtons,
-          })}
-        >
-          <thead>
-            <tr className="d-none d-md-table-row">
-              {columns.map((column, index) => (
-                <th key={index} className={cx('pt-0', column)}>
-                  {strings[column]}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          {!!inProgress.length && (
-            <tbody className="tsml-in-progress">
-              {showInProgress ? (
-                inProgress.map((slug, index) => <Row slug={slug} key={index} />)
-              ) : (
-                <tr>
-                  <td
-                    className="p-2 text-center rounded-0"
-                    colSpan={columns.length}
-                  >
-                    <button
-                      onClick={() => setShowInProgress(true)}
-                      className="alert-link bg-transparent border-0 d-block fw-normal mx-auto p-2 text-center text-decoration-underline w-100"
-                    >
-                      {inProgress.length === 1
-                        ? strings.in_progress_single
-                        : strings.in_progress_multiple.replace(
-                            '%count%',
-                            inProgress.length
-                          )}
-                    </button>
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          )}
-          <InfiniteScroll
-            element="tbody"
-            loadMore={() => {
-              setLimit(limit + meetingsPerPage);
-            }}
-            hasMore={filteredSlugs.length > limit}
-          >
-            {filteredSlugs.slice(0, limit).map((slug, index) => (
-              <Row slug={slug} key={index} />
+  return !filteredSlugs.length ? null : (
+    <div className="row">
+      <table
+        className={cx('table table-striped flex-grow-1 my-0', {
+          'clickable-rows': !listButtons,
+        })}
+      >
+        <thead>
+          <tr className="d-none d-md-table-row">
+            {columns.map((column, index) => (
+              <th key={index} className={cx('pt-0', column)}>
+                {strings[column]}
+              </th>
             ))}
-          </InfiniteScroll>
-        </table>
-      </div>
-    )
+          </tr>
+        </thead>
+        {!!inProgress.length && (
+          <tbody className="tsml-in-progress">
+            {showInProgress ? (
+              inProgress.map((slug, index) => <Row slug={slug} key={index} />)
+            ) : (
+              <tr>
+                <td
+                  className="p-2 text-center rounded-0"
+                  colSpan={columns.length}
+                >
+                  <button
+                    onClick={() => setShowInProgress(true)}
+                    className="alert-link bg-transparent border-0 d-block fw-normal mx-auto p-2 text-center text-decoration-underline w-100"
+                  >
+                    {inProgress.length === 1
+                      ? strings.in_progress_single
+                      : strings.in_progress_multiple.replace(
+                          '%count%',
+                          inProgress.length.toString()
+                        )}
+                  </button>
+                </td>
+              </tr>
+            )}
+          </tbody>
+        )}
+        <InfiniteScroll
+          element="tbody"
+          loadMore={() => {
+            setLimit(limit + meetingsPerPage);
+          }}
+          hasMore={filteredSlugs.length > limit}
+        >
+          {filteredSlugs.slice(0, limit).map((slug, index) => (
+            <Row slug={slug} key={index} />
+          ))}
+        </InfiniteScroll>
+      </table>
+    </div>
   );
 }

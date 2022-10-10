@@ -279,7 +279,7 @@ export function loadMeetingData(data, capabilities, timezone) {
         );
       } else {
         meeting.end = meeting.start.plus({
-          minutes: settings.defaults.duration,
+          minutes: settings.duration,
         });
       }
 
