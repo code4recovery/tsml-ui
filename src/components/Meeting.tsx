@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { DateTime, Info } from 'luxon';
 
-import type { Meeting, State } from '../types';
+import type { Meeting as MeetingType, State } from '../types';
 import {
   formatClasses as cx,
   formatDirectionsUrl,
@@ -475,7 +475,7 @@ function Paragraphs({ text, className }: { text: string; className?: string }) {
 }
 
 function formatWeekdays(
-  weekday: { name: string; meetings: Meeting[] }[],
+  weekday: { name: string; meetings: MeetingType[] }[],
   slug: string,
   state: State,
   setState: (state: State) => void

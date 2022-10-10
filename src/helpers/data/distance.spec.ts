@@ -2,7 +2,7 @@ import { getDistance } from './calculate-distances';
 import { settings } from '../settings';
 import type { Meeting } from '../../types';
 
-jest.mock('./settings', () => ({
+jest.mock('../settings', () => ({
   settings: { distance_unit: 'mi' },
 }));
 
@@ -41,20 +41,20 @@ describe('distance', () => {
     expect(getDistance(a, b)).toStrictEqual(expected);
   });
 
-  //null checks
+  //undefined checks
   it.each`
     a                                | b
-    ${null}                          | ${null}
-    ${{ latitude: 1 }}               | ${null}
-    ${{ longitude: 1 }}              | ${null}
-    ${{ latitude: 1, longitude: 1 }} | ${null}
-    ${null}                          | ${{ latitude: 1 }}
-    ${null}                          | ${{ longitude: 1 }}
-    ${null}                          | ${{ latitude: 1, longitude: 1 }}
+    ${undefined}                     | ${undefined}
+    ${{ latitude: 1 }}               | ${undefined}
+    ${{ longitude: 1 }}              | ${undefined}
+    ${{ latitude: 1, longitude: 1 }} | ${undefined}
+    ${undefined}                     | ${{ latitude: 1 }}
+    ${undefined}                     | ${{ longitude: 1 }}
+    ${undefined}                     | ${{ latitude: 1, longitude: 1 }}
     ${{ latitude: 1 }}               | ${{ latitude: 1 }}
     ${{ latitude: 1, longitude: 1 }} | ${{ latitude: 1 }}
     ${{ latitude: 1 }}               | ${{ latitude: 1, longitude: 1 }}
-  `('yields null with $a and $b', ({ a, b }) => {
-    expect(getDistance(a, b)).toStrictEqual(null);
+  `('yields undefined with $a and $b', ({ a, b }) => {
+    expect(getDistance(a, b)).toStrictEqual(undefined);
   });
 });

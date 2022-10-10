@@ -107,7 +107,7 @@ describe('<Table />', () => {
     //unclickable rows
     const rows = screen.getAllByRole('row');
     rows.forEach(row => fireEvent.click(row));
-    expect(mockSetState).toHaveBeenCalledTimes(filteredSlugs.length);
+    expect(mockSetState).toHaveBeenCalledTimes(filteredSlugs.length * 2);
   });
 
   it('displays single meeting in progress', () => {
@@ -117,7 +117,7 @@ describe('<Table />', () => {
     render(
       <Table
         filteredSlugs={filteredSlugs}
-        inProgress={[]}
+        inProgress={['foo']}
         listButtons={false}
         setState={mockSetState}
         state={mockState}
@@ -146,7 +146,7 @@ describe('<Table />', () => {
     render(
       <Table
         filteredSlugs={filteredSlugs}
-        inProgress={[]}
+        inProgress={['foo', 'bar']}
         listButtons={false}
         setState={mockSetState}
         state={mockState}

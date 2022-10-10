@@ -2,6 +2,7 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { DateTime } from 'luxon';
 
+import type { Meeting as MeetingType, State } from '../types';
 import { strings } from '../helpers';
 import Meeting from './Meeting';
 
@@ -10,7 +11,8 @@ describe('<Meeting />', () => {
     window.URL.createObjectURL = jest.fn() as jest.Mock;
   });
 
-  const mockMeeting = {
+  const mockMeeting: MeetingType = {
+    slug: 'test',
     isInPerson: true,
     isOnline: true,
     isActive: true,
@@ -43,17 +45,41 @@ describe('<Meeting />', () => {
     updated: '2/17/22',
   };
 
-  const mockState = {
+  const mockState: State = {
     capabilities: {
+      coordinates: true,
+      distance: true,
+      geolocation: true,
+      inactive: true,
+      location: true,
+      region: true,
+      time: true,
       type: true,
+      weekday: true,
+    },
+    indexes: {
+      distance: [],
+      region: [],
+      time: [],
+      type: [],
+      weekday: [],
     },
     input: {
+      distance: [],
       meeting: 'foo',
+      mode: 'search',
+      region: [],
+      time: [],
+      type: [],
+      view: 'table',
+      weekday: [],
     },
+    loading: false,
     meetings: {
       foo: mockMeeting,
       bar: mockMeeting,
     },
+    ready: true,
   };
 
   it('renders with clickable buttons', () => {
