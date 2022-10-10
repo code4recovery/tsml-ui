@@ -1,8 +1,9 @@
 import { settings } from './settings';
 import { formatUrl } from './format';
+import type { State } from '../types';
 
 //load input values from query string
-export function getQueryString() {
+export function getQueryString(): State['input'] {
   const input = { ...settings.defaults };
 
   //load input from query string
@@ -24,7 +25,10 @@ export function getQueryString() {
       input[param] = query.get(param);
     });
 
-  return input;
+  return {
+    ...settings.defaults,
+    ...input,
+  };
 }
 
 //save input values to query string

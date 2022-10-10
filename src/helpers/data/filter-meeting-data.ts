@@ -1,16 +1,21 @@
 import { DateTime } from 'luxon';
 
+import type { State } from '../../types';
 import { settings } from '../settings';
 import { getIndexByKey } from './get-index-by-key';
 import { calculateDistances } from './calculate-distances';
 
 //run filters on meetings; this is run at every render
-export function filterMeetingData(state, setState, mapbox) {
-  const matchGroups = [];
+export function filterMeetingData(
+  state: State,
+  setState: (state: State) => void,
+  mapbox?: string
+) {
+  const matchGroups: string[][] = [];
   const now = DateTime.now();
   const now_offset = now.plus({ minute: settings.now_offset });
   const slugs = Object.keys(state.meetings);
-  const timeDiff = {};
+  const timeDiff: { [index: string]: number } = {};
 
   //filter by distance, region, time, type, and weekday
   settings.filters.forEach(filter => {
@@ -27,6 +32,7 @@ export function filterMeetingData(state, setState, mapbox) {
         matchGroups.push(
           [].concat.apply(
             [],
+            // @ts-expect-error TODO
             state.input[filter].map(
               key => getIndexByKey(state.indexes[filter], key)?.slugs ?? []
             )
@@ -61,9 +67,12 @@ export function filterMeetingData(state, setState, mapbox) {
         .filter(e => e.length);
       const matches = slugs.filter(slug =>
         orTerms.some(andTerm =>
-          andTerm.every(term => state.meetings[slug].search.search(term) !== -1)
+          andTerm.every(
+            term => state.meetings[slug].search?.search(term) !== -1
+          )
         )
       );
+      // @ts-expect-error TODO
       matchGroups.push([].concat.apply([], matches));
     }
   } else if (['me', 'location'].includes(state.input.mode)) {
@@ -81,8 +90,8 @@ export function filterMeetingData(state, setState, mapbox) {
           `https://api.mapbox.com/geocoding/v5/mapbox.places/${
             state.input.search
           }.json?${new URLSearchParams({
-            access_token: mapbox,
-            autocomplete: false,
+            access_token: mapbox ?? '',
+            autocomplete: 'false',
             language: settings.language,
           })}`
         )
@@ -91,11 +100,11 @@ export function filterMeetingData(state, setState, mapbox) {
             if (result.features && result.features.length) {
               //re-render page with new params
               calculateDistances(
+                filteredSlugs,
                 result.features[0].center[1],
                 result.features[0].center[0],
-                filteredSlugs,
-                state,
-                setState
+                setState,
+                state
               );
             } else {
               //show error
@@ -105,11 +114,11 @@ export function filterMeetingData(state, setState, mapbox) {
         navigator.geolocation.getCurrentPosition(
           position => {
             calculateDistances(
+              filteredSlugs,
               position.coords.latitude,
               position.coords.longitude,
-              filteredSlugs,
-              state,
-              setState
+              setState,
+              state
             );
           },
           error => {
@@ -123,7 +132,8 @@ export function filterMeetingData(state, setState, mapbox) {
 
   //do the filtering, if necessary
   const filteredSlugs = matchGroups.length
-    ? matchGroups.shift().filter(v => matchGroups.every(a => a.includes(v))) //get intersection of slug arrays
+    ? // @ts-expect-error TODO
+      matchGroups.shift().filter(v => matchGroups.every(a => a.includes(v))) //get intersection of slug arrays
     : slugs; //get everything
 
   //build lookup for meeting times based on now
@@ -152,14 +162,16 @@ export function filterMeetingData(state, setState, mapbox) {
       }
     } else {
       if (meetingA.minutes_week !== meetingB.minutes_week) {
+        if (!meetingA.minutes_week) return -1;
+        if (!meetingB.minutes_week) return 1;
         return meetingA.minutes_week - meetingB.minutes_week;
       }
     }
 
     //then by distance
     if (meetingA.distance !== meetingB.distance) {
-      if (meetingA.distance === null) return -1;
-      if (meetingB.distance === null) return 1;
+      if (!meetingA.distance) return -1;
+      if (!meetingB.distance) return 1;
       return meetingA.distance - meetingB.distance;
     }
 
@@ -183,12 +195,11 @@ export function filterMeetingData(state, setState, mapbox) {
   //find in-progress meetings
   const inProgress = state.input.weekday?.length
     ? []
-    : filteredSlugs.filter(
-        slug =>
-          state.meetings[slug].start < now_offset &&
-          state.meetings[slug].end > now &&
-          !state.meetings[slug].types.includes('inactive')
-      );
+    : filteredSlugs.filter(slug => {
+        const { start, end, types } = state.meetings[slug];
+        if (!start || !end) return false;
+        return start < now_offset && end > now && !types?.includes('inactive');
+      });
 
   return [filteredSlugs, inProgress];
 }

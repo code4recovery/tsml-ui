@@ -2,9 +2,44 @@ import React, { useEffect, useRef, useState } from 'react';
 import ReactMapGL, { Marker, NavigationControl, Popup } from 'react-map-gl';
 import WebMercatorViewport from 'viewport-mercator-project';
 
+import type { Meeting, State } from '../types';
 import { formatDirectionsUrl, settings, strings } from '../helpers';
 import Button from './Button';
 import Link from './Link';
+
+type MapProps = {
+  filteredSlugs: string[];
+  listMeetingsInPopup: boolean;
+  mapbox?: string;
+  setState: (state: State) => void;
+  state: State;
+};
+
+type Locations = {
+  [index: string]: {
+    directions_url: string;
+    formatted_address: string;
+    latitude: number;
+    longitude: number;
+    meetings: Meeting[];
+    name?: string;
+  };
+};
+
+type Bounds = {
+  north?: number;
+  east?: number;
+  south?: number;
+  west?: number;
+};
+
+type Viewport = {
+  width: number;
+  height: number;
+  zoom: number;
+  latitude: number;
+  longitude: number;
+};
 
 export default function Map({
   filteredSlugs,
@@ -12,20 +47,28 @@ export default function Map({
   state,
   setState,
   mapbox,
-}) {
-  const [popup, setPopup] = useState(null);
-  const [viewport, setViewport] = useState(null);
-  const [data, setData] = useState({
+}: MapProps) {
+  const [popup, setPopup] = useState<string | undefined>();
+  const [viewport, setViewport] = useState<Viewport | undefined>();
+  const [data, setData] = useState<{
+    locations: Locations;
+    bounds: Bounds;
+    locationKeys: string[];
+  }>({
     locations: {},
     bounds: {},
     locationKeys: [],
   });
-  const [dimensions, setDimensions] = useState(null);
-  const mapFrame = useRef();
+  const [dimensions, setDimensions] = useState<{
+    width: number;
+    height: number;
+  }>();
+  const mapFrame = useRef<HTMLDivElement>(null);
 
   //window size listener (todo figure out why height can go up but not down)
   useEffect(() => {
     const resizeListener = () => {
+      if (!mapFrame.current) return;
       const { width, height } = mapFrame.current.getBoundingClientRect();
       if (width && height) {
         setDimensions({
@@ -53,8 +96,8 @@ export default function Map({
 
   //reset bounds and locations when filteredSlugs changes
   useEffect(() => {
-    const locations = {};
-    const bounds = {};
+    const locations: Locations = {};
+    const bounds: Bounds = {};
 
     filteredSlugs.forEach(slug => {
       const meeting = state.meetings[slug];
@@ -90,7 +133,7 @@ export default function Map({
     });
 
     //quick reference array
-    const locationKeys = Object.keys(locations).sort(
+    const locationKeys: string[] = Object.keys(locations).sort(
       (a, b) => locations[b].latitude - locations[a].latitude
     );
 
@@ -109,7 +152,15 @@ export default function Map({
 
   //reset viewport when data or dimensions change
   useEffect(() => {
-    if (!dimensions || !data.bounds) return;
+    if (
+      !dimensions ||
+      !data.bounds ||
+      !data.bounds.north ||
+      !data.bounds.east ||
+      !data.bounds.south ||
+      !data.bounds.west
+    )
+      return;
     setViewport(
       data.bounds.west === data.bounds.east
         ? {
@@ -161,7 +212,7 @@ export default function Map({
                   latitude={data.locations[key].latitude}
                   longitude={data.locations[key].longitude}
                   offsetTop={-settings.map.markers.location.height}
-                  onClose={() => setPopup(null)}
+                  onClose={() => setPopup(undefined)}
                 >
                   <div className="d-grid gap-2">
                     <h4 className="fw-light">{data.locations[key].name}</h4>
@@ -169,13 +220,15 @@ export default function Map({
                     {listMeetingsInPopup && (
                       <div className="list-group mb-1">
                         {data.locations[key].meetings
-                          .sort((a, b) => a.start > b.start)
+                          .sort((a, b) =>
+                            a.start && b.start && a.start > b.start ? 1 : 0
+                          )
                           .map((meeting, index) => (
                             <div key={index} className="list-group-item">
                               <time className="d-block">
-                                {meeting.start.toFormat('t')}
+                                {meeting.start?.toFormat('t')}
                                 <span className="ms-1">
-                                  {meeting.start.toFormat('cccc')}
+                                  {meeting.start?.toFormat('cccc')}
                                 </span>
                               </time>
                               <Link

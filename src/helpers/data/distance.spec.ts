@@ -1,16 +1,23 @@
-import { distance } from './distance';
-import { settings } from './settings';
-import type { Meeting } from '../types';
+import { getDistance } from './calculate-distances';
+import { settings } from '../settings';
+import type { Meeting } from '../../types';
 
-jest.mock('./settings', () => ({
+jest.mock('../settings', () => ({
   settings: { distance_unit: 'mi' },
 }));
 
 describe('distance', () => {
   //exact
   it('returns 0 for exact location', () => {
-    const meeting: Meeting = { slug: '', latitude: 1, longitude: 1 };
-    expect(distance(meeting, meeting)).toStrictEqual(0);
+    const meeting: Meeting = {
+      slug: '',
+      latitude: 1,
+      longitude: 1,
+      formatted_address: '123 Main St, Anytown, OK 12345, USA',
+    };
+    expect(getDistance({ latitude: 1, longitude: 1 }, meeting)).toStrictEqual(
+      0
+    );
   });
 
   //miles
@@ -20,7 +27,7 @@ describe('distance', () => {
     ${{ latitude: 10, longitude: 10 }}   | ${{ latitude: 20, longitude: 20 }}   | ${959.82}
     ${{ latitude: 100, longitude: 100 }} | ${{ latitude: 200, longitude: 200 }} | ${7697.83}
   `('miles: yields $expected with $a and $b', ({ a, b, expected }) => {
-    expect(distance(a, b)).toStrictEqual(expected);
+    expect(getDistance(a, b)).toStrictEqual(expected);
   });
 
   //kilometers
@@ -31,23 +38,23 @@ describe('distance', () => {
     ${{ latitude: 100, longitude: 100 }} | ${{ latitude: 200, longitude: 200 }} | ${12388.45}
   `('kilometers: yields $expected with $a and $b', ({ a, b, expected }) => {
     settings.distance_unit = 'km';
-    expect(distance(a, b)).toStrictEqual(expected);
+    expect(getDistance(a, b)).toStrictEqual(expected);
   });
 
-  //null checks
+  //undefined checks
   it.each`
     a                                | b
-    ${null}                          | ${null}
-    ${{ latitude: 1 }}               | ${null}
-    ${{ longitude: 1 }}              | ${null}
-    ${{ latitude: 1, longitude: 1 }} | ${null}
-    ${null}                          | ${{ latitude: 1 }}
-    ${null}                          | ${{ longitude: 1 }}
-    ${null}                          | ${{ latitude: 1, longitude: 1 }}
+    ${undefined}                     | ${undefined}
+    ${{ latitude: 1 }}               | ${undefined}
+    ${{ longitude: 1 }}              | ${undefined}
+    ${{ latitude: 1, longitude: 1 }} | ${undefined}
+    ${undefined}                     | ${{ latitude: 1 }}
+    ${undefined}                     | ${{ longitude: 1 }}
+    ${undefined}                     | ${{ latitude: 1, longitude: 1 }}
     ${{ latitude: 1 }}               | ${{ latitude: 1 }}
     ${{ latitude: 1, longitude: 1 }} | ${{ latitude: 1 }}
     ${{ latitude: 1 }}               | ${{ latitude: 1, longitude: 1 }}
-  `('yields null with $a and $b', ({ a, b }) => {
-    expect(distance(a, b)).toStrictEqual(null);
+  `('yields undefined with $a and $b', ({ a, b }) => {
+    expect(getDistance(a, b)).toStrictEqual(undefined);
   });
 });

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Info } from 'luxon';
+import { DateTime, Info } from 'luxon';
 
+import type { Meeting as MeetingType, State } from '../types';
 import {
   formatClasses as cx,
   formatDirectionsUrl,
@@ -11,21 +12,29 @@ import {
   strings,
 } from '../helpers';
 import Button from './Button';
-import Icon from './Icon';
+import Icon, { icons } from './Icon';
 import Link from './Link';
 import Map from './Map';
 
+type MeetingProps = {
+  feedback_emails?: string[];
+  mapbox?: string;
+  setState: (state: State) => void;
+  state: State;
+};
+
 export default function Meeting({
-  state,
-  setState,
-  mapbox,
   feedback_emails = [],
-}) {
+  mapbox,
+  setState,
+  state,
+}: MeetingProps) {
   //open types
-  const [define, setDefine] = useState(null);
+  const [define, setDefine] = useState<string | undefined>();
 
   //existence checked in the parent component
-  const meeting = state.meetings[state.input.meeting];
+  const meeting =
+    state.meetings[state.input.meeting as keyof typeof state.meetings];
 
   //scroll to top when you navigate to this page
   useEffect(() => {
@@ -33,7 +42,11 @@ export default function Meeting({
     if (el) {
       const headerHeight = Math.max(
         0,
-        ...[...document.body.getElementsByTagName('*')]
+        ...[
+          ...Array.prototype.slice.call(
+            document.body.getElementsByTagName('*')
+          ),
+        ]
           .filter(
             x =>
               getComputedStyle(x, null).getPropertyValue('position') ===
@@ -72,7 +85,9 @@ export default function Meeting({
     : undefined;
 
   //set page title
-  document.title = meeting.name;
+  if (meeting.name) {
+    document.title = meeting.name;
+  }
 
   //feedback URL link
   if (!meeting.feedback_url && feedback_emails.length) {
@@ -82,7 +97,12 @@ export default function Meeting({
     );
   }
 
-  const contactButtons = [];
+  const contactButtons: {
+    href: string;
+    icon: keyof typeof icons;
+    text: string;
+    target?: string;
+  }[] = [];
 
   if (meeting.email) {
     contactButtons.push({
@@ -128,23 +148,23 @@ export default function Meeting({
     });
   }
   for (let i = 1; i < 4; i++) {
-    if (!meeting[`contact_${i}_name`]) continue;
-    if (meeting[`contact_${i}_email`])
+    if (!meeting[`contact_${i}_name` as keyof typeof Meeting]) continue;
+    if (meeting[`contact_${i}_email` as keyof typeof Meeting])
       contactButtons.push({
-        href: `mailto:${meeting[`contact_${i}_email`]}`,
+        href: `mailto:${meeting[`contact_${i}_email` as keyof typeof Meeting]}`,
         icon: 'email',
         text: strings.contact_email.replace(
           '%contact%',
-          meeting[`contact_${i}_name`]
+          meeting[`contact_${i}_name` as keyof typeof Meeting]
         ),
       });
-    if (meeting[`contact_${i}_phone`])
+    if (meeting[`contact_${i}_phone` as keyof typeof Meeting])
       contactButtons.push({
-        href: `tel:${meeting[`contact_${i}_phone`]}`,
+        href: `tel:${meeting[`contact_${i}_phone` as keyof typeof Meeting]}`,
         icon: 'phone',
         text: strings.contact_call.replace(
           '%contact%',
-          meeting[`contact_${i}_name`]
+          meeting[`contact_${i}_name` as keyof typeof Meeting]
         ),
       });
   }
@@ -160,7 +180,9 @@ export default function Meeting({
             m.isInPerson &&
             m.formatted_address === meeting.formatted_address
         )
-        .sort((a, b) => a.start - b.start),
+        .sort((a, b) =>
+          !a.start ? -1 : !b.start ? 1 : a.start.toMillis() - b.start.toMillis()
+        ),
     }))
     .filter(e => e.meetings.length);
 
@@ -183,7 +205,9 @@ export default function Meeting({
             (m.isOnline || m.isInPerson) &&
             m.group === meeting.group
         )
-        .sort((a, b) => a.start - b.start),
+        .sort((a, b) =>
+          !a.start ? -1 : !b.start ? 1 : a.start.toMillis() - b.start.toMillis()
+        ),
     }))
     .filter(e => e.meetings.length);
 
@@ -195,9 +219,9 @@ export default function Meeting({
   return (
     <div
       className={cx('d-flex flex-column flex-grow-1 meeting', {
-        'in-person': meeting.isInPerson,
+        'in-person': !!meeting.isInPerson,
         'inactive': !meeting.isActive,
-        'online': meeting.isOnline,
+        'online': !!meeting.isOnline,
       })}
     >
       <h1 className="fw-light mb-1">
@@ -208,7 +232,7 @@ export default function Meeting({
         <a
           href={formatUrl({
             ...state.input,
-            meeting: null,
+            meeting: undefined,
           })}
           onClick={e => {
             e.preventDefault();
@@ -216,7 +240,7 @@ export default function Meeting({
               ...state,
               input: {
                 ...state.input,
-                meeting: null,
+                meeting: undefined,
               },
             });
           }}
@@ -244,7 +268,7 @@ export default function Meeting({
                   (
                   {formatTime(
                     meeting.start.setZone(meeting.timezone),
-                    meeting.end.setZone(meeting.timezone)
+                    meeting.end?.setZone(meeting.timezone)
                   )}
                   )
                 </p>
@@ -258,11 +282,13 @@ export default function Meeting({
                     )
                     .map((type, index) => (
                       <li className="m-0" key={index}>
-                        {strings.type_descriptions?.[type] ? (
+                        {strings.type_descriptions?.[
+                          type as keyof typeof strings.type_descriptions
+                        ] ? (
                           <button
                             className="d-flex flex-column bg-transparent border-0 p-0 text-start text-reset"
                             onClick={() =>
-                              setDefine(define === type ? null : type)
+                              setDefine(define === type ? undefined : type)
                             }
                           >
                             <div className="d-flex align-items-center gap-2">
@@ -277,7 +303,11 @@ export default function Meeting({
                             </div>
                             {define === type && (
                               <small className="d-block mb-2">
-                                {strings.type_descriptions[type]}
+                                {
+                                  strings.type_descriptions[
+                                    type as keyof typeof strings.type_descriptions
+                                  ]
+                                }
                               </small>
                             )}
                           </button>
@@ -343,7 +373,7 @@ export default function Meeting({
                 className={cx(
                   {
                     'text-decoration-line-through text-muted':
-                      meeting.isTempClosed,
+                      !!meeting.isTempClosed,
                   },
                   'd-grid gap-2 list-group-item py-3 location'
                 )}
@@ -431,7 +461,7 @@ export default function Meeting({
 }
 
 //return paragraphs from possibly-multiline string
-function Paragraphs({ text, className }) {
+function Paragraphs({ text, className }: { text: string; className?: string }) {
   return (
     <div className={className}>
       {text
@@ -444,7 +474,12 @@ function Paragraphs({ text, className }) {
   );
 }
 
-function formatWeekdays(weekday, slug, state, setState) {
+function formatWeekdays(
+  weekday: { name: string; meetings: MeetingType[] }[],
+  slug: string,
+  state: State,
+  setState: (state: State) => void
+) {
   return weekday.map(({ meetings, name }, index) => (
     <div key={index}>
       <h3 className="h6 mb-1 mt-2">{name}</h3>
@@ -455,7 +490,7 @@ function formatWeekdays(weekday, slug, state, setState) {
             key={index}
           >
             <div className="text-muted text-nowrap">
-              {m.start.toFormat('t')}
+              {m.start?.toFormat('t')}
             </div>
             <div className="flex-grow-1">
               {m.slug === slug ? (
@@ -485,7 +520,7 @@ function formatWeekdays(weekday, slug, state, setState) {
 }
 
 //format time string (duration? or appointment?)
-function formatTime(start, end) {
+function formatTime(start?: DateTime, end?: DateTime) {
   if (!start) {
     return strings.appointment;
   }
@@ -502,7 +537,7 @@ function formatTime(start, end) {
 }
 
 //add or remove an "edit meeting" link on WordPress
-function wordPressEditLink(url) {
+function wordPressEditLink(url?: string) {
   const adminBar = document.getElementById('wp-admin-bar-root-default');
   if (!adminBar) return;
   const editButton = document.getElementById('wp-admin-bar-edit-meeting');
@@ -521,6 +556,6 @@ function wordPressEditLink(url) {
     //add button to menu bar
     adminBar.appendChild(button);
   } else if (editButton) {
-    editButton.parentNode.removeChild(editButton);
+    editButton.parentNode?.removeChild(editButton);
   }
 }

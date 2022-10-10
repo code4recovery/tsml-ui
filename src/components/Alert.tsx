@@ -55,7 +55,7 @@ export default function Alert({ state, setState }: AlertProps) {
               }}
               text={strings.remove.replace(
                 '%filter%',
-                getIndexByKey(state.indexes[filter], value)?.name
+                getIndexByKey(state.indexes[filter], value)?.name ?? ''
               )}
               icon="close"
             />
