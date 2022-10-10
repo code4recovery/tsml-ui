@@ -1,13 +1,19 @@
 import { DateTime } from 'luxon';
 
+import type { JSONData } from '../../types';
 import { formatSlug } from '../format';
 
+type GoogleSheetData = {
+  values: [string[]];
+};
+
 //translates Google Sheet JSON into Meeting Guide format (example puget-sound.html)
-export function translateGoogleSheet(data, sheetId) {
-  if (!data.values) return;
+export function translateGoogleSheet(data: GoogleSheetData, sheetId: string) {
+  if (!data.values || !data.values.length) return;
 
-  const meetings = [];
+  const meetings: JSONData[] = [];
 
+  // @ts-expect-error TODO
   const headers = data.values
     .shift()
     .map(header => formatSlug(header).replaceAll('-', '_'))
@@ -18,11 +24,11 @@ export function translateGoogleSheet(data, sheetId) {
     //skip empty rows
     if (!row.filter(e => e).length) return;
 
-    const meeting = {};
+    const meeting: JSONData = {};
 
     //fill values
     headers.forEach((header, index) => {
-      meeting[header] = row[index];
+      meeting[header as keyof JSONData] = row[index];
     });
 
     //edit url link

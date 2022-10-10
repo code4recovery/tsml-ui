@@ -1,6 +1,6 @@
-import { distance } from './distance';
-import { settings } from './settings';
-import type { Meeting } from '../types';
+import { getDistance } from './calculate-distances';
+import { settings } from '../settings';
+import type { Meeting } from '../../types';
 
 jest.mock('./settings', () => ({
   settings: { distance_unit: 'mi' },
@@ -15,7 +15,9 @@ describe('distance', () => {
       longitude: 1,
       formatted_address: '123 Main St, Anytown, OK 12345, USA',
     };
-    expect(distance(meeting, meeting)).toStrictEqual(0);
+    expect(getDistance({ latitude: 1, longitude: 1 }, meeting)).toStrictEqual(
+      0
+    );
   });
 
   //miles
@@ -25,7 +27,7 @@ describe('distance', () => {
     ${{ latitude: 10, longitude: 10 }}   | ${{ latitude: 20, longitude: 20 }}   | ${959.82}
     ${{ latitude: 100, longitude: 100 }} | ${{ latitude: 200, longitude: 200 }} | ${7697.83}
   `('miles: yields $expected with $a and $b', ({ a, b, expected }) => {
-    expect(distance(a, b)).toStrictEqual(expected);
+    expect(getDistance(a, b)).toStrictEqual(expected);
   });
 
   //kilometers
@@ -36,7 +38,7 @@ describe('distance', () => {
     ${{ latitude: 100, longitude: 100 }} | ${{ latitude: 200, longitude: 200 }} | ${12388.45}
   `('kilometers: yields $expected with $a and $b', ({ a, b, expected }) => {
     settings.distance_unit = 'km';
-    expect(distance(a, b)).toStrictEqual(expected);
+    expect(getDistance(a, b)).toStrictEqual(expected);
   });
 
   //null checks
@@ -53,6 +55,6 @@ describe('distance', () => {
     ${{ latitude: 1, longitude: 1 }} | ${{ latitude: 1 }}
     ${{ latitude: 1 }}               | ${{ latitude: 1, longitude: 1 }}
   `('yields null with $a and $b', ({ a, b }) => {
-    expect(distance(a, b)).toStrictEqual(null);
+    expect(getDistance(a, b)).toStrictEqual(null);
   });
 });
