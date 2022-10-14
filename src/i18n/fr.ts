@@ -21,6 +21,8 @@ export const fr: Translation = {
   in_progress_multiple: '%count% rendez-vous en cours',
   location: 'Emplacement',
   location_group: 'Emplacement / Groupe',
+  match_single: '1 résultat',
+  match_multiple: '%count% résultats',
   meeting_information: 'Informations sur la réunion',
   meetings: 'Rencontres',
   midday: 'Midi',

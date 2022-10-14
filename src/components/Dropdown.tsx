@@ -1,7 +1,12 @@
 import React, { Fragment } from 'react';
 
 import type { State } from '../types';
-import { formatClasses as cx, getIndexByKey, formatUrl } from '../helpers';
+import {
+  formatClasses as cx,
+  formatUrl,
+  getIndexByKey,
+  strings,
+} from '../helpers';
 
 type DropdownProps = {
   defaultValue: string;
@@ -88,7 +93,17 @@ export default function Dropdown({
         onClick={e => setFilter(e, filter, key)}
       >
         <span>{name}</span>
-        <span className="badge bg-light border ms-3 text-dark">
+        <span
+          aria-label={
+            slugs.length === 1
+              ? strings.match_single
+              : strings.match_multiple.replace(
+                  '%count%',
+                  slugs.length.toString()
+                )
+          }
+          className="badge bg-light border ms-3 text-dark"
+        >
           {slugs.length}
         </span>
       </a>

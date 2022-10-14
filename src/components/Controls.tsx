@@ -140,38 +140,40 @@ export default function Controls({ state, setState, mapbox }: ControlsProps) {
     <div className="controls d-print-none gx-3 gx-md-4 gy-3 row">
       <div className="col-6 col-lg">
         <div className="position-relative">
-          <form className="input-group" onSubmit={locationSearch}>
-            <input
-              aria-label={strings.modes[state.input.mode]}
-              className="form-control"
-              disabled={state.input.mode === 'me'}
-              onChange={e => {
-                if (state.input.mode === 'search') {
-                  state.input.search = e.target.value;
-                  setState({ ...state });
-                } else {
-                  setSearch(e.target.value);
-                }
-              }}
-              placeholder={strings.modes[state.input.mode]}
-              ref={searchInput}
-              spellCheck="false"
-              type="search"
-              value={
-                state.input.mode === 'location' ? search : state.input.search
-              }
-            />
-            {modes.length > 1 && (
-              <button
-                id="mode"
+          <form onSubmit={locationSearch}>
+            <fieldset className="input-group">
+              <input
                 aria-label={strings.modes[state.input.mode]}
-                className="btn btn-outline-secondary dropdown-toggle"
-                onClick={() =>
-                  setDropdown(dropdown === 'search' ? undefined : 'search')
+                className="form-control"
+                disabled={state.input.mode === 'me'}
+                onChange={e => {
+                  if (state.input.mode === 'search') {
+                    state.input.search = e.target.value;
+                    setState({ ...state });
+                  } else {
+                    setSearch(e.target.value);
+                  }
+                }}
+                placeholder={strings.modes[state.input.mode]}
+                ref={searchInput}
+                spellCheck="false"
+                type="search"
+                value={
+                  state.input.mode === 'location' ? search : state.input.search
                 }
-                type="button"
               />
-            )}
+              {modes.length > 1 && (
+                <button
+                  id="mode"
+                  aria-label={strings.modes[state.input.mode]}
+                  className="btn btn-outline-secondary dropdown-toggle"
+                  onClick={() =>
+                    setDropdown(dropdown === 'search' ? undefined : 'search')
+                  }
+                  type="button"
+                />
+              )}
+            </fieldset>
           </form>
           {modes.length > 1 && (
             <div

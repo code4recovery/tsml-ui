@@ -8,15 +8,16 @@ div.tsml-ui {
 }
 
 //configure bootstrap
+$enable-rfs: false;
 $grid-gutter-width: 24px;
-$input-btn-padding-y: 6px;
+$input-btn-padding-x-sm: 8px;
 $input-btn-padding-x: 12px;
 $input-btn-padding-y-sm: 4px;
-$input-btn-padding-x-sm: 8px;
-$spacer: 16px;
-$table-cell-padding-y: 8px;
-$table-cell-padding-x: 8px;
+$input-btn-padding-y: 6px;
 $rfs-unit: px;
+$spacer: 16px;
+$table-cell-padding-x: 8px;
+$table-cell-padding-y: 8px;
 
 //"namespaced" css -- should not interfere with presentation outside .tsml-ui
 div.tsml-ui {
@@ -83,6 +84,10 @@ div.tsml-ui {
     padding: 0;
     text-align: left;
     text-transform: none;
+  }
+
+  h1:focus {
+    outline: none;
   }
 
   button {
