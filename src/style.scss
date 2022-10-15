@@ -28,9 +28,7 @@ div.tsml-ui {
   @import '~bootstrap/scss/functions';
   @import '~bootstrap/scss/variables';
   @import '~bootstrap/scss/maps';
-  @import '~bootstrap/scss/maps';
   @import '~bootstrap/scss/mixins';
-  @import '~bootstrap/scss/map';
   @import '~bootstrap/scss/utilities';
 
   $dropdown-border-color: $gray-300;
@@ -99,7 +97,10 @@ div.tsml-ui {
   }
 
   h1 {
-    font-size: 40px !important;
+    font-size: 32px !important;
+    @include media-breakpoint-up(md) {
+      font-size: 40px !important;
+    }
   }
 
   h2 {
