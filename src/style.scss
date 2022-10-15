@@ -9,6 +9,7 @@ div.tsml-ui {
 
 //configure bootstrap
 $enable-rfs: false;
+$enable-rfs: false;
 $grid-gutter-width: 24px;
 $input-btn-padding-x-sm: 8px;
 $input-btn-padding-x: 12px;
@@ -16,6 +17,7 @@ $input-btn-padding-y-sm: 4px;
 $input-btn-padding-y: 6px;
 $rfs-unit: px;
 $spacer: 16px;
+$table-cell-padding-x: 8px;
 $table-cell-padding-x: 8px;
 $table-cell-padding-y: 8px;
 $prefix: 'tsml-';
@@ -26,9 +28,14 @@ div.tsml-ui {
   @import '~bootstrap/scss/functions';
   @import '~bootstrap/scss/variables';
   @import '~bootstrap/scss/maps';
+  @import '~bootstrap/scss/maps';
   @import '~bootstrap/scss/mixins';
   @import '~bootstrap/scss/map';
   @import '~bootstrap/scss/utilities';
+
+  $dropdown-border-color: $gray-300;
+  $dropdown-divider-bg: $gray-300;
+  $table-border-color: $gray-300;
 
   $dropdown-border-color: $gray-300;
   $dropdown-divider-bg: $gray-300;
@@ -101,6 +108,17 @@ div.tsml-ui {
 
   h3 {
     font-size: 16px !important;
+  }
+
+  a {
+    color: $link-color;
+    &:hover {
+      color: $link-hover-color;
+    }
+  }
+
+  h1:focus {
+    outline: none;
   }
 
   a {
@@ -370,6 +388,7 @@ div.tsml-ui {
     //mobile view
     @include media-breakpoint-down(md) {
       tr {
+        border-top: 1px solid $gray-300;
         border-top: 1px solid $gray-300;
         padding: 6px 12px;
         position: relative;
