@@ -9,7 +9,6 @@ div.tsml-ui {
 
 //configure bootstrap
 $enable-rfs: false;
-$enable-rfs: false;
 $grid-gutter-width: 24px;
 $input-btn-padding-x-sm: 8px;
 $input-btn-padding-x: 12px;
@@ -17,7 +16,6 @@ $input-btn-padding-y-sm: 4px;
 $input-btn-padding-y: 6px;
 $rfs-unit: px;
 $spacer: 16px;
-$table-cell-padding-x: 8px;
 $table-cell-padding-x: 8px;
 $table-cell-padding-y: 8px;
 $prefix: 'tsml-';
@@ -30,10 +28,6 @@ div.tsml-ui {
   @import '~bootstrap/scss/maps';
   @import '~bootstrap/scss/mixins';
   @import '~bootstrap/scss/utilities';
-
-  $dropdown-border-color: $gray-300;
-  $dropdown-divider-bg: $gray-300;
-  $table-border-color: $gray-300;
 
   $dropdown-border-color: $gray-300;
   $dropdown-divider-bg: $gray-300;
@@ -79,9 +73,8 @@ div.tsml-ui {
   font-family: $font-family-sans-serif !important;
   font-weight: $font-weight-base !important;
   line-height: $line-height-base !important;
-  text-align: $body-text-align !important;
-  -webkit-tap-highlight-color: rgba($black, 0);
-  -webkit-text-size-adjust: 100%;
+  text-align: left !important;
+  text-size-adjust: none;
 
   h1,
   h2,
@@ -101,6 +94,9 @@ div.tsml-ui {
     @include media-breakpoint-up(md) {
       font-size: 40px !important;
     }
+    &:focus {
+      outline: none;
+    }
   }
 
   h2 {
@@ -118,32 +114,6 @@ div.tsml-ui {
     }
   }
 
-  h1:focus {
-    outline: none;
-  }
-
-  a {
-    color: $link-color;
-    &:hover {
-      color: $link-hover-color;
-    }
-  }
-
-  h1:focus {
-    outline: none;
-  }
-
-  a {
-    color: $link-color;
-    &:hover {
-      color: $link-hover-color;
-    }
-  }
-
-  h1:focus {
-    outline: none;
-  }
-
   button {
     font-weight: inherit;
   }
@@ -156,6 +126,9 @@ div.tsml-ui {
     cursor: inherit;
     &[href] {
       cursor: pointer;
+    }
+    &:focus {
+      box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
     }
   }
 
