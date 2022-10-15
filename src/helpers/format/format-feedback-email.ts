@@ -27,10 +27,7 @@ export function formatFeedbackEmail(
 
   //build mailto link
   return `mailto:${formatArray(feedback_emails).join()}?${new URLSearchParams({
-    subject: strings.email_subject.replace(
-      '%name%',
-      meeting.name ?? strings.unnamed_meeting
-    ),
+    subject: strings.email_subject.replace('%name%', meeting.name),
     body: lines.join('\n'),
   })
     .toString()
