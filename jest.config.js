@@ -7,6 +7,7 @@ module.exports = {
     '!<rootDir>/src/(types|i18n)/*',
     '!<rootDir>/**/__snapshots__/*',
     '!<rootDir>/e2e/**/*',
+    '!<rootDir>/src/**/index.ts',
   ],
   testPathIgnorePatterns: ['e2e'],
 };

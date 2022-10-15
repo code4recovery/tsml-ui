@@ -1,6 +1,5 @@
 import { settings } from '../settings';
 import { getQueryString } from '../query-string';
-//import { formatUrl } from './format-url';
 import { formatFeedbackEmail } from '.';
 import { Meeting } from '../../types';
 
