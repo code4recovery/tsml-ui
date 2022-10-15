@@ -27,6 +27,7 @@ div.tsml-ui {
   @import '~bootstrap/scss/variables';
   @import '~bootstrap/scss/maps';
   @import '~bootstrap/scss/mixins';
+  @import '~bootstrap/scss/map';
   @import '~bootstrap/scss/utilities';
 
   $dropdown-border-color: $gray-300;
@@ -80,9 +81,6 @@ div.tsml-ui {
   h1,
   h2,
   h3,
-  h4,
-  h5,
-  h6,
   p,
   ol,
   ul {
@@ -91,6 +89,29 @@ div.tsml-ui {
     padding: 0;
     text-align: left;
     text-transform: none;
+  }
+
+  h1 {
+    font-size: 40px !important;
+  }
+
+  h2 {
+    font-size: 20px !important;
+  }
+
+  h3 {
+    font-size: 16px !important;
+  }
+
+  a {
+    color: $link-color;
+    &:hover {
+      color: $link-hover-color;
+    }
+  }
+
+  h1:focus {
+    outline: none;
   }
 
   a {
