@@ -229,7 +229,7 @@ export default function Meeting({
       <h1 className="fw-light mb-1" id="tsml-title" tabIndex={-1}>
         <Link meeting={meeting} />
       </h1>
-      <div className="align-items-center border-bottom d-flex h6 mb-3 pb-2">
+      <div className="align-items-center border-bottom d-flex mb-3 pb-2">
         <Icon icon="back" />
         <a
           href={formatUrl({
@@ -262,7 +262,7 @@ export default function Meeting({
           )}
           <div className="list-group">
             <div className="d-grid gap-2 list-group-item py-3">
-              <h2 className="h5">{strings.meeting_information}</h2>
+              <h2>{strings.meeting_information}</h2>
               <p>{formatTime(meeting.start, meeting.end)}</p>
 
               {meeting.start && meeting.start.zoneName !== meeting.timezone && (
@@ -380,7 +380,7 @@ export default function Meeting({
                   'd-grid gap-2 list-group-item py-3 location'
                 )}
               >
-                {meeting.location && <h2 className="h5">{meeting.location}</h2>}
+                {meeting.location && <h2>{meeting.location}</h2>}
                 {meeting.formatted_address && (
                   <p>{meeting.formatted_address}</p>
                 )}
@@ -404,7 +404,7 @@ export default function Meeting({
                 !!groupWeekdays.length ||
                 !!contactButtons.length) && (
                 <div className="d-grid gap-2 list-group-item py-3 group">
-                  <h2 className="h5">{meeting.group}</h2>
+                  <h2>{meeting.group}</h2>
                   {meeting.district && <p>{meeting.district}</p>}
                   {meeting.group_notes && (
                     <Paragraphs text={meeting.group_notes} />
@@ -484,7 +484,7 @@ function formatWeekdays(
 ) {
   return weekday.map(({ meetings, name }, index) => (
     <div key={index}>
-      <h3 className="h6 mb-1 mt-2">{name}</h3>
+      <h3 className="mb-1 mt-2">{name}</h3>
       <ol className="list-unstyled">
         {meetings.map((m, index) => (
           <li

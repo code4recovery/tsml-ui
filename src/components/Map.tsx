@@ -219,7 +219,7 @@ export default function Map({
                   onClose={() => setPopup(undefined)}
                 >
                   <div className="d-grid gap-2">
-                    <h4 className="fw-light">{data.locations[key].name}</h4>
+                    <h2>{data.locations[key].name}</h2>
                     <p>{data.locations[key].formatted_address}</p>
                     {listMeetingsInPopup && (
                       <div className="list-group mb-1">
