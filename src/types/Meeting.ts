@@ -39,7 +39,7 @@ export interface Meeting {
   location_notes?: string;
   longitude?: number;
   minutes_week?: number;
-  name?: string;
+  name: string;
   notes?: string;
   paypal?: string;
   phone?: string;

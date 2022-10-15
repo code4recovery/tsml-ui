@@ -21,6 +21,8 @@ export interface Translation {
   in_progress_multiple: string;
   location: string;
   location_group: string;
+  match_single: string;
+  match_multiple: string;
   meeting_information: string;
   meetings: string;
   midday: string;

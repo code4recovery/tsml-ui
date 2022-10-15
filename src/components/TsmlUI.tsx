@@ -236,7 +236,7 @@ export default function TsmlUI({ google, mapbox, src, timezone }: TsmlUIProps) {
             feedback_emails={settings.feedback_emails}
           />
         ) : (
-          <div className="d-grid gap-3">
+          <div className="d-flex flex-column flex-grow-1 gap-3">
             {settings.show.title && <Title state={state} />}
             {settings.show.controls && (
               <Controls state={state} setState={setState} mapbox={mapbox} />

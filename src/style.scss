@@ -8,23 +8,31 @@ div.tsml-ui {
 }
 
 //configure bootstrap
+$enable-rfs: false;
 $grid-gutter-width: 24px;
-$input-btn-padding-y: 6px;
+$input-btn-padding-x-sm: 8px;
 $input-btn-padding-x: 12px;
 $input-btn-padding-y-sm: 4px;
-$input-btn-padding-x-sm: 8px;
-$spacer: 16px;
-$table-cell-padding-y: 8px;
-$table-cell-padding-x: 8px;
+$input-btn-padding-y: 6px;
 $rfs-unit: px;
+$spacer: 16px;
+$table-cell-padding-x: 8px;
+$table-cell-padding-y: 8px;
+$prefix: 'tsml-';
 
 //"namespaced" css -- should not interfere with presentation outside .tsml-ui
 div.tsml-ui {
   //import only what we need from bootstrap
   @import '~bootstrap/scss/functions';
   @import '~bootstrap/scss/variables';
+  @import '~bootstrap/scss/maps';
   @import '~bootstrap/scss/mixins';
   @import '~bootstrap/scss/utilities';
+
+  $dropdown-border-color: $gray-300;
+  $dropdown-divider-bg: $gray-300;
+  $table-border-color: $gray-300;
+
   @import '~bootstrap/scss/root';
   @import '~bootstrap/scss/reboot';
   @import '~bootstrap/scss/type';
@@ -85,9 +93,21 @@ div.tsml-ui {
     text-transform: none;
   }
 
+  a {
+    color: $link-color;
+    &:hover {
+      color: $link-hover-color;
+    }
+  }
+
+  h1:focus {
+    outline: none;
+  }
+
   button {
     font-weight: inherit;
   }
+
   .mapboxgl-ctrl-attrib-inner {
     font-size: 12px !important;
   }
@@ -268,25 +288,15 @@ div.tsml-ui {
   }
 
   table.table {
-    border-width: 0;
     font-size: 16px !important;
     table-layout: auto;
-
-    tr {
-      border-bottom: 1px solid $table-border-color;
-    }
 
     th {
       text-transform: none;
     }
 
     td {
-      border: 0;
       vertical-align: middle;
-    }
-
-    thead tr {
-      border-bottom: 1px solid $gray-400;
     }
 
     .distance {
@@ -297,13 +307,6 @@ div.tsml-ui {
     tr th:first-child,
     td:first-child {
       padding-left: 16px;
-    }
-
-    tbody {
-      border-top: 0 !important;
-      &:first-of-type {
-        border-top: 1px solid $gray-300 !important;
-      }
     }
 
     tbody.tsml-in-progress {
@@ -340,12 +343,13 @@ div.tsml-ui {
 
     //when whole row is clickable
     &.clickable-rows tbody tr:hover a {
-      color: $blue-700;
+      color: $link-hover-color;
     }
 
     //mobile view
     @include media-breakpoint-down(md) {
       tr {
+        border-top: 1px solid $gray-300;
         padding: 6px 12px;
         position: relative;
 

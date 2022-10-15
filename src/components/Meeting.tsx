@@ -60,6 +60,8 @@ export default function Meeting({
       el.scrollIntoView();
     }
 
+    document.getElementById('tsml-title')?.focus();
+
     //log edit_url
     if (meeting.edit_url) {
       console.log(`TSML UI edit ${meeting.name}: ${meeting.edit_url}`);
@@ -224,7 +226,7 @@ export default function Meeting({
         'online': !!meeting.isOnline,
       })}
     >
-      <h1 className="fw-light mb-1">
+      <h1 className="fw-light mb-1" id="tsml-title" tabIndex={-1}>
         <Link meeting={meeting} />
       </h1>
       <div className="align-items-center border-bottom d-flex h6 mb-3 pb-2">
