@@ -101,22 +101,16 @@ export function loadMeetingData(
 
     //creates formatted_address if necessary
     if (!formatted_address) {
-      if (meeting.city) {
-        formatted_address = meeting.city;
-        if (meeting.address) {
-          formatted_address = `${meeting.address}, ${formatted_address}`;
-        }
-        if (meeting.state) {
-          formatted_address = `${formatted_address}, ${meeting.state}`;
-        }
-        if (meeting.postal_code) {
-          formatted_address = `${formatted_address} ${meeting.postal_code}`;
-        }
-        if (meeting.country) {
-          formatted_address = `${formatted_address}, ${meeting.country}`;
-        }
-      } else {
-        return warn('no city or formatted_address', meeting);
+      formatted_address = [
+        meeting.address,
+        `${meeting.state} ${meeting.postal_code}`,
+        meeting.country,
+      ]
+        .map(e => e?.trim())
+        .filter(e => e)
+        .join(', ');
+      if (!formatted_address) {
+        return warn('no address information', meeting);
       }
     }
 

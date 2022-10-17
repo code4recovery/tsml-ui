@@ -2,6 +2,7 @@ import { DateTime } from 'luxon';
 
 import type { JSONData } from '../../types';
 import { formatSlug } from '../format';
+import { settings } from '../settings';
 
 type GoogleSheetData = {
   values: [string[]];
@@ -28,8 +29,14 @@ export function translateGoogleSheet(data: GoogleSheetData, sheetId: string) {
 
     //fill values
     headers.forEach((header, index) => {
-      // @ts-expect-error TODO
-      meeting[header as keyof JSONData] = row[index];
+      if (row[index]) {
+        if (header === 'types') {
+          meeting.types = row[index].split(',').map(e => e.trim());
+        } else {
+          // @ts-expect-error TODO
+          meeting[header as keyof JSONData] = row[index];
+        }
+      }
     });
 
     //edit url link
@@ -51,6 +58,7 @@ export function translateGoogleSheet(data: GoogleSheetData, sheetId: string) {
         );
       }
     }
+
     if (meeting.end_time) {
       const end_time = DateTime.fromFormat(meeting.end_time, 'h:mm a', {
         locale: 'en',
@@ -62,6 +70,15 @@ export function translateGoogleSheet(data: GoogleSheetData, sheetId: string) {
         console.warn(
           `TSML UI error parsing ${meeting.end_time} (${end_time.invalidExplanation}): ${meeting.edit_url}`
         );
+      }
+    }
+
+    if (meeting.day && typeof meeting.day === 'string') {
+      meeting.day = meeting.day.toLowerCase();
+      //@ts-expect-error TODO
+      if (settings.weekdays.includes(meeting.day)) {
+        //@ts-expect-error TODO
+        meeting.day = settings.weekdays.indexOf(meeting.day);
       }
     }
 
