@@ -28,6 +28,7 @@ export function translateGoogleSheet(data: GoogleSheetData, sheetId: string) {
 
     //fill values
     headers.forEach((header, index) => {
+      // @ts-expect-error TODO
       meeting[header as keyof JSONData] = row[index];
     });
 
