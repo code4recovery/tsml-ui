@@ -270,8 +270,7 @@ export function loadMeetingData(
         if (dayIndex === -1) {
           indexes.weekday.push({
             key: `${meeting.day}`,
-            name:
-              strings[settings.weekdays[meeting.day]] ?? strings.appointment,
+            name: strings[settings.weekdays[meeting.day]],
             slugs: [slug],
           });
         } else {
@@ -353,8 +352,13 @@ export function loadMeetingData(
     //optional updated date
     let updated;
     if (meeting.updated) {
-      updated = DateTime.fromISO(meeting.updated).setZone(timezone);
-      updated = updated.isValid ? updated.toLocaleString() : undefined;
+      updated = DateTime.fromSQL(meeting.updated).setZone(timezone);
+      if (!updated.isValid) {
+        warn(`invalid updated (${updated.invalidExplanation})`, meeting);
+        updated = undefined;
+      } else {
+        updated = updated.toLocaleString();
+      }
     }
 
     //build search string
@@ -376,6 +380,7 @@ export function loadMeetingData(
 
     meetings[slug] = {
       address,
+      approximate,
       conference_phone,
       conference_phone_notes,
       conference_provider,
@@ -399,8 +404,9 @@ export function loadMeetingData(
       group,
       group_notes,
       isActive,
-      isOnline,
       isInPerson,
+      isOnline,
+      isTempClosed,
       latitude,
       location,
       location_notes,
@@ -412,9 +418,9 @@ export function loadMeetingData(
       phone,
       regions,
       search,
-      start,
       slug,
       square: validateSquare(meeting),
+      start,
       timezone,
       types,
       updated,

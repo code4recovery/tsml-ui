@@ -1,7 +1,5 @@
 import type { DateTime } from 'luxon';
 
-type Day = '0' | '1' | '2' | '3' | '4' | '5' | '6';
-
 export interface Meeting {
   address?: string;
   approximate?: boolean;
@@ -10,22 +8,20 @@ export interface Meeting {
   conference_provider?: string;
   conference_url?: string;
   conference_url_notes?: string;
-  contact_1_name?: string;
   contact_1_email?: string;
+  contact_1_name?: string;
   contact_1_phone?: string;
-  contact_2_name?: string;
   contact_2_email?: string;
+  contact_2_name?: string;
   contact_2_phone?: string;
-  contact_3_name?: string;
   contact_3_email?: string;
+  contact_3_name?: string;
   contact_3_phone?: string;
-  day?: Day | Day[];
   distance?: number;
   district?: string;
-  edit_url?: string | null;
+  edit_url?: string;
   email?: string;
   end?: DateTime;
-  end_time?: `${number}:${number}`;
   feedback_url?: string;
   formatted_address: string;
   group?: string;
@@ -43,13 +39,11 @@ export interface Meeting {
   notes?: string;
   paypal?: string;
   phone?: string;
-  region?: string;
   regions?: string[];
   search?: string;
   slug: string;
   square?: string;
   start?: DateTime;
-  time?: `${number}:${number}`;
   timezone?: string;
   types?: MeetingType[];
   updated?: string;

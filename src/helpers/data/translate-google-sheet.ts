@@ -32,6 +32,8 @@ export function translateGoogleSheet(data: GoogleSheetData, sheetId: string) {
       if (row[index]) {
         if (header === 'types') {
           meeting.types = row[index].split(',').map(e => e.trim());
+        } else if (header === 'regions') {
+          meeting.regions = row[index].split('>').map(e => e.trim());
         } else {
           // @ts-expect-error TODO
           meeting[header as keyof JSONData] = row[index];
@@ -80,6 +82,15 @@ export function translateGoogleSheet(data: GoogleSheetData, sheetId: string) {
         //@ts-expect-error TODO
         meeting.day = settings.weekdays.indexOf(meeting.day);
       }
+    }
+
+    //convert from 12/31/2022 to 2022-12-31
+    if (meeting.updated && (meeting.updated.match(/\//g) || []).length === 2) {
+      const [month, day, year] = meeting.updated.split('/');
+      meeting.updated = `${year}-${month.padStart(2, '0')}-${day.padStart(
+        2,
+        '0'
+      )}`;
     }
 
     meetings.push(meeting);
