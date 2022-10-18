@@ -2,10 +2,11 @@ import { DateTime } from 'luxon';
 
 import type { JSONData } from '../../types';
 import { formatSlug } from '../format';
-import { settings } from '../settings';
+import { en } from '../../i18n';
+import { settings } from '../../helpers';
 
-type GoogleSheetData = {
-  values: [string[]];
+export type GoogleSheetData = {
+  values: string[][];
 };
 
 //translates Google Sheet JSON into Meeting Guide format (example puget-sound.html)
@@ -21,6 +22,12 @@ export function translateGoogleSheet(data: GoogleSheetData, sheetId: string) {
     .map(header => (header === 'id' ? 'slug' : header))
     .map(header => (header === 'full_address' ? 'formatted_address' : header));
 
+  const validTypes: { [index: string]: string } = {};
+  const validCodes = Object.keys(en.types);
+  validCodes.forEach(key => {
+    validTypes[en.types[key as keyof Translation['types']]] = key;
+  });
+
   data.values.forEach((row, index) => {
     //skip empty rows
     if (!row.filter(e => e).length) return;
@@ -31,7 +38,11 @@ export function translateGoogleSheet(data: GoogleSheetData, sheetId: string) {
     headers.forEach((header, index) => {
       if (row[index]) {
         if (header === 'types') {
-          meeting.types = row[index].split(',').map(e => e.trim());
+          meeting.types = row[index]
+            .split(',')
+            .map(e => e.trim())
+            .filter(type => validCodes.includes(type) || type in validTypes)
+            .map(type => (type in validTypes ? validTypes[type] : type));
         } else if (header === 'regions') {
           meeting.regions = row[index].split('>').map(e => e.trim());
         } else {
