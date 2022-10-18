@@ -4,7 +4,7 @@ export type Index = {
   key: string;
   name: string;
   slugs: string[];
-  children: Index[];
+  children?: Index[];
 };
 
 export type State = {

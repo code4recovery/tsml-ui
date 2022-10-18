@@ -152,8 +152,8 @@ export function filterMeetingData(
     const meetingB = state.meetings[b];
 
     //sort appointment meetings to the end
-    if (meetingA.time && !meetingB.time) return -1;
-    if (!meetingA.time && meetingB.time) return 1;
+    if (meetingA.start && !meetingB.start) return -1;
+    if (!meetingA.start && meetingB.start) return 1;
 
     //sort by time
     if (!state.input.weekday.length) {

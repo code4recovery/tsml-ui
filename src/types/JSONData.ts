@@ -1,6 +1,6 @@
 export type JSONData = {
   address?: string;
-  approximate?: string;
+  approximate?: string | boolean;
   city?: string;
   conference_phone?: string;
   conference_phone_notes?: string;
@@ -17,7 +17,7 @@ export type JSONData = {
   contact_3_phone?: string;
   coordinates?: string;
   country?: string;
-  day?: string;
+  day?: string | number | string[] | number[];
   district?: string;
   edit_url?: string;
   email?: string;
@@ -26,25 +26,30 @@ export type JSONData = {
   formatted_address?: string;
   group?: string;
   group_notes?: string;
-  latitude?: string;
+  latitude?: string | number;
   location?: string;
   location_notes?: string;
-  longitude?: string;
+  longitude?: string | number;
   name?: string;
   notes?: string;
   paypal?: string;
   phone?: string;
   postal_code?: string;
   region?: string;
-  regions?: string;
+  regions?: string[];
   slug?: string;
   square?: string;
   state?: string;
   sub_region?: string;
+  sub_sub_region?: string;
   time?: string;
   timezone?: string;
-  types?: string | MeetingType[];
+  types?: number[] | string[];
   updated?: string;
   venmo?: string;
   website?: string;
+};
+
+export type JSONDataFlat = JSONData & {
+  day?: number;
 };

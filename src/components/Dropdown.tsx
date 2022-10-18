@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 
-import type { State } from '../types';
+import type { Index, State } from '../types';
 import {
   formatClasses as cx,
   formatUrl,
@@ -16,13 +16,6 @@ type DropdownProps = {
   setDropdown: (dropdown?: string) => void;
   setState: (state: State) => void;
   state: State;
-};
-
-type DropdownItem = {
-  key: string;
-  name: string;
-  slugs: string[];
-  children: DropdownItem[];
 };
 
 export default function Dropdown({
@@ -75,7 +68,7 @@ export default function Dropdown({
     setState({ ...state });
   };
 
-  const renderDropdownItem = ({ key, name, slugs, children }: DropdownItem) => (
+  const renderDropdownItem = ({ key, name, slugs, children }: Index) => (
     <Fragment key={key}>
       <a
         className={cx(
