@@ -2,9 +2,11 @@ import { DateTime } from 'luxon';
 
 import type { JSONData } from '../../types';
 import { formatSlug } from '../format';
+import { en } from '../../i18n';
+import { settings } from '../../helpers';
 
-type GoogleSheetData = {
-  values: [string[]];
+export type GoogleSheetData = {
+  values: string[][];
 };
 
 //translates Google Sheet JSON into Meeting Guide format (example puget-sound.html)
@@ -20,6 +22,12 @@ export function translateGoogleSheet(data: GoogleSheetData, sheetId: string) {
     .map(header => (header === 'id' ? 'slug' : header))
     .map(header => (header === 'full_address' ? 'formatted_address' : header));
 
+  const validTypes: { [index: string]: string } = {};
+  const validCodes = Object.keys(en.types);
+  validCodes.forEach(key => {
+    validTypes[en.types[key as keyof Translation['types']]] = key;
+  });
+
   data.values.forEach((row, index) => {
     //skip empty rows
     if (!row.filter(e => e).length) return;
@@ -28,7 +36,20 @@ export function translateGoogleSheet(data: GoogleSheetData, sheetId: string) {
 
     //fill values
     headers.forEach((header, index) => {
-      meeting[header as keyof JSONData] = row[index];
+      if (row[index]) {
+        if (header === 'types') {
+          meeting.types = row[index]
+            .split(',')
+            .map(e => e.trim())
+            .filter(type => validCodes.includes(type) || type in validTypes)
+            .map(type => (type in validTypes ? validTypes[type] : type));
+        } else if (header === 'regions') {
+          meeting.regions = row[index].split('>').map(e => e.trim());
+        } else {
+          // @ts-expect-error TODO
+          meeting[header as keyof JSONData] = row[index];
+        }
+      }
     });
 
     //edit url link
@@ -50,6 +71,7 @@ export function translateGoogleSheet(data: GoogleSheetData, sheetId: string) {
         );
       }
     }
+
     if (meeting.end_time) {
       const end_time = DateTime.fromFormat(meeting.end_time, 'h:mm a', {
         locale: 'en',
@@ -62,6 +84,24 @@ export function translateGoogleSheet(data: GoogleSheetData, sheetId: string) {
           `TSML UI error parsing ${meeting.end_time} (${end_time.invalidExplanation}): ${meeting.edit_url}`
         );
       }
+    }
+
+    if (meeting.day && typeof meeting.day === 'string') {
+      meeting.day = meeting.day.toLowerCase();
+      //@ts-expect-error TODO
+      if (settings.weekdays.includes(meeting.day)) {
+        //@ts-expect-error TODO
+        meeting.day = settings.weekdays.indexOf(meeting.day);
+      }
+    }
+
+    //convert from 12/31/2022 to 2022-12-31
+    if (meeting.updated && (meeting.updated.match(/\//g) || []).length === 2) {
+      const [month, day, year] = meeting.updated.split('/');
+      meeting.updated = `${year}-${month.padStart(2, '0')}-${day.padStart(
+        2,
+        '0'
+      )}`;
     }
 
     meetings.push(meeting);

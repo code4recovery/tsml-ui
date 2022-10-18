@@ -384,18 +384,18 @@ export default function Meeting({
                 {meeting.formatted_address && (
                   <p>{meeting.formatted_address}</p>
                 )}
-                {meeting.regions && <p>{meeting.regions.join(' > ')}</p>}
+                {!!meeting.regions?.length && (
+                  <p>{meeting.regions.join(' > ')}</p>
+                )}
                 {meeting.location_notes && (
                   <Paragraphs text={meeting.location_notes} />
                 )}
-                <div className="meetings d-grid gap-2">
-                  {formatWeekdays(
-                    locationWeekdays,
-                    meeting.slug,
-                    state,
-                    setState
-                  )}
-                </div>
+                {formatWeekdays(
+                  locationWeekdays,
+                  meeting.slug,
+                  state,
+                  setState
+                )}
               </div>
             )}
             {meeting.group &&
@@ -416,14 +416,7 @@ export default function Meeting({
                       ))}
                     </div>
                   )}
-                  <div className="meetings d-grid gap-2">
-                    {formatWeekdays(
-                      groupWeekdays,
-                      meeting.slug,
-                      state,
-                      setState
-                    )}
-                  </div>
+                  {formatWeekdays(groupWeekdays, meeting.slug, state, setState)}
                 </div>
               )}
             {meeting.updated && (
@@ -482,43 +475,51 @@ function formatWeekdays(
   state: State,
   setState: (state: State) => void
 ) {
-  return weekday.map(({ meetings, name }, index) => (
-    <div key={index}>
-      <h3 className="mb-1 mt-2">{name}</h3>
-      <ol className="list-unstyled">
-        {meetings.map((m, index) => (
-          <li
-            className="d-flex flex-row gap-2 justify-content-between m-0"
-            key={index}
-          >
-            <div className="text-muted text-nowrap">
-              {m.start?.toFormat('t')}
-            </div>
-            <div className="flex-grow-1">
-              {m.slug === slug ? (
-                <Link meeting={m} />
-              ) : (
-                <Link meeting={m} setState={setState} state={state} />
-              )}
-            </div>
-            <div className="align-items-start d-flex gap-1 justify-content-end pt-1">
-              {m.isInPerson && (
-                <small className="align-items-center d-flex flex-row float-end gap-2 px-2 py-1 rounded text-sm in-person">
-                  <Icon icon="geo" size={13} />
-                </small>
-              )}
-              {m.isOnline && (
-                <small className="align-items-center d-flex flex-row float-end gap-2 px-2 py-1 rounded text-sm online">
-                  {m.conference_provider && <Icon icon="camera" size={13} />}
-                  {m.conference_phone && <Icon icon="phone" size={13} />}
-                </small>
-              )}
-            </div>
-          </li>
+  return (
+    !!weekday.length && (
+      <div className="meetings d-grid gap-2">
+        {weekday.map(({ meetings, name }, index) => (
+          <div key={index}>
+            <h3 className="mb-1 mt-2">{name}</h3>
+            <ol className="list-unstyled">
+              {meetings.map((m, index) => (
+                <li
+                  className="d-flex flex-row gap-2 justify-content-between m-0"
+                  key={index}
+                >
+                  <div className="text-muted text-nowrap">
+                    {m.start?.toFormat('t')}
+                  </div>
+                  <div className="flex-grow-1">
+                    {m.slug === slug ? (
+                      <Link meeting={m} />
+                    ) : (
+                      <Link meeting={m} setState={setState} state={state} />
+                    )}
+                  </div>
+                  <div className="align-items-start d-flex gap-1 justify-content-end pt-1">
+                    {m.isInPerson && (
+                      <small className="align-items-center d-flex flex-row float-end gap-2 px-2 py-1 rounded text-sm in-person">
+                        <Icon icon="geo" size={13} />
+                      </small>
+                    )}
+                    {m.isOnline && (
+                      <small className="align-items-center d-flex flex-row float-end gap-2 px-2 py-1 rounded text-sm online">
+                        {m.conference_provider && (
+                          <Icon icon="camera" size={13} />
+                        )}
+                        {m.conference_phone && <Icon icon="phone" size={13} />}
+                      </small>
+                    )}
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </div>
         ))}
-      </ol>
-    </div>
-  ));
+      </div>
+    )
+  );
 }
 
 //format time string (duration? or appointment?)

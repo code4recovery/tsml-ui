@@ -6,6 +6,6 @@ describe('formatAddress', () => {
   });
 
   it.each([undefined, 'foo, bar, baz'])('yields null with %s', input => {
-    expect(formatAddress(input)).toStrictEqual(null);
+    expect(formatAddress(input)).toStrictEqual(undefined);
   });
 });
