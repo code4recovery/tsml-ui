@@ -4,22 +4,79 @@ import {
   translateGoogleSheet,
 } from './translate-google-sheet';
 
-test('translateGoogleSheet', () => {
-  const input: GoogleSheetData = {
-    values: [
-      ['Name', 'Types'],
-      ['Test Meeting', 'Open, Women'],
-    ],
-  };
+describe('translateGoogleSheet', () => {
   const sheetId = 'abc123';
 
-  const expected: Array<Partial<JSONData>> = [
-    {
-      edit_url: `https://docs.google.com/spreadsheets/d/${sheetId}/edit#gid=0&range=2:2+`,
-      name: 'Test Meeting',
-      types: ['O', 'W'],
-    },
-  ];
+  it('parses correctly', () => {
+    const input: GoogleSheetData = {
+      values: [
+        ['Name', 'Types', 'Regions', 'Time', 'End Time', 'Day', 'Updated'],
+        [
+          'Test Meeting',
+          'Open, Women',
+          'City > Neighborhood',
+          '6:00 PM',
+          '7:00 PM',
+          'Sunday',
+          '10/31/2022',
+        ],
+        [
+          'Invalid Meeting',
+          'O, W',
+          'City > Neighborhood',
+          'Invalid time',
+          'Invalid time',
+          'Invalid day',
+          '2022-10-31',
+        ],
+      ],
+    };
 
-  expect(translateGoogleSheet(input, sheetId)).toStrictEqual(expected);
+    const expected: Array<Partial<JSONData>> = [
+      {
+        edit_url: `https://docs.google.com/spreadsheets/d/${sheetId}/edit#gid=0&range=2:2+`,
+        end_time: '19:00',
+        name: 'Test Meeting',
+        regions: ['City', 'Neighborhood'],
+        time: '18:00',
+        types: ['O', 'W'],
+        day: 0,
+        updated: '2022-10-31',
+      },
+      {
+        edit_url: `https://docs.google.com/spreadsheets/d/${sheetId}/edit#gid=0&range=3:3+`,
+        name: 'Invalid Meeting',
+        regions: ['City', 'Neighborhood'],
+        types: ['O', 'W'],
+        end_time: undefined,
+        time: undefined,
+        day: 'invalid day', //todo maybe this is bad
+        updated: '2022-10-31',
+      },
+    ];
+
+    expect(translateGoogleSheet(input, sheetId)).toStrictEqual(expected);
+  });
+
+  it('handles non-spec values', () => {
+    const input: GoogleSheetData = {
+      values: [['ID', 'Full Address', 'Test'], ['123', '123 Main St'], []],
+    };
+
+    const expected: Array<Partial<JSONData>> = [
+      {
+        edit_url: `https://docs.google.com/spreadsheets/d/${sheetId}/edit#gid=0&range=2:2+`,
+        slug: '123',
+        formatted_address: '123 Main St',
+      },
+    ];
+
+    expect(translateGoogleSheet(input, sheetId)).toStrictEqual(expected);
+  });
+
+  it('returns undefined when sheet is empty', () => {
+    expect(translateGoogleSheet({ values: [] }, sheetId)).toStrictEqual(
+      undefined
+    );
+  });
 });
