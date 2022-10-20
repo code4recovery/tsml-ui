@@ -103,7 +103,7 @@ export function loadMeetingData(
     if (!formatted_address) {
       formatted_address = [
         meeting.address,
-        `${meeting.state} ${meeting.postal_code}`,
+        [meeting.state, meeting.postal_code].join(' ').trim(),
         meeting.country,
       ]
         .map(e => e?.trim())
@@ -427,6 +427,13 @@ export function loadMeetingData(
       venmo: validateVenmo(meeting),
       website,
     };
+
+    //clean up undefined
+    Object.keys(meetings[slug]).forEach(
+      key =>
+        meetings[slug][key as keyof Meeting] === undefined &&
+        delete meetings[slug][key as keyof Meeting]
+    );
   });
 
   //convert region to array, sort by name
@@ -590,6 +597,6 @@ function validateVenmo(meeting: JSONDataFlat) {
 function warn(issue: string, meeting: JSONDataFlat) {
   const { slug, edit_url } = meeting;
   console.warn(
-    `TSML UI ${issue}${edit_url ? `: ${edit_url}` : slug ? `: ${slug}` : null}`
+    `TSML UI ${issue}${edit_url ? `: ${edit_url}` : slug ? `: ${slug}` : ''}`
   );
 }
