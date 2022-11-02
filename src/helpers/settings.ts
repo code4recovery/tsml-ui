@@ -9,6 +9,7 @@ const defaults: TSMLReactConfig = {
   columns: ['time', 'distance', 'name', 'location_group', 'address', 'region'],
   conference_providers: {
     'bluejeans.com': 'Bluejeans',
+    'discord.gg': 'Discord',
     'freeconference.com': 'Free Conference',
     'freeconferencecall.com': 'FreeConferenceCall',
     'meet.google.com': 'Google Hangouts',
