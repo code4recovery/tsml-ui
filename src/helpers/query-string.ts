@@ -26,23 +26,25 @@ export function getQueryString(): State['input'] {
     });
 
   //temporary band-aid to support weekday=0 URLs
-  input.weekday = input.weekday.map(day => {
-    //@ts-expect-error todo
-    if (day === '0') return settings.weekdays[0];
-    //@ts-expect-error todo
-    if (day === '1') return settings.weekdays[1];
-    //@ts-expect-error todo
-    if (day === '2') return settings.weekdays[2];
-    //@ts-expect-error todo
-    if (day === '3') return settings.weekdays[3];
-    //@ts-expect-error todo
-    if (day === '4') return settings.weekdays[4];
-    //@ts-expect-error todo
-    if (day === '5') return settings.weekdays[5];
-    //@ts-expect-error todo
-    if (day === '6') return settings.weekdays[6];
-    return day;
-  });
+  if (input.weekday) {
+    input.weekday = input.weekday.map(day => {
+      //@ts-expect-error todo
+      if (day === '0') return settings.weekdays[0];
+      //@ts-expect-error todo
+      if (day === '1') return settings.weekdays[1];
+      //@ts-expect-error todo
+      if (day === '2') return settings.weekdays[2];
+      //@ts-expect-error todo
+      if (day === '3') return settings.weekdays[3];
+      //@ts-expect-error todo
+      if (day === '4') return settings.weekdays[4];
+      //@ts-expect-error todo
+      if (day === '5') return settings.weekdays[5];
+      //@ts-expect-error todo
+      if (day === '6') return settings.weekdays[6];
+      return day;
+    });
+  }
 
   return {
     ...settings.defaults,
