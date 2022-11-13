@@ -100,11 +100,13 @@ if (!Array.isArray(settings.flags)) {
 }
 
 //columns can be specified to override the default
-if (
-  typeof tsml_react_config === 'object' &&
-  Array.isArray(tsml_react_config.columns)
-) {
-  settings.columns = tsml_react_config.columns;
+if (typeof tsml_react_config === 'object') {
+  if (Array.isArray(tsml_react_config.columns)) {
+    settings.columns = tsml_react_config.columns;
+  }
+  if (Array.isArray(tsml_react_config.weekdays)) {
+    settings.weekdays = tsml_react_config.weekdays;
+  }
 }
 
 const preferredLanguage = navigator.language.substring(0, 2) as Lang;

@@ -41,8 +41,8 @@ describe('<Controls />', () => {
     );
 
     //click a dropdown button
-    const button = screen.getByRole('button', { name: region_any });
-    fireEvent.click(button);
+    const button = screen.getAllByRole('button', { name: region_any });
+    fireEvent.click(button[0]);
 
     //dropdown opens
     const dropdown = screen.getByLabelText(region_any);
