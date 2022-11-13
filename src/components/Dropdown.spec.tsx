@@ -54,8 +54,8 @@ describe('<Dropdown />', () => {
       />
     );
 
-    const button = screen.getByRole('button');
-    fireEvent.click(button);
+    const button = screen.getAllByRole('button');
+    fireEvent.click(button[0]);
     expect(mockSetDropdown).toBeCalled();
 
     const dropdown = screen.getByLabelText(defaultValue);
@@ -92,8 +92,8 @@ describe('<Dropdown />', () => {
     const dropdown = screen.getByLabelText(defaultValue);
     expect(dropdown).toHaveClass('show');
 
-    const button = screen.getByRole('button');
-    fireEvent.click(button);
+    const button = screen.getAllByRole('button');
+    fireEvent.click(button[0]);
     expect(mockSetDropdown).toBeCalled();
 
     //test links

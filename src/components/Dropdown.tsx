@@ -32,7 +32,7 @@ export default function Dropdown({
 
   //set filter: pass it up to parent
   const setFilter = (
-    e: React.MouseEvent<HTMLAnchorElement>,
+    e: React.MouseEvent<HTMLButtonElement>,
     filter: keyof typeof state.indexes,
     value?: string
   ) => {
@@ -70,7 +70,7 @@ export default function Dropdown({
 
   const renderDropdownItem = ({ key, name, slugs, children }: Index) => (
     <Fragment key={key}>
-      <a
+      <button
         className={cx(
           'align-items-center d-flex dropdown-item justify-content-between',
           {
@@ -78,11 +78,6 @@ export default function Dropdown({
             'bg-secondary text-white': values.includes(key),
           }
         )}
-        href={formatUrl({
-          ...state.input,
-          // @ts-expect-error TODO
-          [filter]: values.includes(key) ? [key] : [],
-        })}
         onClick={e => setFilter(e, filter, key)}
       >
         <span>{name}</span>
@@ -99,7 +94,7 @@ export default function Dropdown({
         >
           {slugs.length}
         </span>
-      </a>
+      </button>
       {!!children?.length && (
         <div className="children">
           {children.map(child => renderDropdownItem(child))}
@@ -132,18 +127,14 @@ export default function Dropdown({
         })}
         aria-labelledby={filter}
       >
-        <a
+        <button
           className={cx('dropdown-item', {
             'active bg-secondary text-white': !values.length,
           })}
           onClick={e => setFilter(e, filter, undefined)}
-          href={formatUrl({
-            ...state.input,
-            [filter]: [],
-          })}
         >
           {defaultValue}
-        </a>
+        </button>
         {[
           options
             ?.filter(option =>
