@@ -265,11 +265,13 @@ export function loadMeetingData(
       if (isActive) {
         //day index
         const dayIndex = indexes.weekday.findIndex(
-          ({ key }) => key === `${meeting.day}`
+          ({ key }) =>
+            key ===
+            settings.weekdays[meeting.day as keyof typeof settings.weekdays]
         );
         if (dayIndex === -1) {
           indexes.weekday.push({
-            key: `${meeting.day}`,
+            key: settings.weekdays[meeting.day],
             name: strings[settings.weekdays[meeting.day]],
             slugs: [slug],
           });
@@ -444,7 +446,9 @@ export function loadMeetingData(
   //convert weekday to array and sort by ordinal
   indexes.weekday = flattenAndSortIndexes(
     indexes.weekday,
-    (a, b) => parseInt(a.key) - parseInt(b.key)
+    (a, b) =>
+      //@ts-expect-error TODO
+      settings.weekdays.indexOf(a.key) - settings.weekdays.indexOf(b.key)
   );
 
   //convert time to array and sort by ordinal
