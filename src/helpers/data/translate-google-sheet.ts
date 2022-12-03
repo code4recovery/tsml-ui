@@ -2,7 +2,7 @@ import { DateTime } from 'luxon';
 
 import type { JSONData } from '../../types';
 import { formatSlug } from '../format';
-import { en } from '../../i18n';
+import { en, es, fr, ja } from '../../i18n';
 import { settings } from '../../helpers';
 
 export type GoogleSheetData = {
@@ -26,6 +26,16 @@ export function translateGoogleSheet(data: GoogleSheetData, sheetId: string) {
   const validCodes = Object.keys(en.types);
   validCodes.forEach(key => {
     validTypes[en.types[key as keyof Translation['types']]] = key;
+    validTypes[es.types[key as keyof Translation['types']]] = key;
+    validTypes[fr.types[key as keyof Translation['types']]] = key;
+    validTypes[ja.types[key as keyof Translation['types']]] = key;
+  });
+  const validDays: { [index: string]: number } = {};
+  settings.weekdays.forEach((key, index) => {
+    validDays[en.days[key as keyof Translation['days']]] = index;
+    validDays[es.days[key as keyof Translation['days']]] = index;
+    validDays[fr.days[key as keyof Translation['days']]] = index;
+    validDays[ja.days[key as keyof Translation['days']]] = index;
   });
 
   data.values.forEach((row, index) => {
@@ -87,11 +97,10 @@ export function translateGoogleSheet(data: GoogleSheetData, sheetId: string) {
     }
 
     if (meeting.day && typeof meeting.day === 'string') {
-      meeting.day = meeting.day.toLowerCase();
-      //@ts-expect-error TODO
-      if (settings.weekdays.includes(meeting.day)) {
-        //@ts-expect-error TODO
-        meeting.day = settings.weekdays.indexOf(meeting.day);
+      if (meeting.day in validDays) {
+        meeting.day = validDays[meeting.day];
+      } else {
+        delete meeting.day;
       }
     }
 

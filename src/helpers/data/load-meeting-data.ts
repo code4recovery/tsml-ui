@@ -272,7 +272,7 @@ export function loadMeetingData(
         if (dayIndex === -1) {
           indexes.weekday.push({
             key: settings.weekdays[meeting.day],
-            name: strings[settings.weekdays[meeting.day]],
+            name: strings.days[settings.weekdays[meeting.day]],
             slugs: [slug],
           });
         } else {
