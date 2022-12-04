@@ -227,17 +227,17 @@ div.tsml-ui {
 
       //indentation todo make recursive with sass?
       .children {
-        a {
+        button {
           padding-left: 24px;
         }
 
         .children {
-          a {
+          button {
             padding-left: 48px;
           }
 
           .children {
-            a {
+            button {
               padding-left: 64px;
             }
           }

@@ -50,7 +50,6 @@ describe('translateGoogleSheet', () => {
         types: ['O', 'W'],
         end_time: undefined,
         time: undefined,
-        day: 'invalid day', //todo maybe this is bad
         updated: '2022-10-31',
       },
     ];
