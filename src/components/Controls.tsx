@@ -140,11 +140,11 @@ export default function Controls({ state, setState, mapbox }: ControlsProps) {
     <div className="controls d-print-none gx-3 gx-md-4 gy-3 row">
       <div className="col-6 col-lg">
         <div className="position-relative">
-          <form onSubmit={locationSearch}>
+          <form onSubmit={locationSearch} className="m-0">
             <fieldset className="input-group">
               <input
                 aria-label={strings.modes[state.input.mode]}
-                className="form-control"
+                className="form-control h-auto"
                 disabled={state.input.mode === 'me'}
                 onChange={e => {
                   if (state.input.mode === 'search') {
