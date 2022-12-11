@@ -19,6 +19,11 @@ jobs:
       - run: npm install
       - run: npm run test-coverage
       - run: npx mix --production
+      - name: Prettify code
+        uses: creyD/prettier_action@v4.2
+        with:
+          prettier_options: --write **/*.{js,md}
+          only_changed: True
       - name: Coveralls
         uses: coverallsapp/github-action@master
         with:
