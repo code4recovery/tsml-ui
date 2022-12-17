@@ -3,8 +3,8 @@ import { formatConferenceProvider } from './format-conference-provider';
 
 describe('formatConferenceProvider', () => {
   it.each(['foo', 'https://', 'https://foo.com'])(
-    'yields null with %s',
-    input => expect(formatConferenceProvider(input)).toStrictEqual(null)
+    'yields undefined with %s',
+    input => expect(formatConferenceProvider(input)).toStrictEqual(undefined)
   );
 
   it('returns title when a valid provider is found', () => {

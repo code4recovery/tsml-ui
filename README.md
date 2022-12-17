@@ -51,6 +51,16 @@ var tsml_react_config = {
 };
 ```
 
+### Use kilometers
+
+Distances can be calculated in miles (`mi`) or kilometers (`km`).
+
+```js
+var tsml_react_config = {
+  distance_unit: 'km',
+};
+```
+
 ## Frequently asked questions
 
 ### How do timezones work?

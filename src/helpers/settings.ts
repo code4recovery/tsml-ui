@@ -1,7 +1,7 @@
 import merge from 'deepmerge';
 import { Settings } from 'luxon';
 
-import { en, es, fr } from '../i18n';
+import { en, es, fr, ja } from '../i18n';
 
 //override these on your page with tsml_react_config
 const defaults: TSMLReactConfig = {
@@ -9,11 +9,13 @@ const defaults: TSMLReactConfig = {
   columns: ['time', 'distance', 'name', 'location_group', 'address', 'region'],
   conference_providers: {
     'bluejeans.com': 'Bluejeans',
+    'discord.gg': 'Discord',
     'freeconference.com': 'Free Conference',
     'freeconferencecall.com': 'FreeConferenceCall',
     'meet.google.com': 'Google Hangouts',
-    'gotomeet.me': 'GoToMeeting',
-    'gotomeeting.com': 'GoToMeeting',
+    'goto.com': 'GoTo',
+    'gotomeet.me': 'GoTo',
+    'gotomeeting.com': 'GoTo',
     'meet.jit.si': 'Jitsi',
     'skype.com': 'Skype',
     'webex.com': 'WebEx',
@@ -22,7 +24,6 @@ const defaults: TSMLReactConfig = {
   },
   defaults: {
     distance: [],
-    meeting: null,
     mode: 'search',
     region: [],
     search: '',
@@ -33,6 +34,7 @@ const defaults: TSMLReactConfig = {
   },
   distance_options: [1, 2, 5, 10, 15, 25],
   distance_unit: 'mi', //mi or km
+  duration: 60,
   feedback_emails: [], //email addresses for update meeting info button
   filters: ['region', 'distance', 'weekday', 'time', 'type'],
   flags: null,
@@ -71,9 +73,10 @@ const defaults: TSMLReactConfig = {
     title: true, //whether to display the title h1
   },
   strings: {
-    en: en,
-    es: es,
-    fr: fr,
+    en,
+    es,
+    fr,
+    ja,
   },
   times: ['morning', 'midday', 'evening', 'night'],
   weekdays: [
@@ -98,11 +101,13 @@ if (!Array.isArray(settings.flags)) {
 }
 
 //columns can be specified to override the default
-if (
-  typeof tsml_react_config === 'object' &&
-  Array.isArray(tsml_react_config.columns)
-) {
-  settings.columns = tsml_react_config.columns;
+if (typeof tsml_react_config === 'object') {
+  if (Array.isArray(tsml_react_config.columns)) {
+    settings.columns = tsml_react_config.columns;
+  }
+  if (Array.isArray(tsml_react_config.weekdays)) {
+    settings.weekdays = tsml_react_config.weekdays;
+  }
 }
 
 const preferredLanguage = navigator.language.substring(0, 2) as Lang;

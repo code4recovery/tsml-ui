@@ -1,16 +1,42 @@
+import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { DateTime } from 'luxon';
 
+import { State } from '../types';
 import { strings } from '../helpers';
 import Table from './Table';
 
 describe('<Table />', () => {
-  const mockState = {
+  const mockState: State = {
     capabilities: {
-      region: true,
-      location: true,
+      coordinates: true,
       distance: true,
+      geolocation: false,
+      inactive: true,
+      location: true,
+      region: true,
+      time: true,
+      type: true,
+      weekday: true,
     },
+    indexes: {
+      distance: [],
+      region: [],
+      time: [],
+      type: [],
+      weekday: [],
+    },
+    input: {
+      distance: [],
+      mode: 'search',
+      region: [],
+      time: [],
+      type: [],
+      view: 'table',
+      weekday: [],
+    },
+    ready: true,
+    loading: false,
     meetings: {
       foo: {
         slug: 'foo',
@@ -47,9 +73,11 @@ describe('<Table />', () => {
     const mockSetState = jest.fn();
     render(
       <Table
-        state={mockState}
-        setState={mockSetState}
         filteredSlugs={filteredSlugs}
+        inProgress={[]}
+        listButtons={false}
+        setState={mockSetState}
+        state={mockState}
       />
     );
 
@@ -63,10 +91,11 @@ describe('<Table />', () => {
     const mockSetState = jest.fn();
     render(
       <Table
-        state={mockState}
-        setState={mockSetState}
         filteredSlugs={filteredSlugs}
-        listButtons={true}
+        inProgress={[]}
+        listButtons={false}
+        setState={mockSetState}
+        state={mockState}
       />
     );
 
@@ -78,18 +107,20 @@ describe('<Table />', () => {
     //unclickable rows
     const rows = screen.getAllByRole('row');
     rows.forEach(row => fireEvent.click(row));
-    expect(mockSetState).toHaveBeenCalledTimes(filteredSlugs.length);
+    expect(mockSetState).toHaveBeenCalledTimes(filteredSlugs.length * 2);
   });
 
   it('displays single meeting in progress', () => {
     const inProgress = [filteredSlugs[0]];
+    const mockSetState = jest.fn();
 
     render(
       <Table
-        state={mockState}
-        setState={jest.fn()}
         filteredSlugs={filteredSlugs}
-        inProgress={inProgress}
+        inProgress={['foo']}
+        listButtons={false}
+        setState={mockSetState}
+        state={mockState}
       />
     );
 
@@ -110,12 +141,15 @@ describe('<Table />', () => {
 
   it('displays multiple meetings in progress', () => {
     const inProgress = [...filteredSlugs];
+    const mockSetState = jest.fn();
+
     render(
       <Table
-        state={mockState}
-        setState={jest.fn()}
         filteredSlugs={filteredSlugs}
-        inProgress={inProgress}
+        inProgress={['foo', 'bar']}
+        listButtons={false}
+        setState={mockSetState}
+        state={mockState}
       />
     );
 

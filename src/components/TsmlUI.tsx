@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import '../../public/style.css';
 import 'mapbox-gl/dist/mapbox-gl.css';
-
+import type { State } from '../types';
 import { Alert, Controls, Loading, Map, Meeting, Table, Title } from './';
 
 import {
@@ -16,8 +16,15 @@ import {
   translateGoogleSheet,
 } from '../helpers';
 
-export default function TsmlUI({ src, mapbox, google, timezone }) {
-  const [state, setState] = useState({
+type TsmlUIProps = {
+  google?: string;
+  mapbox?: string;
+  src?: string;
+  timezone?: string;
+};
+
+export default function TsmlUI({ google, mapbox, src, timezone }: TsmlUIProps) {
+  const [state, setState] = useState<State>({
     capabilities: {
       coordinates: false,
       distance: false,
@@ -29,7 +36,15 @@ export default function TsmlUI({ src, mapbox, google, timezone }) {
       type: false,
       weekday: false,
     },
-    input: {},
+    input: {
+      distance: [],
+      mode: 'search',
+      region: [],
+      time: [],
+      type: [],
+      view: 'table',
+      weekday: [],
+    },
     indexes: {
       distance: [],
       region: [],
@@ -45,7 +60,7 @@ export default function TsmlUI({ src, mapbox, google, timezone }) {
   //enable forward & back buttons
   useEffect(() => {
     const popstateListener = () => {
-      setState({ ...state, input: getQueryString(window.location.search) });
+      setState({ ...state, input: getQueryString() });
     };
     window.addEventListener('popstate', popstateListener);
 
@@ -152,11 +167,11 @@ export default function TsmlUI({ src, mapbox, google, timezone }) {
 
           setState({
             ...state,
-            capabilities: capabilities,
-            indexes: indexes,
-            input: input,
+            capabilities,
+            indexes,
+            input,
             loading: false,
-            meetings: meetings,
+            meetings,
             ready: !waitingForGeo,
           });
         })
@@ -174,8 +189,10 @@ export default function TsmlUI({ src, mapbox, google, timezone }) {
           };
           setState({
             ...state,
-            error: errors[error]
-              ? `Error: ${errors[error]} (${error}) when ${
+            error: errors[error as keyof typeof errors]
+              ? `Error: ${
+                  errors[error as keyof typeof errors]
+                } (${error}) when ${
                   sheetId ? 'contacting Google' : 'loading data'
                 }.`
               : error.toString(),
@@ -204,49 +221,50 @@ export default function TsmlUI({ src, mapbox, google, timezone }) {
     state.error = strings.not_found;
   }
 
-  return (
+  return !state.ready ? (
     <div className="tsml-ui">
-      {!state.ready ? (
-        <Loading />
-      ) : (
-        <div className="container-fluid d-flex flex-column gap-3 py-3">
-          {state.input.meeting && state.input.meeting in state.meetings ? (
-            <Meeting
-              state={state}
-              setState={setState}
-              mapbox={mapbox}
-              feedback_emails={settings.feedback_emails}
-            />
-          ) : (
-            <>
-              {settings.show.title && <Title state={state} />}
-              {settings.show.controls && (
-                <Controls state={state} setState={setState} mapbox={mapbox} />
-              )}
-              {(state.alert || state.error) && (
-                <Alert state={state} setState={setState} />
-              )}
-              {filteredSlugs && state.input.view === 'table' && (
-                <Table
-                  state={state}
-                  setState={setState}
-                  filteredSlugs={filteredSlugs}
-                  inProgress={inProgress}
-                  listButtons={settings.show.listButtons}
-                />
-              )}
-              {filteredSlugs && state.input.view === 'map' && (
-                <Map
-                  state={state}
-                  setState={setState}
-                  filteredSlugs={filteredSlugs}
-                  mapbox={mapbox}
-                />
-              )}
-            </>
-          )}
-        </div>
-      )}
+      <Loading />
+    </div>
+  ) : (
+    <div className="tsml-ui">
+      <div className="container-fluid d-flex flex-column py-3">
+        {state.input.meeting && state.input.meeting in state.meetings ? (
+          <Meeting
+            state={state}
+            setState={setState}
+            mapbox={mapbox}
+            feedback_emails={settings.feedback_emails}
+          />
+        ) : (
+          <div className="d-flex flex-column flex-grow-1 gap-3">
+            {settings.show.title && <Title state={state} />}
+            {settings.show.controls && (
+              <Controls state={state} setState={setState} mapbox={mapbox} />
+            )}
+            {(state.alert || state.error) && (
+              <Alert state={state} setState={setState} />
+            )}
+            {filteredSlugs && state.input.view === 'table' && (
+              <Table
+                filteredSlugs={filteredSlugs}
+                inProgress={inProgress}
+                listButtons={settings.show.listButtons}
+                setState={setState}
+                state={state}
+              />
+            )}
+            {filteredSlugs && state.input.view === 'map' && (
+              <Map
+                filteredSlugs={filteredSlugs}
+                listMeetingsInPopup={true}
+                mapbox={mapbox}
+                setState={setState}
+                state={state}
+              />
+            )}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

@@ -7,12 +7,7 @@ import { iOS } from '../user-agent';
 export function formatIcs(meeting: Meeting) {
   const fmt = "yyyyLLdd'T'HHmmss";
 
-  if (!meeting.start) return;
-
-  //need an end time. guess one hour if none specified
-  if (!meeting.end) {
-    meeting.end = meeting.start.plus({ hour: 1 });
-  }
+  if (!meeting.start || !meeting.end) return;
 
   //make sure it's in the future
   if (meeting.start < DateTime.now()) {

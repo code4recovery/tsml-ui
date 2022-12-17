@@ -136,15 +136,15 @@ export default function Controls({ state, setState, mapbox }: ControlsProps) {
     setState({ ...state });
   };
 
-  return (
-    !!Object.keys(state.meetings).length && (
-      <div className="controls d-print-none gx-3 gx-md-4 gy-3 row">
-        <div className="col-6 col-lg">
-          <div className="position-relative">
-            <form className="input-group" onSubmit={locationSearch}>
+  return !Object.keys(state.meetings).length ? null : (
+    <div className="controls d-print-none gx-3 gx-md-4 gy-3 row">
+      <div className="col-6 col-lg">
+        <div className="position-relative">
+          <form onSubmit={locationSearch} className="m-0">
+            <fieldset className="input-group">
               <input
                 aria-label={strings.modes[state.input.mode]}
-                className="form-control"
+                className="form-control h-auto"
                 disabled={state.input.mode === 'me'}
                 onChange={e => {
                   if (state.input.mode === 'search') {
@@ -173,69 +173,71 @@ export default function Controls({ state, setState, mapbox }: ControlsProps) {
                   type="button"
                 />
               )}
-            </form>
-            {modes.length > 1 && (
-              <div
-                className={cx('dropdown-menu dropdown-menu-end my-1', {
-                  show: dropdown === 'search',
-                })}
-              >
-                {modes.map(mode => (
-                  <a
-                    className={cx(
-                      'align-items-center dropdown-item d-flex justify-content-between',
-                      {
-                        'active bg-secondary text-white':
-                          state.input.mode === mode,
-                      }
-                    )}
-                    href={formatUrl({ ...state.input, mode })}
-                    key={mode}
-                    onClick={e => setMode(e, mode)}
-                  >
-                    {strings.modes[mode]}
-                  </a>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-        {filters.map((filter, index) => (
-          <div className="col-6 col-lg" key={filter}>
-            <Dropdown
-              defaultValue={strings[`${filter}_any` as keyof typeof strings]}
-              end={!canShowViews && index === filters.length - 1}
-              filter={filter}
-              open={dropdown === filter}
-              setDropdown={setDropdown}
-              state={state}
-              setState={setState}
-            />
-          </div>
-        ))}
-        {canShowViews && (
-          <div className="col-6 col-lg">
-            <div className="btn-group h-100 w-100" role="group">
-              {views.map(view => (
-                <button
-                  aria-label={strings.views[view]}
+            </fieldset>
+          </form>
+          {modes.length > 1 && (
+            <div
+              className={cx('dropdown-menu dropdown-menu-end my-1', {
+                show: dropdown === 'search',
+              })}
+            >
+              {modes.map(mode => (
+                <a
                   className={cx(
-                    'align-items-center btn btn-outline-secondary d-flex justify-content-center w-100',
+                    'align-items-center dropdown-item d-flex justify-content-between',
                     {
-                      active: state.input.view === view,
+                      'active bg-secondary text-white':
+                        state.input.mode === mode,
                     }
                   )}
-                  key={view}
-                  onClick={e => setView(e, view)}
-                  type="button"
+                  href={formatUrl({ ...state.input, mode })}
+                  key={mode}
+                  onClick={e => setMode(e, mode)}
                 >
-                  <Icon icon={view} />
-                </button>
+                  {strings.modes[mode]}
+                </a>
               ))}
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
-    )
+      {filters.map((filter, index) => (
+        <div className="col-6 col-lg" key={filter}>
+          <Dropdown
+            defaultValue={
+              strings[`${filter}_any` as keyof typeof strings] as string
+            }
+            end={!canShowViews && index === filters.length - 1}
+            filter={filter}
+            open={dropdown === filter}
+            setDropdown={setDropdown}
+            state={state}
+            setState={setState}
+          />
+        </div>
+      ))}
+      {canShowViews && (
+        <div className="col-6 col-lg">
+          <div className="btn-group h-100 w-100" role="group">
+            {views.map(view => (
+              <button
+                aria-label={strings.views[view]}
+                className={cx(
+                  'align-items-center btn btn-outline-secondary d-flex justify-content-center w-100',
+                  {
+                    active: state.input.view === view,
+                  }
+                )}
+                key={view}
+                onClick={e => setView(e, view)}
+                type="button"
+              >
+                <Icon icon={view} />
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
   );
 }

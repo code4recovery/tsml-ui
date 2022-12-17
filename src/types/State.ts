@@ -4,7 +4,7 @@ export type Index = {
   key: string;
   name: string;
   slugs: string[];
-  children: Index[];
+  children?: Index[];
 };
 
 export type State = {
@@ -13,6 +13,8 @@ export type State = {
     coordinates: boolean;
     distance: boolean;
     geolocation: boolean;
+    inactive: boolean;
+    location: boolean;
     region: boolean;
     time: boolean;
     type: boolean;
@@ -30,6 +32,7 @@ export type State = {
     distance: string[];
     latitude?: number;
     longitude?: number;
+    meeting?: string;
     mode: 'search' | 'location' | 'me';
     region: string[];
     search?: string;
@@ -38,7 +41,9 @@ export type State = {
     view: 'table' | 'map';
     weekday: TSMLReactConfig['weekdays'];
   };
+  loading: boolean;
   meetings: {
     [index: string]: Meeting;
   };
+  ready: boolean;
 };

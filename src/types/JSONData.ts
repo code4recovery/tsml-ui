@@ -1,11 +1,9 @@
-import type { DateTime } from 'luxon';
-
-export interface Meeting {
+export type JSONData = {
   address?: string;
-  approximate?: boolean;
+  approximate?: string | boolean;
+  city?: string;
   conference_phone?: string;
   conference_phone_notes?: string;
-  conference_provider?: string;
   conference_url?: string;
   conference_url_notes?: string;
   contact_1_email?: string;
@@ -17,36 +15,41 @@ export interface Meeting {
   contact_3_email?: string;
   contact_3_name?: string;
   contact_3_phone?: string;
-  distance?: number;
+  coordinates?: string;
+  country?: string;
+  day?: string | number | string[] | number[];
   district?: string;
   edit_url?: string;
   email?: string;
-  end?: DateTime;
+  end_time?: string;
   feedback_url?: string;
-  formatted_address: string;
+  formatted_address?: string;
   group?: string;
   group_notes?: string;
-  isActive?: boolean;
-  isInPerson?: boolean;
-  isOnline?: boolean;
-  isTempClosed?: boolean;
-  latitude?: number;
+  latitude?: string | number;
   location?: string;
   location_notes?: string;
-  longitude?: number;
-  minutes_week?: number;
-  name: string;
+  longitude?: string | number;
+  name?: string;
   notes?: string;
   paypal?: string;
   phone?: string;
+  postal_code?: string;
+  region?: string;
   regions?: string[];
-  search?: string;
-  slug: string;
+  slug?: string;
   square?: string;
-  start?: DateTime;
+  state?: string;
+  sub_region?: string;
+  sub_sub_region?: string;
+  time?: string;
   timezone?: string;
-  types?: MeetingType[];
+  types?: number[] | string[];
   updated?: string;
   venmo?: string;
   website?: string;
-}
+};
+
+export type JSONDataFlat = JSONData & {
+  day?: number;
+};

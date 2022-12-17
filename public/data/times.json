@@ -7,6 +7,7 @@
     "end_time": "21:00",
     "group": "Online Group",
     "types": ["O", "M"],
+    "formatted_address": "123 Main St, Anytown, OK 12345, USA",
     "conference_url": "https://zoom.us/d/1234567"
   },
   {
@@ -17,6 +18,7 @@
     "end_time": "21:00",
     "group": "Online Group",
     "types": ["O", "SM"],
+    "formatted_address": "123 Main St, Anytown, OK 12345, USA",
     "conference_url": "https://zoom.us/d/1234567"
   },
   {
@@ -27,6 +29,7 @@
     "end_time": "11:00",
     "group": "Online Group",
     "types": ["O", "SM"],
+    "formatted_address": "123 Main St, Anytown, OK 12345, USA",
     "conference_url": "https://zoom.us/d/1234567"
   },
   {
@@ -37,6 +40,7 @@
     "end_time": "21:00",
     "group": "Online Group",
     "types": ["O", "SM"],
+    "formatted_address": "123 Main St, Anytown, OK 12345, USA",
     "conference_url": "https://zoom.us/d/1234567"
   },
   {
@@ -44,6 +48,7 @@
     "name": "Appt",
     "group": "Online Group",
     "types": ["O", "SM"],
+    "formatted_address": "123 Main St, Anytown, OK 12345, USA",
     "conference_url": "https://zoom.us/d/1234567"
   },
   {
@@ -53,26 +58,29 @@
     "time": "07:00",
     "group": "Online Group",
     "types": ["O", "D"],
+    "formatted_address": "123 Main St, Anytown, OK 12345, USA",
     "conference_url": "https://zoom.us/d/1234567"
   },
   {
     "slug": "sunday-8pm",
     "name": "Sunday 8pm",
-    "day": "7",
+    "day": "0",
     "time": "20:00",
     "end_time": "21:00",
     "group": "Online Group",
     "types": ["O", "SM"],
+    "formatted_address": "123 Main St, Anytown, OK 12345, USA",
     "conference_url": "https://zoom.us/d/1234567"
   },
   {
     "slug": "sunday-8am",
     "name": "Sunday 8am",
-    "day": "7",
+    "day": "0",
     "time": "08:00",
-    "end_time": "12:00",
+    "end_time": "10:00",
     "group": "Online Group",
     "types": ["O", "SM"],
+    "formatted_address": "123 Main St, Anytown, OK 12345, USA",
     "conference_url": "https://zoom.us/d/1234567"
   }
 ]

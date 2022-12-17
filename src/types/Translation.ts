@@ -8,6 +8,15 @@ export interface Translation {
   contact_call: string;
   contact_email: string;
   contribute_with: string;
+  days: {
+    friday: string;
+    monday: string;
+    saturday: string;
+    sunday: string;
+    thursday: string;
+    tuesday: string;
+    wednesday: string;
+  };
   distance: string;
   distance_any: string;
   email_edit_url: string;
@@ -15,17 +24,17 @@ export interface Translation {
   email_subject: string;
   evening: string;
   feedback: string;
-  friday: string;
   get_directions: string;
   in_progress_single: string;
   in_progress_multiple: string;
   location: string;
   location_group: string;
+  match_single: string;
+  match_multiple: string;
   meeting_information: string;
   meetings: string;
   midday: string;
   midnight: string;
-  monday: string;
   morning: string;
   name: string;
   no_results: string;
@@ -41,10 +50,7 @@ export interface Translation {
   region: string;
   region_any: string;
   remove: string;
-  saturday: string;
   seventh_tradition: string;
-  sunday: string;
-  thursday: string;
   time: string;
   time_any: string;
   title: {
@@ -57,7 +63,6 @@ export interface Translation {
     search_near: string;
     distance: string;
   };
-  tuesday: string;
   type_any: string;
   type_descriptions: Record<Extract<MeetingType, 'O' | 'C'>, string>;
   types: Record<MeetingType, string>;
@@ -67,6 +72,5 @@ export interface Translation {
     table: string;
     map: string;
   };
-  wednesday: string;
   weekday_any: string;
 }

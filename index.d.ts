@@ -1,6 +1,6 @@
 type Translation = import('./src/types/Translation').Translation;
 type MeetingType = import('./src/types/MeetingType').MeetingType;
-type Lang = 'en' | 'es' | 'fr';
+type Lang = 'en' | 'es' | 'fr' | 'ja';
 
 interface TSMLReactConfig {
   cache: boolean;
@@ -10,7 +10,7 @@ interface TSMLReactConfig {
   conference_providers: Record<string, string>;
   defaults: {
     distance: string[];
-    meeting: string | null;
+    meeting?: string;
     mode: 'search' | 'location' | 'me';
     region: string[];
     search: string;
@@ -21,7 +21,7 @@ interface TSMLReactConfig {
   };
   distance_options: number[];
   distance_unit: 'mi' | 'km';
-  /** Email addresses for update meeting info button */
+  duration: number;
   feedback_emails: string[];
   filters: Array<'region' | 'distance' | 'weekday' | 'time' | 'type'>;
   flags: Array<'M' | 'W'> | undefined | null;
@@ -38,16 +38,11 @@ interface TSMLReactConfig {
     };
     style: string;
   };
-  /** What meetings to show based off a past start time in minutes */
   now_offset: number;
-  /** Input other than filters */
   params: Array<'search' | 'mode' | 'view' | 'meeting'>;
   show: {
-    /** Whether to show search + dropdowns + list/map */
     controls: boolean;
-    /** Show conference buttons in list or show labels */
     listButtons: boolean;
-    /** Whether to display the title h1 */
     title: boolean;
   };
   strings: {
