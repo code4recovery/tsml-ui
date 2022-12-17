@@ -79,7 +79,7 @@ export default function Form({
     },
     day: {
       label: 'Day',
-      options: ['', ...settings.weekdays.map(weekday => strings[weekday])],
+      options: ['', ...settings.weekdays.map(weekday => strings.days[weekday])],
       span: 4,
       type: 'select',
     },
@@ -196,16 +196,19 @@ export default function Form({
       type: 'textarea',
     },
   };
+
+  console.log(`weekday ${meeting.start?.weekday}`);
+
   const getDefaultValue = (field: keyof FormFields): string | string[] => {
     if (meeting.types && field === 'types') {
       return meeting.types?.map(type => strings.types[type]);
     }
-    if (field === 'day' && meeting.day) {
+    if (field === 'day' && meeting.start?.weekday) {
       return `${
-        strings[
+        strings.days[
           settings.weekdays[
-            meeting.day as keyof typeof settings.weekdays
-          ] as keyof Translation
+            meeting.start?.weekday as keyof typeof settings.weekdays
+          ] as keyof Translation['days']
         ]
       }`;
     }

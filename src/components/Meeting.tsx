@@ -5,7 +5,6 @@ import type { Meeting as MeetingType, State } from '../types';
 import {
   formatClasses as cx,
   formatDirectionsUrl,
-  formatFeedbackEmail,
   formatIcs,
   formatUrl,
   settings,
@@ -13,6 +12,7 @@ import {
 } from '../helpers';
 import Button from './Button';
 import Icon, { icons } from './Icon';
+import Form from './Form';
 import Link from './Link';
 import Map from './Map';
 
@@ -23,12 +23,7 @@ type MeetingProps = {
   state: State;
 };
 
-export default function Meeting({
-  feedback_emails = [],
-  mapbox,
-  setState,
-  state,
-}: MeetingProps) {
+export default function Meeting({ mapbox, setState, state }: MeetingProps) {
   //open types
   const [define, setDefine] = useState<string | undefined>();
 
@@ -89,14 +84,6 @@ export default function Meeting({
   //set page title
   if (meeting.name) {
     document.title = meeting.name;
-  }
-
-  //feedback URL link
-  if (!meeting.feedback_url && feedback_emails.length) {
-    meeting.feedback_url = formatFeedbackEmail(
-      settings.feedback_emails,
-      meeting
-    );
   }
 
   const contactButtons: {
@@ -220,7 +207,7 @@ export default function Meeting({
 
   return (
     <div
-      className={cx('d-flex flex-column flex-grow-1 meeting', {
+      className={cx('d-flex flex-column meeting', {
         'in-person': !!meeting.isInPerson,
         'inactive': !meeting.isActive,
         'online': !!meeting.isOnline,
@@ -250,7 +237,7 @@ export default function Meeting({
           {strings.back_to_meetings}
         </a>
       </div>
-      <div className="flex-grow-1 row">
+      <div className="row">
         <div className="align-content-start col-md-4 d-grid gap-3 mb-3 mb-md-0">
           {directionsUrl && (
             <Button
@@ -425,20 +412,12 @@ export default function Meeting({
               </div>
             )}
           </div>
-
-          {meeting.feedback_url && (
-            <Button
-              href={meeting.feedback_url}
-              icon="edit"
-              text={strings.feedback}
-            />
-          )}
         </div>
         {!!mapbox && (
           <div
             className={cx(
               { 'd-md-block d-none': !meeting.isInPerson },
-              'col-md-8'
+              'col-md-8 d-flex flex-column gap-3'
             )}
           >
             <Map
@@ -448,6 +427,24 @@ export default function Meeting({
               setState={setState}
               mapbox={mapbox}
             />
+
+            {meeting.feedback_url ? (
+              <Button
+                href={meeting.feedback_url}
+                icon="edit"
+                text={strings.feedback}
+              />
+            ) : (
+              !!settings.feedback_emails.length && (
+                <Form
+                  feedbackEmails={settings.feedback_emails}
+                  meeting={meeting}
+                  typesInUse={Object.values(state.indexes.type).map(
+                    type => type.name
+                  )}
+                />
+              )
+            )}
           </div>
         )}
       </div>

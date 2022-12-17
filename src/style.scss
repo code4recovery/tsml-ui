@@ -252,7 +252,7 @@ div.tsml-ui {
 
   .meeting .map {
     height: 700px;
-    flex-grow: 0;
+    flex-grow: unset !important;
   }
 
   .map {
