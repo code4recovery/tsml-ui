@@ -89,6 +89,10 @@ Second, while we can infer that a meeting is "online" if there is a Zoom URL (fo
 
 Web servants may [add their own meeting types](#add-custom-types) of course.
 
+### What is Speaker/Discussion?
+
+When meetings are tagged both Speaker (`SP`) and Discussion (`D`), TSML UI merges them into a combined Speaker/Discussion type. This enables users to use existing filters to locate Speaker-only and Discussion-only meetings.
+
 ### Can I import TSML UI from NPM for use in a NextJS or Gatsby project?
 
 Not yet! Please open a pull request and walk us through the process of adding it to NPM and we'll give it a shot.
