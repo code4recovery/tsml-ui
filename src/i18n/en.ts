@@ -122,6 +122,7 @@ export const en: Translation = {
     SEN: 'Seniors',
     SM: 'Smoking Permitted',
     SP: 'Speaker',
+    SPD: 'Speaker/Discussion',
     ST: 'Step Study',
     T: 'Transgender',
     TC: 'Location Temporarily Closed',
