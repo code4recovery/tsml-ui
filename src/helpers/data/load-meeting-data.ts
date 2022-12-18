@@ -176,6 +176,13 @@ export function loadMeetingData(
       );
     }
 
+    //if meeting is both speaker and discussion, combine
+    if (types.includes('SP') && types.includes('D')) {
+      types.splice(types.indexOf('SP'), 1);
+      types.splice(types.indexOf('D'), 1);
+      types.push('SPD');
+    }
+
     //check location/group capability
     if (
       !capabilities.location &&
