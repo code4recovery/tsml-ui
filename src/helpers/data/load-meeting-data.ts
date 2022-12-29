@@ -31,8 +31,9 @@ export function loadMeetingData(
 
   //used later to check type validity
   const typeCodes = Object.keys(strings.types);
+  const bannedTypes = ['ONL']; //we have our own online type
   const isMeetingType = (type: string): type is MeetingType =>
-    !!type && typeCodes.includes(type);
+    !!type && !bannedTypes.includes(type) && typeCodes.includes(type);
 
   //loop through each entry
   flattenDays(data).forEach(meeting => {
