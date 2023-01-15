@@ -79,8 +79,8 @@ describe('<Dropdown />', () => {
     );
 
     function modify<
-      K extends keyof typeof mockState['input'],
-      T extends typeof mockState['input'][K]
+      K extends keyof (typeof mockState)['input'],
+      T extends (typeof mockState)['input'][K]
     >(key: K, value: T) {
       return {
         ...mockState,
