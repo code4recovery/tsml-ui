@@ -31,8 +31,9 @@ export function loadMeetingData(
 
   //used later to check type validity
   const typeCodes = Object.keys(strings.types);
+  const bannedTypes = ['ONL']; //we have our own online type
   const isMeetingType = (type: string): type is MeetingType =>
-    !!type && typeCodes.includes(type);
+    !!type && !bannedTypes.includes(type) && typeCodes.includes(type);
 
   //loop through each entry
   flattenDays(data).forEach(meeting => {
@@ -174,6 +175,13 @@ export function loadMeetingData(
       types = types.filter(
         type => !settings.in_person_types.includes(type as MeetingType)
       );
+    }
+
+    //if meeting is both speaker and discussion, combine
+    if (types.includes('SP') && types.includes('D')) {
+      types.splice(types.indexOf('SP'), 1);
+      types.splice(types.indexOf('D'), 1);
+      types.push('SPD');
     }
 
     //check location/group capability
