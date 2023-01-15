@@ -10,7 +10,18 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+
+      - name: Prettify code
+        uses: creyD/prettier_action@v4.2
+        with:
+          prettier_options: --write **/*.{ts,tsx}
+          same_commit: True
+
       - name: Setup Node
         uses: actions/setup-node@v2
         with:
@@ -19,11 +30,7 @@ jobs:
       - run: npm install
       - run: npm run test-coverage
       - run: npx mix --production
-      - name: Prettify code
-        uses: creyD/prettier_action@v4.2
-        with:
-          prettier_options: --write **/*.{ts,tsx}
-          only_changed: True
+
       - name: Coveralls
         uses: coverallsapp/github-action@master
         with:
