@@ -10,7 +10,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Setup Node
+      - name: Checkout
         uses: actions/checkout@v2
 
       - name: Setup Node
