@@ -122,7 +122,7 @@ export function filterMeetingData(
             );
           },
           error => {
-            console.warn(`TSML UI geolocation error: ${error}`);
+            console.warn(`TSML UI geolocation error: ${error.message}`);
           },
           { timeout: 5000 }
         );
