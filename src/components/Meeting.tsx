@@ -356,6 +356,18 @@ export default function Meeting({
                       )}
                     </div>
                   )}
+                  {meeting.url && state.capabilities.sharing && (
+                    <Button
+                      onClick={() =>
+                        navigator.share({
+                          title: meeting.name,
+                          url: meeting.url,
+                        })
+                      }
+                      icon="share"
+                      text={strings.share}
+                    />
+                  )}
                   {meeting.start && meeting.isActive && (
                     <Button
                       onClick={() => formatIcs(meeting)}

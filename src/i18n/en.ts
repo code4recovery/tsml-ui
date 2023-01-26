@@ -51,6 +51,7 @@ export const en: Translation = {
   region_any: 'Anywhere',
   remove: 'Remove %filter%',
   seventh_tradition: 'Seventh Tradition',
+  share: 'Share',
   time: 'Time',
   time_any: 'Any Time',
   title: {

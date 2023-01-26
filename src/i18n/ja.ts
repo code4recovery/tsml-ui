@@ -51,6 +51,7 @@ export const ja: Translation = {
   region_any: '区域指定無し',
   remove: '%filter% を削除',
   seventh_tradition: '伝統 7',
+  share: '共有',
   time: '時間',
   time_any: '時間指定無し',
   title: {
