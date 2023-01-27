@@ -51,6 +51,7 @@ export const fr: Translation = {
   region_any: 'Partout',
   remove: 'Supprimer %filter%',
   seventh_tradition: 'Septième tradition',
+  share: 'Partager',
   time: 'Temps',
   time_any: 'À tout moment',
   title: {

@@ -371,6 +371,12 @@ export function loadMeetingData(
       }
     }
 
+    //optional url
+    const url =
+      meeting.url?.startsWith('http://') || meeting.url?.startsWith('https://')
+        ? meeting.url
+        : undefined;
+
     //build search string
     const search = [
       district,
@@ -434,6 +440,7 @@ export function loadMeetingData(
       timezone,
       types,
       updated,
+      url,
       venmo: validateVenmo(meeting),
       website,
     };
@@ -501,6 +508,9 @@ export function loadMeetingData(
     capabilities.coordinates &&
     (window.location.protocol === 'https:' ||
       window.location.hostname === 'localhost');
+
+  //determine sharing
+  capabilities.sharing = typeof navigator.canShare === 'function';
 
   return [meetings, indexes, capabilities];
 }

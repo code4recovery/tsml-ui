@@ -36,6 +36,11 @@ export default function Meeting({
   const meeting =
     state.meetings[state.input.meeting as keyof typeof state.meetings];
 
+  const sharePayload = {
+    title: meeting.name,
+    url: meeting.url ?? location.href,
+  };
+
   //scroll to top when you navigate to this page
   useEffect(() => {
     const el = document.getElementById('tsml-ui');
@@ -356,10 +361,20 @@ export default function Meeting({
                       )}
                     </div>
                   )}
+                  {state.capabilities.sharing &&
+                    navigator.canShare(sharePayload) && (
+                      <Button
+                        icon="share"
+                        onClick={() =>
+                          navigator.share(sharePayload).catch(() => {})
+                        }
+                        text={strings.share}
+                      />
+                    )}
                   {meeting.start && meeting.isActive && (
                     <Button
-                      onClick={() => formatIcs(meeting)}
                       icon="calendar"
+                      onClick={() => formatIcs(meeting)}
                       text={strings.add_to_calendar}
                     />
                   )}
