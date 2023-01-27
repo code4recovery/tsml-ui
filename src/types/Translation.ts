@@ -51,6 +51,7 @@ export interface Translation {
   region_any: string;
   remove: string;
   seventh_tradition: string;
+  share: string;
   time: string;
   time_any: string;
   title: {

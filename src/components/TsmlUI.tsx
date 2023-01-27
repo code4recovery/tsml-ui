@@ -32,6 +32,7 @@ export default function TsmlUI({ google, mapbox, src, timezone }: TsmlUIProps) {
       inactive: false,
       location: false,
       region: false,
+      sharing: false,
       time: false,
       type: false,
       weekday: false,

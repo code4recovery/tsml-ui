@@ -46,6 +46,7 @@ export type JSONData = {
   timezone?: string;
   types?: number[] | string[];
   updated?: string;
+  url?: string;
   venmo?: string;
   website?: string;
 };
