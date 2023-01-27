@@ -510,8 +510,7 @@ export function loadMeetingData(
       window.location.hostname === 'localhost');
 
   //determine sharing
-  capabilities.sharing =
-    typeof navigator.canShare === 'function' && navigator.canShare();
+  capabilities.sharing = typeof navigator.canShare === 'function';
 
   return [meetings, indexes, capabilities];
 }
