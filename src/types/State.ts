@@ -16,6 +16,7 @@ export type State = {
     inactive: boolean;
     location: boolean;
     region: boolean;
+    sharing: boolean;
     time: boolean;
     type: boolean;
     weekday: boolean;
