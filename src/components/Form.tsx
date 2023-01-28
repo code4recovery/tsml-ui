@@ -197,9 +197,12 @@ export default function Form({
     },
   };
 
-  console.log(`weekday ${meeting.start?.weekday}`);
-
   const getDefaultValue = (field: keyof FormFields): string | string[] => {
+    //dev
+    //if (field === 'your_name') return 'Josh';
+    //if (field === 'your_email') return 'josh@test.com';
+    //if (field === 'comments') return 'This is a test message';
+
     if (meeting.types && field === 'types') {
       return meeting.types?.map(type => strings.types[type]);
     }
@@ -211,6 +214,12 @@ export default function Form({
           ] as keyof Translation['days']
         ]
       }`;
+    }
+    if (field === 'time') {
+      return meeting.start?.toFormat('HH:mm') ?? '';
+    }
+    if (field === 'end_time') {
+      return meeting.end?.toFormat('HH:mm') ?? '';
     }
     const value = meeting[field as keyof Meeting];
     if (typeof value === 'string') return value;
@@ -282,7 +291,22 @@ export default function Form({
             const lines = [fields.comments.current, ''];
             const changes = Object.keys(fields)
               .slice(1)
-              .filter(field => fields[field].current !== fields[field].value);
+              .filter(
+                field =>
+                  !['your_name', 'your_email', 'comments'].includes(field)
+              )
+              .filter(field => {
+                if (field === 'types') {
+                  const currentValues = (
+                    fields[field].current as string[]
+                  ).join();
+                  const originalValues = (
+                    fields[field].value as string[]
+                  ).join();
+                  return currentValues !== originalValues;
+                }
+                return fields[field].current !== fields[field].value;
+              });
             if (changes.length) {
               lines.push('---', 'CHANGES:', '');
               changes.forEach(field => {
@@ -291,12 +315,10 @@ export default function Form({
                 );
               });
             }
-            console.log(lines.join('\n'));
-            /*
-            window.location = `mailto:${feedbackEmails.join()}?subject=${encodeURI(
+            //console.log(lines.join('\n'));
+            location.href = `mailto:${feedbackEmails.join()}?subject=${encodeURI(
               strings.email_subject.replace('%name%', meeting.name)
             )}&body=${encodeURI(lines.join('\n'))}`;
-            */
           }}
         >
           <div className="row">

@@ -192,6 +192,7 @@ export default function Map({
           mapStyle={settings.map.style}
           mapboxApiAccessToken={mapbox}
           onViewportChange={setViewport}
+          scrollZoom={false}
           {...viewport}
         >
           {data.locationKeys.map(key => (
