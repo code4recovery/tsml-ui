@@ -8,8 +8,7 @@
     "test-watch": "jest --watch",
     "test-coverage": "jest --coverage",
     "test-e2e": "yarn playwright test",
-    "serve": "serve public",
-    "postinstall": "yarn playwright install"
+    "serve": "serve public"
   },
   "devDependencies": {
     "@babel/preset-react": "^7.14.5",
