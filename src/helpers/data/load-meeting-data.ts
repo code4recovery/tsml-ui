@@ -595,7 +595,7 @@ function validateConferencePhone(meeting: JSONDataFlat) {
 function validatePayPal(meeting: JSONDataFlat) {
   const { paypal } = meeting;
   if (paypal) {
-    if (/^[a-z0-9]+$/.test(paypal) && paypal.length < 21) {
+    if (/^[a-zA-Z0-9]+$/.test(paypal) && paypal.length < 21) {
       return paypal;
     }
     warn(`invalid paypal ${paypal}`, meeting);
