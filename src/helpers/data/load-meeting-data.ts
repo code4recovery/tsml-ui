@@ -38,7 +38,6 @@ export function loadMeetingData(
   //loop through each entry
   flattenDays(data).forEach(meeting => {
     const {
-      conference_phone,
       contact_1_email,
       contact_1_name,
       contact_1_phone,
@@ -78,6 +77,7 @@ export function loadMeetingData(
     let {
       address,
       conference_url,
+      conference_phone,
       conference_phone_notes,
       conference_url_notes,
       formatted_address,
@@ -96,6 +96,7 @@ export function loadMeetingData(
       conference_url_notes = undefined;
     }
 
+    conference_phone = validateConferencePhone(meeting);
     if (!conference_phone && conference_phone_notes) {
       conference_phone_notes = undefined;
     }
@@ -579,13 +580,22 @@ function populateRegionsIndex(
   return index;
 }
 
+function validateConferencePhone(meeting: JSONDataFlat) {
+  const { conference_phone } = meeting;
+  if (conference_phone) {
+    const conference_phone_clean = conference_phone.replace(/[^\d,+#]/g, '');
+    if (conference_phone_clean.length > 10) {
+      return conference_phone_clean;
+    }
+    warn(`invalid conference_phone ${conference_phone}`, meeting);
+  }
+  return undefined;
+}
+
 function validatePayPal(meeting: JSONDataFlat) {
   const { paypal } = meeting;
   if (paypal) {
-    if (
-      paypal.startsWith('https://www.paypal.me') ||
-      paypal.startsWith('https://paypal.me')
-    ) {
+    if (/^[a-z0-9]+$/.test(paypal) && paypal.length < 21) {
       return paypal;
     }
     warn(`invalid paypal ${paypal}`, meeting);
