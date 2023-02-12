@@ -149,7 +149,7 @@ export default function Meeting({
   }
   if (meeting.paypal) {
     contactButtons.push({
-      href: meeting.paypal,
+      href: `https://www.paypal.com/paypalme/${meeting.paypal}`,
       icon: 'cash',
       text: strings.contribute_with.replace('%service%', 'PayPal'),
     });
