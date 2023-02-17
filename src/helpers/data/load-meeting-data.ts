@@ -584,7 +584,7 @@ function validateConferencePhone(meeting: JSONDataFlat) {
   const { conference_phone } = meeting;
   if (conference_phone) {
     const conference_phone_clean = conference_phone.replace(/[^\d,+#]/g, '');
-    if (conference_phone_clean.length > 10) {
+    if (conference_phone_clean.length >= 10) {
       return conference_phone_clean;
     }
     warn(`invalid conference_phone ${conference_phone}`, meeting);
