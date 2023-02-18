@@ -1,7 +1,7 @@
 import merge from 'deepmerge';
 import { Settings } from 'luxon';
 
-import { en, es, fr, ja } from '../i18n';
+import { en, es, fr, ja, sv } from '../i18n';
 
 //override these on your page with tsml_react_config
 const defaults: TSMLReactConfig = {
@@ -78,6 +78,7 @@ const defaults: TSMLReactConfig = {
     es,
     fr,
     ja,
+    sv,
   },
   times: ['morning', 'midday', 'evening', 'night'],
   weekdays: [
