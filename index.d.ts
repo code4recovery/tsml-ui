@@ -1,6 +1,6 @@
 type Translation = import('./src/types/Translation').Translation;
 type MeetingType = import('./src/types/MeetingType').MeetingType;
-type Lang = 'en' | 'es' | 'fr' | 'ja';
+type Lang = 'en' | 'es' | 'fr' | 'ja' | 'sv';
 
 interface TSMLReactConfig {
   cache: boolean;
