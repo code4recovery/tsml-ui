@@ -3,7 +3,7 @@ import { Translation } from '../types';
 export const sv: Translation = {
   add_to_calendar: 'Lägg till i kalender',
   address: 'Adress / Plattform',
-  appointment: 'TODO',
+  appointment: 'Tidsbeställning',
   back_to_meetings: 'Tillbaka till mötena',
   contact_call: 'Ring %contact%',
   contact_email: 'Maila %contact%',
@@ -33,7 +33,7 @@ export const sv: Translation = {
   match_multiple: '%count% resultat',
   meeting_information: 'Mötes Information',
   meetings: 'Möten',
-  midday: 'TODO',
+  midday: 'Mitt på dagen',
   midnight: 'Midnatt',
   modes: {
     location: 'Nära Plats',
@@ -66,8 +66,8 @@ export const sv: Translation = {
   },
   type_any: 'Alla typer',
   type_descriptions: {
-    C: 'Slutna möten är för endast för gemenskapens medlemmar, eller för de som har ett problem med sinnesförändrande substanser och en önskan att sluta dricka eller använda.',
-    O: 'Öppna möten är tillgängliga för alla som är intresserade av gemenskapens program för tillfrisknande. Folk utan drog och alkohol problem är välkomman att delta.',
+    C: 'Slutna möten är endast för A.A. medlemmar, eller för de som har ett problem med alkohol och en “önskan att sluta dricka.“',
+    O: 'Öppna möten är tillgängliga för alla som är intresserade av Anonyma Alkoholisters program för tillfrisknande från alkoholism. Icke-alkoholister får delta på öppna möten.',
   },
   types: {
     '11': '11th Stegs Meditation',
