@@ -19,8 +19,6 @@ export const sv: Translation = {
   },
   distance: 'Avstånd',
   distance_any: 'Alla Avstånd',
-  distance_km: '%distance% km',
-  distance_mi: '%distance% mi',
   email_edit_url: 'Redigera URL: %url%',
   email_public_url: 'Publik URL: %url%',
   email_subject: 'Mötes Feedback: %name%',
