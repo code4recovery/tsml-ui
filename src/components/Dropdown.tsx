@@ -3,7 +3,7 @@ import React, { Fragment } from 'react';
 import type { Index, State } from '../types';
 import {
   formatClasses as cx,
-  formatUrl,
+  formatString as i18n,
   getIndexByKey,
   strings,
 } from '../helpers';
@@ -85,10 +85,9 @@ export default function Dropdown({
           aria-label={
             slugs.length === 1
               ? strings.match_single
-              : strings.match_multiple.replace(
-                  '%count%',
-                  slugs.length.toString()
-                )
+              : i18n(strings.match_multiple, {
+                  count: slugs.length,
+                })
           }
           className="badge bg-light border ms-3 text-dark"
         >

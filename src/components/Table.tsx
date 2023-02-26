@@ -5,6 +5,7 @@ import { Meeting, State } from '../types';
 import {
   formatClasses as cx,
   formatDirectionsUrl,
+  formatString as i18n,
   settings,
   strings,
 } from '../helpers';
@@ -104,11 +105,11 @@ export default function Table({
         </div>
       );
     } else if (key === 'distance' && meeting.distance) {
-      return (
-        <>
-          {meeting.distance}
-          <small className="ms-1 text-muted">{settings.distance_unit}</small>
-        </>
+      return i18n(
+        settings.distance_unit === 'km'
+          ? strings.distance_km
+          : strings.distance_mi,
+        { distance: meeting.distance }
       );
     } else if (key === 'location') {
       return meeting.location;
@@ -193,10 +194,9 @@ export default function Table({
                   >
                     {inProgress.length === 1
                       ? strings.in_progress_single
-                      : strings.in_progress_multiple.replace(
-                          '%count%',
-                          inProgress.length.toString()
-                        )}
+                      : i18n(strings.in_progress_multiple, {
+                          count: inProgress.length,
+                        })}
                   </button>
                 </td>
               </tr>

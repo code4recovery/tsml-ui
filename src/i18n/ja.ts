@@ -19,6 +19,8 @@ export const ja: Translation = {
   },
   distance: '距離',
   distance_any: '距離指定無し',
+  distance_km: '%distance%キロ',
+  distance_mi: '%distance%マイル',
   email_edit_url: 'URLの変更依頼をメール: %url%',
   email_public_url: '公開URLの掲載依頼をメール: %url%',
   email_subject: 'メールする: %name%',

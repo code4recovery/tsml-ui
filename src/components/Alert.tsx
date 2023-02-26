@@ -2,7 +2,12 @@ import React from 'react';
 
 import type { MeetingType, State } from '../types';
 import Button from './Button';
-import { getIndexByKey, strings, settings } from '../helpers';
+import {
+  formatString as i18n,
+  getIndexByKey,
+  settings,
+  strings,
+} from '../helpers';
 
 type AlertProps = {
   state: State;
@@ -22,7 +27,7 @@ export default function Alert({ state, setState }: AlertProps) {
             setState({ ...state });
           }}
           className="btn-light btn-outline-secondary"
-          text={strings.remove.replace('%filter%', `‘${state.input.search}’`)}
+          text={i18n(strings.remove, { filter: `‘${state.input.search}’` })}
           icon="close"
         />
       )}
@@ -53,10 +58,9 @@ export default function Alert({ state, setState }: AlertProps) {
                 }
                 setState({ ...state });
               }}
-              text={strings.remove.replace(
-                '%filter%',
-                getIndexByKey(state.indexes[filter], value)?.name ?? ''
-              )}
+              text={i18n(strings.remove, {
+                filter: getIndexByKey(state.indexes[filter], value)?.name,
+              })}
               icon="close"
             />
           ))

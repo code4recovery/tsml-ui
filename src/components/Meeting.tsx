@@ -7,6 +7,7 @@ import {
   formatDirectionsUrl,
   formatFeedbackEmail,
   formatIcs,
+  formatString as i18n,
   formatUrl,
   settings,
   strings,
@@ -135,23 +136,23 @@ export default function Meeting({
   }
   if (meeting.venmo) {
     contactButtons.push({
-      href: `https://venmo.com/${meeting.venmo.substr(1)}`,
+      href: `https://venmo.com/${meeting.venmo.substring(1)}`,
       icon: 'cash',
-      text: strings.contribute_with.replace('%service%', 'Venmo'),
+      text: i18n(strings.contribute_with, { service: 'Venmo' }),
     });
   }
   if (meeting.square) {
     contactButtons.push({
       href: `https://cash.app/${meeting.square}`,
       icon: 'cash',
-      text: strings.contribute_with.replace('%service%', 'Cash App'),
+      text: i18n(strings.contribute_with, { service: 'Cash App' }),
     });
   }
   if (meeting.paypal) {
     contactButtons.push({
       href: `https://www.paypal.com/paypalme/${meeting.paypal}`,
       icon: 'cash',
-      text: strings.contribute_with.replace('%service%', 'PayPal'),
+      text: i18n(strings.contribute_with, { service: 'PayPal' }),
     });
   }
   for (let i = 1; i < 4; i++) {
@@ -160,19 +161,17 @@ export default function Meeting({
       contactButtons.push({
         href: `mailto:${meeting[`contact_${i}_email` as keyof typeof Meeting]}`,
         icon: 'email',
-        text: strings.contact_email.replace(
-          '%contact%',
-          meeting[`contact_${i}_name` as keyof typeof Meeting]
-        ),
+        text: i18n(strings.contact_email, {
+          contact: meeting[`contact_${i}_name` as keyof typeof Meeting],
+        }),
       });
     if (meeting[`contact_${i}_phone` as keyof typeof Meeting])
       contactButtons.push({
         href: `tel:${meeting[`contact_${i}_phone` as keyof typeof Meeting]}`,
         icon: 'phone',
-        text: strings.contact_call.replace(
-          '%contact%',
-          meeting[`contact_${i}_name` as keyof typeof Meeting]
-        ),
+        text: i18n(strings.contact_call, {
+          contact: meeting[`contact_${i}_name` as keyof typeof Meeting],
+        }),
       });
   }
 
@@ -436,7 +435,7 @@ export default function Meeting({
               )}
             {meeting.updated && (
               <div className="list-group-item">
-                {strings.updated.replace('%updated%', meeting.updated)}
+                {i18n(strings.updated, { updated: meeting.updated })}
               </div>
             )}
           </div>

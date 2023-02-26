@@ -3,7 +3,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { DateTime } from 'luxon';
 
 import { State } from '../types';
-import { strings } from '../helpers';
+import { formatString as i18n, strings } from '../helpers';
 import Table from './Table';
 
 describe('<Table />', () => {
@@ -15,6 +15,7 @@ describe('<Table />', () => {
       inactive: true,
       location: true,
       region: true,
+      sharing: true,
       time: true,
       type: true,
       weekday: true,
@@ -158,7 +159,7 @@ describe('<Table />', () => {
 
     const button = screen.getByRole('button');
     expect(button).toHaveTextContent(
-      strings.in_progress_multiple.replace('%count%', inProgress.length)
+      i18n(strings.in_progress_multiple, { count: inProgress.length })
     );
 
     fireEvent.click(button);
