@@ -1,7 +1,7 @@
 import React from 'react';
 
 import type { State } from '../types';
-import { getIndexByKey, strings } from '../helpers';
+import { formatString as i18n, getIndexByKey, strings } from '../helpers';
 
 type TitleProps = {
   state: State;
@@ -23,7 +23,7 @@ export default function Title({ state: { indexes, input } }: TitleProps) {
       input.search
     ) {
       parts.push(
-        strings.title.search_with.replace('%search%', `‘${input.search}’`)
+        i18n(strings.title.search_with, { search: `‘${input.search}’` })
       );
     } else if (
       key === 'search_near' &&
@@ -31,7 +31,7 @@ export default function Title({ state: { indexes, input } }: TitleProps) {
       input.search
     ) {
       parts.push(
-        strings.title.search_near.replace('%search%', `‘${input.search}’`)
+        i18n(strings.title.search_near, { search: `‘${input.search}’` })
       );
     } else if (indexes[key as keyof typeof indexes]) {
       const value = input[key as keyof typeof indexes]
@@ -42,10 +42,9 @@ export default function Title({ state: { indexes, input } }: TitleProps) {
         .join(' + ');
       if (value.length) {
         parts.push(
-          strings.title[key as keyof typeof strings.title].replace(
-            `%${key}%`,
-            value
-          )
+          i18n(strings.title[key as keyof typeof strings.title], {
+            [key]: value,
+          })
         );
       }
     }

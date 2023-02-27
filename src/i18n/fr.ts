@@ -19,6 +19,8 @@ export const fr: Translation = {
   },
   distance: 'Distance',
   distance_any: 'Toute distance',
+  distance_km: '%distance% km',
+  distance_mi: '%distance% mi',
   email_edit_url: 'Modifier l’URL : %url%',
   email_public_url: 'URL publique : %url%',
   email_subject: 'Commentaires sur la réunion : %name%',
