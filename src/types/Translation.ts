@@ -19,6 +19,8 @@ export interface Translation {
   };
   distance: string;
   distance_any: string;
+  distance_km: string;
+  distance_mi: string;
   email_edit_url: string;
   email_public_url: string;
   email_subject: string;
