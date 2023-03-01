@@ -292,7 +292,7 @@ export default function Meeting({
                           type as keyof typeof strings.type_descriptions
                         ] ? (
                           <button
-                            className="d-flex flex-column bg-transparent border-0 p-0 text-start text-reset"
+                            className="bg-transparent border-0 d-flex flex-column p-0 text-decoration-none text-reset text-start"
                             onClick={() =>
                               setDefine(define === type ? undefined : type)
                             }
@@ -308,7 +308,7 @@ export default function Meeting({
                               />
                             </div>
                             {define === type && (
-                              <small className="d-block mb-2">
+                              <small className="d-block mb-1">
                                 {
                                   strings.type_descriptions[
                                     type as keyof typeof strings.type_descriptions
