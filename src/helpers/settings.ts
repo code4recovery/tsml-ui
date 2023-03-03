@@ -110,6 +110,9 @@ if (typeof tsml_react_config === 'object') {
   if (Array.isArray(tsml_react_config.weekdays)) {
     settings.weekdays = tsml_react_config.weekdays;
   }
+  if (Array.isArray(tsml_react_config.filters)) {
+    settings.filters = tsml_react_config.filters;
+  }
 }
 
 const preferredLanguage = navigator.language.substring(0, 2) as Lang;
