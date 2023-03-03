@@ -2,7 +2,7 @@ import { DateTime } from 'luxon';
 
 import type { JSONData } from '../../types';
 import { formatSlug } from '../format';
-import { en, es, fr, ja } from '../../i18n';
+import { en, es, fr, ja, sv } from '../../i18n';
 import { settings } from '../../helpers';
 
 export type GoogleSheetData = {
@@ -29,6 +29,7 @@ export function translateGoogleSheet(data: GoogleSheetData, sheetId: string) {
     validTypes[es.types[key as keyof Translation['types']]] = key;
     validTypes[fr.types[key as keyof Translation['types']]] = key;
     validTypes[ja.types[key as keyof Translation['types']]] = key;
+    validTypes[sv.types[key as keyof Translation['types']]] = key;
   });
   const validDays: { [index: string]: number } = {};
   settings.weekdays.forEach((key, index) => {
@@ -36,6 +37,7 @@ export function translateGoogleSheet(data: GoogleSheetData, sheetId: string) {
     validDays[es.days[key as keyof Translation['days']]] = index;
     validDays[fr.days[key as keyof Translation['days']]] = index;
     validDays[ja.days[key as keyof Translation['days']]] = index;
+    validDays[sv.days[key as keyof Translation['days']]] = index;
   });
 
   data.values.forEach((row, index) => {
