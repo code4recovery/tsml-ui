@@ -39,7 +39,7 @@ export default function Controls({ state, setState, mapbox }: ControlsProps) {
   //get available filters
   const filters = settings.filters
     .filter(filter => state.capabilities[filter])
-    .filter(filter => filter !== 'region' || state.input.mode !== 'me')
+    .filter(filter => filter !== 'region' || state.input.mode === 'search')
     .filter(filter => filter !== 'distance' || state.input.mode !== 'search');
 
   //get available views
