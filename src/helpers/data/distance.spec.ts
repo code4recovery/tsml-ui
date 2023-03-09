@@ -24,9 +24,9 @@ describe('distance', () => {
   //miles
   it.each`
     a                                    | b                                    | expected
-    ${{ latitude: 1, longitude: 1 }}     | ${{ latitude: 2, longitude: 2 }}     | ${97.69}
-    ${{ latitude: 10, longitude: 10 }}   | ${{ latitude: 20, longitude: 20 }}   | ${959.82}
-    ${{ latitude: 100, longitude: 100 }} | ${{ latitude: 200, longitude: 200 }} | ${7697.83}
+    ${{ latitude: 1, longitude: 1 }}     | ${{ latitude: 2, longitude: 2 }}     | ${97.7}
+    ${{ latitude: 10, longitude: 10 }}   | ${{ latitude: 20, longitude: 20 }}   | ${960}
+    ${{ latitude: 100, longitude: 100 }} | ${{ latitude: 200, longitude: 200 }} | ${7698}
   `('miles: yields $expected with $a and $b', ({ a, b, expected }) => {
     expect(getDistance(a, b)).toStrictEqual(expected);
   });
@@ -34,9 +34,9 @@ describe('distance', () => {
   //kilometers
   it.each`
     a                                    | b                                    | expected
-    ${{ latitude: 1, longitude: 1 }}     | ${{ latitude: 2, longitude: 2 }}     | ${157.22}
-    ${{ latitude: 10, longitude: 10 }}   | ${{ latitude: 20, longitude: 20 }}   | ${1544.68}
-    ${{ latitude: 100, longitude: 100 }} | ${{ latitude: 200, longitude: 200 }} | ${12388.45}
+    ${{ latitude: 1, longitude: 1 }}     | ${{ latitude: 2, longitude: 2 }}     | ${157}
+    ${{ latitude: 10, longitude: 10 }}   | ${{ latitude: 20, longitude: 20 }}   | ${1545}
+    ${{ latitude: 100, longitude: 100 }} | ${{ latitude: 200, longitude: 200 }} | ${12388}
   `('kilometers: yields $expected with $a and $b', ({ a, b, expected }) => {
     settings.distance_unit = 'km';
     expect(getDistance(a, b)).toStrictEqual(expected);
