@@ -100,6 +100,14 @@ export function getDistance(
     // If using kilometers, do an additional multiplication
     if (settings.distance_unit === 'km') dist *= 1.609344;
 
-    return parseFloat(dist.toFixed(2));
+    if (dist < 10) {
+      return Math.round(dist * 100) / 100;
+    }
+
+    if (dist < 100) {
+      return Math.round(dist * 10) / 10;
+    }
+
+    return Math.round(dist);
   }
 }
