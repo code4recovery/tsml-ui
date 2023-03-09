@@ -1,6 +1,7 @@
 import type { Index, Meeting, State } from '../../types';
-import { settings } from '../settings';
+import { settings, strings } from '../settings';
 import { flattenAndSortIndexes } from './flatten-and-sort-indexes';
+import { formatString as i18n } from '../format';
 
 //calculate distances
 export function calculateDistances(
@@ -17,7 +18,12 @@ export function calculateDistances(
   settings.distance_options.forEach(option => {
     distances[option] = {
       key: option.toString(),
-      name: `${option} ${settings.distance_unit}`,
+      name: i18n(
+        settings.distance_unit === 'km'
+          ? strings.distance_km
+          : strings.distance_mi,
+        { distance: option }
+      ),
       slugs: [],
       children: [],
     };
