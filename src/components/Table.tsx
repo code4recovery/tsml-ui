@@ -105,11 +105,15 @@ export default function Table({
         </div>
       );
     } else if (key === 'distance' && meeting.distance) {
-      return i18n(
-        settings.distance_unit === 'km'
-          ? strings.distance_km
-          : strings.distance_mi,
-        { distance: meeting.distance }
+      return (
+        <div className="align-items-baseline d-flex flex-wrap justify-content-sm-end">
+          <span className="fs-5 me-1">
+            {meeting.distance.toLocaleString(navigator.language)}
+          </span>
+          <small className="text-muted">
+            {strings[settings.distance_unit]}
+          </small>
+        </div>
       );
     } else if (key === 'location') {
       return meeting.location;

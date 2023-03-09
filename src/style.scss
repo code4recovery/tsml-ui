@@ -365,6 +365,7 @@ div.tsml-ui {
     @include media-breakpoint-down(md) {
       tr {
         border-top: 1px solid $gray-300;
+        min-height: 110px;
         padding: 6px 12px;
         position: relative;
 
@@ -372,18 +373,16 @@ div.tsml-ui {
           border: 0;
           padding: 0 0 0 96px;
 
-          &.time {
+          &.time,
+          &.distance {
             left: 16px;
             padding-left: 0;
             position: absolute;
-            width: 88px;
+            width: 83px;
           }
 
           &.distance {
-            font-size: 24px;
-            left: 16px;
-            padding-left: 0;
-            position: absolute;
+            line-height: 1.15;
             top: 56px;
           }
         }

@@ -29,12 +29,14 @@ export interface Translation {
   get_directions: string;
   in_progress_single: string;
   in_progress_multiple: string;
+  km: string;
   location: string;
   location_group: string;
   match_single: string;
   match_multiple: string;
   meeting_information: string;
   meetings: string;
+  mi: string;
   midday: string;
   midnight: string;
   morning: string;
