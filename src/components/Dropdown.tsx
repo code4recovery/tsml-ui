@@ -111,7 +111,7 @@ export default function Dropdown({
     <div className="dropdown">
       <button
         aria-expanded={open}
-        className="btn btn-outline-secondary dropdown-toggle w-100"
+        className="btn btn-outline-secondary dropdown-toggle overflow-hidden w-100"
         id={filter}
         onClick={() => setDropdown(open ? undefined : filter)}
       >
