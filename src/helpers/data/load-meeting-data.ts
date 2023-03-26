@@ -88,7 +88,7 @@ export function loadMeetingData(
       if (conference_provider) {
         conference_url = meeting.conference_url;
       } else {
-        warn('unknown conference_url', meeting);
+        warn(`unknown conference_url ${meeting.conference_url}`, meeting);
       }
     }
 
@@ -111,9 +111,6 @@ export function loadMeetingData(
         .map(e => e?.trim())
         .filter(e => e)
         .join(', ');
-      if (!formatted_address) {
-        return warn('no address information', meeting);
-      }
     }
 
     //used in table

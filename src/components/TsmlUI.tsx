@@ -125,7 +125,7 @@ export default function TsmlUI({ google, mapbox, src, timezone }: TsmlUIProps) {
       }
 
       //cache busting
-      if (src.endsWith('.json') && input.meeting) {
+      if (src.endsWith('.json')) {
         src = `${src}?${new Date().getTime()}`;
       }
 
