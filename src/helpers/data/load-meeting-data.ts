@@ -360,7 +360,9 @@ export function loadMeetingData(
     //optional updated date
     let updated;
     if (meeting.updated) {
-      updated = DateTime.fromSQL(meeting.updated).setZone(timezone);
+      updated = DateTime.fromSQL(meeting.updated, {
+        zone: 'utc',
+      }).toLocal();
       if (!updated.isValid) {
         warn(`invalid updated (${updated.invalidExplanation})`, meeting);
         updated = undefined;
