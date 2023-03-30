@@ -129,7 +129,7 @@ export default function Meeting({
   }
   if (meeting.phone) {
     contactButtons.push({
-      href: meeting.phone,
+      href: `tel:${meeting.phone}`,
       icon: 'phone',
       text: meeting.phone,
     });
