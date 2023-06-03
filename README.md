@@ -99,6 +99,20 @@ Not yet! Please open a pull request and walk us through the process of adding it
 
 ## Contributing
 
-Pull requests are welcome. To get started, clone this repository, run `npm i`, and point your web root at the `public` folder.
+Contributions are welcome. Ideally, please join [Code for Recovery](https://code4recovery.org/) (we have no dues or fees) beforehand to discuss your proposed changes, or at a minimum file an issue. (The one exception: language translations do not need an issue beforehand.)
 
-While developing, run `npx mix watch` to compile assets as you edit them. When you're ready to commit, run `npx mix --production` to minify them for production.
+Here are the steps to follow when developing:
+
+1. clone (or, if you are not a member, fork and clone) this repository
+1. create a branch for your changes
+1. run `npm i` in the project folder (install NPM if it is not installed)
+1. run `npm run serve` in one terminal window (or use another solution to serve files locally)
+1. run `npx mix watch` in another terminal window (this updates files in development as you change them)
+1. confirm your changes at, for example, `http://localhost:3000/tests/aasanjose` (there are a number of examples in that folder)
+
+When you are ready to make a PR:
+
+1. clean up your diff, try to change as few lines as possible
+1. run prettier locally to autoformat your files
+1. alphabetize things like component props and CSS rules (if applicable)
+1. run `npx mix --production` to minify files
