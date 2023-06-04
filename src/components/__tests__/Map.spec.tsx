@@ -2,12 +2,16 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import { DateTime } from 'luxon';
 
-import Map from './Map';
+import Map from '../Map';
+import { mockState } from '../__fixtures__';
 
 describe('<Map />', () => {
-  const mockState = {
+  const mockStateWithMeeting = {
+    ...mockState,
     meetings: {
-      'foo': {
+      foo: {
+        formatted_address: 'New York, NY, USA',
+        slug: 'foo',
         isInPerson: true,
         latitude: 40.712776,
         longitude: -74.005974,
@@ -45,7 +49,7 @@ describe('<Map />', () => {
       <Map
         filteredSlugs={Object.keys(mockState.meetings)}
         listMeetingsInPopup={false}
-        state={mockState}
+        state={mockStateWithMeeting}
         setState={jest.fn()}
         mapbox="pk.123456"
       />
@@ -55,10 +59,12 @@ describe('<Map />', () => {
 
   it('renders with multiple meetings', () => {
     const mockStateMultiple = {
-      ...mockState,
+      ...mockStateWithMeeting,
       meetings: {
         ...mockState.meetings,
-        'bar': {
+        bar: {
+          formatted_address: 'Los Angeles, CA, USA',
+          slug: 'bar',
           isInPerson: true,
           latitude: 34.052235,
           longitude: -118.243683,
@@ -77,14 +83,5 @@ describe('<Map />', () => {
       />
     );
     expect(container).toBeTruthy();
-
-    /*todo wait for map to load
-    const { latitude, longitude, name } = mockStateMultiple.meetings.bar;
-    const marker = screen.getByTestId(`${latitude},${longitude}`);
-    fireEvent.click(marker);
-
-    const h4 = screen.getByText(name);
-    expect(h4).toBeVisible();
-    */
   });
 });

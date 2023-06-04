@@ -8,9 +8,6 @@ type TitleProps = {
 };
 
 export default function Title({ state: { indexes, input } }: TitleProps) {
-  //loading
-  if (!indexes || !input) return null;
-
   //build title from strings.title
   const parts: string[] = [];
 

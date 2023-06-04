@@ -1,31 +1,29 @@
+import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
-import Controls from './Controls';
-import { strings } from '../helpers';
+import Controls from '../Controls';
+import { strings } from '../../helpers';
+import { mockMeeting, mockState } from '../__fixtures__';
 
 describe('<Controls />', () => {
   jest.useFakeTimers();
 
-  const mockState = {
+  const mockStateWithControls = {
+    ...mockState,
     capabilities: {
+      ...mockState.capabilities,
       coordinates: true,
       geolocation: true,
       region: true,
       distance: true,
     },
     indexes: {
+      ...mockState.indexes,
       distance: [{ name: 'Foo', key: 'foo', slugs: [] }],
       region: [{ name: 'Bar', key: 'bar', slugs: [] }],
     },
-    input: {
-      mode: 'search',
-      distance: [],
-      region: [],
-      search: '',
-      view: 'list',
-    },
     meetings: {
-      foo: { search: 'foo' },
-      bar: { search: 'bar' },
+      foo: { ...mockMeeting, search: 'foo' },
+      bar: { ...mockMeeting, search: 'bar' },
     },
   };
 
@@ -35,9 +33,20 @@ describe('<Controls />', () => {
 
   const { region_any, modes, views } = strings;
 
+  it('is empty with no meetings', () => {
+    const { container } = render(
+      <Controls state={mockState} setState={mockSetState} />
+    );
+    expect(container.firstChild).toBeNull();
+  });
+
   it('has clickable dropdowns', () => {
     render(
-      <Controls state={mockState} setState={mockSetState} mapbox={mapbox} />
+      <Controls
+        state={mockStateWithControls}
+        setState={mockSetState}
+        mapbox={mapbox}
+      />
     );
 
     //click a dropdown button
@@ -63,16 +72,7 @@ describe('<Controls />', () => {
   });
 
   it('has working text search', () => {
-    render(
-      <Controls
-        state={{
-          ...mockState,
-          capabilities: { ...mockState.capabilities, coordinates: false },
-        }}
-        setState={mockSetState}
-        mapbox={mapbox}
-      />
-    );
+    render(<Controls state={mockStateWithControls} setState={mockSetState} />);
 
     //text search
     const input = screen.getByRole('searchbox');
@@ -80,7 +80,9 @@ describe('<Controls />', () => {
 
     //try submitting
     const form = input.closest('form');
-    fireEvent.submit(form);
+    if (form) {
+      fireEvent.submit(form);
+    }
 
     expect(mockSetState).toBeCalledTimes(2);
 
@@ -91,8 +93,12 @@ describe('<Controls />', () => {
     render(
       <Controls
         state={{
-          ...mockState,
-          input: { ...mockState.input, mode: 'location', view: 'map' },
+          ...mockStateWithControls,
+          input: {
+            ...mockStateWithControls.input,
+            mode: 'location',
+            view: 'map',
+          },
         }}
         setState={mockSetState}
         mapbox={mapbox}
@@ -105,7 +111,9 @@ describe('<Controls />', () => {
 
     //submit form
     const form = input.closest('form');
-    fireEvent.submit(form);
+    if (form) {
+      fireEvent.submit(form);
+    }
 
     //toggle
     const button = screen.getByRole('button', { name: modes.location });

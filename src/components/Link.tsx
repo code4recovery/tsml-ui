@@ -11,16 +11,15 @@ type LinkProps = {
 };
 
 export default function Link({ meeting, setState, state }: LinkProps) {
-  const flags = settings.flags
-    ? settings.flags
-        .filter(flag => meeting.types?.includes(flag))
-        .map(flag => strings.types[flag])
-        .sort()
-        .join(', ')
-    : [];
+  const flags =
+    settings.flags
+      ?.filter(flag => meeting.types?.includes(flag))
+      .map(flag => strings.types[flag])
+      .sort()
+      .join(', ') ?? [];
 
   if (!state || !setState) {
-    return !flags ? (
+    return !flags.length ? (
       <>{meeting.name}</>
     ) : (
       <>

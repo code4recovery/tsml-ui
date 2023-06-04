@@ -1,5 +1,6 @@
-import { fireEvent, render, screen, within } from '@testing-library/react';
-import Button from './Button';
+import React from 'react';
+import { fireEvent, render, screen } from '@testing-library/react';
+import Button from '../Button';
 
 describe('<Button />', () => {
   it('passes props correctly', () => {
@@ -29,10 +30,7 @@ describe('<Button />', () => {
   });
 
   it('responds to small prop correctly', () => {
-    render(
-      // @ts-expect-error TODO: Fix params that should be optional in ts refactor.
-      <Button small href="https://bar.com" icon="back" />
-    );
+    render(<Button small href="https://bar.com" icon="back" />);
 
     const icon = screen.getByTestId('icon-back');
 

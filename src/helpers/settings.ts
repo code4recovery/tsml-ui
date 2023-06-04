@@ -38,7 +38,6 @@ const defaults: TSMLReactConfig = {
   duration: 60,
   feedback_emails: [], //email addresses for update meeting info button
   filters: ['region', 'distance', 'weekday', 'time', 'type'],
-  flags: null,
   in_person_types: [
     'BA',
     'BRK',

@@ -1,20 +1,24 @@
 import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
-import Alert from './Alert';
-import { strings } from '../helpers';
-
-//TODO: These types can be much better once AppState types are defined.
+import Alert from '../Alert';
+import { strings } from '../../helpers';
+import { mockState } from '../__fixtures__';
 
 describe('<Alert />', () => {
   it('renders null with no alerts or errors', () => {
-    const { container } = render(<Alert state={{}} setState={jest.fn()} />);
+    const { container } = render(
+      <Alert state={mockState} setState={jest.fn()} />
+    );
     expect(container.firstChild).toBeNull();
   });
 
   it('works with error state', () => {
     render(
       <Alert
-        state={{ error: 'an error was encountered loading the data' }}
+        state={{
+          ...mockState,
+          error: 'an error was encountered loading the data',
+        }}
         setState={jest.fn()}
       />
     );
@@ -25,10 +29,13 @@ describe('<Alert />', () => {
   });
 
   it('works with clearing filters with no results', async () => {
-    const mockState = {
+    const mockSetState = jest.fn();
+
+    const mockStateWithFilters = {
+      ...mockState,
       alert: strings.no_results,
       input: {
-        distance: [],
+        ...mockState.input,
         region: ['foo'],
         search: 'bar',
         time: ['baz'],
@@ -36,16 +43,15 @@ describe('<Alert />', () => {
         weekday: ['0'],
       },
       indexes: {
-        region: [{ key: 'foo', name: 'Foo' }],
-        time: [{ key: 'baz', name: 'Baz' }],
-        type: [{ key: 'qux', name: 'Qux' }],
-        weekday: [{ key: '0', name: 'Monday' }],
+        ...mockState.indexes,
+        region: [{ key: 'foo', name: 'Foo', slugs: ['test'] }],
+        time: [{ key: 'baz', name: 'Baz', slugs: [] }],
+        type: [{ key: 'qux', name: 'Qux', slugs: [] }],
+        weekday: [{ key: '0', name: 'Monday', slugs: [] }],
       },
     };
 
-    const mockSetState = jest.fn();
-
-    render(<Alert state={mockState} setState={mockSetState} />);
+    render(<Alert state={mockStateWithFilters} setState={mockSetState} />);
 
     const text = /No meetings were found matching the selected criteria./i;
     expect(screen.getByText(text)).toBeInTheDocument();
@@ -57,12 +63,12 @@ describe('<Alert />', () => {
     const removeWeekdayButton = screen.getByText(/remove monday/i);
 
     function modify<
-      K extends keyof typeof mockState['input'],
-      T extends typeof mockState['input'][K]
+      K extends keyof (typeof mockStateWithFilters)['input'],
+      T extends (typeof mockStateWithFilters)['input'][K]
     >(key: K, value: T) {
       return {
-        ...mockState,
-        input: { ...mockState.input, [key]: value },
+        ...mockStateWithFilters,
+        input: { ...mockStateWithFilters.input, [key]: value },
       };
     }
 

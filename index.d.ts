@@ -24,7 +24,7 @@ interface TSMLReactConfig {
   duration: number;
   feedback_emails: string[];
   filters: Array<'region' | 'distance' | 'weekday' | 'time' | 'type'>;
-  flags: Array<'M' | 'W'> | undefined | null;
+  flags?: MeetingType[];
   in_person_types: MeetingType[];
   language: Lang;
   map: {

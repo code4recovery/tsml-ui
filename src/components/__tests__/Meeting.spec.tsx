@@ -2,9 +2,9 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { DateTime } from 'luxon';
 
-import type { Meeting as MeetingType, State } from '../types';
-import { strings } from '../helpers';
-import Meeting from './Meeting';
+import type { Meeting as MeetingType, State } from '../../types';
+import { strings } from '../../helpers';
+import Meeting from '../Meeting';
 
 describe('<Meeting />', () => {
   beforeEach(() => {
@@ -53,6 +53,7 @@ describe('<Meeting />', () => {
       inactive: true,
       location: true,
       region: true,
+      sharing: false,
       time: true,
       type: true,
       weekday: true,

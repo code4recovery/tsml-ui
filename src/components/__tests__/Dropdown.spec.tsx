@@ -1,15 +1,21 @@
+import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
-import Dropdown from './Dropdown';
-import { strings } from '../helpers';
+import Dropdown from '../Dropdown';
+import { strings } from '../../helpers';
+import { mockState } from '../__fixtures__';
+import { State } from '../../types';
 
 describe('<Dropdown />', () => {
   const filter = 'type';
   const defaultValue = strings[`${filter}_any`];
-  const mockState = {
+  const mockStateWithFilter: State = {
+    ...mockState,
     input: {
+      ...mockState.input,
       [filter]: [],
     },
     indexes: {
+      ...mockState.indexes,
       [filter]: [
         { key: 'foo', name: 'Foo', slugs: [] },
         {
@@ -32,7 +38,10 @@ describe('<Dropdown />', () => {
         end={false}
         defaultValue={defaultValue}
         setDropdown={jest.fn()}
-        state={{ ...mockState, input: { [filter]: ['bar'] } }}
+        state={{
+          ...mockStateWithFilter,
+          input: { ...mockStateWithFilter.input, [filter]: ['bar'] },
+        }}
         setState={jest.fn()}
       />
     );
@@ -74,17 +83,17 @@ describe('<Dropdown />', () => {
         open={true}
         setDropdown={mockSetDropdown}
         setState={mockSetState}
-        state={mockState}
+        state={mockStateWithFilter}
       />
     );
 
     function modify<
-      K extends keyof typeof mockState['input'],
-      T extends typeof mockState['input'][K]
+      K extends keyof (typeof mockStateWithFilter)['input'],
+      T extends (typeof mockStateWithFilter)['input'][K]
     >(key: K, value: T) {
       return {
-        ...mockState,
-        input: { ...mockState.input, [key]: value },
+        ...mockStateWithFilter,
+        input: { ...mockStateWithFilter.input, [key]: value },
       };
     }
 

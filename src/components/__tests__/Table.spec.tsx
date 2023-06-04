@@ -2,9 +2,9 @@ import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { DateTime } from 'luxon';
 
-import { State } from '../types';
-import { formatString as i18n, strings } from '../helpers';
-import Table from './Table';
+import { State } from '../../types';
+import { formatString as i18n, strings } from '../../helpers';
+import Table from '../Table';
 
 describe('<Table />', () => {
   const mockState: State = {
