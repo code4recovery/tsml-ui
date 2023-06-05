@@ -1,4 +1,4 @@
-import { formatString } from '.';
+import { formatString } from '../format-string';
 
 describe('formatString', () => {
   it('works with mixed params', () => {

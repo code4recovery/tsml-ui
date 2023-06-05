@@ -1,5 +1,5 @@
-import type { Meeting } from '../../types';
-import { iOS } from '../user-agent';
+import type { Meeting } from '../types';
+import { iOS } from './user-agent';
 
 //create a link for directions
 export function formatDirectionsUrl({

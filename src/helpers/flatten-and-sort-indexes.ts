@@ -1,4 +1,4 @@
-import type { Index } from '../../types';
+import type { Index } from '../types';
 
 //recursive function to make sorted array from object index
 export function flattenAndSortIndexes(

@@ -1,5 +1,5 @@
 import { settings } from './settings';
-import { formatUrl } from './format';
+import { formatUrl } from './format-url';
 import type { State } from '../types';
 
 //load input values from query string

@@ -1,4 +1,4 @@
-import { formatDirectionsUrl } from './format-directions-url';
+import { formatDirectionsUrl } from '../format-directions-url';
 
 describe('formatDirectionsUrl', () => {
   const { formatted_address, latitude, longitude } = {

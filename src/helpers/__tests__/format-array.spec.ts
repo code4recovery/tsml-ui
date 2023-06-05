@@ -1,4 +1,4 @@
-import { formatArray } from './format-array';
+import { formatArray } from '../format-array';
 
 describe('formatArray', () => {
   it.each`

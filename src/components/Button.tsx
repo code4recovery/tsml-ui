@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { formatClasses as cx } from '../helpers/format';
+import { formatClasses as cx } from '../helpers';
 import Icon, { icons } from './Icon';
 
 type ButtonProps = {

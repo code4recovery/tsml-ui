@@ -1,13 +1,13 @@
-import { getQueryString, setQueryString } from './query-string';
+import { getQueryString, setQueryString } from '../query-string';
 import { stringify } from 'querystring';
-import { settings } from './settings';
-import { formatUrl } from './format';
+import { settings } from '../settings';
+import { formatUrl } from '../format-url';
 
-jest.mock('./settings', () => ({
+jest.mock('../settings', () => ({
   settings: { filters: [], params: [] },
 }));
 
-jest.mock('./format', () => ({
+jest.mock('../format-url', () => ({
   formatUrl: jest.fn().mockReturnValue('foo'),
 }));
 

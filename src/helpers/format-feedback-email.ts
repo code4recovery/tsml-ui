@@ -1,6 +1,6 @@
-import { Meeting } from '../../types';
-import { getQueryString } from '../query-string';
-import { strings } from '../settings';
+import { Meeting } from '../types';
+import { getQueryString } from './query-string';
+import { strings } from './settings';
 import { formatArray } from './format-array';
 import { formatString as i18n } from './format-string';
 import { formatUrl } from './format-url';

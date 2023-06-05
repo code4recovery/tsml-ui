@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon';
 
-import { formatIcs } from '.';
+import { formatIcs } from '../format-ics';
 import { Meeting } from '../../types';
 
 //TODO: Only requiring the parts needed for this test, should
