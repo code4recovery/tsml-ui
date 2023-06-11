@@ -1,5 +1,3 @@
-import { MeetingType } from './MeetingType';
-
 export interface Translation {
   add_to_calendar: string;
   address: string;
@@ -70,7 +68,7 @@ export interface Translation {
   };
   type_any: string;
   type_descriptions: Record<Extract<MeetingType, 'O' | 'C'>, string>;
-  types: Record<MeetingType, string>;
+  types: Record<MeetingType | MetaType, string>;
   unnamed_meeting: string;
   updated: string;
   views: {

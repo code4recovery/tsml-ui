@@ -143,7 +143,7 @@ export function loadMeetingData(
     if (approximate) address = undefined;
 
     //types
-    let types: MeetingType[] = Array.isArray(meeting.types)
+    let types: Array<MeetingType | MetaType> = Array.isArray(meeting.types)
       ? meeting.types
           .map(type =>
             typeof type === 'number' ? type.toString() : type.trim()
@@ -345,7 +345,9 @@ export function loadMeetingData(
     }
 
     //build type index (can be multiple) -- if inactive, only index the 'inactive' type
-    const typesToIndex: MeetingType[] = isActive ? types : ['inactive'];
+    const typesToIndex: Array<MeetingType | MetaType> = isActive
+      ? types
+      : ['inactive'];
     typesToIndex.forEach(type => {
       const typeSlug = formatSlug(strings.types[type]);
       const typeIndex = indexes.type.findIndex(({ key }) => key === typeSlug);

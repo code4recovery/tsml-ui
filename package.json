@@ -34,6 +34,7 @@
     "typescript": "^5.0.4"
   },
   "dependencies": {
+    "@code4recovery/spec": "^1.0.0",
     "bootstrap": "5.2.2",
     "deepmerge": "^4.3.1",
     "luxon": "^3.3.0",

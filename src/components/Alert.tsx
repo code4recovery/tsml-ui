@@ -1,6 +1,6 @@
 import React from 'react';
 
-import type { MeetingType, State } from '../types';
+import type { State } from '../types';
 import Button from './Button';
 import {
   formatString as i18n,
@@ -50,7 +50,7 @@ export default function Alert({ state, setState }: AlertProps) {
                 } else if (filter === 'type') {
                   state.input[filter] = state.input[filter].filter(
                     e => e !== value
-                  ) as MeetingType[];
+                  ) as Array<MeetingType | MetaType>;
                 } else {
                   state.input[filter] = state.input[filter].filter(
                     e => e !== value

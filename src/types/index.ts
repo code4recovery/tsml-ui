@@ -1,5 +1,5 @@
 export * from './JSONData';
 export * from './Meeting';
-export * from './MeetingType';
+export * from './MetaType';
 export * from './State';
 export * from './Translation';

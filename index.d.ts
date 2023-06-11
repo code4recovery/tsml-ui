@@ -1,6 +1,7 @@
 type Translation = import('./src/types/Translation').Translation;
-type MeetingType = import('./src/types/MeetingType').MeetingType;
-type Lang = 'en' | 'es' | 'fr' | 'ja' | 'sv';
+type MetaType = import('./src/types/MetaType').MetaType;
+type MeetingType = import('@code4recovery/spec').MeetingType;
+type Lang = import('@code4recovery/spec').Language;
 
 interface TSMLReactConfig {
   cache: boolean;
@@ -15,7 +16,7 @@ interface TSMLReactConfig {
     region: string[];
     search: string;
     time: TSMLReactConfig['times'];
-    type: MeetingType[];
+    type: Array<MeetingType | MetaType>;
     view: 'table' | 'map';
     weekday: TSMLReactConfig['weekdays'];
   };

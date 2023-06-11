@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon';
 
-import type { JSONData } from '../../types';
+import type { JSONData, Translation } from '../../types';
 import { formatSlug } from '../format';
 import { en, es, fr, ja, sv } from '../../i18n';
 import { settings } from '../../helpers';
