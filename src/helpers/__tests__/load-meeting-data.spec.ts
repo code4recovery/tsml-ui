@@ -1,5 +1,5 @@
 import type { JSONData } from '../../types';
-import { flattenDays, loadMeetingData } from './load-meeting-data';
+import { flattenDays, loadMeetingData } from '../load-meeting-data';
 
 describe('loadMeetingData', () => {
   it('loads data correctly', () => {

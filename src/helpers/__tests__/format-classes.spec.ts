@@ -1,4 +1,4 @@
-import { formatClasses } from './format-classes';
+import { formatClasses } from '../format-classes';
 
 describe('formatClasses', () => {
   it.each`

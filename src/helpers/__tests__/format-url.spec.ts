@@ -1,4 +1,4 @@
-import { formatUrl } from '.';
+import { formatUrl } from '../format-url';
 
 describe('formatUrl', () => {
   it('works with no params', () => {

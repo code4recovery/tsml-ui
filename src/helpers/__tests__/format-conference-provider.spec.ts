@@ -1,5 +1,5 @@
 import { settings } from '../settings';
-import { formatConferenceProvider } from './format-conference-provider';
+import { formatConferenceProvider } from '../format-conference-provider';
 
 describe('formatConferenceProvider', () => {
   it.each(['foo', 'https://', 'https://foo.com'])(

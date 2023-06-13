@@ -1,4 +1,4 @@
-import { formatAddress } from './format-address';
+import { formatAddress } from '../format-address';
 
 describe('formatAddress', () => {
   it('returns first part of address if length > 3', () => {

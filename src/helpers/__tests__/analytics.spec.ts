@@ -1,4 +1,4 @@
-import { analyticsEvent } from '.';
+import { analyticsEvent } from '../analytics';
 
 window.gtag = jest.fn();
 window.ga = jest.fn();

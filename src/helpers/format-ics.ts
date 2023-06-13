@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon';
 
-import { Meeting } from '../../types';
-import { iOS } from '../user-agent';
+import { Meeting } from '../types';
+import { iOS } from './user-agent';
 
 //format ICS file for add to calendar
 export function formatIcs(meeting: Meeting) {

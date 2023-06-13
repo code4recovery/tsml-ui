@@ -1,4 +1,4 @@
-import { getDistance } from './calculate-distances';
+import { getDistance } from '../calculate-distances';
 import { settings } from '../settings';
 import type { Meeting } from '../../types';
 

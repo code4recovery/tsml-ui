@@ -2,7 +2,7 @@ import { JSONData } from '../../types';
 import {
   GoogleSheetData,
   translateGoogleSheet,
-} from './translate-google-sheet';
+} from '../translate-google-sheet';
 
 describe('translateGoogleSheet', () => {
   const sheetId = 'abc123';
