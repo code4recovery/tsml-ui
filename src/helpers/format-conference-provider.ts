@@ -1,4 +1,4 @@
-import { settings } from '../settings';
+import { settings } from './settings';
 
 //get name of provider from url
 export function formatConferenceProvider(url: string) {

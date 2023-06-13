@@ -1,4 +1,4 @@
-import { formatSlug } from '.';
+import { formatSlug } from '../format-slug';
 
 describe('formatSlug', () => {
   it('removes accents', () => {

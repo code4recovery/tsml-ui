@@ -1,4 +1,4 @@
-import { settings } from '../settings';
+import { settings } from './settings';
 
 //format an internal link with correct query params
 export function formatUrl(input: Partial<TSMLReactConfig['defaults']>) {

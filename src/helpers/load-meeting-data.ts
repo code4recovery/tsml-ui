@@ -1,14 +1,10 @@
 import { DateTime } from 'luxon';
-import type {
-  JSONData,
-  JSONDataFlat,
-  State,
-  Meeting,
-  Index,
-} from '../../types';
+import type { JSONData, JSONDataFlat, State, Meeting, Index } from '../types';
 
-import { formatAddress, formatConferenceProvider, formatSlug } from '../format';
-import { settings, strings } from '../settings';
+import { formatAddress } from './format-address';
+import { formatConferenceProvider } from './format-conference-provider';
+import { formatSlug } from './format-slug';
+import { settings, strings } from './settings';
 import { flattenAndSortIndexes } from './flatten-and-sort-indexes';
 
 //set up meeting data; this is only run once when the app loads

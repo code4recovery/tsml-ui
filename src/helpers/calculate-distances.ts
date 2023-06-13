@@ -1,7 +1,7 @@
-import type { Index, Meeting, State } from '../../types';
-import { settings, strings } from '../settings';
+import type { Index, Meeting, State } from '../types';
+import { settings, strings } from './settings';
 import { flattenAndSortIndexes } from './flatten-and-sort-indexes';
-import { formatString as i18n } from '../format';
+import { formatString as i18n } from './format-string';
 
 //calculate distances
 export function calculateDistances(

@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon';
 
-import type { State } from '../../types';
-import { settings } from '../settings';
+import type { State } from '../types';
+import { settings } from './settings';
 import { getIndexByKey } from './get-index-by-key';
 import { calculateDistances } from './calculate-distances';
 

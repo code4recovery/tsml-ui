@@ -1,9 +1,9 @@
 import { settings } from '../settings';
 import { getQueryString } from '../query-string';
-import { formatFeedbackEmail } from '.';
+import { formatFeedbackEmail } from '../format-feedback-email';
 import { Meeting } from '../../types';
 
-jest.mock('./format-url', () => ({
+jest.mock('../format-url', () => ({
   formatUrl: jest.fn().mockReturnValue('https://foo.com'),
 }));
 

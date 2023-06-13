@@ -1,4 +1,4 @@
-import type { Index } from '../../types';
+import type { Index } from '../types';
 
 //find an index by key
 export function getIndexByKey(
