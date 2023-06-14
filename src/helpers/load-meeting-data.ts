@@ -1,5 +1,6 @@
 import { DateTime } from 'luxon';
 import type { JSONData, JSONDataFlat, State, Meeting, Index } from '../types';
+import { isMeetingType } from '@code4recovery/spec';
 
 import { formatAddress } from './format-address';
 import { formatConferenceProvider } from './format-conference-provider';
@@ -24,12 +25,6 @@ export function loadMeetingData(
     weekday: [],
     distance: [],
   };
-
-  //used later to check type validity
-  const typeCodes = Object.keys(strings.types);
-  const bannedTypes = ['ONL']; //we have our own online type
-  const isMeetingType = (type: string): type is MeetingType =>
-    !!type && !bannedTypes.includes(type) && typeCodes.includes(type);
 
   //loop through each entry
   flattenDays(data).forEach(meeting => {
