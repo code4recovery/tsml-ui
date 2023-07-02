@@ -1,7 +1,8 @@
-import { settings } from './settings';
-
 //get name of provider from url
-export function formatConferenceProvider(url: string) {
+export function formatConferenceProvider(
+  url: string,
+  settings: TSMLReactConfig
+) {
   const urlParts = url.split('/');
   if (urlParts.length < 2) return undefined;
   const provider = Object.keys(settings.conference_providers).filter(domain =>

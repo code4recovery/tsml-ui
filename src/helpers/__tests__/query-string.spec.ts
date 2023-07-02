@@ -1,11 +1,7 @@
 import { getQueryString, setQueryString } from '../query-string';
 import { stringify } from 'querystring';
-import { settings } from '../settings';
 import { formatUrl } from '../format-url';
-
-jest.mock('../settings', () => ({
-  settings: { filters: [], params: [] },
-}));
+import { defaults } from '../settings';
 
 jest.mock('../format-url', () => ({
   formatUrl: jest.fn().mockReturnValue('foo'),
@@ -13,25 +9,25 @@ jest.mock('../format-url', () => ({
 
 describe('getQueryString', () => {
   it('returns defaults correctly', () => {
-    expect(getQueryString()).toStrictEqual({});
+    expect(getQueryString(defaults)).toStrictEqual({});
   });
 
   it('reads from url correctly', () => {
-    settings.filters.push('region');
-    settings.params.push('search');
+    defaults.filters.push('region');
+    defaults.params.push('search');
 
     const params = { region: ['foo'], search: 'bar' };
 
     window.location.search = stringify(params);
 
-    expect(getQueryString()).toStrictEqual(params);
+    expect(getQueryString(defaults)).toStrictEqual(params);
   });
 });
 
 describe('setQueryString', () => {
   it('calls formatUrl and pushState correctly', () => {
     const params = { search: 'foo' };
-    setQueryString(params);
+    setQueryString(params, defaults);
 
     expect(formatUrl).toHaveBeenCalledWith(params);
     expect(window.history.pushState).toHaveBeenCalledWith('', '', 'foo');

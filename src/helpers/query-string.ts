@@ -1,9 +1,8 @@
-import { settings } from './settings';
 import { formatUrl } from './format-url';
 import type { State } from '../types';
 
 //load input values from query string
-export function getQueryString(): State['input'] {
+export function getQueryString(settings: TSMLReactConfig): State['input'] {
   const input = { ...settings.defaults };
 
   //load input from query string
@@ -53,8 +52,11 @@ export function getQueryString(): State['input'] {
 }
 
 //save input values to query string
-export function setQueryString(input: Partial<TSMLReactConfig['defaults']>) {
-  const url = formatUrl(input);
+export function setQueryString(
+  input: Partial<TSMLReactConfig['defaults']>,
+  settings: TSMLReactConfig
+) {
+  const url = formatUrl(input, settings);
 
   //set the query string with the history api
   if (window.location.href !== url) {

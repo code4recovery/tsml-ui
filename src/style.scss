@@ -1,15 +1,14 @@
-//for dropdown blur
-html {
-  height: 100%;
-}
+// for loading spinner & dropdown blur
+html,
 body,
 div#tsml-ui,
 div.tsml-ui {
-  min-height: 100%;
+  height: 100%;
+  height: 100%;
   margin: 0 auto;
 }
 
-//configure bootstrap
+// configure bootstrap
 $enable-rfs: false;
 $grid-gutter-width: 24px;
 $input-btn-padding-x-sm: 8px;
@@ -22,9 +21,9 @@ $table-cell-padding-x: 8px;
 $table-cell-padding-y: 8px;
 $prefix: 'tsml-';
 
-//"namespaced" css -- should not interfere with presentation outside .tsml-ui
+// "namespaced" css -- should not interfere with presentation outside .tsml-ui
 div.tsml-ui {
-  //import only what we need from bootstrap
+  // import only what we need from bootstrap
   @import '~bootstrap/scss/functions';
   @import '~bootstrap/scss/variables';
   @import '~bootstrap/scss/maps';
@@ -38,38 +37,38 @@ div.tsml-ui {
   @import '~bootstrap/scss/root';
   @import '~bootstrap/scss/reboot';
   @import '~bootstrap/scss/type';
-  //@import '~bootstrap/scss/images';
+  // @import '~bootstrap/scss/images';
   @import '~bootstrap/scss/containers';
   @import '~bootstrap/scss/grid';
   @import '~bootstrap/scss/tables';
   @import '~bootstrap/scss/forms';
   @import '~bootstrap/scss/buttons';
-  //@import '~bootstrap/scss/transitions';
+  // @import '~bootstrap/scss/transitions';
   @import '~bootstrap/scss/dropdown';
   @import '~bootstrap/scss/button-group';
-  //@import '~bootstrap/scss/nav';
-  //@import '~bootstrap/scss/navbar';
-  //@import '~bootstrap/scss/card';
-  //@import '~bootstrap/scss/accordion';
-  //@import '~bootstrap/scss/breadcrumb';
-  //@import '~bootstrap/scss/pagination';
+  // @import '~bootstrap/scss/nav';
+  // @import '~bootstrap/scss/navbar';
+  // @import '~bootstrap/scss/card';
+  // @import '~bootstrap/scss/accordion';
+  // @import '~bootstrap/scss/breadcrumb';
+  // @import '~bootstrap/scss/pagination';
   @import '~bootstrap/scss/badge';
   @import '~bootstrap/scss/alert';
-  //@import '~bootstrap/scss/progress';
+  // @import '~bootstrap/scss/progress';
   @import '~bootstrap/scss/list-group';
-  //@import '~bootstrap/scss/close';
-  //@import '~bootstrap/scss/toasts';
-  //@import '~bootstrap/scss/modal';
-  //@import '~bootstrap/scss/tooltip';
-  //@import '~bootstrap/scss/popover';
-  //@import '~bootstrap/scss/carousel';
+  // @import '~bootstrap/scss/close';
+  // @import '~bootstrap/scss/toasts';
+  // @import '~bootstrap/scss/modal';
+  // @import '~bootstrap/scss/tooltip';
+  // @import '~bootstrap/scss/popover';
+  // @import '~bootstrap/scss/carousel';
   @import '~bootstrap/scss/spinners';
   @import '~bootstrap/scss/offcanvas';
-  //@import '~bootstrap/scss/placeholders';
+  // @import '~bootstrap/scss/placeholders';
   @import '~bootstrap/scss/helpers';
   @import '~bootstrap/scss/utilities/api';
 
-  //styles that bootstrap normally puts on the body
+  // styles that bootstrap normally puts on the body
   background-color: $body-bg !important;
   color: $body-color !important;
   font-family: $font-family-sans-serif !important;
@@ -181,7 +180,7 @@ div.tsml-ui {
     }
   }
 
-  //needed as of bootstrap 5.1
+  // needed as of bootstrap 5.1
   .bg-light {
     background-color: $gray-100 !important;
   }
@@ -208,16 +207,16 @@ div.tsml-ui {
   .list-group {
     overflow-x: hidden;
     .list-group-item + .list-group-item {
-      //to prevent double border
+      // to prevent double border
       border-top-width: 0;
     }
   }
 
   .controls {
-    //to allow map to fill available space
+    // to allow map to fill available space
     flex: none;
 
-    //show search cancel button
+    // show search cancel button
     input[type='search']::-webkit-search-cancel-button {
       -webkit-appearance: searchfield-cancel-button;
     }
@@ -227,7 +226,7 @@ div.tsml-ui {
         min-width: 100%;
       }
 
-      //indentation todo make recursive with sass?
+      // indentation todo make recursive with sass?
       .children {
         button {
           padding-left: 24px;
@@ -260,12 +259,12 @@ div.tsml-ui {
   }
 
   .map {
-    min-height: 500px; //maps should fill at least 500, but up to entire space
+    min-height: 500px; // maps should fill at least 500, but up to entire space
 
     .mapboxgl-popup {
       max-width: 85%;
       width: 320px;
-      z-index: 100; //above the pins
+      z-index: 100; // above the pins
 
       .mapboxgl-popup-content {
         padding: 12px;
@@ -318,7 +317,7 @@ div.tsml-ui {
       text-align: right;
     }
 
-    //align edges
+    // align edges
     tr th:first-child,
     td:first-child {
       padding-left: 16px;
@@ -347,7 +346,7 @@ div.tsml-ui {
       }
     }
 
-    //necessary as of v5 to prevent overlapping bg
+    // necessary as of v5 to prevent overlapping bg
     tbody > tr:nth-of-type(odd) {
       background-color: $gray-100;
       td,
@@ -356,7 +355,7 @@ div.tsml-ui {
       }
     }
 
-    //when whole row is clickable
+    // when whole row is clickable
     &.clickable-rows tbody tr:hover a {
       color: $link-hover-color;
     }
@@ -391,7 +390,7 @@ div.tsml-ui {
   }
 }
 
-//wordpress
+// wordpress
 #wpadminbar #wp-admin-bar-edit-meeting > .ab-item::before {
   content: '\f464';
   top: 2px;

@@ -10,20 +10,27 @@ import {
   formatUrl,
   getQueryString,
   loadMeetingData,
+  mergeSettings,
   setQueryString,
-  settings,
-  strings,
+  SettingsContext,
   translateGoogleSheet,
 } from '../helpers';
 
 type TsmlUIProps = {
   google?: string;
   mapbox?: string;
+  settings?: TSMLReactConfig;
   src?: string;
   timezone?: string;
 };
 
-export default function TsmlUI({ google, mapbox, src, timezone }: TsmlUIProps) {
+export default function TsmlUI({
+  google,
+  mapbox,
+  settings: userSettings,
+  src,
+  timezone,
+}: TsmlUIProps) {
   const [state, setState] = useState<State>({
     capabilities: {
       coordinates: false,
@@ -58,10 +65,12 @@ export default function TsmlUI({ google, mapbox, src, timezone }: TsmlUIProps) {
     ready: false,
   });
 
+  const { settings, strings } = mergeSettings(userSettings);
+
   //enable forward & back buttons
   useEffect(() => {
     const popstateListener = () => {
-      setState({ ...state, input: getQueryString() });
+      setState({ ...state, input: getQueryString(settings) });
     };
     window.addEventListener('popstate', popstateListener);
 
@@ -75,7 +84,8 @@ export default function TsmlUI({ google, mapbox, src, timezone }: TsmlUIProps) {
     canonical.setAttribute(
       'href',
       formatUrl(
-        state.input.meeting ? { meeting: state.input.meeting } : state.input
+        state.input.meeting ? { meeting: state.input.meeting } : state.input,
+        settings
       )
     );
 
@@ -98,7 +108,7 @@ export default function TsmlUI({ google, mapbox, src, timezone }: TsmlUIProps) {
       'TSML UI meeting finder: https://github.com/code4recovery/tsml-ui'
     );
 
-    const input = getQueryString();
+    const input = getQueryString(settings);
 
     if (!src) {
       setState({
@@ -134,7 +144,7 @@ export default function TsmlUI({ google, mapbox, src, timezone }: TsmlUIProps) {
         .then(res => (res.ok ? res.json() : Promise.reject(res.status)))
         .then(data => {
           if (sheetId) {
-            data = translateGoogleSheet(data, sheetId);
+            data = translateGoogleSheet(data, sheetId, settings);
           }
 
           if (!Array.isArray(data) || !data.length) {
@@ -149,6 +159,8 @@ export default function TsmlUI({ google, mapbox, src, timezone }: TsmlUIProps) {
           const [meetings, indexes, capabilities] = loadMeetingData(
             data,
             state.capabilities,
+            settings,
+            strings,
             timezone
           );
 
@@ -205,12 +217,14 @@ export default function TsmlUI({ google, mapbox, src, timezone }: TsmlUIProps) {
   }
 
   //apply input changes to query string
-  setQueryString(state.input);
+  setQueryString(state.input, settings);
 
   //filter data
   const [filteredSlugs, inProgress] = filterMeetingData(
     state,
     setState,
+    settings,
+    strings,
     mapbox
   );
 
@@ -222,50 +236,54 @@ export default function TsmlUI({ google, mapbox, src, timezone }: TsmlUIProps) {
     state.error = strings.not_found;
   }
 
-  return !state.ready ? (
-    <div className="tsml-ui">
-      <Loading />
-    </div>
-  ) : (
-    <div className="tsml-ui">
-      <div className="container-fluid d-flex flex-column py-3">
-        {state.input.meeting && state.input.meeting in state.meetings ? (
-          <Meeting
-            state={state}
-            setState={setState}
-            mapbox={mapbox}
-            feedback_emails={settings.feedback_emails}
-          />
-        ) : (
-          <div className="d-flex flex-column flex-grow-1 gap-3">
-            {settings.show.title && <Title state={state} />}
-            {settings.show.controls && (
-              <Controls state={state} setState={setState} mapbox={mapbox} />
-            )}
-            {(state.alert || state.error) && (
-              <Alert state={state} setState={setState} />
-            )}
-            {filteredSlugs && state.input.view === 'table' && (
-              <Table
-                filteredSlugs={filteredSlugs}
-                inProgress={inProgress}
-                listButtons={settings.show.listButtons}
-                setState={setState}
+  return (
+    <SettingsContext.Provider value={{ settings, strings }}>
+      {!state.ready ? (
+        <div className="tsml-ui">
+          <Loading />
+        </div>
+      ) : (
+        <div className="tsml-ui">
+          <div className="container-fluid d-flex flex-column py-3">
+            {state.input.meeting && state.input.meeting in state.meetings ? (
+              <Meeting
                 state={state}
-              />
-            )}
-            {filteredSlugs && state.input.view === 'map' && (
-              <Map
-                filteredSlugs={filteredSlugs}
-                listMeetingsInPopup={true}
+                setState={setState}
                 mapbox={mapbox}
-                setState={setState}
-                state={state}
+                feedback_emails={settings.feedback_emails}
               />
+            ) : (
+              <div className="d-flex flex-column flex-grow-1 gap-3">
+                {settings.show.title && <Title state={state} />}
+                {settings.show.controls && (
+                  <Controls state={state} setState={setState} mapbox={mapbox} />
+                )}
+                {(state.alert || state.error) && (
+                  <Alert state={state} setState={setState} />
+                )}
+                {filteredSlugs && state.input.view === 'table' && (
+                  <Table
+                    filteredSlugs={filteredSlugs}
+                    inProgress={inProgress}
+                    listButtons={settings.show.listButtons}
+                    setState={setState}
+                    state={state}
+                  />
+                )}
+                {filteredSlugs && state.input.view === 'map' && (
+                  <Map
+                    filteredSlugs={filteredSlugs}
+                    listMeetingsInPopup={true}
+                    mapbox={mapbox}
+                    setState={setState}
+                    state={state}
+                  />
+                )}
+              </div>
             )}
           </div>
-        )}
-      </div>
-    </div>
+        </div>
+      )}
+    </SettingsContext.Provider>
   );
 }

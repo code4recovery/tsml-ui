@@ -1,10 +1,11 @@
+import { createContext, useContext } from 'react';
 import merge from 'deepmerge';
 import { Settings } from 'luxon';
 
 import { en, es, fr, ja, sv } from '../i18n';
 
 //override these on your page with tsml_react_config
-const defaults: TSMLReactConfig = {
+export const defaults: TSMLReactConfig = {
   cache: false,
   columns: ['time', 'distance', 'name', 'location_group', 'address', 'region'],
   conference_providers: {
@@ -91,34 +92,40 @@ const defaults: TSMLReactConfig = {
   ],
 };
 
-const settings =
-  typeof tsml_react_config === 'object'
-    ? merge(defaults, tsml_react_config)
-    : defaults;
+export function mergeSettings(userSettings?: TSMLReactConfig) {
+  const settings = userSettings ? merge(defaults, userSettings) : defaults;
 
-//flags can be specified to override the default. also [] means unset
-if (!Array.isArray(settings.flags)) {
-  settings.flags = ['M', 'W'];
+  // flags can be specified to override the default. also [] means unset
+  if (!Array.isArray(settings.flags)) {
+    settings.flags = ['M', 'W'];
+  }
+
+  // columns can be specified to override the default
+  if (userSettings) {
+    if (Array.isArray(userSettings.columns)) {
+      settings.columns = userSettings.columns;
+    }
+    if (Array.isArray(userSettings.weekdays)) {
+      settings.weekdays = userSettings.weekdays;
+    }
+  }
+
+  const preferredLanguage = navigator.language.substring(0, 2) as Lang;
+
+  const language = Object.keys(settings.strings).includes(preferredLanguage)
+    ? preferredLanguage
+    : settings.language;
+
+  const strings = settings.strings[language];
+
+  Settings.defaultLocale = language;
+
+  return { settings, strings };
 }
 
-//columns can be specified to override the default
-if (typeof tsml_react_config === 'object') {
-  if (Array.isArray(tsml_react_config.columns)) {
-    settings.columns = tsml_react_config.columns;
-  }
-  if (Array.isArray(tsml_react_config.weekdays)) {
-    settings.weekdays = tsml_react_config.weekdays;
-  }
-}
+export const SettingsContext = createContext<{
+  settings: TSMLReactConfig;
+  strings: Translation;
+}>({ settings: defaults, strings: en });
 
-const preferredLanguage = navigator.language.substring(0, 2) as Lang;
-
-const language = Object.keys(settings.strings).includes(preferredLanguage)
-  ? preferredLanguage
-  : settings.language;
-
-const strings = settings.strings[language];
-
-Settings.defaultLocale = language;
-
-export { settings, strings };
+export const useSettings = () => useContext(SettingsContext);

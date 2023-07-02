@@ -1,9 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import ReactMapGL, { Marker, NavigationControl, Popup } from 'react-map-gl';
 import WebMercatorViewport from 'viewport-mercator-project';
 
 import type { Meeting, State } from '../types';
-import { formatDirectionsUrl, settings, strings } from '../helpers';
+import { formatDirectionsUrl, useSettings } from '../helpers';
 import Button from './Button';
 import Link from './Link';
 
@@ -48,6 +48,7 @@ export default function Map({
   setState,
   mapbox,
 }: MapProps) {
+  const { settings, strings } = useSettings();
   const [popup, setPopup] = useState<string | undefined>();
   const [viewport, setViewport] = useState<Viewport | undefined>();
   const [data, setData] = useState<{

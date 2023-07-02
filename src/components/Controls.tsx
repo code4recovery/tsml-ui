@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import Dropdown from './Dropdown';
 import Icon from './Icon';
@@ -6,8 +6,7 @@ import {
   analyticsEvent,
   formatClasses as cx,
   formatUrl,
-  settings,
-  strings,
+  useSettings,
 } from '../helpers';
 import type { State } from '../types';
 
@@ -18,6 +17,7 @@ type ControlsProps = {
 };
 
 export default function Controls({ state, setState, mapbox }: ControlsProps) {
+  const { settings, strings } = useSettings();
   const [dropdown, setDropdown] = useState<string>();
   const [search, setSearch] = useState(
     state.input.mode === 'location' ? state.input.search : ''
@@ -190,7 +190,7 @@ export default function Controls({ state, setState, mapbox }: ControlsProps) {
                         state.input.mode === mode,
                     }
                   )}
-                  href={formatUrl({ ...state.input, mode })}
+                  href={formatUrl({ ...state.input, mode }, settings)}
                   key={mode}
                   onClick={e => setMode(e, mode)}
                 >

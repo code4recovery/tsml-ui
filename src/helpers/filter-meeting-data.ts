@@ -1,7 +1,6 @@
 import { DateTime } from 'luxon';
 
 import type { State } from '../types';
-import { settings } from './settings';
 import { getIndexByKey } from './get-index-by-key';
 import { calculateDistances } from './calculate-distances';
 
@@ -9,6 +8,8 @@ import { calculateDistances } from './calculate-distances';
 export function filterMeetingData(
   state: State,
   setState: (state: State) => void,
+  settings: TSMLReactConfig,
+  strings: Translation,
   mapbox?: string
 ) {
   const matchGroups: string[][] = [];
@@ -104,7 +105,9 @@ export function filterMeetingData(
                 result.features[0].center[1],
                 result.features[0].center[0],
                 setState,
-                state
+                state,
+                settings,
+                strings
               );
             } else {
               //show error
@@ -118,7 +121,9 @@ export function filterMeetingData(
               position.coords.latitude,
               position.coords.longitude,
               setState,
-              state
+              state,
+              settings,
+              strings
             );
           },
           error => {

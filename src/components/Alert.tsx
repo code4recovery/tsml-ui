@@ -1,13 +1,6 @@
-import React from 'react';
-
 import type { State } from '../types';
 import Button from './Button';
-import {
-  formatString as i18n,
-  getIndexByKey,
-  settings,
-  strings,
-} from '../helpers';
+import { formatString as i18n, getIndexByKey, useSettings } from '../helpers';
 
 type AlertProps = {
   state: State;
@@ -15,6 +8,7 @@ type AlertProps = {
 };
 
 export default function Alert({ state, setState }: AlertProps) {
+  const { settings, strings } = useSettings();
   return state.error ? (
     <div className="alert alert-danger text-center m-0">{state.error}</div>
   ) : state.alert ? (

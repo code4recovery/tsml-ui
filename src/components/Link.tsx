@@ -1,8 +1,5 @@
-import React from 'react';
-
+import { formatUrl, useSettings } from '../helpers';
 import type { State, Meeting } from '../types';
-
-import { formatUrl, settings, strings } from '../helpers';
 
 type LinkProps = {
   meeting: Meeting;
@@ -11,6 +8,8 @@ type LinkProps = {
 };
 
 export default function Link({ meeting, setState, state }: LinkProps) {
+  const { settings, strings } = useSettings();
+
   const flags =
     settings.flags
       ?.filter(flag => meeting.types?.includes(flag))
@@ -32,7 +31,7 @@ export default function Link({ meeting, setState, state }: LinkProps) {
   return (
     <>
       <a
-        href={formatUrl({ ...state.input, meeting: meeting.slug })}
+        href={formatUrl({ ...state.input, meeting: meeting.slug }, settings)}
         onClick={e => {
           e.preventDefault();
           e.stopPropagation();

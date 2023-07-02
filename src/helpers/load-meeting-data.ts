@@ -5,13 +5,14 @@ import { isMeetingType } from '@code4recovery/spec';
 import { formatAddress } from './format-address';
 import { formatConferenceProvider } from './format-conference-provider';
 import { formatSlug } from './format-slug';
-import { settings, strings } from './settings';
 import { flattenAndSortIndexes } from './flatten-and-sort-indexes';
 
 //set up meeting data; this is only run once when the app loads
 export function loadMeetingData(
   data: JSONData[],
   capabilities: State['capabilities'],
+  settings: TSMLReactConfig,
+  strings: Translation,
   timezone?: string
 ): [State['meetings'], State['indexes'], State['capabilities']] {
   //meetings is a lookup
@@ -62,7 +63,7 @@ export function loadMeetingData(
 
     //conference url
     const conference_provider = meeting.conference_url
-      ? formatConferenceProvider(meeting.conference_url)
+      ? formatConferenceProvider(meeting.conference_url, settings)
       : undefined;
 
     let {
