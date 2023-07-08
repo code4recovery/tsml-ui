@@ -1,7 +1,7 @@
 import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import Alert from '../Alert';
-import { strings } from '../../helpers';
+import { en } from '../../i18n';
 import { mockState } from '../__fixtures__';
 
 describe('<Alert />', () => {
@@ -33,7 +33,7 @@ describe('<Alert />', () => {
 
     const mockStateWithFilters = {
       ...mockState,
-      alert: strings.no_results,
+      alert: en.no_results,
       input: {
         ...mockState.input,
         region: ['foo'],
@@ -53,8 +53,7 @@ describe('<Alert />', () => {
 
     render(<Alert state={mockStateWithFilters} setState={mockSetState} />);
 
-    const text = /No meetings were found matching the selected criteria./i;
-    expect(screen.getByText(text)).toBeInTheDocument();
+    expect(screen.getByText(en.no_results)).toBeInTheDocument();
 
     const removeSearchButton = screen.getByText(/remove ‘bar’/i);
     const removeRegionButton = screen.getByText(/remove foo/i);

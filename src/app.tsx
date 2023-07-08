@@ -1,19 +1,21 @@
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 
 import { TsmlUI } from './components';
 
-//locate element
+// locate element
 const element = document.getElementById('tsml-ui');
 
 if (element) {
-  ReactDOM.render(
+  createRoot(element).render(
     <TsmlUI
       google={element.getAttribute('data-google') || undefined}
       mapbox={element.getAttribute('data-mapbox') || undefined}
+      settings={
+        typeof tsml_react_config === 'undefined' ? undefined : tsml_react_config
+      }
       src={element.getAttribute('data-src') || undefined}
       timezone={element.getAttribute('data-timezone') || undefined}
-    />,
-    element
+    />
   );
 } else {
   console.warn('TSML UI could not find a div#tsml-ui element');

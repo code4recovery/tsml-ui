@@ -1,12 +1,11 @@
 type Translation = import('./src/types/Translation').Translation;
-type MeetingType = import('./src/types/MeetingType').MeetingType;
-type Lang = 'en' | 'es' | 'fr' | 'ja' | 'sv';
+type MetaType = import('./src/types/MetaType').MetaType;
+type MeetingType = import('@code4recovery/spec').MeetingType;
+type Lang = import('@code4recovery/spec').Language;
 
 interface TSMLReactConfig {
   cache: boolean;
-  columns: Array<
-    'time' | 'distance' | 'name' | 'location_group' | 'address' | 'region'
-  >;
+  columns: string[];
   conference_providers: Record<string, string>;
   defaults: {
     distance: string[];
@@ -15,7 +14,7 @@ interface TSMLReactConfig {
     region: string[];
     search: string;
     time: TSMLReactConfig['times'];
-    type: MeetingType[];
+    type: Array<MeetingType | MetaType>;
     view: 'table' | 'map';
     weekday: TSMLReactConfig['weekdays'];
   };
@@ -49,15 +48,7 @@ interface TSMLReactConfig {
     [lang in Lang]: Translation;
   };
   times: Array<'morning' | 'midday' | 'evening' | 'night'>;
-  weekdays: Array<
-    | 'sunday'
-    | 'monday'
-    | 'tuesday'
-    | 'wednesday'
-    | 'thursday'
-    | 'friday'
-    | 'saturday'
-  >;
+  weekdays: string[];
 }
 
 declare var tsml_react_config: TSMLReactConfig | undefined;

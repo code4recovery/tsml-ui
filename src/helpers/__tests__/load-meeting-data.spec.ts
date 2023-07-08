@@ -1,5 +1,6 @@
 import type { JSONData } from '../../types';
 import { flattenDays, loadMeetingData } from '../load-meeting-data';
+import { defaults } from '../settings';
 
 describe('loadMeetingData', () => {
   it('loads data correctly', () => {
@@ -34,6 +35,8 @@ describe('loadMeetingData', () => {
         type: false,
         weekday: false,
       },
+      defaults,
+      defaults.strings[defaults.language],
       'America/Los_Angeles'
     );
     expect(meetings).toStrictEqual({

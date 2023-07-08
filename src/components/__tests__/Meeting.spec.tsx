@@ -3,7 +3,8 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { DateTime } from 'luxon';
 
 import type { Meeting as MeetingType, State } from '../../types';
-import { strings } from '../../helpers';
+import { SettingsContext, mergeSettings } from '../../helpers';
+import { en } from '../../i18n';
 import Meeting from '../Meeting';
 
 describe('<Meeting />', () => {
@@ -85,23 +86,25 @@ describe('<Meeting />', () => {
 
   it('renders with clickable buttons', () => {
     const { container } = render(
-      <Meeting state={mockState} setState={jest.fn()} mapbox="pk.123456" />
+      <SettingsContext.Provider value={mergeSettings()}>
+        <Meeting state={mockState} setState={jest.fn()} mapbox="pk.123456" />
+      </SettingsContext.Provider>
     );
     expect(container).toBeTruthy();
 
     //click type definition
-    const type_definition = screen.getByText(strings.types.O);
+    const type_definition = screen.getByText(en.types.O);
     expect(type_definition).toBeTruthy();
     fireEvent.click(type_definition);
     fireEvent.click(type_definition);
 
     //click formatIcs
-    const calendar_link = screen.getByText(strings.add_to_calendar);
+    const calendar_link = screen.getByText(en.add_to_calendar);
     expect(calendar_link).toBeTruthy();
     fireEvent.click(calendar_link);
 
     //click back
-    const back_link = screen.getByText(strings.back_to_meetings);
+    const back_link = screen.getByText(en.back_to_meetings);
     expect(back_link).toBeTruthy();
     fireEvent.click(back_link);
   });

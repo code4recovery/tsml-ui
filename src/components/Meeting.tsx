@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { DateTime, Info } from 'luxon';
 
 import type { Meeting as MeetingType, State } from '../types';
@@ -9,8 +9,7 @@ import {
   formatIcs,
   formatString as i18n,
   formatUrl,
-  settings,
-  strings,
+  useSettings,
 } from '../helpers';
 import Button from './Button';
 import Icon, { icons } from './Icon';
@@ -30,6 +29,8 @@ export default function Meeting({
   setState,
   state,
 }: MeetingProps) {
+  const { settings, strings } = useSettings();
+
   //open types
   const [define, setDefine] = useState<string | undefined>();
 
@@ -40,6 +41,23 @@ export default function Meeting({
   const sharePayload = {
     title: meeting.name,
     url: meeting.url ?? location.href,
+  };
+
+  //format time string (duration? or appointment?)
+  const formatTime = (start?: DateTime, end?: DateTime) => {
+    if (!start) {
+      return strings.appointment;
+    }
+
+    if (end) {
+      if (start.weekday === end.weekday) {
+        return `${start.toFormat('cccc t')} – ${end.toFormat('t ZZZZ')}`;
+      }
+
+      return `${start.toFormat('cccc t')} – ${end.toFormat('cccc t ZZZZ')}`;
+    }
+
+    return start.toFormat('cccc t ZZZZ');
   };
 
   //scroll to top when you navigate to this page
@@ -101,7 +119,9 @@ export default function Meeting({
   if (!meeting.feedback_url && feedback_emails.length) {
     meeting.feedback_url = formatFeedbackEmail(
       settings.feedback_emails,
-      meeting
+      meeting,
+      settings,
+      strings
     );
   }
 
@@ -236,10 +256,13 @@ export default function Meeting({
       <div className="align-items-center border-bottom d-flex mb-3 pb-2">
         <Icon icon="back" />
         <a
-          href={formatUrl({
-            ...state.input,
-            meeting: undefined,
-          })}
+          href={formatUrl(
+            {
+              ...state.input,
+              meeting: undefined,
+            },
+            settings
+          )}
           onClick={e => {
             e.preventDefault();
             setState({
@@ -534,23 +557,6 @@ function formatWeekdays(
       </div>
     )
   );
-}
-
-//format time string (duration? or appointment?)
-function formatTime(start?: DateTime, end?: DateTime) {
-  if (!start) {
-    return strings.appointment;
-  }
-
-  if (end) {
-    if (start.weekday === end.weekday) {
-      return `${start.toFormat('cccc t')} – ${end.toFormat('t ZZZZ')}`;
-    }
-
-    return `${start.toFormat('cccc t')} – ${end.toFormat('cccc t ZZZZ')}`;
-  }
-
-  return start.toFormat('cccc t ZZZZ');
 }
 
 //add or remove an "edit meeting" link on WordPress

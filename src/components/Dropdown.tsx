@@ -1,11 +1,11 @@
-import React, { Fragment } from 'react';
+import { Fragment } from 'react';
 
 import type { Index, State } from '../types';
 import {
   formatClasses as cx,
   formatString as i18n,
   getIndexByKey,
-  strings,
+  useSettings,
 } from '../helpers';
 
 type DropdownProps = {
@@ -27,6 +27,7 @@ export default function Dropdown({
   setState,
   state,
 }: DropdownProps) {
+  const { strings } = useSettings();
   const options = state.indexes[filter];
   const values = state.input[filter];
 

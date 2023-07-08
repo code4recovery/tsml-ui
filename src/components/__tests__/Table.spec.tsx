@@ -1,85 +1,37 @@
 import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
-import { DateTime } from 'luxon';
 
-import { State } from '../../types';
-import { formatString as i18n, strings } from '../../helpers';
+import {
+  SettingsContext,
+  formatString as i18n,
+  mergeSettings,
+} from '../../helpers';
 import Table from '../Table';
+import { mockMeeting, mockState } from '../__fixtures__';
 
 describe('<Table />', () => {
-  const mockState: State = {
-    capabilities: {
-      coordinates: true,
-      distance: true,
-      geolocation: false,
-      inactive: true,
-      location: true,
-      region: true,
-      sharing: true,
-      time: true,
-      type: true,
-      weekday: true,
-    },
-    indexes: {
-      distance: [],
-      region: [],
-      time: [],
-      type: [],
-      weekday: [],
-    },
-    input: {
-      distance: [],
-      mode: 'search',
-      region: [],
-      time: [],
-      type: [],
-      view: 'table',
-      weekday: [],
-    },
-    ready: true,
-    loading: false,
+  const mockStateWithMeeting = {
+    ...mockState,
     meetings: {
-      foo: {
-        slug: 'foo',
-        name: 'Foo',
-        location: 'Bar',
-        address: '123 Main St',
-        distance: 1,
-        types: ['M'],
-        isInPerson: true,
-        isOnline: true,
-        formatted_address: '123 Main St, Anytown, NY 12345, USA',
-        conference_url: 'https://zoom.us/d/12356789',
-        conference_provider: 'Zoom',
-        conference_phone: '+12121234123',
-        regions: ['Anytown'],
-        start: DateTime.now(),
-      },
-      bar: {
-        slug: 'bar',
-        name: 'Bar',
-        location: 'Baz',
-        types: ['M'],
-        isInPerson: false,
-        isOnline: false,
-        formatted_address: 'Anytown, NY 12345, USA',
-        regions: ['Anytown'],
-      },
+      [mockMeeting.slug]: mockMeeting,
     },
   };
-
-  const filteredSlugs = Object.keys(mockState.meetings);
+  const filteredSlugs = Object.keys(mockStateWithMeeting.meetings);
+  const { strings } = mergeSettings();
+  const settings = mergeSettings();
 
   it('renders with clickable rows', () => {
     const mockSetState = jest.fn();
     render(
-      <Table
-        filteredSlugs={filteredSlugs}
-        inProgress={[]}
-        listButtons={false}
-        setState={mockSetState}
-        state={mockState}
-      />
+      <SettingsContext.Provider value={settings}>
+        <Table
+          filteredSlugs={filteredSlugs}
+          inProgress={[]}
+          listButtons={false}
+          setState={mockSetState}
+          state={mockStateWithMeeting}
+        />
+      </SettingsContext.Provider>
     );
 
     //clickable rows
@@ -91,13 +43,15 @@ describe('<Table />', () => {
   it('renders with clickable listButtons', () => {
     const mockSetState = jest.fn();
     render(
-      <Table
-        filteredSlugs={filteredSlugs}
-        inProgress={[]}
-        listButtons={false}
-        setState={mockSetState}
-        state={mockState}
-      />
+      <SettingsContext.Provider value={settings}>
+        <Table
+          filteredSlugs={filteredSlugs}
+          inProgress={[]}
+          listButtons={false}
+          setState={mockSetState}
+          state={mockStateWithMeeting}
+        />
+      </SettingsContext.Provider>
     );
 
     //clickable links
@@ -116,13 +70,15 @@ describe('<Table />', () => {
     const mockSetState = jest.fn();
 
     render(
-      <Table
-        filteredSlugs={filteredSlugs}
-        inProgress={['foo']}
-        listButtons={false}
-        setState={mockSetState}
-        state={mockState}
-      />
+      <SettingsContext.Provider value={settings}>
+        <Table
+          filteredSlugs={filteredSlugs}
+          inProgress={['foo']}
+          listButtons={false}
+          setState={mockSetState}
+          state={mockStateWithMeeting}
+        />
+      </SettingsContext.Provider>
     );
 
     //count rows (data rows + header + show in progress)
@@ -141,25 +97,41 @@ describe('<Table />', () => {
   });
 
   it('displays multiple meetings in progress', () => {
-    const inProgress = [...filteredSlugs];
     const mockSetState = jest.fn();
 
+    const mockStateWithMeetings = {
+      ...mockStateWithMeeting,
+      meetings: {
+        ...mockStateWithMeeting.meetings,
+        'bar': {
+          ...mockMeeting,
+        },
+      },
+    };
+
+    const multiFilteredSlugs = Object.keys(mockStateWithMeetings.meetings);
+    const inProgress = [...multiFilteredSlugs];
+
     render(
-      <Table
-        filteredSlugs={filteredSlugs}
-        inProgress={['foo', 'bar']}
-        listButtons={false}
-        setState={mockSetState}
-        state={mockState}
-      />
+      <SettingsContext.Provider value={settings}>
+        <Table
+          filteredSlugs={multiFilteredSlugs}
+          inProgress={inProgress}
+          listButtons={false}
+          setState={mockSetState}
+          state={mockStateWithMeetings}
+        />
+      </SettingsContext.Provider>
     );
 
     //count rows (data rows + header + show in progress)
-    expect(screen.getAllByRole('row')).toHaveLength(filteredSlugs.length + 2);
+    expect(screen.getAllByRole('row')).toHaveLength(
+      multiFilteredSlugs.length + 2
+    );
 
     const button = screen.getByRole('button');
     expect(button).toHaveTextContent(
-      i18n(strings.in_progress_multiple, { count: inProgress.length })
+      i18n(strings.in_progress_multiple, { count: multiFilteredSlugs.length })
     );
 
     fireEvent.click(button);
@@ -167,7 +139,7 @@ describe('<Table />', () => {
 
     //recount rows
     expect(screen.getAllByRole('row')).toHaveLength(
-      filteredSlugs.length + inProgress.length + 1
+      multiFilteredSlugs.length + inProgress.length + 1
     );
   });
 });

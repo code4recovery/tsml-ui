@@ -1,16 +1,18 @@
 import { DateTime } from 'luxon';
 import type { JSONData, JSONDataFlat, State, Meeting, Index } from '../types';
+import { isMeetingType } from '@code4recovery/spec';
 
 import { formatAddress } from './format-address';
 import { formatConferenceProvider } from './format-conference-provider';
 import { formatSlug } from './format-slug';
-import { settings, strings } from './settings';
 import { flattenAndSortIndexes } from './flatten-and-sort-indexes';
 
 //set up meeting data; this is only run once when the app loads
 export function loadMeetingData(
   data: JSONData[],
   capabilities: State['capabilities'],
+  settings: TSMLReactConfig,
+  strings: Translation,
   timezone?: string
 ): [State['meetings'], State['indexes'], State['capabilities']] {
   //meetings is a lookup
@@ -24,12 +26,6 @@ export function loadMeetingData(
     weekday: [],
     distance: [],
   };
-
-  //used later to check type validity
-  const typeCodes = Object.keys(strings.types);
-  const bannedTypes = ['ONL']; //we have our own online type
-  const isMeetingType = (type: string): type is MeetingType =>
-    !!type && !bannedTypes.includes(type) && typeCodes.includes(type);
 
   //loop through each entry
   flattenDays(data).forEach(meeting => {
@@ -67,7 +63,7 @@ export function loadMeetingData(
 
     //conference url
     const conference_provider = meeting.conference_url
-      ? formatConferenceProvider(meeting.conference_url)
+      ? formatConferenceProvider(meeting.conference_url, settings)
       : undefined;
 
     let {
@@ -139,7 +135,7 @@ export function loadMeetingData(
     if (approximate) address = undefined;
 
     //types
-    let types: MeetingType[] = Array.isArray(meeting.types)
+    let types: Array<MeetingType | MetaType> = Array.isArray(meeting.types)
       ? meeting.types
           .map(type =>
             typeof type === 'number' ? type.toString() : type.trim()
@@ -277,7 +273,9 @@ export function loadMeetingData(
         if (dayIndex === -1) {
           indexes.weekday.push({
             key: settings.weekdays[meeting.day],
-            name: strings.days[settings.weekdays[meeting.day]],
+            name: strings.days[
+              settings.weekdays[meeting.day] as keyof typeof strings.days
+            ],
             slugs: [slug],
           });
         } else {
@@ -341,7 +339,9 @@ export function loadMeetingData(
     }
 
     //build type index (can be multiple) -- if inactive, only index the 'inactive' type
-    const typesToIndex: MeetingType[] = isActive ? types : ['inactive'];
+    const typesToIndex: Array<MeetingType | MetaType> = isActive
+      ? types
+      : ['inactive'];
     typesToIndex.forEach(type => {
       const typeSlug = formatSlug(strings.types[type]);
       const typeIndex = indexes.type.findIndex(({ key }) => key === typeSlug);
@@ -459,7 +459,6 @@ export function loadMeetingData(
   indexes.weekday = flattenAndSortIndexes(
     indexes.weekday,
     (a, b) =>
-      //@ts-expect-error TODO
       settings.weekdays.indexOf(a.key) - settings.weekdays.indexOf(b.key)
   );
 

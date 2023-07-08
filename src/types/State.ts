@@ -38,7 +38,7 @@ export type State = {
     region: string[];
     search?: string;
     time: TSMLReactConfig['times'];
-    type: MeetingType[];
+    type: Array<MeetingType | MetaType>;
     view: 'table' | 'map';
     weekday: TSMLReactConfig['weekdays'];
   };

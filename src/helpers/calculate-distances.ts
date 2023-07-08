@@ -1,5 +1,4 @@
 import type { Index, Meeting, State } from '../types';
-import { settings, strings } from './settings';
 import { flattenAndSortIndexes } from './flatten-and-sort-indexes';
 import { formatString as i18n } from './format-string';
 
@@ -9,7 +8,9 @@ export function calculateDistances(
   latitude: number,
   longitude: number,
   setState: (state: State) => void,
-  state: State
+  state: State,
+  settings: TSMLReactConfig,
+  strings: Translation
 ) {
   //build new index and meetings array
   const distances: {
@@ -31,7 +32,11 @@ export function calculateDistances(
 
   //loop through and update or clear distances, and rebuild index
   filteredSlugs.forEach(slug => {
-    const distance = getDistance({ latitude, longitude }, state.meetings[slug]);
+    const distance = getDistance(
+      { latitude, longitude },
+      state.meetings[slug],
+      settings
+    );
 
     if (typeof distance === 'undefined') return;
 
@@ -76,7 +81,8 @@ export function calculateDistances(
 // Adapted from: https://www.geodatasource.com/developers/javascript
 export function getDistance(
   a: { latitude: number; longitude: number },
-  b: Meeting
+  b: Meeting,
+  settings: TSMLReactConfig
 ) {
   if (!a?.latitude || !b?.latitude || !a?.longitude || !b?.longitude) return;
 

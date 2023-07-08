@@ -1,4 +1,5 @@
 import { JSONData } from '../../types';
+import { defaults } from '../settings';
 import {
   GoogleSheetData,
   translateGoogleSheet,
@@ -54,7 +55,9 @@ describe('translateGoogleSheet', () => {
       },
     ];
 
-    expect(translateGoogleSheet(input, sheetId)).toStrictEqual(expected);
+    expect(translateGoogleSheet(input, sheetId, defaults)).toStrictEqual(
+      expected
+    );
   });
 
   it('handles non-spec values', () => {
@@ -70,12 +73,14 @@ describe('translateGoogleSheet', () => {
       },
     ];
 
-    expect(translateGoogleSheet(input, sheetId)).toStrictEqual(expected);
+    expect(translateGoogleSheet(input, sheetId, defaults)).toStrictEqual(
+      expected
+    );
   });
 
   it('returns undefined when sheet is empty', () => {
-    expect(translateGoogleSheet({ values: [] }, sheetId)).toStrictEqual(
-      undefined
-    );
+    expect(
+      translateGoogleSheet({ values: [] }, sheetId, defaults)
+    ).toStrictEqual(undefined);
   });
 });

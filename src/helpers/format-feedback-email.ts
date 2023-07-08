@@ -1,6 +1,5 @@
 import { Meeting } from '../types';
 import { getQueryString } from './query-string';
-import { strings } from './settings';
 import { formatArray } from './format-array';
 import { formatString as i18n } from './format-string';
 import { formatUrl } from './format-url';
@@ -8,11 +7,13 @@ import { formatUrl } from './format-url';
 //send back a mailto link to a feedback email
 export function formatFeedbackEmail(
   feedback_emails: TSMLReactConfig['feedback_emails'],
-  meeting: Meeting
+  meeting: Meeting,
+  settings: TSMLReactConfig,
+  strings: Translation
 ) {
   //remove extra query params from meeting URL
-  const input = getQueryString();
-  const meetingUrl = formatUrl({ meeting: input.meeting });
+  const input = getQueryString(settings);
+  const meetingUrl = formatUrl({ meeting: input.meeting }, settings);
 
   //build message
   const lines = [

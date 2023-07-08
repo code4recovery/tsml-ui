@@ -1,7 +1,7 @@
 import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import Controls from '../Controls';
-import { strings } from '../../helpers';
+import { mergeSettings, SettingsContext } from '../../helpers';
 import { mockMeeting, mockState } from '../__fixtures__';
 
 describe('<Controls />', () => {
@@ -31,11 +31,14 @@ describe('<Controls />', () => {
 
   const mapbox = 'pk.abc123';
 
-  const { region_any, modes, views } = strings;
+  const settings = mergeSettings();
+  const { region_any, modes, views } = settings.strings;
 
   it('is empty with no meetings', () => {
     const { container } = render(
-      <Controls state={mockState} setState={mockSetState} />
+      <SettingsContext.Provider value={settings}>
+        <Controls state={mockState} setState={mockSetState} />
+      </SettingsContext.Provider>
     );
     expect(container.firstChild).toBeNull();
   });

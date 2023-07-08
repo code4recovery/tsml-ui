@@ -1,4 +1,4 @@
-import { settings } from '../settings';
+import { defaults } from '../settings';
 import { getQueryString } from '../query-string';
 import { formatFeedbackEmail } from '../format-feedback-email';
 import { Meeting } from '../../types';
@@ -12,7 +12,7 @@ jest.mock('../query-string');
 const mockedGetQueryString = jest.mocked(getQueryString);
 
 //can't use mock factories with outside scoped variables
-mockedGetQueryString.mockReturnValue(settings.defaults);
+mockedGetQueryString.mockReturnValue(defaults.defaults);
 
 //TODO: Only requiring the parts needed for this test, should
 //probably integrate fixtures.
@@ -25,10 +25,24 @@ const mockEmails = ['foo@bar.com', 'baz@qux.com'];
 
 describe('formatFeedbackEmail', () => {
   it('works with one or more emails', () => {
-    expect(formatFeedbackEmail([mockEmails[0]], mockMeeting)).toStrictEqual(
+    expect(
+      formatFeedbackEmail(
+        [mockEmails[0]],
+        mockMeeting,
+        defaults,
+        defaults.strings[defaults.language]
+      )
+    ).toStrictEqual(
       'mailto:foo@bar.com?subject=Meeting Feedback%3A Foo&body=%0A%0A%0A-----%0APublic URL%3A https%3A%2F%2Ffoo.com%0AEdit URL%3A row 1'
     );
-    expect(formatFeedbackEmail(mockEmails, mockMeeting)).toStrictEqual(
+    expect(
+      formatFeedbackEmail(
+        mockEmails,
+        mockMeeting,
+        defaults,
+        defaults.strings[defaults.language]
+      )
+    ).toStrictEqual(
       'mailto:foo@bar.com,baz@qux.com?subject=Meeting Feedback%3A Foo&body=%0A%0A%0A-----%0APublic URL%3A https%3A%2F%2Ffoo.com%0AEdit URL%3A row 1'
     );
   });

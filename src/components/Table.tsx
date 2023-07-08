@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
 
 import { Meeting, State } from '../types';
@@ -6,8 +6,7 @@ import {
   formatClasses as cx,
   formatDirectionsUrl,
   formatString as i18n,
-  settings,
-  strings,
+  useSettings,
 } from '../helpers';
 import { icons } from './Icon';
 
@@ -29,6 +28,7 @@ export default function Table({
   inProgress = [],
   listButtons = false,
 }: TableProps) {
+  const { settings, strings } = useSettings();
   const meetingsPerPage = 10;
   const supported_columns = [
     'address',
@@ -177,7 +177,7 @@ export default function Table({
           <tr className="d-none d-md-table-row">
             {columns.map((column, index) => (
               <th key={index} className={cx('pt-0', column)}>
-                {strings[column]}
+                {strings[column as keyof Translation] as string}
               </th>
             ))}
           </tr>

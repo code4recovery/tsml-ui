@@ -1,9 +1,8 @@
-import { settings } from './settings';
 import { formatUrl } from './format-url';
 import type { State } from '../types';
 
 //load input values from query string
-export function getQueryString(): State['input'] {
+export function getQueryString(settings: TSMLReactConfig): State['input'] {
   const input = { ...settings.defaults };
 
   //load input from query string
@@ -27,23 +26,11 @@ export function getQueryString(): State['input'] {
 
   //temporary band-aid to support weekday=0 URLs
   if (input.weekday) {
-    input.weekday = input.weekday.map(day => {
-      //@ts-expect-error todo
-      if (day === '0') return settings.weekdays[0];
-      //@ts-expect-error todo
-      if (day === '1') return settings.weekdays[1];
-      //@ts-expect-error todo
-      if (day === '2') return settings.weekdays[2];
-      //@ts-expect-error todo
-      if (day === '3') return settings.weekdays[3];
-      //@ts-expect-error todo
-      if (day === '4') return settings.weekdays[4];
-      //@ts-expect-error todo
-      if (day === '5') return settings.weekdays[5];
-      //@ts-expect-error todo
-      if (day === '6') return settings.weekdays[6];
-      return day;
-    });
+    input.weekday = input.weekday.map(day =>
+      ['0', '1', '2', '3', '4', '5', '6'].includes(day)
+        ? settings.weekdays[parseInt(day)]
+        : day
+    );
   }
 
   return {
@@ -53,8 +40,11 @@ export function getQueryString(): State['input'] {
 }
 
 //save input values to query string
-export function setQueryString(input: Partial<TSMLReactConfig['defaults']>) {
-  const url = formatUrl(input);
+export function setQueryString(
+  input: Partial<TSMLReactConfig['defaults']>,
+  settings: TSMLReactConfig
+) {
+  const url = formatUrl(input, settings);
 
   //set the query string with the history api
   if (window.location.href !== url) {

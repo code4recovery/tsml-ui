@@ -2,43 +2,53 @@ import React from 'react';
 import { screen, render, fireEvent } from '@testing-library/react';
 import { Meeting } from '../../types';
 import Link from '../Link';
-import { settings } from '../../helpers/settings';
+import { SettingsContext, mergeSettings } from '../../helpers/settings';
 import { mockState } from '../__fixtures__';
-
-jest.mock('../../helpers/settings');
-
-let mockSettings = jest.mocked(settings);
 
 const mockMeeting: Meeting = {
   name: 'Foo',
   types: ['M'],
   slug: 'bar-baz',
-} as Meeting;
+  formatted_address: '123 Main St, Anytown, AK 12345, USA',
+};
 
 describe('<Link />', () => {
-  it('works without props', () => {
-    const { container } = render(
-      <Link meeting={mockMeeting} state={undefined} setState={undefined} />
+  it('works without flags', () => {
+    const mockSettings = mergeSettings({
+      flags: [],
+    });
+
+    render(
+      <SettingsContext.Provider value={mockSettings}>
+        <Link meeting={mockMeeting} state={undefined} setState={undefined} />
+      </SettingsContext.Provider>
     );
 
-    expect(container.firstChild?.nodeValue).toBe('Foo');
+    expect(screen.queryByText(/men/i)).toBeNull();
   });
 
-  it('works without flags', () => {
-    mockSettings.flags = undefined;
-
-    const { container } = render(
-      <Link meeting={mockMeeting} state={undefined} setState={undefined} />
+  it('works without props', () => {
+    const mockSettings = mergeSettings();
+    render(
+      <SettingsContext.Provider value={mockSettings}>
+        <Link meeting={mockMeeting} state={undefined} setState={undefined} />
+      </SettingsContext.Provider>
     );
 
-    expect(container.firstChild?.nodeValue).toBe('Foo');
+    expect(screen.getByText(mockMeeting.name)).toBeInTheDocument();
+    expect(screen.getByText(/men/i)).toBeInTheDocument();
+    expect(screen.queryByRole('link')).toBeNull();
   });
 
   it('works with flags', () => {
-    mockSettings.flags = ['M'];
+    const mockSettings = mergeSettings({
+      flags: ['M'],
+    });
 
     render(
-      <Link meeting={mockMeeting} state={undefined} setState={undefined} />
+      <SettingsContext.Provider value={mockSettings}>
+        <Link meeting={mockMeeting} state={undefined} setState={undefined} />
+      </SettingsContext.Provider>
     );
 
     expect(screen.getByText(/men/i)).toBeInTheDocument();
@@ -48,12 +58,14 @@ describe('<Link />', () => {
     const mockSetState = jest.fn();
 
     render(
-      <Link meeting={mockMeeting} state={mockState} setState={mockSetState} />
+      <SettingsContext.Provider value={mergeSettings()}>
+        <Link meeting={mockMeeting} state={mockState} setState={mockSetState} />
+      </SettingsContext.Provider>
     );
 
     const link = screen.getByRole('link');
 
-    expect(link).toHaveAttribute('href', 'https://test.com/');
+    expect(link).toHaveAttribute('href', 'https://test.com/?meeting=bar-baz');
     expect(link).toHaveTextContent(/foo/i);
     expect(screen.getByText(/men/i)).toBeInTheDocument();
 

@@ -1,5 +1,3 @@
-import { MeetingType } from './MeetingType';
-
 export interface Translation {
   add_to_calendar: string;
   address: string;
@@ -38,11 +36,9 @@ export interface Translation {
   meetings: string;
   mi: string;
   midday: string;
-  midnight: string;
   morning: string;
   name: string;
   no_results: string;
-  noon: string;
   not_found: string;
   modes: {
     location: string;
@@ -70,7 +66,7 @@ export interface Translation {
   };
   type_any: string;
   type_descriptions: Record<Extract<MeetingType, 'O' | 'C'>, string>;
-  types: Record<MeetingType, string>;
+  types: Record<MeetingType | MetaType, string>;
   unnamed_meeting: string;
   updated: string;
   views: {

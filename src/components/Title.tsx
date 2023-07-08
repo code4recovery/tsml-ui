@@ -1,13 +1,13 @@
-import React from 'react';
-
 import type { State } from '../types';
-import { formatString as i18n, getIndexByKey, strings } from '../helpers';
+import { formatString as i18n, getIndexByKey, useSettings } from '../helpers';
 
 type TitleProps = {
   state: State;
 };
 
 export default function Title({ state: { indexes, input } }: TitleProps) {
+  const { strings } = useSettings();
+
   //build title from strings.title
   const parts: string[] = [];
 
