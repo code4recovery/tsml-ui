@@ -92,7 +92,7 @@ export const defaults: TSMLReactConfig = {
   ],
 };
 
-export function mergeSettings(userSettings?: TSMLReactConfig) {
+export function mergeSettings(userSettings?: Partial<TSMLReactConfig>) {
   const settings = userSettings ? merge(defaults, userSettings) : defaults;
 
   // flags can be specified to override the default. also [] means unset

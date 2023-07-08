@@ -39,7 +39,6 @@ export const en: Translation = {
   meetings: 'Meetings',
   mi: 'mi',
   midday: 'Midday',
-  midnight: 'Mid',
   modes: {
     location: 'Near Location',
     me: 'Near Me',
@@ -48,7 +47,6 @@ export const en: Translation = {
   morning: 'Morning',
   name: 'Name',
   no_results: 'No meetings were found matching the selected criteria.',
-  noon: 'Noon',
   not_found: 'Meeting not found.',
   night: 'Night',
   phone: 'Phone',

@@ -39,7 +39,6 @@ export const sv: Translation = {
   meetings: 'Möten',
   mi: 'mi',
   midday: 'Mitt på dagen',
-  midnight: 'Midnatt',
   modes: {
     location: 'Nära Plats',
     me: 'Nära Mig',
@@ -48,7 +47,6 @@ export const sv: Translation = {
   morning: 'Morgon',
   name: 'Namn',
   no_results: 'Hittade inga möten för sökningen.',
-  noon: 'Eftermiddag',
   not_found: 'Hittade inte mötet.',
   night: 'Natt',
   phone: 'Telefon',

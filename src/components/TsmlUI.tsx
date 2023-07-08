@@ -217,7 +217,9 @@ export default function TsmlUI({
   }
 
   //apply input changes to query string
-  setQueryString(state.input, settings);
+  if (!state.loading) {
+    setQueryString(state.input, settings);
+  }
 
   //filter data
   const [filteredSlugs, inProgress] = filterMeetingData(

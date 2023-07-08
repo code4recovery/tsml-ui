@@ -61,6 +61,18 @@ var tsml_react_config = {
 };
 ```
 
+### Change the map style
+
+Mapbox maps can be styled by creating a [custom map style](https://docs.mapbox.com/studio-manual/guides/map-styling/) and adding it to the `tsml_react_config` object.
+
+```js
+var tsml_react_config = {
+  map: {
+    style: 'mapbox://styles/username/abcdefg',
+  },
+};
+```
+
 ## Frequently asked questions
 
 ### How do timezones work?
@@ -116,3 +128,7 @@ When you are ready to make a PR:
 1. run prettier locally to autoformat your files
 1. alphabetize things like component props and CSS rules (if applicable)
 1. run `npx mix --production` to minify files
+
+```
+
+```

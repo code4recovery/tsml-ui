@@ -273,7 +273,9 @@ export function loadMeetingData(
         if (dayIndex === -1) {
           indexes.weekday.push({
             key: settings.weekdays[meeting.day],
-            name: strings.days[settings.weekdays[meeting.day]],
+            name: strings.days[
+              settings.weekdays[meeting.day] as keyof typeof strings.days
+            ],
             slugs: [slug],
           });
         } else {
@@ -457,7 +459,6 @@ export function loadMeetingData(
   indexes.weekday = flattenAndSortIndexes(
     indexes.weekday,
     (a, b) =>
-      //@ts-expect-error TODO
       settings.weekdays.indexOf(a.key) - settings.weekdays.indexOf(b.key)
   );
 

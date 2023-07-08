@@ -9,7 +9,7 @@ jest.mock('../format-url', () => ({
 
 describe('getQueryString', () => {
   it('returns defaults correctly', () => {
-    expect(getQueryString(defaults)).toStrictEqual({});
+    expect(getQueryString(defaults)).toStrictEqual(defaults.defaults);
   });
 
   it('reads from url correctly', () => {
@@ -20,7 +20,10 @@ describe('getQueryString', () => {
 
     window.location.search = stringify(params);
 
-    expect(getQueryString(defaults)).toStrictEqual(params);
+    expect(getQueryString(defaults)).toStrictEqual({
+      ...defaults.defaults,
+      ...params,
+    });
   });
 });
 
@@ -29,7 +32,7 @@ describe('setQueryString', () => {
     const params = { search: 'foo' };
     setQueryString(params, defaults);
 
-    expect(formatUrl).toHaveBeenCalledWith(params);
+    expect(formatUrl).toHaveBeenCalledWith(params, defaults);
     expect(window.history.pushState).toHaveBeenCalledWith('', '', 'foo');
   });
 });

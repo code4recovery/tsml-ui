@@ -36,11 +36,9 @@ export interface Translation {
   meetings: string;
   mi: string;
   midday: string;
-  midnight: string;
   morning: string;
   name: string;
   no_results: string;
-  noon: string;
   not_found: string;
   modes: {
     location: string;

@@ -5,9 +5,7 @@ type Lang = import('@code4recovery/spec').Language;
 
 interface TSMLReactConfig {
   cache: boolean;
-  columns: Array<
-    'time' | 'distance' | 'name' | 'location_group' | 'address' | 'region'
-  >;
+  columns: string[];
   conference_providers: Record<string, string>;
   defaults: {
     distance: string[];
@@ -50,15 +48,7 @@ interface TSMLReactConfig {
     [lang in Lang]: Translation;
   };
   times: Array<'morning' | 'midday' | 'evening' | 'night'>;
-  weekdays: Array<
-    | 'sunday'
-    | 'monday'
-    | 'tuesday'
-    | 'wednesday'
-    | 'thursday'
-    | 'friday'
-    | 'saturday'
-  >;
+  weekdays: string[];
 }
 
 declare var tsml_react_config: TSMLReactConfig | undefined;

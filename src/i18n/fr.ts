@@ -39,7 +39,6 @@ export const fr: Translation = {
   meetings: 'Rencontres',
   mi: 'mi',
   midday: 'Midi',
-  midnight: 'Minuit',
   modes: {
     location: 'Près de l’emplacement',
     me: 'Proche de moi',
@@ -48,7 +47,6 @@ export const fr: Translation = {
   morning: 'Matin',
   name: 'Nom',
   no_results: "Aucune réunion n'a été trouvée.",
-  noon: 'Le midi',
   not_found: 'Réunion introuvable.',
   night: 'Nuit',
   phone: 'Téléphone',

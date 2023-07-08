@@ -39,11 +39,9 @@ export const ja: Translation = {
   meetings: 'ミーティング',
   mi: 'マイル',
   midday: '昼',
-  midnight: '夜中',
   morning: '朝',
   name: '名前',
   no_results: '選択した条件に一致するミーティングは見つかりませんでした。',
-  noon: '正午',
   not_found: 'ミーティングが見つかりません。',
   modes: {
     location: '指定地から',

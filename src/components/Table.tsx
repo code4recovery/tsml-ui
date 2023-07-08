@@ -177,7 +177,7 @@ export default function Table({
           <tr className="d-none d-md-table-row">
             {columns.map((column, index) => (
               <th key={index} className={cx('pt-0', column)}>
-                {strings[column]}
+                {strings[column as keyof Translation] as string}
               </th>
             ))}
           </tr>

@@ -1,13 +1,14 @@
 import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import Dropdown from '../Dropdown';
-import { strings } from '../../helpers';
+import { SettingsContext, mergeSettings } from '../../helpers';
 import { mockState } from '../__fixtures__';
 import { State } from '../../types';
 
 describe('<Dropdown />', () => {
   const filter = 'type';
-  const defaultValue = strings[`${filter}_any`];
+  const settings = mergeSettings();
+  const defaultValue = settings.strings[`${filter}_any`];
   const mockStateWithFilter: State = {
     ...mockState,
     input: {
@@ -32,18 +33,20 @@ describe('<Dropdown />', () => {
 
   it('renders', () => {
     render(
-      <Dropdown
-        filter={filter}
-        open={false}
-        end={false}
-        defaultValue={defaultValue}
-        setDropdown={jest.fn()}
-        state={{
-          ...mockStateWithFilter,
-          input: { ...mockStateWithFilter.input, [filter]: ['bar'] },
-        }}
-        setState={jest.fn()}
-      />
+      <SettingsContext.Provider value={settings}>
+        <Dropdown
+          filter={filter}
+          open={false}
+          end={false}
+          defaultValue={defaultValue}
+          setDropdown={jest.fn()}
+          state={{
+            ...mockStateWithFilter,
+            input: { ...mockStateWithFilter.input, [filter]: ['bar'] },
+          }}
+          setState={jest.fn()}
+        />
+      </SettingsContext.Provider>
     );
     expect(screen.getAllByText(defaultValue)).toHaveLength(1);
   });
@@ -52,15 +55,17 @@ describe('<Dropdown />', () => {
     const mockSetDropdown = jest.fn();
 
     render(
-      <Dropdown
-        filter={filter}
-        open={false}
-        end={false}
-        defaultValue={defaultValue}
-        setDropdown={mockSetDropdown}
-        state={mockState}
-        setState={jest.fn()}
-      />
+      <SettingsContext.Provider value={settings}>
+        <Dropdown
+          filter={filter}
+          open={false}
+          end={false}
+          defaultValue={defaultValue}
+          setDropdown={mockSetDropdown}
+          state={mockState}
+          setState={jest.fn()}
+        />
+      </SettingsContext.Provider>
     );
 
     const button = screen.getAllByRole('button');
@@ -76,15 +81,17 @@ describe('<Dropdown />', () => {
     const mockSetState = jest.fn();
 
     render(
-      <Dropdown
-        defaultValue={defaultValue}
-        end={false}
-        filter={filter}
-        open={true}
-        setDropdown={mockSetDropdown}
-        setState={mockSetState}
-        state={mockStateWithFilter}
-      />
+      <SettingsContext.Provider value={settings}>
+        <Dropdown
+          defaultValue={defaultValue}
+          end={false}
+          filter={filter}
+          open={true}
+          setDropdown={mockSetDropdown}
+          setState={mockSetState}
+          state={mockStateWithFilter}
+        />
+      </SettingsContext.Provider>
     );
 
     function modify<
@@ -124,7 +131,7 @@ describe('<Dropdown />', () => {
     expect(mockSetState).toHaveBeenLastCalledWith(modify(filter, ['bar']));
 
     //click all
-    const all = screen.getAllByText(strings[`${filter}_any`]);
+    const all = screen.getAllByText(settings.strings[`${filter}_any`]);
     fireEvent.click(all[1]);
     expect(mockSetState).toHaveBeenLastCalledWith(modify(filter, []));
   });
