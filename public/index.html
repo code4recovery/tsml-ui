@@ -3,18 +3,25 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+      crossorigin="anonymous"
+    />
     <script>
-        function setColorMode(dark) {
-            document.documentElement.setAttribute('data-bs-theme', dark ? 'dark' : 'light');
-        }
-        setColorMode(window.matchMedia("(prefers-color-scheme: dark)").matches);
-        window
-            .matchMedia("(prefers-color-scheme: dark)")
-            .addEventListener("change", function(e) {
-                setColorMode(e.matches);
-            });
+      function setColorMode(dark) {
+        document.documentElement.setAttribute(
+          'data-bs-theme',
+          dark ? 'dark' : 'light'
+        );
+      }
+      setColorMode(window.matchMedia('(prefers-color-scheme: dark)').matches);
+      window
+        .matchMedia('(prefers-color-scheme: dark)')
+        .addEventListener('change', function (e) {
+          setColorMode(e.matches);
+        });
     </script>
     <title>TSML UI</title>
   </head>
@@ -42,9 +49,15 @@
           <section class="my-5">
             <h2 class="h4">12 Step Meeting List</h2>
             <p>
-              If you are using the <a href="https://wordpress.org/plugins/12-step-meeting-list/" target="_blank">12 
-              Step Meeting List plugin</a> for WordPress, setup is simple. Go to Dashboard > Meetings > Import & 
-              Settings > Settings and change <code>User Interface Display</code> &rarr; <code>TSML UI</code>
+              If you are using the
+              <a
+                href="https://wordpress.org/plugins/12-step-meeting-list/"
+                target="_blank"
+                >12 Step Meeting List plugin</a
+              >
+              for WordPress, setup is simple. Go to Dashboard > Meetings >
+              Import & Settings > Settings and change
+              <code>User Interface Display</code> &rarr; <code>TSML UI</code>
             </p>
           </section>
 
@@ -58,13 +71,16 @@
               format below. If your data has geographic coordinates, adding a
               <a href="https://www.mapbox.com/" target="_blank"
                 >Mapbox API access token</a
-              > will enable maps (otherwise remove that parameter). To specify a default timezone for your location, set a 
+              >
+              will enable maps (otherwise remove that parameter). To specify a
+              default timezone for your location, set a
               <a
                 href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones"
                 target="_blank"
                 >proper time zone</a
-              > in the <code>data-timezone</code> parameter. If you remove it, meeting times will 
-              be translated into the user's timezone.
+              >
+              in the <code>data-timezone</code> parameter. If you remove it,
+              meeting times will be translated into the user's timezone.
             </p>
             <pre class="rounded bg-black text-light p-3 overflow-hidden">
 &lt;div
@@ -88,8 +104,7 @@
             <p>
               You can connect TSML UI directly to a Google Sheet. To do this,
               just use your Google Sheet URL as the
-              <code>data-src</code> attribute, get a Google Sheets API Key
-              (<a
+              <code>data-src</code> attribute, get a Google Sheets API Key (<a
                 href="https://developers.google.com/sheets/api/guides/authorizing#APIKey"
                 target="_blank"
                 >here are instructions</a
@@ -105,17 +120,45 @@
 &gt;&lt;/div&gt;
 &lt;script src="https://tsml-ui.code4recovery.org/app.js" async&gt;&lt;/script&gt;</pre
             >
-            <!-- <button class="btn btn-outline-primary mb-3" href="" disabled>Demo coming soon</button> -->
-            <p>Some caveats about connecting directly to Google Sheets:
-              <ol>
-                <li>Although it is free, Google imposes <a href="https://developers.google.com/sheets/api/limits" target="_blank">rate limits on its Sheets API</a>, and if that limit is exceeded, your users may see a 429 (too many requests) error when accessing the meeting finder.</li>
-                <li>Depending on how your sheet is set up, the request from Google can be pretty bulky, and page performance may vary.</li>
-                <li>Users may see incomplete data if they request the page while data is being entered.</li>
-                <li>Some users may have privacy-oriented content blockers that block their access to Google, which will cause an error.</li>
-                <li>If you choose to enter personally identifiable information (such as meeting contact information) this will be exposed to users who know how to look for it.</li>
-              </ol>
+            <p>Some caveats when connecting directly to Google Sheets:</p>
+            <ol>
+              <li>
+                Although it is free, Google imposes
+                <a
+                  href="https://developers.google.com/sheets/api/limits"
+                  target="_blank"
+                  >rate limits on its Sheets API</a
+                >, and if that limit is exceeded, your users may see a 429 (too
+                many requests) error when accessing the meeting finder.
+              </li>
+              <li>
+                Depending on how your sheet is set up, the request from Google
+                can be pretty bulky, and page performance may vary.
+              </li>
+              <li>
+                Users may see incomplete data if they request the page while
+                data is being entered.
+              </li>
+              <li>
+                Some users may have privacy-oriented content blockers that block
+                their access to Google, which will cause an error.
+              </li>
+              <li>
+                If you choose to enter personally identifiable information (such
+                as meeting contact information) this will be exposed to users
+                who know how to look for it.
+              </li>
+            </ol>
+            <p>
+              The Sheets Importer option below mitigates these issues and does
+              not require you to have a Google API key.
             </p>
-            <p>The Sheets Importer option below mitigates these issues and does not require you to have a Google API key.</p>
+            <a
+              class="btn btn-outline-primary"
+              href="https://meetings.pugetsoundaa.org/"
+              target="_blank"
+              >Demo: Puget Sound, WA</a
+            >
           </section>
 
           <section class="my-5">
