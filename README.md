@@ -128,7 +128,3 @@ When you are ready to make a PR:
 1. run prettier locally to autoformat your files
 1. alphabetize things like component props and CSS rules (if applicable)
 1. run `npx mix --production` to minify files
-
-```
-
-```
