@@ -15,7 +15,7 @@ describe('formatSlug', () => {
     expect(formatSlug(actual)).toStrictEqual(expected);
   });
 
-  it.skip('removes invalid chars', () => {
+  it('removes invalid chars', () => {
     const actual = '!@#$%^&*()';
     const expected = '';
 
