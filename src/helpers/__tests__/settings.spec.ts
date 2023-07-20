@@ -1,6 +1,12 @@
 import { mergeSettings } from '../settings';
 
 describe('settings', () => {
+  let languageGetter: jest.SpyInstance<string, []>;
+
+  beforeEach(() => {
+    languageGetter = jest.spyOn(window.navigator, 'language', 'get');
+  });
+
   it('should import user columns', () => {
     const columns = ['name'];
     const { settings } = mergeSettings({
@@ -33,5 +39,11 @@ describe('settings', () => {
     const flags: MeetingType[] = [];
     const { settings } = mergeSettings({ flags });
     expect(settings.flags).toEqual(flags);
+  });
+
+  it('should fall back to english', () => {
+    languageGetter.mockReturnValue('de');
+    const { settings } = mergeSettings();
+    expect(settings.language).toEqual('en');
   });
 });

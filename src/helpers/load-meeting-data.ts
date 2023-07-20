@@ -434,7 +434,7 @@ export function loadMeetingData(
       slug,
       square: validateSquare(meeting),
       start,
-      timezone,
+      timezone: meeting.timezone,
       types,
       updated,
       url,

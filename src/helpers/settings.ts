@@ -110,15 +110,15 @@ export function mergeSettings(userSettings?: Partial<TSMLReactConfig>) {
     }
   }
 
-  const preferredLanguage = navigator.language.substring(0, 2) as Lang;
+  const preferredLanguage = navigator.language.substring(0, 2);
 
-  const language = Object.keys(settings.strings).includes(preferredLanguage)
-    ? preferredLanguage
-    : settings.language;
+  if (preferredLanguage in settings.strings) {
+    settings.language = preferredLanguage as Lang;
+  }
 
-  const strings = settings.strings[language];
+  const strings = settings.strings[settings.language];
 
-  Settings.defaultLocale = language;
+  Settings.defaultLocale = navigator.language;
 
   return { settings, strings };
 }
