@@ -255,11 +255,9 @@ export function loadMeetingData(
       }
 
       //normalize timezones
-      if (!timezone) {
-        start = start.setZone('local');
-        if (end) {
-          end = end.setZone('local');
-        }
+      start = start.setZone(timezone ? timezone : 'local');
+      if (end) {
+        end = end.setZone(timezone ? timezone : 'local');
       }
 
       //day & time indexes
