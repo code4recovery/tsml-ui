@@ -52,7 +52,6 @@ describe('loadMeetingData', () => {
         regions: ['Anytown'],
         search: '123 main st, ok, usa\ttest meeting\tanytown',
         slug: 'test-meeting',
-        timezone: 'America/Los_Angeles',
         types: ['in-person', 'active'],
       },
       'inactive-meeting': {
@@ -66,7 +65,6 @@ describe('loadMeetingData', () => {
         regions: [],
         search: 'anytown, ok, usa\tinactive meeting',
         slug: 'inactive-meeting',
-        timezone: 'America/Los_Angeles',
         types: ['inactive'],
       },
     });

@@ -8,8 +8,8 @@ describe('formatSlug', () => {
     expect(formatSlug(actual)).toStrictEqual(expected);
   });
 
-  it('hyphen cases', () => {
-    const actual = 'Foo Bar Baz';
+  it('kebab cases', () => {
+    const actual = 'Foo Bar_Baz';
     const expected = 'foo-bar-baz';
 
     expect(formatSlug(actual)).toStrictEqual(expected);
@@ -23,7 +23,7 @@ describe('formatSlug', () => {
   });
 
   it('removes whitespace and leading / trailing hyphens', () => {
-    const actual = ' -foo-bar- ';
+    const actual = ' -foo  bar- ';
     const expected = 'foo-bar';
 
     expect(formatSlug(actual)).toStrictEqual(expected);
