@@ -11,9 +11,8 @@ export function formatSlug(str: string) {
   }
 
   return str
-    .replace(/[^a-z0-9 -]/g, '') // remove non-alphanumerics
     .replace(/\s+/g, '-') // collapse whitespace and replace by -
-    .replace(/-+/g, '-') // collapse hyphens
-    .replace(/^-+/, '') // trim hyphens from start
-    .replace(/-+$/, ''); // trim hyphens from end
+    .replace(/-+/g, '-') // collapse dashes
+    .replace(/^-+/, '') // trim - from start of text
+    .replace(/-+$/, ''); // trim - from end of text
 }

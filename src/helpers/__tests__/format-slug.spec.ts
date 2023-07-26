@@ -15,12 +15,7 @@ describe('formatSlug', () => {
     expect(formatSlug(actual)).toStrictEqual(expected);
   });
 
-  it('removes invalid chars', () => {
-    const actual = '!@#$%^&*()';
-    const expected = '';
-
-    expect(formatSlug(actual)).toStrictEqual(expected);
-  });
+  // todo add test for japanese characters
 
   it('removes whitespace and leading / trailing hyphens', () => {
     const actual = ' -foo  bar- ';
