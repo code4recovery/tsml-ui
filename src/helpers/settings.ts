@@ -120,6 +120,11 @@ export function mergeSettings(userSettings?: Partial<TSMLReactConfig>) {
 
   Settings.defaultLocale = navigator.language;
 
+  // sort flags alphabetically (more performant to do it here than in render)
+  settings.flags = settings.flags.sort((a, b) =>
+    strings.types[a].localeCompare(strings.types[b])
+  );
+
   return { settings, strings };
 }
 

@@ -10,26 +10,10 @@ type LinkProps = {
 export default function Link({ meeting, setState, state }: LinkProps) {
   const { settings, strings } = useSettings();
 
-  const flags =
-    settings.flags
-      ?.filter(flag => meeting.types?.includes(flag))
-      .map(flag => strings.types[flag])
-      .sort()
-      .join(', ') ?? [];
-
-  if (!state || !setState) {
-    return !flags.length ? (
+  const name =
+    !state || !setState ? (
       <>{meeting.name}</>
     ) : (
-      <>
-        <span>{meeting.name}</span>
-        <small className="ms-2 text-muted">{flags}</small>
-      </>
-    );
-  }
-
-  return (
-    <>
       <a
         href={formatUrl({ ...state.input, meeting: meeting.slug }, settings)}
         onClick={e => {
@@ -46,7 +30,23 @@ export default function Link({ meeting, setState, state }: LinkProps) {
       >
         {meeting.name}
       </a>
-      {flags && <small className="ms-2 text-muted">{flags}</small>}
+    );
+
+  const flags = settings.flags
+    ?.filter(flag => meeting.types?.includes(flag))
+    .map(flag => (
+      <small
+        key={flag}
+        className={`flag-${flag.toLowerCase()} ms-2 text-muted`}
+      >
+        {strings.types[flag]}
+      </small>
+    ));
+
+  return (
+    <>
+      {name}
+      {!!flags && flags}
     </>
   );
 }
