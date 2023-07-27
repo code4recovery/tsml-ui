@@ -51,7 +51,7 @@ describe('<Link />', () => {
       </SettingsContext.Provider>
     );
 
-    expect(screen.getByText(/men/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/men/i)).toHaveLength(2);
   });
 
   it('works with setState', () => {

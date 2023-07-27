@@ -30,7 +30,7 @@ describe('settings', () => {
   });
 
   it('should import flags', () => {
-    const flags: MeetingType[] = ['O', 'C'];
+    const flags: MeetingType[] = ['C', 'O'];
     const { settings } = mergeSettings({ flags });
     expect(settings.flags).toEqual(flags);
   });
