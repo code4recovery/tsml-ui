@@ -1,11 +1,7 @@
-// for loading spinner & dropdown blur
+// dropdown blur
 html,
-body,
-div#tsml-ui,
-div.tsml-ui {
-  height: 100%;
-  margin: 0 auto;
-  overflow-x: inherit !important;
+body {
+  min-height: 100vh;
 }
 
 // configure bootstrap
