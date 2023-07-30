@@ -240,12 +240,10 @@ export default function TsmlUI({
 
   return (
     <SettingsContext.Provider value={{ settings, strings }}>
-      {!state.ready ? (
-        <div className="tsml-ui">
+      <div className="tsml-ui">
+        {!state.ready ? (
           <Loading />
-        </div>
-      ) : (
-        <div className="tsml-ui">
+        ) : (
           <div className="container-fluid d-flex flex-column py-3">
             {state.input.meeting && state.input.meeting in state.meetings ? (
               <Meeting
@@ -284,8 +282,8 @@ export default function TsmlUI({
               </div>
             )}
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </SettingsContext.Provider>
   );
 }
