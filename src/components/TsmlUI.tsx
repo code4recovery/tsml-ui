@@ -238,6 +238,8 @@ export default function TsmlUI({
     state.error = strings.not_found;
   }
 
+  state.ready = false;
+
   return (
     <SettingsContext.Provider value={{ settings, strings }}>
       {!state.ready ? (
