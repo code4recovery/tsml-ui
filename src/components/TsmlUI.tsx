@@ -240,50 +240,48 @@ export default function TsmlUI({
 
   return (
     <SettingsContext.Provider value={{ settings, strings }}>
-      <div className="tsml-ui">
-        {!state.ready ? (
-          <Loading />
-        ) : (
-          <div className="container-fluid d-flex flex-column py-3">
-            {state.input.meeting && state.input.meeting in state.meetings ? (
-              <Meeting
-                state={state}
-                setState={setState}
-                mapbox={mapbox}
-                feedback_emails={settings.feedback_emails}
-              />
-            ) : (
-              <div className="d-flex flex-column flex-grow-1 gap-3">
-                {settings.show.title && <Title state={state} />}
-                {settings.show.controls && (
-                  <Controls state={state} setState={setState} mapbox={mapbox} />
-                )}
-                {(state.alert || state.error) && (
-                  <Alert state={state} setState={setState} />
-                )}
-                {filteredSlugs && state.input.view === 'table' && (
-                  <Table
-                    filteredSlugs={filteredSlugs}
-                    inProgress={inProgress}
-                    listButtons={settings.show.listButtons}
-                    setState={setState}
-                    state={state}
-                  />
-                )}
-                {filteredSlugs && state.input.view === 'map' && (
-                  <Map
-                    filteredSlugs={filteredSlugs}
-                    listMeetingsInPopup={true}
-                    mapbox={mapbox}
-                    setState={setState}
-                    state={state}
-                  />
-                )}
-              </div>
-            )}
-          </div>
-        )}
-      </div>
+      {!state.ready ? (
+        <Loading />
+      ) : (
+        <div className="container-fluid d-flex flex-column py-3">
+          {state.input.meeting && state.input.meeting in state.meetings ? (
+            <Meeting
+              state={state}
+              setState={setState}
+              mapbox={mapbox}
+              feedback_emails={settings.feedback_emails}
+            />
+          ) : (
+            <div className="d-flex flex-column flex-grow-1 gap-3">
+              {settings.show.title && <Title state={state} />}
+              {settings.show.controls && (
+                <Controls state={state} setState={setState} mapbox={mapbox} />
+              )}
+              {(state.alert || state.error) && (
+                <Alert state={state} setState={setState} />
+              )}
+              {filteredSlugs && state.input.view === 'table' && (
+                <Table
+                  filteredSlugs={filteredSlugs}
+                  inProgress={inProgress}
+                  listButtons={settings.show.listButtons}
+                  setState={setState}
+                  state={state}
+                />
+              )}
+              {filteredSlugs && state.input.view === 'map' && (
+                <Map
+                  filteredSlugs={filteredSlugs}
+                  listMeetingsInPopup={true}
+                  mapbox={mapbox}
+                  setState={setState}
+                  state={state}
+                />
+              )}
+            </div>
+          )}
+        </div>
+      )}
     </SettingsContext.Provider>
   );
 }

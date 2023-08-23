@@ -41,10 +41,6 @@ export default function Alert({ state, setState }: AlertProps) {
                   state.input[filter] = state.input[filter].filter(
                     e => e !== value
                   ) as TSMLReactConfig['times'];
-                } else if (filter === 'type') {
-                  state.input[filter] = state.input[filter].filter(
-                    e => e !== value
-                  ) as Array<MeetingType | MetaType>;
                 } else {
                   state.input[filter] = state.input[filter].filter(
                     e => e !== value
