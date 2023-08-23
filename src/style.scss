@@ -68,7 +68,7 @@ div#tsml-ui {
   @import '~bootstrap/scss/utilities/api';
 
   // styles that bootstrap normally puts on the body
-  // background-color: $body-bg !important;
+  background-color: $body-bg !important;
   color: $body-color !important;
   display: flex;
   font-family: $font-family-sans-serif !important;
