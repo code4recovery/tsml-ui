@@ -65,8 +65,8 @@ export interface Translation {
     distance: string;
   };
   type_any: string;
-  type_descriptions: Record<Extract<MeetingType, 'O' | 'C'>, string>;
-  types: Record<MeetingType | MetaType, string>;
+  type_descriptions: Record<string, string>;
+  types: Record<string, string>;
   unnamed_meeting: string;
   updated: string;
   views: {

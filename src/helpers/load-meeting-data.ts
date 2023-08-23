@@ -1,6 +1,5 @@
 import { DateTime } from 'luxon';
 import type { JSONData, JSONDataFlat, State, Meeting, Index } from '../types';
-import { isMeetingType } from '@code4recovery/spec';
 
 import { formatAddress } from './format-address';
 import { formatConferenceProvider } from './format-conference-provider';
@@ -135,12 +134,12 @@ export function loadMeetingData(
     if (approximate) address = undefined;
 
     //types
-    let types: Array<MeetingType | MetaType> = Array.isArray(meeting.types)
+    let types = Array.isArray(meeting.types)
       ? meeting.types
           .map(type =>
             typeof type === 'number' ? type.toString() : type.trim()
           )
-          .filter(isMeetingType)
+          .filter(type => type in strings.types && type !== 'ONL')
       : [];
 
     //add online metattype
@@ -165,9 +164,7 @@ export function loadMeetingData(
 
     //if meeting is not in person, remove types that only apply to in-person meetings
     if (!isInPerson) {
-      types = types.filter(
-        type => !settings.in_person_types.includes(type as MeetingType)
-      );
+      types = types.filter(type => !settings.in_person_types.includes(type));
     }
 
     //if meeting is both speaker and discussion, combine
@@ -337,16 +334,16 @@ export function loadMeetingData(
     }
 
     //build type index (can be multiple) -- if inactive, only index the 'inactive' type
-    const typesToIndex: Array<MeetingType | MetaType> = isActive
-      ? types
-      : ['inactive'];
+    const typesToIndex: string[] = isActive ? types : ['inactive'];
     typesToIndex.forEach(type => {
-      const typeSlug = formatSlug(strings.types[type]);
+      const typeSlug = formatSlug(
+        strings.types[type as keyof typeof strings.types]
+      );
       const typeIndex = indexes.type.findIndex(({ key }) => key === typeSlug);
       if (typeIndex === -1) {
         indexes.type.push({
           key: typeSlug,
-          name: strings.types[type],
+          name: strings.types[type as keyof typeof strings.types],
           slugs: [slug],
         });
       } else {
