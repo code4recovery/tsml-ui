@@ -2,7 +2,7 @@
 
 exports[`<Loading /> 1`] = `
 <div
-  className="align-items-center d-flex flex-grow-1 h-100 justify-content-center loading"
+  className="align-items-center d-flex justify-content-center w-100"
 >
   <div
     className="m-5 spinner-border text-secondary"
