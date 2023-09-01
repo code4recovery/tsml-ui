@@ -447,7 +447,7 @@ export function loadMeetingData(
 
   //convert region to array, sort by name
   indexes.region = flattenAndSortIndexes(indexes.region, (a, b) =>
-    a.name.localeCompare(b.name)
+    a.name?.localeCompare(b.name)
   );
 
   //convert weekday to array and sort by ordinal
@@ -466,7 +466,7 @@ export function loadMeetingData(
 
   //convert type to array and sort by name
   indexes.type = flattenAndSortIndexes(indexes.type, (a, b) =>
-    a.name.localeCompare(b.name)
+    a.name?.localeCompare(b.name)
   );
 
   //determine capabilities (filter out options that apply to every meeting)
