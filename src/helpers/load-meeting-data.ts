@@ -313,7 +313,7 @@ export function loadMeetingData(
     }
 
     //parse regions
-    if (!regions || !Array.isArray(meeting.regions)) {
+    if (!regions || !Array.isArray(regions)) {
       regions = [];
       if (meeting.region) {
         regions.push(meeting.region);
@@ -326,6 +326,12 @@ export function loadMeetingData(
       } else if (meeting.city) {
         regions.push(meeting.city);
       }
+    } else {
+      // defend against weird values, remove empty regions
+      regions = regions
+        .filter(e => typeof e === 'string')
+        .map(e => e.trim())
+        .filter(e => e.length);
     }
 
     //build region index
