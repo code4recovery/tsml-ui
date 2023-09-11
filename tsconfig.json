@@ -1,16 +1,17 @@
 {
   "compilerOptions": {
+    "allowJs": false,
+    "esModuleInterop": true,
+    "jsx": "react-jsx",
+    "jsxImportSource": "@emotion/react",
     "lib": ["ES2021.String", "DOM"],
-    "target": "ES2015",
     "module": "esnext",
     "moduleResolution": "node",
-    "allowJs": false,
-    "strict": true,
-    "esModuleInterop": true,
-    "strictNullChecks": true,
     "noImplicitAny": true,
-    "jsx": "preserve",
-    "outDir": "public"
+    "outDir": "public",
+    "strict": true,
+    "strictNullChecks": true,
+    "target": "ES2015"
   },
   "include": ["index.d.ts", "src/app.tsx", "src/**/*.ts"]
 }

@@ -1,5 +1,6 @@
 import type { State } from '../types';
 import { formatString as i18n, getIndexByKey, useSettings } from '../helpers';
+import { title as titleCss } from '../styles';
 
 type TitleProps = {
   state: State;
@@ -54,7 +55,7 @@ export default function Title({ state: { indexes, input } }: TitleProps) {
 
   //return h1
   return (
-    <h1 aria-live="polite" className="fw-light mb-n1">
+    <h1 aria-live="polite" css={titleCss}>
       {title}
     </h1>
   );

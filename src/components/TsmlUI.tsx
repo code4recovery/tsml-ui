@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { Global } from '@emotion/react';
 
-import '../../public/style.css';
 import 'mapbox-gl/dist/mapbox-gl.css';
+import { global } from '../styles';
 import type { State } from '../types';
 import { Alert, Controls, Loading, Map, Meeting, Table, Title } from './';
 
@@ -240,6 +241,7 @@ export default function TsmlUI({
 
   return (
     <SettingsContext.Provider value={{ settings, strings }}>
+      <Global styles={global} />
       {!state.ready ? (
         <Loading />
       ) : (

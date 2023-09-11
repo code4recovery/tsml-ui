@@ -9,6 +9,7 @@ import {
   useSettings,
 } from '../helpers';
 import { icons } from './Icon';
+import { table } from '../styles';
 
 import Button from './Button';
 import Link from './Link';
@@ -168,11 +169,7 @@ export default function Table({
 
   return !filteredSlugs.length ? null : (
     <div className="row">
-      <table
-        className={cx('table table-striped flex-grow-1 my-0', {
-          'clickable-rows': !listButtons,
-        })}
-      >
+      <table css={table}>
         <thead>
           <tr className="d-none d-md-table-row">
             {columns.map((column, index) => (
