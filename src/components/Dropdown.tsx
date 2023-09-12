@@ -1,12 +1,13 @@
 import { Fragment } from 'react';
 
-import type { Index, State } from '../types';
 import {
   formatClasses as cx,
   formatString as i18n,
   getIndexByKey,
   useSettings,
 } from '../helpers';
+import { dropdown } from '../styles';
+import type { Index, State } from '../types';
 
 type DropdownProps = {
   defaultValue: string;
@@ -72,16 +73,13 @@ export default function Dropdown({
   const renderDropdownItem = ({ key, name, slugs, children }: Index) => (
     <Fragment key={key}>
       <button
-        className={cx(
-          'align-items-center d-flex dropdown-item justify-content-between',
-          {
-            // @ts-expect-error TODO
-            'bg-secondary text-white': values.includes(key),
-          }
-        )}
+        className={cx({
+          // @ts-expect-error TODO
+          active: values.includes(key),
+        })}
         onClick={e => setFilter(e, filter, key)}
       >
-        <span>{name}</span>
+        {name}
         <span
           aria-label={
             slugs.length === 1
@@ -109,10 +107,10 @@ export default function Dropdown({
   };
 
   return (
-    <div className="dropdown">
+    <div css={dropdown}>
       <button
         aria-expanded={open}
-        className="btn btn-outline-secondary dropdown-toggle overflow-hidden w-100"
+        className="dropdown-toggle"
         id={filter}
         onClick={() => setDropdown(open ? undefined : filter)}
       >
@@ -121,15 +119,12 @@ export default function Dropdown({
           : defaultValue}
       </button>
       <div
-        className={cx('dropdown-menu my-1', {
-          show: open,
-          'dropdown-menu-end': end,
-        })}
         aria-labelledby={filter}
+        style={{ display: open ? 'block' : 'none' }}
       >
         <button
-          className={cx('dropdown-item', {
-            'active bg-secondary text-white': !values.length,
+          className={cx({
+            active: !values.length,
           })}
           onClick={e => setFilter(e, filter, undefined)}
         >
@@ -153,7 +148,7 @@ export default function Dropdown({
           .filter(e => e.length)
           .map((group, index) => (
             <Fragment key={index}>
-              <div className="dropdown-divider" />
+              <hr />
               {group.map(option => renderDropdownItem(option))}
             </Fragment>
           ))}

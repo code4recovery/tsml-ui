@@ -140,7 +140,7 @@ export default function Controls({ state, setState, mapbox }: ControlsProps) {
   return !Object.keys(state.meetings).length ? null : (
     <div css={controls}>
       <form onSubmit={locationSearch}>
-        <fieldset>
+        <fieldset role="group">
           <input
             aria-label={strings.modes[state.input.mode]}
             disabled={state.input.mode === 'me'}
@@ -162,8 +162,8 @@ export default function Controls({ state, setState, mapbox }: ControlsProps) {
           />
           {modes.length > 1 && (
             <button
-              id="mode"
               aria-label={strings.modes[state.input.mode]}
+              className="dropdown-toggle"
               onClick={() =>
                 setDropdown(dropdown === 'search' ? undefined : 'search')
               }
@@ -172,7 +172,7 @@ export default function Controls({ state, setState, mapbox }: ControlsProps) {
           )}
         </fieldset>
         {modes.length > 1 && (
-          <>
+          <div>
             {modes.map(mode => (
               <a
                 className={cx({
@@ -185,7 +185,7 @@ export default function Controls({ state, setState, mapbox }: ControlsProps) {
                 {strings.modes[mode]}
               </a>
             ))}
-          </>
+          </div>
         )}
       </form>
       {filters.map((filter, index) => (
