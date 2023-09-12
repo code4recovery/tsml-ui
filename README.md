@@ -73,6 +73,37 @@ var tsml_react_config = {
 };
 ```
 
+### Change other styles
+
+CSS variables can be used to customize the appearance. Here are some examples:
+
+```css
+#tsml-ui {
+  --bg-color: 41, 38, 37;
+  --border-color: 215, 194, 168;
+  --color: 215, 194, 168;
+  --link-color: 252, 176, 62;
+  --font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+```
+
+Variables can be combined with media queries to enable dark mode:
+
+```css
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: black;
+    color: white;
+  }
+  #tsml-ui {
+    --bg-color: 0, 0, 0;
+    --border-color: 123, 123, 123;
+    --color: 255, 255, 255;
+    --link-color: 123, 200, 255;
+  }
+}
+```
+
 ## Frequently asked questions
 
 ### How do timezones work?

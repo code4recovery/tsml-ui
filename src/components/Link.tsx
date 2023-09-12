@@ -23,7 +23,7 @@ export default function Link({ meeting, setState, state }: LinkProps) {
     ) : (
       <>
         <span>{meeting.name}</span>
-        <small className="ms-2 text-muted">{flags}</small>
+        <small>{flags}</small>
       </>
     );
   }
@@ -46,7 +46,7 @@ export default function Link({ meeting, setState, state }: LinkProps) {
       >
         {meeting.name}
       </a>
-      {flags && <small className="ms-2 text-muted">{flags}</small>}
+      {flags && <small>{flags}</small>}
     </>
   );
 }

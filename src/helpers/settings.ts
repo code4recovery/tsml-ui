@@ -70,7 +70,6 @@ export const defaults: TSMLReactConfig = {
   params: ['search', 'mode', 'view', 'meeting'], //input other than filters
   show: {
     controls: true, //whether to show search + dropdowns + list/map
-    listButtons: false, //show conference buttons in list or show labels
     title: true, //whether to display the title h1
   },
   strings: {

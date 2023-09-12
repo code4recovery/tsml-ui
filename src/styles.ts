@@ -1,6 +1,7 @@
 import { css } from '@emotion/react';
 
 const borderRadius = '0.25rem';
+const lgAndUp = '(min-width: 992px)';
 
 export const controls = css`
   display: grid;
@@ -106,6 +107,10 @@ export const global = css`
     font-size: var(--font-size);
     line-height: 1.5;
 
+    a {
+      color: rgb(var(--link-color));
+    }
+
     button,
     input {
       background-color: transparent;
@@ -162,10 +167,12 @@ export const table = css`
   table-layout: auto;
   width: 100%;
 
-  td {
+  td,
+  th {
     border-bottom: 1px solid rgba(var(--color), 0.15);
     margin: 0;
     padding: calc(var(--gutter) / 2);
+    text-align: left;
     &:first-of-type {
       padding-left: var(--gutter);
     }
@@ -174,6 +181,21 @@ export const table = css`
   tbody tr {
     &:nth-of-type(2n + 1) {
       background-color: rgba(var(--color), 0.05);
+    }
+  }
+
+  time {
+    display: flex;
+    flex-direction: column;
+    span {
+      white-space: nowrap;
+      &:first-of-type {
+        text-transform: lowercase;
+      }
+    }
+    @media ${lgAndUp} {
+      flex-direction: row;
+      gap: 0.5rem;
     }
   }
 `;

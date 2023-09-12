@@ -10,18 +10,19 @@
     <link rel="icon" type="image/png" href="/logo.png" />
     <style type="text/css">
       body {
-        background-color: black;
-        color: white;
         margin: 0;
       }
-      #tsml-ui {
-        --bg-color: 41, 38, 37;
-        --border-color: 215, 194, 168;
-        --color: 215, 194, 168;
-        --link-color: 252, 176, 62;
-        --font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-        min-height: 100vh;
-        min-height: -webkit-fill-available;
+      @media (prefers-color-scheme: dark) {
+        body {
+          background-color: black;
+          color: white;
+        }
+        #tsml-ui {
+          --bg-color: 0, 0, 0;
+          --border-color: 123, 123, 123;
+          --color: 255, 255, 255;
+          --link-color: 123, 200, 255;
+        }
       }
     </style>
     <title>Meetings</title>
