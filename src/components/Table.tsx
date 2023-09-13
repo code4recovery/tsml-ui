@@ -2,7 +2,7 @@ import { useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
 
 import { formatString as i18n, useSettings } from '../helpers';
-import { table } from '../styles';
+import { inProgress as inProgressCss, table } from '../styles';
 import { Meeting, State } from '../types';
 import Button from './Button';
 import { icons } from './Icon';
@@ -144,7 +144,7 @@ export default function Table({
         </tr>
       </thead>
       {!!inProgress.length && (
-        <tbody className="tsml-in-progress">
+        <tbody css={inProgressCss}>
           {showInProgress ? (
             inProgress.map((slug, index) => <Row slug={slug} key={index} />)
           ) : (

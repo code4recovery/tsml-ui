@@ -1,14 +1,27 @@
-import { css } from '@emotion/react';
+import { css, keyframes } from '@emotion/react';
 
+const animateSpinner = keyframes`
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+`;
 const borderRadius = '0.25rem';
+const mdAndUp = '(min-width: 768px)';
 const lgAndUp = '(min-width: 992px)';
 
 export const controls = css`
   display: grid;
   gap: var(--gutter);
-  grid-auto-columns: minmax(0, 1fr);
-  grid-auto-flow: column;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   padding: 0 var(--gutter);
+
+  @media ${lgAndUp} {
+    grid-auto-columns: minmax(0, 1fr);
+    grid-auto-flow: column;
+  }
 
   fieldset {
     border: 0;
@@ -17,7 +30,11 @@ export const controls = css`
 
   [role='group'] {
     display: flex;
-    > * {
+    button {
+      align-items: center;
+      display: flex;
+      justify-content: center;
+      padding: 0 !important;
       &:not(:first-child) {
         border-top-left-radius: 0 !important;
         border-bottom-left-radius: 0 !important;
@@ -103,6 +120,8 @@ export const global = css`
   #tsml-ui {
     background-color: rgb(var(--bg-color));
     color: rgb(var(--color));
+    display: flex;
+    flex-direction: column;
     font-family: var(--font-family);
     font-size: var(--font-size);
     line-height: 1.5;
@@ -162,10 +181,68 @@ export const global = css`
   }
 `;
 
+export const inProgress = css`
+  background-color: rgba(255, 193, 7, 0.25);
+  button {
+    color: #998a5e;
+    border: 0 !important;
+    background-color: transparent !important;
+    border-radius: 0 !important;
+    text-decoration: underline;
+    &:focus {
+      box-shadow: none !important;
+    }
+  }
+`;
+
+export const loading = css`
+  align-items: center;
+  display: flex;
+  flex-grow: 1;
+  justify-content: center;
+
+  > div {
+    display: inline-block;
+    height: 5rem;
+    position: relative;
+    width: 5rem;
+    div {
+      animation: ${animateSpinner} 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+      border-color: rgb(var(--color)) transparent transparent transparent;
+      border-radius: 50%;
+      border-style: solid;
+      border-width: 0.25rem;
+      box-sizing: border-box;
+      display: block;
+      height: 4rem;
+      margin: 0.75rem;
+      position: absolute;
+      width: 4rem;
+      &:nth-child(1) {
+        animation-delay: -0.45s;
+      }
+      &:nth-child(2) {
+        animation-delay: -0.3s;
+      }
+      &:nth-child(3) {
+        animation-delay: -0.15s;
+      }
+    }
+  }
+`;
+
 export const table = css`
   border-spacing: 0;
   table-layout: auto;
   width: 100%;
+
+  td {
+    cursor: pointer;
+    display: block;
+    @media ${mdAndUp} {
+      display: table-cell;
+    }
+  }
 
   td,
   th {
@@ -175,6 +252,16 @@ export const table = css`
     text-align: left;
     &:first-of-type {
       padding-left: var(--gutter);
+    }
+    &:last-of-type {
+      padding-right: var(--gutter);
+    }
+  }
+
+  thead {
+    display: none;
+    @media ${mdAndUp} {
+      display: table-header-group;
     }
   }
 
