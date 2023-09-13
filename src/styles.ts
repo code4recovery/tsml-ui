@@ -8,9 +8,37 @@ const animateSpinner = keyframes`
     transform: rotate(360deg);
   }
 `;
-const borderRadius = '0.25rem';
+const light = `color-mix(in srgb, var(--background), var(--text) 5%)`;
+const medium = `color-mix(in srgb, var(--background), var(--text) 15%)`;
+const dark = `color-mix(in srgb, var(--background), var(--text) 55%)`;
 const mdAndUp = '(min-width: 768px)';
 const lgAndUp = '(min-width: 992px)';
+
+export const chiclets = css`
+  display: flex;
+  gap: 0.25rem;
+  flex-wrap: wrap;
+`;
+
+export const chiclet = (type: 'in-person' | 'online' | 'inactive') => css`
+  align-items: center;
+  background-color: ${type === 'in-person'
+    ? 'color-mix(in srgb, var(--in-person), var(--background) 82%);'
+    : type === 'online'
+    ? 'color-mix(in srgb, var(--online), var(--background) 82%);'
+    : 'color-mix(in srgb, var(--inactive), var(--background) 82%);'};
+  border-radius: var(--border-radius);
+  color: ${type === 'in-person'
+    ? 'var(--in-person)'
+    : type === 'online'
+    ? 'var(--online)'
+    : 'var(--inactive)'};
+  display: inline-flex;
+  font-size: 0.875rem;
+  gap: 0.25rem;
+  justify-content: center;
+  padding: 0.25rem 0.5rem;
+`;
 
 export const controls = css`
   display: grid;
@@ -30,11 +58,10 @@ export const controls = css`
 
   [role='group'] {
     display: flex;
-    button {
+    > * {
       align-items: center;
       display: flex;
       justify-content: center;
-      padding: 0 !important;
       &:not(:first-child) {
         border-top-left-radius: 0 !important;
         border-bottom-left-radius: 0 !important;
@@ -45,15 +72,18 @@ export const controls = css`
         border-bottom-right-radius: 0 !important;
       }
     }
+    > button {
+      padding: 0 !important;
+    }
   }
 `;
 
 export const dropdown = css`
   position: relative;
   > div {
-    background-color: rgb(var(--bg-color));
-    border-radius: ${borderRadius};
-    border: 1px solid rgba(var(--color), 0.15);
+    background-color: var(--background);
+    border-radius: var(--border-radius);
+    border: 1px solid ${medium};
     left: 0;
     margin-top: 4px;
     min-width: 100%;
@@ -62,7 +92,7 @@ export const dropdown = css`
     z-index: 1;
 
     hr {
-      background-color: rgba(var(--border-color), 0.5);
+      background-color: ${medium};
       height: 1px;
       border: 0;
       margin: 0.5rem 0;
@@ -78,11 +108,17 @@ export const dropdown = css`
       text-align: left;
 
       span {
-        background-color: rgba(var(--border-color), 0.125);
-        border-radius: ${borderRadius};
+        background-color: ${light};
+        border-radius: var(--border-radius);
+        color: var(--text) !important;
         font-weight: bold;
         font-size: 75%;
         padding: 0.125rem 0.25rem;
+      }
+
+      &:not(.active):hover {
+        background-color: ${light} !important;
+        color: var(--text) !important;
       }
     }
 
@@ -108,18 +144,25 @@ export const global = css`
   }
 
   :root {
-    --bg-color: 255, 255, 255;
-    --border-color: 108, 117, 125;
-    --color: 33, 37, 41;
+    --background: #fff;
+    --border-radius: 0.25rem;
+    --border: #6c757d;
+    --focus: #0d6efd40;
     --font-family: system-ui, -apple-system, sans-serif;
     --font-size: 1rem;
-    --link-color: 0, 123, 255;
     --gutter: 1rem;
+    --in-person: #146c43;
+    --in-progress: #664d03;
+    --inactive: #b02a37;
+    --link: #0d6efd;
+    --online: #0a58ca;
+    --text-muted: #6c757d;
+    --text: #212529;
   }
 
   #tsml-ui {
-    background-color: rgb(var(--bg-color));
-    color: rgb(var(--color));
+    background-color: var(--background);
+    color: var(--text);
     display: flex;
     flex-direction: column;
     font-family: var(--font-family);
@@ -127,32 +170,31 @@ export const global = css`
     line-height: 1.5;
 
     a {
-      color: rgb(var(--link-color));
+      color: var(--link);
     }
 
     button,
     input {
       background-color: transparent;
-      border-radius: ${borderRadius};
-      border: 1px solid rgb(var(--border-color));
-      color: rgb(var(--color));
+      border-radius: var(--border-radius);
+      border: 1px solid ${dark};
+      color: var(--text);
       cursor: pointer;
       font-size: var(--font-size);
       padding: calc(var(--gutter) / 2) var(--gutter);
+      transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+        border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
       white-space: nowrap;
       width: 100%;
 
       &:focus {
-        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+        box-shadow: 0 0 0 0.25rem var(--focus);
       }
 
-      &:hover {
-        background-color: rgba(var(--border-color), 0.15);
-      }
-
+      &:hover,
       &.active {
-        background-color: rgb(var(--border-color));
-        color: rgb(var(--bg-color));
+        background-color: ${dark};
+        color: var(--background);
       }
     }
 
@@ -181,16 +223,29 @@ export const global = css`
   }
 `;
 
-export const inProgress = css`
-  background-color: rgba(255, 193, 7, 0.25);
+export const inProgressCss = css`
   button {
-    color: #998a5e;
+    color: var(--in-progress) !important;
     border: 0 !important;
     background-color: transparent !important;
     border-radius: 0 !important;
     text-decoration: underline;
     &:focus {
       box-shadow: none !important;
+    }
+  }
+  tr {
+    background-color: color-mix(
+      in srgb,
+      var(--in-progress),
+      var(--background) 50%
+    ) !important;
+    &:nth-of-type(2n + 1) {
+      background-color: color-mix(
+        in srgb,
+        var(--in-progress),
+        var(--background) 75%
+      ) !important;
     }
   }
 `;
@@ -208,14 +263,14 @@ export const loading = css`
     width: 5rem;
     div {
       animation: ${animateSpinner} 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-      border-color: rgb(var(--color)) transparent transparent transparent;
+      border-color: ${dark} transparent transparent transparent;
       border-radius: 50%;
       border-style: solid;
-      border-width: 0.25rem;
+      border-width: 0.34rem;
       box-sizing: border-box;
       display: block;
       height: 4rem;
-      margin: 0.75rem;
+      margin: 0.66rem;
       position: absolute;
       width: 4rem;
       &:nth-child(1) {
@@ -246,7 +301,7 @@ export const table = css`
 
   td,
   th {
-    border-bottom: 1px solid rgba(var(--color), 0.15);
+    border-bottom: 1px solid ${medium};
     margin: 0;
     padding: calc(var(--gutter) / 2);
     text-align: left;
@@ -267,7 +322,7 @@ export const table = css`
 
   tbody tr {
     &:nth-of-type(2n + 1) {
-      background-color: rgba(var(--color), 0.05);
+      background-color: ${light};
     }
   }
 

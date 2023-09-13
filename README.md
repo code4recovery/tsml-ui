@@ -73,21 +73,9 @@ var tsml_react_config = {
 };
 ```
 
-### Change other styles
+### Dark mode
 
-CSS variables can be used to customize the appearance. Here are some examples:
-
-```css
-#tsml-ui {
-  --bg-color: 41, 38, 37;
-  --border-color: 215, 194, 168;
-  --color: 215, 194, 168;
-  --link-color: 252, 176, 62;
-  --font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-}
-```
-
-Variables can be combined with media queries to enable dark mode:
+CSS variables can be used to customize the appearance. They can be combined with media queries to enable dark mode.
 
 ```css
 @media (prefers-color-scheme: dark) {
@@ -96,13 +84,14 @@ Variables can be combined with media queries to enable dark mode:
     color: white;
   }
   #tsml-ui {
-    --bg-color: 0, 0, 0;
-    --border-color: 123, 123, 123;
-    --color: 255, 255, 255;
-    --link-color: 123, 200, 255;
+    --background: #000;
+    --color: #000;
+    --link: #7bc8ff;
   }
 }
 ```
+
+Note: hex values (`#123456`) must be used when specifiying colors.
 
 ## Frequently asked questions
 

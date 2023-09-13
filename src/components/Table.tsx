@@ -2,10 +2,9 @@ import { useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
 
 import { formatString as i18n, useSettings } from '../helpers';
-import { inProgress as inProgressCss, table } from '../styles';
+import { chiclet, chiclets, inProgressCss, table } from '../styles';
 import { Meeting, State } from '../types';
-import Button from './Button';
-import { icons } from './Icon';
+import Icon, { icons } from './Icon';
 import Link from './Link';
 
 export default function Table({
@@ -43,43 +42,46 @@ export default function Table({
 
   const getValue = (meeting: Meeting, key: string) => {
     if (key === 'address') {
-      const buttons: {
-        className: string;
+      const attendance: {
         icon: keyof typeof icons;
         text?: string;
+        type: 'in-person' | 'online' | 'inactive';
       }[] = [];
       if (meeting.isInPerson) {
-        buttons.push({
-          className: 'in-person',
+        attendance.push({
           icon: 'geo',
           text: meeting.address,
+          type: 'in-person',
         });
       }
       if (meeting.conference_provider) {
-        buttons.push({
-          className: 'online',
+        attendance.push({
           icon: 'camera',
           text: meeting.conference_provider,
+          type: 'online',
         });
       }
       if (meeting.conference_phone) {
-        buttons.push({
-          className: 'online',
+        attendance.push({
           icon: 'phone',
           text: strings.phone,
+          type: 'online',
         });
       }
       if (!meeting.isInPerson && !meeting.isOnline) {
-        buttons.push({
-          className: 'inactive',
+        attendance.push({
           icon: 'close',
           text: strings.types.inactive,
+          type: 'inactive',
         });
       }
       return (
-        <div>
-          {buttons.map((button, index) => (
-            <Button key={index} small={true} {...button} />
+        <div css={chiclets}>
+          {attendance.map(({ icon, text, type }, index) => (
+            <span css={chiclet(type)} key={index}>
+              <Icon icon={icon} />
+              {text && <span>{text}</span>}
+            </span>
           ))}
         </div>
       );
