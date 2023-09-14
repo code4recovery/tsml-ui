@@ -8,7 +8,7 @@ import {
   formatUrl,
   useSettings,
 } from '../helpers';
-import { controls } from '../styles';
+import { controlsCss } from '../styles';
 import type { State } from '../types';
 
 type ControlsProps = {
@@ -138,7 +138,7 @@ export default function Controls({ state, setState, mapbox }: ControlsProps) {
   };
 
   return !Object.keys(state.meetings).length ? null : (
-    <div css={controls}>
+    <div css={controlsCss}>
       <form onSubmit={locationSearch}>
         <fieldset role="group">
           <input

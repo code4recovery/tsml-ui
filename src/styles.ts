@@ -1,46 +1,13 @@
 import { css, keyframes } from '@emotion/react';
 
-const animateSpinner = keyframes`
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-`;
 const light = `color-mix(in srgb, var(--background), var(--text) 5%)`;
 const medium = `color-mix(in srgb, var(--background), var(--text) 15%)`;
 const dark = `color-mix(in srgb, var(--background), var(--text) 55%)`;
+
 const mdAndUp = '(min-width: 768px)';
 const lgAndUp = '(min-width: 992px)';
 
-export const chiclets = css`
-  display: flex;
-  gap: 0.25rem;
-  flex-wrap: wrap;
-`;
-
-export const chiclet = (type: 'in-person' | 'online' | 'inactive') => css`
-  align-items: center;
-  background-color: ${type === 'in-person'
-    ? 'color-mix(in srgb, var(--in-person), var(--background) 82%);'
-    : type === 'online'
-    ? 'color-mix(in srgb, var(--online), var(--background) 82%);'
-    : 'color-mix(in srgb, var(--inactive), var(--background) 82%);'};
-  border-radius: var(--border-radius);
-  color: ${type === 'in-person'
-    ? 'var(--in-person)'
-    : type === 'online'
-    ? 'var(--online)'
-    : 'var(--inactive)'};
-  display: inline-flex;
-  font-size: 0.875rem;
-  gap: 0.25rem;
-  justify-content: center;
-  padding: 0.25rem 0.5rem;
-`;
-
-export const controls = css`
+export const controlsCss = css`
   display: grid;
   gap: var(--gutter);
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -58,18 +25,18 @@ export const controls = css`
 
   [role='group'] {
     display: flex;
-    > * {
+    > button {
       align-items: center;
       display: flex;
       justify-content: center;
-      &:not(:first-child) {
+      &:first-child {
+        border-top-right-radius: 0 !important;
+        border-bottom-right-radius: 0 !important;
+      }
+      &:last-child {
         border-top-left-radius: 0 !important;
         border-bottom-left-radius: 0 !important;
         margin-left: -1px;
-      }
-      &:not(:last-child) {
-        border-top-right-radius: 0 !important;
-        border-bottom-right-radius: 0 !important;
       }
     }
     > button {
@@ -78,7 +45,7 @@ export const controls = css`
   }
 `;
 
-export const dropdown = css`
+export const dropdownCss = css`
   position: relative;
   > div {
     background-color: var(--background);
@@ -136,7 +103,7 @@ export const dropdown = css`
   }
 `;
 
-export const global = css`
+export const globalCss = css`
   html,
   body {
     min-height: 100vh;
@@ -152,7 +119,8 @@ export const global = css`
     --font-size: 1rem;
     --gutter: 1rem;
     --in-person: #146c43;
-    --in-progress: #664d03;
+    --in-progress-text: #664d03;
+    --in-progress-background: #fffcf0;
     --inactive: #b02a37;
     --link: #0d6efd;
     --online: #0a58ca;
@@ -179,7 +147,6 @@ export const global = css`
       border-radius: var(--border-radius);
       border: 1px solid ${dark};
       color: var(--text);
-      cursor: pointer;
       font-size: var(--font-size);
       padding: calc(var(--gutter) / 2) var(--gutter);
       transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
@@ -199,6 +166,7 @@ export const global = css`
     }
 
     button {
+      cursor: pointer;
       overflow: hidden;
       user-select: none;
       &.dropdown-toggle::after {
@@ -223,34 +191,16 @@ export const global = css`
   }
 `;
 
-export const inProgressCss = css`
-  button {
-    color: var(--in-progress) !important;
-    border: 0 !important;
-    background-color: transparent !important;
-    border-radius: 0 !important;
-    text-decoration: underline;
-    &:focus {
-      box-shadow: none !important;
-    }
+const loadingAnimation = keyframes`
+  0% {
+    transform: rotate(0deg);
   }
-  tr {
-    background-color: color-mix(
-      in srgb,
-      var(--in-progress),
-      var(--background) 50%
-    ) !important;
-    &:nth-of-type(2n + 1) {
-      background-color: color-mix(
-        in srgb,
-        var(--in-progress),
-        var(--background) 75%
-      ) !important;
-    }
+  100% {
+    transform: rotate(360deg);
   }
 `;
 
-export const loading = css`
+export const loadingCss = css`
   align-items: center;
   display: flex;
   flex-grow: 1;
@@ -262,7 +212,7 @@ export const loading = css`
     position: relative;
     width: 5rem;
     div {
-      animation: ${animateSpinner} 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+      animation: ${loadingAnimation} 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
       border-color: ${dark} transparent transparent transparent;
       border-radius: 50%;
       border-style: solid;
@@ -273,20 +223,76 @@ export const loading = css`
       margin: 0.66rem;
       position: absolute;
       width: 4rem;
-      &:nth-child(1) {
+      &:nth-of-type(1) {
         animation-delay: -0.45s;
       }
-      &:nth-child(2) {
+      &:nth-of-type(2) {
         animation-delay: -0.3s;
       }
-      &:nth-child(3) {
+      &:nth-of-type(3) {
         animation-delay: -0.15s;
       }
     }
   }
 `;
 
-export const table = css`
+export const meetingBackCss = css`
+  align-items: center;
+  display: flex;
+  margin: calc(var(--gutter) * -1.75) 0 var(--gutter);
+  padding: var(--gutter);
+`;
+
+export const meetingColumnsCss = css`
+  display: flex;
+  flex-direction: column;
+  gap: var(--gutter);
+  padding: 0 var(--gutter);
+  @media ${mdAndUp} {
+    flex-direction: row;
+  }
+`;
+
+export const meetingCss = css`
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+
+  /* for focusing, can remove with react router */
+  h1 {
+    outline: none;
+  }
+`;
+
+export const tableChicletsCss = css`
+  display: flex;
+  gap: 0.25rem;
+  flex-wrap: wrap;
+`;
+
+export const tableChicletCss = (
+  type: 'in-person' | 'online' | 'inactive'
+) => css`
+  align-items: center;
+  background-color: ${type === 'in-person'
+    ? 'color-mix(in srgb, var(--in-person), var(--background) 82%);'
+    : type === 'online'
+    ? 'color-mix(in srgb, var(--online), var(--background) 82%);'
+    : 'color-mix(in srgb, var(--inactive), var(--background) 82%);'};
+  border-radius: var(--border-radius);
+  color: ${type === 'in-person'
+    ? 'var(--in-person)'
+    : type === 'online'
+    ? 'var(--online)'
+    : 'var(--inactive)'};
+  display: inline-flex;
+  font-size: 0.875rem;
+  gap: 0.25rem;
+  justify-content: center;
+  padding: 0.25rem 0.5rem;
+`;
+
+export const tableCss = css`
   border-spacing: 0;
   table-layout: auto;
   width: 100%;
@@ -322,7 +328,7 @@ export const table = css`
 
   tbody tr {
     &:nth-of-type(2n + 1) {
-      background-color: ${light};
+      background-color: #00000009;
     }
   }
 
@@ -338,6 +344,23 @@ export const table = css`
     @media ${lgAndUp} {
       flex-direction: row;
       gap: 0.5rem;
+    }
+  }
+`;
+
+export const tableInProgressCss = css`
+  background-color: var(--in-progress-background);
+  a,
+  button {
+    color: var(--in-progress-text) !important;
+  }
+  button {
+    border: 0 !important;
+    background-color: transparent !important;
+    border-radius: 0 !important;
+    text-decoration: underline;
+    &:focus {
+      box-shadow: none !important;
     }
   }
 `;

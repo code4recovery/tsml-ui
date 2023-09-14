@@ -2,7 +2,12 @@ import { useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
 
 import { formatString as i18n, useSettings } from '../helpers';
-import { chiclet, chiclets, inProgressCss, table } from '../styles';
+import {
+  tableChicletCss,
+  tableChicletsCss,
+  tableCss,
+  tableInProgressCss,
+} from '../styles';
 import { Meeting, State } from '../types';
 import Icon, { icons } from './Icon';
 import Link from './Link';
@@ -76,9 +81,9 @@ export default function Table({
         });
       }
       return (
-        <div css={chiclets}>
+        <div css={tableChicletsCss}>
           {attendance.map(({ icon, text, type }, index) => (
-            <span css={chiclet(type)} key={index}>
+            <span css={tableChicletCss(type)} key={index}>
               <Icon icon={icon} />
               {text && <span>{text}</span>}
             </span>
@@ -135,7 +140,7 @@ export default function Table({
   };
 
   return !filteredSlugs.length ? null : (
-    <table css={table}>
+    <table css={tableCss}>
       <thead>
         <tr>
           {columns.map((column, index) => (
@@ -146,7 +151,7 @@ export default function Table({
         </tr>
       </thead>
       {!!inProgress.length && (
-        <tbody css={inProgressCss}>
+        <tbody css={tableInProgressCss}>
           {showInProgress ? (
             inProgress.map((slug, index) => <Row slug={slug} key={index} />)
           ) : (

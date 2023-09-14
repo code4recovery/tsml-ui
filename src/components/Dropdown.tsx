@@ -6,7 +6,7 @@ import {
   getIndexByKey,
   useSettings,
 } from '../helpers';
-import { dropdown } from '../styles';
+import { dropdownCss } from '../styles';
 import type { Index, State } from '../types';
 
 type DropdownProps = {
@@ -107,7 +107,7 @@ export default function Dropdown({
   };
 
   return (
-    <div css={dropdown}>
+    <div css={dropdownCss}>
       <button
         aria-expanded={open}
         className="dropdown-toggle"

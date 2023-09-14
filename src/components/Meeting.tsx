@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { DateTime, Info } from 'luxon';
 
-import type { Meeting as MeetingType, State } from '../types';
 import {
   formatClasses as cx,
   formatDirectionsUrl,
@@ -11,6 +10,9 @@ import {
   formatUrl,
   useSettings,
 } from '../helpers';
+import { meetingCss, meetingColumnsCss, meetingBackCss } from '../styles';
+import type { Meeting as MeetingType, State } from '../types';
+
 import Button from './Button';
 import Icon, { icons } from './Icon';
 import Link from './Link';
@@ -96,14 +98,6 @@ export default function Meeting({
       wordPressEditLink();
     };
   }, [state.input.meeting]);
-
-  //manage classes
-  useEffect(() => {
-    document.body.classList.add('tsml-ui-meeting');
-    return () => {
-      document.body.classList.remove('tsml-ui-meeting');
-    };
-  }, []);
 
   //directions URL link
   const directionsUrl = meeting.isInPerson
@@ -243,17 +237,11 @@ export default function Meeting({
   }
 
   return (
-    <div
-      className={cx('d-flex flex-column flex-grow-1 meeting', {
-        'in-person': !!meeting.isInPerson,
-        'inactive': !meeting.isActive,
-        'online': !!meeting.isOnline,
-      })}
-    >
-      <h1 className="fw-light mb-1" id="tsml-title" tabIndex={-1}>
+    <div css={meetingCss}>
+      <h1 id="tsml-title" tabIndex={-1}>
         <Link meeting={meeting} />
       </h1>
-      <div className="align-items-center border-bottom d-flex mb-3 pb-2">
+      <div css={meetingBackCss}>
         <Icon icon="back" />
         <a
           href={formatUrl(
@@ -277,11 +265,10 @@ export default function Meeting({
           {strings.back_to_meetings}
         </a>
       </div>
-      <div className="flex-grow-1 row">
+      <div css={meetingColumnsCss}>
         <div className="align-content-start col-md-4 d-grid gap-3 mb-3 mb-md-0">
           {directionsUrl && (
             <Button
-              className="in-person"
               href={directionsUrl}
               icon="geo"
               text={strings.get_directions}

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Global } from '@emotion/react';
 
 import 'mapbox-gl/dist/mapbox-gl.css';
-import { global } from '../styles';
+import { globalCss } from '../styles';
 import type { State } from '../types';
 import { Alert, Controls, Loading, Map, Meeting, Table, Title } from './';
 
@@ -239,7 +239,7 @@ export default function TsmlUI({
 
   return (
     <SettingsContext.Provider value={{ settings, strings }}>
-      <Global styles={global} />
+      <Global styles={globalCss} />
       {!state.ready ? (
         <Loading />
       ) : state.input.meeting && state.input.meeting in state.meetings ? (
