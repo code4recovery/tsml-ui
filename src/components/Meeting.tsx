@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { DateTime, Info } from 'luxon';
 
 import {
-  formatClasses as cx,
   formatDirectionsUrl,
   formatFeedbackEmail,
   formatIcs,
@@ -10,7 +9,7 @@ import {
   formatUrl,
   useSettings,
 } from '../helpers';
-import { meetingCss, meetingColumnsCss, meetingBackCss } from '../styles';
+import { meetingBackCss, meetingColumnsCss, meetingCss } from '../styles';
 import type { Meeting as MeetingType, State } from '../types';
 
 import Button from './Button';
@@ -266,7 +265,7 @@ export default function Meeting({
         </a>
       </div>
       <div css={meetingColumnsCss}>
-        <div className="align-content-start col-md-4 d-grid gap-3 mb-3 mb-md-0">
+        <div>
           {directionsUrl && (
             <Button
               href={directionsUrl}
@@ -274,13 +273,13 @@ export default function Meeting({
               text={strings.get_directions}
             />
           )}
-          <div className="list-group">
-            <div className="d-grid gap-2 list-group-item py-3">
+          <div>
+            <div>
               <h2>{strings.meeting_information}</h2>
               <p>{formatTime(meeting.start, meeting.end)}</p>
 
               {meeting.start && meeting.start.zoneName !== meeting.timezone && (
-                <p className="text-muted">
+                <p>
                   (
                   {formatTime(
                     meeting.start.setZone(meeting.timezone),
@@ -290,35 +289,28 @@ export default function Meeting({
                 </p>
               )}
               {state.capabilities.type && meeting.types && (
-                <ul className="ms-4">
+                <ul>
                   {meeting.types
                     .filter(type => type !== 'active')
                     .sort((a, b) =>
                       strings.types[a].localeCompare(strings.types[b])
                     )
                     .map((type, index) => (
-                      <li className="m-0" key={index}>
+                      <li key={index}>
                         {strings.type_descriptions?.[
                           type as keyof typeof strings.type_descriptions
                         ] ? (
                           <button
-                            className="bg-transparent border-0 d-flex flex-column p-0 text-decoration-none text-reset text-start"
                             onClick={() =>
                               setDefine(define === type ? undefined : type)
                             }
                           >
-                            <div className="d-flex align-items-center gap-2">
+                            <div>
                               <span>{strings.types[type]}</span>
-                              <Icon
-                                icon="info"
-                                size={13}
-                                className={
-                                  define === type ? 'text-muted' : undefined
-                                }
-                              />
+                              <Icon icon="info" size={13} />
                             </div>
                             {define === type && (
-                              <small className="d-block mb-1">
+                              <small>
                                 {
                                   strings.type_descriptions[
                                     type as keyof typeof strings.type_descriptions
@@ -337,36 +329,28 @@ export default function Meeting({
               {meeting.notes && <Paragraphs text={meeting.notes} />}
               {(meeting.isActive ||
                 (!meeting.group && !!contactButtons.length)) && (
-                <div className="d-grid gap-3 mt-2">
+                <div>
                   {meeting.conference_provider && (
-                    <div className="d-grid gap-1">
+                    <div>
                       <Button
-                        className="online"
                         href={meeting.conference_url}
                         icon="camera"
                         text={meeting.conference_provider}
                       />
                       {meeting.conference_url_notes && (
-                        <Paragraphs
-                          className="d-block text-muted"
-                          text={meeting.conference_url_notes}
-                        />
+                        <Paragraphs text={meeting.conference_url_notes} />
                       )}
                     </div>
                   )}
                   {meeting.conference_phone && (
-                    <div className="d-grid gap-1">
+                    <div>
                       <Button
-                        className="online"
                         href={`tel:${meeting.conference_phone}`}
                         icon="phone"
                         text={strings.phone}
                       />
                       {meeting.conference_phone_notes && (
-                        <Paragraphs
-                          className="d-block text-muted"
-                          text={meeting.conference_phone_notes}
-                        />
+                        <Paragraphs text={meeting.conference_phone_notes} />
                       )}
                     </div>
                   )}
@@ -395,15 +379,7 @@ export default function Meeting({
               )}
             </div>
             {!meeting.approximate && (
-              <div
-                className={cx(
-                  {
-                    'text-decoration-line-through text-muted':
-                      !!meeting.isTempClosed,
-                  },
-                  'd-grid gap-2 list-group-item py-3 location'
-                )}
-              >
+              <div data-disabled={meeting.isTempClosed}>
                 {meeting.location && <h2>{meeting.location}</h2>}
                 {meeting.formatted_address && (
                   <p>{meeting.formatted_address}</p>
@@ -427,14 +403,14 @@ export default function Meeting({
                 meeting.group_notes ||
                 !!groupWeekdays.length ||
                 !!contactButtons.length) && (
-                <div className="d-grid gap-2 list-group-item py-3 group">
+                <div>
                   <h2>{meeting.group}</h2>
                   {meeting.district && <p>{meeting.district}</p>}
                   {meeting.group_notes && (
                     <Paragraphs text={meeting.group_notes} />
                   )}
                   {!!contactButtons.length && (
-                    <div className="d-grid gap-3 mt-2">
+                    <div>
                       {contactButtons.map((button, index) => (
                         <Button {...button} key={index} />
                       ))}
@@ -444,9 +420,7 @@ export default function Meeting({
                 </div>
               )}
             {meeting.updated && (
-              <div className="list-group-item">
-                {i18n(strings.updated, { updated: meeting.updated })}
-              </div>
+              <div>{i18n(strings.updated, { updated: meeting.updated })}</div>
             )}
           </div>
 
@@ -459,12 +433,7 @@ export default function Meeting({
           )}
         </div>
         {!!mapbox && (
-          <div
-            className={cx(
-              { 'd-md-block d-none': !meeting.isInPerson },
-              'col-md-8'
-            )}
-          >
+          <div>
             <Map
               filteredSlugs={[meeting.slug]}
               listMeetingsInPopup={false}
@@ -480,9 +449,9 @@ export default function Meeting({
 }
 
 //return paragraphs from possibly-multiline string
-function Paragraphs({ text, className }: { text: string; className?: string }) {
+function Paragraphs({ text }: { text: string }) {
   return (
-    <div className={className}>
+    <div>
       {text
         .split('\n')
         .filter(e => e)
@@ -501,34 +470,29 @@ function formatWeekdays(
 ) {
   return (
     !!weekday.length && (
-      <div className="meetings d-grid gap-2">
+      <div>
         {weekday.map(({ meetings, name }, index) => (
           <div key={index}>
-            <h3 className="mb-1 mt-2">{name}</h3>
-            <ol className="list-unstyled">
+            <h3>{name}</h3>
+            <ol>
               {meetings.map((m, index) => (
-                <li
-                  className="d-flex flex-row gap-2 justify-content-between m-0"
-                  key={index}
-                >
-                  <div className="text-muted text-nowrap">
-                    {m.start?.toFormat('t')}
-                  </div>
-                  <div className="flex-grow-1">
+                <li key={index}>
+                  <div>{m.start?.toFormat('t')}</div>
+                  <div>
                     {m.slug === slug ? (
                       <Link meeting={m} />
                     ) : (
                       <Link meeting={m} setState={setState} state={state} />
                     )}
                   </div>
-                  <div className="align-items-start d-flex gap-1 justify-content-end pt-1">
+                  <div>
                     {m.isInPerson && (
-                      <small className="align-items-center d-flex flex-row float-end gap-2 px-2 py-1 rounded text-sm in-person">
+                      <small>
                         <Icon icon="geo" size={13} />
                       </small>
                     )}
                     {m.isOnline && (
-                      <small className="align-items-center d-flex flex-row float-end gap-2 px-2 py-1 rounded text-sm online">
+                      <small>
                         {m.conference_provider && (
                           <Icon icon="camera" size={13} />
                         )}

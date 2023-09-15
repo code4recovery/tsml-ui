@@ -8,7 +8,6 @@ describe('<Button />', () => {
 
     render(
       <Button
-        className="foo"
         href="https://bar.com"
         icon="back"
         onClick={mockOnClick}
@@ -20,7 +19,6 @@ describe('<Button />', () => {
     const button = screen.getByRole('link');
 
     expect(icon).toBeInTheDocument();
-    expect(button).toHaveClass('foo');
     expect(button).toHaveAttribute('href', 'https://bar.com');
     expect(button).toHaveTextContent('baz');
 
@@ -30,12 +28,11 @@ describe('<Button />', () => {
   });
 
   it('responds to small prop correctly', () => {
-    render(<Button small href="https://bar.com" icon="back" />);
+    render(<Button href="https://bar.com" icon="back" />);
 
     const icon = screen.getByTestId('icon-back');
 
-    expect(icon).toHaveAttribute('height', '18');
-    expect(icon).toHaveAttribute('width', '18');
-    expect(icon).toHaveClass('me-1');
+    expect(icon).toHaveAttribute('height', '20');
+    expect(icon).toHaveAttribute('width', '20');
   });
 });

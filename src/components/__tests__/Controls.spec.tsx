@@ -58,11 +58,11 @@ describe('<Controls />', () => {
 
     //dropdown opens
     const dropdown = screen.getByLabelText(region_any);
-    expect(dropdown).toHaveClass('show');
+    expect(dropdown).toBeVisible();
 
     //dropdown closes
     fireEvent.click(document.body);
-    expect(dropdown).not.toHaveClass('show');
+    expect(dropdown).not.toBeVisible();
 
     //change the search mode
     const locationLink = screen.getByText(modes.location);

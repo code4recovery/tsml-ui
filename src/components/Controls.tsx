@@ -2,13 +2,15 @@ import { useEffect, useRef, useState } from 'react';
 
 import Dropdown from './Dropdown';
 import Icon from './Icon';
+import { analyticsEvent, formatUrl, useSettings } from '../helpers';
 import {
-  analyticsEvent,
-  formatClasses as cx,
-  formatUrl,
-  useSettings,
-} from '../helpers';
-import { controlsCss } from '../styles';
+  controlsCss,
+  controlsGroupFirstCss,
+  controlsGroupLastCss,
+  dropdownButtonLastCss,
+  controlsInputCss,
+  controlsInputFirstCss,
+} from '../styles';
 import type { State } from '../types';
 
 type ControlsProps = {
@@ -75,7 +77,6 @@ export default function Controls({ state, setState, mapbox }: ControlsProps) {
 
   //close current dropdown (on body click)
   const closeDropdown = (e: MouseEvent) => {
-    if ((e.target as HTMLElement).classList.contains('dropdown-toggle')) return;
     setDropdown(undefined);
   };
 
@@ -143,6 +144,7 @@ export default function Controls({ state, setState, mapbox }: ControlsProps) {
         <fieldset role="group">
           <input
             aria-label={strings.modes[state.input.mode]}
+            css={modes.length > 1 ? controlsInputFirstCss : controlsInputCss}
             disabled={state.input.mode === 'me'}
             onChange={e => {
               if (state.input.mode === 'search') {
@@ -163,10 +165,11 @@ export default function Controls({ state, setState, mapbox }: ControlsProps) {
           {modes.length > 1 && (
             <button
               aria-label={strings.modes[state.input.mode]}
-              className="dropdown-toggle"
-              onClick={() =>
-                setDropdown(dropdown === 'search' ? undefined : 'search')
-              }
+              css={dropdownButtonLastCss}
+              onClick={e => {
+                setDropdown(dropdown === 'search' ? undefined : 'search');
+                e.stopPropagation();
+              }}
               type="button"
             />
           )}
@@ -175,9 +178,7 @@ export default function Controls({ state, setState, mapbox }: ControlsProps) {
           <div>
             {modes.map(mode => (
               <a
-                className={cx({
-                  active: state.input.mode === mode,
-                })}
+                data-active={state.input.mode === mode}
                 href={formatUrl({ ...state.input, mode }, settings)}
                 key={mode}
                 onClick={e => setMode(e, mode)}
@@ -205,12 +206,11 @@ export default function Controls({ state, setState, mapbox }: ControlsProps) {
       ))}
       {canShowViews && (
         <div role="group">
-          {views.map(view => (
+          {views.map((view, index) => (
             <button
               aria-label={strings.views[view]}
-              className={cx({
-                active: state.input.view === view,
-              })}
+              css={index ? controlsGroupLastCss : controlsGroupFirstCss}
+              data-active={state.input.view === view}
               key={view}
               onClick={e => setView(e, view)}
               type="button"

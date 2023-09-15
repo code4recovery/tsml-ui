@@ -1,12 +1,7 @@
 import { Fragment } from 'react';
 
-import {
-  formatClasses as cx,
-  formatString as i18n,
-  getIndexByKey,
-  useSettings,
-} from '../helpers';
-import { dropdownCss } from '../styles';
+import { formatString as i18n, getIndexByKey, useSettings } from '../helpers';
+import { dropdownButtonCss, dropdownCss } from '../styles';
 import type { Index, State } from '../types';
 
 type DropdownProps = {
@@ -73,10 +68,8 @@ export default function Dropdown({
   const renderDropdownItem = ({ key, name, slugs, children }: Index) => (
     <Fragment key={key}>
       <button
-        className={cx({
-          // @ts-expect-error TODO
-          active: values.includes(key),
-        })}
+        // @ts-expect-error TODO
+        data-active={values.includes(key)}
         onClick={e => setFilter(e, filter, key)}
       >
         {name}
@@ -88,15 +81,12 @@ export default function Dropdown({
                   count: slugs.length,
                 })
           }
-          className="badge bg-light border ms-3 text-dark"
         >
           {slugs.length}
         </span>
       </button>
       {!!children?.length && (
-        <div className="children">
-          {children.map(child => renderDropdownItem(child))}
-        </div>
+        <div>{children.map(child => renderDropdownItem(child))}</div>
       )}
     </Fragment>
   );
@@ -110,9 +100,12 @@ export default function Dropdown({
     <div css={dropdownCss}>
       <button
         aria-expanded={open}
-        className="dropdown-toggle"
+        css={dropdownButtonCss}
         id={filter}
-        onClick={() => setDropdown(open ? undefined : filter)}
+        onClick={e => {
+          setDropdown(open ? undefined : filter);
+          e.stopPropagation();
+        }}
       >
         {values?.length && options?.length
           ? values.map(value => getIndexByKey(options, value)?.name).join(' + ')
@@ -120,12 +113,13 @@ export default function Dropdown({
       </button>
       <div
         aria-labelledby={filter}
-        style={{ display: open ? 'block' : 'none' }}
+        style={{
+          display: open ? 'block' : 'none',
+          [end ? 'right' : 'left']: 0,
+        }}
       >
         <button
-          className={cx({
-            active: !values.length,
-          })}
+          data-active={!values.length}
           onClick={e => setFilter(e, filter, undefined)}
         >
           {defaultValue}

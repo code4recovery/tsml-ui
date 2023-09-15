@@ -1,7 +1,6 @@
 import Icon, { icons } from './Icon';
 
 type ButtonProps = {
-  className?: string;
   href?: string;
   icon?: keyof typeof icons;
   onClick?: () => void;

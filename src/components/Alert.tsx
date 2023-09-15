@@ -10,17 +10,16 @@ type AlertProps = {
 export default function Alert({ state, setState }: AlertProps) {
   const { settings, strings } = useSettings();
   return state.error ? (
-    <div className="alert alert-danger text-center m-0">{state.error}</div>
+    <div>{state.error}</div>
   ) : state.alert ? (
-    <div className="d-flex flex-column gap-3">
-      <div className="alert alert-warning text-center m-0">{state.alert}</div>
+    <div>
+      <div>{state.alert}</div>
       {state.alert === strings.no_results && state.input.search && (
         <Button
           onClick={() => {
             state.input.search = '';
             setState({ ...state });
           }}
-          className="btn-light btn-outline-secondary"
           text={i18n(strings.remove, { filter: `‘${state.input.search}’` })}
           icon="close"
         />
@@ -30,7 +29,7 @@ export default function Alert({ state, setState }: AlertProps) {
           state.input[filter].map(value => (
             <Button
               key={value}
-              className="btn-light btn-outline-secondary"
+              icon="close"
               onClick={() => {
                 //todo fix how ugly this is
                 if (filter === 'weekday') {
@@ -51,7 +50,6 @@ export default function Alert({ state, setState }: AlertProps) {
               text={i18n(strings.remove, {
                 filter: getIndexByKey(state.indexes[filter], value)?.name,
               })}
-              icon="close"
             />
           ))
         )}

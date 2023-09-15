@@ -73,7 +73,7 @@ describe('<Dropdown />', () => {
     expect(mockSetDropdown).toBeCalled();
 
     const dropdown = screen.getByLabelText(defaultValue);
-    expect(dropdown).toBeVisible();
+    expect(dropdown).not.toBeVisible();
   });
 
   it('has working links', async () => {
@@ -106,7 +106,7 @@ describe('<Dropdown />', () => {
 
     //dropdown starts open
     const dropdown = screen.getByLabelText(defaultValue);
-    expect(dropdown).toHaveClass('show');
+    expect(dropdown).toBeVisible();
 
     const button = screen.getAllByRole('button');
     fireEvent.click(button[0]);
