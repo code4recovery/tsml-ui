@@ -2,8 +2,9 @@ import { useEffect, useRef, useState } from 'react';
 import ReactMapGL, { Marker, NavigationControl, Popup } from 'react-map-gl';
 import WebMercatorViewport from 'viewport-mercator-project';
 
-import type { Meeting, State } from '../types';
 import { formatDirectionsUrl, useSettings } from '../helpers';
+import { mapCss } from '../styles';
+import type { Meeting, State } from '../types';
 import Button from './Button';
 import Link from './Link';
 
@@ -173,7 +174,7 @@ export default function Map({
   }, [data, dimensions]);
 
   return (
-    <div aria-hidden={true} ref={mapFrame}>
+    <div aria-hidden={true} ref={mapFrame} css={mapCss}>
       {viewport && !!data.locationKeys.length && (
         <ReactMapGL
           mapStyle={settings.map.style}

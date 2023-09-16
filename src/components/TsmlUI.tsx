@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Global } from '@emotion/react';
 
-import 'mapbox-gl/dist/mapbox-gl.css';
 import { globalCss } from '../styles';
 import type { State } from '../types';
 import { Alert, Controls, Loading, Map, Meeting, Table, Title } from './';
@@ -266,13 +265,17 @@ export default function TsmlUI({
               state={state}
             />
           ) : (
-            <Map
-              filteredSlugs={filteredSlugs}
-              listMeetingsInPopup={true}
-              mapbox={mapbox}
-              setState={setState}
-              state={state}
-            />
+            <div
+              style={{ padding: '0 1rem 1rem', flexGrow: 1, display: 'flex' }}
+            >
+              <Map
+                filteredSlugs={filteredSlugs}
+                listMeetingsInPopup={true}
+                mapbox={mapbox}
+                setState={setState}
+                state={state}
+              />
+            </div>
           )}
         </>
       )}

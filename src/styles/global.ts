@@ -35,17 +35,27 @@ export const globalCss = css`
     font-family: var(--font-family);
     font-size: var(--font-size);
     line-height: 1.5;
+    padding-bottom: var(--gutter);
 
     a {
       color: var(--link);
     }
 
-    h1 {
-      font-weight: 300;
-      font-size: 2.5rem;
+    h1,
+    h2 {
       line-height: 1.2;
       margin: 0;
+    }
+
+    h1 {
+      font-weight: 300;
+      font-size: calc(var(--font-size) * 2.5);
       padding: var(--gutter);
+    }
+
+    h2 {
+      font-weight: 500;
+      font-size: calc(var(--font-size) * 1.25);
     }
   }
 `;

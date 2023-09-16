@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 
-import { mdAndUp, medium } from './variables';
+import { dark, mdAndUp, medium } from './variables';
 
 export const meetingBackCss = css`
   align-items: center;
@@ -12,42 +12,55 @@ export const meetingBackCss = css`
 export const meetingColumnsCss = css`
   display: flex;
   flex-direction: column;
-  gap: var(--gutter);
+  gap: calc(var(--gutter) * 1.5);
   padding: 0 var(--gutter);
 
   @media ${mdAndUp} {
     flex-direction: row;
   }
 
-  h2 {
+  * {
     margin: 0;
-    font-weight: 400;
   }
 
-  p,
   ul {
-    margin: var(--gutter) 0;
+    padding-left: var(--gutter);
+    padding-bottom: calc(var(--gutter) / 2);
+    button {
+      background-color: transparent;
+      border: none;
+      color: var(--text);
+      cursor: pointer;
+      padding: 0;
+      font-size: var(--font-size);
+      text-align: left;
+      vertical-align: text-top;
+
+      > div {
+        align-items: center;
+        display: flex;
+        gap: calc(var(--gutter) / 2);
+      }
+
+      small {
+        display: block;
+        margin: calc(var(--gutter) / 2) 0;
+      }
+    }
   }
 
-  ul button {
-    background-color: transparent;
-    border: none;
-    color: var(--text);
-    cursor: pointer;
-    padding: 0;
+  h3 {
     font-size: var(--font-size);
-    text-align: left;
-    vertical-align: text-top;
+    font-weight: 500;
+    margin: var(--gutter) 0 0;
+  }
 
-    > div {
-      align-items: center;
+  ol {
+    list-style: none;
+    padding: 0;
+    li {
       display: flex;
-      gap: calc(var(--gutter) / 2);
-    }
-
-    small {
-      display: block;
-      margin: calc(var(--gutter) / 2) 0;
+      justify-content: space-between;
     }
   }
 
@@ -62,10 +75,21 @@ export const meetingColumnsCss = css`
       > div {
         padding: var(--gutter);
         border-bottom: 1px solid ${medium};
+        display: flex;
+        flex-direction: column;
+        gap: calc(var(--gutter) / 2);
         &:last-of-type {
           border-bottom: none;
         }
       }
+    }
+  }
+
+  > div:last-of-type {
+    display: flex;
+    flex-grow: 1;
+    > div {
+      max-height: 1000px;
     }
   }
 `;
@@ -78,5 +102,9 @@ export const meetingCss = css`
   /* for focusing, can remove with react router */
   h1 {
     outline: none;
+    small {
+      color: ${dark};
+      margin-left: 0.5rem;
+    }
   }
 `;

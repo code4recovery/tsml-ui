@@ -3,13 +3,19 @@ import { css } from '@emotion/react';
 import { dark } from './variables';
 
 export const formControlCss = css`
+  align-items: center;
   background-color: transparent;
   border-radius: var(--border-radius);
   border: 1px solid ${dark};
-  color: var(--text);
+  box-sizing: border-box;
+  color: var(--text) !important;
   cursor: pointer;
+  display: flex;
   font-size: var(--font-size);
+  gap: calc(var(--gutter) / 2);
+  justify-content: center;
   padding: calc(var(--gutter) / 2) var(--gutter);
+  text-decoration: none !important;
   transition: all 0.15s ease-in-out;
   width: 100%;
   &:focus {
@@ -25,13 +31,12 @@ export const buttonCss = css`
 
   svg {
     display: block;
-    margin: 0 auto;
   }
 
   :hover,
   &[data-active='true'] {
     background-color: ${dark};
-    color: var(--background);
+    color: var(--background) !important;
   }
 `;
 
@@ -44,10 +49,6 @@ export const dropdownButtonCss = css`
     border-top: 0.3em solid;
     content: '';
     display: inline-block;
-    margin-left: 0.255em;
     vertical-align: 0.255em;
-  }
-  :empty::after {
-    margin-left: 0;
   }
 `;

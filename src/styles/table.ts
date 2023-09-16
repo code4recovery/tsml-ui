@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 
-import { mdAndUp, lgAndUp, medium } from './variables';
+import { dark, mdAndUp, medium, lgAndUp } from './variables';
 
 export const tableChicletsCss = css`
   display: flex;
@@ -34,6 +34,11 @@ export const tableCss = css`
   border-spacing: 0;
   table-layout: auto;
   width: 100%;
+
+  small {
+    margin-left: 0.5rem;
+    color: ${dark};
+  }
 
   td {
     cursor: pointer;

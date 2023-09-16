@@ -41,6 +41,15 @@
       data-mapbox="pk.eyJ1Ijoiam9zaHJlaXNuZXIiLCJhIjoiY2tvYXA0YnZxMGRldDJxbzdta25uNGphdiJ9.eay-UKgIT99ALmdw08xBPw"
       data-timezone="America/Los_Angeles"
     ></div>
+    <script>
+      var darkMode =
+        window.matchMedia &&
+        window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+      var tsml_react_config = {
+        map: darkMode ? { style: 'mapbox://styles/mapbox/dark-v11' } : {},
+      };
+    </script>
     <script src="/app.js" async></script>
   </body>
 </html>

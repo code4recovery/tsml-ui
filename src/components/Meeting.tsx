@@ -32,10 +32,10 @@ export default function Meeting({
 }: MeetingProps) {
   const { settings, strings } = useSettings();
 
-  //open types
+  // open types
   const [define, setDefine] = useState<string | undefined>();
 
-  //existence checked in the parent component
+  // existence checked in the parent component
   const meeting =
     state.meetings[state.input.meeting as keyof typeof state.meetings];
 
@@ -44,7 +44,7 @@ export default function Meeting({
     url: meeting.url ?? location.href,
   };
 
-  //format time string (duration? or appointment?)
+  // format time string (duration? or appointment?)
   const formatTime = (start?: DateTime, end?: DateTime) => {
     if (!start) {
       return strings.appointment;
@@ -61,7 +61,7 @@ export default function Meeting({
     return start.toFormat('cccc t ZZZZ');
   };
 
-  //scroll to top when you navigate to this page
+  // scroll to top when you navigate to this page
   useEffect(() => {
     const el = document.getElementById('tsml-ui');
     if (el) {
@@ -87,7 +87,7 @@ export default function Meeting({
 
     document.getElementById('tsml-title')?.focus();
 
-    //log edit_url
+    // log edit_url
     if (meeting.edit_url) {
       console.log(`TSML UI edit ${meeting.name}: ${meeting.edit_url}`);
       wordPressEditLink(meeting.edit_url);
@@ -98,17 +98,17 @@ export default function Meeting({
     };
   }, [state.input.meeting]);
 
-  //directions URL link
+  // directions URL link
   const directionsUrl = meeting.isInPerson
     ? formatDirectionsUrl(meeting)
     : undefined;
 
-  //set page title
+  // set page title
   if (meeting.name) {
     document.title = meeting.name;
   }
 
-  //feedback URL link
+  // feedback URL link
   if (!meeting.feedback_url && feedback_emails.length) {
     meeting.feedback_url = formatFeedbackEmail(
       settings.feedback_emails,
@@ -149,21 +149,21 @@ export default function Meeting({
   }
   if (meeting.venmo) {
     contactButtons.push({
-      href: `https://venmo.com/${meeting.venmo.substring(1)}`,
+      href: `https:// venmo.com/${meeting.venmo.substring(1)}`,
       icon: 'cash',
       text: i18n(strings.contribute_with, { service: 'Venmo' }),
     });
   }
   if (meeting.square) {
     contactButtons.push({
-      href: `https://cash.app/${meeting.square}`,
+      href: `https:// cash.app/${meeting.square}`,
       icon: 'cash',
       text: i18n(strings.contribute_with, { service: 'Cash App' }),
     });
   }
   if (meeting.paypal) {
     contactButtons.push({
-      href: `https://www.paypal.com/paypalme/${meeting.paypal}`,
+      href: `https:// www.paypal.com/paypalme/${meeting.paypal}`,
       icon: 'cash',
       text: i18n(strings.contribute_with, { service: 'PayPal' }),
     });
@@ -205,7 +205,7 @@ export default function Meeting({
     }))
     .filter(e => e.meetings.length);
 
-  //don't display if only one meeting
+  // don't display if only one meeting
   if (
     locationWeekdays.length === 1 &&
     locationWeekdays[0].meetings.length === 1
@@ -230,7 +230,7 @@ export default function Meeting({
     }))
     .filter(e => e.meetings.length);
 
-  //don't display if only one meeting
+  // don't display if only one meeting
   if (groupWeekdays.length === 1 && groupWeekdays[0].meetings.length === 1) {
     groupWeekdays.splice(0, 1);
   }
@@ -448,7 +448,7 @@ export default function Meeting({
   );
 }
 
-//return paragraphs from possibly-multiline string
+// return paragraphs from possibly-multiline string
 function Paragraphs({ text }: { text: string }) {
   return (
     <div>
@@ -510,24 +510,24 @@ function formatWeekdays(
   );
 }
 
-//add or remove an "edit meeting" link on WordPress
+// add or remove an "edit meeting" link on WordPress
 function wordPressEditLink(url?: string) {
   const adminBar = document.getElementById('wp-admin-bar-root-default');
   if (!adminBar) return;
   const editButton = document.getElementById('wp-admin-bar-edit-meeting');
   if (url) {
-    //create link
+    // create link
     const link = document.createElement('a');
     link.setAttribute('class', 'ab-item');
     link.setAttribute('href', url);
     link.appendChild(document.createTextNode('Edit Meeting'));
 
-    //create button
+    // create button
     const button = document.createElement('li');
     button.setAttribute('id', 'wp-admin-bar-edit-meeting');
     button.appendChild(link);
 
-    //add button to menu bar
+    // add button to menu bar
     adminBar.appendChild(button);
   } else if (editButton) {
     editButton.parentNode?.removeChild(editButton);
