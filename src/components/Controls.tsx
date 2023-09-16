@@ -7,9 +7,11 @@ import {
   controlsCss,
   controlsGroupFirstCss,
   controlsGroupLastCss,
-  dropdownButtonLastCss,
   controlsInputCss,
   controlsInputFirstCss,
+  controlsSearchDropdownCss,
+  dropdownButtonLastCss,
+  dropdownCss,
 } from '../styles';
 import type { State } from '../types';
 
@@ -140,7 +142,7 @@ export default function Controls({ state, setState, mapbox }: ControlsProps) {
 
   return !Object.keys(state.meetings).length ? null : (
     <div css={controlsCss}>
-      <form onSubmit={locationSearch}>
+      <form onSubmit={locationSearch} css={dropdownCss}>
         <fieldset role="group">
           <input
             aria-label={strings.modes[state.input.mode]}
@@ -175,16 +177,20 @@ export default function Controls({ state, setState, mapbox }: ControlsProps) {
           )}
         </fieldset>
         {modes.length > 1 && (
-          <div>
+          <div
+            css={controlsSearchDropdownCss}
+            style={{
+              display: dropdown === 'search' ? 'block' : 'none',
+            }}
+          >
             {modes.map(mode => (
-              <a
+              <button
                 data-active={state.input.mode === mode}
-                href={formatUrl({ ...state.input, mode }, settings)}
                 key={mode}
                 onClick={e => setMode(e, mode)}
               >
                 {strings.modes[mode]}
-              </a>
+              </button>
             ))}
           </div>
         )}

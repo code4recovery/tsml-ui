@@ -88,17 +88,16 @@ export const tableCss = css`
 
 export const tableInProgressCss = css`
   background-color: var(--in-progress-background);
-  a,
   button {
-    border: 0;
-    width: 100%;
     background-color: transparent;
     border-radius: 0;
+    border: 0;
     color: var(--in-progress-text);
     cursor: pointer;
     font-size: var(--font-size);
     padding: calc(var(--gutter) / 2);
     text-decoration: underline;
+    width: 100%;
     &:focus {
       box-shadow: none !important;
     }

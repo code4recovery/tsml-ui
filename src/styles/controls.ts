@@ -1,18 +1,13 @@
 import { css } from '@emotion/react';
 
+import { buttonCss, formControlCss } from './button';
 import { lgAndUp, medium, dark } from './variables';
-import { buttonCss, dropdownButtonCss, formControlCss } from './button';
 
 export const controlsCss = css`
   display: grid;
   gap: var(--gutter);
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  padding: 0 var(--gutter);
-
-  @media ${lgAndUp} {
-    grid-auto-columns: minmax(0, 1fr);
-    grid-auto-flow: column;
-  }
+  padding: 0 var(--gutter) var(--gutter);
 
   fieldset {
     border: 0;
@@ -25,6 +20,11 @@ export const controlsCss = css`
 
   [role='group'] {
     display: flex;
+  }
+
+  @media ${lgAndUp} {
+    grid-auto-columns: minmax(0, 1fr);
+    grid-auto-flow: column;
   }
 `;
 
@@ -56,9 +56,7 @@ export const controlsInputFirstCss = css`
   border-bottom-right-radius: 0 !important;
 `;
 
-export const dropdownButtonLastCss = css`
-  ${dropdownButtonCss}
-  border-top-left-radius: 0 !important;
-  border-bottom-left-radius: 0 !important;
-  margin-left: -1px;
+export const controlsSearchDropdownCss = css`
+  min-width: 0 !important;
+  right: 0;
 `;

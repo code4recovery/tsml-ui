@@ -23,6 +23,11 @@ export const buttonCss = css`
   user-select: none;
   white-space: nowrap;
 
+  svg {
+    display: block;
+    margin: 0 auto;
+  }
+
   :hover,
   &[data-active='true'] {
     background-color: ${dark};
