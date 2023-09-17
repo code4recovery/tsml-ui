@@ -4,7 +4,7 @@ import { dark, mdAndUp, medium, lgAndUp } from './variables';
 
 export const tableChicletsCss = css`
   display: flex;
-  gap: 0.25rem;
+  gap: 4px;
   flex-wrap: wrap;
 `;
 
@@ -24,20 +24,38 @@ export const tableChicletCss = (
     ? 'var(--online)'
     : 'var(--inactive)'};
   display: inline-flex;
-  font-size: 0.875rem;
-  gap: 0.25rem;
+  font-size: calc(var(--font-size) * 0.875);
+  gap: 4px;
   justify-content: center;
-  padding: 0.25rem 0.5rem;
+  padding: 4px 8px;
 `;
 
 export const tableCss = css`
+  border: 0 !important;
   border-spacing: 0;
+  margin: 0 calc(var(--gutter) * -1);
   table-layout: auto;
-  width: 100%;
+  width: calc(100% + var(--gutter) * 2);
 
   small {
-    margin-left: 0.5rem;
+    margin-left: 8px;
     color: ${dark};
+  }
+
+  td,
+  th {
+    border: 0 !important;
+    border-bottom: 1px solid ${medium} !important;
+    margin: 0;
+    padding: calc(var(--gutter) / 2) !important;
+    text-align: left;
+    vertical-align: middle;
+    &:first-of-type {
+      padding-left: var(--gutter) !important;
+    }
+    &:last-of-type {
+      padding-right: var(--gutter) !important;
+    }
   }
 
   td {
@@ -48,18 +66,10 @@ export const tableCss = css`
     }
   }
 
-  td,
   th {
-    border-bottom: 1px solid ${medium};
-    margin: 0;
-    padding: calc(var(--gutter) / 2);
-    text-align: left;
-    &:first-of-type {
-      padding-left: var(--gutter);
-    }
-    &:last-of-type {
-      padding-right: var(--gutter);
-    }
+    text-transform: none !important;
+    font-size: calc(var(--font-size) * 0.875) !important;
+    font-weight: normal !important;
   }
 
   thead {
@@ -70,8 +80,11 @@ export const tableCss = css`
   }
 
   tbody tr {
-    &:nth-of-type(2n + 1) {
-      background-color: #00000009;
+    &:nth-of-type(2n) {
+      background-color: color-mix(in srgb, currentColor 3%, transparent);
+    }
+    &:hover a {
+      text-decoration: underline !important;
     }
   }
 
@@ -86,7 +99,7 @@ export const tableCss = css`
     }
     @media ${lgAndUp} {
       flex-direction: row;
-      gap: 0.5rem;
+      gap: 8px;
     }
   }
 `;
@@ -101,10 +114,12 @@ export const tableInProgressCss = css`
     cursor: pointer;
     font-size: var(--font-size);
     padding: calc(var(--gutter) / 2);
-    text-decoration: underline;
     width: 100%;
     &:focus {
       box-shadow: none !important;
+    }
+    &:hover {
+      text-decoration: underline;
     }
   }
 `;

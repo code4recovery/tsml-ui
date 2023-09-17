@@ -7,14 +7,17 @@ export const controlsCss = css`
   display: grid;
   gap: var(--gutter);
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  padding: 0 var(--gutter) var(--gutter);
+  padding: var(--gutter) 0;
 
-  fieldset {
-    border: 0;
-    padding: 0;
-    button {
-      padding: calc(var(--gutter) / 2) !important;
-      width: 2.5rem !important;
+  form {
+    display: flex;
+    fieldset {
+      border: 0;
+      padding: 0;
+      button {
+        padding: calc(var(--gutter) / 2) !important;
+        width: 40px !important;
+      }
     }
   }
 

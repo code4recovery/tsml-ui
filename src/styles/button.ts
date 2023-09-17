@@ -5,6 +5,7 @@ import { dark } from './variables';
 export const formControlCss = css`
   align-items: center;
   background-color: transparent;
+  background-image: none !important;
   border-radius: var(--border-radius);
   border: 1px solid ${dark};
   box-sizing: border-box;
@@ -14,12 +15,13 @@ export const formControlCss = css`
   font-size: var(--font-size);
   gap: calc(var(--gutter) / 2);
   justify-content: center;
+  line-height: var(--line-height);
   padding: calc(var(--gutter) / 2) var(--gutter);
   text-decoration: none !important;
   transition: all 0.15s ease-in-out;
   width: 100%;
   &:focus {
-    box-shadow: 0 0 0 0.25rem var(--focus);
+    box-shadow: 0 0 0 4px var(--focus);
   }
 `;
 

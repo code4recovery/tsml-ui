@@ -84,7 +84,7 @@ export default function Table({
         <div css={tableChicletsCss}>
           {attendance.map(({ icon, text, type }, index) => (
             <span css={tableChicletCss(type)} key={index}>
-              <Icon icon={icon} />
+              <Icon icon={icon} size={18} />
               {text && <span>{text}</span>}
             </span>
           ))}

@@ -5,9 +5,31 @@ import { dark, medium } from './variables';
 export const mapCss = css`
   background-color: ${medium};
   border-radius: var(--border-radius);
+  display: flex;
   flex-grow: 1;
   min-height: 500px;
   overflow: hidden !important;
+  position: relative;
+
+  > div {
+    height: 100% !important;
+    width: 100% !important;
+  }
+
+  button {
+    background-image: none !important;
+  }
+
+  .mapboxgl-ctrl-attrib {
+    background: var(--background) !important;
+    a {
+      color: ${dark} !important;
+    }
+  }
+
+  .mapboxgl-ctrl-logo {
+    opacity: 0.5;
+  }
 
   .mapboxgl-popup {
     max-width: 85%;
@@ -24,9 +46,18 @@ export const mapCss = css`
       position: relative;
 
       h2 {
-        font-size: 1.25rem;
+        font-size: 20px;
         margin: 0;
         line-height: 1.2;
+      }
+
+      > div {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        p {
+          margin: 0;
+        }
       }
 
       .list-group {
@@ -52,7 +83,6 @@ export const mapCss = css`
         width: 30px;
 
         &:hover {
-          background: var(--background);
           color: ${medium};
         }
       }

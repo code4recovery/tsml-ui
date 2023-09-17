@@ -5,15 +5,13 @@ import { dark, mdAndUp, medium } from './variables';
 export const meetingBackCss = css`
   align-items: center;
   display: flex;
-  margin: calc(var(--gutter) * -1.75) 0 var(--gutter);
-  padding: var(--gutter);
+  margin-bottom: var(--gutter);
 `;
 
 export const meetingColumnsCss = css`
   display: flex;
   flex-direction: column;
   gap: calc(var(--gutter) * 1.5);
-  padding: 0 var(--gutter);
 
   @media ${mdAndUp} {
     flex-direction: row;
@@ -104,7 +102,7 @@ export const meetingCss = css`
     outline: none;
     small {
       color: ${dark};
-      margin-left: 0.5rem;
+      margin-left: 8px;
     }
   }
 `;

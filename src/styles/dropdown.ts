@@ -8,8 +8,8 @@ export const dropdownCss = css`
   > div {
     background-color: var(--background);
     border-radius: var(--border-radius);
-    border: 1px solid ${medium};
-    margin-top: 0.25rem;
+    border: 1px solid ${dark};
+    margin-top: 4px;
     min-width: 100%;
     overflow: hidden;
     position: absolute;
@@ -31,7 +31,7 @@ export const dropdownCss = css`
       cursor: pointer;
       display: flex;
       font-size: var(--font-size);
-      gap: 1rem;
+      gap: 16px;
       justify-content: space-between;
       padding: calc(var(--gutter) / 2) var(--gutter);
       text-align: left;
@@ -43,7 +43,7 @@ export const dropdownCss = css`
         color: var(--text);
         font-weight: bold;
         font-size: 75%;
-        padding: 0.125rem 0.25rem;
+        padding: 2px 4px;
       }
 
       &[data-active='true'] {
@@ -58,15 +58,15 @@ export const dropdownCss = css`
     }
 
     .children button {
-      padding-left: 2rem !important;
+      padding-left: 32px !important;
     }
 
     .children .children button {
-      padding-left: 3rem !important;
+      padding-left: 48px !important;
     }
 
     .children .children .children button {
-      padding-left: 4rem !important;
+      padding-left: 64px !important;
     }
   }
 `;

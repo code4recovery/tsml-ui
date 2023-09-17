@@ -265,9 +265,7 @@ export default function TsmlUI({
               state={state}
             />
           ) : (
-            <div
-              style={{ padding: '0 1rem 1rem', flexGrow: 1, display: 'flex' }}
-            >
+            <div style={{ display: 'flex', flexGrow: 1 }}>
               <Map
                 filteredSlugs={filteredSlugs}
                 listMeetingsInPopup={true}
