@@ -1,7 +1,5 @@
 import { css } from '@emotion/react';
 
-import { dark, medium } from './variables';
-
 export const globalCss = css`
   html,
   body {
@@ -18,11 +16,11 @@ export const globalCss = css`
     --font-size: 16px;
     --gutter: 16px;
     --in-person: #146c43;
-    --in-progress-text: #664d03;
-    --in-progress-background: #fffcf0;
+    --in-progress-background: #faf4e0;
+    --in-progress-text: #998a5e;
     --inactive: #b02a37;
     --link: #0d6efd;
-    --online: #0a58ca;p
+    --online: #0a58ca;
     --online-background-image: url(https://images.unsplash.com/photo-1588196749597-9ff075ee6b5b?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=1440&ixid=MnwxfDB8MXxhbGx8fHx8fHx8fHwxNjIyMTIzODkw&ixlib=rb-1.2.1&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=1920);
     --text-muted: #6c757d;
     --text: #212529;
@@ -42,9 +40,12 @@ export const globalCss = css`
     a {
       color: var(--link);
       text-decoration: none;
-      &:hover {
-        text-decoration: underline;
-      }
+    }
+
+    a:hover,
+    tr:hover a {
+      color: color-mix(in srgb, var(--text) 40%, var(--link));
+      text-decoration: underline;
     }
 
     h1,

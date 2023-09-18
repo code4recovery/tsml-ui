@@ -27,6 +27,7 @@ export const formControlCss = css`
 
 export const buttonCss = css`
   ${formControlCss}
+  color: ${dark} !important;
   overflow: hidden;
   user-select: none;
   white-space: nowrap;

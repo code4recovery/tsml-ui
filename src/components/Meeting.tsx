@@ -9,7 +9,12 @@ import {
   formatUrl,
   useSettings,
 } from '../helpers';
-import { meetingBackCss, meetingColumnsCss, meetingCss } from '../styles';
+import {
+  meetingBackCss,
+  meetingColumnsCss,
+  meetingCss,
+  meetingOnlineCss,
+} from '../styles';
 import type { Meeting as MeetingType, State } from '../types';
 
 import Button from './Button';
@@ -433,7 +438,13 @@ export default function Meeting({
           )}
         </div>
         {!!mapbox && (
-          <div>
+          <div
+            css={
+              meeting.isOnline && !meeting.isInPerson
+                ? meetingOnlineCss
+                : undefined
+            }
+          >
             <Map
               filteredSlugs={[meeting.slug]}
               listMeetingsInPopup={false}

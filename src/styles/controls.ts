@@ -10,7 +10,6 @@ export const controlsCss = css`
   padding: var(--gutter) 0;
 
   form {
-    display: flex;
     fieldset {
       border: 0;
       padding: 0;
@@ -55,8 +54,8 @@ export const controlsInputCss = css`
 
 export const controlsInputFirstCss = css`
   ${controlsInputCss}
-  border-top-right-radius: 0 !important;
   border-bottom-right-radius: 0 !important;
+  border-top-right-radius: 0 !important;
 `;
 
 export const controlsSearchDropdownCss = css`

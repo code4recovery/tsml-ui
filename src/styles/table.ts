@@ -33,9 +33,9 @@ export const tableChicletCss = (
 export const tableCss = css`
   border: 0 !important;
   border-spacing: 0;
-  margin: 0 calc(var(--gutter) * -1);
+  margin: 0 calc(var(--gutter) * -1) !important;
   table-layout: auto;
-  width: calc(100% + var(--gutter) * 2);
+  width: calc(100% + var(--gutter) * 2) !important;
 
   small {
     margin-left: 8px;
@@ -67,9 +67,9 @@ export const tableCss = css`
   }
 
   th {
+    font-size: var(--font-size) !important;
+    font-weight: 500 !important;
     text-transform: none !important;
-    font-size: calc(var(--font-size) * 0.875) !important;
-    font-weight: normal !important;
   }
 
   thead {
@@ -82,9 +82,6 @@ export const tableCss = css`
   tbody tr {
     &:nth-of-type(2n) {
       background-color: color-mix(in srgb, currentColor 3%, transparent);
-    }
-    &:hover a {
-      text-decoration: underline !important;
     }
   }
 
@@ -106,6 +103,11 @@ export const tableCss = css`
 
 export const tableInProgressCss = css`
   background-color: var(--in-progress-background);
+
+  td[colspan] {
+    padding: 0 !important;
+  }
+
   button {
     background-color: transparent;
     border-radius: 0;
@@ -113,12 +115,14 @@ export const tableInProgressCss = css`
     color: var(--in-progress-text);
     cursor: pointer;
     font-size: var(--font-size);
-    padding: calc(var(--gutter) / 2);
+    padding: var(--gutter);
     width: 100%;
     &:focus {
       box-shadow: none !important;
     }
     &:hover {
+      background-color: transparent !important;
+      color: color-mix(in srgb, var(--text) 40%, var(--in-progress-text));
       text-decoration: underline;
     }
   }

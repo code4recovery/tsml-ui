@@ -11,6 +11,7 @@ export const meetingBackCss = css`
 export const meetingColumnsCss = css`
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
   gap: calc(var(--gutter) * 1.5);
 
   @media ${mdAndUp} {
@@ -76,6 +77,17 @@ export const meetingColumnsCss = css`
         display: flex;
         flex-direction: column;
         gap: calc(var(--gutter) / 2);
+        > div {
+          display: flex;
+          flex-direction: column;
+          gap: var(--gutter);
+          > div {
+            display: flex;
+            flex-direction: column;
+            gap: calc(var(--gutter) / 3);
+            color: ${dark};
+          }
+        }
         &:last-of-type {
           border-bottom: none;
         }
@@ -84,11 +96,28 @@ export const meetingColumnsCss = css`
   }
 
   > div:last-of-type {
+    border-radius: var(--border-radius);
     display: flex;
     flex-grow: 1;
-    > div {
-      max-height: 1000px;
-    }
+    max-height: 1000px;
+    overflow: hidden;
+  }
+`;
+
+export const meetingOnlineCss = css`
+  position: relative;
+  &::after {
+    background-image: var(--online-background-image);
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    bottom: 0;
+    content: '';
+    left: 0;
+    opacity: 0.25;
+    position: absolute;
+    right: 0;
+    top: 0;
   }
 `;
 
@@ -97,8 +126,8 @@ export const meetingCss = css`
   flex-direction: column;
   flex-grow: 1;
 
-  /* for focusing, can remove with react router */
   h1 {
+    /* for focusing, can remove with react router */
     outline: none;
     small {
       color: ${dark};
