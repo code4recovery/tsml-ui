@@ -276,6 +276,7 @@ export default function Meeting({
               href={directionsUrl}
               icon="geo"
               text={strings.get_directions}
+              type="in-person"
             />
           )}
           <div>
@@ -341,6 +342,7 @@ export default function Meeting({
                         href={meeting.conference_url}
                         icon="camera"
                         text={meeting.conference_provider}
+                        type="online"
                       />
                       {meeting.conference_url_notes && (
                         <Paragraphs text={meeting.conference_url_notes} />
@@ -353,6 +355,7 @@ export default function Meeting({
                         href={`tel:${meeting.conference_phone}`}
                         icon="phone"
                         text={strings.phone}
+                        type="online"
                       />
                       {meeting.conference_phone_notes && (
                         <Paragraphs text={meeting.conference_phone_notes} />

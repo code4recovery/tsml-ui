@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 
-import { dark } from './variables';
+import { dark, gutter } from './variables';
 
 export const formControlCss = css`
   align-items: center;
@@ -13,10 +13,10 @@ export const formControlCss = css`
   cursor: pointer;
   display: flex;
   font-size: var(--font-size);
-  gap: calc(var(--gutter) / 2);
+  gap: ${gutter / 2}px;
   justify-content: center;
   line-height: var(--line-height);
-  padding: calc(var(--gutter) / 2) var(--gutter);
+  padding: ${gutter / 2}px ${gutter}px;
   text-decoration: none !important;
   transition: all 0.15s ease-in-out;
   width: 100%;
@@ -39,6 +39,28 @@ export const buttonCss = css`
   :hover,
   &[data-active='true'] {
     background-color: ${dark};
+    color: var(--background) !important;
+  }
+`;
+
+export const buttonDirectionsCss = css`
+  ${buttonCss}
+  background-color: color-mix(in srgb, var(--in-person), var(--background) 82%);
+  border-color: color-mix(in srgb, var(--in-person), var(--background) 70%);
+  color: var(--in-person) !important;
+  &:hover {
+    background-color: var(--in-person) !important;
+    color: var(--background) !important;
+  }
+`;
+
+export const buttonJoinCss = css`
+  ${buttonCss}
+  background-color: color-mix(in srgb, var(--online), var(--background) 82%);
+  border-color: color-mix(in srgb, var(--online), var(--background) 70%);
+  color: var(--online) !important;
+  &:hover {
+    background-color: var(--online) !important;
     color: var(--background) !important;
   }
 `;

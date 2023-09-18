@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 
-import { dark, mdAndUp, medium, lgAndUp } from './variables';
+import { dark, gutter, mdAndUp, medium, lgAndUp } from './variables';
 
 export const tableChicletsCss = css`
   display: flex;
@@ -33,9 +33,9 @@ export const tableChicletCss = (
 export const tableCss = css`
   border: 0 !important;
   border-spacing: 0;
-  margin: 0 calc(var(--gutter) * -1) !important;
+  margin: 0 ${gutter * -1}px !important;
   table-layout: auto;
-  width: calc(100% + var(--gutter) * 2) !important;
+  width: calc(100% + ${gutter * 2}px) !important;
 
   small {
     margin-left: 8px;
@@ -47,14 +47,14 @@ export const tableCss = css`
     border: 0 !important;
     border-bottom: 1px solid ${medium} !important;
     margin: 0;
-    padding: calc(var(--gutter) / 2) !important;
+    padding: ${gutter / 2}px !important;
     text-align: left;
     vertical-align: middle;
     &:first-of-type {
-      padding-left: var(--gutter) !important;
+      padding-left: ${gutter}px !important;
     }
     &:last-of-type {
-      padding-right: var(--gutter) !important;
+      padding-right: ${gutter}px !important;
     }
   }
 
@@ -115,7 +115,7 @@ export const tableInProgressCss = css`
     color: var(--in-progress-text);
     cursor: pointer;
     font-size: var(--font-size);
-    padding: var(--gutter);
+    padding: ${gutter}px;
     width: 100%;
     &:focus {
       box-shadow: none !important;

@@ -235,6 +235,7 @@ export default function Map({
                         href={data.locations[key].directions_url}
                         icon="geo"
                         text={strings.get_directions}
+                        type="in-person"
                       />
                     )}
                   </div>

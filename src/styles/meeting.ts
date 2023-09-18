@@ -1,18 +1,18 @@
 import { css } from '@emotion/react';
 
-import { dark, mdAndUp, medium } from './variables';
+import { dark, gutter, mdAndUp, medium } from './variables';
 
 export const meetingBackCss = css`
   align-items: center;
   display: flex;
-  margin-bottom: var(--gutter);
+  margin-bottom: ${gutter}px;
 `;
 
 export const meetingColumnsCss = css`
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  gap: calc(var(--gutter) * 1.5);
+  gap: ${gutter * 1.5}px;
 
   @media ${mdAndUp} {
     flex-direction: row;
@@ -23,8 +23,7 @@ export const meetingColumnsCss = css`
   }
 
   ul {
-    padding-left: var(--gutter);
-    padding-bottom: calc(var(--gutter) / 2);
+    padding: 0 0 ${gutter / 2}px ${gutter};
     button {
       background-color: transparent;
       border: none;
@@ -38,12 +37,12 @@ export const meetingColumnsCss = css`
       > div {
         align-items: center;
         display: flex;
-        gap: calc(var(--gutter) / 2);
+        gap: ${gutter / 2}px;
       }
 
       small {
         display: block;
-        margin: calc(var(--gutter) / 2) 0;
+        margin: ${gutter / 2}px 0;
       }
     }
   }
@@ -51,7 +50,7 @@ export const meetingColumnsCss = css`
   h3 {
     font-size: var(--font-size);
     font-weight: 500;
-    margin: var(--gutter) 0 0;
+    margin: ${gutter}px 0 0;
   }
 
   ol {
@@ -66,25 +65,25 @@ export const meetingColumnsCss = css`
   > div:first-of-type {
     display: flex;
     flex-direction: column;
-    gap: var(--gutter);
+    gap: ${gutter}px;
     width: 33%;
     > div {
       border: 1px solid ${medium};
       border-radius: var(--border-radius);
       > div {
-        padding: var(--gutter);
+        padding: ${gutter}px;
         border-bottom: 1px solid ${medium};
         display: flex;
         flex-direction: column;
-        gap: calc(var(--gutter) / 2);
+        gap: ${gutter / 2}px;
         > div {
           display: flex;
           flex-direction: column;
-          gap: var(--gutter);
+          gap: ${gutter}px;
           > div {
             display: flex;
             flex-direction: column;
-            gap: calc(var(--gutter) / 3);
+            gap: ${gutter / 3}px;
             color: ${dark};
           }
         }

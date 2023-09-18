@@ -4,3 +4,5 @@ export const dark = `color-mix(in srgb, var(--background), var(--text) 55%)`;
 
 export const mdAndUp = '(min-width: 768px)';
 export const lgAndUp = '(min-width: 992px)';
+
+export const gutter = 16;

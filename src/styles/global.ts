@@ -1,5 +1,7 @@
 import { css } from '@emotion/react';
 
+import { gutter } from './variables';
+
 export const globalCss = css`
   html,
   body {
@@ -10,11 +12,9 @@ export const globalCss = css`
   :root {
     --background: #fff;
     --border-radius: 4px;
-    --border: #6c757d;
     --focus: #0d6efd40;
     --font-family: system-ui, -apple-system, sans-serif;
     --font-size: 16px;
-    --gutter: 16px;
     --in-person: #146c43;
     --in-progress-background: #faf4e0;
     --in-progress-text: #998a5e;
@@ -22,7 +22,6 @@ export const globalCss = css`
     --link: #0d6efd;
     --online: #0a58ca;
     --online-background-image: url(https://images.unsplash.com/photo-1588196749597-9ff075ee6b5b?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=1440&ixid=MnwxfDB8MXxhbGx8fHx8fHx8fHwxNjIyMTIzODkw&ixlib=rb-1.2.1&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=1920);
-    --text-muted: #6c757d;
     --text: #212529;
   }
 
@@ -35,7 +34,7 @@ export const globalCss = css`
     font-family: var(--font-family);
     font-size: var(--font-size);
     line-height: 1.5;
-    padding: var(--gutter);
+    padding: ${gutter}px;
 
     a {
       color: var(--link);

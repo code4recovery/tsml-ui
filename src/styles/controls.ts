@@ -1,20 +1,20 @@
 import { css } from '@emotion/react';
 
 import { buttonCss, formControlCss } from './button';
-import { lgAndUp, medium, dark } from './variables';
+import { dark, gutter, lgAndUp, medium } from './variables';
 
 export const controlsCss = css`
   display: grid;
-  gap: var(--gutter);
+  gap: ${gutter}px;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  padding: var(--gutter) 0;
+  padding: ${gutter}px 0;
 
   form {
     fieldset {
       border: 0;
       padding: 0;
       button {
-        padding: calc(var(--gutter) / 2) !important;
+        padding: ${gutter / 2}px !important;
         width: 40px !important;
       }
     }

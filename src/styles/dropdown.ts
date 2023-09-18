@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 
-import { dark, medium } from './variables';
+import { dark, gutter, medium } from './variables';
 import { dropdownButtonCss } from './button';
 
 export const dropdownCss = css`
@@ -8,7 +8,7 @@ export const dropdownCss = css`
   > div {
     background-color: var(--background);
     border-radius: var(--border-radius);
-    border: 1px solid ${dark};
+    border: 1px solid ${medium};
     margin-top: 4px;
     min-width: 100%;
     overflow: hidden;
@@ -33,7 +33,7 @@ export const dropdownCss = css`
       font-size: var(--font-size);
       gap: 16px;
       justify-content: space-between;
-      padding: calc(var(--gutter) / 2) var(--gutter);
+      padding: ${gutter / 2}px ${gutter}px;
       text-align: left;
       width: 100%;
 
@@ -57,15 +57,15 @@ export const dropdownCss = css`
       }
     }
 
-    .children button {
+    div button {
       padding-left: 32px !important;
     }
 
-    .children .children button {
+    div div button {
       padding-left: 48px !important;
     }
 
-    .children .children .children button {
+    div div div button {
       padding-left: 64px !important;
     }
   }
