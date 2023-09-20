@@ -17,7 +17,12 @@
       #tsml-ui {
         --background: #292625;
         --font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        --in-person: #66cc66;
+        --in-progress-background: #191919;
+        --in-progress-text: #d7c2a8;
+        --inactive: #cc6666;
         --link: #fcb03e;
+        --online: #6699cc;
         --text: #d7c2a8;
         min-height: 100vh;
         min-height: -webkit-fill-available;
@@ -32,6 +37,11 @@
       data-mapbox="pk.eyJ1Ijoiam9zaHJlaXNuZXIiLCJhIjoiY2tvYXA0YnZxMGRldDJxbzdta25uNGphdiJ9.eay-UKgIT99ALmdw08xBPw"
       data-timezone="America/New_York"
     ></div>
+    <script>
+      var tsml_react_config = {
+        map: { style: 'mapbox://styles/mapbox/navigation-night-v1' },
+      };
+    </script>
     <script src="/app.js" async></script>
   </body>
 </html>

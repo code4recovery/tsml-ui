@@ -63,7 +63,7 @@ var tsml_react_config = {
 
 ### Change the map style
 
-Mapbox maps can be styled by creating a [custom map style](https://docs.mapbox.com/studio-manual/guides/map-styling/) and adding it to the `tsml_react_config` object.
+Mapbox maps can be styled by picking a [classic Mapbox style](https://docs.mapbox.com/api/maps/styles/#classic-mapbox-styles) or creating a [custom map style](https://docs.mapbox.com/studio-manual/guides/map-styling/) and adding it to the `tsml_react_config` object.
 
 ```js
 var tsml_react_config = {
@@ -92,6 +92,24 @@ CSS variables can be used to customize the appearance. They can be combined with
 ```
 
 Note: hex values (`#123456`) must be used when specifiying colors.
+
+### Change the online background image
+
+This image will be shown instead of a map for online meetings. Should be roughly 2000px wide and tall.
+
+```css
+#tsml-ui {
+  --online-background-image: url(/path/to/image.jpg);
+}
+```
+
+To remove:
+
+```css
+#tsml-ui {
+  --online-background-image: none;
+}
+```
 
 ## Frequently asked questions
 

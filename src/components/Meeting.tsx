@@ -14,6 +14,7 @@ import {
   meetingColumnsCss,
   meetingCss,
   meetingOnlineCss,
+  tableChicletCss,
 } from '../styles';
 import type { Meeting as MeetingType, State } from '../types';
 
@@ -501,12 +502,12 @@ function formatWeekdays(
                   </div>
                   <div>
                     {m.isInPerson && (
-                      <small>
+                      <small css={tableChicletCss('in-person')}>
                         <Icon icon="geo" size={13} />
                       </small>
                     )}
                     {m.isOnline && (
-                      <small>
+                      <small css={tableChicletCss('online')}>
                         {m.conference_provider && (
                           <Icon icon="camera" size={13} />
                         )}

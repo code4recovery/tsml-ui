@@ -54,11 +54,32 @@ export const meetingColumnsCss = css`
   }
 
   ol {
+    color: ${dark};
     list-style: none;
     padding: 0;
     li {
       display: flex;
       justify-content: space-between;
+      div {
+        align-items: baseline;
+        display: flex;
+        flex-grow: 1;
+        flex-wrap: wrap;
+        gap: 0 8px;
+        :first-of-type {
+          flex-grow: 0;
+          text-transform: lowercase;
+          white-space: nowrap;
+          width: 85px;
+        }
+        :last-of-type {
+          flex-grow: 0;
+          flex-wrap: nowrap;
+          gap: 4px;
+          justify-content: flex-end;
+          padding-top: 2px;
+        }
+      }
     }
   }
 
@@ -66,7 +87,10 @@ export const meetingColumnsCss = css`
     display: flex;
     flex-direction: column;
     gap: ${gutter}px;
-    width: 33%;
+    width: 100%;
+    @media ${mdAndUp} {
+      width: 33%;
+    }
     > div {
       border: 1px solid ${medium};
       border-radius: var(--border-radius);
@@ -84,7 +108,6 @@ export const meetingColumnsCss = css`
             display: flex;
             flex-direction: column;
             gap: ${gutter / 3}px;
-            color: ${dark};
           }
         }
         &:last-of-type {

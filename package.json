@@ -12,6 +12,7 @@
   "devDependencies": {
     "@babel/preset-react": "^7.22.3",
     "@babel/preset-typescript": "^7.21.5",
+    "@emotion/babel-plugin": "^11.11.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^14.0.0",
     "@types/jest": "^29.5.1",
@@ -40,6 +41,9 @@
     "viewport-mercator-project": "^7.0.4"
   },
   "babel": {
+    "plugins": [
+      "@emotion"
+    ],
     "presets": [
       "@babel/preset-react"
     ]
