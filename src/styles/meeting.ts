@@ -26,12 +26,15 @@ export const meetingColumnsCss = css`
     padding: 0 0 ${gutter / 2}px ${gutter};
     button {
       background-color: transparent;
+      background-image: none;
       border: none;
       color: var(--text);
       cursor: pointer;
-      padding: 0;
       font-size: var(--font-size);
+      line-height: 1.5;
+      padding: 0 !important;
       text-align: left;
+      text-shadow: none;
       vertical-align: text-top;
 
       > div {
@@ -56,7 +59,8 @@ export const meetingColumnsCss = css`
   ol {
     color: ${dark};
     list-style: none;
-    padding: 0;
+    margin: 0 !important;
+    padding: 0 !important;
     li {
       display: flex;
       justify-content: space-between;

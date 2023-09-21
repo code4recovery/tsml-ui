@@ -81,10 +81,10 @@ export const mapCss = css`
           margin: 0;
         }
       }
+    }
 
-      .mapboxgl-popup-tip {
-        border-top-color: var(--background);
-      }
+    .mapboxgl-popup-tip {
+      border-top-color: var(--background);
     }
   }
 `;
