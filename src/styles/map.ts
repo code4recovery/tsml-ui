@@ -58,7 +58,7 @@ export const mapCss = css`
       width: 30px;
 
       &:hover {
-        color: ${medium};
+        color: var(--text);
       }
     }
 
