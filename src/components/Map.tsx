@@ -3,7 +3,7 @@ import ReactMapGL, { Marker, NavigationControl, Popup } from 'react-map-gl';
 import WebMercatorViewport from 'viewport-mercator-project';
 
 import { formatDirectionsUrl, useSettings } from '../helpers';
-import { mapCss } from '../styles';
+import { mapCss, mapMeetingsCss } from '../styles';
 import type { Meeting, State } from '../types';
 import Button from './Button';
 import Link from './Link';
@@ -210,7 +210,7 @@ export default function Map({
                     <h2>{data.locations[key].name}</h2>
                     <p>{data.locations[key].formatted_address}</p>
                     {listMeetingsInPopup && (
-                      <div>
+                      <div css={mapMeetingsCss}>
                         {data.locations[key].meetings
                           .sort((a, b) =>
                             a.start && b.start && a.start > b.start ? 1 : 0

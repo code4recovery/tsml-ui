@@ -27,6 +27,13 @@ export const mapCss = css`
     }
   }
 
+  .mapboxgl-ctrl-group {
+    button {
+      background-color: var(--background);
+      border-top-color: ${medium};
+    }
+  }
+
   .mapboxgl-ctrl-logo {
     opacity: 0.5;
   }
@@ -36,8 +43,23 @@ export const mapCss = css`
     width: 320px;
     z-index: 100;
 
-    .mapboxgl-popup-tip {
-      border-top-color: var(--background);
+    .mapboxgl-popup-close-button {
+      background: var(--background);
+      border-radius: 100%;
+      border: 1px solid ${medium};
+      color: ${dark};
+      font-size: 24px;
+      height: 30px;
+      line-height: 1;
+      padding: 0 4px 4px 4px;
+      position: absolute;
+      right: -10px;
+      top: -10px;
+      width: 30px;
+
+      &:hover {
+        color: ${medium};
+      }
     }
 
     .mapboxgl-popup-content {
@@ -60,32 +82,40 @@ export const mapCss = css`
         }
       }
 
-      .list-group {
-        max-height: 250px;
-        .list-group-item {
-          font-size: 14.4px;
-          padding: 8px;
-        }
+      .mapboxgl-popup-tip {
+        border-top-color: var(--background);
       }
+    }
+  }
+`;
 
-      .mapboxgl-popup-close-button {
-        background: var(--background);
-        border-radius: 100%;
-        border: 1px solid ${medium};
-        color: ${dark};
-        font-size: 24px;
-        height: 30px;
-        line-height: 1;
-        padding: 0 4px 4px 4px;
-        position: absolute;
-        right: -10px;
-        top: -10px;
-        width: 30px;
-
-        &:hover {
-          color: ${medium};
-        }
-      }
+export const mapMeetingsCss = css`
+  margin-bottom: 4px;
+  max-height: 250px;
+  overflow-y: auto;
+  > div {
+    border: 1px solid ${medium};
+    font-size: 90%;
+    margin-top: -1px;
+    padding: 4px 8px;
+    :first-of-type {
+      border-top-left-radius: var(--border-radius);
+      border-top-right-radius: var(--border-radius);
+      margin-top: 0;
+    }
+    :last-of-type {
+      border-bottom-left-radius: var(--border-radius);
+      border-bottom-right-radius: var(--border-radius);
+    }
+    time {
+      display: flex;
+      gap: 0 4px;
+    }
+    a {
+      margin-right: 6px;
+    }
+    small {
+      color: ${dark};
     }
   }
 `;
