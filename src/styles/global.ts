@@ -47,6 +47,12 @@ export const globalCss = css`
       text-decoration: underline;
     }
 
+    button,
+    input {
+      background-image: none !important;
+      text-shadow: none !important;
+    }
+
     h1,
     h2 {
       line-height: 1.2;

@@ -5,7 +5,6 @@ import { dark, gutter } from './variables';
 export const formControlCss = css`
   align-items: center;
   background-color: transparent;
-  background-image: none !important;
   border-radius: var(--border-radius);
   border: 1px solid ${dark};
   box-sizing: border-box;
