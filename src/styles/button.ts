@@ -15,7 +15,7 @@ export const formControlCss = css`
   gap: ${gutter / 2}px;
   justify-content: center;
   line-height: var(--line-height);
-  padding: ${gutter / 2}px ${gutter}px;
+  padding: ${gutter / 2.66666}px ${gutter}px;
   text-decoration: none !important;
   transition: all 0.15s ease-in-out;
   width: 100%;

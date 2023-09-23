@@ -45,11 +45,14 @@ export const tableCss = css`
   td,
   th {
     border: 0 !important;
-    border-bottom: 1px solid ${medium} !important;
     margin: 0;
-    padding: ${gutter / 2}px !important;
     text-align: left;
     vertical-align: middle;
+  }
+
+  th {
+    border-bottom: 1px solid ${medium} !important;
+    padding: ${gutter / 2}px !important;
     &:first-of-type {
       padding-left: ${gutter}px !important;
     }
@@ -61,8 +64,22 @@ export const tableCss = css`
   td {
     cursor: pointer;
     display: block;
+    padding: 0 ${gutter / 2}px 0 96px !important;
+    &:first-of-type {
+      padding-left: ${gutter / 2}px !important;
+      position: absolute;
+    }
     @media ${mdAndUp} {
+      border-bottom: 1px solid ${medium} !important;
       display: table-cell;
+      padding: ${gutter / 2}px !important;
+      &:first-of-type {
+        padding-left: ${gutter}px !important;
+        position: static;
+      }
+      &:last-of-type {
+        padding-right: ${gutter}px !important;
+      }
     }
   }
 
@@ -76,6 +93,18 @@ export const tableCss = css`
     display: none;
     @media ${mdAndUp} {
       display: table-header-group;
+    }
+  }
+
+  tr {
+    border: 0;
+    border-bottom: 1px solid ${medium} !important;
+    display: block;
+    padding: ${gutter / 2}px ${gutter / 2}px !important;
+    position: relative;
+    @media ${mdAndUp} {
+      display: table-row;
+      padding: 0 !important;
     }
   }
 
@@ -106,6 +135,7 @@ export const tableInProgressCss = css`
 
   td[colspan] {
     padding: 0 !important;
+    position: static;
   }
 
   button {

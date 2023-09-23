@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 
-import { gutter } from './variables';
+import { gutter, mdAndUp } from './variables';
 
 export const globalCss = css`
   html,
@@ -38,7 +38,7 @@ export const globalCss = css`
 
     a {
       color: var(--link);
-      text-decoration: none;
+      text-decoration: underline;
     }
 
     a:hover,
@@ -60,8 +60,11 @@ export const globalCss = css`
     }
 
     h1 {
+      font-size: calc(var(--font-size) * 2);
       font-weight: 300;
-      font-size: calc(var(--font-size) * 2.5);
+      @media ${mdAndUp} {
+        font-size: calc(var(--font-size) * 2.5);
+      }
     }
 
     h2 {
