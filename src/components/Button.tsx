@@ -16,8 +16,9 @@ export default function Button({
   text,
   type,
 }: ButtonProps) {
+  const Tag = href ? 'a' : 'button';
   return (
-    <a
+    <Tag
       href={href}
       onClick={onClick}
       target={href && '_blank'}
@@ -31,6 +32,6 @@ export default function Button({
     >
       {icon && <Icon icon={icon} />}
       {text}
-    </a>
+    </Tag>
   );
 }

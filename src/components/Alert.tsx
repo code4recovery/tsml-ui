@@ -1,6 +1,7 @@
 import type { State } from '../types';
 import Button from './Button';
 import { formatString as i18n, getIndexByKey, useSettings } from '../helpers';
+import { alertCss, errorCss } from '../styles';
 
 type AlertProps = {
   state: State;
@@ -10,10 +11,10 @@ type AlertProps = {
 export default function Alert({ state, setState }: AlertProps) {
   const { settings, strings } = useSettings();
   return state.error ? (
-    <div>{state.error}</div>
+    <div css={errorCss}>{state.error}</div>
   ) : state.alert ? (
-    <div>
-      <div>{state.alert}</div>
+    <>
+      <div css={alertCss}>{state.alert}</div>
       {state.alert === strings.no_results && state.input.search && (
         <Button
           onClick={() => {
@@ -53,6 +54,6 @@ export default function Alert({ state, setState }: AlertProps) {
             />
           ))
         )}
-    </div>
+    </>
   ) : null;
 }

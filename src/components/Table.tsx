@@ -5,7 +5,6 @@ import { formatString as i18n, useSettings } from '../helpers';
 import {
   tableChicletCss,
   tableChicletsCss,
-  tableCss,
   tableInProgressCss,
 } from '../styles';
 import { Meeting, State } from '../types';
@@ -133,14 +132,16 @@ export default function Table({
         }
       >
         {columns.map((column, index) => (
-          <td key={index}>{getValue(meeting, column)}</td>
+          <td className={`tsml-${column}`} key={index}>
+            {getValue(meeting, column)}
+          </td>
         ))}
       </tr>
     );
   };
 
   return !filteredSlugs.length ? null : (
-    <table css={tableCss}>
+    <table>
       <thead>
         <tr>
           {columns.map((column, index) => (

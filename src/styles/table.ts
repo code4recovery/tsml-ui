@@ -33,60 +33,63 @@ export const tableChicletCss = (
 export const tableCss = css`
   border: 0 !important;
   border-spacing: 0;
-  margin: 0 ${gutter * -1}px !important;
+  margin: 0 ${gutter * -1}px ${gutter * -1}px;
   table-layout: auto;
-  width: calc(100% + ${gutter * 2}px) !important;
+  width: calc(100% + ${gutter * 2}px);
 
   small {
-    margin-left: 8px;
+    margin-left: 6px;
     color: ${dark};
   }
 
   td,
   th {
-    border: 0 !important;
+    border: 0;
     margin: 0;
     text-align: left;
     vertical-align: middle;
   }
 
-  th {
-    border-bottom: 1px solid ${medium} !important;
-    padding: ${gutter / 2}px !important;
-    &:first-of-type {
-      padding-left: ${gutter}px !important;
-    }
-    &:last-of-type {
-      padding-right: ${gutter}px !important;
-    }
-  }
-
   td {
     cursor: pointer;
     display: block;
-    padding: 0 ${gutter / 2}px 0 96px !important;
-    &:first-of-type {
-      padding-left: ${gutter / 2}px !important;
+    padding: 0 ${gutter / 2}px 0 96px;
+    &.tsml-time,
+    &.tsml-distance {
+      padding-left: ${gutter / 2}px;
       position: absolute;
     }
+    &.tsml-distance {
+      font-size: calc(var(--font-size) * 1.25);
+      top: 56px;
+    }
     @media ${mdAndUp} {
-      border-bottom: 1px solid ${medium} !important;
+      border-bottom: 1px solid ${medium};
       display: table-cell;
-      padding: ${gutter / 2}px !important;
-      &:first-of-type {
-        padding-left: ${gutter}px !important;
-        position: static;
+      padding: ${gutter / 2}px;
+      position: static !important;
+      &.tsml-time,
+      &.tsml-distance {
+        padding-left: ${gutter}px;
       }
       &:last-of-type {
-        padding-right: ${gutter}px !important;
+        padding-right: ${gutter}px;
       }
     }
   }
 
   th {
-    font-size: var(--font-size) !important;
-    font-weight: 500 !important;
-    text-transform: none !important;
+    border-bottom: 1px solid ${medium};
+    font-size: var(--font-size);
+    font-weight: 600;
+    padding: 0 ${gutter / 2}px ${gutter / 2}px;
+    text-transform: none;
+    &:first-of-type {
+      padding-left: ${gutter}px;
+    }
+    &:last-of-type {
+      padding-right: ${gutter}px;
+    }
   }
 
   thead {
@@ -98,20 +101,18 @@ export const tableCss = css`
 
   tr {
     border: 0;
-    border-bottom: 1px solid ${medium} !important;
+    border-top: 1px solid ${medium};
     display: block;
-    padding: ${gutter / 2}px ${gutter / 2}px !important;
+    padding: ${gutter / 2}px ${gutter / 2}px;
     position: relative;
     @media ${mdAndUp} {
       display: table-row;
-      padding: 0 !important;
+      padding: 0;
     }
   }
 
-  tbody tr {
-    &:nth-of-type(2n) {
-      background-color: color-mix(in srgb, currentColor 3%, transparent);
-    }
+  tbody tr:nth-of-type(2n + 1) {
+    background-color: color-mix(in srgb, currentColor 3%, transparent);
   }
 
   time {
@@ -131,7 +132,10 @@ export const tableCss = css`
 `;
 
 export const tableInProgressCss = css`
-  background-color: var(--in-progress-background);
+  tr {
+    background-color: var(--alert-background) !important;
+    padding: 0 !important;
+  }
 
   td[colspan] {
     padding: 0 !important;
@@ -142,17 +146,17 @@ export const tableInProgressCss = css`
     background-color: transparent;
     border-radius: 0;
     border: 0;
-    color: var(--in-progress-text);
+    color: var(--alert-text);
     cursor: pointer;
     font-size: var(--font-size);
-    padding: ${gutter}px;
+    padding: ${gutter * 1.25}px;
     width: 100%;
     &:focus {
-      box-shadow: none !important;
+      box-shadow: none;
     }
     &:hover {
-      background-color: transparent !important;
-      color: color-mix(in srgb, var(--text) 40%, var(--in-progress-text));
+      background-color: transparent;
+      color: color-mix(in srgb, var(--text) 40%, var(--alert-text));
       text-decoration: underline;
     }
   }

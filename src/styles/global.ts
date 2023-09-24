@@ -1,6 +1,7 @@
 import { css } from '@emotion/react';
 
 import { gutter, mdAndUp } from './variables';
+import { tableCss } from './table';
 
 export const globalCss = css`
   html,
@@ -10,14 +11,14 @@ export const globalCss = css`
   }
 
   :root {
+    --alert-background: #faf4e0;
+    --alert-text: #998a5e;
     --background: #fff;
     --border-radius: 4px;
     --focus: #0d6efd40;
     --font-family: system-ui, -apple-system, sans-serif;
     --font-size: 16px;
     --in-person: #146c43;
-    --in-progress-background: #faf4e0;
-    --in-progress-text: #998a5e;
     --inactive: #b02a37;
     --link: #0d6efd;
     --online: #0a58ca;
@@ -30,6 +31,7 @@ export const globalCss = css`
     box-sizing: border-box;
     color: var(--text);
     display: flex;
+    gap: ${gutter}px;
     flex-direction: column;
     font-family: var(--font-family);
     font-size: var(--font-size);
@@ -70,6 +72,10 @@ export const globalCss = css`
     h2 {
       font-weight: 500;
       font-size: calc(var(--font-size) * 1.25);
+    }
+
+    table {
+      ${tableCss}
     }
   }
 `;
