@@ -1,21 +1,19 @@
 import { css } from '@emotion/react';
 
 import { buttonCss, formControlCss } from './button';
-import { dark, gutter, lgAndUp, medium } from './variables';
+import { color, media, size } from './variables';
 
 export const controlsCss = css`
   display: grid;
-  gap: ${gutter}px;
+  gap: ${size.gutter}px;
   grid-template-columns: repeat(2, minmax(0, 1fr));
 
-  form {
-    fieldset {
-      border: 0;
-      padding: 0;
-      button {
-        padding: ${gutter / 2}px !important;
-        width: 40px !important;
-      }
+  fieldset {
+    border: 0;
+    padding: 0;
+    button {
+      padding: ${size.gutter / 2}px !important;
+      width: 40px !important;
     }
   }
 
@@ -23,7 +21,7 @@ export const controlsCss = css`
     display: flex;
   }
 
-  @media ${lgAndUp} {
+  @media ${media.lgAndUp} {
     grid-auto-columns: minmax(0, 1fr);
     grid-auto-flow: column;
   }
@@ -44,9 +42,9 @@ export const controlsGroupLastCss = css`
 
 export const controlsInputCss = css`
   ${formControlCss}
-  border: 1px solid ${medium};
+  border: 1px solid ${color.medium};
   &:focus {
-    border: 1px solid ${dark};
+    border: 1px solid ${color.dark};
     outline: none;
   }
 `;

@@ -1,18 +1,11 @@
 import { css, keyframes } from '@emotion/react';
 
-import { medium } from './variables';
+import { color, size } from './variables';
 
-const loadingAnimation = keyframes`
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
+const animation = keyframes`
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 `;
-
-const size = '4rem';
-const borderSize = '0.4rem';
 
 export const loadingCss = css`
   align-items: center;
@@ -22,15 +15,15 @@ export const loadingCss = css`
   min-height: 500px;
 
   > div {
-    height: ${size};
+    height: ${size.loading}px;
     position: relative;
-    width: ${size};
+    width: ${size.loading}px;
     div {
-      animation: ${loadingAnimation} 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-      border-color: ${medium} transparent transparent transparent;
+      animation: ${animation} 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+      border-color: ${color.medium} transparent transparent transparent;
       border-radius: 50%;
       border-style: solid;
-      border-width: ${borderSize};
+      border-width: ${size.loading / 10}px;
       box-sizing: border-box;
       height: 100%;
       position: absolute;

@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 
-import { dark, gutter, mdAndUp, medium, lgAndUp } from './variables';
+import { color, media, size } from './variables';
 
 export const tableChicletsCss = css`
   display: flex;
@@ -33,13 +33,13 @@ export const tableChicletCss = (
 export const tableCss = css`
   border: 0 !important;
   border-spacing: 0;
-  margin: 0 ${gutter * -1}px ${gutter * -1}px;
+  margin: 0 ${size.gutter * -1}px ${size.gutter * -1}px;
   table-layout: auto;
-  width: calc(100% + ${gutter * 2}px);
+  width: calc(100% + ${size.gutter * 2}px);
 
   small {
     margin-left: 6px;
-    color: ${dark};
+    color: ${color.dark};
   }
 
   td,
@@ -53,59 +53,59 @@ export const tableCss = css`
   td {
     cursor: pointer;
     display: block;
-    padding: 0 ${gutter / 2}px 0 96px;
+    padding: 0 ${size.gutter / 2}px 0 96px;
     &.tsml-time,
     &.tsml-distance {
-      padding-left: ${gutter / 2}px;
+      padding-left: ${size.gutter / 2}px;
       position: absolute;
     }
     &.tsml-distance {
       font-size: calc(var(--font-size) * 1.25);
       top: 56px;
     }
-    @media ${mdAndUp} {
-      border-bottom: 1px solid ${medium};
+    @media ${media.mdAndUp} {
+      border-bottom: 1px solid ${color.medium};
       display: table-cell;
-      padding: ${gutter / 2}px;
+      padding: ${size.gutter / 2}px;
       position: static !important;
       &.tsml-time,
       &.tsml-distance {
-        padding-left: ${gutter}px;
+        padding-left: ${size.gutter}px;
       }
       &:last-of-type {
-        padding-right: ${gutter}px;
+        padding-right: ${size.gutter}px;
       }
     }
   }
 
   th {
-    border-bottom: 1px solid ${medium};
+    border-bottom: 1px solid ${color.medium};
     font-size: var(--font-size);
     font-weight: 600;
-    padding: 0 ${gutter / 2}px ${gutter / 2}px;
+    padding: 0 ${size.gutter / 2}px ${size.gutter / 2}px;
     text-transform: none;
     &:first-of-type {
-      padding-left: ${gutter}px;
+      padding-left: ${size.gutter}px;
     }
     &:last-of-type {
-      padding-right: ${gutter}px;
+      padding-right: ${size.gutter}px;
     }
   }
 
   thead {
     display: none;
-    @media ${mdAndUp} {
+    @media ${media.mdAndUp} {
       display: table-header-group;
     }
   }
 
   tr {
     border: 0;
-    border-top: 1px solid ${medium};
+    border-top: 1px solid ${color.medium};
     display: block;
-    padding: ${gutter / 2}px ${gutter / 2}px;
+    padding: ${size.gutter / 2}px ${size.gutter / 2}px;
     position: relative;
-    @media ${mdAndUp} {
+    @media ${media.mdAndUp} {
       display: table-row;
       padding: 0;
     }
@@ -124,7 +124,7 @@ export const tableCss = css`
         text-transform: lowercase;
       }
     }
-    @media ${lgAndUp} {
+    @media ${media.lgAndUp} {
       flex-direction: row;
       gap: 8px;
     }
@@ -149,7 +149,7 @@ export const tableInProgressCss = css`
     color: var(--alert-text);
     cursor: pointer;
     font-size: var(--font-size);
-    padding: ${gutter * 1.25}px;
+    padding: ${size.gutter * 1.25}px;
     width: 100%;
     &:focus {
       box-shadow: none;

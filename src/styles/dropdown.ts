@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 
-import { dark, gutter, medium } from './variables';
+import { color, size } from './variables';
 import { dropdownButtonCss } from './button';
 
 export const dropdownCss = css`
@@ -8,7 +8,7 @@ export const dropdownCss = css`
   > div {
     background-color: var(--background);
     border-radius: var(--border-radius);
-    border: 1px solid ${medium};
+    border: 1px solid ${color.medium};
     margin-top: 4px;
     min-width: 100%;
     overflow: hidden;
@@ -16,7 +16,7 @@ export const dropdownCss = css`
     z-index: 1;
 
     hr {
-      background-color: ${medium};
+      background-color: ${color.medium};
       border: 0;
       height: 1px;
       margin: 0;
@@ -33,12 +33,12 @@ export const dropdownCss = css`
       font-size: var(--font-size);
       gap: 16px;
       justify-content: space-between;
-      padding: ${gutter / 2}px ${gutter}px;
+      padding: ${size.gutter / 2}px ${size.gutter}px;
       text-align: left;
       width: 100%;
 
       span {
-        background-color: ${medium};
+        background-color: ${color.medium};
         border-radius: var(--border-radius);
         color: var(--text);
         font-weight: bold;
@@ -47,12 +47,12 @@ export const dropdownCss = css`
       }
 
       &[data-active='true'] {
-        background-color: ${dark};
+        background-color: ${color.dark};
         color: var(--background);
       }
 
       &[data-active='false']:hover {
-        background-color: ${medium};
+        background-color: ${color.medium};
         color: var(--text);
       }
     }

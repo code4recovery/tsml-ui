@@ -1,20 +1,20 @@
 import { css } from '@emotion/react';
-import { gutter } from './variables';
+import { size } from './variables';
 
-const baseCss = css`
+const messageCss = css`
   border-radius: var(--border-radius);
-  padding: ${gutter}px;
+  padding: ${size.gutter}px;
   text-align: center;
 `;
 
 export const alertCss = css`
-  ${baseCss};
+  ${messageCss};
   background-color: var(--alert-background);
   color: var(--alert-text);
 `;
 
 export const errorCss = css`
-  ${baseCss};
+  ${messageCss};
   background-color: color-mix(in srgb, var(--inactive), var(--background) 82%);
   color: var(--inactive);
 `;

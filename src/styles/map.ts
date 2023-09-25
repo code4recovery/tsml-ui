@@ -1,9 +1,9 @@
 import { css } from '@emotion/react';
 
-import { dark, medium } from './variables';
+import { color } from './variables';
 
 export const mapCss = css`
-  background-color: ${medium};
+  background-color: ${color.medium};
   border-radius: var(--border-radius);
   display: flex;
   flex-grow: 1;
@@ -23,14 +23,14 @@ export const mapCss = css`
   .mapboxgl-ctrl-attrib {
     background: var(--background) !important;
     a {
-      color: ${dark} !important;
+      color: ${color.dark} !important;
     }
   }
 
   .mapboxgl-ctrl-group {
     button {
       background-color: var(--background);
-      border-top-color: ${medium};
+      border-top-color: ${color.medium};
     }
   }
 
@@ -46,8 +46,8 @@ export const mapCss = css`
     .mapboxgl-popup-close-button {
       background: var(--background);
       border-radius: 100%;
-      border: 1px solid ${medium};
-      color: ${dark};
+      border: 1px solid ${color.medium};
+      color: ${color.dark};
       font-size: 24px;
       height: 30px;
       line-height: 1;
@@ -94,7 +94,7 @@ export const mapMeetingsCss = css`
   max-height: 250px;
   overflow-y: auto;
   > div {
-    border: 1px solid ${medium};
+    border: 1px solid ${color.medium};
     font-size: 90%;
     margin-top: -1px;
     padding: 4px 8px;
@@ -115,7 +115,7 @@ export const mapMeetingsCss = css`
       margin-right: 6px;
     }
     small {
-      color: ${dark};
+      color: ${color.dark};
     }
   }
 `;

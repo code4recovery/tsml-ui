@@ -1,21 +1,21 @@
 import { css } from '@emotion/react';
 
-import { dark, gutter } from './variables';
+import { color, size } from './variables';
 
 export const formControlCss = css`
   align-items: center;
   background-color: transparent;
   border-radius: var(--border-radius);
-  border: 1px solid ${dark};
+  border: 1px solid ${color.dark};
   box-sizing: border-box;
   color: var(--text) !important;
   cursor: pointer;
   display: flex;
   font-size: var(--font-size);
-  gap: ${gutter / 2}px;
+  gap: ${size.gutter / 2}px;
   justify-content: center;
   line-height: var(--line-height);
-  padding: ${gutter / 2.66666}px ${gutter}px;
+  padding: ${size.gutter / 2.66666}px ${size.gutter}px;
   text-decoration: none !important;
   transition: all 0.15s ease-in-out;
   width: 100%;
@@ -26,7 +26,7 @@ export const formControlCss = css`
 
 export const buttonCss = css`
   ${formControlCss}
-  color: ${dark} !important;
+  color: ${color.dark} !important;
   overflow: hidden;
   user-select: none;
   white-space: nowrap;
@@ -37,7 +37,7 @@ export const buttonCss = css`
 
   :hover,
   &[data-active='true'] {
-    background-color: ${dark};
+    background-color: ${color.dark};
     color: var(--background) !important;
   }
 `;

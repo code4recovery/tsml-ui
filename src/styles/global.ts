@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 
-import { gutter, mdAndUp } from './variables';
+import { media, size } from './variables';
 import { tableCss } from './table';
 
 export const globalCss = css`
@@ -31,12 +31,12 @@ export const globalCss = css`
     box-sizing: border-box;
     color: var(--text);
     display: flex;
-    gap: ${gutter}px;
+    gap: ${size.gutter}px;
     flex-direction: column;
     font-family: var(--font-family);
     font-size: var(--font-size);
     line-height: 1.5;
-    padding: ${gutter}px;
+    padding: ${size.gutter}px;
 
     a {
       color: var(--link);
@@ -51,8 +51,8 @@ export const globalCss = css`
 
     button,
     input {
-      background-image: none !important;
-      text-shadow: none !important;
+      background-image: none;
+      text-shadow: none;
     }
 
     h1,
@@ -64,7 +64,7 @@ export const globalCss = css`
     h1 {
       font-size: calc(var(--font-size) * 2);
       font-weight: 300;
-      @media ${mdAndUp} {
+      @media ${media.mdAndUp} {
         font-size: calc(var(--font-size) * 2.5);
       }
     }

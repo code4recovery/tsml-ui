@@ -1,20 +1,20 @@
 import { css } from '@emotion/react';
 
-import { dark, gutter, mdAndUp, medium } from './variables';
+import { color, media, size } from './variables';
 
 export const meetingBackCss = css`
   align-items: center;
   display: flex;
-  margin-bottom: ${gutter}px;
+  margin-bottom: ${size.gutter}px;
 `;
 
 export const meetingColumnsCss = css`
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  gap: ${gutter * 1.5}px;
+  gap: ${size.gutter * 1.5}px;
 
-  @media ${mdAndUp} {
+  @media ${media.mdAndUp} {
     flex-direction: row;
   }
 
@@ -23,7 +23,7 @@ export const meetingColumnsCss = css`
   }
 
   ul {
-    padding: 0 0 ${gutter / 2}px ${gutter};
+    padding: 0 0 ${size.gutter / 2}px ${size.gutter};
     button {
       background-color: transparent;
       background-image: none;
@@ -40,12 +40,12 @@ export const meetingColumnsCss = css`
       > div {
         align-items: center;
         display: flex;
-        gap: ${gutter / 2}px;
+        gap: ${size.gutter / 2}px;
       }
 
       small {
         display: block;
-        margin: ${gutter / 2}px 0;
+        margin: ${size.gutter / 2}px 0;
       }
     }
   }
@@ -53,11 +53,11 @@ export const meetingColumnsCss = css`
   h3 {
     font-size: var(--font-size);
     font-weight: 500;
-    margin: ${gutter}px 0 0;
+    margin: ${size.gutter}px 0 0;
   }
 
   ol {
-    color: ${dark};
+    color: ${color.dark};
     list-style: none;
     margin: 0 !important;
     padding: 0 !important;
@@ -90,28 +90,28 @@ export const meetingColumnsCss = css`
   > div:first-of-type {
     display: flex;
     flex-direction: column;
-    gap: ${gutter}px;
+    gap: ${size.gutter}px;
     width: 100%;
-    @media ${mdAndUp} {
+    @media ${media.mdAndUp} {
       width: 33%;
     }
     > div {
-      border: 1px solid ${medium};
+      border: 1px solid ${color.medium};
       border-radius: var(--border-radius);
       > div {
-        padding: ${gutter}px;
-        border-bottom: 1px solid ${medium};
+        padding: ${size.gutter}px;
+        border-bottom: 1px solid ${color.medium};
         display: flex;
         flex-direction: column;
-        gap: ${gutter / 2}px;
+        gap: ${size.gutter / 2}px;
         > div {
           display: flex;
           flex-direction: column;
-          gap: ${gutter}px;
+          gap: ${size.gutter}px;
           > div {
             display: flex;
             flex-direction: column;
-            gap: ${gutter / 3}px;
+            gap: ${size.gutter / 3}px;
           }
         }
         &:last-of-type {
@@ -156,7 +156,7 @@ export const meetingCss = css`
     /* for focusing, can remove with react router */
     outline: none;
     small {
-      color: ${dark};
+      color: ${color.dark};
       margin-left: 8px;
     }
   }
