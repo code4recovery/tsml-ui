@@ -134,7 +134,6 @@ export const tableCss = css`
 export const tableInProgressCss = css`
   tr {
     background-color: var(--alert-background) !important;
-    padding: 0 !important;
   }
 
   td[colspan] {
@@ -149,7 +148,7 @@ export const tableInProgressCss = css`
     color: var(--alert-text);
     cursor: pointer;
     font-size: var(--font-size);
-    padding: ${size.gutter * 1.25}px;
+    padding: ${size.gutter}px;
     width: 100%;
     &:focus {
       box-shadow: none;
