@@ -1,7 +1,6 @@
 import { css } from '@emotion/react';
 
 import { color } from './variables';
-import { defaults } from '../helpers';
 
 export const mapCss = css`
   background-color: ${color.medium};
@@ -93,11 +92,8 @@ export const mapCss = css`
     &[class*='anchor-right'] .mapboxgl-popup-tip {
       border-left-color: var(--background);
     }
-    &[class*='anchor-top'] {
-      padding-top: ${defaults.map.markers.location.height}px;
-      .mapboxgl-popup-tip {
-        border-bottom-color: var(--background);
-      }
+    &[class*='anchor-top'] .mapboxgl-popup-tip {
+      border-bottom-color: var(--background);
     }
   }
 `;

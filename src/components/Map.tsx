@@ -203,7 +203,7 @@ export default function Map({
                   closeOnClick={false}
                   latitude={data.locations[key].latitude}
                   longitude={data.locations[key].longitude}
-                  offsetTop={-settings.map.markers.location.height}
+                  offsetTop={-settings.map.markers.location.height / 1.5}
                   onClose={() => setPopup(undefined)}
                 >
                   <div>
