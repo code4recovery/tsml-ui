@@ -73,25 +73,47 @@ var tsml_react_config = {
 };
 ```
 
-### Dark mode
+### Customize theme colors
 
-CSS variables can be used to customize the appearance. They can be combined with media queries to enable dark mode.
+You can add CSS variables to your site to customize the TSML UI's appearance. Here are the defaults:
 
 ```css
-@media (prefers-color-scheme: dark) {
-  body {
-    background-color: black;
-    color: white;
-  }
-  #tsml-ui {
-    --background: #000;
-    --color: #000;
-    --link: #7bc8ff;
-  }
+#tsml-ui {
+  --alert-background: #faf4e0;
+  --alert-text: #998a5e;
+  --background: #fff;
+  --border-radius: 4px;
+  --focus: #0d6efd40;
+  --font-family: system-ui, -apple-system, sans-serif;
+  --font-size: 16px;
+  --in-person: #146c43;
+  --inactive: #b02a37;
+  --link: #0d6efd;
+  --online: #0a58ca;
+  --online-background-image: url(https://images.unsplash.com/photo-1588196749597-9ff075ee6b5b?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=1440&ixid=MnwxfDB8MXxhbGx8fHx8fHx8fHwxNjIyMTIzODkw&ixlib=rb-1.2.1&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=1920);
+  --text: #212529;
 }
 ```
 
 Note: hex values (`#123456`) must be used when specifiying colors.
+
+### Dark mode
+
+Theme customization can be combined with media queries to enable responsive dark mode. The goal should be to match TSML UI's colors to the container colors. [Here's a demo](https://tsml-ui.code4recovery.org/tests/dark-mode.html). The background is white if the user prefers a light appearance, and black if they prefer dark.
+
+```css
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #000;
+    color: #fff;
+  }
+  #tsml-ui {
+    --background: #000;
+    --color: #fff;
+    --link: #7bc8ff;
+  }
+}
+```
 
 ### Change the online background image
 
