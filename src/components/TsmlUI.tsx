@@ -103,7 +103,7 @@ export default function TsmlUI({
   // load data once
   if (state.loading) {
     console.log(
-      'TSML UI meeting finder: https:// github.com/code4recovery/tsml-ui'
+      'TSML UI meeting finder: https://github.com/code4recovery/tsml-ui'
     );
 
     const input = getQueryString(settings);
@@ -116,7 +116,7 @@ export default function TsmlUI({
         ready: true,
       });
     } else {
-      const sheetId = src.startsWith('https:// docs.google.com/spreadsheets/d/')
+      const sheetId = src.startsWith('https://docs.google.com/spreadsheets/d/')
         ? src.split('/')[5]
         : undefined;
 
@@ -129,7 +129,7 @@ export default function TsmlUI({
             loading: false,
           });
         }
-        src = `https:// sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/A1:ZZ?key=${google}`;
+        src = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/A1:ZZ?key=${google}`;
       }
 
       // cache busting
