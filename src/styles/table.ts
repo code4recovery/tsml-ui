@@ -34,6 +34,7 @@ export const tableCss = css`
   border: 0 !important;
   border-spacing: 0;
   table-layout: auto;
+  width: 100%;
 
   small {
     margin-left: 6px;
