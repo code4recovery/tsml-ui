@@ -33,9 +33,7 @@ export const tableChicletCss = (
 export const tableCss = css`
   border: 0 !important;
   border-spacing: 0;
-  margin: 0 ${size.gutter * -1}px ${size.gutter * -1}px;
   table-layout: auto;
-  width: calc(100% + ${size.gutter * 2}px);
 
   small {
     margin-left: 6px;
@@ -101,7 +99,6 @@ export const tableCss = css`
 
   tr {
     border: 0;
-    border-top: 1px solid ${color.medium};
     display: block;
     padding: ${size.gutter / 2}px ${size.gutter / 2}px;
     position: relative;
@@ -111,8 +108,11 @@ export const tableCss = css`
     }
   }
 
-  tbody tr:nth-of-type(2n + 1) {
-    background-color: color-mix(in srgb, currentColor 3%, transparent);
+  tbody tr {
+    border-top: 1px solid ${color.medium};
+    :nth-of-type(2n + 1) {
+      background-color: color-mix(in srgb, currentColor 3%, transparent);
+    }
   }
 
   time {
@@ -159,4 +159,9 @@ export const tableInProgressCss = css`
       text-decoration: underline;
     }
   }
+`;
+
+export const tableWrapperCss = css`
+  margin: 0 ${size.gutter * -1}px ${size.gutter * -1}px;
+  width: calc(100% + ${size.gutter * 2}px);
 `;

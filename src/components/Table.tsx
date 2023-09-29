@@ -6,6 +6,7 @@ import {
   tableChicletCss,
   tableChicletsCss,
   tableInProgressCss,
+  tableWrapperCss,
 } from '../styles';
 import { Meeting, State } from '../types';
 import Icon, { icons } from './Icon';
@@ -141,44 +142,46 @@ export default function Table({
   };
 
   return !filteredSlugs.length ? null : (
-    <table>
-      <thead>
-        <tr>
-          {columns.map((column, index) => (
-            <th key={index}>
-              {strings[column as keyof Translation] as string}
-            </th>
+    <div css={tableWrapperCss}>
+      <table>
+        <thead>
+          <tr>
+            {columns.map((column, index) => (
+              <th key={index}>
+                {strings[column as keyof Translation] as string}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        {!!inProgress.length && (
+          <tbody css={tableInProgressCss}>
+            {showInProgress ? (
+              inProgress.map((slug, index) => <Row slug={slug} key={index} />)
+            ) : (
+              <tr>
+                <td colSpan={columns.length}>
+                  <button onClick={() => setShowInProgress(true)}>
+                    {inProgress.length === 1
+                      ? strings.in_progress_single
+                      : i18n(strings.in_progress_multiple, {
+                          count: inProgress.length,
+                        })}
+                  </button>
+                </td>
+              </tr>
+            )}
+          </tbody>
+        )}
+        <InfiniteScroll
+          element="tbody"
+          hasMore={filteredSlugs.length > limit}
+          loadMore={() => setLimit(limit + meetingsPerPage)}
+        >
+          {filteredSlugs.slice(0, limit).map((slug, index) => (
+            <Row slug={slug} key={index} />
           ))}
-        </tr>
-      </thead>
-      {!!inProgress.length && (
-        <tbody css={tableInProgressCss}>
-          {showInProgress ? (
-            inProgress.map((slug, index) => <Row slug={slug} key={index} />)
-          ) : (
-            <tr>
-              <td colSpan={columns.length}>
-                <button onClick={() => setShowInProgress(true)}>
-                  {inProgress.length === 1
-                    ? strings.in_progress_single
-                    : i18n(strings.in_progress_multiple, {
-                        count: inProgress.length,
-                      })}
-                </button>
-              </td>
-            </tr>
-          )}
-        </tbody>
-      )}
-      <InfiniteScroll
-        element="tbody"
-        hasMore={filteredSlugs.length > limit}
-        loadMore={() => setLimit(limit + meetingsPerPage)}
-      >
-        {filteredSlugs.slice(0, limit).map((slug, index) => (
-          <Row slug={slug} key={index} />
-        ))}
-      </InfiniteScroll>
-    </table>
+        </InfiniteScroll>
+      </table>
+    </div>
   );
 }

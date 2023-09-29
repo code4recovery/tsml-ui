@@ -31,7 +31,7 @@ export const meetingColumnsCss = css`
       color: var(--text);
       cursor: pointer;
       font-size: var(--font-size);
-      line-height: 1.5;
+      line-height: 1;
       padding: 0 !important;
       text-align: left;
       text-shadow: none;
@@ -45,6 +45,7 @@ export const meetingColumnsCss = css`
 
       small {
         display: block;
+        line-height: 1.5;
         margin: ${size.gutter / 2}px 0;
       }
     }
