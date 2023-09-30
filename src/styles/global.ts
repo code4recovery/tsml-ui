@@ -60,6 +60,11 @@ export const globalCss = css`
     h1,
     h2 {
       line-height: 1.2;
+    }
+
+    h1,
+    h2,
+    p {
       margin: 0;
     }
 
