@@ -52,7 +52,9 @@ export const globalCss = css`
     button,
     input {
       background-image: none;
+      letter-spacing: normal;
       text-shadow: none;
+      text-transform: none;
     }
 
     h1,
