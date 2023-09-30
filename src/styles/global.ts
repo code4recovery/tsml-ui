@@ -64,7 +64,10 @@ export const globalCss = css`
 
     h1,
     h2,
-    p {
+    h3,
+    ol,
+    p,
+    ul {
       margin: 0;
     }
 

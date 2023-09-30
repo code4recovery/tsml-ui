@@ -54,16 +54,15 @@ export const meetingColumnsCss = css`
   h3 {
     font-size: var(--font-size);
     font-weight: 500;
-    margin: ${size.gutter}px 0 0;
   }
 
   ol {
     color: ${color.dark};
     list-style: none;
-    margin: 0 !important;
     padding: 0 !important;
     li {
       display: flex;
+      gap: ${size.gutter / 2}px;
       justify-content: space-between;
       div {
         align-items: baseline;
@@ -112,7 +111,6 @@ export const meetingColumnsCss = css`
           > div {
             display: flex;
             flex-direction: column;
-            gap: ${size.gutter / 3}px;
           }
         }
         &:last-of-type {
