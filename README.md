@@ -32,11 +32,11 @@ var tsml_react_config = {
 };
 ```
 
-AA groups that wish to participate in the Meeting Guide app should be careful not to repurpose types already in use. A full list of A.A. meeting types can be found in the [Meeting Guide format spec](https://github.com/code4recovery/spec).
+A.A. groups that wish to participate in the Meeting Guide app should be careful not to repurpose types already in use. A full list of A.A. meeting types can be found in the [Meeting Guide format spec](https://github.com/code4recovery/spec).
 
 ### Override type descriptions
 
-AA meeting type descriptions are automatically applied to Open and Closed types. These can be unset or overwritten as needed.
+A.A. meeting type descriptions are automatically applied to Open and Closed types. These can be unset or overwritten as needed.
 
 ```js
 var tsml_react_config = {
@@ -151,7 +151,7 @@ Metatypes are types that are not specified explicitly in the data, they are infe
 
 ### Why no "Hybrid" type?
 
-This app exists to help people find AA meetings, and after much discussion we decided that Hybrid was not a useful filter type for that purpose. We believe that people on the whole do not set out looking for a hybrid meeting, they simply want to know whether their online or in-person meeting happens to be hybrid. They will know this by its appearance in the list.
+This app exists to help people find A.A. meetings, and after much discussion we decided that Hybrid was not a useful filter type for that purpose. We believe that people on the whole do not set out looking for a hybrid meeting, they simply want to know whether their online or in-person meeting happens to be hybrid. They will know this by its appearance in the list.
 
 Second, while we can infer that a meeting is "online" if there is a Zoom URL (for example) in the listing, the app should not assume that, when there are online and in-person options, that means it is an actual "hybrid" meeting with a video screen and speakers in the room.
 
