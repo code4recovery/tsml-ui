@@ -32,7 +32,7 @@ var tsml_react_config = {
 };
 ```
 
-AA groups that wish to participate in the Meeting Guide app should be careful not to repurpose types already in use. A full list of AA meeting types can be found in the [Meeting Guide format spec](https://github.com/code4recovery/spec).
+AA groups that wish to participate in the Meeting Guide app should be careful not to repurpose types already in use. A full list of A.A. meeting types can be found in the [Meeting Guide format spec](https://github.com/code4recovery/spec).
 
 ### Override type descriptions
 
@@ -75,7 +75,7 @@ var tsml_react_config = {
 
 ### Customize theme colors
 
-You can add CSS variables to your site to customize the TSML UI's appearance. Here are the defaults:
+You can use CSS variables to customize TSML UI’s appearance. Here are the defaults:
 
 ```css
 #tsml-ui {
@@ -95,18 +95,14 @@ You can add CSS variables to your site to customize the TSML UI's appearance. He
 }
 ```
 
-Note: hex values (`#123456`) must be used when specifiying colors.
+Only specify the variables you wish to override in your code. Hex values (`#123456`) must be used when specifiying colors.
 
 ### Dark mode
 
-Theme customization can be combined with media queries to enable responsive dark mode. The goal should be to match TSML UI's colors to the container colors. [Here's a demo](https://tsml-ui.code4recovery.org/tests/dark-mode.html). The background is white if the user prefers a light appearance, and black if they prefer dark.
+If your website theme supports responsive dark mode, TSML UI can match it with a media query: In [this demo](https://tsml-ui.code4recovery.org/tests/aasanjose.html) the background will be white if the user prefers a light appearance, and black if they prefer dark.
 
 ```css
 @media (prefers-color-scheme: dark) {
-  body {
-    background-color: #000;
-    color: #fff;
-  }
   #tsml-ui {
     --background: #000;
     --color: #fff;

@@ -174,7 +174,7 @@ export default function Map({
   }, [data, dimensions]);
 
   return (
-    <div aria-hidden={true} ref={mapFrame} css={mapCss}>
+    <div aria-hidden={true} css={mapCss} ref={mapFrame}>
       {viewport && !!data.locationKeys.length && (
         <ReactMapGL
           mapStyle={settings.map.style}

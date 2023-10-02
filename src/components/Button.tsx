@@ -19,9 +19,6 @@ export default function Button({
   const Tag = href ? 'a' : 'button';
   return (
     <Tag
-      href={href}
-      onClick={onClick}
-      target={href && '_blank'}
       css={
         type === 'in-person'
           ? buttonDirectionsCss
@@ -29,6 +26,9 @@ export default function Button({
           ? buttonJoinCss
           : buttonCss
       }
+      href={href}
+      onClick={onClick}
+      target={href && '_blank'}
     >
       {icon && <Icon icon={icon} />}
       {text}

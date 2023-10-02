@@ -13,15 +13,15 @@ import Icon, { icons } from './Icon';
 import Link from './Link';
 
 export default function Table({
-  state,
-  setState,
   filteredSlugs = [],
   inProgress = [],
+  setState,
+  state,
 }: {
-  state: State;
-  setState: (state: State) => void;
   filteredSlugs: string[];
   inProgress: string[];
+  setState: (state: State) => void;
+  state: State;
 }) {
   const { settings, strings } = useSettings();
   const meetingsPerPage = 10;
