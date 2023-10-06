@@ -16,7 +16,7 @@ export const defaults: TSMLReactConfig = {
     'goto.com': 'GoTo',
     'gotomeet.me': 'GoTo',
     'gotomeeting.com': 'GoTo',
-    'meet.google.com': 'Google Hangouts',
+    'meet.google.com': 'Google Meet',
     'meet.jit.si': 'Jitsi',
     'meetings.dialpad.com': 'Dialpad',
     'skype.com': 'Skype',
