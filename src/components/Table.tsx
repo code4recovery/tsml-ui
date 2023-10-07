@@ -1,33 +1,28 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
 
-import { Meeting, State } from '../types';
+import { formatString as i18n, useSettings } from '../helpers';
 import {
-  formatClasses as cx,
-  formatDirectionsUrl,
-  formatString as i18n,
-  useSettings,
-} from '../helpers';
-import { icons } from './Icon';
-
-import Button from './Button';
+  tableChicletCss,
+  tableChicletsCss,
+  tableInProgressCss,
+  tableWrapperCss,
+} from '../styles';
+import { Meeting, State } from '../types';
+import Icon, { icons } from './Icon';
 import Link from './Link';
 
-type TableProps = {
-  state: State;
-  setState: (state: State) => void;
-  filteredSlugs: string[];
-  inProgress: string[];
-  listButtons: boolean;
-};
-
 export default function Table({
-  state,
-  setState,
   filteredSlugs = [],
   inProgress = [],
-  listButtons = false,
-}: TableProps) {
+  setState,
+  state,
+}: {
+  filteredSlugs: string[];
+  inProgress: string[];
+  setState: (state: State) => void;
+  state: State;
+}) {
   const { settings, strings } = useSettings();
   const meetingsPerPage = 10;
   const supported_columns = [
@@ -43,14 +38,6 @@ export default function Table({
   const [showInProgress, setShowInProgress] = useState(false);
   const { distance, location, region } = state.capabilities;
 
-  //manage classes
-  useEffect(() => {
-    document.body.classList.add('tsml-ui-table');
-    return () => {
-      document.body.classList.remove('tsml-ui-table');
-    };
-  }, []);
-
   //show columns based on capabilities
   const columns = settings.columns
     .filter(col => supported_columns.includes(col))
@@ -60,59 +47,54 @@ export default function Table({
 
   const getValue = (meeting: Meeting, key: string) => {
     if (key === 'address') {
-      const buttons: {
-        className: string;
-        href?: string;
+      const attendance: {
         icon: keyof typeof icons;
         text?: string;
+        type: 'in-person' | 'online' | 'inactive';
       }[] = [];
       if (meeting.isInPerson) {
-        buttons.push({
-          className: 'in-person',
-          href: listButtons ? formatDirectionsUrl(meeting) : undefined,
+        attendance.push({
           icon: 'geo',
           text: meeting.address,
+          type: 'in-person',
         });
       }
       if (meeting.conference_provider) {
-        buttons.push({
-          className: 'online',
-          href: listButtons ? meeting.conference_url : undefined,
+        attendance.push({
           icon: 'camera',
           text: meeting.conference_provider,
+          type: 'online',
         });
       }
       if (meeting.conference_phone) {
-        buttons.push({
-          className: 'online',
-          href: listButtons ? `tel:${meeting.conference_phone}` : undefined,
+        attendance.push({
           icon: 'phone',
           text: strings.phone,
+          type: 'online',
         });
       }
       if (!meeting.isInPerson && !meeting.isOnline) {
-        buttons.push({
-          className: 'inactive',
+        attendance.push({
           icon: 'close',
           text: strings.types.inactive,
+          type: 'inactive',
         });
       }
       return (
-        <div className="d-flex flex-wrap gap-1">
-          {buttons.map((button, index) => (
-            <Button key={index} small={true} {...button} />
+        <div css={tableChicletsCss}>
+          {attendance.map(({ icon, text, type }, index) => (
+            <span css={tableChicletCss(type)} key={index}>
+              <Icon icon={icon} size={18} />
+              {text && <span>{text}</span>}
+            </span>
           ))}
         </div>
       );
     } else if (key === 'distance' && meeting.distance) {
       return (
-        <div className="align-items-baseline d-flex flex-wrap justify-content-sm-end">
-          <span className="fs-5 me-1">
-            {meeting.distance.toLocaleString(navigator.language)}
-          </span>
-          <small className="text-muted">
-            {strings[settings.distance_unit]}
-          </small>
+        <div>
+          <span>{meeting.distance.toLocaleString(navigator.language)}</span>
+          <small>{strings[settings.distance_unit]}</small>
         </div>
       );
     } else if (key === 'location') {
@@ -125,11 +107,9 @@ export default function Table({
       return meeting.regions[meeting.regions.length - 1];
     } else if (key === 'time') {
       return meeting.start ? (
-        <time className="d-flex flex-column flex-lg-row gap-lg-1">
-          <span className="text-nowrap text-lowercase">
-            {meeting.start.toFormat('t')}
-          </span>
-          <span className="text-nowrap">{meeting.start.toFormat('cccc')}</span>
+        <time>
+          <span>{meeting.start.toFormat('t')}</span>
+          <span>{meeting.start.toFormat('cccc')}</span>
         </time>
       ) : (
         strings.appointment
@@ -142,23 +122,18 @@ export default function Table({
     const meeting = state.meetings[slug];
     return (
       <tr
-        className={cx(
-          { 'cursor-pointer': !listButtons },
-          'd-block d-md-table-row'
-        )}
-        onClick={() => {
-          if (listButtons) return;
+        onClick={() =>
           setState({
             ...state,
             input: {
               ...state.input,
               meeting: meeting.slug,
             },
-          });
-        }}
+          })
+        }
       >
         {columns.map((column, index) => (
-          <td className={cx('d-block d-md-table-cell', column)} key={index}>
+          <td className={`tsml-${column}`} key={index}>
             {getValue(meeting, column)}
           </td>
         ))}
@@ -167,35 +142,25 @@ export default function Table({
   };
 
   return !filteredSlugs.length ? null : (
-    <div className="row">
-      <table
-        className={cx('table table-striped flex-grow-1 my-0', {
-          'clickable-rows': !listButtons,
-        })}
-      >
+    <div css={tableWrapperCss}>
+      <table>
         <thead>
-          <tr className="d-none d-md-table-row">
+          <tr>
             {columns.map((column, index) => (
-              <th key={index} className={cx('pt-0', column)}>
+              <th key={index}>
                 {strings[column as keyof Translation] as string}
               </th>
             ))}
           </tr>
         </thead>
         {!!inProgress.length && (
-          <tbody className="tsml-in-progress">
+          <tbody css={tableInProgressCss}>
             {showInProgress ? (
               inProgress.map((slug, index) => <Row slug={slug} key={index} />)
             ) : (
               <tr>
-                <td
-                  className="p-2 text-center rounded-0"
-                  colSpan={columns.length}
-                >
-                  <button
-                    onClick={() => setShowInProgress(true)}
-                    className="alert-link bg-transparent border-0 d-block fw-normal mx-auto p-2 text-center text-decoration-underline w-100"
-                  >
+                <td colSpan={columns.length}>
+                  <button onClick={() => setShowInProgress(true)}>
                     {inProgress.length === 1
                       ? strings.in_progress_single
                       : i18n(strings.in_progress_multiple, {
@@ -209,10 +174,8 @@ export default function Table({
         )}
         <InfiniteScroll
           element="tbody"
-          loadMore={() => {
-            setLimit(limit + meetingsPerPage);
-          }}
           hasMore={filteredSlugs.length > limit}
+          loadMore={() => setLimit(limit + meetingsPerPage)}
         >
           {filteredSlugs.slice(0, limit).map((slug, index) => (
             <Row slug={slug} key={index} />

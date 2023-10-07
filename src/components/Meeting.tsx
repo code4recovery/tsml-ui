@@ -1,9 +1,7 @@
 import { useEffect, useState } from 'react';
 import { DateTime, Info } from 'luxon';
 
-import type { Meeting as MeetingType, State } from '../types';
 import {
-  formatClasses as cx,
   formatDirectionsUrl,
   formatFeedbackEmail,
   formatIcs,
@@ -11,6 +9,15 @@ import {
   formatUrl,
   useSettings,
 } from '../helpers';
+import {
+  meetingBackCss,
+  meetingColumnsCss,
+  meetingCss,
+  meetingOnlineCss,
+  tableChicletCss,
+} from '../styles';
+import type { Meeting as MeetingType, State } from '../types';
+
 import Button from './Button';
 import Icon, { icons } from './Icon';
 import Link from './Link';
@@ -31,10 +38,10 @@ export default function Meeting({
 }: MeetingProps) {
   const { settings, strings } = useSettings();
 
-  //open types
+  // open types
   const [define, setDefine] = useState<string | undefined>();
 
-  //existence checked in the parent component
+  // existence checked in the parent component
   const meeting =
     state.meetings[state.input.meeting as keyof typeof state.meetings];
 
@@ -43,7 +50,7 @@ export default function Meeting({
     url: meeting.url ?? location.href,
   };
 
-  //format time string (duration? or appointment?)
+  // format time string (duration? or appointment?)
   const formatTime = (start?: DateTime, end?: DateTime) => {
     if (!start) {
       return strings.appointment;
@@ -60,7 +67,7 @@ export default function Meeting({
     return start.toFormat('cccc t ZZZZ');
   };
 
-  //scroll to top when you navigate to this page
+  // scroll to top when you navigate to this page
   useEffect(() => {
     const el = document.getElementById('tsml-ui');
     if (el) {
@@ -86,7 +93,7 @@ export default function Meeting({
 
     document.getElementById('tsml-title')?.focus();
 
-    //log edit_url
+    // log edit_url
     if (meeting.edit_url) {
       console.log(`TSML UI edit ${meeting.name}: ${meeting.edit_url}`);
       wordPressEditLink(meeting.edit_url);
@@ -97,25 +104,17 @@ export default function Meeting({
     };
   }, [state.input.meeting]);
 
-  //manage classes
-  useEffect(() => {
-    document.body.classList.add('tsml-ui-meeting');
-    return () => {
-      document.body.classList.remove('tsml-ui-meeting');
-    };
-  }, []);
-
-  //directions URL link
+  // directions URL link
   const directionsUrl = meeting.isInPerson
     ? formatDirectionsUrl(meeting)
     : undefined;
 
-  //set page title
+  // set page title
   if (meeting.name) {
     document.title = meeting.name;
   }
 
-  //feedback URL link
+  // feedback URL link
   if (!meeting.feedback_url && feedback_emails.length) {
     meeting.feedback_url = formatFeedbackEmail(
       settings.feedback_emails,
@@ -156,21 +155,21 @@ export default function Meeting({
   }
   if (meeting.venmo) {
     contactButtons.push({
-      href: `https://venmo.com/${meeting.venmo.substring(1)}`,
+      href: `https:// venmo.com/${meeting.venmo.substring(1)}`,
       icon: 'cash',
       text: i18n(strings.contribute_with, { service: 'Venmo' }),
     });
   }
   if (meeting.square) {
     contactButtons.push({
-      href: `https://cash.app/${meeting.square}`,
+      href: `https:// cash.app/${meeting.square}`,
       icon: 'cash',
       text: i18n(strings.contribute_with, { service: 'Cash App' }),
     });
   }
   if (meeting.paypal) {
     contactButtons.push({
-      href: `https://www.paypal.com/paypalme/${meeting.paypal}`,
+      href: `https:// www.paypal.com/paypalme/${meeting.paypal}`,
       icon: 'cash',
       text: i18n(strings.contribute_with, { service: 'PayPal' }),
     });
@@ -212,7 +211,7 @@ export default function Meeting({
     }))
     .filter(e => e.meetings.length);
 
-  //don't display if only one meeting
+  // don't display if only one meeting
   if (
     locationWeekdays.length === 1 &&
     locationWeekdays[0].meetings.length === 1
@@ -237,23 +236,17 @@ export default function Meeting({
     }))
     .filter(e => e.meetings.length);
 
-  //don't display if only one meeting
+  // don't display if only one meeting
   if (groupWeekdays.length === 1 && groupWeekdays[0].meetings.length === 1) {
     groupWeekdays.splice(0, 1);
   }
 
   return (
-    <div
-      className={cx('d-flex flex-column flex-grow-1 meeting', {
-        'in-person': !!meeting.isInPerson,
-        'inactive': !meeting.isActive,
-        'online': !!meeting.isOnline,
-      })}
-    >
-      <h1 className="fw-light mb-1" id="tsml-title" tabIndex={-1}>
+    <div css={meetingCss}>
+      <h1 id="tsml-title" tabIndex={-1}>
         <Link meeting={meeting} />
       </h1>
-      <div className="align-items-center border-bottom d-flex mb-3 pb-2">
+      <div css={meetingBackCss}>
         <Icon icon="back" />
         <a
           href={formatUrl(
@@ -277,23 +270,23 @@ export default function Meeting({
           {strings.back_to_meetings}
         </a>
       </div>
-      <div className="flex-grow-1 row">
-        <div className="align-content-start col-md-4 d-grid gap-3 mb-3 mb-md-0">
+      <div css={meetingColumnsCss}>
+        <div>
           {directionsUrl && (
             <Button
-              className="in-person"
               href={directionsUrl}
               icon="geo"
               text={strings.get_directions}
+              type="in-person"
             />
           )}
-          <div className="list-group">
-            <div className="d-grid gap-2 list-group-item py-3">
+          <div>
+            <div>
               <h2>{strings.meeting_information}</h2>
               <p>{formatTime(meeting.start, meeting.end)}</p>
 
               {meeting.start && meeting.start.zoneName !== meeting.timezone && (
-                <p className="text-muted">
+                <p>
                   (
                   {formatTime(
                     meeting.start.setZone(meeting.timezone),
@@ -303,35 +296,28 @@ export default function Meeting({
                 </p>
               )}
               {state.capabilities.type && meeting.types && (
-                <ul className="ms-4">
+                <ul>
                   {meeting.types
                     .filter(type => type !== 'active')
                     .sort((a, b) =>
                       strings.types[a].localeCompare(strings.types[b])
                     )
                     .map((type, index) => (
-                      <li className="m-0" key={index}>
+                      <li key={index}>
                         {strings.type_descriptions?.[
                           type as keyof typeof strings.type_descriptions
                         ] ? (
                           <button
-                            className="bg-transparent border-0 d-flex flex-column p-0 text-decoration-none text-reset text-start"
                             onClick={() =>
                               setDefine(define === type ? undefined : type)
                             }
                           >
-                            <div className="d-flex align-items-center gap-2">
+                            <div>
                               <span>{strings.types[type]}</span>
-                              <Icon
-                                icon="info"
-                                size={13}
-                                className={
-                                  define === type ? 'text-muted' : undefined
-                                }
-                              />
+                              <Icon icon="info" size={13} />
                             </div>
                             {define === type && (
-                              <small className="d-block mb-1">
+                              <small>
                                 {
                                   strings.type_descriptions[
                                     type as keyof typeof strings.type_descriptions
@@ -350,36 +336,30 @@ export default function Meeting({
               {meeting.notes && <Paragraphs text={meeting.notes} />}
               {(meeting.isActive ||
                 (!meeting.group && !!contactButtons.length)) && (
-                <div className="d-grid gap-3 mt-2">
+                <div>
                   {meeting.conference_provider && (
-                    <div className="d-grid gap-1">
+                    <div>
                       <Button
-                        className="online"
                         href={meeting.conference_url}
                         icon="camera"
                         text={meeting.conference_provider}
+                        type="online"
                       />
                       {meeting.conference_url_notes && (
-                        <Paragraphs
-                          className="d-block text-muted"
-                          text={meeting.conference_url_notes}
-                        />
+                        <Paragraphs text={meeting.conference_url_notes} />
                       )}
                     </div>
                   )}
                   {meeting.conference_phone && (
-                    <div className="d-grid gap-1">
+                    <div>
                       <Button
-                        className="online"
                         href={`tel:${meeting.conference_phone}`}
                         icon="phone"
                         text={strings.phone}
+                        type="online"
                       />
                       {meeting.conference_phone_notes && (
-                        <Paragraphs
-                          className="d-block text-muted"
-                          text={meeting.conference_phone_notes}
-                        />
+                        <Paragraphs text={meeting.conference_phone_notes} />
                       )}
                     </div>
                   )}
@@ -408,15 +388,7 @@ export default function Meeting({
               )}
             </div>
             {!meeting.approximate && (
-              <div
-                className={cx(
-                  {
-                    'text-decoration-line-through text-muted':
-                      !!meeting.isTempClosed,
-                  },
-                  'd-grid gap-2 list-group-item py-3 location'
-                )}
-              >
+              <div data-disabled={meeting.isTempClosed}>
                 {meeting.location && <h2>{meeting.location}</h2>}
                 {meeting.formatted_address && (
                   <p>{meeting.formatted_address}</p>
@@ -440,14 +412,14 @@ export default function Meeting({
                 meeting.group_notes ||
                 !!groupWeekdays.length ||
                 !!contactButtons.length) && (
-                <div className="d-grid gap-2 list-group-item py-3 group">
+                <div>
                   <h2>{meeting.group}</h2>
                   {meeting.district && <p>{meeting.district}</p>}
                   {meeting.group_notes && (
                     <Paragraphs text={meeting.group_notes} />
                   )}
                   {!!contactButtons.length && (
-                    <div className="d-grid gap-3 mt-2">
+                    <div>
                       {contactButtons.map((button, index) => (
                         <Button {...button} key={index} />
                       ))}
@@ -457,9 +429,7 @@ export default function Meeting({
                 </div>
               )}
             {meeting.updated && (
-              <div className="list-group-item">
-                {i18n(strings.updated, { updated: meeting.updated })}
-              </div>
+              <div>{i18n(strings.updated, { updated: meeting.updated })}</div>
             )}
           </div>
 
@@ -473,10 +443,11 @@ export default function Meeting({
         </div>
         {!!mapbox && (
           <div
-            className={cx(
-              { 'd-md-block d-none': !meeting.isInPerson },
-              'col-md-8'
-            )}
+            css={
+              meeting.isOnline && !meeting.isInPerson
+                ? meetingOnlineCss
+                : undefined
+            }
           >
             <Map
               filteredSlugs={[meeting.slug]}
@@ -492,10 +463,10 @@ export default function Meeting({
   );
 }
 
-//return paragraphs from possibly-multiline string
-function Paragraphs({ text, className }: { text: string; className?: string }) {
+// return paragraphs from possibly-multiline string
+function Paragraphs({ text }: { text: string }) {
   return (
-    <div className={className}>
+    <div>
       {text
         .split('\n')
         .filter(e => e)
@@ -514,34 +485,29 @@ function formatWeekdays(
 ) {
   return (
     !!weekday.length && (
-      <div className="meetings d-grid gap-2">
+      <div>
         {weekday.map(({ meetings, name }, index) => (
           <div key={index}>
-            <h3 className="mb-1 mt-2">{name}</h3>
-            <ol className="list-unstyled">
+            <h3>{name}</h3>
+            <ol>
               {meetings.map((m, index) => (
-                <li
-                  className="d-flex flex-row gap-2 justify-content-between m-0"
-                  key={index}
-                >
-                  <div className="text-muted text-nowrap">
-                    {m.start?.toFormat('t')}
-                  </div>
-                  <div className="flex-grow-1">
+                <li key={index}>
+                  <div>{m.start?.toFormat('t')}</div>
+                  <div>
                     {m.slug === slug ? (
                       <Link meeting={m} />
                     ) : (
                       <Link meeting={m} setState={setState} state={state} />
                     )}
                   </div>
-                  <div className="align-items-start d-flex gap-1 justify-content-end pt-1">
+                  <div>
                     {m.isInPerson && (
-                      <small className="align-items-center d-flex flex-row float-end gap-2 px-2 py-1 rounded text-sm in-person">
+                      <small css={tableChicletCss('in-person')}>
                         <Icon icon="geo" size={13} />
                       </small>
                     )}
                     {m.isOnline && (
-                      <small className="align-items-center d-flex flex-row float-end gap-2 px-2 py-1 rounded text-sm online">
+                      <small css={tableChicletCss('online')}>
                         {m.conference_provider && (
                           <Icon icon="camera" size={13} />
                         )}
@@ -559,24 +525,24 @@ function formatWeekdays(
   );
 }
 
-//add or remove an "edit meeting" link on WordPress
+// add or remove an "edit meeting" link on WordPress
 function wordPressEditLink(url?: string) {
   const adminBar = document.getElementById('wp-admin-bar-root-default');
   if (!adminBar) return;
   const editButton = document.getElementById('wp-admin-bar-edit-meeting');
   if (url) {
-    //create link
+    // create link
     const link = document.createElement('a');
     link.setAttribute('class', 'ab-item');
     link.setAttribute('href', url);
     link.appendChild(document.createTextNode('Edit Meeting'));
 
-    //create button
+    // create button
     const button = document.createElement('li');
     button.setAttribute('id', 'wp-admin-bar-edit-meeting');
     button.appendChild(link);
 
-    //add button to menu bar
+    // add button to menu bar
     adminBar.appendChild(button);
   } else if (editButton) {
     editButton.parentNode?.removeChild(editButton);

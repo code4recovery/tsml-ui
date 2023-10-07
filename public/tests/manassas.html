@@ -8,32 +8,38 @@
     />
     <meta name="description" content="React JS recovery meeting finder demo" />
     <link rel="icon" type="image/png" href="/logo.png" />
-    <title>Meetings</title>
     <style type="text/css">
       body {
+        background-color: black;
+        color: white;
         margin: 0;
       }
       #tsml-ui {
+        --alert-background: #191919;
+        --alert-text: #d7c2a8;
+        --background: #292625;
+        --font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        --in-person: #66cc66;
+        --inactive: #cc6666;
+        --link: #fcb03e;
+        --online: #6699cc;
+        --text: #d7c2a8;
         min-height: 100vh;
         min-height: -webkit-fill-available;
       }
     </style>
+    <title>Meetings</title>
   </head>
   <body>
     <div
       id="tsml-ui"
-      data-src="/data/aasepia.json"
-      data-mapbox="pk.eyJ1IjoiYWFzZi1tcGFsIiwiYSI6ImNqaHl6NHY0NzByemszcHBkcHpib296OHkifQ.F7GfpF1jRosyQ0PGNUfDkA"
+      data-src="https://aavirginia.org/wp-admin/admin-ajax.php?action=meetings&district=district-33-manassas"
+      data-mapbox="pk.eyJ1Ijoiam9zaHJlaXNuZXIiLCJhIjoiY2tvYXA0YnZxMGRldDJxbzdta25uNGphdiJ9.eay-UKgIT99ALmdw08xBPw"
       data-timezone="America/New_York"
     ></div>
     <script>
       var tsml_react_config = {
-        'timezone': 'America/New_York',
-        'flags': ['M', 'W', 'X', 'TC'],
-        'strings': {
-          'en': { 'types': { 'X': 'Wheelchair', 'TC': 'Temp Closed' } },
-        },
-        'feedback_url': 'https://aasepia.org/meeting-status/',
+        map: { style: 'mapbox://styles/mapbox/navigation-night-v1' },
       };
     </script>
     <script src="/app.js" async></script>

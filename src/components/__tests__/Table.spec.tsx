@@ -27,7 +27,6 @@ describe('<Table />', () => {
         <Table
           filteredSlugs={filteredSlugs}
           inProgress={[]}
-          listButtons={false}
           setState={mockSetState}
           state={mockStateWithMeeting}
         />
@@ -40,31 +39,6 @@ describe('<Table />', () => {
     expect(mockSetState).toHaveBeenCalledTimes(filteredSlugs.length);
   });
 
-  it('renders with clickable listButtons', () => {
-    const mockSetState = jest.fn();
-    render(
-      <SettingsContext.Provider value={settings}>
-        <Table
-          filteredSlugs={filteredSlugs}
-          inProgress={[]}
-          listButtons={false}
-          setState={mockSetState}
-          state={mockStateWithMeeting}
-        />
-      </SettingsContext.Provider>
-    );
-
-    //clickable links
-    const anchors = screen.getAllByRole('link');
-    anchors.forEach(anchor => fireEvent.click(anchor));
-    expect(mockSetState).toHaveBeenCalledTimes(filteredSlugs.length);
-
-    //unclickable rows
-    const rows = screen.getAllByRole('row');
-    rows.forEach(row => fireEvent.click(row));
-    expect(mockSetState).toHaveBeenCalledTimes(filteredSlugs.length * 2);
-  });
-
   it('displays single meeting in progress', () => {
     const inProgress = [filteredSlugs[0]];
     const mockSetState = jest.fn();
@@ -74,7 +48,6 @@ describe('<Table />', () => {
         <Table
           filteredSlugs={filteredSlugs}
           inProgress={['foo']}
-          listButtons={false}
           setState={mockSetState}
           state={mockStateWithMeeting}
         />
@@ -117,7 +90,6 @@ describe('<Table />', () => {
         <Table
           filteredSlugs={multiFilteredSlugs}
           inProgress={inProgress}
-          listButtons={false}
           setState={mockSetState}
           state={mockStateWithMeetings}
         />

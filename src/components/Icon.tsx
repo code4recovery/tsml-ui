@@ -55,16 +55,14 @@ export const icons = {
 type IconProps = {
   icon: keyof typeof icons;
   size?: number;
-  className?: string;
 };
 
-export default function Icon({ icon, size = 20, className }: IconProps) {
+export default function Icon({ icon, size = 20 }: IconProps) {
   const paths = icons[icon as keyof typeof icons];
 
   return (
     <svg
       data-testid={`icon-${icon}`}
-      className={className}
       fill="currentColor"
       height={size}
       viewBox="0 0 16 16"

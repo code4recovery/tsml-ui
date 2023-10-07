@@ -39,7 +39,6 @@ interface TSMLReactConfig {
   params: Array<'search' | 'mode' | 'view' | 'meeting'>;
   show: {
     controls: boolean;
-    listButtons: boolean;
     title: boolean;
   };
   strings: {

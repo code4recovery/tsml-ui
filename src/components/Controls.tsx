@@ -2,12 +2,17 @@ import { useEffect, useRef, useState } from 'react';
 
 import Dropdown from './Dropdown';
 import Icon from './Icon';
+import { analyticsEvent, formatUrl, useSettings } from '../helpers';
 import {
-  analyticsEvent,
-  formatClasses as cx,
-  formatUrl,
-  useSettings,
-} from '../helpers';
+  controlsCss,
+  controlsGroupFirstCss,
+  controlsGroupLastCss,
+  controlsInputCss,
+  controlsInputFirstCss,
+  controlsSearchDropdownCss,
+  dropdownButtonLastCss,
+  dropdownCss,
+} from '../styles';
 import type { State } from '../types';
 
 type ControlsProps = {
@@ -74,7 +79,6 @@ export default function Controls({ state, setState, mapbox }: ControlsProps) {
 
   //close current dropdown (on body click)
   const closeDropdown = (e: MouseEvent) => {
-    if ((e.target as HTMLElement).classList.contains('dropdown-toggle')) return;
     setDropdown(undefined);
   };
 
@@ -137,72 +141,62 @@ export default function Controls({ state, setState, mapbox }: ControlsProps) {
   };
 
   return !Object.keys(state.meetings).length ? null : (
-    <div className="controls d-print-none gx-3 gx-md-4 gy-3 row">
-      <div className="col-6 col-lg">
-        <div className="position-relative">
-          <form onSubmit={locationSearch} className="m-0">
-            <fieldset className="input-group">
-              <input
-                aria-label={strings.modes[state.input.mode]}
-                className="form-control h-auto"
-                disabled={state.input.mode === 'me'}
-                onChange={e => {
-                  if (state.input.mode === 'search') {
-                    state.input.search = e.target.value;
-                    setState({ ...state });
-                  } else {
-                    setSearch(e.target.value);
-                  }
-                }}
-                placeholder={strings.modes[state.input.mode]}
-                ref={searchInput}
-                spellCheck="false"
-                type="search"
-                value={
-                  state.input.mode === 'location' ? search : state.input.search
-                }
-              />
-              {modes.length > 1 && (
-                <button
-                  id="mode"
-                  aria-label={strings.modes[state.input.mode]}
-                  className="btn btn-outline-secondary dropdown-toggle"
-                  onClick={() =>
-                    setDropdown(dropdown === 'search' ? undefined : 'search')
-                  }
-                  type="button"
-                />
-              )}
-            </fieldset>
-          </form>
+    <div css={controlsCss}>
+      <form onSubmit={locationSearch} css={dropdownCss}>
+        <fieldset role="group">
+          <input
+            aria-label={strings.modes[state.input.mode]}
+            css={modes.length > 1 ? controlsInputFirstCss : controlsInputCss}
+            disabled={state.input.mode === 'me'}
+            onChange={e => {
+              if (state.input.mode === 'search') {
+                state.input.search = e.target.value;
+                setState({ ...state });
+              } else {
+                setSearch(e.target.value);
+              }
+            }}
+            placeholder={strings.modes[state.input.mode]}
+            ref={searchInput}
+            spellCheck="false"
+            type="search"
+            value={
+              state.input.mode === 'location' ? search : state.input.search
+            }
+          />
           {modes.length > 1 && (
-            <div
-              className={cx('dropdown-menu dropdown-menu-end my-1', {
-                show: dropdown === 'search',
-              })}
-            >
-              {modes.map(mode => (
-                <a
-                  className={cx(
-                    'align-items-center dropdown-item d-flex justify-content-between',
-                    {
-                      'active bg-secondary text-white':
-                        state.input.mode === mode,
-                    }
-                  )}
-                  href={formatUrl({ ...state.input, mode }, settings)}
-                  key={mode}
-                  onClick={e => setMode(e, mode)}
-                >
-                  {strings.modes[mode]}
-                </a>
-              ))}
-            </div>
+            <button
+              aria-label={strings.modes[state.input.mode]}
+              css={dropdownButtonLastCss}
+              onClick={e => {
+                setDropdown(dropdown === 'search' ? undefined : 'search');
+                e.stopPropagation();
+              }}
+              type="button"
+            />
           )}
-        </div>
-      </div>
+        </fieldset>
+        {modes.length > 1 && (
+          <div
+            css={controlsSearchDropdownCss}
+            style={{
+              display: dropdown === 'search' ? 'block' : 'none',
+            }}
+          >
+            {modes.map(mode => (
+              <button
+                data-active={state.input.mode === mode}
+                key={mode}
+                onClick={e => setMode(e, mode)}
+              >
+                {strings.modes[mode]}
+              </button>
+            ))}
+          </div>
+        )}
+      </form>
       {filters.map((filter, index) => (
-        <div className="col-6 col-lg" key={filter}>
+        <div key={filter}>
           <Dropdown
             defaultValue={
               strings[`${filter}_any` as keyof typeof strings] as string
@@ -217,25 +211,19 @@ export default function Controls({ state, setState, mapbox }: ControlsProps) {
         </div>
       ))}
       {canShowViews && (
-        <div className="col-6 col-lg">
-          <div className="btn-group h-100 w-100" role="group">
-            {views.map(view => (
-              <button
-                aria-label={strings.views[view]}
-                className={cx(
-                  'align-items-center btn btn-outline-secondary d-flex justify-content-center w-100',
-                  {
-                    active: state.input.view === view,
-                  }
-                )}
-                key={view}
-                onClick={e => setView(e, view)}
-                type="button"
-              >
-                <Icon icon={view} />
-              </button>
-            ))}
-          </div>
+        <div role="group">
+          {views.map((view, index) => (
+            <button
+              aria-label={strings.views[view]}
+              css={index ? controlsGroupLastCss : controlsGroupFirstCss}
+              data-active={state.input.view === view}
+              key={view}
+              onClick={e => setView(e, view)}
+              type="button"
+            >
+              <Icon icon={view} />
+            </button>
+          ))}
         </div>
       )}
     </div>

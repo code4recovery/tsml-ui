@@ -2,8 +2,9 @@ import { useEffect, useRef, useState } from 'react';
 import ReactMapGL, { Marker, NavigationControl, Popup } from 'react-map-gl';
 import WebMercatorViewport from 'viewport-mercator-project';
 
-import type { Meeting, State } from '../types';
 import { formatDirectionsUrl, useSettings } from '../helpers';
+import { mapCss, mapMeetingsCss } from '../styles';
+import type { Meeting, State } from '../types';
 import Button from './Button';
 import Link from './Link';
 
@@ -84,16 +85,6 @@ export default function Map({
       window.removeEventListener('resize', resizeListener);
     };
   }, []);
-
-  //manage classes
-  useEffect(() => {
-    if (!state.input?.meeting) {
-      document.body.classList.add('tsml-ui-map');
-    }
-    return () => {
-      document.body.classList.remove('tsml-ui-map');
-    };
-  }, [state.input?.meeting]);
 
   //reset bounds and locations when filteredSlugs changes
   useEffect(() => {
@@ -183,11 +174,7 @@ export default function Map({
   }, [data, dimensions]);
 
   return (
-    <div
-      aria-hidden={true}
-      className="border rounded bg-light flex-grow-1 map"
-      ref={mapFrame}
-    >
+    <div aria-hidden={true} css={mapCss} ref={mapFrame}>
       {viewport && !!data.locationKeys.length && (
         <ReactMapGL
           mapStyle={settings.map.style}
@@ -216,25 +203,23 @@ export default function Map({
                   closeOnClick={false}
                   latitude={data.locations[key].latitude}
                   longitude={data.locations[key].longitude}
-                  offsetTop={-settings.map.markers.location.height}
+                  offsetTop={-settings.map.markers.location.height / 1.5}
                   onClose={() => setPopup(undefined)}
                 >
-                  <div className="d-grid gap-2">
+                  <div>
                     <h2>{data.locations[key].name}</h2>
                     <p>{data.locations[key].formatted_address}</p>
                     {listMeetingsInPopup && (
-                      <div className="list-group mb-1">
+                      <div css={mapMeetingsCss}>
                         {data.locations[key].meetings
                           .sort((a, b) =>
                             a.start && b.start && a.start > b.start ? 1 : 0
                           )
                           .map((meeting, index) => (
-                            <div key={index} className="list-group-item">
-                              <time className="d-block">
+                            <div key={index}>
+                              <time>
                                 {meeting.start?.toFormat('t')}
-                                <span className="ms-1">
-                                  {meeting.start?.toFormat('cccc')}
-                                </span>
+                                <span>{meeting.start?.toFormat('cccc')}</span>
                               </time>
                               <Link
                                 meeting={meeting}
@@ -247,10 +232,10 @@ export default function Map({
                     )}
                     {data.locations[key].directions_url && (
                       <Button
-                        className="in-person"
                         href={data.locations[key].directions_url}
                         icon="geo"
                         text={strings.get_directions}
+                        type="in-person"
                       />
                     )}
                   </div>
@@ -259,7 +244,6 @@ export default function Map({
             </div>
           ))}
           <NavigationControl
-            className="d-none d-md-block"
             onViewportChange={setViewport}
             showCompass={false}
             style={{ top: 10, right: 10 }}

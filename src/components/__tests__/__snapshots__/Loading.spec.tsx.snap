@@ -2,10 +2,28 @@
 
 exports[`<Loading /> 1`] = `
 <div
-  className="align-items-center d-flex flex-grow-1 justify-content-center"
+  css={
+    {
+      "map": "/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImxvYWRpbmcudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBUzZCIiwiZmlsZSI6ImxvYWRpbmcudHMiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgeyBjc3MsIGtleWZyYW1lcyB9IGZyb20gJ0BlbW90aW9uL3JlYWN0JztcblxuaW1wb3J0IHsgY29sb3IsIHNpemUgfSBmcm9tICcuL3ZhcmlhYmxlcyc7XG5cbmNvbnN0IGFuaW1hdGlvbiA9IGtleWZyYW1lc2BcbiAgZnJvbSB7IHRyYW5zZm9ybTogcm90YXRlKDBkZWcpOyB9XG4gIHRvIHsgdHJhbnNmb3JtOiByb3RhdGUoMzYwZGVnKTsgfVxuYDtcblxuZXhwb3J0IGNvbnN0IGxvYWRpbmdDc3MgPSBjc3NgXG4gIGFsaWduLWl0ZW1zOiBjZW50ZXI7XG4gIGRpc3BsYXk6IGZsZXg7XG4gIGZsZXgtZ3JvdzogMTtcbiAganVzdGlmeS1jb250ZW50OiBjZW50ZXI7XG4gIG1pbi1oZWlnaHQ6IDUwMHB4O1xuXG4gID4gZGl2IHtcbiAgICBoZWlnaHQ6ICR7c2l6ZS5sb2FkaW5nfXB4O1xuICAgIHBvc2l0aW9uOiByZWxhdGl2ZTtcbiAgICB3aWR0aDogJHtzaXplLmxvYWRpbmd9cHg7XG4gICAgZGl2IHtcbiAgICAgIGFuaW1hdGlvbjogJHthbmltYXRpb259IDEuMnMgY3ViaWMtYmV6aWVyKDAuNSwgMCwgMC41LCAxKSBpbmZpbml0ZTtcbiAgICAgIGJvcmRlci1jb2xvcjogJHtjb2xvci5tZWRpdW19IHRyYW5zcGFyZW50IHRyYW5zcGFyZW50IHRyYW5zcGFyZW50O1xuICAgICAgYm9yZGVyLXJhZGl1czogNTAlO1xuICAgICAgYm9yZGVyLXN0eWxlOiBzb2xpZDtcbiAgICAgIGJvcmRlci13aWR0aDogJHtzaXplLmxvYWRpbmcgLyAxMH1weDtcbiAgICAgIGJveC1zaXppbmc6IGJvcmRlci1ib3g7XG4gICAgICBoZWlnaHQ6IDEwMCU7XG4gICAgICBwb3NpdGlvbjogYWJzb2x1dGU7XG4gICAgICB3aWR0aDogMTAwJTtcbiAgICAgICY6bnRoLW9mLXR5cGUoMSkge1xuICAgICAgICBhbmltYXRpb24tZGVsYXk6IC0wLjQ1cztcbiAgICAgIH1cbiAgICAgICY6bnRoLW9mLXR5cGUoMikge1xuICAgICAgICBhbmltYXRpb24tZGVsYXk6IC0wLjNzO1xuICAgICAgfVxuICAgICAgJjpudGgtb2YtdHlwZSgzKSB7XG4gICAgICAgIGFuaW1hdGlvbi1kZWxheTogLTAuMTVzO1xuICAgICAgfVxuICAgIH1cbiAgfVxuYDtcbiJdfQ== */",
+      "name": "13hncpq-loadingCss",
+      "next": {
+        "name": "animation-w6tfot",
+        "next": undefined,
+        "styles": "@keyframes animation-w6tfot{
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}",
+      },
+      "styles": "align-items:center;display:flex;flex-grow:1;justify-content:center;min-height:500px;>div{height:64px;position:relative;width:64px;div{animation:animation-w6tfot 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;border-color:color-mix(in srgb, var(--background), var(--text) 15%) transparent transparent transparent;border-radius:50%;border-style:solid;border-width:6.4px;box-sizing:border-box;height:100%;position:absolute;width:100%;&:nth-of-type(1){animation-delay:-0.45s;}&:nth-of-type(2){animation-delay:-0.3s;}&:nth-of-type(3){animation-delay:-0.15s;}}};label:loadingCss;",
+      "toString": [Function],
+    }
+  }
 >
-  <div
-    className="m-5 spinner-border text-secondary"
-  />
+  <div>
+    <div />
+    <div />
+    <div />
+    <div />
+  </div>
 </div>
 `;

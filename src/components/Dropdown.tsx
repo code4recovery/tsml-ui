@@ -1,12 +1,8 @@
 import { Fragment } from 'react';
 
+import { formatString as i18n, getIndexByKey, useSettings } from '../helpers';
+import { dropdownButtonCss, dropdownCss } from '../styles';
 import type { Index, State } from '../types';
-import {
-  formatClasses as cx,
-  formatString as i18n,
-  getIndexByKey,
-  useSettings,
-} from '../helpers';
 
 type DropdownProps = {
   defaultValue: string;
@@ -72,16 +68,11 @@ export default function Dropdown({
   const renderDropdownItem = ({ key, name, slugs, children }: Index) => (
     <Fragment key={key}>
       <button
-        className={cx(
-          'align-items-center d-flex dropdown-item justify-content-between',
-          {
-            // @ts-expect-error TODO
-            'bg-secondary text-white': values.includes(key),
-          }
-        )}
+        // @ts-expect-error TODO
+        data-active={values.includes(key)}
         onClick={e => setFilter(e, filter, key)}
       >
-        <span>{name}</span>
+        {name}
         <span
           aria-label={
             slugs.length === 1
@@ -90,15 +81,12 @@ export default function Dropdown({
                   count: slugs.length,
                 })
           }
-          className="badge bg-light border ms-3 text-dark"
         >
           {slugs.length}
         </span>
       </button>
       {!!children?.length && (
-        <div className="children">
-          {children.map(child => renderDropdownItem(child))}
-        </div>
+        <div>{children.map(child => renderDropdownItem(child))}</div>
       )}
     </Fragment>
   );
@@ -109,28 +97,29 @@ export default function Dropdown({
   };
 
   return (
-    <div className="dropdown">
+    <div css={dropdownCss}>
       <button
         aria-expanded={open}
-        className="btn btn-outline-secondary dropdown-toggle overflow-hidden w-100"
+        css={dropdownButtonCss}
         id={filter}
-        onClick={() => setDropdown(open ? undefined : filter)}
+        onClick={e => {
+          setDropdown(open ? undefined : filter);
+          e.stopPropagation();
+        }}
       >
         {values?.length && options?.length
           ? values.map(value => getIndexByKey(options, value)?.name).join(' + ')
           : defaultValue}
       </button>
       <div
-        className={cx('dropdown-menu my-1', {
-          show: open,
-          'dropdown-menu-end': end,
-        })}
         aria-labelledby={filter}
+        style={{
+          display: open ? 'block' : 'none',
+          [end ? 'right' : 'left']: 0,
+        }}
       >
         <button
-          className={cx('dropdown-item', {
-            'active bg-secondary text-white': !values.length,
-          })}
+          data-active={!values.length}
           onClick={e => setFilter(e, filter, undefined)}
         >
           {defaultValue}
@@ -153,7 +142,7 @@ export default function Dropdown({
           .filter(e => e.length)
           .map((group, index) => (
             <Fragment key={index}>
-              <div className="dropdown-divider" />
+              <hr />
               {group.map(option => renderDropdownItem(option))}
             </Fragment>
           ))}

@@ -1,14 +1,10 @@
 import type { State } from '../types';
 import { formatString as i18n, getIndexByKey, useSettings } from '../helpers';
 
-type TitleProps = {
-  state: State;
-};
-
-export default function Title({ state: { indexes, input } }: TitleProps) {
+export default function Title({ state: { indexes, input } }: { state: State }) {
   const { strings } = useSettings();
 
-  //build title from strings.title
+  // build title from strings.title
   const parts: string[] = [];
 
   Object.keys(strings.title).forEach(key => {
@@ -49,13 +45,8 @@ export default function Title({ state: { indexes, input } }: TitleProps) {
 
   const title = parts.join(' ');
 
-  //set window title
+  // set window title
   document.title = title;
 
-  //return h1
-  return (
-    <h1 aria-live="polite" className="fw-light mb-n1">
-      {title}
-    </h1>
-  );
+  return <h1 aria-live="polite">{title}</h1>;
 }

@@ -16,7 +16,7 @@ export const defaults: TSMLReactConfig = {
     'goto.com': 'GoTo',
     'gotomeet.me': 'GoTo',
     'gotomeeting.com': 'GoTo',
-    'meet.google.com': 'Google Hangouts',
+    'meet.google.com': 'Google Meet',
     'meet.jit.si': 'Jitsi',
     'meetings.dialpad.com': 'Dialpad',
     'skype.com': 'Skype',
@@ -64,13 +64,12 @@ export const defaults: TSMLReactConfig = {
         width: 26,
       },
     },
-    style: 'mapbox://styles/mapbox/streets-v9',
+    style: 'mapbox://styles/mapbox/streets-v12',
   },
   now_offset: -10, //"now" includes meetings that started in the last 10 minutes
   params: ['search', 'mode', 'view', 'meeting'], //input other than filters
   show: {
     controls: true, //whether to show search + dropdowns + list/map
-    listButtons: false, //show conference buttons in list or show labels
     title: true, //whether to display the title h1
   },
   strings: {

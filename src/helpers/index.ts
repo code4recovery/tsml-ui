@@ -4,7 +4,6 @@ export * from './filter-meeting-data';
 export * from './flatten-and-sort-indexes';
 export * from './format-address';
 export * from './format-array';
-export * from './format-classes';
 export * from './format-conference-provider';
 export * from './format-directions-url';
 export * from './format-feedback-email';
