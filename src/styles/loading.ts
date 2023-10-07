@@ -24,7 +24,6 @@ export const loadingCss = css`
       border-radius: 50%;
       border-style: solid;
       border-width: ${size.loading / 10}px;
-      box-sizing: border-box;
       height: 100%;
       position: absolute;
       width: 100%;

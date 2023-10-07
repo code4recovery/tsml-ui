@@ -75,5 +75,5 @@ export const dropdownButtonLastCss = css`
   ${dropdownButtonCss}
   border-top-left-radius: 0 !important;
   border-bottom-left-radius: 0 !important;
-  margin-left: -1px;
+  margin-left: -1px !important;
 `;

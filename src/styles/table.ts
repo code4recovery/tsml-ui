@@ -151,6 +151,7 @@ export const tableInProgressCss = css`
     color: var(--alert-text);
     cursor: pointer;
     font-size: var(--font-size);
+    margin: 0;
     padding: ${size.gutter}px;
     width: 100%;
     &:focus {

@@ -38,6 +38,10 @@ export const globalCss = css`
     line-height: 1.5;
     padding: ${size.gutter}px;
 
+    * {
+      box-sizing: border-box;
+    }
+
     a {
       color: var(--link);
       text-decoration: underline;
