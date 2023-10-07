@@ -8,9 +8,14 @@ export const controlsCss = css`
   gap: ${size.gutter}px;
   grid-template-columns: repeat(2, minmax(0, 1fr));
 
+  form,
   fieldset {
     border: 0;
+    margin: 0;
     padding: 0;
+  }
+
+  fieldset {
     button {
       padding: ${size.gutter / 2}px !important;
       width: 40px !important;

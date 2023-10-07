@@ -78,6 +78,7 @@ export const tableCss = css`
   }
 
   th {
+    background-color: transparent;
     border-bottom: 1px solid ${color.medium};
     font-size: var(--font-size);
     font-weight: 600;

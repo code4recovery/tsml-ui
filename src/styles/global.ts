@@ -59,6 +59,7 @@ export const globalCss = css`
 
     h1,
     h2 {
+      font-family: var(--font-family);
       line-height: 1.2;
     }
 

@@ -4,8 +4,8 @@ import { color, size } from './variables';
 
 export const formControlCss = css`
   align-items: center;
-  background-color: transparent;
-  border-radius: var(--border-radius);
+  background-color: transparent !important;
+  border-radius: var(--border-radius) !important;
   border: 1px solid ${color.dark};
   box-sizing: border-box;
   color: var(--text) !important;
@@ -15,6 +15,7 @@ export const formControlCss = css`
   gap: ${size.gutter / 2}px;
   justify-content: center;
   line-height: var(--line-height);
+  margin: 0 !important;
   padding: ${size.gutter / 2.66666}px ${size.gutter}px !important;
   text-decoration: none !important;
   transition: all 0.15s ease-in-out;
@@ -37,14 +38,14 @@ export const buttonCss = css`
 
   :hover,
   &[data-active='true'] {
-    background-color: ${color.dark};
+    background-color: ${color.dark} !important;
     color: var(--background) !important;
   }
 `;
 
 export const buttonDirectionsCss = css`
   ${buttonCss}
-  background-color: color-mix(in srgb, var(--in-person), var(--background) 82%);
+  background-color: color-mix(in srgb, var(--in-person), var(--background) 82%) !important;
   border-color: color-mix(in srgb, var(--in-person), var(--background) 70%);
   color: var(--in-person) !important;
   &:hover {
@@ -55,7 +56,7 @@ export const buttonDirectionsCss = css`
 
 export const buttonJoinCss = css`
   ${buttonCss}
-  background-color: color-mix(in srgb, var(--online), var(--background) 82%);
+  background-color: color-mix(in srgb, var(--online), var(--background) 82%) !important;
   border-color: color-mix(in srgb, var(--online), var(--background) 70%);
   color: var(--online) !important;
   &:hover {
