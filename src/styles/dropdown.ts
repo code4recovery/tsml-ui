@@ -33,6 +33,7 @@ export const dropdownCss = css`
       font-size: var(--font-size);
       gap: 16px;
       justify-content: space-between;
+      margin: 0;
       padding: ${size.gutter / 2}px ${size.gutter}px;
       text-align: left;
       width: 100%;

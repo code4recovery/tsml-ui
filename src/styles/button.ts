@@ -13,8 +13,9 @@ export const formControlCss = css`
   font-family: var(--font-family) !important;
   font-size: var(--font-size) !important;
   gap: ${size.gutter / 2}px;
+  height: auto !important;
   justify-content: center;
-  line-height: var(--line-height);
+  line-height: var(--line-height) !important;
   margin: 0 !important;
   min-height: auto;
   padding: ${size.gutter / 2.66666}px ${size.gutter}px !important;
