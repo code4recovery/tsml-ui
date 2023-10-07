@@ -6,7 +6,7 @@ export const formControlCss = css`
   align-items: center;
   background-color: transparent !important;
   border-radius: var(--border-radius) !important;
-  border: 1px solid ${color.dark};
+  border: 1px solid ${color.dark} !important;
   box-sizing: border-box;
   color: var(--text) !important;
   cursor: pointer;

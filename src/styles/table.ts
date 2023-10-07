@@ -43,7 +43,9 @@ export const tableCss = css`
 
   td,
   th {
+    background-color: transparent;
     border: 0;
+    font-size: var(--font-size);
     margin: 0;
     text-align: left;
     vertical-align: middle;
@@ -78,7 +80,6 @@ export const tableCss = css`
   }
 
   th {
-    background-color: transparent;
     border-bottom: 1px solid ${color.medium};
     font-size: var(--font-size);
     font-weight: 600;

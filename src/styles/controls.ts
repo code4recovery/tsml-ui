@@ -11,7 +11,7 @@ export const controlsCss = css`
   form,
   fieldset {
     border: 0;
-    margin: 0;
+    margin: 0 !important;
     padding: 0;
   }
 
@@ -42,7 +42,7 @@ export const controlsGroupLastCss = css`
   ${buttonCss}
   border-top-left-radius: 0 !important;
   border-bottom-left-radius: 0 !important;
-  margin-left: -1px;
+  margin-left: -1px !important;
 `;
 
 export const controlsInputCss = css`
