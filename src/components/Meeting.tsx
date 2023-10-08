@@ -441,23 +441,21 @@ export default function Meeting({
             />
           )}
         </div>
-        {!!mapbox && (
-          <div
-            css={
-              meeting.isOnline && !meeting.isInPerson
-                ? meetingOnlineCss
-                : undefined
-            }
-          >
-            <Map
-              filteredSlugs={[meeting.slug]}
-              listMeetingsInPopup={false}
-              state={state}
-              setState={setState}
-              mapbox={mapbox}
-            />
-          </div>
-        )}
+        <div
+          css={
+            meeting.isOnline && !meeting.isInPerson
+              ? meetingOnlineCss
+              : undefined
+          }
+        >
+          <Map
+            filteredSlugs={[meeting.slug]}
+            listMeetingsInPopup={false}
+            state={state}
+            setState={setState}
+            mapbox={mapbox}
+          />
+        </div>
       </div>
     </div>
   );

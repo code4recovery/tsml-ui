@@ -145,6 +145,7 @@ export default function Map({
   //reset viewport when data or dimensions change
   useEffect(() => {
     if (
+      !mapbox ||
       !dimensions ||
       !data.bounds ||
       !data.bounds.north ||

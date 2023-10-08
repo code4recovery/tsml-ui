@@ -15,7 +15,7 @@ export const formControlCss = css`
   gap: ${size.gutter / 2}px;
   height: auto !important;
   justify-content: center;
-  line-height: var(--line-height) !important;
+  line-height: 1.5 !important;
   margin: 0 !important;
   min-height: auto;
   padding: ${size.gutter / 2.66666}px ${size.gutter}px !important;
