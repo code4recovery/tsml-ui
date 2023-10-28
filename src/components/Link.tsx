@@ -1,5 +1,6 @@
 import { formatUrl, useSettings } from '../helpers';
 import type { State, Meeting } from '../types';
+import { Link as RouterLink } from 'react-router-dom';
 
 type LinkProps = {
   meeting: Meeting;
@@ -30,8 +31,8 @@ export default function Link({ meeting, setState, state }: LinkProps) {
 
   return (
     <>
-      <a
-        href={formatUrl({ ...state.input, meeting: meeting.slug }, settings)}
+      <RouterLink
+        to={formatUrl({ ...state.input, meeting: meeting.slug }, settings)}
         onClick={e => {
           e.preventDefault();
           e.stopPropagation();
@@ -45,7 +46,7 @@ export default function Link({ meeting, setState, state }: LinkProps) {
         }}
       >
         {meeting.name}
-      </a>
+      </RouterLink>
       {flags && <small>{flags}</small>}
     </>
   );
