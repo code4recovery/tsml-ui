@@ -17,3 +17,4 @@ export * from './query-string';
 export * from './settings';
 export * from './translate-google-sheet';
 export * from './user-agent';
+export * from './format-relative-url';

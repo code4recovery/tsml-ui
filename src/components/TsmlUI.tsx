@@ -61,11 +61,6 @@ export default function TsmlUI() {
     );
   }, [location]);
 
-  // useEffect(() => {
-  //   // if state has changed update location
-  //   navigate(formatRelativeUrl(state.input, settings, location));
-  // }, [state]);
-
   return (
     <SettingsContext.Provider value={{ settings, strings }}>
       <Global styles={globalCss} />

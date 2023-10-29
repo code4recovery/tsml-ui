@@ -11,6 +11,7 @@ import {
 import { Meeting, State } from '../types';
 import Icon, { icons } from './Icon';
 import Link from './Link';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export default function Table({
   filteredSlugs = [],
@@ -37,6 +38,8 @@ export default function Table({
   const [limit, setLimit] = useState(meetingsPerPage);
   const [showInProgress, setShowInProgress] = useState(false);
   const { distance, location, region } = state.capabilities;
+  const navigate = useNavigate();
+  const routerLocation = useLocation();
 
   //show columns based on capabilities
   const columns = settings.columns
@@ -123,7 +126,7 @@ export default function Table({
     return (
       <tr
         onClick={() => {
-          console.log('meeting: ', meeting);
+          navigate(`${routerLocation.pathname}?meeting=${meeting.slug}`);
         }}
       >
         {columns.map((column, index) => (
