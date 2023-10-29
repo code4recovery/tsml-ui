@@ -154,6 +154,20 @@ export default function TsmlUI({
             });
           }
 
+          if (timezone) {
+            try {
+              // check if timezone is valid
+              Intl.DateTimeFormat(undefined, { timeZone: timezone });
+            } catch (e) {
+              return setState({
+                ...state,
+                error: `Timezone ${timezone} is not valid. Please use one like Europe/Rome.`,
+                loading: false,
+                ready: true,
+              });
+            }
+          }
+
           const [meetings, indexes, capabilities] = loadMeetingData(
             data,
             state.capabilities,
