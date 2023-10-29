@@ -23,6 +23,7 @@ import Button from './Button';
 import Icon, { icons } from './Icon';
 import Link from './Link';
 import Map from './Map';
+import { useLocation } from 'react-router-dom';
 
 type MeetingProps = {
   feedback_emails?: string[];
@@ -38,6 +39,7 @@ export default function Meeting({
   state,
 }: MeetingProps) {
   const { settings, strings } = useSettings();
+  const routerLocation = useLocation();
 
   // open types
   const [define, setDefine] = useState<string | undefined>();
@@ -121,7 +123,8 @@ export default function Meeting({
       settings.feedback_emails,
       meeting,
       settings,
-      strings
+      strings,
+      routerLocation
     );
   }
 
