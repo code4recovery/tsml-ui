@@ -122,15 +122,9 @@ export default function Table({
     const meeting = state.meetings[slug];
     return (
       <tr
-        onClick={() =>
-          setState({
-            ...state,
-            input: {
-              ...state.input,
-              meeting: meeting.slug,
-            },
-          })
-        }
+        onClick={() => {
+          console.log('meeting: ', meeting);
+        }}
       >
         {columns.map((column, index) => (
           <td className={`tsml-${column}`} key={index}>

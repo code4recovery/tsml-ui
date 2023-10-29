@@ -34,8 +34,9 @@ export default function Link({ meeting, setState, state }: LinkProps) {
       <RouterLink
         to={formatUrl({ ...state.input, meeting: meeting.slug }, settings)}
         onClick={e => {
-          e.preventDefault();
-          e.stopPropagation();
+          // e.preventDefault();
+          // e.stopPropagation();
+          console.log('clicked');
           setState({
             ...state,
             input: {

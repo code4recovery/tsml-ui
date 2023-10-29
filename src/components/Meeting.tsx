@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { DateTime, Info } from 'luxon';
+import { Link as RouterLink } from 'react-router-dom';
 
 import {
   formatDirectionsUrl,
@@ -23,6 +24,7 @@ import Icon, { icons } from './Icon';
 import Link from './Link';
 import Map from './Map';
 import { useLocation } from 'react-router-dom';
+import { formatRelativeUrl } from '../helpers/format-relative-url';
 
 type MeetingProps = {
   feedback_emails?: string[];
@@ -251,16 +253,17 @@ export default function Meeting({
       </h1>
       <div css={meetingBackCss}>
         <Icon icon="back" />
-        <a
-          href={formatUrl(
+        <RouterLink
+          to={formatRelativeUrl(
             {
               ...state.input,
               meeting: undefined,
             },
-            settings
+            settings,
+            routerLocation
           )}
           onClick={e => {
-            e.preventDefault();
+            // e.preventDefault();
             setState({
               ...state,
               input: {
@@ -271,7 +274,7 @@ export default function Meeting({
           }}
         >
           {strings.back_to_meetings}
-        </a>
+        </RouterLink>
       </div>
       <div css={meetingColumnsCss}>
         <div>
