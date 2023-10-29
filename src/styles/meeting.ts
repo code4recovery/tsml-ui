@@ -23,7 +23,7 @@ export const meetingColumnsCss = css`
   }
 
   ul {
-    padding: 0 0 ${size.gutter / 2}px ${size.gutter};
+    padding: 0 0 0 ${size.gutter * 1.5}px;
     button {
       background-color: transparent;
       background-image: none;
@@ -99,20 +99,11 @@ export const meetingColumnsCss = css`
       border: 1px solid ${color.medium};
       border-radius: var(--border-radius);
       > div {
-        padding: ${size.gutter}px;
         border-bottom: 1px solid ${color.medium};
         display: flex;
         flex-direction: column;
-        gap: ${size.gutter / 2}px;
-        > div {
-          display: flex;
-          flex-direction: column;
-          gap: ${size.gutter}px;
-          > div {
-            display: flex;
-            flex-direction: column;
-          }
-        }
+        gap: ${size.gutter}px;
+        padding: ${size.gutter}px;
         &:last-of-type {
           border-bottom: none;
         }

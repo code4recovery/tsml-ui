@@ -10,6 +10,7 @@ import {
   useSettings,
 } from '../helpers';
 import {
+  buttonHelpCss,
   meetingBackCss,
   meetingColumnsCss,
   meetingCss,
@@ -336,9 +337,9 @@ export default function Meeting({
               {meeting.notes && <Paragraphs text={meeting.notes} />}
               {(meeting.isActive ||
                 (!meeting.group && !!contactButtons.length)) && (
-                <div>
+                <>
                   {meeting.conference_provider && (
-                    <div>
+                    <div css={buttonHelpCss}>
                       <Button
                         href={meeting.conference_url}
                         icon="camera"
@@ -351,7 +352,7 @@ export default function Meeting({
                     </div>
                   )}
                   {meeting.conference_phone && (
-                    <div>
+                    <div css={buttonHelpCss}>
                       <Button
                         href={`tel:${meeting.conference_phone}`}
                         icon="phone"
@@ -384,7 +385,7 @@ export default function Meeting({
                     contactButtons.map((button, index) => (
                       <Button {...button} key={index} />
                     ))}
-                </div>
+                </>
               )}
             </div>
             {!meeting.approximate && (

@@ -60,6 +60,13 @@ export const buttonDirectionsCss = css`
   }
 `;
 
+export const buttonHelpCss = css`
+  color: ${color.dark};
+  display: grid;
+  font-size: var(--font-size);
+  gap: ${size.gutter / 3}px;
+`;
+
 export const buttonJoinCss = css`
   ${buttonCss}
   background-color: color-mix(in srgb, var(--online), var(--background) 82%) !important;
