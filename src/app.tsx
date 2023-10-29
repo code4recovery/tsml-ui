@@ -1,4 +1,5 @@
 import { createRoot } from 'react-dom/client';
+import { StateContextProvider } from './components/StateContext';
 
 import { TsmlUI } from './components';
 import {
@@ -18,7 +19,7 @@ if (el) {
     {
       path: '/*',
       element: (
-        <TsmlUI
+        <StateContextProvider
           google={el.getAttribute('data-google') || undefined}
           mapbox={el.getAttribute('data-mapbox') || undefined}
           settings={
@@ -28,7 +29,9 @@ if (el) {
           }
           src={el.getAttribute('data-src') || undefined}
           timezone={el.getAttribute('data-timezone') || undefined}
-        />
+        >
+          <TsmlUI />
+        </StateContextProvider>
       ),
     },
   ];
