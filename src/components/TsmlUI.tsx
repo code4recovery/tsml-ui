@@ -7,7 +7,6 @@ import { Alert, Controls, Loading, Map, Meeting, Table, Title } from './';
 
 import {
   filterMeetingData,
-  formatUrl,
   getQueryString,
   loadMeetingData,
   mergeSettings,
@@ -15,6 +14,7 @@ import {
   SettingsContext,
   translateGoogleSheet,
 } from '../helpers';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export default function TsmlUI({
   google,
@@ -65,32 +65,35 @@ export default function TsmlUI({
 
   const { settings, strings } = mergeSettings(userSettings);
 
+  const location = useLocation();
+  const navigate = useNavigate();
+
   // enable forward & back buttons
-  useEffect(() => {
-    const popstateListener = () => {
-      setState({ ...state, input: getQueryString(settings) });
-    };
-    window.addEventListener('popstate', popstateListener);
+  // useEffect(() => {
+  //   const popstateListener = () => {
+  //     setState({ ...state, input: getQueryString(settings, location) });
+  //   };
+  //   window.addEventListener('popstate', popstateListener);
 
-    // update canonical
-    let canonical = document.querySelector('link[rel="canonical"]');
-    if (!canonical) {
-      canonical = document.createElement('link');
-      canonical.setAttribute('rel', 'canonical');
-      document.getElementsByTagName('head')[0]?.appendChild(canonical);
-    }
-    canonical.setAttribute(
-      'href',
-      formatUrl(
-        state.input.meeting ? { meeting: state.input.meeting } : state.input,
-        settings
-      )
-    );
+  //   // update canonical
+  //   let canonical = document.querySelector('link[rel="canonical"]');
+  //   if (!canonical) {
+  //     canonical = document.createElement('link');
+  //     canonical.setAttribute('rel', 'canonical');
+  //     document.getElementsByTagName('head')[0]?.appendChild(canonical);
+  //   }
+  //   canonical.setAttribute(
+  //     'href',
+  //     formatUrl(
+  //       state.input.meeting ? { meeting: state.input.meeting } : state.input,
+  //       settings
+  //     )
+  //   );
 
-    return () => {
-      window.removeEventListener('popstate', popstateListener);
-    };
-  }, [state, window.location.search]);
+  //   return () => {
+  //     window.removeEventListener('popstate', popstateListener);
+  //   };
+  // }, [state, location]);
 
   // manage classes
   useEffect(() => {
@@ -106,7 +109,7 @@ export default function TsmlUI({
       'TSML UI meeting finder: https://github.com/code4recovery/tsml-ui'
     );
 
-    const input = getQueryString(settings);
+    const input = getQueryString(settings, location);
 
     if (!src) {
       setState({
@@ -216,7 +219,7 @@ export default function TsmlUI({
 
   // apply input changes to query string
   if (!state.loading) {
-    setQueryString(state.input, settings);
+    setQueryString(state.input, settings, navigate, location);
   }
 
   // filter data

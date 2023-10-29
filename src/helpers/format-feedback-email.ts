@@ -1,4 +1,5 @@
 import { Meeting } from '../types';
+import type { Location } from 'react-router-dom';
 import { getQueryString } from './query-string';
 import { formatArray } from './format-array';
 import { formatString as i18n } from './format-string';
@@ -9,10 +10,11 @@ export function formatFeedbackEmail(
   feedback_emails: TSMLReactConfig['feedback_emails'],
   meeting: Meeting,
   settings: TSMLReactConfig,
-  strings: Translation
+  strings: Translation,
+  location: Location<any>
 ) {
   //remove extra query params from meeting URL
-  const input = getQueryString(settings);
+  const input = getQueryString(settings, location);
   const meetingUrl = formatUrl({ meeting: input.meeting }, settings);
 
   //build message
