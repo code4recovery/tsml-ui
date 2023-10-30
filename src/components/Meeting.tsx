@@ -156,21 +156,21 @@ export default function Meeting({
   }
   if (meeting.venmo) {
     contactButtons.push({
-      href: `https:// venmo.com/${meeting.venmo.substring(1)}`,
+      href: `https://venmo.com/${meeting.venmo.substring(1)}`,
       icon: 'cash',
       text: i18n(strings.contribute_with, { service: 'Venmo' }),
     });
   }
   if (meeting.square) {
     contactButtons.push({
-      href: `https:// cash.app/${meeting.square}`,
+      href: `https://cash.app/${meeting.square}`,
       icon: 'cash',
       text: i18n(strings.contribute_with, { service: 'Cash App' }),
     });
   }
   if (meeting.paypal) {
     contactButtons.push({
-      href: `https:// www.paypal.com/paypalme/${meeting.paypal}`,
+      href: `https://www.paypal.com/paypalme/${meeting.paypal}`,
       icon: 'cash',
       text: i18n(strings.contribute_with, { service: 'PayPal' }),
     });
@@ -419,13 +419,10 @@ export default function Meeting({
                   {meeting.group_notes && (
                     <Paragraphs text={meeting.group_notes} />
                   )}
-                  {!!contactButtons.length && (
-                    <div>
-                      {contactButtons.map((button, index) => (
-                        <Button {...button} key={index} />
-                      ))}
-                    </div>
-                  )}
+                  {contactButtons.map((button, index) => (
+                    <Button {...button} key={index} />
+                  ))}
+
                   {formatWeekdays(groupWeekdays, meeting.slug, state, setState)}
                 </div>
               )}
@@ -482,46 +479,38 @@ function formatWeekdays(
   state: State,
   setState: (state: State) => void
 ) {
-  return (
-    !!weekday.length && (
-      <div>
-        {weekday.map(({ meetings, name }, index) => (
-          <div key={index}>
-            <h3>{name}</h3>
-            <ol>
-              {meetings.map((m, index) => (
-                <li key={index}>
-                  <div>{m.start?.toFormat('t')}</div>
-                  <div>
-                    {m.slug === slug ? (
-                      <Link meeting={m} />
-                    ) : (
-                      <Link meeting={m} setState={setState} state={state} />
-                    )}
-                  </div>
-                  <div>
-                    {m.isInPerson && (
-                      <small css={tableChicletCss('in-person')}>
-                        <Icon icon="geo" size={13} />
-                      </small>
-                    )}
-                    {m.isOnline && (
-                      <small css={tableChicletCss('online')}>
-                        {m.conference_provider && (
-                          <Icon icon="camera" size={13} />
-                        )}
-                        {m.conference_phone && <Icon icon="phone" size={13} />}
-                      </small>
-                    )}
-                  </div>
-                </li>
-              ))}
-            </ol>
-          </div>
+  return weekday.map(({ meetings, name }, index) => (
+    <div key={index}>
+      <h3>{name}</h3>
+      <ol>
+        {meetings.map((m, index) => (
+          <li key={index}>
+            <div>{m.start?.toFormat('t')}</div>
+            <div>
+              {m.slug === slug ? (
+                <Link meeting={m} />
+              ) : (
+                <Link meeting={m} setState={setState} state={state} />
+              )}
+            </div>
+            <div>
+              {m.isInPerson && (
+                <small css={tableChicletCss('in-person')}>
+                  <Icon icon="geo" size={13} />
+                </small>
+              )}
+              {m.isOnline && (
+                <small css={tableChicletCss('online')}>
+                  {m.conference_provider && <Icon icon="camera" size={13} />}
+                  {m.conference_phone && <Icon icon="phone" size={13} />}
+                </small>
+              )}
+            </div>
+          </li>
         ))}
-      </div>
-    )
-  );
+      </ol>
+    </div>
+  ));
 }
 
 // add or remove an "edit meeting" link on WordPress
