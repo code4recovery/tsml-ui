@@ -2,6 +2,8 @@ import { css } from '@emotion/react';
 
 import { color } from './variables';
 
+import 'mapbox-gl/dist/mapbox-gl.css';
+
 export const mapCss = css`
   background-color: ${color.medium};
   border-radius: var(--border-radius);

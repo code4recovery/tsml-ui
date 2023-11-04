@@ -8,4 +8,7 @@ module.exports = {
     '!<rootDir>/**/__snapshots__/*',
     '!<rootDir>/src/**/index.ts',
   ],
+  moduleNameMapper: {
+    '\\.(css)$': '<rootDir>/test/__mocks__/styleMock.js',
+  },
 };
