@@ -100,133 +100,138 @@ export default function TsmlUI({
     };
   }, []);
 
-  // load data once
-  if (state.loading) {
-    console.log(
-      'TSML UI meeting finder: https://github.com/code4recovery/tsml-ui'
-    );
+  useEffect(() => {
+    // load data once
+    if (state.loading) {
+      console.log(
+        'TSML UI meeting finder: https://github.com/code4recovery/tsml-ui'
+      );
 
-    const input = getQueryString(settings);
+      const input = getQueryString(settings);
 
-    if (!src) {
-      setState({
-        ...state,
-        error: 'Configuration error: a data source must be specified.',
-        loading: false,
-        ready: true,
-      });
-    } else {
-      const sheetId = src.startsWith('https://docs.google.com/spreadsheets/d/')
-        ? src.split('/')[5]
-        : undefined;
+      if (!src) {
+        setState({
+          ...state,
+          error: 'Configuration error: a data source must be specified.',
+          loading: false,
+          ready: true,
+        });
+      } else {
+        const sheetId = src.startsWith(
+          'https://docs.google.com/spreadsheets/d/'
+        )
+          ? src.split('/')[5]
+          : undefined;
 
-      // google sheet
-      if (sheetId) {
-        if (!google) {
-          setState({
-            ...state,
-            error: 'Configuration error: a Google API key is required.',
-            loading: false,
-          });
-        }
-        src = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/A1:ZZ?key=${google}`;
-      }
-
-      // cache busting
-      if (src.endsWith('.json') && input.meeting) {
-        src = `${src}?${new Date().getTime()}`;
-      }
-
-      // fetch json data file and build indexes
-      fetch(src)
-        .then(res => (res.ok ? res.json() : Promise.reject(res.status)))
-        .then(data => {
-          if (sheetId) {
-            data = translateGoogleSheet(data, sheetId, settings);
-          }
-
-          if (!Array.isArray(data) || !data.length) {
-            return setState({
+        // google sheet
+        if (sheetId) {
+          if (!google) {
+            setState({
               ...state,
-              error: 'Configuration error: data is not in the correct format.',
+              error: 'Configuration error: a Google API key is required.',
               loading: false,
-              ready: true,
             });
           }
+          src = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/A1:ZZ?key=${google}`;
+        }
 
-          if (timezone) {
-            try {
-              // check if timezone is valid
-              Intl.DateTimeFormat(undefined, { timeZone: timezone });
-            } catch (e) {
+        // cache busting
+        if (src.endsWith('.json') && input.meeting) {
+          src = `${src}?${new Date().getTime()}`;
+        }
+
+        // fetch json data file and build indexes
+        fetch(src)
+          .then(res => (res.ok ? res.json() : Promise.reject(res.status)))
+          .then(data => {
+            if (sheetId) {
+              data = translateGoogleSheet(data, sheetId, settings);
+            }
+
+            if (!Array.isArray(data) || !data.length) {
               return setState({
                 ...state,
-                error: `Timezone ${timezone} is not valid. Please use one like Europe/Rome.`,
+                error:
+                  'Configuration error: data is not in the correct format.',
                 loading: false,
                 ready: true,
               });
             }
-          }
 
-          const [meetings, indexes, capabilities] = loadMeetingData(
-            data,
-            state.capabilities,
-            settings,
-            strings,
-            timezone
-          );
+            if (timezone) {
+              try {
+                // check if timezone is valid
+                Intl.DateTimeFormat(undefined, { timeZone: timezone });
+              } catch (e) {
+                return setState({
+                  ...state,
+                  error: `Timezone ${timezone} is not valid. Please use one like Europe/Rome.`,
+                  loading: false,
+                  ready: true,
+                });
+              }
+            }
 
-          if (!timezone && !Object.keys(meetings).length) {
-            return setState({
+            const [meetings, indexes, capabilities] = loadMeetingData(
+              data,
+              state.capabilities,
+              settings,
+              strings,
+              timezone
+            );
+
+            if (!timezone && !Object.keys(meetings).length) {
+              return setState({
+                ...state,
+                error: 'Configuration error: time zone is not set.',
+                loading: false,
+                ready: true,
+              });
+            }
+
+            const waitingForGeo =
+              (!input.latitude || !input.longitude) &&
+              ((input.mode === 'location' && input.search) ||
+                input.mode === 'me');
+
+            setState({
               ...state,
-              error: 'Configuration error: time zone is not set.',
+              capabilities,
+              indexes,
+              input,
+              loading: false,
+              meetings,
+              ready: !waitingForGeo,
+            });
+          })
+          .catch(error => {
+            const errors = {
+              400: 'bad request',
+              401: 'unauthorized',
+              403: 'forbidden',
+              404: 'not found',
+              429: 'too many requests',
+              500: 'internal server',
+              502: 'bad gateway',
+              503: 'service unavailable',
+              504: 'gateway timeout',
+            };
+            setState({
+              ...state,
+              error: errors[error as keyof typeof errors]
+                ? `Error: ${
+                    errors[error as keyof typeof errors]
+                  } (${error}) when ${
+                    sheetId ? 'contacting Google' : 'loading data'
+                  }.`
+                : error.toString(),
               loading: false,
               ready: true,
             });
-          }
-
-          const waitingForGeo =
-            (!input.latitude || !input.longitude) &&
-            ((input.mode === 'location' && input.search) ||
-              input.mode === 'me');
-
-          setState({
-            ...state,
-            capabilities,
-            indexes,
-            input,
-            loading: false,
-            meetings,
-            ready: !waitingForGeo,
           });
-        })
-        .catch(error => {
-          const errors = {
-            400: 'bad request',
-            401: 'unauthorized',
-            403: 'forbidden',
-            404: 'not found',
-            429: 'too many requests',
-            500: 'internal server',
-            502: 'bad gateway',
-            503: 'service unavailable',
-            504: 'gateway timeout',
-          };
-          setState({
-            ...state,
-            error: errors[error as keyof typeof errors]
-              ? `Error: ${
-                  errors[error as keyof typeof errors]
-                } (${error}) when ${
-                  sheetId ? 'contacting Google' : 'loading data'
-                }.`
-              : error.toString(),
-            loading: false,
-            ready: true,
-          });
-        });
+      }
     }
-  }
+  }, []);
 
   // apply input changes to query string
   if (!state.loading) {
