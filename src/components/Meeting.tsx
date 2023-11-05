@@ -22,6 +22,7 @@ import type { Meeting as MeetingType, State } from '../types';
 import Button from './Button';
 import Icon, { icons } from './Icon';
 import Link from './Link';
+import { Link as RouterLink } from 'react-router-dom';
 import Map from './Map';
 
 type MeetingProps = {
@@ -249,8 +250,8 @@ export default function Meeting({
       </h1>
       <div css={meetingBackCss}>
         <Icon icon="back" />
-        <a
-          href={formatUrl(
+        <RouterLink
+          to={formatUrl(
             {
               ...state.input,
               meeting: undefined,
@@ -258,7 +259,6 @@ export default function Meeting({
             settings
           )}
           onClick={e => {
-            e.preventDefault();
             setState({
               ...state,
               input: {
@@ -269,7 +269,7 @@ export default function Meeting({
           }}
         >
           {strings.back_to_meetings}
-        </a>
+        </RouterLink>
       </div>
       <div css={meetingColumnsCss}>
         <div>
