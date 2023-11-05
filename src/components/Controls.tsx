@@ -1,8 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 
-import Dropdown from './Dropdown';
-import Icon from './Icon';
-import { analyticsEvent, formatUrl, useSettings } from '../helpers';
+import type { SetURLSearchParams } from 'react-router-dom';
+import { analyticsEvent, useSettings } from '../helpers';
 import {
   controlsCss,
   controlsGroupFirstCss,
@@ -14,7 +13,8 @@ import {
   dropdownCss,
 } from '../styles';
 import type { State } from '../types';
-import type { SetURLSearchParams } from 'react-router-dom';
+import Dropdown from './Dropdown';
+import Icon from './Icon';
 
 type ControlsProps = {
   state: State;
@@ -86,6 +86,19 @@ export default function Controls({
     return () => clearTimeout(timer);
   }, [state.input.search]);
 
+  // update url params when search changes
+  useEffect(() => {
+    const { value } = searchInput.current || { value: '' };
+
+    if (searchParams.get('search') !== value && value) {
+      searchParams.set('search', value);
+      setSearchParams(searchParams);
+    } else {
+      searchParams.delete('search');
+      setSearchParams(searchParams);
+    }
+  }, [searchInput.current?.value]);
+
   //close current dropdown (on body click)
   const closeDropdown = (e: MouseEvent) => {
     setDropdown(undefined);
@@ -117,6 +130,12 @@ export default function Controls({
     });
 
     setSearch('');
+    if (mode !== 'search') {
+      searchParams.delete('search');
+      searchParams.set('mode', mode);
+    } else {
+      searchParams.delete('mode');
+    }
 
     //focus after waiting for disabled to clear
     setTimeout(() => searchInput.current?.focus(), 100);
@@ -140,6 +159,8 @@ export default function Controls({
         search: '',
       },
     });
+
+    setSearchParams(searchParams);
   };
 
   //toggle list/map view
