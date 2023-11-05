@@ -14,14 +14,23 @@ import {
   dropdownCss,
 } from '../styles';
 import type { State } from '../types';
+import type { SetURLSearchParams } from 'react-router-dom';
 
 type ControlsProps = {
   state: State;
   setState: React.Dispatch<React.SetStateAction<State>>;
   mapbox?: string;
+  setSearchParams: SetURLSearchParams;
+  searchParams: URLSearchParams;
 };
 
-export default function Controls({ state, setState, mapbox }: ControlsProps) {
+export default function Controls({
+  state,
+  setState,
+  mapbox,
+  setSearchParams,
+  searchParams,
+}: ControlsProps) {
   const { settings, strings } = useSettings();
   const [dropdown, setDropdown] = useState<string>();
   const [search, setSearch] = useState(
@@ -207,6 +216,8 @@ export default function Controls({ state, setState, mapbox }: ControlsProps) {
             setDropdown={setDropdown}
             state={state}
             setState={setState}
+            setSearchParams={setSearchParams}
+            searchParams={searchParams}
           />
         </div>
       ))}

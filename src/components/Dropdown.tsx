@@ -3,6 +3,7 @@ import { Fragment } from 'react';
 import { formatString as i18n, getIndexByKey, useSettings } from '../helpers';
 import { dropdownButtonCss, dropdownCss } from '../styles';
 import type { Index, State } from '../types';
+import { SetURLSearchParams } from 'react-router-dom';
 
 type DropdownProps = {
   defaultValue: string;
@@ -12,6 +13,8 @@ type DropdownProps = {
   setDropdown: (dropdown?: string) => void;
   setState: (state: State) => void;
   state: State;
+  setSearchParams: SetURLSearchParams;
+  searchParams: URLSearchParams;
 };
 
 export default function Dropdown({
@@ -22,6 +25,8 @@ export default function Dropdown({
   setDropdown,
   setState,
   state,
+  setSearchParams,
+  searchParams,
 }: DropdownProps) {
   const { strings } = useSettings();
   const options = state.indexes[filter];
@@ -43,16 +48,28 @@ export default function Dropdown({
         if (index === -1) {
           // @ts-expect-error TODO
           state.input[filter].push(value);
+          searchParams.set(filter, state.input[filter].join(','));
         } else {
           state.input[filter].splice(index, 1);
+          if (state.input[filter].length > 0) {
+            searchParams.set(filter, state.input[filter].join(','));
+          } else {
+            searchParams.delete(filter);
+          }
         }
       } else {
         // @ts-expect-error TODO
         state.input[filter] = [value];
+        searchParams.set(filter, value);
       }
     } else {
       state.input[filter] = [];
+      // remove filter from search params
+      searchParams.delete(filter);
     }
+
+    // Update search params state
+    setSearchParams(searchParams);
 
     //sort filters
     state.input[filter].sort(

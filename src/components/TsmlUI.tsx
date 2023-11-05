@@ -92,6 +92,7 @@ export default function TsmlUI({
   //   };
   // }, [state, window.location.search]);
 
+  // update input when search params change
   useEffect(() => {
     const input = getQueryString(settings);
     if (input !== state.input) {
@@ -278,7 +279,13 @@ export default function TsmlUI({
         <>
           {settings.show.title && <Title state={state} />}
           {settings.show.controls && (
-            <Controls state={state} setState={setState} mapbox={mapbox} />
+            <Controls
+              state={state}
+              setState={setState}
+              mapbox={mapbox}
+              setSearchParams={setSearhParams}
+              searchParams={searchParams}
+            />
           )}
           {(state.alert || state.error) && (
             <Alert state={state} setState={setState} />
