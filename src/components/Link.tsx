@@ -1,5 +1,5 @@
 import { Link as RouterLink } from 'react-router-dom';
-import { formatUrl, useSettings } from '../helpers';
+import { formatSearchParams, useSettings } from '../helpers';
 import type { State, Meeting } from '../types';
 
 type LinkProps = {
@@ -32,18 +32,20 @@ export default function Link({ meeting, setState, state }: LinkProps) {
   return (
     <>
       <RouterLink
-        to={formatUrl({ ...state.input, meeting: meeting.slug }, settings)}
-        // onClick={e => {
-        //   e.preventDefault();
-        //   e.stopPropagation();
-        //   setState({
-        //     ...state,
-        //     input: {
-        //       ...state.input,
-        //       meeting: meeting.slug,
-        //     },
-        //   });
-        // }}
+        to={formatSearchParams(
+          { ...state.input, meeting: meeting.slug },
+          settings
+        )}
+        onClick={e => {
+          e.stopPropagation();
+          setState({
+            ...state,
+            input: {
+              ...state.input,
+              meeting: meeting.slug,
+            },
+          });
+        }}
       >
         {meeting.name}
       </RouterLink>
