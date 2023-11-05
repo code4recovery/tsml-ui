@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
+import { type SetURLSearchParams } from 'react-router-dom';
 
 import { formatString as i18n, useSettings } from '../helpers';
 import {
@@ -17,11 +18,13 @@ export default function Table({
   inProgress = [],
   setState,
   state,
+  setSearchParams,
 }: {
   filteredSlugs: string[];
   inProgress: string[];
   setState: (state: State) => void;
   state: State;
+  setSearchParams: SetURLSearchParams;
 }) {
   const { settings, strings } = useSettings();
   const meetingsPerPage = 10;
@@ -122,14 +125,18 @@ export default function Table({
     const meeting = state.meetings[slug];
     return (
       <tr
-        onClick={() =>
-          setState({
-            ...state,
-            input: {
-              ...state.input,
+        onClick={
+          () =>
+            setSearchParams({
               meeting: meeting.slug,
-            },
-          })
+            })
+          // setState({
+          //   ...state,
+          //   input: {
+          //     ...state.input,
+          //     meeting: meeting.slug,
+          //   },
+          // })
         }
       >
         {columns.map((column, index) => (

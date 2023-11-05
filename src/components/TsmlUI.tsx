@@ -7,11 +7,9 @@ import { Alert, Controls, Loading, Map, Meeting, Table, Title } from './';
 
 import {
   filterMeetingData,
-  formatUrl,
   getQueryString,
   loadMeetingData,
   mergeSettings,
-  setQueryString,
   SettingsContext,
   translateGoogleSheet,
 } from '../helpers';
@@ -291,6 +289,7 @@ export default function TsmlUI({
               inProgress={inProgress}
               setState={setState}
               state={state}
+              setSearchParams={setSearhParams}
             />
           ) : (
             <div style={{ display: 'flex', flexGrow: 1 }}>
