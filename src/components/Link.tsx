@@ -1,5 +1,5 @@
-import { Link as RouterLink } from 'react-router-dom';
-import { formatSearchParams, useSettings } from '../helpers';
+import { useSearchParams } from 'react-router-dom';
+import { useSettings } from '../helpers';
 import type { State, Meeting } from '../types';
 
 type LinkProps = {
@@ -10,6 +10,7 @@ type LinkProps = {
 
 export default function Link({ meeting, setState, state }: LinkProps) {
   const { settings, strings } = useSettings();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const flags =
     settings.flags
@@ -29,26 +30,22 @@ export default function Link({ meeting, setState, state }: LinkProps) {
     );
   }
 
+  const navigate = () => {
+    searchParams.set('meeting', meeting.slug);
+    setSearchParams(searchParams);
+  };
+
   return (
     <>
-      <RouterLink
-        to={formatSearchParams(
-          { ...state.input, meeting: meeting.slug },
-          settings
-        )}
+      <a
         onClick={e => {
+          e.preventDefault();
           e.stopPropagation();
-          setState({
-            ...state,
-            input: {
-              ...state.input,
-              meeting: meeting.slug,
-            },
-          });
+          navigate();
         }}
       >
         {meeting.name}
-      </RouterLink>
+      </a>
       {flags && <small>{flags}</small>}
     </>
   );

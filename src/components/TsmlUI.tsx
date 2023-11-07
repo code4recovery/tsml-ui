@@ -63,7 +63,7 @@ export default function TsmlUI({
   });
 
   const { settings, strings } = mergeSettings(userSettings);
-  const [searchParams, setSearhParams] = useSearchParams();
+  const [searchParams, _] = useSearchParams();
 
   //   // update canonical
   //   let canonical = document.querySelector('link[rel="canonical"]');
@@ -269,7 +269,6 @@ export default function TsmlUI({
               inProgress={inProgress}
               setState={setState}
               state={state}
-              setSearchParams={setSearhParams}
             />
           ) : (
             <div style={{ display: 'flex', flexGrow: 1 }}>
