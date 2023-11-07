@@ -3,7 +3,7 @@ import { Fragment } from 'react';
 import { formatString as i18n, getIndexByKey, useSettings } from '../helpers';
 import { dropdownButtonCss, dropdownCss } from '../styles';
 import type { Index, State } from '../types';
-import { SetURLSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 
 type DropdownProps = {
   defaultValue: string;
@@ -13,8 +13,6 @@ type DropdownProps = {
   setDropdown: (dropdown?: string) => void;
   setState: (state: State) => void;
   state: State;
-  setSearchParams: SetURLSearchParams;
-  searchParams: URLSearchParams;
 };
 
 export default function Dropdown({
@@ -25,9 +23,8 @@ export default function Dropdown({
   setDropdown,
   setState,
   state,
-  setSearchParams,
-  searchParams,
 }: DropdownProps) {
+  const [searchParams, setSearchParams] = useSearchParams();
   const { strings } = useSettings();
   const options = state.indexes[filter];
   const values = state.input[filter];

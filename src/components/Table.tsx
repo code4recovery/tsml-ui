@@ -125,18 +125,10 @@ export default function Table({
     const meeting = state.meetings[slug];
     return (
       <tr
-        onClick={
-          () =>
-            setSearchParams({
-              meeting: meeting.slug,
-            })
-          // setState({
-          //   ...state,
-          //   input: {
-          //     ...state.input,
-          //     meeting: meeting.slug,
-          //   },
-          // })
+        onClick={() =>
+          setSearchParams({
+            meeting: meeting.slug,
+          })
         }
       >
         {columns.map((column, index) => (

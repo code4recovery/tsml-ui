@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 
-import type { SetURLSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { analyticsEvent, useSettings } from '../helpers';
 import {
   controlsCss,
@@ -20,22 +20,15 @@ type ControlsProps = {
   state: State;
   setState: React.Dispatch<React.SetStateAction<State>>;
   mapbox?: string;
-  setSearchParams: SetURLSearchParams;
-  searchParams: URLSearchParams;
 };
 
-export default function Controls({
-  state,
-  setState,
-  mapbox,
-  setSearchParams,
-  searchParams,
-}: ControlsProps) {
+export default function Controls({ state, setState, mapbox }: ControlsProps) {
   const { settings, strings } = useSettings();
   const [dropdown, setDropdown] = useState<string>();
   const [search, setSearch] = useState(
     state.input.mode === 'location' ? state.input.search : ''
   );
+  const [searchParams, setSearchParams] = useSearchParams();
   const searchInput = useRef<HTMLInputElement>(null);
 
   //get available search options based on capabilities
@@ -237,8 +230,6 @@ export default function Controls({
             setDropdown={setDropdown}
             state={state}
             setState={setState}
-            setSearchParams={setSearchParams}
-            searchParams={searchParams}
           />
         </div>
       ))}

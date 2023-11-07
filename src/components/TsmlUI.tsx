@@ -279,13 +279,7 @@ export default function TsmlUI({
         <>
           {settings.show.title && <Title state={state} />}
           {settings.show.controls && (
-            <Controls
-              state={state}
-              setState={setState}
-              mapbox={mapbox}
-              setSearchParams={setSearhParams}
-              searchParams={searchParams}
-            />
+            <Controls state={state} setState={setState} mapbox={mapbox} />
           )}
           {(state.alert || state.error) && (
             <Alert state={state} setState={setState} />
