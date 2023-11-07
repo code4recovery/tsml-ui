@@ -81,15 +81,18 @@ export default function Controls({ state, setState, mapbox }: ControlsProps) {
 
   // update url params when search changes
   useEffect(() => {
-    const { value } = searchInput.current || { value: '' };
+    if (!searchInput.current) return;
 
-    if (searchParams.get('search') !== value && value) {
+    const { value } = searchInput.current;
+
+    if (searchParams.get('search') === value) return;
+    if (value) {
       searchParams.set('search', value);
-      setSearchParams(searchParams);
     } else {
       searchParams.delete('search');
-      setSearchParams(searchParams);
     }
+
+    setSearchParams(searchParams);
   }, [searchInput.current?.value]);
 
   //close current dropdown (on body click)

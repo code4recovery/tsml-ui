@@ -281,9 +281,7 @@ export default function TsmlUI({
           {settings.show.controls && (
             <Controls state={state} setState={setState} mapbox={mapbox} />
           )}
-          {(state.alert || state.error) && (
-            <Alert state={state} setState={setState} />
-          )}
+          {(state.alert || state.error) && <Alert state={state} />}
           {state.input.view === 'table' ? (
             <Table
               filteredSlugs={filteredSlugs}
