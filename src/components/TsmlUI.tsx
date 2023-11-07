@@ -65,13 +65,6 @@ export default function TsmlUI({
   const { settings, strings } = mergeSettings(userSettings);
   const [searchParams, setSearhParams] = useSearchParams();
 
-  // enable forward & back buttons
-  // useEffect(() => {
-  //   const popstateListener = () => {
-  //     setState({ ...state, input: getQueryString(settings) });
-  //   };
-  //   window.addEventListener('popstate', popstateListener);
-
   //   // update canonical
   //   let canonical = document.querySelector('link[rel="canonical"]');
   //   if (!canonical) {
@@ -87,11 +80,6 @@ export default function TsmlUI({
   //     )
   //   );
 
-  //   return () => {
-  //     window.removeEventListener('popstate', popstateListener);
-  //   };
-  // }, [state, window.location.search]);
-
   // update input when search params change
   useEffect(() => {
     const input = getQueryString(settings);
@@ -99,14 +87,6 @@ export default function TsmlUI({
       setState({ ...state, input });
     }
   }, [searchParams]);
-
-  // manage classes
-  useEffect(() => {
-    document.body.classList.add('tsml-ui');
-    return () => {
-      document.body.classList.remove('tsml-ui');
-    };
-  }, []);
 
   useEffect(() => {
     // load data once
@@ -239,12 +219,13 @@ export default function TsmlUI({
           });
       }
     }
-  }, []);
 
-  // apply input changes to query string
-  // if (!state.loading) {
-  //   setQueryString(state.input, settings);
-  // }
+    // manage classes
+    document.body.classList.add('tsml-ui');
+    return () => {
+      document.body.classList.remove('tsml-ui');
+    };
+  }, []);
 
   // filter data
   const [filteredSlugs, inProgress] = filterMeetingData(
