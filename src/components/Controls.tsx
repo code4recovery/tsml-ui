@@ -86,17 +86,17 @@ export default function Controls({ state, setState, mapbox }: ControlsProps) {
   const locationSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (state.input.mode === 'location') {
-      setState({
-        ...state,
-        input: {
-          ...state.input,
-          latitude: undefined,
-          longitude: undefined,
-          search: search,
-        },
-      });
-    }
+    if (state.input.mode !== 'location') return;
+
+    setState({
+      ...state,
+      input: {
+        ...state.input,
+        latitude: undefined,
+        longitude: undefined,
+        search,
+      },
+    });
   };
 
   //set search mode dropdown and clear all distances
@@ -164,6 +164,7 @@ export default function Controls({ state, setState, mapbox }: ControlsProps) {
               state.input.mode === 'location' ? search : state.input.search
             }
           />
+          <input type="submit" hidden />
           {modes.length > 1 && (
             <button
               aria-label={strings.modes[state.input.mode]}
