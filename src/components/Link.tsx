@@ -1,3 +1,4 @@
+import { NavLink } from 'react-router-dom';
 import { formatUrl, useSettings } from '../helpers';
 import type { State, Meeting } from '../types';
 
@@ -30,22 +31,14 @@ export default function Link({ meeting, setState, state }: LinkProps) {
 
   return (
     <>
-      <a
-        href={formatUrl({ ...state.input, meeting: meeting.slug }, settings)}
+      <NavLink
+        to={formatUrl({ ...state.input, meeting: meeting.slug }, settings)}
         onClick={e => {
-          e.preventDefault();
           e.stopPropagation();
-          setState({
-            ...state,
-            input: {
-              ...state.input,
-              meeting: meeting.slug,
-            },
-          });
         }}
       >
         {meeting.name}
-      </a>
+      </NavLink>
       {flags && <small>{flags}</small>}
     </>
   );

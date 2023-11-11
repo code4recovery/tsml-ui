@@ -6,3 +6,4 @@ test-results/
 playwright-report/
 .vscode
 .DS_Store
+.idea

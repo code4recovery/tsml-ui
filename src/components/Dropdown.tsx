@@ -3,6 +3,7 @@ import { Fragment } from 'react';
 import { formatString as i18n, getIndexByKey, useSettings } from '../helpers';
 import { dropdownButtonCss, dropdownCss } from '../styles';
 import type { Index, State } from '../types';
+import { useSearchParams } from 'react-router-dom';
 
 type DropdownProps = {
   defaultValue: string;
@@ -10,7 +11,6 @@ type DropdownProps = {
   filter: keyof State['indexes'];
   open: boolean;
   setDropdown: (dropdown?: string) => void;
-  setState: (state: State) => void;
   state: State;
 };
 
@@ -20,9 +20,9 @@ export default function Dropdown({
   filter,
   open,
   setDropdown,
-  setState,
   state,
 }: DropdownProps) {
+  const [searchParams, setSearchParams] = useSearchParams();
   const { strings } = useSettings();
   const options = state.indexes[filter];
   const values = state.input[filter];
@@ -35,34 +35,40 @@ export default function Dropdown({
   ) => {
     e.preventDefault();
 
-    //add or remove from filters
+    // add or remove from filters
+    let currentValues = searchParams.get(filter)?.split('/') ?? [];
+
     if (value) {
+      const index = currentValues.indexOf(value);
       if (e.metaKey) {
-        // @ts-expect-error TODO
-        const index = state.input[filter].indexOf(value);
         if (index === -1) {
-          // @ts-expect-error TODO
-          state.input[filter].push(value);
+          currentValues.push(value);
         } else {
-          state.input[filter].splice(index, 1);
+          // Remove the value
+          currentValues.splice(index, 1);
+        }
+        // sort values
+        if (currentValues.length) {
+          currentValues.sort();
+
+          // TODO: this is a hack to get around unable to use %2F in search params
+          // currently this will break if filter values are seperated by escaping / with  %2F
+          const newValues = currentValues.join('/');
+          searchParams.set(filter, newValues);
+        } else {
+          searchParams.delete(filter);
         }
       } else {
-        // @ts-expect-error TODO
-        state.input[filter] = [value];
+        // Single value, directly set the value
+        searchParams.set(filter, value);
       }
     } else {
-      state.input[filter] = [];
+      // Remove the filter from search params if no value is provided
+      searchParams.delete(filter);
     }
 
-    //sort filters
-    state.input[filter].sort(
-      (a, b) =>
-        state.indexes[filter].findIndex(x => a === x.key) -
-        state.indexes[filter].findIndex(x => b === x.key)
-    );
-
-    //pass it up to app controller
-    setState({ ...state });
+    // Update search params state
+    setSearchParams(searchParams);
   };
 
   const renderDropdownItem = ({ key, name, slugs, children }: Index) => (

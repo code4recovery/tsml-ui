@@ -1,8 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 
-import Dropdown from './Dropdown';
-import Icon from './Icon';
-import { analyticsEvent, formatUrl, useSettings } from '../helpers';
+import { useSearchParams } from 'react-router-dom';
+import { analyticsEvent, useSettings } from '../helpers';
 import {
   controlsCss,
   controlsGroupFirstCss,
@@ -14,6 +13,8 @@ import {
   dropdownCss,
 } from '../styles';
 import type { State } from '../types';
+import Dropdown from './Dropdown';
+import Icon from './Icon';
 
 type ControlsProps = {
   state: State;
@@ -27,6 +28,7 @@ export default function Controls({ state, setState, mapbox }: ControlsProps) {
   const [search, setSearch] = useState(
     state.input.mode === 'location' ? state.input.search : ''
   );
+  const [searchParams, setSearchParams] = useSearchParams();
   const searchInput = useRef<HTMLInputElement>(null);
 
   //get available search options based on capabilities
@@ -77,6 +79,23 @@ export default function Controls({ state, setState, mapbox }: ControlsProps) {
     return () => clearTimeout(timer);
   }, [state.input.search]);
 
+  // update url params when search changes
+  useEffect(() => {
+    if (!searchInput.current) return;
+
+    const { value } = searchInput.current;
+
+    if (value === search) return;
+    if (searchParams.get('search') === value) return;
+    if (value) {
+      searchParams.set('search', value);
+    } else {
+      searchParams.delete('search');
+    }
+
+    setSearchParams(searchParams);
+  }, [searchInput.current?.value]);
+
   //close current dropdown (on body click)
   const closeDropdown = (e: MouseEvent) => {
     setDropdown(undefined);
@@ -108,6 +127,12 @@ export default function Controls({ state, setState, mapbox }: ControlsProps) {
     });
 
     setSearch('');
+    if (mode !== 'search') {
+      searchParams.delete('search');
+      searchParams.set('mode', mode);
+    } else {
+      searchParams.delete('mode');
+    }
 
     //focus after waiting for disabled to clear
     setTimeout(() => searchInput.current?.focus(), 100);
@@ -131,6 +156,8 @@ export default function Controls({ state, setState, mapbox }: ControlsProps) {
         search: '',
       },
     });
+
+    setSearchParams(searchParams);
   };
 
   //toggle list/map view
@@ -207,7 +234,6 @@ export default function Controls({ state, setState, mapbox }: ControlsProps) {
             open={dropdown === filter}
             setDropdown={setDropdown}
             state={state}
-            setState={setState}
           />
         </div>
       ))}
