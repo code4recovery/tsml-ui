@@ -48,16 +48,13 @@ export default function Dropdown({
           currentValues.splice(index, 1);
         }
         // sort values
-        if (currentValues.length > 1) {
+        if (currentValues.length) {
           currentValues.sort();
 
           // TODO: this is a hack to get around unable to use %2F in search params
           // currently this will break if filter values are seperated by escaping / with  %2F
           const newValues = currentValues.join('/');
           searchParams.set(filter, newValues);
-        } else if (currentValues.length === 1) {
-          // Handle the case where there's only one value left
-          searchParams.set(filter, currentValues[0]);
         } else {
           searchParams.delete(filter);
         }

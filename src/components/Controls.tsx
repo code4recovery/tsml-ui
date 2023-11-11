@@ -85,6 +85,7 @@ export default function Controls({ state, setState, mapbox }: ControlsProps) {
 
     const { value } = searchInput.current;
 
+    if (value === search) return;
     if (searchParams.get('search') === value) return;
     if (value) {
       searchParams.set('search', value);
