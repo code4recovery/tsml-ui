@@ -1,5 +1,5 @@
-import { useSearchParams } from 'react-router-dom';
-import { useSettings } from '../helpers';
+import { NavLink } from 'react-router-dom';
+import { formatUrl, useSettings } from '../helpers';
 import type { State, Meeting } from '../types';
 
 type LinkProps = {
@@ -10,7 +10,6 @@ type LinkProps = {
 
 export default function Link({ meeting, setState, state }: LinkProps) {
   const { settings, strings } = useSettings();
-  const [searchParams, setSearchParams] = useSearchParams();
 
   const flags =
     settings.flags
@@ -30,22 +29,16 @@ export default function Link({ meeting, setState, state }: LinkProps) {
     );
   }
 
-  const navigate = () => {
-    searchParams.set('meeting', meeting.slug);
-    setSearchParams(searchParams);
-  };
-
   return (
     <>
-      <a
+      <NavLink
+        to={formatUrl({ ...state.input, meeting: meeting.slug }, settings)}
         onClick={e => {
-          e.preventDefault();
           e.stopPropagation();
-          navigate();
         }}
       >
         {meeting.name}
-      </a>
+      </NavLink>
       {flags && <small>{flags}</small>}
     </>
   );
