@@ -11,7 +11,6 @@ type DropdownProps = {
   filter: keyof State['indexes'];
   open: boolean;
   setDropdown: (dropdown?: string) => void;
-  setState: (state: State) => void;
   state: State;
 };
 
@@ -21,7 +20,6 @@ export default function Dropdown({
   filter,
   open,
   setDropdown,
-  setState,
   state,
 }: DropdownProps) {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -37,46 +35,43 @@ export default function Dropdown({
   ) => {
     e.preventDefault();
 
-    //add or remove from filters
+    // add or remove from filters
+    let currentValues = searchParams.get(filter)?.split('/') ?? [];
+
     if (value) {
+      const index = currentValues.indexOf(value);
       if (e.metaKey) {
-        // @ts-expect-error TODO
-        const index = state.input[filter].indexOf(value);
         if (index === -1) {
-          // @ts-expect-error TODO
-          state.input[filter].push(value);
-          searchParams.set(filter, state.input[filter].join(','));
+          currentValues.push(value);
         } else {
-          state.input[filter].splice(index, 1);
-          if (state.input[filter].length > 0) {
-            searchParams.set(filter, state.input[filter].join(','));
-          } else {
-            searchParams.delete(filter);
-          }
+          // Remove the value
+          currentValues.splice(index, 1);
+        }
+        // sort values
+        if (currentValues.length > 1) {
+          currentValues.sort();
+
+          // TODO: this is a hack to get around unable to use %2F in search params
+          // currently this will break if filter values are seperated by escaping / with  %2F
+          const newValues = currentValues.join('/');
+          searchParams.set(filter, newValues);
+        } else if (currentValues.length === 1) {
+          // Handle the case where there's only one value left
+          searchParams.set(filter, currentValues[0]);
+        } else {
+          searchParams.delete(filter);
         }
       } else {
-        // @ts-expect-error TODO
-        state.input[filter] = [value];
+        // Single value, directly set the value
         searchParams.set(filter, value);
       }
     } else {
-      state.input[filter] = [];
-      // remove filter from search params
+      // Remove the filter from search params if no value is provided
       searchParams.delete(filter);
     }
 
     // Update search params state
     setSearchParams(searchParams);
-
-    //sort filters
-    state.input[filter].sort(
-      (a, b) =>
-        state.indexes[filter].findIndex(x => a === x.key) -
-        state.indexes[filter].findIndex(x => b === x.key)
-    );
-
-    //pass it up to app controller
-    setState({ ...state });
   };
 
   const renderDropdownItem = ({ key, name, slugs, children }: Index) => (

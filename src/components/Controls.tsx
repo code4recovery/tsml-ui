@@ -232,7 +232,6 @@ export default function Controls({ state, setState, mapbox }: ControlsProps) {
             open={dropdown === filter}
             setDropdown={setDropdown}
             state={state}
-            setState={setState}
           />
         </div>
       ))}
