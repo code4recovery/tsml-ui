@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { DateTime } from 'luxon';
+import { MemoryRouter } from 'react-router-dom';
 
 import type { Meeting as MeetingType, State } from '../../src/types';
 import { SettingsContext, mergeSettings } from '../../src/helpers';
@@ -86,9 +87,11 @@ describe('<Meeting />', () => {
 
   it('renders with clickable buttons', () => {
     const { container } = render(
-      <SettingsContext.Provider value={mergeSettings()}>
-        <Meeting state={mockState} setState={jest.fn()} mapbox="pk.123456" />
-      </SettingsContext.Provider>
+      <MemoryRouter>
+        <SettingsContext.Provider value={mergeSettings()}>
+          <Meeting state={mockState} setState={jest.fn()} mapbox="pk.123456" />
+        </SettingsContext.Provider>
+      </MemoryRouter>
     );
     expect(container).toBeTruthy();
 
@@ -111,78 +114,84 @@ describe('<Meeting />', () => {
 
   it('renders with group info', () => {
     const { container } = render(
-      <Meeting
-        state={{
-          ...mockState,
-          meetings: {
-            foo: {
-              ...mockMeeting,
-              group: 'Test',
+      <MemoryRouter>
+        <Meeting
+          state={{
+            ...mockState,
+            meetings: {
+              foo: {
+                ...mockMeeting,
+                group: 'Test',
+              },
+              bar: {
+                ...mockMeeting,
+                group: 'Test',
+              },
             },
-            bar: {
-              ...mockMeeting,
-              group: 'Test',
-            },
-          },
-        }}
-        setState={jest.fn()}
-        mapbox="pk.123456"
-        feedback_emails={['test@test.com']}
-      />
+          }}
+          setState={jest.fn()}
+          mapbox="pk.123456"
+          feedback_emails={['test@test.com']}
+        />
+      </MemoryRouter>
     );
     expect(container).toBeTruthy();
   });
 
   it('renders when inactive', () => {
     const { container } = render(
-      <Meeting
-        state={{
-          ...mockState,
-          meetings: {
-            foo: {
-              ...mockMeeting,
-              isActive: false,
-              isInPerson: false,
+      <MemoryRouter>
+        <Meeting
+          state={{
+            ...mockState,
+            meetings: {
+              foo: {
+                ...mockMeeting,
+                isActive: false,
+                isInPerson: false,
+              },
+              bar: {
+                ...mockMeeting,
+                start: DateTime.now().plus({ day: 1 }),
+              },
             },
-            bar: {
-              ...mockMeeting,
-              start: DateTime.now().plus({ day: 1 }),
-            },
-          },
-        }}
-        setState={jest.fn()}
-        mapbox="pk.123456"
-      />
+          }}
+          setState={jest.fn()}
+          mapbox="pk.123456"
+        />
+      </MemoryRouter>
     );
     expect(container).toBeTruthy();
   });
 
   it('renders with group but no contact', () => {
     const { container } = render(
-      <Meeting
-        state={{
-          ...mockState,
-          meetings: {
-            foo: {
-              ...mockMeeting,
-              group: 'Test',
-              start: undefined,
-              email: undefined,
-              website: undefined,
-              phone: undefined,
-              venmo: undefined,
-              square: undefined,
-              paypal: undefined,
+      <MemoryRouter>
+        <Meeting
+          state={{
+            ...mockState,
+            meetings: {
+              foo: {
+                ...mockMeeting,
+                group: 'Test',
+                start: undefined,
+                email: undefined,
+                website: undefined,
+                phone: undefined,
+                venmo: undefined,
+                square: undefined,
+                paypal: undefined,
+              },
+              bar: {
+                ...mockMeeting,
+                isOnline: false,
+              },
             },
-            bar: {
-              ...mockMeeting,
-              isOnline: false,
-            },
-          },
-        }}
-        setState={jest.fn()}
-        mapbox="pk.123456"
-      />
+          }}
+          setState={jest.fn()}
+          mapbox="pk.123456"
+        />
+      </MemoryRouter>
     );
     expect(container).toBeTruthy();
   });

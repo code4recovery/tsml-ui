@@ -1,5 +1,6 @@
 import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
 
 import {
   SettingsContext,
@@ -23,14 +24,16 @@ describe('<Table />', () => {
   it('renders with clickable rows', () => {
     const mockSetState = jest.fn();
     render(
-      <SettingsContext.Provider value={settings}>
-        <Table
-          filteredSlugs={filteredSlugs}
-          inProgress={[]}
-          setState={mockSetState}
-          state={mockStateWithMeeting}
-        />
-      </SettingsContext.Provider>
+      <MemoryRouter>
+        <SettingsContext.Provider value={settings}>
+          <Table
+            filteredSlugs={filteredSlugs}
+            inProgress={[]}
+            setState={mockSetState}
+            state={mockStateWithMeeting}
+          />
+        </SettingsContext.Provider>
+      </MemoryRouter>
     );
 
     //clickable rows
@@ -44,14 +47,16 @@ describe('<Table />', () => {
     const mockSetState = jest.fn();
 
     render(
-      <SettingsContext.Provider value={settings}>
-        <Table
-          filteredSlugs={filteredSlugs}
-          inProgress={['foo']}
-          setState={mockSetState}
-          state={mockStateWithMeeting}
-        />
-      </SettingsContext.Provider>
+      <MemoryRouter>
+        <SettingsContext.Provider value={settings}>
+          <Table
+            filteredSlugs={filteredSlugs}
+            inProgress={['foo']}
+            setState={mockSetState}
+            state={mockStateWithMeeting}
+          />
+        </SettingsContext.Provider>
+      </MemoryRouter>
     );
 
     //count rows (data rows + header + show in progress)
@@ -86,14 +91,16 @@ describe('<Table />', () => {
     const inProgress = [...multiFilteredSlugs];
 
     render(
-      <SettingsContext.Provider value={settings}>
-        <Table
-          filteredSlugs={multiFilteredSlugs}
-          inProgress={inProgress}
-          setState={mockSetState}
-          state={mockStateWithMeetings}
-        />
-      </SettingsContext.Provider>
+      <MemoryRouter>
+        <SettingsContext.Provider value={settings}>
+          <Table
+            filteredSlugs={multiFilteredSlugs}
+            inProgress={inProgress}
+            setState={mockSetState}
+            state={mockStateWithMeetings}
+          />
+        </SettingsContext.Provider>
+      </MemoryRouter>
     );
 
     //count rows (data rows + header + show in progress)

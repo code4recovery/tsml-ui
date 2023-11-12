@@ -1,5 +1,7 @@
 import React from 'react';
 import { screen, render, fireEvent } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
+
 import { Meeting } from '../../src/types';
 import Link from '../../src/components/Link';
 import { SettingsContext, mergeSettings } from '../../src/helpers/settings';
@@ -58,9 +60,15 @@ describe('<Link />', () => {
     const mockSetState = jest.fn();
 
     render(
-      <SettingsContext.Provider value={mergeSettings()}>
-        <Link meeting={mockMeeting} state={mockState} setState={mockSetState} />
-      </SettingsContext.Provider>
+      <MemoryRouter>
+        <SettingsContext.Provider value={mergeSettings()}>
+          <Link
+            meeting={mockMeeting}
+            state={mockState}
+            setState={mockSetState}
+          />
+        </SettingsContext.Provider>
+      </MemoryRouter>
     );
 
     const link = screen.getByRole('link');
