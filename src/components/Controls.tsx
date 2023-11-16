@@ -8,6 +8,7 @@ import {
   controlsGroupLastCss,
   controlsInputCss,
   controlsInputFirstCss,
+  controlsInputSearchSubmitCss,
   controlsSearchDropdownCss,
   dropdownButtonLastCss,
   dropdownCss,
@@ -191,7 +192,7 @@ export default function Controls({ state, setState, mapbox }: ControlsProps) {
               state.input.mode === 'location' ? search : state.input.search
             }
           />
-          <input type="submit" hidden />
+          <input type="submit" hidden css={controlsInputSearchSubmitCss}/>
           {modes.length > 1 && (
             <button
               aria-label={strings.modes[state.input.mode]}
