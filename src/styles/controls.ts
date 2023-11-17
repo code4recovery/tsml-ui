@@ -64,3 +64,7 @@ export const controlsSearchDropdownCss = css`
   min-width: 0 !important;
   right: 0;
 `;
+
+export const controlsInputSearchSubmitCss = css`
+  display: none !important;
+`;
