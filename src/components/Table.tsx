@@ -84,7 +84,6 @@ export default function Table({
           type: 'inactive',
         });
       }
-      console.info(attendance);
       return (
         <div css={tableChicletsCss}>
           {attendance.map(({ icon, text, type, noTranslate }, index) => (
