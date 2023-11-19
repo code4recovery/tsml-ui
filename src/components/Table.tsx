@@ -89,7 +89,7 @@ export default function Table({
           {attendance.map(({ icon, text, type, noTranslate }, index) => (
             <span css={tableChicletCss(type)} key={index}>
               <Icon icon={icon} size={18} />
-              {text && <span className={(true === noTranslate) ? 'notranslate' : ''}>{text}</span>}
+              {text && <span className={noTranslate ? 'notranslate' : undefined}>{text}</span>}
             </span>
           ))}
         </div>
