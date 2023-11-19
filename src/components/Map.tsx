@@ -209,7 +209,7 @@ export default function Map({
                 >
                   <div>
                     <h2>{data.locations[key].name}</h2>
-                    <p>{data.locations[key].formatted_address}</p>
+                    <p className="notranslate">{data.locations[key].formatted_address}</p>
                     {listMeetingsInPopup && (
                       <div css={mapMeetingsCss}>
                         {data.locations[key].meetings
