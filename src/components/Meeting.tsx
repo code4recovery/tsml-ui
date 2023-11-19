@@ -392,7 +392,7 @@ export default function Meeting({
               <div data-disabled={meeting.isTempClosed}>
                 {meeting.location && <h2>{meeting.location}</h2>}
                 {meeting.formatted_address && (
-                  <p>{meeting.formatted_address}</p>
+                  <p className="notranslate">{meeting.formatted_address}</p>
                 )}
                 {!!meeting.regions?.length && (
                   <p>{meeting.regions.join(' > ')}</p>
