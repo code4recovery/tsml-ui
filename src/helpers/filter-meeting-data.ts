@@ -100,15 +100,14 @@ export function filterMeetingData(
           .then(result => {
             if (result.features && result.features.length) {
               //re-render page with new params
-              calculateDistances(
-                filteredSlugs,
-                result.features[0].center[1],
-                result.features[0].center[0],
+              calculateDistances({
+                latitude: result.features[0].center[1],
+                longitude: result.features[0].center[0],
                 setState,
-                state,
                 settings,
-                strings
-              );
+                state,
+                strings,
+              });
             } else {
               //show error
             }
@@ -116,15 +115,14 @@ export function filterMeetingData(
       } else if (state.input.mode === 'me') {
         navigator.geolocation.getCurrentPosition(
           position => {
-            calculateDistances(
-              filteredSlugs,
-              position.coords.latitude,
-              position.coords.longitude,
+            calculateDistances({
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude,
               setState,
-              state,
               settings,
-              strings
-            );
+              state,
+              strings,
+            });
           },
           error => {
             console.warn(`TSML UI geolocation error: ${error.message}`);
