@@ -52,6 +52,7 @@ export default function Table({
       const attendance: {
         icon: keyof typeof icons;
         text?: string;
+        noTranslate?: boolean;
         type: 'in-person' | 'online' | 'inactive';
       }[] = [];
       if (meeting.isInPerson) {
@@ -59,6 +60,7 @@ export default function Table({
           icon: 'geo',
           text: meeting.address,
           type: 'in-person',
+          noTranslate: true,
         });
       }
       if (meeting.conference_provider) {
@@ -84,10 +86,10 @@ export default function Table({
       }
       return (
         <div css={tableChicletsCss}>
-          {attendance.map(({ icon, text, type }, index) => (
+          {attendance.map(({ icon, text, type, noTranslate }, index) => (
             <span css={tableChicletCss(type)} key={index}>
               <Icon icon={icon} size={18} />
-              {text && <span>{text}</span>}
+              {text && <span className={noTranslate ? 'notranslate' : undefined}>{text}</span>}
             </span>
           ))}
         </div>
