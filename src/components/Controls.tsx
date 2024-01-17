@@ -177,8 +177,16 @@ export default function Controls({
   //toggle list/map view
   const setView = (e: MouseEvent, view: 'table' | 'map') => {
     e.preventDefault();
-    state.input.view = view;
-    setState({ ...state });
+
+    if (view !== 'table') {
+      searchParams.set('view', view);
+    } else {
+      searchParams.delete('view');
+    }
+
+    setState({ ...state, input: { ...state.input, view } });
+
+    setSearchParams(searchParams);
   };
 
   return !Object.keys(state.meetings).length ? null : (
