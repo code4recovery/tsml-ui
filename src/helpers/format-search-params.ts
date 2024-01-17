@@ -5,7 +5,7 @@ export function formatSearchParams(
 ) {
   const query = {};
 
-  //distance, region, time, type, and weekday
+  // distance, region, time, type, and weekday
   settings.filters
     .filter(filter => typeof input[filter] !== 'undefined')
     .filter(filter => input[filter]?.length)
@@ -14,7 +14,7 @@ export function formatSearchParams(
       query[filter] = input[filter].join('/');
     });
 
-  //meeting, mode, search, view
+  // meeting, mode, search, view
   settings.params
     .filter(param => typeof input[param] !== 'undefined')
     .filter(param => input[param] !== settings.defaults[param])
@@ -23,12 +23,12 @@ export function formatSearchParams(
       query[param] = input[param];
     });
 
-  //create a query string with only values in use
+  // create a query string with only values in use
   const queryString = new URLSearchParams(query)
     .toString()
     .replace(/%2F/g, '/')
     .replace(/%20/g, '+')
     .replace(/%2C/g, ',');
 
-  return `${!!queryString.length ? `?${queryString}` : ''}`;
+  return `${queryString.length ? `?${queryString}` : ''}`;
 }

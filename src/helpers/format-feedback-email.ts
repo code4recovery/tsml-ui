@@ -1,21 +1,22 @@
 import { Meeting } from '../types';
-import { getQueryString } from './query-string';
+
 import { formatArray } from './format-array';
 import { formatString as i18n } from './format-string';
 import { formatUrl } from './format-url';
+import { getQueryString } from './query-string';
 
-//send back a mailto link to a feedback email
+// send back a mailto link to a feedback email
 export function formatFeedbackEmail(
   feedback_emails: TSMLReactConfig['feedback_emails'],
   meeting: Meeting,
   settings: TSMLReactConfig,
   strings: Translation
 ) {
-  //remove extra query params from meeting URL
+  // remove extra query params from meeting URL
   const input = getQueryString(settings);
   const meetingUrl = formatUrl({ meeting: input.meeting }, settings);
 
-  //build message
+  // build message
   const lines = [
     ``,
     '',
@@ -27,7 +28,7 @@ export function formatFeedbackEmail(
     lines.push(i18n(strings.email_edit_url, { url: meeting.edit_url }));
   }
 
-  //build mailto link
+  // build mailto link
   return `mailto:${formatArray(feedback_emails).join()}?${new URLSearchParams({
     subject: i18n(strings.email_subject, { name: meeting.name }),
     body: lines.join('\n'),

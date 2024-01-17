@@ -1,9 +1,7 @@
 import { useEffect, useState } from 'react';
-import { Global } from '@emotion/react';
 
-import { globalCss } from '../styles';
-import type { State } from '../types';
-import { Alert, Controls, Loading, Map, Meeting, Table, Title } from './';
+import { Global } from '@emotion/react';
+import { useSearchParams } from 'react-router-dom';
 
 import {
   filterMeetingData,
@@ -13,7 +11,11 @@ import {
   SettingsContext,
   translateGoogleSheet,
 } from '../helpers';
-import { useSearchParams } from 'react-router-dom';
+import { globalCss } from '../styles';
+
+import { Alert, Controls, Loading, Map, Meeting, Table, Title } from './';
+
+import type { State } from '../types';
 
 export default function TsmlUI({
   google,
@@ -63,7 +65,7 @@ export default function TsmlUI({
   });
 
   const { settings, strings } = mergeSettings(userSettings);
-  const [searchParams, _] = useSearchParams();
+  const [searchParams] = useSearchParams();
 
   //   // update canonical
   //   let canonical = document.querySelector('link[rel="canonical"]');

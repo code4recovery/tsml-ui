@@ -1,11 +1,19 @@
 import React from 'react';
+
 import { fireEvent, render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 
 import Dropdown from '../../src/components/Dropdown';
 import { SettingsContext, mergeSettings } from '../../src/helpers';
-import { mockState } from '../__fixtures__';
 import { State } from '../../src/types';
+import { mockState } from '../__fixtures__';
+
+const mockSetParams = jest.fn();
+
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useSearchParams: () => [new URLSearchParams(), mockSetParams],
+}));
 
 describe('<Dropdown />', () => {
   const filter = 'type';
@@ -123,7 +131,12 @@ describe('<Dropdown />', () => {
 
     //click a filter
     fireEvent.click(link1);
-    expect(mockSetState).toHaveBeenLastCalledWith(modify(filter, ['foo']));
+    expect(mockSetParams).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        foo: 'foo',
+        bar: 'bar',
+      })
+    );
 
     //add a filter by clicking with metaKey
     fireEvent.click(link2, { metaKey: true });

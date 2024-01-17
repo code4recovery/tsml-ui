@@ -1,6 +1,7 @@
 import React from 'react';
-import { MemoryRouter } from 'react-router-dom';
+
 import { fireEvent, render, screen } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
 
 import Alert from '../../src/components/Alert';
 import { en } from '../../src/i18n';

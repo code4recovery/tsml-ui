@@ -1,13 +1,16 @@
-import type { Index, Meeting, State } from '../types';
+import { Dispatch, SetStateAction } from 'react';
+
 import { flattenAndSortIndexes } from './flatten-and-sort-indexes';
 import { formatString as i18n } from './format-string';
+
+import type { Index, Meeting, State } from '../types';
 
 //calculate distances
 export function calculateDistances(
   filteredSlugs: string[],
   latitude: number,
   longitude: number,
-  setState: (state: State) => void,
+  setState: Dispatch<SetStateAction<State>>,
   state: State,
   settings: TSMLReactConfig,
   strings: Translation

@@ -1,20 +1,15 @@
-import { useEffect, useRef, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
+
 import ReactMapGL, { Marker, NavigationControl, Popup } from 'react-map-gl';
 import WebMercatorViewport from 'viewport-mercator-project';
 
 import { formatDirectionsUrl, useSettings } from '../helpers';
 import { mapCss, mapMeetingsCss } from '../styles';
-import type { Meeting, State } from '../types';
+
 import Button from './Button';
 import Link from './Link';
 
-type MapProps = {
-  filteredSlugs: string[];
-  listMeetingsInPopup: boolean;
-  mapbox?: string;
-  setState: (state: State) => void;
-  state: State;
-};
+import type { Meeting, State } from '../types';
 
 type Locations = {
   [index: string]: {
@@ -48,7 +43,13 @@ export default function Map({
   state,
   setState,
   mapbox,
-}: MapProps) {
+}: {
+  filteredSlugs: string[];
+  listMeetingsInPopup: boolean;
+  mapbox?: string;
+  setState: Dispatch<SetStateAction<State>>;
+  state: State;
+}) {
   const { settings, strings } = useSettings();
   const [popup, setPopup] = useState<string | undefined>();
   const [viewport, setViewport] = useState<Viewport | undefined>();
@@ -98,7 +99,7 @@ export default function Map({
         const coords = meeting.latitude + ',' + meeting.longitude;
 
         //create a new pin
-        if (!locations.hasOwnProperty(coords)) {
+        if (!locations.coords) {
           locations[coords] = {
             directions_url: formatDirectionsUrl(meeting),
             formatted_address: meeting.formatted_address,
@@ -209,7 +210,9 @@ export default function Map({
                 >
                   <div>
                     <h2>{data.locations[key].name}</h2>
-                    <p className="notranslate">{data.locations[key].formatted_address}</p>
+                    <p className="notranslate">
+                      {data.locations[key].formatted_address}
+                    </p>
                     {listMeetingsInPopup && (
                       <div css={mapMeetingsCss}>
                         {data.locations[key].meetings

@@ -1,18 +1,11 @@
-import { Fragment } from 'react';
+import { Dispatch, Fragment, MouseEvent, SetStateAction } from 'react';
+
+import { useSearchParams } from 'react-router-dom';
 
 import { formatString as i18n, getIndexByKey, useSettings } from '../helpers';
 import { dropdownButtonCss, dropdownCss } from '../styles';
-import type { Index, State } from '../types';
-import { useSearchParams } from 'react-router-dom';
 
-type DropdownProps = {
-  defaultValue: string;
-  end: boolean;
-  filter: keyof State['indexes'];
-  open: boolean;
-  setDropdown: (dropdown?: string) => void;
-  state: State;
-};
+import type { Index, State } from '../types';
 
 export default function Dropdown({
   defaultValue,
@@ -21,7 +14,14 @@ export default function Dropdown({
   open,
   setDropdown,
   state,
-}: DropdownProps) {
+}: {
+  defaultValue: string;
+  end: boolean;
+  filter: keyof State['indexes'];
+  open: boolean;
+  setDropdown: Dispatch<SetStateAction<string | undefined>>;
+  state: State;
+}) {
   const [searchParams, setSearchParams] = useSearchParams();
   const { strings } = useSettings();
   const options = state.indexes[filter];
@@ -29,7 +29,7 @@ export default function Dropdown({
 
   //set filter: pass it up to parent
   const setFilter = (
-    e: React.MouseEvent<HTMLButtonElement>,
+    e: MouseEvent<HTMLButtonElement>,
     filter: keyof typeof state.indexes,
     value?: string
   ) => {

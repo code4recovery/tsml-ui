@@ -1,6 +1,6 @@
-import { defaults } from '../../src/helpers/settings';
-import { getQueryString } from '../../src/helpers/query-string';
 import { formatFeedbackEmail } from '../../src/helpers/format-feedback-email';
+import { getQueryString } from '../../src/helpers/query-string';
+import { defaults } from '../../src/helpers/settings';
 import { Meeting } from '../../src/types';
 
 jest.mock('../../src/helpers/format-url', () => ({

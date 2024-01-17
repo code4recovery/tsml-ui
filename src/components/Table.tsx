@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
+
 import InfiniteScroll from 'react-infinite-scroller';
 import { useSearchParams } from 'react-router-dom';
 
@@ -10,6 +11,7 @@ import {
   tableWrapperCss,
 } from '../styles';
 import { Meeting, State } from '../types';
+
 import Icon, { icons } from './Icon';
 import Link from './Link';
 
@@ -21,7 +23,7 @@ export default function Table({
 }: {
   filteredSlugs: string[];
   inProgress: string[];
-  setState: (state: State) => void;
+  setState: Dispatch<SetStateAction<State>>;
   state: State;
 }) {
   const { settings, strings } = useSettings();
@@ -89,7 +91,11 @@ export default function Table({
           {attendance.map(({ icon, text, type, noTranslate }, index) => (
             <span css={tableChicletCss(type)} key={index}>
               <Icon icon={icon} size={18} />
-              {text && <span className={noTranslate ? 'notranslate' : undefined}>{text}</span>}
+              {text && (
+                <span className={noTranslate ? 'notranslate' : undefined}>
+                  {text}
+                </span>
+              )}
             </span>
           ))}
         </div>

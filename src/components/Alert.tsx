@@ -1,14 +1,13 @@
-import type { State } from '../types';
-import Button from './Button';
-import { formatString as i18n, getIndexByKey, useSettings } from '../helpers';
-import { alertCss, errorCss } from '../styles';
 import { useSearchParams } from 'react-router-dom';
 
-type AlertProps = {
-  state: State;
-};
+import { formatString as i18n, getIndexByKey, useSettings } from '../helpers';
+import { alertCss, errorCss } from '../styles';
 
-export default function Alert({ state }: AlertProps) {
+import Button from './Button';
+
+import type { State } from '../types';
+
+export default function Alert({ state }: { state: State }) {
   const [searchParams, setSearchParams] = useSearchParams();
   const { settings, strings } = useSettings();
   return state.error ? (

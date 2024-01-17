@@ -1,21 +1,22 @@
 import { DateTime } from 'luxon';
 
 import { Meeting } from '../types';
+
 import { iOS } from './user-agent';
 
-//format ICS file for add to calendar
+// format ICS file for add to calendar
 export function formatIcs(meeting: Meeting) {
   const fmt = "yyyyLLdd'T'HHmmss";
 
   if (!meeting.start || !meeting.end) return;
 
-  //make sure it's in the future
+  // make sure it's in the future
   if (meeting.start < DateTime.now()) {
     meeting.start = meeting.start.plus({ week: 1 });
     meeting.end = meeting.end.plus({ week: 1 });
   }
 
-  //start building event
+  // start building event
   const event = [
     `SUMMARY:${meeting.name}`,
     `DTSTAMP:${meeting.start.setZone('UTC').toFormat(fmt)}Z`,
@@ -23,15 +24,15 @@ export function formatIcs(meeting: Meeting) {
     `DTEND;TZID=${meeting.timezone}:${meeting.end.toFormat(fmt)}`,
   ];
 
-  //start building description
+  // start building description
   const description = [];
 
-  //add notes
+  // add notes
   if (meeting.notes) {
     description.push(meeting.notes);
   }
 
-  //add in-person info
+  // add in-person info
   if (meeting.isInPerson) {
     event.push(`LOCATION:${meeting.location}\n${meeting.formatted_address}`);
     if (meeting.location_notes) {
@@ -39,7 +40,7 @@ export function formatIcs(meeting: Meeting) {
     }
   }
 
-  //add online info
+  // add online info
   if (meeting.isOnline) {
     if (meeting.conference_provider) {
       if (meeting.conference_url_notes) {
@@ -63,12 +64,12 @@ export function formatIcs(meeting: Meeting) {
     event.push(`DESCRIPTION:${description.join('\n')}`);
   }
 
-  //add group website
+  // add group website
   if (meeting.website) {
     event.push(`URL:${meeting.website}`);
   }
 
-  //format event string
+  // format event string
   const blob = [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
@@ -79,11 +80,11 @@ export function formatIcs(meeting: Meeting) {
   ].join('\n');
 
   if (iOS()) {
-    //create data url for ios
+    // create data url for ios
     const uri = `data:text/calendar;charset=utf8,${blob}`;
     window.location = encodeURI(uri) as unknown as Location;
   } else {
-    //create temporary link to download
+    // create temporary link to download
     const url = window.URL.createObjectURL(new Blob([blob]));
     const link = document.createElement('a');
     link.href = url;

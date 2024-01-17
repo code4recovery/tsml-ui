@@ -1,11 +1,11 @@
-//format an internal link with correct query params
+// format an internal link with correct query params
 export function formatUrl(
   input: Partial<TSMLReactConfig['defaults']>,
   settings: TSMLReactConfig
 ) {
   const query = {};
 
-  //distance, region, time, type, and weekday
+  // distance, region, time, type, and weekday
   settings.filters
     .filter(filter => typeof input[filter] !== 'undefined')
     .filter(filter => input[filter]?.length)
@@ -14,7 +14,7 @@ export function formatUrl(
       query[filter] = input[filter].join('/');
     });
 
-  //meeting, mode, search, view
+  // meeting, mode, search, view
   settings.params
     .filter(param => typeof input[param] !== 'undefined')
     .filter(param => input[param] !== settings.defaults[param])
@@ -23,7 +23,7 @@ export function formatUrl(
       query[param] = input[param];
     });
 
-  //create a query string with only values in use
+  // create a query string with only values in use
   const queryString = new URLSearchParams(query)
     .toString()
     .replace(/%2F/g, '/')
@@ -32,5 +32,5 @@ export function formatUrl(
 
   const [path] = window.location.href.split('?');
 
-  return `${path}${!!queryString.length ? `?${queryString}` : ''}`;
+  return `${path}${queryString.length ? `?${queryString}` : ''}`;
 }

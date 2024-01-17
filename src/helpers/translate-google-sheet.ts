@@ -1,14 +1,16 @@
 import { DateTime } from 'luxon';
 
-import type { JSONData, Translation } from '../types';
-import { formatSlug } from './format-slug';
 import { en, es, fr, ja, sv } from '../i18n';
+
+import { formatSlug } from './format-slug';
+
+import type { JSONData, Translation } from '../types';
 
 export type GoogleSheetData = {
   values: string[][];
 };
 
-//translates Google Sheet JSON into Meeting Guide format (example puget-sound.html)
+// translates Google Sheet JSON into Meeting Guide format (example puget-sound.html)
 export function translateGoogleSheet(
   data: GoogleSheetData,
   sheetId: string,
@@ -44,12 +46,12 @@ export function translateGoogleSheet(
   });
 
   data.values.forEach((row, index) => {
-    //skip empty rows
+    // skip empty rows
     if (!row.filter(e => e).length) return;
 
     const meeting: JSONData = {};
 
-    //fill values
+    // fill values
     headers.forEach((header, index) => {
       if (row[index]) {
         if (header === 'types') {
@@ -67,12 +69,12 @@ export function translateGoogleSheet(
       }
     });
 
-    //edit url link
+    // edit url link
     meeting.edit_url = `https://docs.google.com/spreadsheets/d/${sheetId}/edit#gid=0&range=${
       index + 2
     }:${index + 2}+`;
 
-    //convert time to HH:MM
+    // convert time to HH:MM
     if (meeting.time) {
       const time = DateTime.fromFormat(meeting.time, 'h:mm a', {
         locale: 'en',
@@ -109,7 +111,7 @@ export function translateGoogleSheet(
       }
     }
 
-    //convert from 12/31/2022 to 2022-12-31
+    // convert from 12/31/2022 to 2022-12-31
     if (meeting.updated && (meeting.updated.match(/\//g) || []).length === 2) {
       const [month, day, year] = meeting.updated.split('/');
       meeting.updated = `${year}-${month.padStart(2, '0')}-${day.padStart(

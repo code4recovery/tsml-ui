@@ -1,5 +1,6 @@
-import type { State } from '../types';
 import { formatString as i18n, getIndexByKey, useSettings } from '../helpers';
+
+import type { State } from '../types';
 
 export default function Title({ state: { indexes, input } }: { state: State }) {
   const { strings } = useSettings();

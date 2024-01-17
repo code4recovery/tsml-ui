@@ -1,12 +1,13 @@
 import { DateTime } from 'luxon';
-import type { JSONData, JSONDataFlat, State, Meeting, Index } from '../types';
 
+import { flattenAndSortIndexes } from './flatten-and-sort-indexes';
 import { formatAddress } from './format-address';
 import { formatConferenceProvider } from './format-conference-provider';
 import { formatSlug } from './format-slug';
-import { flattenAndSortIndexes } from './flatten-and-sort-indexes';
 
-//set up meeting data; this is only run once when the app loads
+import type { JSONData, JSONDataFlat, State, Meeting, Index } from '../types';
+
+// set up meeting data; this is only run once when the app loads
 export function loadMeetingData(
   data: JSONData[],
   capabilities: State['capabilities'],
@@ -14,10 +15,10 @@ export function loadMeetingData(
   strings: Translation,
   timezone?: string
 ): [State['meetings'], State['indexes'], State['capabilities']] {
-  //meetings is a lookup
+  // meetings is a lookup
   const meetings: { [index: string]: Meeting } = {};
 
-  //indexes start as objects, will be converted to arrays
+  // indexes start as objects, will be converted to arrays
   const indexes: State['indexes'] = {
     region: [],
     time: [],
@@ -26,7 +27,7 @@ export function loadMeetingData(
     distance: [],
   };
 
-  //loop through each entry
+  // loop through each entry
   flattenDays(data).forEach(meeting => {
     const {
       contact_1_email,
@@ -53,14 +54,14 @@ export function loadMeetingData(
       website,
     } = meeting;
 
-    //slug is required and must be unique
+    // slug is required and must be unique
     if (!slug) {
       return warn('no slug', meeting);
     } else if (slug in meetings) {
       return warn('duplicate slug', meeting);
     }
 
-    //conference url
+    // conference url
     const conference_provider = meeting.conference_url
       ? formatConferenceProvider(meeting.conference_url, settings)
       : undefined;
@@ -92,7 +93,7 @@ export function loadMeetingData(
       conference_phone_notes = undefined;
     }
 
-    //creates formatted_address if necessary
+    // creates formatted_address if necessary
     if (!formatted_address) {
       formatted_address = [
         meeting.address,
@@ -107,12 +108,12 @@ export function loadMeetingData(
       }
     }
 
-    //used in table
+    // used in table
     if (!address) {
       address = formatAddress(formatted_address);
     }
 
-    //check if approximate
+    // check if approximate
     let approximate, coordinates;
     if (
       meeting.coordinates &&
@@ -130,7 +131,7 @@ export function loadMeetingData(
       approximate = !address;
     }
 
-    //if approximate is specified, it overrules formatAddress
+    // if approximate is specified, it overrules formatAddress
     if (approximate) address = undefined;
 
     //types
@@ -142,18 +143,18 @@ export function loadMeetingData(
           .filter(type => type in strings.types && type !== 'ONL')
       : [];
 
-    //add online metattype
+    // add online metattype
     const isOnline = !!conference_provider || !!conference_phone;
     if (isOnline) types.push('online');
 
-    //add in-person metatype
+    // add in-person metatype
     const isTempClosed = types.includes('TC');
     const isInPerson = !isTempClosed && !approximate;
     if (isInPerson) {
       types.push('in-person');
     }
 
-    //add active / inactive metatypes
+    // add active / inactive metatypes
     const isActive = isOnline || isInPerson;
     if (isActive) {
       types.push('active');
@@ -162,19 +163,19 @@ export function loadMeetingData(
       types.push('inactive');
     }
 
-    //if meeting is not in person, remove types that only apply to in-person meetings
+    // if meeting is not in person, remove types that only apply to in-person meetings
     if (!isInPerson) {
       types = types.filter(type => !settings.in_person_types.includes(type));
     }
 
-    //if meeting is both speaker and discussion, combine
+    // if meeting is both speaker and discussion, combine
     if (types.includes('SP') && types.includes('D')) {
       types.splice(types.indexOf('SP'), 1);
       types.splice(types.indexOf('D'), 1);
       types.push('SPD');
     }
 
-    //check location/group capability
+    // check location/group capability
     if (
       !capabilities.location &&
       ((isOnline && group) || (isInPerson && location))
@@ -182,7 +183,7 @@ export function loadMeetingData(
       capabilities.location = true;
     }
 
-    //format latitude + longitude
+    // format latitude + longitude
     let latitude, longitude;
     if (meeting.latitude && meeting.longitude) {
       if (isInPerson) {
@@ -200,29 +201,29 @@ export function loadMeetingData(
 
     let start, end, minutes_week;
 
-    //handle day and time
+    // handle day and time
     if (typeof meeting.day !== 'undefined' && meeting.time) {
       //luxon uses iso day
       const weekday = meeting.day === 0 ? 7 : meeting.day;
       const [hour, minute] = meeting.time.split(':').map(num => parseInt(num));
 
-      //timezone
+      // timezone
       if (!meeting.timezone) {
         if (timezone) {
           meeting.timezone = timezone;
         } else {
-          //either tz setting or meeting tz is required
+          // either tz setting or meeting tz is required
           return warn(`${meeting.slug} has no timezone`, meeting);
         }
       }
 
-      //make start/end datetimes
+      // make start/end datetimes
       start = DateTime.fromObject(
         { weekday, hour, minute },
         { zone: meeting.timezone }
       );
 
-      //check valid start time
+      // check valid start time
       if (!start.isValid) {
         return warn(`invalid start (${start.invalidExplanation})`, meeting);
       }
@@ -241,7 +242,7 @@ export function loadMeetingData(
         });
       }
 
-      //check valid end time
+      // check valid end time
       if (!end.isValid) {
         return warn(`invalid end (${end.invalidExplanation})`, meeting);
       }
@@ -251,15 +252,15 @@ export function loadMeetingData(
         warn(`unusually long (${duration} mins)`, meeting);
       }
 
-      //normalize timezones
+      // normalize timezones
       start = start.setZone(timezone ? timezone : 'local');
       if (end) {
         end = end.setZone(timezone ? timezone : 'local');
       }
 
-      //day & time indexes
+      // day & time indexes
       if (isActive) {
-        //day index
+        // day index
         const dayIndex = indexes.weekday.findIndex(
           ({ key }) =>
             key ===
@@ -277,23 +278,23 @@ export function loadMeetingData(
           indexes.weekday[dayIndex].slugs.push(slug);
         }
 
-        //time differences for sorting
+        // time differences for sorting
         const minutes_midnight = start.hour * 60 + start.minute;
         minutes_week = minutes_midnight + meeting.day * 1440;
 
-        //time index (can be multiple)
+        // time index (can be multiple)
         const times = [];
         if (minutes_midnight >= 240 && minutes_midnight < 720) {
-          times.push(0); //morning (4am–11:59pm)
+          times.push(0); // morning (4am–11:59pm)
         }
         if (minutes_midnight >= 660 && minutes_midnight < 1020) {
-          times.push(1); //midday (11am–4:59pm)
+          times.push(1); // midday (11am–4:59pm)
         }
         if (minutes_midnight >= 960 && minutes_midnight < 1260) {
-          times.push(2); //evening (4pm–8:59pm)
+          times.push(2); // evening (4pm–8:59pm)
         }
         if (minutes_midnight >= 1200 || minutes_midnight < 300) {
-          times.push(3); //night (8pm–4:59am)
+          times.push(3); // night (8pm–4:59am)
         }
         times.forEach(time => {
           const timeIndex = indexes.time.findIndex(
@@ -312,7 +313,7 @@ export function loadMeetingData(
       }
     }
 
-    //parse regions
+    // parse regions
     if (!regions || !Array.isArray(regions)) {
       regions = [];
       if (meeting.region) {
@@ -334,12 +335,12 @@ export function loadMeetingData(
         .filter(e => e.length);
     }
 
-    //build region index
+    // build region index
     if (isActive && !!regions.length) {
       indexes.region = populateRegionsIndex(regions, 0, indexes.region, slug);
     }
 
-    //build type index (can be multiple) -- if inactive, only index the 'inactive' type
+    // build type index (can be multiple) -- if inactive, only index the 'inactive' type
     const typesToIndex: string[] = isActive ? types : ['inactive'];
     typesToIndex.forEach(type => {
       const typeSlug = formatSlug(
@@ -357,7 +358,7 @@ export function loadMeetingData(
       }
     });
 
-    //optional updated date
+    // optional updated date
     let updated;
     if (meeting.updated) {
       updated = DateTime.fromSQL(meeting.updated).setZone(timezone);
@@ -369,13 +370,13 @@ export function loadMeetingData(
       }
     }
 
-    //optional url
+    // optional url
     const url =
       meeting.url?.startsWith('http://') || meeting.url?.startsWith('https://')
         ? meeting.url
         : undefined;
 
-    //build search string
+    // build search string
     const search = [
       district,
       formatted_address,
@@ -443,7 +444,7 @@ export function loadMeetingData(
       website,
     };
 
-    //clean up undefined
+    // clean up undefined
     Object.keys(meetings[slug]).forEach(
       key =>
         meetings[slug][key as keyof Meeting] === undefined &&
@@ -451,31 +452,31 @@ export function loadMeetingData(
     );
   });
 
-  //convert region to array, sort by name
+  // convert region to array, sort by name
   indexes.region = flattenAndSortIndexes(indexes.region, (a, b) =>
     a.name?.localeCompare(b.name)
   );
 
-  //convert weekday to array and sort by ordinal
+  // convert weekday to array and sort by ordinal
   indexes.weekday = flattenAndSortIndexes(
     indexes.weekday,
     (a, b) =>
       settings.weekdays.indexOf(a.key) - settings.weekdays.indexOf(b.key)
   );
 
-  //convert time to array and sort by ordinal
+  // convert time to array and sort by ordinal
   indexes.time = flattenAndSortIndexes(
     indexes.time,
-    //@ts-expect-error TODO
+    // @ts-expect-error TODO
     (a, b) => settings.times.indexOf(a.key) - settings.times.indexOf(b.key)
   );
 
-  //convert type to array and sort by name
+  // convert type to array and sort by name
   indexes.type = flattenAndSortIndexes(indexes.type, (a, b) =>
     a.name?.localeCompare(b.name)
   );
 
-  //determine capabilities (filter out options that apply to every meeting)
+  // determine capabilities (filter out options that apply to every meeting)
   const meetingsCount = Object.keys(meetings).length;
   ['region', 'weekday', 'time', 'type'].forEach(indexKey => {
     capabilities[indexKey as keyof typeof capabilities] = !!indexes[
@@ -483,12 +484,12 @@ export function loadMeetingData(
     ].filter((index: Index) => index.slugs.length !== meetingsCount).length;
   });
 
-  //remove active type if no inactive meetings
+  // remove active type if no inactive meetings
   if (!capabilities.inactive) {
-    //...from the indexes
+    // ...from the indexes
     indexes.type = indexes.type.filter(type => type.key !== 'active');
 
-    //...from each meeting
+    // ...from each meeting
     Object.keys(meetings).forEach(slug => {
       meetings[slug] = {
         ...meetings[slug],
@@ -499,20 +500,20 @@ export function loadMeetingData(
     });
   }
 
-  //determine search modes
+  // determine search modes
   capabilities.geolocation =
     navigator.geolocation &&
     capabilities.coordinates &&
     (window.location.protocol === 'https:' ||
       window.location.hostname === 'localhost');
 
-  //determine sharing
+  // determine sharing
   capabilities.sharing = typeof navigator.canShare === 'function';
 
   return [meetings, indexes, capabilities];
 }
 
-//look for data with multiple days and make them all single
+// look for data with multiple days and make them all single
 export function flattenDays(data: JSONData[]): JSONDataFlat[] {
   const addMeetings: JSONDataFlat[] = [];
   const removeIndexes: number[] = [];
@@ -542,7 +543,7 @@ export function flattenDays(data: JSONData[]): JSONDataFlat[] {
     .concat(addMeetings);
 }
 
-//recursive function to build an index of regions from a flat array
+// recursive function to build an index of regions from a flat array
 function populateRegionsIndex(
   regions: string[],
   position: number,
@@ -621,7 +622,7 @@ function validateVenmo(meeting: JSONDataFlat) {
   return undefined;
 }
 
-//warn about bad data
+// warn about bad data
 function warn(issue: string, meeting: JSONDataFlat) {
   const { slug, edit_url } = meeting;
   console.warn(

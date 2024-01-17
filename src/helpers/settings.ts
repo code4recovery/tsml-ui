@@ -1,10 +1,11 @@
 import { createContext, useContext } from 'react';
+
 import merge from 'deepmerge';
 import { Settings } from 'luxon';
 
 import { en, es, fr, ja, sv } from '../i18n';
 
-//override these on your page with tsml_react_config
+// override these on your page with tsml_react_config
 export const defaults: TSMLReactConfig = {
   cache: false,
   columns: ['time', 'distance', 'name', 'location_group', 'address', 'region'],
@@ -52,7 +53,7 @@ export const defaults: TSMLReactConfig = {
     'X',
     'XB',
   ],
-  language: 'en', //fallback language
+  language: 'en', // fallback language
   map: {
     markers: {
       location: {
@@ -66,11 +67,11 @@ export const defaults: TSMLReactConfig = {
     },
     style: 'mapbox://styles/mapbox/streets-v10',
   },
-  now_offset: -10, //"now" includes meetings that started in the last 10 minutes
+  now_offset: -10, // "now" includes meetings that started in the last 10 minutes
   params: ['search', 'mode', 'view', 'meeting'], //input other than filters
   show: {
-    controls: true, //whether to show search + dropdowns + list/map
-    title: true, //whether to display the title h1
+    controls: true, // whether to show search + dropdowns + list/map
+    title: true, // whether to display the title h1
   },
   strings: {
     en,
