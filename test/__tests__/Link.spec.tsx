@@ -1,11 +1,10 @@
 import React from 'react';
-
 import { screen, render, fireEvent } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 
+import { Meeting } from '../../src/types';
 import Link from '../../src/components/Link';
 import { SettingsContext, mergeSettings } from '../../src/helpers/settings';
-import { Meeting } from '../../src/types';
 import { mockState } from '../__fixtures__';
 
 const mockMeeting: Meeting = {

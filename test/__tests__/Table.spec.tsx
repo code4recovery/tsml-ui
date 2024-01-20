@@ -1,14 +1,13 @@
 import React from 'react';
-
 import { fireEvent, render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 
-import Table from '../../src/components/Table';
 import {
   SettingsContext,
   formatString as i18n,
   mergeSettings,
 } from '../../src/helpers';
+import Table from '../../src/components/Table';
 import { mockMeeting, mockState } from '../__fixtures__';
 
 describe('<Table />', () => {
