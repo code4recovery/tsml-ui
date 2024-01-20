@@ -3,15 +3,24 @@ import { flattenAndSortIndexes } from './flatten-and-sort-indexes';
 import { formatString as i18n } from './format-string';
 
 //calculate distances
-export function calculateDistances(
-  filteredSlugs: string[],
-  latitude: number,
-  longitude: number,
-  setState: (state: State) => void,
-  state: State,
-  settings: TSMLReactConfig,
-  strings: Translation
-) {
+export function calculateDistances({
+  latitude,
+  longitude,
+  setState,
+  settings,
+  state,
+  strings,
+}: {
+  latitude: number;
+  longitude: number;
+  setState: (state: State) => void;
+  settings: TSMLReactConfig;
+  state: State;
+  strings: Translation;
+}) {
+  const slugs = Object.keys(state.meetings);
+  if (!slugs.length) return;
+
   //build new index and meetings array
   const distances: {
     [index: string]: Index;
@@ -31,7 +40,7 @@ export function calculateDistances(
   });
 
   //loop through and update or clear distances, and rebuild index
-  filteredSlugs.forEach(slug => {
+  slugs.forEach(slug => {
     const distance = getDistance(
       { latitude, longitude },
       state.meetings[slug],
