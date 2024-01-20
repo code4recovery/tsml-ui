@@ -1,4 +1,4 @@
-import { DateTime } from 'luxon';
+import { DateTime, WeekdayNumbers } from 'luxon';
 
 import { flattenAndSortIndexes } from './flatten-and-sort-indexes';
 import { formatAddress } from './format-address';
@@ -204,7 +204,7 @@ export function loadMeetingData(
     // handle day and time
     if (typeof meeting.day !== 'undefined' && meeting.time) {
       //luxon uses iso day
-      const weekday = meeting.day === 0 ? 7 : meeting.day;
+      const weekday = meeting.day === 0 ? 7 : (meeting.day as WeekdayNumbers);
       const [hour, minute] = meeting.time.split(':').map(num => parseInt(num));
 
       // timezone
