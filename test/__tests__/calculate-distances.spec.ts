@@ -1,9 +1,10 @@
 import { getDistance } from '../../src/helpers/calculate-distances';
-import type { Meeting } from '../../src/types';
 import { defaults as settings } from '../../src/helpers/settings';
 
+import type { Meeting } from '../../src/types';
+
 describe('distance', () => {
-  //exact
+  // exact
   it('returns 0 for exact location', () => {
     const meeting: Meeting = {
       name: 'Test meeting',
@@ -17,7 +18,7 @@ describe('distance', () => {
     ).toStrictEqual(0);
   });
 
-  //miles
+  // miles
   it.each`
     a                                    | b                                    | expected
     ${{ latitude: 1, longitude: 1 }}     | ${{ latitude: 2, longitude: 2 }}     | ${97.7}
@@ -27,7 +28,7 @@ describe('distance', () => {
     expect(getDistance(a, b, settings)).toStrictEqual(expected);
   });
 
-  //kilometers
+  // kilometers
   it.each`
     a                                    | b                                    | expected
     ${{ latitude: 1, longitude: 1 }}     | ${{ latitude: 2, longitude: 2 }}     | ${157}
@@ -38,7 +39,7 @@ describe('distance', () => {
     expect(getDistance(a, b, settings)).toStrictEqual(expected);
   });
 
-  //undefined checks
+  // undefined checks
   it.each`
     a                                | b
     ${undefined}                     | ${undefined}

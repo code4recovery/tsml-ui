@@ -1,6 +1,15 @@
-import { useEffect, useRef, useState } from 'react';
+import {
+  Dispatch,
+  SetStateAction,
+  FormEvent,
+  useEffect,
+  useRef,
+  useState,
+  MouseEvent,
+} from 'react';
 
 import { useSearchParams } from 'react-router-dom';
+
 import { analyticsEvent, useSettings } from '../helpers';
 import {
   controlsCss,
@@ -13,17 +22,21 @@ import {
   dropdownButtonLastCss,
   dropdownCss,
 } from '../styles';
-import type { State } from '../types';
+
 import Dropdown from './Dropdown';
 import Icon from './Icon';
 
-type ControlsProps = {
-  state: State;
-  setState: React.Dispatch<React.SetStateAction<State>>;
-  mapbox?: string;
-};
+import type { State } from '../types';
 
-export default function Controls({ state, setState, mapbox }: ControlsProps) {
+export default function Controls({
+  state,
+  setState,
+  mapbox,
+}: {
+  state: State;
+  setState: Dispatch<SetStateAction<State>>;
+  mapbox?: string;
+}) {
   const { settings, strings } = useSettings();
   const [dropdown, setDropdown] = useState<string>();
   const [search, setSearch] = useState(
@@ -98,12 +111,12 @@ export default function Controls({ state, setState, mapbox }: ControlsProps) {
   }, [searchInput.current?.value]);
 
   //close current dropdown (on body click)
-  const closeDropdown = (e: MouseEvent) => {
+  const closeDropdown = () => {
     setDropdown(undefined);
   };
 
   //near location search
-  const locationSearch = (e: React.FormEvent<HTMLFormElement>) => {
+  const locationSearch = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (state.input.mode !== 'location') return;
@@ -120,7 +133,7 @@ export default function Controls({ state, setState, mapbox }: ControlsProps) {
   };
 
   //set search mode dropdown and clear all distances
-  const setMode = (e: React.MouseEvent, mode: 'search' | 'location' | 'me') => {
+  const setMode = (e: MouseEvent, mode: 'search' | 'location' | 'me') => {
     e.preventDefault();
 
     Object.keys(state.meetings).forEach(slug => {
@@ -162,10 +175,18 @@ export default function Controls({ state, setState, mapbox }: ControlsProps) {
   };
 
   //toggle list/map view
-  const setView = (e: React.MouseEvent, view: 'table' | 'map') => {
+  const setView = (e: MouseEvent, view: 'table' | 'map') => {
     e.preventDefault();
-    state.input.view = view;
-    setState({ ...state });
+
+    if (view !== 'table') {
+      searchParams.set('view', view);
+    } else {
+      searchParams.delete('view');
+    }
+
+    setState({ ...state, input: { ...state.input, view } });
+
+    setSearchParams(searchParams);
   };
 
   return !Object.keys(state.meetings).length ? null : (
@@ -192,7 +213,7 @@ export default function Controls({ state, setState, mapbox }: ControlsProps) {
               state.input.mode === 'location' ? search : state.input.search
             }
           />
-          <input type="submit" hidden css={controlsInputSearchSubmitCss}/>
+          <input type="submit" hidden css={controlsInputSearchSubmitCss} />
           {modes.length > 1 && (
             <button
               aria-label={strings.modes[state.input.mode]}

@@ -1,5 +1,7 @@
-import { useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+
 import { DateTime, Info } from 'luxon';
+import { Link as RouterLink } from 'react-router-dom';
 
 import {
   formatDirectionsUrl,
@@ -17,27 +19,25 @@ import {
   meetingOnlineCss,
   tableChicletCss,
 } from '../styles';
-import type { Meeting as MeetingType, State } from '../types';
 
 import Button from './Button';
 import Icon, { icons } from './Icon';
 import Link from './Link';
-import { Link as RouterLink } from 'react-router-dom';
 import Map from './Map';
 
-type MeetingProps = {
-  feedback_emails?: string[];
-  mapbox?: string;
-  setState: (state: State) => void;
-  state: State;
-};
+import type { Meeting as MeetingType, State } from '../types';
 
 export default function Meeting({
   feedback_emails = [],
   mapbox,
   setState,
   state,
-}: MeetingProps) {
+}: {
+  feedback_emails?: string[];
+  mapbox?: string;
+  setState: Dispatch<SetStateAction<State>>;
+  state: State;
+}) {
   const { settings, strings } = useSettings();
 
   // open types
@@ -258,7 +258,7 @@ export default function Meeting({
             },
             settings
           )}
-          onClick={e => {
+          onClick={() => {
             setState({
               ...state,
               input: {
@@ -477,7 +477,7 @@ function formatWeekdays(
   weekday: { name: string; meetings: MeetingType[] }[],
   slug: string,
   state: State,
-  setState: (state: State) => void
+  setState: Dispatch<SetStateAction<State>>
 ) {
   return weekday.map(({ meetings, name }, index) => (
     <div key={index}>

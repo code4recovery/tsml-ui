@@ -1,12 +1,14 @@
 import React from 'react';
+
 import { render, screen, fireEvent } from '@testing-library/react';
 import { DateTime } from 'luxon';
 import { MemoryRouter } from 'react-router-dom';
 
-import type { Meeting as MeetingType, State } from '../../src/types';
+import Meeting from '../../src/components/Meeting';
 import { SettingsContext, mergeSettings } from '../../src/helpers';
 import { en } from '../../src/i18n';
-import Meeting from '../../src/components/Meeting';
+
+import type { Meeting as MeetingType, State } from '../../src/types';
 
 describe('<Meeting />', () => {
   beforeEach(() => {

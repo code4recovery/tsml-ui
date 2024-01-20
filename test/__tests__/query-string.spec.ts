@@ -1,6 +1,7 @@
-import { getQueryString, setQueryString } from '../../src/helpers/query-string';
 import { stringify } from 'querystring';
+
 import { formatUrl } from '../../src/helpers/format-url';
+import { getQueryString, setQueryString } from '../../src/helpers/query-string';
 import { defaults } from '../../src/helpers/settings';
 
 jest.mock('../../src/helpers/format-url', () => ({

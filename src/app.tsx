@@ -1,10 +1,11 @@
 import { createRoot } from 'react-dom/client';
-import { TsmlUI } from './components';
 import {
   RouteObject,
   RouterProvider,
   createBrowserRouter,
 } from 'react-router-dom';
+
+import { TsmlUI } from './components';
 
 // locate element
 const element = document.getElementById('tsml-ui');
@@ -23,7 +24,8 @@ if (element) {
           settings={
             typeof tsml_react_config === 'undefined'
               ? undefined
-              : tsml_react_config
+              : // eslint-disable-next-line no-undef
+                tsml_react_config
           }
           src={element.getAttribute('data-src') || undefined}
           timezone={element.getAttribute('data-timezone') || undefined}

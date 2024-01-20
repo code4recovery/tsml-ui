@@ -1,13 +1,16 @@
+import { Dispatch, SetStateAction } from 'react';
+
 import { DateTime } from 'luxon';
 
-import type { State } from '../types';
-import { getIndexByKey } from './get-index-by-key';
 import { calculateDistances } from './calculate-distances';
+import { getIndexByKey } from './get-index-by-key';
+
+import type { State } from '../types';
 
 //run filters on meetings; this is run at every render
 export function filterMeetingData(
   state: State,
-  setState: (state: State) => void,
+  setState: Dispatch<SetStateAction<State>>,
   settings: TSMLReactConfig,
   strings: Translation,
   mapbox?: string

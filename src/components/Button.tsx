@@ -1,13 +1,6 @@
 import { buttonCss, buttonDirectionsCss, buttonJoinCss } from '../styles';
-import Icon, { icons } from './Icon';
 
-type ButtonProps = {
-  href?: string;
-  icon?: keyof typeof icons;
-  onClick?: () => void;
-  text?: string;
-  type?: 'in-person' | 'online';
-};
+import Icon, { icons } from './Icon';
 
 export default function Button({
   href,
@@ -15,7 +8,13 @@ export default function Button({
   onClick,
   text,
   type,
-}: ButtonProps) {
+}: {
+  href?: string;
+  icon?: keyof typeof icons;
+  onClick?: () => void;
+  text?: string;
+  type?: 'in-person' | 'online';
+}) {
   const Tag = href ? 'a' : 'button';
   return (
     <Tag

@@ -1,5 +1,7 @@
 import React from 'react';
+
 import { screen, render } from '@testing-library/react';
+
 import Title from '../../src/components/Title';
 import { mockState } from '../__fixtures__';
 

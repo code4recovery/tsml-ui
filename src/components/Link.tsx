@@ -1,14 +1,20 @@
+import { Dispatch, SetStateAction } from 'react';
+
 import { NavLink } from 'react-router-dom';
+
 import { formatUrl, useSettings } from '../helpers';
+
 import type { State, Meeting } from '../types';
 
-type LinkProps = {
+export default function Link({
+  meeting,
+  setState,
+  state,
+}: {
   meeting: Meeting;
-  setState?: (state: State) => void;
+  setState?: Dispatch<SetStateAction<State>>;
   state?: State;
-};
-
-export default function Link({ meeting, setState, state }: LinkProps) {
+}) {
   const { settings, strings } = useSettings();
 
   const flags =

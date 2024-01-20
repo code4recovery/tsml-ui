@@ -1,9 +1,10 @@
-import type { JSONData } from '../../src/types';
 import {
   flattenDays,
   loadMeetingData,
 } from '../../src/helpers/load-meeting-data';
 import { defaults } from '../../src/helpers/settings';
+
+import type { JSONData } from '../../src/types';
 
 describe('loadMeetingData', () => {
   it('loads data correctly', () => {

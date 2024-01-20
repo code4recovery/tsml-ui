@@ -1,9 +1,9 @@
-import { JSONData } from '../../src/types';
 import { defaults } from '../../src/helpers/settings';
 import {
   GoogleSheetData,
   translateGoogleSheet,
 } from '../../src/helpers/translate-google-sheet';
+import { JSONData } from '../../src/types';
 
 describe('translateGoogleSheet', () => {
   const sheetId = 'abc123';
