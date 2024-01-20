@@ -1,5 +1,7 @@
 import React from 'react';
+import { MemoryRouter } from 'react-router-dom';
 import { fireEvent, render, screen } from '@testing-library/react';
+
 import Alert from '../../src/components/Alert';
 import { en } from '../../src/i18n';
 import { mockState } from '../__fixtures__';
@@ -7,20 +9,23 @@ import { mockState } from '../__fixtures__';
 describe('<Alert />', () => {
   it('renders null with no alerts or errors', () => {
     const { container } = render(
-      <Alert state={mockState} setState={jest.fn()} />
+      <MemoryRouter>
+        <Alert state={mockState} />
+      </MemoryRouter>
     );
     expect(container.firstChild).toBeNull();
   });
 
   it('works with error state', () => {
     render(
-      <Alert
-        state={{
-          ...mockState,
-          error: 'an error was encountered loading the data',
-        }}
-        setState={jest.fn()}
-      />
+      <MemoryRouter>
+        <Alert
+          state={{
+            ...mockState,
+            error: 'an error was encountered loading the data',
+          }}
+        />
+      </MemoryRouter>
     );
 
     const text = /an error was encountered loading the data/i;
@@ -51,7 +56,11 @@ describe('<Alert />', () => {
       },
     };
 
-    render(<Alert state={mockStateWithFilters} setState={mockSetState} />);
+    render(
+      <MemoryRouter>
+        <Alert state={mockStateWithFilters} />
+      </MemoryRouter>
+    );
 
     expect(screen.getByText(en.no_results)).toBeInTheDocument();
 

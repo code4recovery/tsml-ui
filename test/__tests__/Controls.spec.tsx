@@ -1,5 +1,7 @@
 import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
+
 import Controls from '../../src/components/Controls';
 import { mergeSettings, SettingsContext } from '../../src/helpers';
 import { mockMeeting, mockState } from '../__fixtures__';
@@ -36,20 +38,24 @@ describe('<Controls />', () => {
 
   it('is empty with no meetings', () => {
     const { container } = render(
-      <SettingsContext.Provider value={settings}>
-        <Controls state={mockState} setState={mockSetState} />
-      </SettingsContext.Provider>
+      <MemoryRouter>
+        <SettingsContext.Provider value={settings}>
+          <Controls state={mockState} setState={mockSetState} />
+        </SettingsContext.Provider>
+      </MemoryRouter>
     );
     expect(container.firstChild).toBeNull();
   });
 
   it('has clickable dropdowns', () => {
     render(
-      <Controls
-        state={mockStateWithControls}
-        setState={mockSetState}
-        mapbox={mapbox}
-      />
+      <MemoryRouter>
+        <Controls
+          state={mockStateWithControls}
+          setState={mockSetState}
+          mapbox={mapbox}
+        />
+      </MemoryRouter>
     );
 
     //click a dropdown button
@@ -75,7 +81,11 @@ describe('<Controls />', () => {
   });
 
   it('has working text search', () => {
-    render(<Controls state={mockStateWithControls} setState={mockSetState} />);
+    render(
+      <MemoryRouter>
+        <Controls state={mockStateWithControls} setState={mockSetState} />
+      </MemoryRouter>
+    );
 
     //text search
     const input = screen.getByRole('searchbox');
@@ -94,18 +104,20 @@ describe('<Controls />', () => {
 
   it('has working location search', () => {
     render(
-      <Controls
-        state={{
-          ...mockStateWithControls,
-          input: {
-            ...mockStateWithControls.input,
-            mode: 'location',
-            view: 'map',
-          },
-        }}
-        setState={mockSetState}
-        mapbox={mapbox}
-      />
+      <MemoryRouter>
+        <Controls
+          state={{
+            ...mockStateWithControls,
+            input: {
+              ...mockStateWithControls.input,
+              mode: 'location',
+              view: 'map',
+            },
+          }}
+          setState={mockSetState}
+          mapbox={mapbox}
+        />
+      </MemoryRouter>
     );
 
     //enter search values

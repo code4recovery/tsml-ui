@@ -1,5 +1,7 @@
 import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
+
 import Dropdown from '../../src/components/Dropdown';
 import { SettingsContext, mergeSettings } from '../../src/helpers';
 import { mockState } from '../__fixtures__';
@@ -33,20 +35,21 @@ describe('<Dropdown />', () => {
 
   it('renders', () => {
     render(
-      <SettingsContext.Provider value={settings}>
-        <Dropdown
-          filter={filter}
-          open={false}
-          end={false}
-          defaultValue={defaultValue}
-          setDropdown={jest.fn()}
-          state={{
-            ...mockStateWithFilter,
-            input: { ...mockStateWithFilter.input, [filter]: ['bar'] },
-          }}
-          setState={jest.fn()}
-        />
-      </SettingsContext.Provider>
+      <MemoryRouter>
+        <SettingsContext.Provider value={settings}>
+          <Dropdown
+            filter={filter}
+            open={false}
+            end={false}
+            defaultValue={defaultValue}
+            setDropdown={jest.fn()}
+            state={{
+              ...mockStateWithFilter,
+              input: { ...mockStateWithFilter.input, [filter]: ['bar'] },
+            }}
+          />
+        </SettingsContext.Provider>
+      </MemoryRouter>
     );
     expect(screen.getAllByText(defaultValue)).toHaveLength(1);
   });
@@ -55,17 +58,18 @@ describe('<Dropdown />', () => {
     const mockSetDropdown = jest.fn();
 
     render(
-      <SettingsContext.Provider value={settings}>
-        <Dropdown
-          filter={filter}
-          open={false}
-          end={false}
-          defaultValue={defaultValue}
-          setDropdown={mockSetDropdown}
-          state={mockState}
-          setState={jest.fn()}
-        />
-      </SettingsContext.Provider>
+      <MemoryRouter>
+        <SettingsContext.Provider value={settings}>
+          <Dropdown
+            filter={filter}
+            open={false}
+            end={false}
+            defaultValue={defaultValue}
+            setDropdown={mockSetDropdown}
+            state={mockState}
+          />
+        </SettingsContext.Provider>
+      </MemoryRouter>
     );
 
     const button = screen.getAllByRole('button');
@@ -81,17 +85,18 @@ describe('<Dropdown />', () => {
     const mockSetState = jest.fn();
 
     render(
-      <SettingsContext.Provider value={settings}>
-        <Dropdown
-          defaultValue={defaultValue}
-          end={false}
-          filter={filter}
-          open={true}
-          setDropdown={mockSetDropdown}
-          setState={mockSetState}
-          state={mockStateWithFilter}
-        />
-      </SettingsContext.Provider>
+      <MemoryRouter>
+        <SettingsContext.Provider value={settings}>
+          <Dropdown
+            defaultValue={defaultValue}
+            end={false}
+            filter={filter}
+            open={true}
+            setDropdown={mockSetDropdown}
+            state={mockStateWithFilter}
+          />
+        </SettingsContext.Provider>
+      </MemoryRouter>
     );
 
     function modify<
