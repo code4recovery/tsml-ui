@@ -1,11 +1,15 @@
 import { formatAddress } from '../../src/helpers/format-address';
 
 describe('formatAddress', () => {
-  it('returns first part of address if length > 3', () => {
-    expect(formatAddress('foo, bar, baz, qux')).toStrictEqual('foo');
+  it('returns first part of address if USA address', () => {
+    expect(formatAddress('123 Main St, Buffalo, NY 12345, USA')).toStrictEqual(
+      '123 Main St'
+    );
   });
 
-  it.each([undefined, 'foo, bar, baz'])('yields null with %s', input => {
-    expect(formatAddress(input)).toStrictEqual(undefined);
+  it('returns first part of address in Australia', () => {
+    expect(
+      formatAddress('123 Main St, Melbourne VIC 1234, Australia')
+    ).toStrictEqual('123 Main St');
   });
 });

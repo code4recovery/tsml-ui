@@ -97,6 +97,7 @@ export function loadMeetingData(
     if (!formatted_address) {
       formatted_address = [
         meeting.address,
+        meeting.city,
         [meeting.state, meeting.postal_code].join(' ').trim(),
         meeting.country,
       ]
@@ -128,7 +129,7 @@ export function loadMeetingData(
     } else if (typeof meeting.approximate === 'boolean') {
       approximate = meeting.approximate;
     } else {
-      approximate = !address;
+      approximate = formatted_address.split(',').length < 4;
     }
 
     // if approximate is specified, it overrules formatAddress

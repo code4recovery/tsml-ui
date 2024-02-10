@@ -82,5 +82,15 @@
     "types": ["O", "SM"],
     "formatted_address": "123 Main St, Anytown, OK 12345, USA",
     "conference_url": "https://zoom.us/d/1234567"
+  },
+  {
+    "slug": "approximate",
+    "name": "Approximate Inactive Test",
+    "day": "0",
+    "time": "08:00",
+    "end_time": "10:00",
+    "group": "Online Group",
+    "types": ["O", "NA"],
+    "formatted_address": "Anytown, OK 12345, USA"
   }
 ]
