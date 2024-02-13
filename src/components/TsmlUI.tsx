@@ -1,7 +1,11 @@
 import { useEffect, useState } from 'react';
 
 import { Global } from '@emotion/react';
-import { useSearchParams } from 'react-router-dom';
+import {
+  LoaderFunctionArgs,
+  useLoaderData,
+  useSearchParams,
+} from 'react-router-dom';
 
 import {
   filterMeetingData,
@@ -17,19 +21,25 @@ import { Alert, Controls, Loading, Map, Meeting, Table, Title } from './';
 
 import type { State } from '../types';
 
+export const loader = ({ params }: LoaderFunctionArgs) => params;
+
 export default function TsmlUI({
   google,
   mapbox,
+  path,
   settings: userSettings,
   src,
   timezone,
 }: {
   google?: string;
   mapbox?: string;
+  path?: string;
   settings?: TSMLReactConfig;
   src?: string;
   timezone?: string;
 }) {
+  const params = useLoaderData() as { meetingSlug?: string };
+
   const [state, setState] = useState<State>({
     capabilities: {
       coordinates: false,
@@ -64,7 +74,7 @@ export default function TsmlUI({
     ready: false,
   });
 
-  const { settings, strings } = mergeSettings(userSettings);
+  const { settings, strings } = mergeSettings({ ...userSettings, path });
   const [searchParams] = useSearchParams();
 
   //   // update canonical
@@ -85,10 +95,14 @@ export default function TsmlUI({
   // update input when search params change
   useEffect(() => {
     const input = getQueryString(settings);
+    if (params.meetingSlug) {
+      input.meeting = params.meetingSlug;
+    }
     if (input !== state.input) {
+      console.log('input changed', input, state.input);
       setState({ ...state, input });
     }
-  }, [searchParams]);
+  }, [params, searchParams]);
 
   useEffect(() => {
     // load data once

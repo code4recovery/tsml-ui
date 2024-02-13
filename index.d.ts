@@ -37,6 +37,7 @@ interface TSMLReactConfig {
   };
   now_offset: number;
   params: Array<'search' | 'mode' | 'view' | 'meeting'>;
+  path?: string;
   show: {
     controls: boolean;
     title: boolean;

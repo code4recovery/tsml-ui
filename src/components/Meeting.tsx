@@ -251,13 +251,11 @@ export default function Meeting({
       <div css={meetingBackCss}>
         <Icon icon="back" />
         <RouterLink
-          to={formatUrl(
-            {
-              ...state.input,
-              meeting: undefined,
-            },
-            settings
-          )}
+          to={formatUrl({
+            input: state.input,
+            meeting: undefined,
+            settings,
+          })}
           onClick={() => {
             setState({
               ...state,

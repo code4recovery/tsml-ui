@@ -1,9 +1,9 @@
 import { Dispatch, SetStateAction, useState } from 'react';
 
 import InfiniteScroll from 'react-infinite-scroller';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-import { formatString as i18n, useSettings } from '../helpers';
+import { formatUrl, formatString as i18n, useSettings } from '../helpers';
 import {
   tableChicletCss,
   tableChicletsCss,
@@ -27,7 +27,7 @@ export default function Table({
   state: State;
 }) {
   const { settings, strings } = useSettings();
-  const [_, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
   const meetingsPerPage = 10;
   const supported_columns = [
     'address',
@@ -133,9 +133,9 @@ export default function Table({
     return (
       <tr
         onClick={() =>
-          setSearchParams({
-            meeting: meeting.slug,
-          })
+          navigate(
+            formatUrl({ input: state.input, meeting: meeting.slug, settings })
+          )
         }
       >
         {columns.map((column, index) => (

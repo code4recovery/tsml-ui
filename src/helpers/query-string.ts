@@ -45,7 +45,7 @@ export function setQueryString(
   input: Partial<TSMLReactConfig['defaults']>,
   settings: TSMLReactConfig
 ) {
-  const url = formatUrl(input, settings);
+  const url = formatUrl({ input, settings });
 
   // set the query string with the history api
   if (window.location.href !== url) {
