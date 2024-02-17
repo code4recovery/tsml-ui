@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import { DateTime, Info } from 'luxon';
+import { Helmet } from 'react-helmet';
 import {
   LoaderFunctionArgs,
   Link as RouterLink,
@@ -69,33 +70,8 @@ export default function Meeting() {
     return start.toFormat('cccc t ZZZZ');
   };
 
-  // scroll to top when you navigate to this page
+  // log edit_url
   useEffect(() => {
-    const el = document.getElementById('tsml-ui');
-    if (el) {
-      const headerHeight = Math.max(
-        0,
-        ...[
-          ...Array.prototype.slice.call(
-            document.body.getElementsByTagName('*')
-          ),
-        ]
-          .filter(
-            x =>
-              getComputedStyle(x, null).getPropertyValue('position') ===
-                'fixed' && x.offsetTop < 100
-          )
-          .map(x => x.offsetTop + x.offsetHeight)
-      );
-      if (headerHeight) {
-        el.style.scrollMarginTop = `${headerHeight}px`;
-      }
-      el.scrollIntoView();
-    }
-
-    document.getElementById('tsml-title')?.focus();
-
-    // log edit_url
     if (meeting.edit_url) {
       console.log(`TSML UI edit ${meeting.name}: ${meeting.edit_url}`);
       wordPressEditLink(meeting.edit_url);
@@ -110,11 +86,6 @@ export default function Meeting() {
   const directionsUrl = meeting.isInPerson
     ? formatDirectionsUrl(meeting)
     : undefined;
-
-  // set page title
-  if (meeting.name) {
-    document.title = meeting.name;
-  }
 
   // feedback URL link
   if (!meeting.feedback_url && feedback_emails.length) {
@@ -245,202 +216,199 @@ export default function Meeting() {
   }
 
   return (
-    <div css={meetingCss}>
-      <h1 id="tsml-title" tabIndex={-1}>
-        <Link meeting={meeting} link={false} />
-      </h1>
-      <div css={meetingBackCss}>
-        <Icon icon="back" />
-        <RouterLink
-          to="/"
-          onClick={() => {
-            /*
-            setState({
-              ...state,
-              input: {
-                ...input,
-                meeting: undefined,
-              },
-            });
-            */
-          }}
-        >
-          {strings.back_to_meetings}
-        </RouterLink>
-      </div>
-      <div css={meetingColumnsCss}>
-        <div>
-          {directionsUrl && (
-            <Button
-              href={directionsUrl}
-              icon="geo"
-              text={strings.get_directions}
-              type="in-person"
-            />
-          )}
+    <>
+      <Helmet>
+        <title>{meeting.name}</title>
+        <meta property="og:title" content={meeting.name} />
+        <meta name="description" content={meeting.notes} />
+        <link rel="canonical" href={window.location.href} />
+      </Helmet>
+      <div css={meetingCss}>
+        <h1 id="tsml-title" tabIndex={-1}>
+          <Link meeting={meeting} link={false} />
+        </h1>
+        <div css={meetingBackCss}>
+          <Icon icon="back" />
+          <RouterLink to="/" preventScrollReset={true}>
+            {strings.back_to_meetings}
+          </RouterLink>
+        </div>
+        <div css={meetingColumnsCss}>
           <div>
-            <div>
-              <h2>{strings.meeting_information}</h2>
-              <p>{formatTime(meeting.start, meeting.end)}</p>
-
-              {meeting.start && meeting.start.zoneName !== meeting.timezone && (
-                <p>
-                  (
-                  {formatTime(
-                    meeting.start.setZone(meeting.timezone),
-                    meeting.end?.setZone(meeting.timezone)
-                  )}
-                  )
-                </p>
-              )}
-              {capabilities.type && meeting.types && (
-                <ul>
-                  {meeting.types
-                    .filter(type => type !== 'active')
-                    .sort((a, b) =>
-                      strings.types[a].localeCompare(strings.types[b])
-                    )
-                    .map((type, index) => (
-                      <li key={index}>
-                        {strings.type_descriptions?.[
-                          type as keyof typeof strings.type_descriptions
-                        ] ? (
-                          <button
-                            onClick={() =>
-                              setDefine(define === type ? undefined : type)
-                            }
-                          >
-                            <div>
-                              <span>{strings.types[type]}</span>
-                              <Icon icon="info" size={13} />
-                            </div>
-                            {define === type && (
-                              <small>
-                                {
-                                  strings.type_descriptions[
-                                    type as keyof typeof strings.type_descriptions
-                                  ]
-                                }
-                              </small>
-                            )}
-                          </button>
-                        ) : (
-                          strings.types[type]
-                        )}
-                      </li>
-                    ))}
-                </ul>
-              )}
-              {meeting.notes && <Paragraphs text={meeting.notes} />}
-              {(meeting.isActive ||
-                (!meeting.group && !!contactButtons.length)) && (
-                <>
-                  {meeting.conference_provider && (
-                    <div css={buttonHelpCss}>
-                      <Button
-                        href={meeting.conference_url}
-                        icon="camera"
-                        text={meeting.conference_provider}
-                        type="online"
-                      />
-                      {meeting.conference_url_notes && (
-                        <Paragraphs text={meeting.conference_url_notes} />
-                      )}
-                    </div>
-                  )}
-                  {meeting.conference_phone && (
-                    <div css={buttonHelpCss}>
-                      <Button
-                        href={`tel:${meeting.conference_phone}`}
-                        icon="phone"
-                        text={strings.phone}
-                        type="online"
-                      />
-                      {meeting.conference_phone_notes && (
-                        <Paragraphs text={meeting.conference_phone_notes} />
-                      )}
-                    </div>
-                  )}
-                  {capabilities.sharing && navigator.canShare(sharePayload) && (
-                    <Button
-                      icon="share"
-                      onClick={() =>
-                        navigator.share(sharePayload).catch(() => {})
-                      }
-                      text={strings.share}
-                    />
-                  )}
-                  {meeting.start && meeting.isActive && (
-                    <Button
-                      icon="calendar"
-                      onClick={() => formatIcs(meeting)}
-                      text={strings.add_to_calendar}
-                    />
-                  )}
-                  {!meeting.group &&
-                    contactButtons.map((button, index) => (
-                      <Button {...button} key={index} />
-                    ))}
-                </>
-              )}
-            </div>
-            {!meeting.approximate && (
-              <div data-disabled={meeting.isTempClosed}>
-                {meeting.location && <h2>{meeting.location}</h2>}
-                {meeting.formatted_address && (
-                  <p className="notranslate">{meeting.formatted_address}</p>
-                )}
-                {!!meeting.regions?.length && (
-                  <p>{meeting.regions.join(' > ')}</p>
-                )}
-                {meeting.location_notes && (
-                  <Paragraphs text={meeting.location_notes} />
-                )}
-                {formatWeekdays(locationWeekdays, meeting.slug)}
-              </div>
+            {directionsUrl && (
+              <Button
+                href={directionsUrl}
+                icon="geo"
+                text={strings.get_directions}
+                type="in-person"
+              />
             )}
-            {meeting.group &&
-              (meeting.district ||
-                meeting.group_notes ||
-                !!groupWeekdays.length ||
-                !!contactButtons.length) && (
-                <div>
-                  <h2>{meeting.group}</h2>
-                  {meeting.district && <p>{meeting.district}</p>}
-                  {meeting.group_notes && (
-                    <Paragraphs text={meeting.group_notes} />
-                  )}
-                  {contactButtons.map((button, index) => (
-                    <Button {...button} key={index} />
-                  ))}
+            <div>
+              <div>
+                <h2>{strings.meeting_information}</h2>
+                <p>{formatTime(meeting.start, meeting.end)}</p>
 
-                  {formatWeekdays(groupWeekdays, meeting.slug)}
+                {meeting.start &&
+                  meeting.start.zoneName !== meeting.timezone && (
+                    <p>
+                      (
+                      {formatTime(
+                        meeting.start.setZone(meeting.timezone),
+                        meeting.end?.setZone(meeting.timezone)
+                      )}
+                      )
+                    </p>
+                  )}
+                {capabilities.type && meeting.types && (
+                  <ul>
+                    {meeting.types
+                      .filter(type => type !== 'active')
+                      .sort((a, b) =>
+                        strings.types[a].localeCompare(strings.types[b])
+                      )
+                      .map((type, index) => (
+                        <li key={index}>
+                          {strings.type_descriptions?.[
+                            type as keyof typeof strings.type_descriptions
+                          ] ? (
+                            <button
+                              onClick={() =>
+                                setDefine(define === type ? undefined : type)
+                              }
+                            >
+                              <div>
+                                <span>{strings.types[type]}</span>
+                                <Icon icon="info" size={13} />
+                              </div>
+                              {define === type && (
+                                <small>
+                                  {
+                                    strings.type_descriptions[
+                                      type as keyof typeof strings.type_descriptions
+                                    ]
+                                  }
+                                </small>
+                              )}
+                            </button>
+                          ) : (
+                            strings.types[type]
+                          )}
+                        </li>
+                      ))}
+                  </ul>
+                )}
+                {meeting.notes && <Paragraphs text={meeting.notes} />}
+                {(meeting.isActive ||
+                  (!meeting.group && !!contactButtons.length)) && (
+                  <>
+                    {meeting.conference_provider && (
+                      <div css={buttonHelpCss}>
+                        <Button
+                          href={meeting.conference_url}
+                          icon="camera"
+                          text={meeting.conference_provider}
+                          type="online"
+                        />
+                        {meeting.conference_url_notes && (
+                          <Paragraphs text={meeting.conference_url_notes} />
+                        )}
+                      </div>
+                    )}
+                    {meeting.conference_phone && (
+                      <div css={buttonHelpCss}>
+                        <Button
+                          href={`tel:${meeting.conference_phone}`}
+                          icon="phone"
+                          text={strings.phone}
+                          type="online"
+                        />
+                        {meeting.conference_phone_notes && (
+                          <Paragraphs text={meeting.conference_phone_notes} />
+                        )}
+                      </div>
+                    )}
+                    {capabilities.sharing &&
+                      navigator.canShare(sharePayload) && (
+                        <Button
+                          icon="share"
+                          onClick={() =>
+                            navigator.share(sharePayload).catch(() => {})
+                          }
+                          text={strings.share}
+                        />
+                      )}
+                    {meeting.start && meeting.isActive && (
+                      <Button
+                        icon="calendar"
+                        onClick={() => formatIcs(meeting)}
+                        text={strings.add_to_calendar}
+                      />
+                    )}
+                    {!meeting.group &&
+                      contactButtons.map((button, index) => (
+                        <Button {...button} key={index} />
+                      ))}
+                  </>
+                )}
+              </div>
+              {!meeting.approximate && (
+                <div data-disabled={meeting.isTempClosed}>
+                  {meeting.location && <h2>{meeting.location}</h2>}
+                  {meeting.formatted_address && (
+                    <p className="notranslate">{meeting.formatted_address}</p>
+                  )}
+                  {!!meeting.regions?.length && (
+                    <p>{meeting.regions.join(' > ')}</p>
+                  )}
+                  {meeting.location_notes && (
+                    <Paragraphs text={meeting.location_notes} />
+                  )}
+                  {formatWeekdays(locationWeekdays, meeting.slug)}
                 </div>
               )}
-            {meeting.updated && (
-              <div>{i18n(strings.updated, { updated: meeting.updated })}</div>
+              {meeting.group &&
+                (meeting.district ||
+                  meeting.group_notes ||
+                  !!groupWeekdays.length ||
+                  !!contactButtons.length) && (
+                  <div>
+                    <h2>{meeting.group}</h2>
+                    {meeting.district && <p>{meeting.district}</p>}
+                    {meeting.group_notes && (
+                      <Paragraphs text={meeting.group_notes} />
+                    )}
+                    {contactButtons.map((button, index) => (
+                      <Button {...button} key={index} />
+                    ))}
+
+                    {formatWeekdays(groupWeekdays, meeting.slug)}
+                  </div>
+                )}
+              {meeting.updated && (
+                <div>{i18n(strings.updated, { updated: meeting.updated })}</div>
+              )}
+            </div>
+
+            {meeting.feedback_url && (
+              <Button
+                href={meeting.feedback_url}
+                icon="edit"
+                text={strings.feedback}
+              />
             )}
           </div>
-
-          {meeting.feedback_url && (
-            <Button
-              href={meeting.feedback_url}
-              icon="edit"
-              text={strings.feedback}
-            />
-          )}
-        </div>
-        <div
-          css={
-            meeting.isOnline && !meeting.isInPerson
-              ? meetingOnlineCss
-              : undefined
-          }
-        >
-          <Map filteredSlugs={[meetingSlug]} listMeetingsInPopup={false} />
+          <div
+            css={
+              meeting.isOnline && !meeting.isInPerson
+                ? meetingOnlineCss
+                : undefined
+            }
+          >
+            <Map filteredSlugs={[meetingSlug]} listMeetingsInPopup={false} />
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 

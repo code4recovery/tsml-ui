@@ -1,7 +1,12 @@
 import { Suspense, useEffect } from 'react';
 
 import { Global } from '@emotion/react';
-import { Outlet, useLoaderData } from 'react-router-dom';
+import {
+  Await,
+  Outlet,
+  ScrollRestoration,
+  useLoaderData,
+} from 'react-router-dom';
 
 import { SettingsContext } from '../helpers';
 import { globalCss } from '../styles';
@@ -17,10 +22,12 @@ export default function TsmlUI({
   settings: TSMLReactConfig;
   strings: Translation;
 }) {
-  const data = useLoaderData() as {
-    capabilities: State['capabilities'];
-    indexes: State['indexes'];
-    meetings: State['meetings'];
+  const { data } = useLoaderData() as {
+    data: {
+      capabilities: State['capabilities'];
+      indexes: State['indexes'];
+      meetings: State['meetings'];
+    };
   };
 
   // manage classes
@@ -31,12 +38,26 @@ export default function TsmlUI({
     };
   }, []);
 
+  // clean up any unsightly empty hashes added by react router
+  useEffect(() => {
+    if (window.location.hash === '#' || window.location.hash === '#/') {
+      window.history.replaceState('', document.title, window.location.pathname);
+    }
+  }, [window.location.hash]);
+
   return (
-    <SettingsContext.Provider value={{ ...data, settings, strings }}>
+    <>
       <Global styles={globalCss} />
       <Suspense fallback={<Loading />}>
-        <Outlet />
+        <Await resolve={data}>
+          {data => (
+            <SettingsContext.Provider value={{ ...data, settings, strings }}>
+              <Outlet />
+            </SettingsContext.Provider>
+          )}
+        </Await>
       </Suspense>
-    </SettingsContext.Provider>
+      <ScrollRestoration />
+    </>
   );
 }

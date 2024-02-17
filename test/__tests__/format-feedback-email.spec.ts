@@ -3,10 +3,6 @@ import { getQueryString } from '../../src/helpers/query-string';
 import { defaults } from '../../src/helpers/settings';
 import { Meeting } from '../../src/types';
 
-jest.mock('../../src/helpers/format-url', () => ({
-  formatUrl: jest.fn().mockReturnValue('https://foo.com'),
-}));
-
 jest.mock('../../src/helpers/query-string');
 
 const mockedGetQueryString = jest.mocked(getQueryString);

@@ -12,7 +12,6 @@ export * from './format-ics';
 export * from './format-search-params';
 export * from './format-slug';
 export * from './format-string';
-export * from './format-url';
 export * from './get-index-by-key';
 export * from './load-meeting-data';
 export * from './query-string';

@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { useSearchParams } from 'react-router-dom';
 
 import {
@@ -24,20 +22,10 @@ export default function Alert({
   const input = getQueryString(searchParams, settings);
 
   return error ? (
-    <div
-      // @ts-ignore
-      css={errorCss}
-    >
-      {error}
-    </div>
+    <div css={errorCss}>{error}</div>
   ) : alert ? (
     <>
-      <div
-        // @ts-ignore
-        css={alertCss}
-      >
-        {alert}
-      </div>
+      <div css={alertCss}>{alert}</div>
       {alert === strings.no_results && input.search && (
         <Button
           onClick={() => {

@@ -1,12 +1,7 @@
 import { stringify } from 'querystring';
 
-import { formatUrl } from '../../src/helpers/format-url';
-import { getQueryString, setQueryString } from '../../src/helpers/query-string';
+import { getQueryString } from '../../src/helpers/query-string';
 import { defaults } from '../../src/helpers/settings';
-
-jest.mock('../../src/helpers/format-url', () => ({
-  formatUrl: jest.fn().mockReturnValue('foo'),
-}));
 
 describe('getQueryString', () => {
   it('returns defaults correctly', () => {
@@ -27,15 +22,5 @@ describe('getQueryString', () => {
       ...defaults.defaults,
       ...params,
     });
-  });
-});
-
-describe('setQueryString', () => {
-  it('calls formatUrl and pushState correctly', () => {
-    const params = { search: 'foo' };
-    setQueryString(params, defaults);
-
-    expect(formatUrl).toHaveBeenCalledWith(params, defaults);
-    expect(window.history.pushState).toHaveBeenCalledWith('', '', 'foo');
   });
 });

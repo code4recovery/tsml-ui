@@ -2,7 +2,7 @@ import { useSearchParams } from 'react-router-dom';
 
 import { filterMeetingData, getQueryString, useSettings } from '../helpers';
 
-import Alert from './Controls';
+import Alert from './Alert';
 import Controls from './Controls';
 import Map from './Map';
 import Table from './Table';
@@ -33,13 +33,13 @@ export default function Index() {
     <>
       {title && <Title />}
       {controls && <Controls />}
-      {alert && <Alert />}
-      {view === 'table' ? (
-        <Table filteredSlugs={filteredSlugs} inProgress={inProgress} />
-      ) : (
+      <Alert alert={alert} />
+      {view === 'map' ? (
         <div style={{ display: 'flex', flexGrow: 1 }}>
           <Map filteredSlugs={filteredSlugs} />
         </div>
+      ) : (
+        <Table filteredSlugs={filteredSlugs} inProgress={inProgress} />
       )}
     </>
   );

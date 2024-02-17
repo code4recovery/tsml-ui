@@ -1,3 +1,4 @@
+import { Helmet } from 'react-helmet';
 import { useSearchParams } from 'react-router-dom';
 
 import {
@@ -54,8 +55,14 @@ export default function Title() {
 
   const title = parts.join(' ');
 
-  // set window title
-  document.title = title;
-
-  return <h1 aria-live="polite">{title}</h1>;
+  return (
+    <>
+      <Helmet>
+        <title>{title}</title>
+        <meta property="og:title" content={title} />
+        <link rel="canonical" href={window.location.href} />
+      </Helmet>
+      <h1 aria-live="polite">{title}</h1>
+    </>
+  );
 }

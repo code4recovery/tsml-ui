@@ -3,7 +3,9 @@ import {
   createBrowserRouter,
   createHashRouter,
   defer,
+  isRouteErrorResponse,
   RouterProvider,
+  useRouteError,
 } from 'react-router-dom';
 
 import Index from './components/Index';
@@ -33,25 +35,20 @@ if (element) {
   });
 
   // loader function is here instead of in the TSML UI component so these vars can be available
-  const loader = async () =>
-    defer(await fetchJson({ google, settings, src, strings, timezone }));
+  const loader = () =>
+    defer({
+      data: fetchJson({ google, settings, src, strings, timezone }),
+    });
 
   const routes = [
     {
-      element: <TsmlUI settings={settings} strings={strings} />,
-      loader,
       children: [
-        {
-          path: '/',
-          element: <Index />,
-          // loader: indexLoader,
-        },
-        {
-          path: `/:meetingSlug`,
-          element: <Meeting />,
-          loader: meetingLoader,
-        },
+        { path: '', element: <Index /> },
+        { path: `:meetingSlug`, element: <Meeting />, loader: meetingLoader },
       ],
+      element: <TsmlUI settings={settings} strings={strings} />,
+      errorElement: <ErrorBoundary />,
+      loader,
     },
   ];
 
@@ -62,4 +59,28 @@ if (element) {
   createRoot(element).render(<RouterProvider router={router} />);
 } else {
   console.warn('TSML UI could not find a div#tsml-ui element');
+}
+
+function ErrorBoundary() {
+  const error = useRouteError();
+
+  if (isRouteErrorResponse(error)) {
+    if (error.status === 404) {
+      return <div>This page doesnt exist!</div>;
+    }
+
+    if (error.status === 401) {
+      return <div>You arent authorized to see this</div>;
+    }
+
+    if (error.status === 503) {
+      return <div>Looks like our API is down</div>;
+    }
+
+    if (error.status === 418) {
+      return <div>🫖</div>;
+    }
+  }
+
+  return <div>{JSON.stringify(error)}</div>;
 }
