@@ -2,6 +2,7 @@ import { useSearchParams } from 'react-router-dom';
 
 import { filterMeetingData, getQueryString, useSettings } from '../helpers';
 
+import Alert from './Controls';
 import Controls from './Controls';
 import Map from './Map';
 import Table from './Table';
@@ -11,6 +12,7 @@ export default function Index() {
   const { capabilities, indexes, meetings, settings, strings } = useSettings();
   const [searchParams] = useSearchParams();
   const input = getQueryString(searchParams, settings);
+  const { title, controls } = settings.show;
 
   const { view } = getQueryString(searchParams, settings);
 
@@ -29,14 +31,14 @@ export default function Index() {
 
   return (
     <>
-      {settings.show.title && <Title />}
-      {settings.show.controls && <Controls />}
+      {title && <Title />}
+      {controls && <Controls />}
       {alert && <Alert />}
       {view === 'table' ? (
-        <Table />
+        <Table filteredSlugs={filteredSlugs} inProgress={inProgress} />
       ) : (
         <div style={{ display: 'flex', flexGrow: 1 }}>
-          <Map />
+          <Map filteredSlugs={filteredSlugs} />
         </div>
       )}
     </>

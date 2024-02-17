@@ -1,21 +1,18 @@
-import { Dispatch, SetStateAction } from 'react';
+import { NavLink, useSearchParams } from 'react-router-dom';
 
-import { NavLink } from 'react-router-dom';
+import { useSettings } from '../helpers';
 
-import { formatUrl, useSettings } from '../helpers';
-
-import type { State, Meeting } from '../types';
+import type { Meeting } from '../types';
 
 export default function Link({
   meeting,
-  setState,
-  state,
+  link = true,
 }: {
   meeting: Meeting;
-  setState?: Dispatch<SetStateAction<State>>;
-  state?: State;
+  link?: boolean;
 }) {
   const { settings, strings } = useSettings();
+  const [searchParams] = useSearchParams();
 
   const flags =
     settings.flags
@@ -24,7 +21,7 @@ export default function Link({
       .sort()
       .join(', ') ?? [];
 
-  if (!state || !setState) {
+  if (!link) {
     return !flags.length ? (
       <>{meeting.name}</>
     ) : (
@@ -35,13 +32,11 @@ export default function Link({
     );
   }
 
+  const url = `/${meeting.slug}${searchParams ? `?${searchParams}` : ''}`;
+
   return (
     <>
-      <NavLink
-        to={formatUrl({ input: state.input, meeting: meeting.slug, settings })}
-      >
-        {meeting.name}
-      </NavLink>
+      <NavLink to={url}>{meeting.name}</NavLink>
       {flags && <small>{flags}</small>}
     </>
   );

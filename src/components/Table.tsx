@@ -3,12 +3,7 @@ import { useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
-import {
-  formatUrl,
-  getQueryString,
-  formatString as i18n,
-  useSettings,
-} from '../helpers';
+import { formatString as i18n, useSettings } from '../helpers';
 import {
   tableChicletCss,
   tableChicletsCss,
@@ -20,7 +15,13 @@ import { Meeting } from '../types';
 import Icon, { icons } from './Icon';
 import Link from './Link';
 
-export default function Table() {
+export default function Table({
+  filteredSlugs,
+  inProgress,
+}: {
+  filteredSlugs: string[];
+  inProgress: string[];
+}) {
   const { settings, strings } = useSettings();
   const { meetings } = useSettings();
   const navigate = useNavigate();
@@ -128,11 +129,10 @@ export default function Table() {
   const Row = ({ slug }: { slug: keyof typeof meetings }) => {
     const meeting = meetings[slug];
     const [searchParams] = useSearchParams();
-    const input = getQueryString(searchParams, settings);
     return (
       <tr
         onClick={() =>
-          navigate(formatUrl({ input, meeting: meeting.slug, settings }))
+          navigate(`${meeting.slug}${searchParams ? `?${searchParams}` : ''}`)
         }
       >
         {columns.map((column, index) => (

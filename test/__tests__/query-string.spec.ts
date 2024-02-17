@@ -10,7 +10,9 @@ jest.mock('../../src/helpers/format-url', () => ({
 
 describe('getQueryString', () => {
   it('returns defaults correctly', () => {
-    expect(getQueryString(defaults)).toStrictEqual(defaults.defaults);
+    expect(getQueryString(new URLSearchParams(), defaults)).toStrictEqual(
+      defaults.defaults
+    );
   });
 
   it('reads from url correctly', () => {
@@ -21,7 +23,7 @@ describe('getQueryString', () => {
 
     window.location.search = stringify(params);
 
-    expect(getQueryString(defaults)).toStrictEqual({
+    expect(getQueryString(new URLSearchParams(), defaults)).toStrictEqual({
       ...defaults.defaults,
       ...params,
     });

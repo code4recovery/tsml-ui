@@ -13,9 +13,7 @@ import {
   formatFeedbackEmail,
   formatIcs,
   formatString as i18n,
-  formatUrl,
   useSettings,
-  getQueryString,
 } from '../helpers';
 import {
   buttonHelpCss,
@@ -40,12 +38,13 @@ export default function Meeting() {
   const { feedback_emails } = settings;
   const { meetingSlug } = useLoaderData() as { meetingSlug: string };
   const [searchParams] = useSearchParams();
-  const input = getQueryString(searchParams, settings);
 
   // open types
   const [define, setDefine] = useState<string | undefined>();
 
-  // existence checked in the parent component
+  if (!(meetingSlug in meetings)) {
+    throw new Error('Meeting not found');
+  }
   const meeting = meetings[meetingSlug as keyof typeof meetings];
 
   const sharePayload = {
@@ -119,12 +118,13 @@ export default function Meeting() {
 
   // feedback URL link
   if (!meeting.feedback_url && feedback_emails.length) {
-    meeting.feedback_url = formatFeedbackEmail(
-      settings.feedback_emails,
+    meeting.feedback_url = formatFeedbackEmail({
+      feedback_emails,
       meeting,
+      searchParams,
       settings,
-      strings
-    );
+      strings,
+    });
   }
 
   const contactButtons: {
@@ -247,16 +247,12 @@ export default function Meeting() {
   return (
     <div css={meetingCss}>
       <h1 id="tsml-title" tabIndex={-1}>
-        <Link meeting={meeting} />
+        <Link meeting={meeting} link={false} />
       </h1>
       <div css={meetingBackCss}>
         <Icon icon="back" />
         <RouterLink
-          to={formatUrl({
-            input,
-            meeting: undefined,
-            settings,
-          })}
+          to="/"
           onClick={() => {
             /*
             setState({
@@ -441,7 +437,7 @@ export default function Meeting() {
               : undefined
           }
         >
-          <Map listMeetingsInPopup={false} />
+          <Map filteredSlugs={[meetingSlug]} listMeetingsInPopup={false} />
         </div>
       </div>
     </div>

@@ -6,14 +6,21 @@ import { formatUrl } from './format-url';
 import { getQueryString } from './query-string';
 
 // send back a mailto link to a feedback email
-export function formatFeedbackEmail(
-  feedback_emails: TSMLReactConfig['feedback_emails'],
-  meeting: Meeting,
-  settings: TSMLReactConfig,
-  strings: Translation
-) {
+export function formatFeedbackEmail({
+  feedback_emails,
+  meeting,
+  searchParams,
+  settings,
+  strings,
+}: {
+  feedback_emails: TSMLReactConfig['feedback_emails'];
+  meeting: Meeting;
+  searchParams: URLSearchParams;
+  settings: TSMLReactConfig;
+  strings: Translation;
+}) {
   // remove extra query params from meeting URL
-  const input = getQueryString(settings);
+  const input = getQueryString(searchParams, settings);
   const meetingUrl = formatUrl({ input, meeting: meeting.slug, settings });
 
   // build message

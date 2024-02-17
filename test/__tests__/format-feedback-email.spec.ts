@@ -26,22 +26,24 @@ const mockEmails = ['foo@bar.com', 'baz@qux.com'];
 describe('formatFeedbackEmail', () => {
   it('works with one or more emails', () => {
     expect(
-      formatFeedbackEmail(
-        [mockEmails[0]],
-        mockMeeting,
-        defaults,
-        defaults.strings[defaults.language]
-      )
+      formatFeedbackEmail({
+        feedback_emails: [mockEmails[0]],
+        meeting: mockMeeting,
+        searchParams: new URLSearchParams(),
+        settings: defaults,
+        strings: defaults.strings[defaults.language],
+      })
     ).toStrictEqual(
       'mailto:foo@bar.com?subject=Meeting Feedback%3A Foo&body=%0A%0A%0A-----%0APublic URL%3A https%3A%2F%2Ffoo.com%0AEdit URL%3A row 1'
     );
     expect(
-      formatFeedbackEmail(
-        mockEmails,
-        mockMeeting,
-        defaults,
-        defaults.strings[defaults.language]
-      )
+      formatFeedbackEmail({
+        feedback_emails: mockEmails,
+        meeting: mockMeeting,
+        searchParams: new URLSearchParams(),
+        settings: defaults,
+        strings: defaults.strings[defaults.language],
+      })
     ).toStrictEqual(
       'mailto:foo@bar.com,baz@qux.com?subject=Meeting Feedback%3A Foo&body=%0A%0A%0A-----%0APublic URL%3A https%3A%2F%2Ffoo.com%0AEdit URL%3A row 1'
     );

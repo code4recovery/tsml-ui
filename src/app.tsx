@@ -7,7 +7,7 @@ import {
 } from 'react-router-dom';
 
 import Index from './components/Index';
-import Meeting from './components/Meeting';
+import Meeting, { loader as meetingLoader } from './components/Meeting';
 import TsmlUI from './components/TsmlUI';
 import { fetchJson, mergeSettings } from './helpers';
 
@@ -49,7 +49,7 @@ if (element) {
         {
           path: `/:meetingSlug`,
           element: <Meeting />,
-          // loader: meetingLoader,
+          loader: meetingLoader,
         },
       ],
     },

@@ -38,8 +38,10 @@ type Viewport = {
 };
 
 export default function Map({
+  filteredSlugs,
   listMeetingsInPopup = true,
 }: {
+  filteredSlugs: string[];
   listMeetingsInPopup?: boolean;
 }) {
   const { meetings, settings, strings } = useSettings();
