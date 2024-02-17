@@ -14,7 +14,7 @@ export function formatFeedbackEmail(
 ) {
   // remove extra query params from meeting URL
   const input = getQueryString(settings);
-  const meetingUrl = formatUrl({ meeting: input.meeting }, settings);
+  const meetingUrl = formatUrl({ input, meeting: meeting.slug, settings });
 
   // build message
   const lines = [

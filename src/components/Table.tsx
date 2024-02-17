@@ -1,33 +1,29 @@
-import { Dispatch, SetStateAction, useState } from 'react';
+import { useState } from 'react';
 
 import InfiniteScroll from 'react-infinite-scroller';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
-import { formatString as i18n, useSettings } from '../helpers';
+import {
+  formatUrl,
+  getQueryString,
+  formatString as i18n,
+  useSettings,
+} from '../helpers';
 import {
   tableChicletCss,
   tableChicletsCss,
   tableInProgressCss,
   tableWrapperCss,
 } from '../styles';
-import { Meeting, State } from '../types';
+import { Meeting } from '../types';
 
 import Icon, { icons } from './Icon';
 import Link from './Link';
 
-export default function Table({
-  filteredSlugs = [],
-  inProgress = [],
-  setState,
-  state,
-}: {
-  filteredSlugs: string[];
-  inProgress: string[];
-  setState: Dispatch<SetStateAction<State>>;
-  state: State;
-}) {
+export default function Table() {
   const { settings, strings } = useSettings();
-  const [_, setSearchParams] = useSearchParams();
+  const { meetings } = useSettings();
+  const navigate = useNavigate();
   const meetingsPerPage = 10;
   const supported_columns = [
     'address',
@@ -40,7 +36,8 @@ export default function Table({
   ];
   const [limit, setLimit] = useState(meetingsPerPage);
   const [showInProgress, setShowInProgress] = useState(false);
-  const { distance, location, region } = state.capabilities;
+  const { capabilities } = useSettings();
+  const { distance, location, region } = capabilities;
 
   //show columns based on capabilities
   const columns = settings.columns
@@ -112,7 +109,7 @@ export default function Table({
     } else if (key === 'location_group') {
       return meeting.isInPerson ? meeting.location : meeting.group;
     } else if (key === 'name' && meeting.slug) {
-      return <Link meeting={meeting} state={state} setState={setState} />;
+      return <Link meeting={meeting} />;
     } else if (key === 'region' && meeting.regions) {
       return meeting.regions[meeting.regions.length - 1];
     } else if (key === 'time') {
@@ -128,14 +125,14 @@ export default function Table({
     return null;
   };
 
-  const Row = ({ slug }: { slug: keyof typeof state.meetings }) => {
-    const meeting = state.meetings[slug];
+  const Row = ({ slug }: { slug: keyof typeof meetings }) => {
+    const meeting = meetings[slug];
+    const [searchParams] = useSearchParams();
+    const input = getQueryString(searchParams, settings);
     return (
       <tr
         onClick={() =>
-          setSearchParams({
-            meeting: meeting.slug,
-          })
+          navigate(formatUrl({ input, meeting: meeting.slug, settings }))
         }
       >
         {columns.map((column, index) => (

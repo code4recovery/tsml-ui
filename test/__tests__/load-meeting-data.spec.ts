@@ -27,18 +27,6 @@ describe('loadMeetingData', () => {
     ];
     const [meetings, indexes, capabilities] = loadMeetingData(
       data,
-      {
-        coordinates: false,
-        distance: false,
-        geolocation: false,
-        inactive: false,
-        location: false,
-        region: false,
-        sharing: false,
-        time: false,
-        type: false,
-        weekday: false,
-      },
       defaults,
       defaults.strings[defaults.language],
       'America/Los_Angeles'

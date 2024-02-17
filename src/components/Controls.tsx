@@ -1,16 +1,8 @@
-import {
-  Dispatch,
-  SetStateAction,
-  FormEvent,
-  useEffect,
-  useRef,
-  useState,
-  MouseEvent,
-} from 'react';
+import { FormEvent, useEffect, useRef, useState, MouseEvent } from 'react';
 
 import { useSearchParams } from 'react-router-dom';
 
-import { analyticsEvent, useSettings } from '../helpers';
+import { analyticsEvent, getQueryString, useSettings } from '../helpers';
 import {
   controlsCss,
   controlsGroupFirstCss,
@@ -26,47 +18,38 @@ import {
 import Dropdown from './Dropdown';
 import Icon from './Icon';
 
-import type { State } from '../types';
-
-export default function Controls({
-  state,
-  setState,
-  mapbox,
-}: {
-  state: State;
-  setState: Dispatch<SetStateAction<State>>;
-  mapbox?: string;
-}) {
-  const { settings, strings } = useSettings();
+export default function Controls() {
+  const { capabilities, meetings, settings, strings } = useSettings();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const input = getQueryString(searchParams, settings);
   const [dropdown, setDropdown] = useState<string>();
   const [search, setSearch] = useState(
-    state.input.mode === 'location' ? state.input.search : ''
+    input.mode === 'location' ? input.search : ''
   );
-  const [searchParams, setSearchParams] = useSearchParams();
   const searchInput = useRef<HTMLInputElement>(null);
 
   //get available search options based on capabilities
   const allModes = ['search', 'location', 'me'] as const;
   const modes = allModes
     .filter(
-      mode => mode !== 'location' || (state.capabilities.coordinates && mapbox)
+      mode =>
+        mode !== 'location' || (capabilities.coordinates && settings.mapbox)
     )
     .filter(
       mode =>
-        mode !== 'me' ||
-        (state.capabilities.coordinates && state.capabilities.geolocation)
+        mode !== 'me' || (capabilities.coordinates && capabilities.geolocation)
     );
 
   //get available filters
   const filters = settings.filters
-    .filter(filter => state.capabilities[filter])
-    .filter(filter => filter !== 'region' || state.input.mode === 'search')
-    .filter(filter => filter !== 'distance' || state.input.mode !== 'search');
+    .filter(filter => capabilities[filter])
+    .filter(filter => filter !== 'region' || input.mode === 'search')
+    .filter(filter => filter !== 'distance' || input.mode !== 'search');
 
   //get available views
   const allViews = ['table', 'map'] as const;
   const views = allViews.filter(
-    view => view !== 'map' || (state.capabilities.coordinates && mapbox)
+    view => view !== 'map' || (capabilities.coordinates && settings.mapbox)
   );
 
   //whether to show the views segmented button
@@ -83,15 +66,15 @@ export default function Controls({
   //search effect
   useEffect(() => {
     const timer = setTimeout(() => {
-      if (!state.input.search) return;
+      if (!input.search) return;
       analyticsEvent({
         category: 'search',
-        action: state.input.mode,
-        label: state.input.search,
+        action: input.mode,
+        label: input.search,
       });
     }, 2000);
     return () => clearTimeout(timer);
-  }, [state.input.search]);
+  }, [input.search]);
 
   // update url params when search changes
   useEffect(() => {
@@ -119,8 +102,9 @@ export default function Controls({
   const locationSearch = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (state.input.mode !== 'location') return;
+    if (input.mode !== 'location') return;
 
+    /*
     setState({
       ...state,
       input: {
@@ -130,14 +114,15 @@ export default function Controls({
         search,
       },
     });
+    */
   };
 
   //set search mode dropdown and clear all distances
   const setMode = (e: MouseEvent, mode: 'search' | 'location' | 'me') => {
     e.preventDefault();
 
-    Object.keys(state.meetings).forEach(slug => {
-      state.meetings[slug].distance = undefined;
+    Object.keys(meetings).forEach(slug => {
+      meetings[slug].distance = undefined;
     });
 
     setSearch('');
@@ -151,6 +136,7 @@ export default function Controls({
     //focus after waiting for disabled to clear
     setTimeout(() => searchInput.current?.focus(), 100);
 
+    /*
     setState({
       ...state,
       capabilities: {
@@ -170,6 +156,7 @@ export default function Controls({
         search: '',
       },
     });
+    */
 
     setSearchParams(searchParams);
   };
@@ -184,39 +171,39 @@ export default function Controls({
       searchParams.delete('view');
     }
 
+    /*
     setState({ ...state, input: { ...state.input, view } });
+    */
 
     setSearchParams(searchParams);
   };
 
-  return !Object.keys(state.meetings).length ? null : (
+  return !Object.keys(meetings).length ? null : (
     <div css={controlsCss}>
       <form onSubmit={locationSearch} css={dropdownCss}>
         <fieldset role="group">
           <input
-            aria-label={strings.modes[state.input.mode]}
+            aria-label={strings.modes[input.mode]}
             css={modes.length > 1 ? controlsInputFirstCss : controlsInputCss}
-            disabled={state.input.mode === 'me'}
+            disabled={input.mode === 'me'}
             onChange={e => {
-              if (state.input.mode === 'search') {
-                state.input.search = e.target.value;
-                setState({ ...state });
+              if (input.mode === 'search') {
+                input.search = e.target.value;
+                // setState({ ...state });
               } else {
                 setSearch(e.target.value);
               }
             }}
-            placeholder={strings.modes[state.input.mode]}
+            placeholder={strings.modes[input.mode]}
             ref={searchInput}
             spellCheck="false"
             type="search"
-            value={
-              state.input.mode === 'location' ? search : state.input.search
-            }
+            value={input.mode === 'location' ? search : input.search}
           />
           <input type="submit" hidden css={controlsInputSearchSubmitCss} />
           {modes.length > 1 && (
             <button
-              aria-label={strings.modes[state.input.mode]}
+              aria-label={strings.modes[input.mode]}
               css={dropdownButtonLastCss}
               onClick={e => {
                 setDropdown(dropdown === 'search' ? undefined : 'search');
@@ -235,7 +222,7 @@ export default function Controls({
           >
             {modes.map(mode => (
               <button
-                data-active={state.input.mode === mode}
+                data-active={input.mode === mode}
                 key={mode}
                 onClick={e => setMode(e, mode)}
               >
@@ -255,7 +242,7 @@ export default function Controls({
             filter={filter}
             open={dropdown === filter}
             setDropdown={setDropdown}
-            state={state}
+            // state={state}
           />
         </div>
       ))}
@@ -265,7 +252,7 @@ export default function Controls({
             <button
               aria-label={strings.views[view]}
               css={index ? controlsGroupLastCss : controlsGroupFirstCss}
-              data-active={state.input.view === view}
+              data-active={input.view === view}
               key={view}
               onClick={e => setView(e, view)}
               type="button"

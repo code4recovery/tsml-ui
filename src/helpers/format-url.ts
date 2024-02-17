@@ -1,8 +1,13 @@
 // format an internal link with correct query params
-export function formatUrl(
-  input: Partial<TSMLReactConfig['defaults']>,
-  settings: TSMLReactConfig
-) {
+export function formatUrl({
+  input,
+  meeting,
+  settings,
+}: {
+  input: Partial<TSMLReactConfig['defaults']>;
+  meeting?: string;
+  settings: TSMLReactConfig;
+}) {
   const query = {};
 
   // distance, region, time, type, and weekday
@@ -23,6 +28,14 @@ export function formatUrl(
       query[param] = input[param];
     });
 
+  if (!settings.path) {
+    // @ts-expect-error TODO
+    query.meeting = meeting;
+  } else if (!meeting) {
+    // @ts-expect-error TODO
+    delete query.meeting;
+  }
+
   // create a query string with only values in use
   const queryString = new URLSearchParams(query)
     .toString()
@@ -30,7 +43,9 @@ export function formatUrl(
     .replace(/%20/g, '+')
     .replace(/%2C/g, ',');
 
-  const [path] = window.location.href.split('?');
+  const path = settings.path
+    ? `${settings.path}${meeting ? `/${meeting}` : ''}`
+    : window.location.href.split('?')[0];
 
   return `${path}${queryString.length ? `?${queryString}` : ''}`;
 }

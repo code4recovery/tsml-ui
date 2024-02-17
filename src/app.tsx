@@ -1,38 +1,63 @@
 import { createRoot } from 'react-dom/client';
 import {
-  RouteObject,
-  RouterProvider,
   createBrowserRouter,
+  createHashRouter,
+  defer,
+  RouterProvider,
 } from 'react-router-dom';
 
-import { TsmlUI } from './components';
+import Index from './components/Index';
+import Meeting from './components/Meeting';
+import TsmlUI from './components/TsmlUI';
+import { fetchJson, mergeSettings } from './helpers';
 
 // locate element
 const element = document.getElementById('tsml-ui');
 
-export let routes: RouteObject[] = [];
-export let router: ReturnType<typeof createBrowserRouter>;
-
 if (element) {
-  const router = createBrowserRouter([
+  // get settings
+  const basename = element.getAttribute('data-path') || undefined;
+  const google = element.getAttribute('data-google') || undefined;
+  const mapbox = element.getAttribute('data-mapbox') || undefined;
+  const src = element.getAttribute('data-src') || undefined;
+  const userSettings =
+    // eslint-disable-next-line no-undef
+    typeof tsml_react_config === 'object' ? tsml_react_config : {};
+  const timezone = element.getAttribute('data-timezone') || undefined;
+
+  // get full settings and strings
+  const { settings, strings } = mergeSettings({
+    ...userSettings,
+    mapbox,
+    timezone,
+  });
+
+  // loader function is here instead of in the TSML UI component so these vars can be available
+  const loader = async () =>
+    defer(await fetchJson({ google, settings, src, strings, timezone }));
+
+  const routes = [
     {
-      path: '/*',
-      element: (
-        <TsmlUI
-          google={element.getAttribute('data-google') || undefined}
-          mapbox={element.getAttribute('data-mapbox') || undefined}
-          settings={
-            typeof tsml_react_config === 'undefined'
-              ? undefined
-              : // eslint-disable-next-line no-undef
-                tsml_react_config
-          }
-          src={element.getAttribute('data-src') || undefined}
-          timezone={element.getAttribute('data-timezone') || undefined}
-        />
-      ),
+      element: <TsmlUI settings={settings} strings={strings} />,
+      loader,
+      children: [
+        {
+          path: '/',
+          element: <Index />,
+          // loader: indexLoader,
+        },
+        {
+          path: `/:meetingSlug`,
+          element: <Meeting />,
+          // loader: meetingLoader,
+        },
+      ],
     },
-  ]);
+  ];
+
+  const router = basename
+    ? createBrowserRouter(routes, { basename })
+    : createHashRouter(routes);
 
   createRoot(element).render(<RouterProvider router={router} />);
 } else {

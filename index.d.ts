@@ -35,8 +35,10 @@ interface TSMLReactConfig {
     };
     style: string;
   };
+  mapbox?: string;
   now_offset: number;
   params: Array<'search' | 'mode' | 'view' | 'meeting'>;
+  path?: string;
   show: {
     controls: boolean;
     title: boolean;
@@ -45,6 +47,7 @@ interface TSMLReactConfig {
     [lang in Lang]: Translation;
   };
   times: Array<'morning' | 'midday' | 'evening' | 'night'>;
+  timezone?: string;
   weekdays: string[];
 }
 

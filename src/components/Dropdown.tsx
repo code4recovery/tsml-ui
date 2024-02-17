@@ -2,7 +2,12 @@ import { Dispatch, Fragment, MouseEvent, SetStateAction } from 'react';
 
 import { useSearchParams } from 'react-router-dom';
 
-import { formatString as i18n, getIndexByKey, useSettings } from '../helpers';
+import {
+  formatString as i18n,
+  getIndexByKey,
+  useSettings,
+  getQueryString,
+} from '../helpers';
 import { dropdownButtonCss, dropdownCss } from '../styles';
 
 import type { Index, State } from '../types';
@@ -13,24 +18,26 @@ export default function Dropdown({
   filter,
   open,
   setDropdown,
-  state,
-}: {
+}: // state,
+{
   defaultValue: string;
   end: boolean;
   filter: keyof State['indexes'];
   open: boolean;
   setDropdown: Dispatch<SetStateAction<string | undefined>>;
-  state: State;
+  // state: State;
 }) {
+  const { indexes, settings } = useSettings();
   const [searchParams, setSearchParams] = useSearchParams();
+  const input = getQueryString(searchParams, settings);
   const { strings } = useSettings();
-  const options = state.indexes[filter];
-  const values = state.input[filter];
+  const options = indexes[filter];
+  const values = input[filter];
 
   //set filter: pass it up to parent
   const setFilter = (
     e: MouseEvent<HTMLButtonElement>,
-    filter: keyof typeof state.indexes,
+    filter: keyof State['indexes'],
     value?: string
   ) => {
     e.preventDefault();
@@ -74,7 +81,7 @@ export default function Dropdown({
   const renderDropdownItem = ({ key, name, slugs, children }: Index) => (
     <Fragment key={key}>
       <button
-        // @ts-expect-error TODO
+        // @ts-ignore
         data-active={values.includes(key)}
         onClick={e => setFilter(e, filter, key)}
       >

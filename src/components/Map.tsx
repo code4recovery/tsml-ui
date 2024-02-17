@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import ReactMapGL, { Marker, NavigationControl, Popup } from 'react-map-gl';
 import WebMercatorViewport from 'viewport-mercator-project';
@@ -9,7 +9,7 @@ import { mapCss, mapMeetingsCss } from '../styles';
 import Button from './Button';
 import Link from './Link';
 
-import type { Meeting, State } from '../types';
+import type { Meeting } from '../types';
 
 type Locations = {
   [index: string]: {
@@ -38,19 +38,11 @@ type Viewport = {
 };
 
 export default function Map({
-  filteredSlugs,
   listMeetingsInPopup = true,
-  state,
-  setState,
-  mapbox,
 }: {
-  filteredSlugs: string[];
-  listMeetingsInPopup: boolean;
-  mapbox?: string;
-  setState: Dispatch<SetStateAction<State>>;
-  state: State;
+  listMeetingsInPopup?: boolean;
 }) {
-  const { settings, strings } = useSettings();
+  const { meetings, settings, strings } = useSettings();
   const [popup, setPopup] = useState<string | undefined>();
   const [viewport, setViewport] = useState<Viewport | undefined>();
   const [data, setData] = useState<{
@@ -93,7 +85,7 @@ export default function Map({
     const bounds: Bounds = {};
 
     filteredSlugs.forEach(slug => {
-      const meeting = state.meetings[slug];
+      const meeting = meetings[slug];
 
       if (meeting?.latitude && meeting?.longitude && meeting?.isInPerson) {
         const coords = meeting.latitude + ',' + meeting.longitude;
@@ -146,7 +138,7 @@ export default function Map({
   //reset viewport when data or dimensions change
   useEffect(() => {
     if (
-      !mapbox ||
+      !settings.mapbox ||
       !dimensions ||
       !data.bounds ||
       !data.bounds.north ||
@@ -180,7 +172,7 @@ export default function Map({
       {viewport && !!data.locationKeys.length && (
         <ReactMapGL
           mapStyle={settings.map.style}
-          mapboxApiAccessToken={mapbox}
+          mapboxApiAccessToken={settings.mapbox}
           onViewportChange={setViewport}
           {...viewport}
         >
@@ -227,8 +219,8 @@ export default function Map({
                               </time>
                               <Link
                                 meeting={meeting}
-                                setState={setState}
-                                state={state}
+                                // setState={setState}
+                                // state={state}
                               />
                             </div>
                           ))}

@@ -1,5 +1,6 @@
 export * from './analytics';
 export * from './calculate-distances';
+export * from './fetch-json';
 export * from './filter-meeting-data';
 export * from './flatten-and-sort-indexes';
 export * from './format-address';

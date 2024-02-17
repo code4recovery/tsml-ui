@@ -1,7 +1,12 @@
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { DateTime, Info } from 'luxon';
-import { Link as RouterLink } from 'react-router-dom';
+import {
+  LoaderFunctionArgs,
+  Link as RouterLink,
+  useLoaderData,
+  useSearchParams,
+} from 'react-router-dom';
 
 import {
   formatDirectionsUrl,
@@ -10,6 +15,7 @@ import {
   formatString as i18n,
   formatUrl,
   useSettings,
+  getQueryString,
 } from '../helpers';
 import {
   buttonHelpCss,
@@ -25,27 +31,22 @@ import Icon, { icons } from './Icon';
 import Link from './Link';
 import Map from './Map';
 
-import type { Meeting as MeetingType, State } from '../types';
+import type { Meeting as MeetingType } from '../types';
 
-export default function Meeting({
-  feedback_emails = [],
-  mapbox,
-  setState,
-  state,
-}: {
-  feedback_emails?: string[];
-  mapbox?: string;
-  setState: Dispatch<SetStateAction<State>>;
-  state: State;
-}) {
-  const { settings, strings } = useSettings();
+export const loader = ({ params }: LoaderFunctionArgs) => params;
+
+export default function Meeting() {
+  const { capabilities, meetings, settings, strings } = useSettings();
+  const { feedback_emails } = settings;
+  const { meetingSlug } = useLoaderData() as { meetingSlug: string };
+  const [searchParams] = useSearchParams();
+  const input = getQueryString(searchParams, settings);
 
   // open types
   const [define, setDefine] = useState<string | undefined>();
 
   // existence checked in the parent component
-  const meeting =
-    state.meetings[state.input.meeting as keyof typeof state.meetings];
+  const meeting = meetings[meetingSlug as keyof typeof meetings];
 
   const sharePayload = {
     title: meeting.name,
@@ -104,7 +105,7 @@ export default function Meeting({
     return () => {
       wordPressEditLink();
     };
-  }, [state.input.meeting]);
+  }, [meetingSlug]);
 
   // directions URL link
   const directionsUrl = meeting.isInPerson
@@ -199,7 +200,7 @@ export default function Meeting({
   const locationWeekdays = Info.weekdays()
     .map((weekday, index) => ({
       name: weekday,
-      meetings: Object.values(state.meetings)
+      meetings: Object.values(meetings)
         .filter(m => m.start?.weekday === index + 1)
         .filter(
           m =>
@@ -224,7 +225,7 @@ export default function Meeting({
   const groupWeekdays = Info.weekdays()
     .map((weekday, index) => ({
       name: weekday,
-      meetings: Object.values(state.meetings)
+      meetings: Object.values(meetings)
         .filter(m => m.start?.weekday === index + 1)
         .filter(
           m =>
@@ -251,21 +252,21 @@ export default function Meeting({
       <div css={meetingBackCss}>
         <Icon icon="back" />
         <RouterLink
-          to={formatUrl(
-            {
-              ...state.input,
-              meeting: undefined,
-            },
-            settings
-          )}
+          to={formatUrl({
+            input,
+            meeting: undefined,
+            settings,
+          })}
           onClick={() => {
+            /*
             setState({
               ...state,
               input: {
-                ...state.input,
+                ...input,
                 meeting: undefined,
               },
             });
+            */
           }}
         >
           {strings.back_to_meetings}
@@ -296,7 +297,7 @@ export default function Meeting({
                   )
                 </p>
               )}
-              {state.capabilities.type && meeting.types && (
+              {capabilities.type && meeting.types && (
                 <ul>
                   {meeting.types
                     .filter(type => type !== 'active')
@@ -364,16 +365,15 @@ export default function Meeting({
                       )}
                     </div>
                   )}
-                  {state.capabilities.sharing &&
-                    navigator.canShare(sharePayload) && (
-                      <Button
-                        icon="share"
-                        onClick={() =>
-                          navigator.share(sharePayload).catch(() => {})
-                        }
-                        text={strings.share}
-                      />
-                    )}
+                  {capabilities.sharing && navigator.canShare(sharePayload) && (
+                    <Button
+                      icon="share"
+                      onClick={() =>
+                        navigator.share(sharePayload).catch(() => {})
+                      }
+                      text={strings.share}
+                    />
+                  )}
                   {meeting.start && meeting.isActive && (
                     <Button
                       icon="calendar"
@@ -400,12 +400,7 @@ export default function Meeting({
                 {meeting.location_notes && (
                   <Paragraphs text={meeting.location_notes} />
                 )}
-                {formatWeekdays(
-                  locationWeekdays,
-                  meeting.slug,
-                  state,
-                  setState
-                )}
+                {formatWeekdays(locationWeekdays, meeting.slug)}
               </div>
             )}
             {meeting.group &&
@@ -423,7 +418,7 @@ export default function Meeting({
                     <Button {...button} key={index} />
                   ))}
 
-                  {formatWeekdays(groupWeekdays, meeting.slug, state, setState)}
+                  {formatWeekdays(groupWeekdays, meeting.slug)}
                 </div>
               )}
             {meeting.updated && (
@@ -446,13 +441,7 @@ export default function Meeting({
               : undefined
           }
         >
-          <Map
-            filteredSlugs={[meeting.slug]}
-            listMeetingsInPopup={false}
-            state={state}
-            setState={setState}
-            mapbox={mapbox}
-          />
+          <Map listMeetingsInPopup={false} />
         </div>
       </div>
     </div>
@@ -475,9 +464,7 @@ function Paragraphs({ text }: { text: string }) {
 
 function formatWeekdays(
   weekday: { name: string; meetings: MeetingType[] }[],
-  slug: string,
-  state: State,
-  setState: Dispatch<SetStateAction<State>>
+  slug: string
 ) {
   return weekday.map(({ meetings, name }, index) => (
     <div key={index}>
@@ -487,11 +474,7 @@ function formatWeekdays(
           <li key={index}>
             <div>{m.start?.toFormat('t')}</div>
             <div>
-              {m.slug === slug ? (
-                <Link meeting={m} />
-              ) : (
-                <Link meeting={m} setState={setState} state={state} />
-              )}
+              {m.slug === slug ? <Link meeting={m} /> : <Link meeting={m} />}
             </div>
             <div>
               {m.isInPerson && (

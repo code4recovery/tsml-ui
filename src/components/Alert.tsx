@@ -5,9 +5,7 @@ import { alertCss, errorCss } from '../styles';
 
 import Button from './Button';
 
-import type { State } from '../types';
-
-export default function Alert({ state }: { state: State }) {
+export default function Alert() {
   const [searchParams, setSearchParams] = useSearchParams();
   const { settings, strings } = useSettings();
   return state.error ? (

@@ -10,13 +10,25 @@ import type { JSONData, JSONDataFlat, State, Meeting, Index } from '../types';
 // set up meeting data; this is only run once when the app loads
 export function loadMeetingData(
   data: JSONData[],
-  capabilities: State['capabilities'],
   settings: TSMLReactConfig,
   strings: Translation,
   timezone?: string
 ): [State['meetings'], State['indexes'], State['capabilities']] {
   // meetings is a lookup
   const meetings: { [index: string]: Meeting } = {};
+
+  const capabilities: State['capabilities'] = {
+    coordinates: false,
+    distance: false,
+    geolocation: false,
+    inactive: false,
+    location: false,
+    region: false,
+    sharing: false,
+    time: false,
+    type: false,
+    weekday: false,
+  };
 
   // indexes start as objects, will be converted to arrays
   const indexes: State['indexes'] = {

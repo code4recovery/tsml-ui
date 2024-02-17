@@ -38,10 +38,7 @@ export default function Link({
   return (
     <>
       <NavLink
-        to={formatUrl({ ...state.input, meeting: meeting.slug }, settings)}
-        onClick={e => {
-          e.stopPropagation();
-        }}
+        to={formatUrl({ input: state.input, meeting: meeting.slug, settings })}
       >
         {meeting.name}
       </NavLink>

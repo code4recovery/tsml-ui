@@ -1,9 +1,17 @@
-import { formatString as i18n, getIndexByKey, useSettings } from '../helpers';
+import { useSearchParams } from 'react-router-dom';
 
-import type { State } from '../types';
+import {
+  formatString as i18n,
+  getIndexByKey,
+  useSettings,
+  getQueryString,
+} from '../helpers';
 
-export default function Title({ state: { indexes, input } }: { state: State }) {
-  const { strings } = useSettings();
+export default function Title() {
+  const { indexes, settings, strings } = useSettings();
+  const [searchParams] = useSearchParams();
+
+  const input = getQueryString(searchParams, settings);
 
   // build title from strings.title
   const parts: string[] = [];

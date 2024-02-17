@@ -1,5 +1,3 @@
-import { Dispatch, SetStateAction } from 'react';
-
 import { flattenAndSortIndexes } from './flatten-and-sort-indexes';
 import { formatString as i18n } from './format-string';
 
@@ -7,21 +5,25 @@ import type { Index, Meeting, State } from '../types';
 
 //calculate distances
 export function calculateDistances({
+  capabilities,
   latitude,
   longitude,
-  setState,
+  meetings,
+  // setState,
   settings,
-  state,
+  // state,
   strings,
 }: {
+  capabilities: State['capabilities'];
   latitude: number;
   longitude: number;
-  setState: Dispatch<SetStateAction<State>>;
+  meetings: State['meetings'];
+  // setState: Dispatch<SetStateAction<State>>;
   settings: TSMLReactConfig;
-  state: State;
+  // state: State;
   strings: Translation;
 }) {
-  const slugs = Object.keys(state.meetings);
+  const slugs = Object.keys(meetings);
   if (!slugs.length) return;
 
   //build new index and meetings array
@@ -46,14 +48,14 @@ export function calculateDistances({
   slugs.forEach(slug => {
     const distance = getDistance(
       { latitude, longitude },
-      state.meetings[slug],
+      meetings[slug],
       settings
     );
 
     if (typeof distance === 'undefined') return;
 
-    state.meetings[slug] = {
-      ...state.meetings[slug],
+    meetings[slug] = {
+      ...meetings[slug],
       distance,
     };
 
@@ -70,23 +72,25 @@ export function calculateDistances({
     distances,
     (a: Index, b: Index) => parseInt(a.key) - parseInt(b.key)
   );
-  state.capabilities.distance = !!distanceIndex.length;
+  capabilities.distance = !!distanceIndex.length;
 
   //this will cause a re-render with latitude and longitude now set
+  /*
   setState({
     ...state,
-    capabilities: state.capabilities,
+    capabilities: capabilities,
     indexes: {
-      ...state.indexes,
+      ...indexes,
       distance: distanceIndex,
     },
     input: {
-      ...state.input,
+      ...input,
       latitude: parseFloat(latitude.toFixed(5)),
       longitude: parseFloat(longitude.toFixed(5)),
     },
     ready: true,
   });
+  */
 }
 
 // Calculate the distance as the crow flies between two geometric points
