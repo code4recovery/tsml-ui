@@ -229,7 +229,10 @@ export default function Meeting() {
         </h1>
         <div css={meetingBackCss}>
           <Icon icon="back" />
-          <RouterLink to="/" preventScrollReset={true}>
+          <RouterLink
+            preventScrollReset={true}
+            to={`/${searchParams ? `?${searchParams}` : ''}`}
+          >
             {strings.back_to_meetings}
           </RouterLink>
         </div>

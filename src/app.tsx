@@ -3,11 +3,10 @@ import {
   createBrowserRouter,
   createHashRouter,
   defer,
-  isRouteErrorResponse,
   RouterProvider,
-  useRouteError,
 } from 'react-router-dom';
 
+import ErrorBoundary from './components/ErrorBoundary';
 import Index from './components/Index';
 import Meeting, { loader as meetingLoader } from './components/Meeting';
 import TsmlUI from './components/TsmlUI';
@@ -59,28 +58,4 @@ if (element) {
   createRoot(element).render(<RouterProvider router={router} />);
 } else {
   console.warn('TSML UI could not find a div#tsml-ui element');
-}
-
-function ErrorBoundary() {
-  const error = useRouteError();
-
-  if (isRouteErrorResponse(error)) {
-    if (error.status === 404) {
-      return <div>This page doesnt exist!</div>;
-    }
-
-    if (error.status === 401) {
-      return <div>You arent authorized to see this</div>;
-    }
-
-    if (error.status === 503) {
-      return <div>Looks like our API is down</div>;
-    }
-
-    if (error.status === 418) {
-      return <div>🫖</div>;
-    }
-  }
-
-  return <div>{JSON.stringify(error)}</div>;
 }
