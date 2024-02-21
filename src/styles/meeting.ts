@@ -25,10 +25,10 @@ export const meetingColumnsCss = css`
   ul {
     padding: 0 0 0 ${size.gutter * 1.5}px;
     button {
-      background-color: transparent;
-      background-image: none;
+      background-color: transparent !important;
+      background-image: none !important;
       border: none;
-      color: var(--text);
+      color: var(--text) !important;
       cursor: pointer;
       font-size: var(--font-size);
       line-height: 1;
@@ -36,6 +36,7 @@ export const meetingColumnsCss = css`
       text-align: left;
       text-shadow: none;
       vertical-align: text-top;
+      white-space: normal;
 
       > div {
         align-items: center;

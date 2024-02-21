@@ -26,9 +26,22 @@ export const controlsCss = css`
     display: flex;
   }
 
+  /* position right-edge dropdown menus so they dont go off-screen */
+  & > div:nth-child(2) > div > div {
+    right: 0;
+  }
+
   @media ${media.lgAndUp} {
     grid-auto-columns: minmax(0, 1fr);
     grid-auto-flow: column;
+
+    & > div:nth-child(2) > div > div {
+      right: auto;
+    }
+
+    & > div:last-child > div > div {
+      right: 0 !important;
+    }
   }
 `;
 
