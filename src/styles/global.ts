@@ -94,4 +94,8 @@ export const globalCss = css`
       ${tableCss}
     }
   }
+
+  body.twentyfourteen #page::before {
+    display: none;
+  }
 `;
