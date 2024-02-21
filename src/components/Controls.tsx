@@ -245,13 +245,12 @@ export default function Controls({
           </div>
         )}
       </form>
-      {filters.map((filter, index) => (
+      {filters.map(filter => (
         <div key={filter}>
           <Dropdown
             defaultValue={
               strings[`${filter}_any` as keyof typeof strings] as string
             }
-            end={!canShowViews && index === filters.length - 1}
             filter={filter}
             open={dropdown === filter}
             setDropdown={setDropdown}

@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 
-import { color, size } from './variables';
 import { dropdownButtonCss } from './button';
+import { color, size } from './variables';
 
 export const dropdownCss = css`
   position: relative;
@@ -36,6 +36,7 @@ export const dropdownCss = css`
       margin: 0;
       padding: ${size.gutter / 2}px ${size.gutter}px;
       text-align: left;
+      white-space: normal;
       width: 100%;
 
       span {

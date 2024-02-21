@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 
-import { media, size } from './variables';
 import { tableCss } from './table';
+import { media, size } from './variables';
 
 export const globalCss = css`
   html,
@@ -37,6 +37,7 @@ export const globalCss = css`
     font-size: var(--font-size);
     line-height: 1.5;
     padding: ${size.gutter}px;
+    width: 100%;
 
     * {
       box-sizing: border-box;
