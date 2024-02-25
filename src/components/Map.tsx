@@ -180,17 +180,23 @@ export default function Map({
       {viewport && !!data.locationKeys.length && (
         <ReactMapGL
           mapStyle={settings.map.style}
-          mapboxApiAccessToken={mapbox}
-          onViewportChange={setViewport}
-          {...viewport}
+          mapboxAccessToken={mapbox}
+          initialViewState={viewport}
+          onMove={event => {
+            setViewport({
+                ...viewport,
+                zoom: event.viewState.zoom,
+                latitude: event.viewState.latitude,
+                longitude: event.viewState.longitude,
+            })
+          }}
         >
           {data.locationKeys.map(key => (
             <div key={key}>
               <Marker
                 latitude={data.locations[key].latitude}
                 longitude={data.locations[key].longitude}
-                offsetLeft={-settings.map.markers.location.width / 2}
-                offsetTop={-settings.map.markers.location.height}
+                offset={[0,(-settings.map.markers.location.width / 1.5)]}
               >
                 <div
                   data-testid={key}
@@ -201,11 +207,10 @@ export default function Map({
               </Marker>
               {popup === key && (
                 <Popup
-                  captureScroll={true}
                   closeOnClick={false}
                   latitude={data.locations[key].latitude}
                   longitude={data.locations[key].longitude}
-                  offsetTop={-settings.map.markers.location.height / 1.5}
+                  offset={settings.map.markers.location.width / 2}
                   onClose={() => setPopup(undefined)}
                 >
                   <div>
@@ -248,7 +253,6 @@ export default function Map({
             </div>
           ))}
           <NavigationControl
-            onViewportChange={setViewport}
             showCompass={false}
             style={{ top: 10, right: 10 }}
           />
