@@ -14,14 +14,12 @@ import type { Index, State } from '../types';
 
 export default function Dropdown({
   defaultValue,
-  end,
   filter,
   open,
   setDropdown,
 }: // state,
 {
   defaultValue: string;
-  end: boolean;
   filter: keyof State['indexes'];
   open: boolean;
   setDropdown: Dispatch<SetStateAction<string | undefined>>;
@@ -126,10 +124,7 @@ export default function Dropdown({
       </button>
       <div
         aria-labelledby={filter}
-        style={{
-          display: open ? 'block' : 'none',
-          [end ? 'right' : 'left']: 0,
-        }}
+        style={{ display: open ? 'block' : 'none' }}
       >
         <button
           data-active={!values.length}

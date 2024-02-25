@@ -4,7 +4,7 @@ import ReactMapGL, { Marker, NavigationControl, Popup } from 'react-map-gl';
 import WebMercatorViewport from 'viewport-mercator-project';
 
 import { formatDirectionsUrl, useSettings } from '../helpers';
-import { mapCss, mapMeetingsCss } from '../styles';
+import { mapCss, mapPopupCss, mapPopupMeetingsCss } from '../styles';
 
 import Button from './Button';
 import Link from './Link';
@@ -174,17 +174,22 @@ export default function Map({
       {viewport && !!data.locationKeys.length && (
         <ReactMapGL
           mapStyle={settings.map.style}
-          mapboxApiAccessToken={settings.mapbox}
-          onViewportChange={setViewport}
-          {...viewport}
+          mapboxAccessToken={settings.mapbox}
+          initialViewState={viewport}
+          onMove={event => {
+            setViewport({
+              ...viewport,
+              zoom: event.viewState.zoom,
+              latitude: event.viewState.latitude,
+              longitude: event.viewState.longitude,
+            });
+          }}
         >
           {data.locationKeys.map(key => (
             <div key={key}>
               <Marker
                 latitude={data.locations[key].latitude}
                 longitude={data.locations[key].longitude}
-                offsetLeft={-settings.map.markers.location.width / 2}
-                offsetTop={-settings.map.markers.location.height}
               >
                 <div
                   data-testid={key}
@@ -195,20 +200,19 @@ export default function Map({
               </Marker>
               {popup === key && (
                 <Popup
-                  captureScroll={true}
                   closeOnClick={false}
+                  focusAfterOpen={false}
                   latitude={data.locations[key].latitude}
                   longitude={data.locations[key].longitude}
-                  offsetTop={-settings.map.markers.location.height / 1.5}
                   onClose={() => setPopup(undefined)}
                 >
-                  <div>
+                  <div css={mapPopupCss}>
                     <h2>{data.locations[key].name}</h2>
                     <p className="notranslate">
                       {data.locations[key].formatted_address}
                     </p>
                     {listMeetingsInPopup && (
-                      <div css={mapMeetingsCss}>
+                      <div css={mapPopupMeetingsCss}>
                         {data.locations[key].meetings
                           .sort((a, b) =>
                             a.start && b.start && a.start > b.start ? 1 : 0
@@ -242,7 +246,6 @@ export default function Map({
             </div>
           ))}
           <NavigationControl
-            onViewportChange={setViewport}
             showCompass={false}
             style={{ top: 10, right: 10 }}
           />

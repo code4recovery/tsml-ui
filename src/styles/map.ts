@@ -100,7 +100,14 @@ export const mapCss = css`
   }
 `;
 
-export const mapMeetingsCss = css`
+export const mapPopupCss = css`
+  display: grid;
+  font-family: var(--font-family);
+  font-size: var(--font-size);
+  gap: 12px;
+`;
+
+export const mapPopupMeetingsCss = css`
   margin-bottom: 4px;
   max-height: 250px;
   overflow-y: auto;
