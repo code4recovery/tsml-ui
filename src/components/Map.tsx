@@ -4,7 +4,7 @@ import ReactMapGL, { Marker, NavigationControl, Popup } from 'react-map-gl';
 import WebMercatorViewport from 'viewport-mercator-project';
 
 import { formatDirectionsUrl, useSettings } from '../helpers';
-import { mapCss, mapMeetingsCss } from '../styles';
+import { mapCss, mapPopupCss, mapPopupMeetingsCss } from '../styles';
 
 import Button from './Button';
 import Link from './Link';
@@ -196,7 +196,6 @@ export default function Map({
               <Marker
                 latitude={data.locations[key].latitude}
                 longitude={data.locations[key].longitude}
-                offset={[0, -settings.map.markers.location.width / 1.5]}
               >
                 <div
                   data-testid={key}
@@ -211,16 +210,15 @@ export default function Map({
                   focusAfterOpen={false}
                   latitude={data.locations[key].latitude}
                   longitude={data.locations[key].longitude}
-                  offset={settings.map.markers.location.width / 2}
                   onClose={() => setPopup(undefined)}
                 >
-                  <div>
+                  <div css={mapPopupCss}>
                     <h2>{data.locations[key].name}</h2>
                     <p className="notranslate">
                       {data.locations[key].formatted_address}
                     </p>
                     {listMeetingsInPopup && (
-                      <div css={mapMeetingsCss}>
+                      <div css={mapPopupMeetingsCss}>
                         {data.locations[key].meetings
                           .sort((a, b) =>
                             a.start && b.start && a.start > b.start ? 1 : 0
