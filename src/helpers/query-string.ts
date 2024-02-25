@@ -1,10 +1,10 @@
-import type { State } from '../types';
+import type { Input } from '../types';
 
 // load input values from query string
 export function getQueryString(
   query: URLSearchParams,
   settings: TSMLReactConfig
-): State['input'] {
+): Input {
   const input = { ...settings.defaults };
 
   // loop through filters

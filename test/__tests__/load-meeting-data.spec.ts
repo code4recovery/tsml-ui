@@ -25,12 +25,12 @@ describe('loadMeetingData', () => {
         formatted_address: 'Anytown, OK, USA',
       },
     ];
-    const [meetings, indexes, capabilities] = loadMeetingData(
+    const { capabilities, indexes, meetings } = loadMeetingData({
       data,
-      defaults,
-      defaults.strings[defaults.language],
-      'America/Los_Angeles'
-    );
+      settings: defaults,
+      strings: defaults.strings[defaults.language],
+      timezone: 'America/Los_Angeles',
+    });
     expect(meetings).toStrictEqual({
       'test-meeting': {
         address: '123 Main St',

@@ -8,12 +8,17 @@ import { formatSlug } from './format-slug';
 import type { JSONData, JSONDataFlat, State, Meeting, Index } from '../types';
 
 // set up meeting data; this is only run once when the app loads
-export function loadMeetingData(
-  data: JSONData[],
-  settings: TSMLReactConfig,
-  strings: Translation,
-  timezone?: string
-): [State['meetings'], State['indexes'], State['capabilities']] {
+export function loadMeetingData({
+  data,
+  settings,
+  strings,
+  timezone,
+}: {
+  data: JSONData[];
+  settings: TSMLReactConfig;
+  strings: Translation;
+  timezone?: string;
+}): State {
   // meetings is a lookup
   const meetings: { [index: string]: Meeting } = {};
 
@@ -523,7 +528,7 @@ export function loadMeetingData(
   // determine sharing
   capabilities.sharing = typeof navigator.canShare === 'function';
 
-  return [meetings, indexes, capabilities];
+  return { capabilities, indexes, meetings };
 }
 
 // look for data with multiple days and make them all single

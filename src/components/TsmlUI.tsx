@@ -22,13 +22,7 @@ export default function TsmlUI({
   settings: TSMLReactConfig;
   strings: Translation;
 }) {
-  const { data } = useLoaderData() as {
-    data: {
-      capabilities: State['capabilities'];
-      indexes: State['indexes'];
-      meetings: State['meetings'];
-    };
-  };
+  const { data } = useLoaderData() as { data: State };
 
   // manage classes
   useEffect(() => {

@@ -3,7 +3,7 @@ import { DateTime } from 'luxon';
 import { calculateDistances } from './calculate-distances';
 import { getIndexByKey } from './get-index-by-key';
 
-import type { State } from '../types';
+import type { Input, State } from '../types';
 
 //run filters on meetings; this is run at every render
 export function filterMeetingData({
@@ -14,13 +14,10 @@ export function filterMeetingData({
   settings,
   strings,
 }: {
-  capabilities: State['capabilities'];
-  indexes: State['indexes'];
-  input: State['input'];
-  meetings: State['meetings'];
+  input: Input;
   settings: TSMLReactConfig;
   strings: Translation;
-}) {
+} & State) {
   const matchGroups: string[][] = [];
   const now = DateTime.now();
   const now_offset = now.plus({ minute: settings.now_offset });

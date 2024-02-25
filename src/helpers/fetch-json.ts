@@ -66,12 +66,12 @@ export function fetchJson({
         }
       }
 
-      const [meetings, indexes, capabilities] = loadMeetingData(
+      const { capabilities, indexes, meetings } = loadMeetingData({
         data,
         settings,
         strings,
-        timezone
-      );
+        timezone,
+      });
 
       if (!timezone && !Object.keys(meetings).length) {
         throw new Error('Configuration error: time zone is not set.');
