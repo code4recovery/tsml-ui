@@ -184,11 +184,11 @@ export default function Map({
           initialViewState={viewport}
           onMove={event => {
             setViewport({
-                ...viewport,
-                zoom: event.viewState.zoom,
-                latitude: event.viewState.latitude,
-                longitude: event.viewState.longitude,
-            })
+              ...viewport,
+              zoom: event.viewState.zoom,
+              latitude: event.viewState.latitude,
+              longitude: event.viewState.longitude,
+            });
           }}
         >
           {data.locationKeys.map(key => (
@@ -196,7 +196,7 @@ export default function Map({
               <Marker
                 latitude={data.locations[key].latitude}
                 longitude={data.locations[key].longitude}
-                offset={[0,(-settings.map.markers.location.width / 1.5)]}
+                offset={[0, -settings.map.markers.location.width / 1.5]}
               >
                 <div
                   data-testid={key}
@@ -208,6 +208,7 @@ export default function Map({
               {popup === key && (
                 <Popup
                   closeOnClick={false}
+                  focusAfterOpen={false}
                   latitude={data.locations[key].latitude}
                   longitude={data.locations[key].longitude}
                   offset={settings.map.markers.location.width / 2}
