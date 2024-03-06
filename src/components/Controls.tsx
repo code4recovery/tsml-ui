@@ -24,7 +24,6 @@ import {
 } from '../styles';
 
 import Dropdown from './Dropdown';
-import Icon from './Icon';
 
 import type { State } from '../types';
 
@@ -262,14 +261,13 @@ export default function Controls({
         <div role="group">
           {views.map((view, index) => (
             <button
-              aria-label={strings.views[view]}
               css={index ? controlsGroupLastCss : controlsGroupFirstCss}
               data-active={state.input.view === view}
               key={view}
               onClick={e => setView(e, view)}
               type="button"
             >
-              <Icon icon={view} />
+              {strings.views[view]}
             </button>
           ))}
         </div>
