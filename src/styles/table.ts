@@ -54,7 +54,7 @@ export const tableCss = css`
   td {
     cursor: pointer;
     display: block;
-    padding: 0 ${size.gutter / 2}px 0 96px;
+    padding: 0 ${size.gutter / 2}px 0 103px;
     &.tsml-time,
     &.tsml-distance {
       padding-left: ${size.gutter / 2}px;
