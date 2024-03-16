@@ -46,10 +46,9 @@ export default function Controls() {
     .filter(filter => filter !== 'distance' || input.mode !== 'search');
 
   //get available views
-  const allViews = ['table', 'map'] as const;
-  const views = allViews.filter(
+  const views = ['list', 'map'].filter(
     view => view !== 'map' || (capabilities.coordinates && settings.mapbox)
-  );
+  ) as ('list' | 'map')[];
 
   //whether to show the views segmented button
   const canShowViews = views.length > 1;
@@ -161,10 +160,10 @@ export default function Controls() {
   };
 
   //toggle list/map view
-  const setView = (e: MouseEvent, view: 'table' | 'map') => {
+  const setView = (e: MouseEvent, view: 'list' | 'map') => {
     e.preventDefault();
 
-    if (view !== 'table') {
+    if (view !== 'list') {
       searchParams.set('view', view);
     } else {
       searchParams.delete('view');

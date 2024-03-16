@@ -70,7 +70,7 @@ export interface Translation {
   unnamed_meeting: string;
   updated: string;
   views: {
-    table: string;
+    list: string;
     map: string;
   };
   weekday_any: string;

@@ -4,8 +4,8 @@ import { filterMeetingData, getQueryString, useSettings } from '../helpers';
 
 import Alert from './Alert';
 import Controls from './Controls';
+import List from './List';
 import Map from './Map';
-import Table from './Table';
 import Title from './Title';
 
 export default function Index() {
@@ -39,7 +39,7 @@ export default function Index() {
           <Map filteredSlugs={filteredSlugs} />
         </div>
       ) : (
-        <Table filteredSlugs={filteredSlugs} inProgress={inProgress} />
+        <List filteredSlugs={filteredSlugs} inProgress={inProgress} />
       )}
     </>
   );

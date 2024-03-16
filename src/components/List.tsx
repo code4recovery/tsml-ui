@@ -15,7 +15,7 @@ import { Meeting } from '../types';
 import Icon, { icons } from './Icon';
 import Link from './Link';
 
-export default function Table({
+export default function List({
   filteredSlugs,
   inProgress,
 }: {

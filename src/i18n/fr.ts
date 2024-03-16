@@ -1,4 +1,5 @@
 import { getTypesForLanguage } from '@code4recovery/spec';
+
 import { Translation } from '../types';
 
 export const fr: Translation = {
@@ -83,7 +84,7 @@ export const fr: Translation = {
   unnamed_meeting: 'Réunion sans nom',
   updated: 'Mis à jour le %updated%',
   views: {
-    table: 'Liste',
+    list: 'Liste',
     map: 'Carte',
   },
   weekday_any: 'Tous les jours',
