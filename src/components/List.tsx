@@ -3,7 +3,7 @@ import { useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
-import { formatString as i18n, useSettings } from '../helpers';
+import { formatString as i18n, useData, useSettings } from '../helpers';
 import {
   tableChicletCss,
   tableChicletsCss,
@@ -22,8 +22,11 @@ export default function List({
   filteredSlugs: string[];
   inProgress: string[];
 }) {
+  const {
+    capabilities: { distance, location, region },
+    meetings,
+  } = useData();
   const { settings, strings } = useSettings();
-  const { meetings } = useSettings();
   const navigate = useNavigate();
   const meetingsPerPage = 10;
   const supported_columns = [
@@ -37,8 +40,6 @@ export default function List({
   ];
   const [limit, setLimit] = useState(meetingsPerPage);
   const [showInProgress, setShowInProgress] = useState(false);
-  const { capabilities } = useSettings();
-  const { distance, location, region } = capabilities;
 
   //show columns based on capabilities
   const columns = settings.columns

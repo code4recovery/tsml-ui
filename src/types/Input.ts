@@ -8,6 +8,6 @@ export type Input = {
   search?: string;
   time: TSMLReactConfig['times'];
   type: string[];
-  view: 'table' | 'map';
+  view: 'list' | 'map';
   weekday: TSMLReactConfig['weekdays'];
 };

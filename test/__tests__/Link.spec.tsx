@@ -1,11 +1,11 @@
 import React from 'react';
+
 import { screen, render, fireEvent } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 
-import { Meeting } from '../../src/types';
 import Link from '../../src/components/Link';
-import { SettingsContext, mergeSettings } from '../../src/helpers/settings';
-import { mockState } from '../__fixtures__';
+import { SettingsProvider, mergeSettings } from '../../src/helpers/settings';
+import { Meeting } from '../../src/types';
 
 const mockMeeting: Meeting = {
   name: 'Foo',
@@ -21,9 +21,9 @@ describe('<Link />', () => {
     });
 
     render(
-      <SettingsContext.Provider value={mockSettings}>
-        <Link meeting={mockMeeting} state={undefined} setState={undefined} />
-      </SettingsContext.Provider>
+      <SettingsProvider value={mockSettings}>
+        <Link meeting={mockMeeting} />
+      </SettingsProvider>
     );
 
     expect(screen.queryByText(/men/i)).toBeNull();
@@ -32,9 +32,9 @@ describe('<Link />', () => {
   it('works without props', () => {
     const mockSettings = mergeSettings();
     render(
-      <SettingsContext.Provider value={mockSettings}>
-        <Link meeting={mockMeeting} state={undefined} setState={undefined} />
-      </SettingsContext.Provider>
+      <SettingsProvider value={mockSettings}>
+        <Link meeting={mockMeeting} />
+      </SettingsProvider>
     );
 
     expect(screen.getByText(mockMeeting.name)).toBeInTheDocument();
@@ -48,26 +48,20 @@ describe('<Link />', () => {
     });
 
     render(
-      <SettingsContext.Provider value={mockSettings}>
-        <Link meeting={mockMeeting} state={undefined} setState={undefined} />
-      </SettingsContext.Provider>
+      <SettingsProvider value={mockSettings}>
+        <Link meeting={mockMeeting} />
+      </SettingsProvider>
     );
 
     expect(screen.getByText(/men/i)).toBeInTheDocument();
   });
 
   it('works with setState', () => {
-    const mockSetState = jest.fn();
-
     render(
       <MemoryRouter>
-        <SettingsContext.Provider value={mergeSettings()}>
-          <Link
-            meeting={mockMeeting}
-            state={mockState}
-            setState={mockSetState}
-          />
-        </SettingsContext.Provider>
+        <SettingsProvider value={mergeSettings()}>
+          <Link meeting={mockMeeting} />
+        </SettingsProvider>
       </MemoryRouter>
     );
 

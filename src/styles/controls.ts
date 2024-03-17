@@ -27,7 +27,7 @@ export const controlsCss = css`
   }
 
   /* position right-edge dropdown menus so they dont go off-screen */
-  & > div:nth-child(2) > div > div {
+  & > div:nth-of-type(1) > div > div {
     right: 0;
   }
 
@@ -35,7 +35,7 @@ export const controlsCss = css`
     grid-auto-columns: minmax(0, 1fr);
     grid-auto-flow: column;
 
-    & > div:nth-child(2) > div > div {
+    & > div:nth-of-type(1) > div > div {
       right: auto;
     }
 

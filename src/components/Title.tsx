@@ -1,18 +1,15 @@
 import { Helmet } from 'react-helmet';
-import { useSearchParams } from 'react-router-dom';
 
 import {
   formatString as i18n,
   getIndexByKey,
   useSettings,
-  getQueryString,
+  useData,
 } from '../helpers';
 
 export default function Title() {
-  const { indexes, settings, strings } = useSettings();
-  const [searchParams] = useSearchParams();
-
-  const input = getQueryString(searchParams, settings);
+  const { indexes, input } = useData();
+  const { strings } = useSettings();
 
   // build title from strings.title
   const parts: string[] = [];

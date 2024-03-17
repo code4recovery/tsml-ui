@@ -5,8 +5,8 @@ import { useSearchParams } from 'react-router-dom';
 import {
   formatString as i18n,
   getIndexByKey,
+  useData,
   useSettings,
-  getQueryString,
 } from '../helpers';
 import { dropdownButtonCss, dropdownCss } from '../styles';
 
@@ -17,17 +17,14 @@ export default function Dropdown({
   filter,
   open,
   setDropdown,
-}: // state,
-{
+}: {
   defaultValue: string;
   filter: keyof State['indexes'];
   open: boolean;
   setDropdown: Dispatch<SetStateAction<string | undefined>>;
-  // state: State;
 }) {
-  const { indexes, settings } = useSettings();
+  const { indexes, input } = useData();
   const [searchParams, setSearchParams] = useSearchParams();
-  const input = getQueryString(searchParams, settings);
   const { strings } = useSettings();
   const options = indexes[filter];
   const values = input[filter];

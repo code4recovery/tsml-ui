@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 type Translation = import('./src/types/Translation').Translation;
 type Lang = import('@code4recovery/spec').Language;
 
@@ -13,7 +14,7 @@ interface TSMLReactConfig {
     search: string;
     time: TSMLReactConfig['times'];
     type: string[];
-    view: 'table' | 'map';
+    view: 'list' | 'map';
     weekday: TSMLReactConfig['weekdays'];
   };
   distance_options: number[];

@@ -14,6 +14,7 @@ import {
   formatFeedbackEmail,
   formatIcs,
   formatString as i18n,
+  useData,
   useSettings,
 } from '../helpers';
 import {
@@ -35,7 +36,8 @@ import type { Meeting as MeetingType } from '../types';
 export const loader = ({ params }: LoaderFunctionArgs) => params;
 
 export default function Meeting() {
-  const { capabilities, meetings, settings, strings } = useSettings();
+  const { capabilities, meetings } = useData();
+  const { settings, strings } = useSettings();
   const { feedback_emails } = settings;
   const { meetingSlug } = useLoaderData() as { meetingSlug: string };
   const [searchParams] = useSearchParams();

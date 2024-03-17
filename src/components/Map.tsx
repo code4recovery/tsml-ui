@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import ReactMapGL, { Marker, NavigationControl, Popup } from 'react-map-gl';
 import WebMercatorViewport from 'viewport-mercator-project';
 
-import { formatDirectionsUrl, useSettings } from '../helpers';
+import { formatDirectionsUrl, useData, useSettings } from '../helpers';
 import { mapCss, mapPopupCss, mapPopupMeetingsCss } from '../styles';
 
 import Button from './Button';
@@ -44,7 +44,8 @@ export default function Map({
   filteredSlugs: string[];
   listMeetingsInPopup?: boolean;
 }) {
-  const { meetings, settings, strings } = useSettings();
+  const { meetings } = useData();
+  const { settings, strings } = useSettings();
   const [popup, setPopup] = useState<string | undefined>();
   const [viewport, setViewport] = useState<Viewport | undefined>();
   const [data, setData] = useState<{

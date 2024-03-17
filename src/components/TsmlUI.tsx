@@ -8,7 +8,7 @@ import {
   useLoaderData,
 } from 'react-router-dom';
 
-import { SettingsContext } from '../helpers';
+import { DataProvider, SettingsProvider } from '../helpers';
 import { globalCss } from '../styles';
 
 import { default as Loading } from './Loading';
@@ -40,18 +40,18 @@ export default function TsmlUI({
   }, [window.location.hash]);
 
   return (
-    <>
+    <SettingsProvider value={{ settings, strings }}>
       <Global styles={globalCss} />
       <Suspense fallback={<Loading />}>
         <Await resolve={data}>
           {data => (
-            <SettingsContext.Provider value={{ ...data, settings, strings }}>
+            <DataProvider {...data}>
               <Outlet />
-            </SettingsContext.Provider>
+            </DataProvider>
           )}
         </Await>
       </Suspense>
       <ScrollRestoration />
-    </>
+    </SettingsProvider>
   );
 }

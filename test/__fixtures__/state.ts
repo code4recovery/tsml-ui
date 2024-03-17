@@ -20,16 +20,5 @@ export const mockState: State = {
     type: [],
     weekday: [],
   },
-  input: {
-    distance: [],
-    region: [],
-    time: [],
-    type: [],
-    weekday: [],
-    mode: 'search',
-    view: 'table',
-  },
-  loading: false,
   meetings: {},
-  ready: true,
 };

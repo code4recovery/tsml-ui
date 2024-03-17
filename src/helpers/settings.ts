@@ -4,7 +4,6 @@ import merge from 'deepmerge';
 import { Settings } from 'luxon';
 
 import { en, es, fr, ja, sv } from '../i18n';
-import { State } from '../types';
 
 // override these on your page with tsml_react_config
 export const defaults: TSMLReactConfig = {
@@ -33,7 +32,7 @@ export const defaults: TSMLReactConfig = {
     search: '',
     time: [],
     type: [],
-    view: 'table',
+    view: 'list',
     weekday: [],
   },
   distance_options: [1, 2, 5, 10, 15, 25],
@@ -124,35 +123,12 @@ export function mergeSettings(userSettings?: Partial<TSMLReactConfig>) {
   return { settings, strings };
 }
 
-export const SettingsContext = createContext<{
-  capabilities: State['capabilities'];
-  meetings: State['meetings'];
-  indexes: State['indexes'];
+const SettingsContext = createContext<{
   settings: TSMLReactConfig;
   strings: Translation;
 }>({
   settings: defaults,
   strings: en,
-  capabilities: {
-    coordinates: false,
-    distance: false,
-    geolocation: false,
-    inactive: false,
-    location: false,
-    region: false,
-    sharing: false,
-    time: false,
-    type: false,
-    weekday: false,
-  },
-  meetings: {},
-  indexes: {
-    distance: [],
-    region: [],
-    time: [],
-    type: [],
-    weekday: [],
-  },
 });
 
 export const useSettings = () => useContext(SettingsContext);

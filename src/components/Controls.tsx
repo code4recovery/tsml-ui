@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 import { useSearchParams } from 'react-router-dom';
 
-import { getQueryString, useSettings } from '../helpers';
+import { useData, useSettings } from '../helpers';
 import {
   controlsCss,
   controlsGroupFirstCss,
@@ -15,9 +15,9 @@ import Search from './Search';
 type View = 'list' | 'map';
 
 export default function Controls() {
-  const { capabilities, meetings, settings, strings } = useSettings();
+  const { capabilities, input, meetings } = useData();
   const [searchParams, setSearchParams] = useSearchParams();
-  const input = getQueryString(searchParams, settings);
+  const { settings, strings } = useSettings();
   const [dropdown, setDropdown] = useState<string>();
 
   // get available filters
@@ -42,10 +42,10 @@ export default function Controls() {
 
   // toggle list/map view
   const setView = (view: View) => {
-    if (view === 'map') {
-      searchParams.set('view', view);
-    } else {
+    if (view === settings.defaults.view) {
       searchParams.delete('view');
+    } else {
+      searchParams.set('view', view);
     }
 
     setSearchParams(searchParams);

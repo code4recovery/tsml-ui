@@ -1,16 +1,17 @@
 import React from 'react';
+
 import { fireEvent, render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 
+import List from '../../src/components/List';
 import {
-  SettingsContext,
+  SettingsProvider,
   formatString as i18n,
   mergeSettings,
 } from '../../src/helpers';
-import Table from '../../src/components/Table';
 import { mockMeeting, mockState } from '../__fixtures__';
 
-describe('<Table />', () => {
+describe('<List />', () => {
   const mockStateWithMeeting = {
     ...mockState,
     meetings: {
@@ -22,17 +23,11 @@ describe('<Table />', () => {
   const settings = mergeSettings();
 
   it('renders with clickable rows', () => {
-    const mockSetState = jest.fn();
     render(
       <MemoryRouter>
-        <SettingsContext.Provider value={settings}>
-          <Table
-            filteredSlugs={filteredSlugs}
-            inProgress={[]}
-            setState={mockSetState}
-            state={mockStateWithMeeting}
-          />
-        </SettingsContext.Provider>
+        <SettingsProvider value={settings}>
+          <List filteredSlugs={filteredSlugs} inProgress={[]} />
+        </SettingsProvider>
       </MemoryRouter>
     );
 
@@ -45,18 +40,12 @@ describe('<Table />', () => {
 
   it('displays single meeting in progress', () => {
     const inProgress = [filteredSlugs[0]];
-    const mockSetState = jest.fn();
 
     render(
       <MemoryRouter>
-        <SettingsContext.Provider value={settings}>
-          <Table
-            filteredSlugs={filteredSlugs}
-            inProgress={['foo']}
-            setState={mockSetState}
-            state={mockStateWithMeeting}
-          />
-        </SettingsContext.Provider>
+        <SettingsProvider value={settings}>
+          <List filteredSlugs={filteredSlugs} inProgress={['foo']} />
+        </SettingsProvider>
       </MemoryRouter>
     );
 
@@ -76,8 +65,6 @@ describe('<Table />', () => {
   });
 
   it('displays multiple meetings in progress', () => {
-    const mockSetState = jest.fn();
-
     const mockStateWithMeetings = {
       ...mockStateWithMeeting,
       meetings: {
@@ -93,14 +80,9 @@ describe('<Table />', () => {
 
     render(
       <MemoryRouter>
-        <SettingsContext.Provider value={settings}>
-          <Table
-            filteredSlugs={multiFilteredSlugs}
-            inProgress={inProgress}
-            setState={mockSetState}
-            state={mockStateWithMeetings}
-          />
-        </SettingsContext.Provider>
+        <SettingsProvider value={settings}>
+          <List filteredSlugs={multiFilteredSlugs} inProgress={inProgress} />
+        </SettingsProvider>
       </MemoryRouter>
     );
 

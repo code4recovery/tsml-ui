@@ -3,8 +3,8 @@ import { useSearchParams } from 'react-router-dom';
 import {
   formatString as i18n,
   getIndexByKey,
+  useData,
   useSettings,
-  getQueryString,
 } from '../helpers';
 import { alertCss, errorCss } from '../styles';
 
@@ -18,8 +18,8 @@ export default function Alert({
   error?: string;
 }) {
   const [searchParams, setSearchParams] = useSearchParams();
-  const { indexes, settings, strings } = useSettings();
-  const input = getQueryString(searchParams, settings);
+  const { indexes, input } = useData();
+  const { settings, strings } = useSettings();
 
   return error ? (
     <div css={errorCss}>{error}</div>

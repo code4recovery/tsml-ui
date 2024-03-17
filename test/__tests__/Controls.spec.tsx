@@ -4,35 +4,12 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 
 import Controls from '../../src/components/Controls';
-import { mergeSettings, SettingsContext } from '../../src/helpers';
-import { mockMeeting, mockState } from '../__fixtures__';
+import { mergeSettings, SettingsProvider } from '../../src/helpers';
 
 describe('<Controls />', () => {
   jest.useFakeTimers();
 
-  const mockStateWithControls = {
-    ...mockState,
-    capabilities: {
-      ...mockState.capabilities,
-      coordinates: true,
-      geolocation: true,
-      region: true,
-      distance: true,
-    },
-    indexes: {
-      ...mockState.indexes,
-      distance: [{ name: 'Foo', key: 'foo', slugs: [] }],
-      region: [{ name: 'Bar', key: 'bar', slugs: [] }],
-    },
-    meetings: {
-      foo: { ...mockMeeting, search: 'foo' },
-      bar: { ...mockMeeting, search: 'bar' },
-    },
-  };
-
   const mockSetState = jest.fn();
-
-  const mapbox = 'pk.abc123';
 
   const settings = mergeSettings();
   const { region_any, modes, views } = settings.strings;
@@ -40,9 +17,9 @@ describe('<Controls />', () => {
   it('is empty with no meetings', () => {
     const { container } = render(
       <MemoryRouter>
-        <SettingsContext.Provider value={settings}>
-          <Controls state={mockState} setState={mockSetState} />
-        </SettingsContext.Provider>
+        <SettingsProvider value={settings}>
+          <Controls />
+        </SettingsProvider>
       </MemoryRouter>
     );
     expect(container.firstChild).toBeNull();
@@ -51,11 +28,7 @@ describe('<Controls />', () => {
   it('has clickable dropdowns', () => {
     render(
       <MemoryRouter>
-        <Controls
-          state={mockStateWithControls}
-          setState={mockSetState}
-          mapbox={mapbox}
-        />
+        <Controls />
       </MemoryRouter>
     );
 
@@ -84,7 +57,7 @@ describe('<Controls />', () => {
   it('has working text search', () => {
     render(
       <MemoryRouter>
-        <Controls state={mockStateWithControls} setState={mockSetState} />
+        <Controls />
       </MemoryRouter>
     );
 
@@ -106,18 +79,7 @@ describe('<Controls />', () => {
   it('has working location search', () => {
     render(
       <MemoryRouter>
-        <Controls
-          state={{
-            ...mockStateWithControls,
-            input: {
-              ...mockStateWithControls.input,
-              mode: 'location',
-              view: 'map',
-            },
-          }}
-          setState={mockSetState}
-          mapbox={mapbox}
-        />
+        <Controls />
       </MemoryRouter>
     );
 

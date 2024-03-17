@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 
 import { useSearchParams } from 'react-router-dom';
 
-import { analyticsEvent, getQueryString, useSettings } from '../helpers';
+import { analyticsEvent, useData, useSettings } from '../helpers';
 import {
   controlsInputCss,
   controlsInputFirstCss,
@@ -21,10 +21,10 @@ export default function Search({
   dropdown?: string;
   setDropdown: (_value?: string) => void;
 }) {
-  const { capabilities, settings, strings } = useSettings();
+  const { capabilities, input } = useData();
+  const { settings, strings } = useSettings();
   const searchInput = useRef<HTMLInputElement>(null);
   const [searchParams, setSearchParams] = useSearchParams();
-  const input = getQueryString(searchParams, settings);
   const [search, setSearch] = useState(input.search);
 
   const setSearchParam = () => {
