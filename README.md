@@ -1,6 +1,6 @@
 # TSML UI &nbsp; [![Coverage Status](https://coveralls.io/repos/github/code4recovery/tsml-ui/badge.svg?branch=main)](https://coveralls.io/github/code4recovery/tsml-ui?branch=main)
 
-TSML UI (12 Step Meeting List User Interface) is an interactive meeting finder makes the [12 Step Meeting List](https://github.com/code4recovery/12-step-meeting-list) interface available for use on any web page, regardless of platform.
+TSML UI (12 Step Meeting List User Interface) is an interactive meeting finder that makes the [12 Step Meeting List](https://github.com/code4recovery/12-step-meeting-list) UI available for use on any web page, regardless of platform.
 
 Here are two demos:
 
@@ -72,6 +72,22 @@ var tsml_react_config = {
   },
 };
 ```
+
+### Pretty permalinks
+
+When embedding TSML UI on a custom site, individual meetings by default have "hash permalink" URLs in the format `<base>#/<slug>` (for example: `/meetings#/get-well-group`).
+
+If your hosting supports URL rewriting, then it is possible to have more attractive permalinks (for example: `/meetings/get-well-group`). To achieve this, you will need to add a rewrite rule to your server configuration so that all requests to sub-pages (`/meetings/*`) are rewritten to your base page (`/meetings`). Once this is done, add a `data-path="/meetings"` attribute to your TSML UI embed code.
+
+The [12 Step Meeting List plugin](https://wordpress.org/plugins/12-step-meeting-list/) applies this configuration by default. However if you are using WordPress and prefer not to use the plugin, you can add a rewrite rule to your theme's `functions.php` file:
+
+```php
+add_action('init', function () {
+    add_rewrite_rule('^meetings/(.*)?', 'index.php?pagename=meetings', 'top');
+});
+```
+
+It's recommended to use the standard base page name `meetings` for consistency with other websites.
 
 ### Customize theme colors
 
