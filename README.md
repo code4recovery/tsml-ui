@@ -1,6 +1,6 @@
 # TSML UI &nbsp; [![Coverage Status](https://coveralls.io/repos/github/code4recovery/tsml-ui/badge.svg?branch=main)](https://coveralls.io/github/code4recovery/tsml-ui?branch=main)
 
-TSML UI (12 Step Meeting List User Interface) is an interactive meeting finder that makes the [12 Step Meeting List](https://github.com/code4recovery/12-step-meeting-list) UI available for use on any web page, regardless of platform.
+TSML UI (12 Step Meeting List User Interface) is an open-source interactive recovery meeting finder that can be added to any website.
 
 Here are two demos:
 
