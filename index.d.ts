@@ -3,7 +3,6 @@ type Translation = import('./src/types/Translation').Translation;
 type Lang = import('@code4recovery/spec').Language;
 
 interface TSMLReactConfig {
-  cache: boolean;
   columns: string[];
   conference_providers: Record<string, string>;
   defaults: {

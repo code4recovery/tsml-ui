@@ -16,6 +16,8 @@ export function fetchJson({
   strings: Translation;
   timezone?: string;
 }) {
+  console.log('fetchJson', src, settings, strings, timezone);
+
   if (!src) {
     throw new Error('Configuration error: a data source is required.');
   }
@@ -41,6 +43,8 @@ export function fetchJson({
   return fetch(src)
     .then(res => (res.ok ? res.json() : Promise.reject(res.status)))
     .then(data => {
+      console.log('fetched data');
+
       if (sheetId) {
         data = translateGoogleSheet(data, sheetId, settings);
       }

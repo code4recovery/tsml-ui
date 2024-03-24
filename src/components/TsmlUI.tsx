@@ -22,7 +22,7 @@ export default function TsmlUI({
   settings: TSMLReactConfig;
   strings: Translation;
 }) {
-  const { data } = useLoaderData() as { data: State };
+  const data = useLoaderData() as { fetcher: Promise<State> };
 
   // manage classes
   useEffect(() => {
@@ -32,20 +32,21 @@ export default function TsmlUI({
     };
   }, []);
 
-  // clean up any unsightly empty hashes added by react router
+  /* clean up any unsightly empty hashes added by react router
   useEffect(() => {
     if (window.location.hash === '#' || window.location.hash === '#/') {
       window.history.replaceState('', document.title, window.location.pathname);
     }
   }, [window.location.hash]);
+*/
 
   return (
     <SettingsProvider value={{ settings, strings }}>
       <Global styles={globalCss} />
       <Suspense fallback={<Loading />}>
-        <Await resolve={data}>
-          {data => (
-            <DataProvider {...data}>
+        <Await resolve={data.fetcher}>
+          {state => (
+            <DataProvider {...state}>
               <Outlet />
             </DataProvider>
           )}

@@ -3,6 +3,7 @@ import {
   createBrowserRouter,
   createHashRouter,
   defer,
+  LoaderFunctionArgs,
   RouterProvider,
 } from 'react-router-dom';
 
@@ -33,17 +34,25 @@ if (element) {
     timezone,
   });
 
-  // loader function is here instead of in the TSML UI component so these vars can be available
-  const loader = () =>
-    defer({
-      data: fetchJson({ google, settings, src, strings, timezone }),
+  const loader = async ({ params }: LoaderFunctionArgs) => {
+    console.log('loader', params, src, settings, strings, timezone);
+    return defer({
+      fetcher: fetchJson({ google, settings, src, strings, timezone }),
     });
+  };
 
   const routes = [
     {
       children: [
-        { path: '', element: <Index /> },
-        { path: `:meetingSlug`, element: <Meeting />, loader: meetingLoader },
+        {
+          element: <Index />,
+          path: '',
+          loader: () => {
+            console.log('index loader');
+            return null;
+          },
+        },
+        { element: <Meeting />, loader: meetingLoader, path: `:meetingSlug` },
       ],
       element: <TsmlUI settings={settings} strings={strings} />,
       errorElement: <ErrorBoundary />,
@@ -51,10 +60,13 @@ if (element) {
     },
   ];
 
+  console.log('creating router', basename);
+
   const router = basename
     ? createBrowserRouter(routes, { basename })
     : createHashRouter(routes);
 
+  console.log('creating root', basename);
   createRoot(element).render(<RouterProvider router={router} />);
 } else {
   console.warn('TSML UI could not find a div#tsml-ui element');

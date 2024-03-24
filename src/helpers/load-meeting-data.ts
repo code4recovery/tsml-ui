@@ -19,6 +19,8 @@ export function loadMeetingData({
   strings: Translation;
   timezone?: string;
 }): State {
+  console.log('loadMeetingData', data.length);
+
   // meetings is a lookup
   const meetings: { [index: string]: Meeting } = {};
 
