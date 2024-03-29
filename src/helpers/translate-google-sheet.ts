@@ -104,6 +104,7 @@ export function translateGoogleSheet(
     }
 
     if (meeting.day && typeof meeting.day === 'string') {
+      meeting.day = meeting.day.trim();
       if (meeting.day in validDays) {
         meeting.day = validDays[meeting.day];
       } else {
