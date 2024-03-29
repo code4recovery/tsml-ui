@@ -1,6 +1,6 @@
 {
   "name": "tsml-ui",
-  "version": "1.7.14",
+  "version": "1.7.15",
   "private": false,
   "license": "MIT",
   "scripts": {
@@ -39,7 +39,7 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
-    "@code4recovery/spec": "^1.0.5",
+    "@code4recovery/spec": "1.0.6",
     "@emotion/react": "^11.11.1",
     "deepmerge": "^4.3.1",
     "luxon": "^3.3.0",
