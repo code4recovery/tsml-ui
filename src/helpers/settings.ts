@@ -3,7 +3,7 @@ import { createContext, useContext } from 'react';
 import merge from 'deepmerge';
 import { Settings } from 'luxon';
 
-import { en, es, fr, ja, sv } from '../i18n';
+import { en, es, fr, ja, sv, sk } from '../i18n';
 
 // override these on your page with tsml_react_config
 export const defaults: TSMLReactConfig = {
@@ -79,6 +79,7 @@ export const defaults: TSMLReactConfig = {
     fr,
     ja,
     sv,
+    sk,
   },
   times: ['morning', 'midday', 'evening', 'night'],
   weekdays: [
