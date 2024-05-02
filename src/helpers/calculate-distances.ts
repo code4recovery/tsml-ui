@@ -64,6 +64,18 @@ export function calculateDistances({
     });
   });
 
+  //remove redundant distances at 50 and higher distances, unless requested via query param
+  let slugMax = 0;
+  let queryDistance = Array.isArray(state.input?.distance) ? state.input.distance[0] : 0;
+  Object.entries(distances).forEach(([val, distance]) => {
+    if (50 <= parseInt(val) && val !== queryDistance) {
+      if (slugMax >= distance.slugs.length) {
+        delete distances[val];
+      }
+    }
+    slugMax = Math.max(slugMax, distance.slugs.length);
+  })
+
   //flatten index and set capability
   const distanceIndex = flattenAndSortIndexes(
     // @ts-expect-error TODO
