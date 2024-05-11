@@ -52,6 +52,8 @@ export function translateGoogleSheet(
     if (!row.filter(e => e).length) return;
 
     const meeting: JSONData = {};
+    // trim cells
+    row = row.map(cell => String(cell).trim());
 
     // fill values
     headers.forEach((header, index) => {
