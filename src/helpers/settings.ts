@@ -35,7 +35,7 @@ export const defaults: TSMLReactConfig = {
     view: 'table',
     weekday: [],
   },
-  distance_options: [1, 2, 5, 10, 15, 25],
+  distance_options: [1, 2, 5, 10, 15, 25, 50, 100],
   distance_unit: 'mi', //mi or km
   duration: 60,
   feedback_emails: [], //email addresses for update meeting info button
