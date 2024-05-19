@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+
 type Translation = import('./src/types/Translation').Translation;
 type Lang = import('@code4recovery/spec').Language;
 

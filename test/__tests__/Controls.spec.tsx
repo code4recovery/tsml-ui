@@ -76,7 +76,7 @@ describe('<Controls />', () => {
     fireEvent.click(locationLink);
 
     //expect stateful thing to happen
-    expect(mockSetState).toBeCalledTimes(1);
+    expect(mockSetState).toHaveBeenCalledTimes(1);
 
     jest.runAllTimers();
   });
@@ -98,7 +98,7 @@ describe('<Controls />', () => {
       fireEvent.submit(form);
     }
 
-    expect(mockSetState).toBeCalledTimes(2);
+    expect(mockSetState).toHaveBeenCalledTimes(2);
 
     jest.runAllTimers();
   });
@@ -137,9 +137,9 @@ describe('<Controls />', () => {
     fireEvent.click(button);
 
     //toggle map button
-    const mapButton = screen.getByLabelText(views.map);
+    const mapButton = screen.getByText(views.map);
     fireEvent.click(mapButton);
 
-    expect(mockSetState).toBeCalledTimes(4);
+    expect(mockSetState).toHaveBeenCalledTimes(4);
   });
 });
