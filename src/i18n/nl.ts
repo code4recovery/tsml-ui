@@ -73,7 +73,7 @@ export const nl = {
     O: 'Er zijn open bijeenkomsten beschikbaar voor iedereen die geïnteresseerd is in het herstelprogramma van de Anonieme Alcoholisten van alcoholisme. Niet-alcoholisten kunnen als waarnemer open bijeenkomsten bijwonen.',
   },
   types: {
-    ...getTypesForLanguage('en'),
+    ...getTypesForLanguage('nl'),
     active: 'Actief',
     inactive: 'Inactief',
     'in-person': 'Fysiek',
