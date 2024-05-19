@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 
 type Translation = import('./src/types/Translation').Translation;
-type Lang = import('@code4recovery/spec').Language | 'nl'; //stopgap until dutch is added to the spec
+type Lang = import('@code4recovery/spec').Language;
 
 interface TSMLReactConfig {
   cache: boolean;
