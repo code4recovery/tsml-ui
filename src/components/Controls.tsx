@@ -129,6 +129,14 @@ export default function Controls({
         search,
       },
     });
+
+    if (search) {
+      searchParams.set('search', search);
+    } else {
+      searchParams.delete('search');
+    }
+
+    setSearchParams(searchParams);
   };
 
   //set search mode dropdown and clear all distances
