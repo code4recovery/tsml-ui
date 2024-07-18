@@ -374,7 +374,7 @@ export default function Meeting({
                         text={strings.share}
                       />
                     )}
-                  {meeting.start && meeting.isActive && (
+                  {meeting.start && meeting.isActive && settings.calendar_enabled && (
                     <Button
                       icon="calendar"
                       onClick={() => formatIcs(meeting)}
