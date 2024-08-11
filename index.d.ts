@@ -5,6 +5,7 @@ type Lang = import('@code4recovery/spec').Language;
 
 interface TSMLReactConfig {
   cache: boolean;
+  calendar_enabled: boolean;
   columns: string[];
   conference_providers: Record<string, string>;
   defaults: {

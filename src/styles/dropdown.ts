@@ -13,7 +13,7 @@ export const dropdownCss = css`
     min-width: 100%;
     overflow: hidden;
     position: absolute;
-    z-index: 1;
+    z-index: 1000;
 
     hr {
       background-color: ${color.medium};

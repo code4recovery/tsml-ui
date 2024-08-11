@@ -61,6 +61,15 @@ var tsml_react_config = {
 };
 ```
 
+### Disable Add to Calendar button
+
+You can disable the add to calendar button if needed.
+```js
+var tsml_react_config = {
+  calendar_enabled: false,
+};
+```
+
 ### Change the map style
 
 Mapbox maps can be styled by picking a [classic Mapbox style](https://docs.mapbox.com/api/maps/styles/#classic-mapbox-styles) or creating a [custom map style](https://docs.mapbox.com/studio-manual/guides/map-styling/) and adding it to the `tsml_react_config` object.
