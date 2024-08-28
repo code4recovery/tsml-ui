@@ -41,7 +41,7 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
-    "@code4recovery/spec": "1.0.8",
+    "@code4recovery/spec": "1.0.9",
     "@emotion/react": "^11.11.1",
     "deepmerge": "^4.3.1",
     "luxon": "^3.3.0",
