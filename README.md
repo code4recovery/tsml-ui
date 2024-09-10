@@ -32,11 +32,11 @@ var tsml_react_config = {
 };
 ```
 
-AA groups that wish to participate in the Meeting Guide app should be careful not to repurpose types already in use. A full list of AA meeting types can be found in the [Meeting Guide format spec](https://github.com/code4recovery/spec).
+A.A. groups that wish to participate in the Meeting Guide app should be careful not to repurpose types already in use. A full list of A.A. meeting types can be found in the [Meeting Guide format spec](https://github.com/code4recovery/spec).
 
 ### Override type descriptions
 
-AA meeting type descriptions are automatically applied to Open and Closed types. These can be unset or overwritten as needed.
+A.A. meeting type descriptions are automatically applied to Open and Closed types. These can be unset or overwritten as needed.
 
 ```js
 var tsml_react_config = {
@@ -51,6 +51,20 @@ var tsml_react_config = {
 };
 ```
 
+### Override type defaults
+
+If you wanted to add a list that is pre-filtered to a single type, "Women" in this example, you can add this code:
+
+```js
+var tsml_react_config = {
+  defaults: { type: ['women'] },
+  show: {
+    controls: false,
+    title: false,
+  },
+};
+```
+
 ### Use kilometers
 
 Distances can be calculated in miles (`mi`) or kilometers (`km`).
@@ -59,6 +73,84 @@ Distances can be calculated in miles (`mi`) or kilometers (`km`).
 var tsml_react_config = {
   distance_unit: 'km',
 };
+```
+
+### Disable Add to Calendar button
+
+You can disable the add to calendar button if needed.
+
+```js
+var tsml_react_config = {
+  calendar_enabled: false,
+};
+```
+
+### Change the map style
+
+Mapbox maps can be styled by picking a [classic Mapbox style](https://docs.mapbox.com/api/maps/styles/#classic-mapbox-styles) or creating a [custom map style](https://docs.mapbox.com/studio-manual/guides/map-styling/) and adding it to the `tsml_react_config` object.
+
+```js
+var tsml_react_config = {
+  map: {
+    style: 'mapbox://styles/username/abcdefg',
+  },
+};
+```
+
+### Customize theme colors
+
+You can use CSS variables to customize TSML UI’s appearance. Here are the defaults:
+
+```css
+#tsml-ui {
+  --alert-background: #faf4e0;
+  --alert-text: #998a5e;
+  --background: #fff;
+  --border-radius: 4px;
+  --focus: #0d6efd40;
+  --font-family: system-ui, -apple-system, sans-serif;
+  --font-size: 16px;
+  --in-person: #146c43;
+  --inactive: #b02a37;
+  --link: #0d6efd;
+  --online: #0a58ca;
+  --online-background-image: url(https://images.unsplash.com/photo-1588196749597-9ff075ee6b5b?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=1440&ixid=MnwxfDB8MXxhbGx8fHx8fHx8fHwxNjIyMTIzODkw&ixlib=rb-1.2.1&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=1920);
+  --text: #212529;
+}
+```
+
+Only specify the variables you wish to override in your code. Hex values (`#123456`) must be used when specifiying colors.
+
+### Dark mode
+
+If your website theme supports responsive dark mode, TSML UI can match it with a media query: In [this demo](https://tsml-ui.code4recovery.org/tests/aasanjose.html) the background will be white if the user prefers a light appearance, and black if they prefer dark.
+
+```css
+@media (prefers-color-scheme: dark) {
+  #tsml-ui {
+    --background: #000;
+    --color: #fff;
+    --link: #7bc8ff;
+  }
+}
+```
+
+### Change the online background image
+
+This image will be shown instead of a map for online meetings. Should be roughly 2000px wide and tall.
+
+```css
+#tsml-ui {
+  --online-background-image: url(/path/to/image.jpg);
+}
+```
+
+To remove:
+
+```css
+#tsml-ui {
+  --online-background-image: none;
+}
 ```
 
 ## Frequently asked questions
@@ -83,7 +175,7 @@ Metatypes are types that are not specified explicitly in the data, they are infe
 
 ### Why no "Hybrid" type?
 
-This app exists to help people find AA meetings, and after much discussion we decided that Hybrid was not a useful filter type for that purpose. We believe that people on the whole do not set out looking for a hybrid meeting, they simply want to know whether their online or in-person meeting happens to be hybrid. They will know this by its appearance in the list.
+This app exists to help people find A.A. meetings, and after much discussion we decided that Hybrid was not a useful filter type for that purpose. We believe that people on the whole do not set out looking for a hybrid meeting, they simply want to know whether their online or in-person meeting happens to be hybrid. They will know this by its appearance in the list.
 
 Second, while we can infer that a meeting is "online" if there is a Zoom URL (for example) in the listing, the app should not assume that, when there are online and in-person options, that means it is an actual "hybrid" meeting with a video screen and speakers in the room.
 

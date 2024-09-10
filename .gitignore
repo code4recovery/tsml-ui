@@ -4,4 +4,7 @@ npm-debug.log
 coverage
 test-results/
 playwright-report/
+public/custom
 .vscode
+.DS_Store
+.idea

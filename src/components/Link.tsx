@@ -1,16 +1,22 @@
-import React from 'react';
+import { Dispatch, SetStateAction } from 'react';
+
+import { NavLink } from 'react-router-dom';
+
+import { formatUrl, useSettings } from '../helpers';
 
 import type { State, Meeting } from '../types';
 
-import { formatUrl, settings, strings } from '../helpers';
-
-type LinkProps = {
+export default function Link({
+  meeting,
+  setState,
+  state,
+}: {
   meeting: Meeting;
-  setState?: (state: State) => void;
+  setState?: Dispatch<SetStateAction<State>>;
   state?: State;
-};
+}) {
+  const { settings, strings } = useSettings();
 
-export default function Link({ meeting, setState, state }: LinkProps) {
   const flags =
     settings.flags
       ?.filter(flag => meeting.types?.includes(flag))
@@ -24,30 +30,22 @@ export default function Link({ meeting, setState, state }: LinkProps) {
     ) : (
       <>
         <span>{meeting.name}</span>
-        <small className="ms-2 text-muted">{flags}</small>
+        <small>{flags}</small>
       </>
     );
   }
 
   return (
     <>
-      <a
-        href={formatUrl({ ...state.input, meeting: meeting.slug })}
+      <NavLink
+        to={formatUrl({ ...state.input, meeting: meeting.slug }, settings)}
         onClick={e => {
-          e.preventDefault();
           e.stopPropagation();
-          setState({
-            ...state,
-            input: {
-              ...state.input,
-              meeting: meeting.slug,
-            },
-          });
         }}
       >
         {meeting.name}
-      </a>
-      {flags && <small className="ms-2 text-muted">{flags}</small>}
+      </NavLink>
+      {flags && <small>{flags}</small>}
     </>
   );
 }

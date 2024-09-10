@@ -1,32 +1,26 @@
-import React from 'react';
+import { useSearchParams } from 'react-router-dom';
 
-import type { MeetingType, State } from '../types';
+import { formatString as i18n, getIndexByKey, useSettings } from '../helpers';
+import { alertCss, errorCss } from '../styles';
+
 import Button from './Button';
-import {
-  formatString as i18n,
-  getIndexByKey,
-  settings,
-  strings,
-} from '../helpers';
 
-type AlertProps = {
-  state: State;
-  setState: React.Dispatch<React.SetStateAction<State>>;
-};
+import type { State } from '../types';
 
-export default function Alert({ state, setState }: AlertProps) {
+export default function Alert({ state }: { state: State }) {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const { settings, strings } = useSettings();
   return state.error ? (
-    <div className="alert alert-danger text-center m-0">{state.error}</div>
+    <div css={errorCss}>{state.error}</div>
   ) : state.alert ? (
-    <div className="d-flex flex-column gap-3">
-      <div className="alert alert-warning text-center m-0">{state.alert}</div>
+    <>
+      <div css={alertCss}>{state.alert}</div>
       {state.alert === strings.no_results && state.input.search && (
         <Button
           onClick={() => {
-            state.input.search = '';
-            setState({ ...state });
+            searchParams.delete('search');
+            setSearchParams(searchParams);
           }}
-          className="btn-light btn-outline-secondary"
           text={i18n(strings.remove, { filter: `‘${state.input.search}’` })}
           icon="close"
         />
@@ -36,35 +30,17 @@ export default function Alert({ state, setState }: AlertProps) {
           state.input[filter].map(value => (
             <Button
               key={value}
-              className="btn-light btn-outline-secondary"
+              icon="close"
               onClick={() => {
-                //todo fix how ugly this is
-                if (filter === 'weekday') {
-                  state.input[filter] = state.input[filter].filter(
-                    e => e !== value
-                  ) as TSMLReactConfig['weekdays'];
-                } else if (filter === 'time') {
-                  state.input[filter] = state.input[filter].filter(
-                    e => e !== value
-                  ) as TSMLReactConfig['times'];
-                } else if (filter === 'type') {
-                  state.input[filter] = state.input[filter].filter(
-                    e => e !== value
-                  ) as MeetingType[];
-                } else {
-                  state.input[filter] = state.input[filter].filter(
-                    e => e !== value
-                  );
-                }
-                setState({ ...state });
+                searchParams.delete(filter);
+                setSearchParams(searchParams);
               }}
               text={i18n(strings.remove, {
                 filter: getIndexByKey(state.indexes[filter], value)?.name,
               })}
-              icon="close"
             />
           ))
         )}
-    </div>
+    </>
   ) : null;
 }

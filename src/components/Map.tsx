@@ -1,19 +1,15 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
+
 import ReactMapGL, { Marker, NavigationControl, Popup } from 'react-map-gl';
 import WebMercatorViewport from 'viewport-mercator-project';
 
-import type { Meeting, State } from '../types';
-import { formatDirectionsUrl, settings, strings } from '../helpers';
+import { formatDirectionsUrl, useSettings } from '../helpers';
+import { mapCss, mapPopupCss, mapPopupMeetingsCss } from '../styles';
+
 import Button from './Button';
 import Link from './Link';
 
-type MapProps = {
-  filteredSlugs: string[];
-  listMeetingsInPopup: boolean;
-  mapbox?: string;
-  setState: (state: State) => void;
-  state: State;
-};
+import type { Meeting, State } from '../types';
 
 type Locations = {
   [index: string]: {
@@ -47,7 +43,14 @@ export default function Map({
   state,
   setState,
   mapbox,
-}: MapProps) {
+}: {
+  filteredSlugs: string[];
+  listMeetingsInPopup: boolean;
+  mapbox?: string;
+  setState: Dispatch<SetStateAction<State>>;
+  state: State;
+}) {
+  const { settings, strings } = useSettings();
   const [popup, setPopup] = useState<string | undefined>();
   const [viewport, setViewport] = useState<Viewport | undefined>();
   const [data, setData] = useState<{
@@ -84,16 +87,6 @@ export default function Map({
     };
   }, []);
 
-  //manage classes
-  useEffect(() => {
-    if (!state.input?.meeting) {
-      document.body.classList.add('tsml-ui-map');
-    }
-    return () => {
-      document.body.classList.remove('tsml-ui-map');
-    };
-  }, [state.input?.meeting]);
-
   //reset bounds and locations when filteredSlugs changes
   useEffect(() => {
     const locations: Locations = {};
@@ -106,7 +99,7 @@ export default function Map({
         const coords = meeting.latitude + ',' + meeting.longitude;
 
         //create a new pin
-        if (!locations.hasOwnProperty(coords)) {
+        if (!locations.coords) {
           locations[coords] = {
             directions_url: formatDirectionsUrl(meeting),
             formatted_address: meeting.formatted_address,
@@ -153,6 +146,7 @@ export default function Map({
   //reset viewport when data or dimensions change
   useEffect(() => {
     if (
+      !mapbox ||
       !dimensions ||
       !data.bounds ||
       !data.bounds.north ||
@@ -182,25 +176,26 @@ export default function Map({
   }, [data, dimensions]);
 
   return (
-    <div
-      aria-hidden={true}
-      className="border rounded bg-light flex-grow-1 map"
-      ref={mapFrame}
-    >
+    <div aria-hidden={true} css={mapCss} ref={mapFrame}>
       {viewport && !!data.locationKeys.length && (
         <ReactMapGL
           mapStyle={settings.map.style}
-          mapboxApiAccessToken={mapbox}
-          onViewportChange={setViewport}
-          {...viewport}
+          mapboxAccessToken={mapbox}
+          initialViewState={viewport}
+          onMove={event => {
+            setViewport({
+              ...viewport,
+              zoom: event.viewState.zoom,
+              latitude: event.viewState.latitude,
+              longitude: event.viewState.longitude,
+            });
+          }}
         >
           {data.locationKeys.map(key => (
             <div key={key}>
               <Marker
                 latitude={data.locations[key].latitude}
                 longitude={data.locations[key].longitude}
-                offsetLeft={-settings.map.markers.location.width / 2}
-                offsetTop={-settings.map.markers.location.height}
               >
                 <div
                   data-testid={key}
@@ -211,29 +206,28 @@ export default function Map({
               </Marker>
               {popup === key && (
                 <Popup
-                  captureScroll={true}
                   closeOnClick={false}
+                  focusAfterOpen={false}
                   latitude={data.locations[key].latitude}
                   longitude={data.locations[key].longitude}
-                  offsetTop={-settings.map.markers.location.height}
                   onClose={() => setPopup(undefined)}
                 >
-                  <div className="d-grid gap-2">
+                  <div css={mapPopupCss}>
                     <h2>{data.locations[key].name}</h2>
-                    <p>{data.locations[key].formatted_address}</p>
+                    <p className="notranslate">
+                      {data.locations[key].formatted_address}
+                    </p>
                     {listMeetingsInPopup && (
-                      <div className="list-group mb-1">
+                      <div css={mapPopupMeetingsCss}>
                         {data.locations[key].meetings
                           .sort((a, b) =>
                             a.start && b.start && a.start > b.start ? 1 : 0
                           )
                           .map((meeting, index) => (
-                            <div key={index} className="list-group-item">
-                              <time className="d-block">
+                            <div key={index}>
+                              <time>
                                 {meeting.start?.toFormat('t')}
-                                <span className="ms-1">
-                                  {meeting.start?.toFormat('cccc')}
-                                </span>
+                                <span>{meeting.start?.toFormat('cccc')}</span>
                               </time>
                               <Link
                                 meeting={meeting}
@@ -246,10 +240,10 @@ export default function Map({
                     )}
                     {data.locations[key].directions_url && (
                       <Button
-                        className="in-person"
                         href={data.locations[key].directions_url}
                         icon="geo"
                         text={strings.get_directions}
+                        type="in-person"
                       />
                     )}
                   </div>
@@ -258,8 +252,6 @@ export default function Map({
             </div>
           ))}
           <NavigationControl
-            className="d-none d-md-block"
-            onViewportChange={setViewport}
             showCompass={false}
             style={{ top: 10, right: 10 }}
           />

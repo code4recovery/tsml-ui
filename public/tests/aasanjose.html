@@ -7,10 +7,33 @@
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
     <meta name="description" content="React JS recovery meeting finder demo" />
-    <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+    <link rel="icon" type="image/png" href="/logo.png" />
     <title>Meetings</title>
+    <style type="text/css">
+      body {
+        margin: 0;
+      }
+      #tsml-ui {
+        min-height: 100vh;
+        min-height: -webkit-fill-available;
+      }
+      @media (prefers-color-scheme: dark) {
+        body {
+          background-color: black;
+          color: white;
+        }
+        #tsml-ui {
+          --alert-background: #191919;
+          --alert-text: #bbb;
+          --background: #000;
+          --in-person: #66aa66;
+          --link: #6699cc;
+          --online: #6699cc;
+          --text: #fff;
+        }
+      }
+    </style>
   </head>
-
   <body>
     <div
       id="tsml-ui"
@@ -18,11 +41,18 @@
       data-mapbox="pk.eyJ1Ijoiam9zaHJlaXNuZXIiLCJhIjoiY2tvYXA0YnZxMGRldDJxbzdta25uNGphdiJ9.eay-UKgIT99ALmdw08xBPw"
       data-timezone="America/Los_Angeles"
     ></div>
-    <script src="/app.js" async></script>
     <script>
+      var darkMode =
+        window.matchMedia &&
+        window.matchMedia('(prefers-color-scheme: dark)').matches;
+
       var tsml_react_config = {
         feedback_emails: ['meetings@aasanjose.org'],
+        map: darkMode
+          ? { style: 'mapbox://styles/mapbox/navigation-night-v1' }
+          : {},
       };
     </script>
+    <script src="/app.js" async></script>
   </body>
 </html>

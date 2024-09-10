@@ -1,16 +1,37 @@
 {
   "compilerOptions": {
+    "allowJs": false,
+    "esModuleInterop": true,
+    "jsx": "react-jsx",
+    "jsxImportSource": "@emotion/react",
     "lib": ["ES2021.String", "DOM"],
-    "target": "ES2015",
     "module": "esnext",
     "moduleResolution": "node",
-    "allowJs": false,
-    "strict": true,
-    "esModuleInterop": true,
-    "strictNullChecks": true,
     "noImplicitAny": true,
-    "jsx": "preserve",
-    "outDir": "public"
+    "outDir": "public",
+    "strict": true,
+    "strictNullChecks": true,
+    "target": "ES2015"
   },
-  "include": ["index.d.ts", "src/app.tsx", "src/**/*.ts"]
+  "include": [
+    "index.d.ts",
+    "src/app.tsx",
+    "src/**/*.ts",
+    "test/__tests__/analytics.spec.ts",
+    "test/__tests__/calculate-distances.spec.ts",
+    "test/__tests__/format-address.spec.ts",
+    "test/__tests__/format-array.spec.ts",
+    "test/__tests__/format-conference-provider.spec.ts",
+    "test/__tests__/format-directions-url.spec.ts",
+    "test/__tests__/format-feedback-email.spec.ts",
+    "test/__tests__/format-ics.spec.ts",
+    "test/__tests__/format-slug.spec.ts",
+    "test/__tests__/format-string.spec.ts",
+    "test/__tests__/format-url.spec.ts",
+    "test/__tests__/load-meeting-data.spec.ts",
+    "test/__tests__/query-string.spec.ts",
+    "test/__tests__/settings.spec.ts",
+    "test/__tests__/translate-google-sheet.spec.ts",
+    "test/__tests__/user-agent.spec.ts"
+  ]
 }

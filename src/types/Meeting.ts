@@ -45,7 +45,7 @@ export interface Meeting {
   square?: string;
   start?: DateTime;
   timezone?: string;
-  types?: MeetingType[];
+  types?: string[];
   url?: string;
   updated?: string;
   venmo?: string;

@@ -1,12 +1,12 @@
+/* eslint-disable no-unused-vars */
+
 type Translation = import('./src/types/Translation').Translation;
-type MeetingType = import('./src/types/MeetingType').MeetingType;
-type Lang = 'en' | 'es' | 'fr' | 'ja' | 'sv';
+type Lang = import('@code4recovery/spec').Language;
 
 interface TSMLReactConfig {
   cache: boolean;
-  columns: Array<
-    'time' | 'distance' | 'name' | 'location_group' | 'address' | 'region'
-  >;
+  calendar_enabled: boolean;
+  columns: string[];
   conference_providers: Record<string, string>;
   defaults: {
     distance: string[];
@@ -15,7 +15,7 @@ interface TSMLReactConfig {
     region: string[];
     search: string;
     time: TSMLReactConfig['times'];
-    type: MeetingType[];
+    type: string[];
     view: 'table' | 'map';
     weekday: TSMLReactConfig['weekdays'];
   };
@@ -24,8 +24,8 @@ interface TSMLReactConfig {
   duration: number;
   feedback_emails: string[];
   filters: Array<'region' | 'distance' | 'weekday' | 'time' | 'type'>;
-  flags?: MeetingType[];
-  in_person_types: MeetingType[];
+  flags?: string[];
+  in_person_types: string[];
   language: Lang;
   map: {
     markers: {
@@ -42,22 +42,13 @@ interface TSMLReactConfig {
   params: Array<'search' | 'mode' | 'view' | 'meeting'>;
   show: {
     controls: boolean;
-    listButtons: boolean;
     title: boolean;
   };
   strings: {
     [lang in Lang]: Translation;
   };
   times: Array<'morning' | 'midday' | 'evening' | 'night'>;
-  weekdays: Array<
-    | 'sunday'
-    | 'monday'
-    | 'tuesday'
-    | 'wednesday'
-    | 'thursday'
-    | 'friday'
-    | 'saturday'
-  >;
+  weekdays: string[];
 }
 
 declare var tsml_react_config: TSMLReactConfig | undefined;

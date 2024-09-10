@@ -1,11 +1,14 @@
+import { createContext, useContext } from 'react';
+
 import merge from 'deepmerge';
 import { Settings } from 'luxon';
 
-import { en, es, fr, ja, sv } from '../i18n';
+import { en, es, fr, ja, nl, pt, sk, sv } from '../i18n';
 
-//override these on your page with tsml_react_config
-const defaults: TSMLReactConfig = {
+// override these on your page with tsml_react_config
+export const defaults: TSMLReactConfig = {
   cache: false,
+  calendar_enabled: true,
   columns: ['time', 'distance', 'name', 'location_group', 'address', 'region'],
   conference_providers: {
     'bluejeans.com': 'Bluejeans',
@@ -15,7 +18,7 @@ const defaults: TSMLReactConfig = {
     'goto.com': 'GoTo',
     'gotomeet.me': 'GoTo',
     'gotomeeting.com': 'GoTo',
-    'meet.google.com': 'Google Hangouts',
+    'meet.google.com': 'Google Meet',
     'meet.jit.si': 'Jitsi',
     'meetings.dialpad.com': 'Dialpad',
     'skype.com': 'Skype',
@@ -33,7 +36,7 @@ const defaults: TSMLReactConfig = {
     view: 'table',
     weekday: [],
   },
-  distance_options: [1, 2, 5, 10, 15, 25],
+  distance_options: [1, 2, 5, 10, 15, 25, 50, 100],
   distance_unit: 'mi', //mi or km
   duration: 60,
   feedback_emails: [], //email addresses for update meeting info button
@@ -51,7 +54,7 @@ const defaults: TSMLReactConfig = {
     'X',
     'XB',
   ],
-  language: 'en', //fallback language
+  language: 'en', // fallback language
   map: {
     markers: {
       location: {
@@ -63,20 +66,22 @@ const defaults: TSMLReactConfig = {
         width: 26,
       },
     },
-    style: 'mapbox://styles/mapbox/streets-v9',
+    style: 'mapbox://styles/mapbox/streets-v10',
   },
-  now_offset: -10, //"now" includes meetings that started in the last 10 minutes
+  now_offset: -10, // "now" includes meetings that started in the last 10 minutes
   params: ['search', 'mode', 'view', 'meeting'], //input other than filters
   show: {
-    controls: true, //whether to show search + dropdowns + list/map
-    listButtons: false, //show conference buttons in list or show labels
-    title: true, //whether to display the title h1
+    controls: true, // whether to show search + dropdowns + list/map
+    title: true, // whether to display the title h1
   },
   strings: {
     en,
     es,
     fr,
     ja,
+    nl,
+    pt,
+    sk,
     sv,
   },
   times: ['morning', 'midday', 'evening', 'night'],
@@ -91,34 +96,49 @@ const defaults: TSMLReactConfig = {
   ],
 };
 
-const settings =
-  typeof tsml_react_config === 'object'
-    ? merge(defaults, tsml_react_config)
-    : defaults;
+export function mergeSettings(userSettings?: Partial<TSMLReactConfig>) {
+  const settings = userSettings ? merge(defaults, userSettings) : defaults;
 
-//flags can be specified to override the default. also [] means unset
-if (!Array.isArray(settings.flags)) {
-  settings.flags = ['M', 'W'];
+  // flags can be specified to override the default. also [] means unset
+  if (!Array.isArray(settings.flags)) {
+    settings.flags = ['M', 'W'];
+  }
+
+  // columns can be specified to override the default
+  if (userSettings) {
+    if (Array.isArray(userSettings.columns)) {
+      settings.columns = userSettings.columns;
+    }
+    if (Array.isArray(userSettings.filters)) {
+      settings.filters = userSettings.filters;
+    }
+    if (Array.isArray(userSettings.params)) {
+      settings.params = userSettings.params;
+    }
+    if (Array.isArray(userSettings.times)) {
+      settings.times = userSettings.times;
+    }
+    if (Array.isArray(userSettings.weekdays)) {
+      settings.weekdays = userSettings.weekdays;
+    }
+  }
+
+  const preferredLanguage = navigator.language.substring(0, 2);
+
+  if (preferredLanguage in settings.strings) {
+    settings.language = preferredLanguage as Lang;
+  }
+
+  const strings = settings.strings[settings.language];
+
+  Settings.defaultLocale = navigator.language;
+
+  return { settings, strings };
 }
 
-//columns can be specified to override the default
-if (typeof tsml_react_config === 'object') {
-  if (Array.isArray(tsml_react_config.columns)) {
-    settings.columns = tsml_react_config.columns;
-  }
-  if (Array.isArray(tsml_react_config.weekdays)) {
-    settings.weekdays = tsml_react_config.weekdays;
-  }
-}
+export const SettingsContext = createContext<{
+  settings: TSMLReactConfig;
+  strings: Translation;
+}>({ settings: defaults, strings: en });
 
-const preferredLanguage = navigator.language.substring(0, 2) as Lang;
-
-const language = Object.keys(settings.strings).includes(preferredLanguage)
-  ? preferredLanguage
-  : settings.language;
-
-const strings = settings.strings[language];
-
-Settings.defaultLocale = language;
-
-export { settings, strings };
+export const useSettings = () => useContext(SettingsContext);
