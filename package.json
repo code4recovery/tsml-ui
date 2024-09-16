@@ -8,7 +8,7 @@
     "test-watch": "jest --watch",
     "test-coverage": "jest --coverage",
     "serve": "serve public",
-    "watch": "npx mix watch",
+    "start": "npx mix watch",
     "build": "npx mix --production"
   },
   "devDependencies": {

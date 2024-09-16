@@ -1,5 +1,5 @@
 export const color = {
-  dark: `color-mix(in srgb, var(--background), var(--text) 55%)`,
+  dark: `color-mix(in srgb, var(--background), var(--text) 63%)`,
   light: `color-mix(in srgb, var(--background), var(--text) 5%)`,
   medium: `color-mix(in srgb, var(--background), var(--text) 15%)`,
 };
