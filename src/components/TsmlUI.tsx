@@ -252,12 +252,7 @@ export default function TsmlUI({
       {!state.ready ? (
         <Loading />
       ) : state.input.meeting && state.input.meeting in state.meetings ? (
-        <Meeting
-          feedback_emails={settings.feedback_emails}
-          mapbox={mapbox}
-          setState={setState}
-          state={state}
-        />
+        <Meeting mapbox={mapbox} setState={setState} state={state} />
       ) : (
         <>
           {settings.show.title && <Title state={state} />}

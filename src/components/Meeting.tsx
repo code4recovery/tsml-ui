@@ -5,7 +5,6 @@ import { Link as RouterLink } from 'react-router-dom';
 
 import {
   formatDirectionsUrl,
-  formatFeedbackEmail,
   formatIcs,
   formatString as i18n,
   formatUrl,
@@ -28,12 +27,10 @@ import Map from './Map';
 import type { Meeting as MeetingType, State } from '../types';
 
 export default function Meeting({
-  feedback_emails = [],
   mapbox,
   setState,
   state,
 }: {
-  feedback_emails?: string[];
   mapbox?: string;
   setState: Dispatch<SetStateAction<State>>;
   state: State;
@@ -114,16 +111,6 @@ export default function Meeting({
   // set page title
   if (meeting.name) {
     document.title = meeting.name;
-  }
-
-  // feedback URL link
-  if (!meeting.feedback_url && feedback_emails.length) {
-    meeting.feedback_url = formatFeedbackEmail(
-      settings.feedback_emails,
-      meeting,
-      settings,
-      strings
-    );
   }
 
   const contactButtons: {
@@ -459,26 +446,17 @@ export default function Meeting({
                   </>
                 )}
 
-                {meeting.entity_feedback_emails?.length ? (
-                  <Button
-                    href={formatFeedbackEmail(
-                      meeting.entity_feedback_emails,
-                      meeting,
-                      settings,
-                      strings
-                    )}
-                    icon="edit"
-                    text={strings.feedback}
-                  />
-                ) : meeting.feedback_url ? (
+                {meeting.feedback_url && (
                   <Button
                     href={meeting.feedback_url}
                     icon="edit"
                     text={strings.feedback}
                   />
-                ) : null}
+                )}
 
-                <p>{i18n(strings.updated, { updated: meeting.updated })}</p>
+                {meeting.updated && (
+                  <p>{i18n(strings.updated, { updated: meeting.updated })}</p>
+                )}
               </div>
             )}
           </div>

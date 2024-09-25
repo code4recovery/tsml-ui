@@ -23,10 +23,10 @@ export type JSONData = {
   email?: string;
   end_time?: string;
   entity?: string;
-  entity_feedback_emails?: string;
   entity_location?: string;
   entity_phone?: string;
   entity_url?: string;
+  feedback_emails?: string;
   feedback_url?: string;
   formatted_address?: string;
   group?: string;
