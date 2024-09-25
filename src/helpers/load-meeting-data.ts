@@ -42,6 +42,10 @@ export function loadMeetingData(
       district,
       edit_url,
       email,
+      entity,
+      entity_location,
+      entity_phone,
+      entity_url,
       feedback_url,
       group,
       group_notes,
@@ -83,6 +87,10 @@ export function loadMeetingData(
         warn('unknown conference_url', meeting);
       }
     }
+
+    const entity_feedback_emails = meeting.entity_feedback_emails
+      ? meeting.entity_feedback_emails.split(',').map(e => e.trim())
+      : [];
 
     if (!conference_url && conference_url_notes) {
       conference_url_notes = undefined;
@@ -418,6 +426,11 @@ export function loadMeetingData(
       district,
       edit_url,
       email,
+      entity,
+      entity_feedback_emails,
+      entity_location,
+      entity_phone,
+      entity_url,
       end,
       feedback_url,
       formatted_address,

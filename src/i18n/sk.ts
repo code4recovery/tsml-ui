@@ -1,5 +1,4 @@
 import { getTypesForLanguage } from '@code4recovery/spec';
-import { Translation } from '../types';
 
 export const sk: Translation = {
   add_to_calendar: 'Pridať do kalendára',
@@ -46,10 +45,12 @@ export const sk: Translation = {
   },
   morning: 'Ráno',
   name: 'Meno',
-  no_results: 'Neboli nájdené žiadne stretnutia zodpovedajúce vybraným kritériám.',
+  no_results:
+    'Neboli nájdené žiadne stretnutia zodpovedajúce vybraným kritériám.',
   not_found: 'Stretnutia sa nenašli.',
   night: 'Noc',
   phone: 'Telefón',
+  provided_by: 'Tento zoznam poskytuje:',
   region: 'Kraj',
   region_any: 'Kdekoľvek',
   remove: 'Zmazať %filter%',

@@ -1,5 +1,4 @@
 import { getTypesForLanguage } from '@code4recovery/spec';
-import { Translation } from '../types';
 
 export const ja: Translation = {
   add_to_calendar: 'カレンダーに追加',
@@ -50,6 +49,7 @@ export const ja: Translation = {
   },
   night: '夜',
   phone: '電話',
+  provided_by: 'このリストは以下によって提供されています:',
   region: '区域',
   region_any: '区域指定無し',
   remove: '%filter% を削除',

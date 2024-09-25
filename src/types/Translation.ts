@@ -47,6 +47,7 @@ export interface Translation {
   };
   night: string;
   phone: string;
+  provided_by: string;
   region: string;
   region_any: string;
   remove: string;

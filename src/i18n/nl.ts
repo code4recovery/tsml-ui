@@ -1,6 +1,6 @@
 import { getTypesForLanguage } from '@code4recovery/spec';
 
-export const nl = {
+export const nl: Translation = {
   add_to_calendar: 'Toevoegen aan agenda',
   address: 'Addres',
   appointment: 'Afspraak',
@@ -50,6 +50,7 @@ export const nl = {
   not_found: 'Meeting niet gevonden.',
   night: 'Nacht',
   phone: 'Telefoon',
+  provided_by: 'Deze lijst wordt aangeboden door:',
   region: 'Plaats',
   region_any: 'Overal',
   remove: 'Verwijder %filter%',

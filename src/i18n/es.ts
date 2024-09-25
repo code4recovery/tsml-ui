@@ -1,5 +1,4 @@
 import { getTypesForLanguage } from '@code4recovery/spec';
-import { Translation } from '../types';
 
 export const es: Translation = {
   add_to_calendar: 'Añadir al calendario',
@@ -50,6 +49,7 @@ export const es: Translation = {
   not_found: 'Reunión no encontrada.',
   night: 'Noche',
   phone: 'Teléfono',
+  provided_by: 'Este listado es proporcionado por:',
   region: 'Región',
   region_any: 'Todos lados',
   remove: 'Quitar %filter%',

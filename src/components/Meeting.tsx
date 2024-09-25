@@ -374,13 +374,15 @@ export default function Meeting({
                         text={strings.share}
                       />
                     )}
-                  {meeting.start && meeting.isActive && settings.calendar_enabled && (
-                    <Button
-                      icon="calendar"
-                      onClick={() => formatIcs(meeting)}
-                      text={strings.add_to_calendar}
-                    />
-                  )}
+                  {meeting.start &&
+                    meeting.isActive &&
+                    settings.calendar_enabled && (
+                      <Button
+                        icon="calendar"
+                        onClick={() => formatIcs(meeting)}
+                        text={strings.add_to_calendar}
+                      />
+                    )}
                   {!meeting.group &&
                     contactButtons.map((button, index) => (
                       <Button {...button} key={index} />
@@ -426,18 +428,60 @@ export default function Meeting({
                   {formatWeekdays(groupWeekdays, meeting.slug, state, setState)}
                 </div>
               )}
-            {meeting.updated && (
-              <div>{i18n(strings.updated, { updated: meeting.updated })}</div>
+            {(meeting.updated || meeting.feedback_url || meeting.entity) && (
+              <div>
+                {meeting.entity && (
+                  <>
+                    <small>{strings.provided_by}</small>
+                    <header>
+                      <h2>{meeting.entity}</h2>
+                      {meeting.entity_location && (
+                        <p>{meeting.entity_location}</p>
+                      )}
+                    </header>
+                    {meeting.entity_phone && (
+                      <Button
+                        href={`tel:${meeting.entity_phone}`}
+                        text={meeting.entity_phone}
+                        icon="phone"
+                      />
+                    )}
+                    {meeting.entity_url && (
+                      <Button
+                        href={meeting.entity_url}
+                        text={new URL(meeting.entity_url).host.replace(
+                          'www.',
+                          ''
+                        )}
+                        icon="link"
+                      />
+                    )}
+                  </>
+                )}
+
+                {meeting.entity_feedback_emails?.length ? (
+                  <Button
+                    href={formatFeedbackEmail(
+                      meeting.entity_feedback_emails,
+                      meeting,
+                      settings,
+                      strings
+                    )}
+                    icon="edit"
+                    text={strings.feedback}
+                  />
+                ) : meeting.feedback_url ? (
+                  <Button
+                    href={meeting.feedback_url}
+                    icon="edit"
+                    text={strings.feedback}
+                  />
+                ) : null}
+
+                <p>{i18n(strings.updated, { updated: meeting.updated })}</p>
+              </div>
             )}
           </div>
-
-          {meeting.feedback_url && (
-            <Button
-              href={meeting.feedback_url}
-              icon="edit"
-              text={strings.feedback}
-            />
-          )}
         </div>
         <div
           css={

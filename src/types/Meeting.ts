@@ -22,6 +22,11 @@ export interface Meeting {
   edit_url?: string;
   email?: string;
   end?: DateTime;
+  entity?: string;
+  entity_feedback_emails?: string[];
+  entity_location?: string;
+  entity_phone?: string;
+  entity_url?: string;
   feedback_url?: string;
   formatted_address: string;
   group?: string;
