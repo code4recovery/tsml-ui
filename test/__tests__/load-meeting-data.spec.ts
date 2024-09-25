@@ -47,6 +47,7 @@ describe('loadMeetingData', () => {
       'test-meeting': {
         address: '123 Main St',
         approximate: false,
+        entity_feedback_emails: [],
         formatted_address: '123 Main St, Anytown, OK, USA',
         isActive: true,
         isInPerson: true,
@@ -60,6 +61,7 @@ describe('loadMeetingData', () => {
       },
       'inactive-meeting': {
         approximate: true,
+        entity_feedback_emails: [],
         formatted_address: 'Anytown, OK, USA',
         isActive: false,
         isInPerson: false,
