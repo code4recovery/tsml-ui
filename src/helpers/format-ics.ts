@@ -20,8 +20,8 @@ export function formatIcs(meeting: Meeting) {
   const event = [
     `SUMMARY:${meeting.name}`,
     `DTSTAMP:${meeting.start.setZone('UTC').toFormat(fmt)}Z`,
-    `DTSTART;TZID=${meeting.timezone}:${meeting.start.toFormat(fmt)}`,
-    `DTEND;TZID=${meeting.timezone}:${meeting.end.toFormat(fmt)}`,
+    `DTSTART;TZID=${meeting.timezone}:${meeting.start.setZone(meeting.timezone).toFormat(fmt)}`,
+    `DTEND;TZID=${meeting.timezone}:${meeting.end.setZone(meeting.timezone).toFormat(fmt)}`,
   ];
 
   // start building description

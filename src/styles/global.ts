@@ -12,7 +12,7 @@ export const globalCss = css`
 
   :root {
     --alert-background: #faf4e0;
-    --alert-text: #998a5e;
+    --alert-text: #736646;
     --background: #fff;
     --border-radius: 4px;
     --focus: #0d6efd40;

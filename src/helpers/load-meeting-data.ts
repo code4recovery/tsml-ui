@@ -200,7 +200,9 @@ export function loadMeetingData(
       }
     }
 
-    let start, end, minutes_week;
+    let start: DateTime | undefined;
+    let end: DateTime | undefined;
+    let minutes_week: number | undefined;
 
     // handle day and time
     if (typeof meeting.day !== 'undefined' && meeting.time) {
@@ -261,18 +263,20 @@ export function loadMeetingData(
 
       // day & time indexes
       if (isActive) {
+        const weekday = settings.weekdays[
+          start?.weekday === 7
+            ? 0
+            : (start?.weekday as keyof typeof settings.weekdays)
+        ] as keyof typeof strings.days;
+
         // day index
         const dayIndex = indexes.weekday.findIndex(
-          ({ key }) =>
-            key ===
-            settings.weekdays[meeting.day as keyof typeof settings.weekdays]
+          ({ key }) => key === weekday
         );
         if (dayIndex === -1) {
           indexes.weekday.push({
-            key: settings.weekdays[meeting.day],
-            name: strings.days[
-              settings.weekdays[meeting.day] as keyof typeof strings.days
-            ],
+            key: weekday,
+            name: strings.days[weekday],
             slugs: [slug],
           });
         } else {

@@ -51,6 +51,20 @@ var tsml_react_config = {
 };
 ```
 
+### Override type defaults
+
+If you wanted to add a list that is pre-filtered to a single type, "Women" in this example, you can add this code:
+
+```js
+var tsml_react_config = {
+  defaults: { type: ['women'] },
+  show: {
+    controls: false,
+    title: false,
+  },
+};
+```
+
 ### Use kilometers
 
 Distances can be calculated in miles (`mi`) or kilometers (`km`).
@@ -64,6 +78,7 @@ var tsml_react_config = {
 ### Disable Add to Calendar button
 
 You can disable the add to calendar button if needed.
+
 ```js
 var tsml_react_config = {
   calendar_enabled: false,

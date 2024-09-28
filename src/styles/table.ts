@@ -114,7 +114,13 @@ export const tableCss = css`
   tbody tr {
     border-top: 1px solid ${color.medium};
     :nth-of-type(2n + 1) {
-      background-color: color-mix(in srgb, currentColor 3%, transparent);
+      background-color: color-mix(in srgb, var(--text) 3%, transparent);
+      a {
+        color: color-mix(in srgb, var(--text) 10%, var(--link));
+      }
+      small {
+        color: var(--text);
+      }
     }
   }
 

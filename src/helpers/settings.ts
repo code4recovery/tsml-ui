@@ -109,6 +109,15 @@ export function mergeSettings(userSettings?: Partial<TSMLReactConfig>) {
     if (Array.isArray(userSettings.columns)) {
       settings.columns = userSettings.columns;
     }
+    if (Array.isArray(userSettings.filters)) {
+      settings.filters = userSettings.filters;
+    }
+    if (Array.isArray(userSettings.params)) {
+      settings.params = userSettings.params;
+    }
+    if (Array.isArray(userSettings.times)) {
+      settings.times = userSettings.times;
+    }
     if (Array.isArray(userSettings.weekdays)) {
       settings.weekdays = userSettings.weekdays;
     }
