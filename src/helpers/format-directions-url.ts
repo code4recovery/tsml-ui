@@ -14,7 +14,7 @@ export function formatDirectionsUrl({
       latitude && longitude
         ? { daddr: [latitude, longitude].join(), q: formatted_address }
         : { daddr: formatted_address };
-    return `maps://?${new URLSearchParams(params)}`;
+    return `http://maps.apple.com/?${new URLSearchParams(params)}`;
   }
 
   // other platforms use Google - https://developers.google.com/maps/documentation/urls/get-started#directions-action
