@@ -8,7 +8,10 @@
     "group": "Online Group",
     "types": ["O", "M"],
     "formatted_address": "123 Main St, Anytown, OK 12345, USA",
-    "conference_url": "https://zoom.us/d/1234567"
+    "conference_url": "https://zoom.us/d/1234567",
+    "contact_1_name": "John D",
+    "contact_1_phone": "123-456-7890",
+    "contact_1_email": "johnd@gmail.com"
   },
   {
     "slug": "saturday-8pm",

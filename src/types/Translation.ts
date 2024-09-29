@@ -3,8 +3,8 @@ export interface Translation {
   address: string;
   appointment: string;
   back_to_meetings: string;
-  contact_call: string;
   contact_email: string;
+  contact_text: string;
   contribute_with: string;
   days: {
     friday: string;

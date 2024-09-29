@@ -189,8 +189,8 @@ export default function Meeting({
     if (meeting[`contact_${i}_phone` as keyof typeof Meeting])
       contactButtons.push({
         href: `tel:${meeting[`contact_${i}_phone` as keyof typeof Meeting]}`,
-        icon: 'phone',
-        text: i18n(strings.contact_call, {
+        icon: 'text',
+        text: i18n(strings.contact_text, {
           contact: meeting[`contact_${i}_name` as keyof typeof Meeting],
         }),
       });
@@ -374,13 +374,15 @@ export default function Meeting({
                         text={strings.share}
                       />
                     )}
-                  {meeting.start && meeting.isActive && settings.calendar_enabled && (
-                    <Button
-                      icon="calendar"
-                      onClick={() => formatIcs(meeting)}
-                      text={strings.add_to_calendar}
-                    />
-                  )}
+                  {meeting.start &&
+                    meeting.isActive &&
+                    settings.calendar_enabled && (
+                      <Button
+                        icon="calendar"
+                        onClick={() => formatIcs(meeting)}
+                        text={strings.add_to_calendar}
+                      />
+                    )}
                   {!meeting.group &&
                     contactButtons.map((button, index) => (
                       <Button {...button} key={index} />
