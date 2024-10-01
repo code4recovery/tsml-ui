@@ -1,13 +1,12 @@
 import { getTypesForLanguage } from '@code4recovery/spec';
-import { Translation } from '../types';
 
 export const es: Translation = {
   add_to_calendar: 'Añadir al calendario',
   address: 'Dirección',
   appointment: 'Cita',
   back_to_meetings: 'Volver a las reuniones',
-  contact_call: 'Llamar a %contact%',
   contact_email: 'Correo a %contact%',
+  contact_text: 'Texto %contact%',
   contribute_with: 'Contribuya con %service%',
   days: {
     friday: 'Viernes',
