@@ -47,6 +47,11 @@ describe('<Meeting />', () => {
     conference_phone_notes: 'Test',
     conference_provider: 'Zoom',
     updated: '2/17/22',
+    contact_1_name: 'Contact 1',
+    contact_1_email: 'contact1@test.com',
+    contact_1_phone: '+18005551212',
+    contact_2_email: 'contact2@test.com',
+    contact_2_phone: '+18005551212',
   };
 
   const mockState: State = {
@@ -138,6 +143,31 @@ describe('<Meeting />', () => {
       </MemoryRouter>
     );
     expect(container).toBeTruthy();
+  });
+
+  it('renders with contact 1 but no contact 2', () => {
+    const { getByText, queryByText } = render(
+      <MemoryRouter>
+        <Meeting
+          state={mockState}
+          setState={jest.fn()}
+          mapbox="pk.123456"
+          feedback_emails={['test@test.com']}
+        />
+      </MemoryRouter>
+    );
+    const contact1text = getByText(`Text ${mockMeeting.contact_1_name}`);
+    expect(contact1text).toHaveAttribute(
+      'href',
+      `sms:${mockMeeting.contact_1_phone}`
+    );
+    const contact1email = getByText(`Email ${mockMeeting.contact_1_name}`);
+    expect(contact1email).toHaveAttribute(
+      'href',
+      `mailto:${mockMeeting.contact_1_email}`
+    );
+    const contact2text = queryByText(`Text ${mockMeeting.contact_2_name}`);
+    expect(contact2text).toBeNull();
   });
 
   it('renders when inactive', () => {
