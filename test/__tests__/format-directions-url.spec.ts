@@ -8,7 +8,7 @@ describe('formatDirectionsUrl', () => {
   };
 
   const baseUrl = 'https://www.google.com/maps/dir/?api=1&destination=';
-  const iosBaseUrl = 'maps://?daddr=';
+  const iosBaseUrl = 'http://maps.apple.com/?daddr=';
 
   it.each`
     input                                         | expectedIos      | expectedGoogle
