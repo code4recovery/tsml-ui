@@ -188,7 +188,7 @@ export default function Meeting({
       });
     if (meeting[`contact_${i}_phone` as keyof typeof Meeting])
       contactButtons.push({
-        href: `tel:${meeting[`contact_${i}_phone` as keyof typeof Meeting]}`,
+        href: `sms:${meeting[`contact_${i}_phone` as keyof typeof Meeting]}`,
         icon: 'text',
         text: i18n(strings.contact_text, {
           contact: meeting[`contact_${i}_name` as keyof typeof Meeting],
