@@ -5,8 +5,8 @@ export const pt: Translation = {
   address: 'Endereço / Plataforma',
   appointment: 'Marcação',
   back_to_meetings: 'Voltar às Reuniões',
-  contact_call: 'Ligar %contact%',
   contact_email: 'Email %contact%',
+  contact_text: 'Texto %contact%',
   contribute_with: 'Contribuir com %service%',
   days: {
     friday: 'Sexta-Feira',

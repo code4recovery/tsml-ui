@@ -5,8 +5,8 @@ export const nl: Translation = {
   address: 'Addres',
   appointment: 'Afspraak',
   back_to_meetings: 'Terug naar Meetings',
-  contact_call: 'Bel %contact%',
   contact_email: 'E-mail %contact%',
+  contact_text: 'Tekst %contact%',
   contribute_with: 'Bijdragen aan %service%',
   days: {
     friday: 'Vrijdag',

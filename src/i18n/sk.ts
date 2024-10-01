@@ -5,8 +5,8 @@ export const sk: Translation = {
   address: 'Adresa / Platforma',
   appointment: 'Stretnutie',
   back_to_meetings: 'Späť na Stretnutia',
-  contact_call: 'Zavolať %contact%',
   contact_email: 'Emailovať %contact%',
+  contact_text: 'Text %contact%',
   contribute_with: 'Prispejte spolu s %service%',
   days: {
     friday: 'Piatok',

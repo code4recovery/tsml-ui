@@ -5,8 +5,8 @@ export const ja: Translation = {
   address: '住所・プラットフォーム',
   appointment: '予定',
   back_to_meetings: 'ミーティング一覧へ戻る',
-  contact_call: '%contact%に電話',
   contact_email: '%contact%にメール',
+  contact_text: '%contact%にテキスト',
   contribute_with: '%service% で献金する',
   days: {
     friday: '金曜日',
