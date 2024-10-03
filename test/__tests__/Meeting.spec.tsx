@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, fireEvent } from '@testing-library/react';
 import { DateTime } from 'luxon';
 import { MemoryRouter } from 'react-router-dom';
 
@@ -35,8 +35,9 @@ describe('<Meeting />', () => {
     paypal: 'https://paypal.me/test',
     location: 'Empire State Building',
     notes: 'Testing meeting notes\n\nTesting new line',
-    location_notes: 'Testing meeting notes\n\nTesting new line',
-    group_notes: 'Testing meeting notes\n\nTesting new line',
+    location_notes: 'Testing location notes\n\nTesting new line',
+    group: 'Test Group',
+    group_notes: 'Testing group notes\n\nTesting new line',
     website: 'https://test.com',
     phone: '+18005551212',
     regions: ['Manhattan', 'Midtown'],
@@ -93,67 +94,52 @@ describe('<Meeting />', () => {
   };
 
   it('renders with clickable buttons', () => {
-    const { container } = render(
+    const { getByText } = render(
       <MemoryRouter>
         <SettingsContext.Provider value={mergeSettings()}>
           <Meeting state={mockState} setState={jest.fn()} mapbox="pk.123456" />
         </SettingsContext.Provider>
       </MemoryRouter>
     );
-    expect(container).toBeTruthy();
 
-    //click type definition
-    const type_definition = screen.getByText(en.types.O);
+    // click type definition
+    const type_definition = getByText(en.types.O);
     expect(type_definition).toBeTruthy();
     fireEvent.click(type_definition);
+    const type_definition_text = getByText(en.type_descriptions.O);
+    expect(type_definition_text).toBeVisible();
     fireEvent.click(type_definition);
+    expect(type_definition_text).not.toBeVisible();
 
-    //click formatIcs
-    const calendar_link = screen.getByText(en.add_to_calendar);
-    expect(calendar_link).toBeTruthy();
+    // click formatIcs
+    const calendar_link = getByText(en.add_to_calendar);
+    expect(calendar_link).toBeVisible();
     fireEvent.click(calendar_link);
 
-    //click back
-    const back_link = screen.getByText(en.back_to_meetings);
-    expect(back_link).toBeTruthy();
+    // click back
+    const back_link = getByText(en.back_to_meetings);
+    expect(back_link).toBeVisible();
     fireEvent.click(back_link);
   });
 
   it('renders with group info', () => {
-    const { container } = render(
+    const { getByText } = render(
       <MemoryRouter>
-        <Meeting
-          state={{
-            ...mockState,
-            meetings: {
-              foo: {
-                ...mockMeeting,
-                group: 'Test',
-              },
-              bar: {
-                ...mockMeeting,
-                group: 'Test',
-              },
-            },
-          }}
-          setState={jest.fn()}
-          mapbox="pk.123456"
-          feedback_emails={['test@test.com']}
-        />
+        <Meeting state={mockState} setState={jest.fn()} mapbox="pk.123456" />
       </MemoryRouter>
     );
-    expect(container).toBeTruthy();
+
+    const group = getByText(mockMeeting.group!);
+    expect(group).toBeVisible();
+
+    const group_notes = getByText(mockMeeting.group_notes!.split('\n')[0]);
+    expect(group_notes).toBeVisible();
   });
 
   it('renders with contact 1 but no contact 2', () => {
     const { getByText, queryByText } = render(
       <MemoryRouter>
-        <Meeting
-          state={mockState}
-          setState={jest.fn()}
-          mapbox="pk.123456"
-          feedback_emails={['test@test.com']}
-        />
+        <Meeting state={mockState} setState={jest.fn()} mapbox="pk.123456" />
       </MemoryRouter>
     );
     const contact1text = getByText(`Text ${mockMeeting.contact_1_name}`);
@@ -171,7 +157,7 @@ describe('<Meeting />', () => {
   });
 
   it('renders when inactive', () => {
-    const { container } = render(
+    const { getByText } = render(
       <MemoryRouter>
         <Meeting
           state={{
@@ -181,10 +167,8 @@ describe('<Meeting />', () => {
                 ...mockMeeting,
                 isActive: false,
                 isInPerson: false,
-              },
-              bar: {
-                ...mockMeeting,
-                start: DateTime.now().plus({ day: 1 }),
+                types: ['X', 'inactive'],
+                end: DateTime.now().plus({ days: 1 }),
               },
             },
           }}
@@ -193,11 +177,12 @@ describe('<Meeting />', () => {
         />
       </MemoryRouter>
     );
-    expect(container).toBeTruthy();
+    const inactiveType = getByText(en.types.inactive);
+    expect(inactiveType).toBeVisible();
   });
 
-  it('renders with group but no contact', () => {
-    const { container } = render(
+  it('renders appointment', () => {
+    const { getByText } = render(
       <MemoryRouter>
         <Meeting
           state={{
@@ -205,18 +190,8 @@ describe('<Meeting />', () => {
             meetings: {
               foo: {
                 ...mockMeeting,
-                group: 'Test',
                 start: undefined,
-                email: undefined,
-                website: undefined,
-                phone: undefined,
-                venmo: undefined,
-                square: undefined,
-                paypal: undefined,
-              },
-              bar: {
-                ...mockMeeting,
-                isOnline: false,
+                end: undefined,
               },
             },
           }}
@@ -225,6 +200,7 @@ describe('<Meeting />', () => {
         />
       </MemoryRouter>
     );
-    expect(container).toBeTruthy();
+    const appointmentText = getByText(en.appointment);
+    expect(appointmentText).toBeVisible();
   });
 });
