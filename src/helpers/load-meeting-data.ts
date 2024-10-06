@@ -3,6 +3,7 @@ import { DateTime, WeekdayNumbers } from 'luxon';
 import { flattenAndSortIndexes } from './flatten-and-sort-indexes';
 import { formatAddress } from './format-address';
 import { formatConferenceProvider } from './format-conference-provider';
+import { formatFeedbackEmail } from './format-feedback-email';
 import { formatSlug } from './format-slug';
 
 import type { JSONData, JSONDataFlat, State, Meeting, Index } from '../types';
@@ -42,7 +43,10 @@ export function loadMeetingData(
       district,
       edit_url,
       email,
-      feedback_url,
+      entity,
+      entity_location,
+      entity_phone,
+      entity_url,
       group,
       group_notes,
       location,
@@ -72,6 +76,7 @@ export function loadMeetingData(
       conference_phone,
       conference_phone_notes,
       conference_url_notes,
+      feedback_url,
       formatted_address,
       regions,
     } = meeting;
@@ -398,6 +403,23 @@ export function loadMeetingData(
       .join('\t')
       .toLowerCase();
 
+    const feedback_emails = meeting.feedback_emails
+      ? meeting.feedback_emails
+          .split(',')
+          .map(e => e.trim())
+          .filter(e => e)
+      : settings.feedback_emails;
+
+    if (!feedback_url && feedback_emails.length) {
+      feedback_url = formatFeedbackEmail({
+        feedback_emails,
+        name,
+        edit_url,
+        settings,
+        strings,
+      });
+    }
+
     meetings[slug] = {
       address,
       approximate,
@@ -418,6 +440,10 @@ export function loadMeetingData(
       district,
       edit_url,
       email,
+      entity,
+      entity_location,
+      entity_phone,
+      entity_url,
       end,
       feedback_url,
       formatted_address,

@@ -50,6 +50,7 @@ export const sk: Translation = {
   not_found: 'Stretnutia sa nenašli.',
   night: 'Noc',
   phone: 'Telefón',
+  provided_by: 'Tento zoznam poskytuje:',
   region: 'Kraj',
   region_any: 'Kdekoľvek',
   remove: 'Zmazať %filter%',

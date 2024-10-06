@@ -49,6 +49,7 @@ export const es: Translation = {
   not_found: 'Reunión no encontrada.',
   night: 'Noche',
   phone: 'Teléfono',
+  provided_by: 'Este listado es proporcionado por:',
   region: 'Región',
   region_any: 'Todos lados',
   remove: 'Quitar %filter%',

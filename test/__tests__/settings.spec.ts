@@ -7,12 +7,48 @@ describe('settings', () => {
     languageGetter = jest.spyOn(window.navigator, 'language', 'get');
   });
 
+  it('should import flags', () => {
+    const flags = ['O', 'C'];
+    const { settings } = mergeSettings({ flags });
+    expect(settings.flags).toEqual(flags);
+  });
+
+  it('should import empty flags', () => {
+    const flags: string[] = [];
+    const { settings } = mergeSettings({ flags });
+    expect(settings.flags).toEqual(flags);
+  });
+
   it('should import user columns', () => {
     const columns = ['name'];
     const { settings } = mergeSettings({
       columns,
     });
     expect(settings.columns).toEqual(columns);
+  });
+
+  it('should import user columns', () => {
+    const columns = ['name'];
+    const { settings } = mergeSettings({ columns });
+    expect(settings.columns).toEqual(columns);
+  });
+
+  it('should import user filters', () => {
+    const filters = ['region'] as TSMLReactConfig['filters'];
+    const { settings } = mergeSettings({ filters });
+    expect(settings.filters).toEqual(filters);
+  });
+
+  it('should import user params', () => {
+    const params = ['search'] as TSMLReactConfig['params'];
+    const { settings } = mergeSettings({ params });
+    expect(settings.params).toEqual(params);
+  });
+
+  it('should import user times', () => {
+    const times = ['morning'] as TSMLReactConfig['times'];
+    const { settings } = mergeSettings({ times });
+    expect(settings.times).toEqual(times);
   });
 
   it('should import user weekdays', () => {
@@ -27,18 +63,6 @@ describe('settings', () => {
     ];
     const { settings } = mergeSettings({ weekdays });
     expect(settings.weekdays).toEqual(weekdays);
-  });
-
-  it('should import flags', () => {
-    const flags = ['O', 'C'];
-    const { settings } = mergeSettings({ flags });
-    expect(settings.flags).toEqual(flags);
-  });
-
-  it('should import empty flags', () => {
-    const flags: string[] = [];
-    const { settings } = mergeSettings({ flags });
-    expect(settings.flags).toEqual(flags);
   });
 
   it('should fall back to english', () => {

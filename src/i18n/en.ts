@@ -49,6 +49,7 @@ export const en: Translation = {
   not_found: 'Meeting not found.',
   night: 'Night',
   phone: 'Phone',
+  provided_by: 'This listing is provided by:',
   region: 'Region',
   region_any: 'Anywhere',
   remove: 'Remove %filter%',

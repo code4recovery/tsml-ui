@@ -49,6 +49,7 @@ export const sv: Translation = {
   not_found: 'Hittade inte mötet.',
   night: 'Natt',
   phone: 'Telefon',
+  provided_by: 'Denna lista tillhandahålls av:',
   region: 'Region',
   region_any: 'Överallt',
   remove: 'Ta bort %filter%',

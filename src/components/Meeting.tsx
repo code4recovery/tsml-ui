@@ -5,7 +5,6 @@ import { Link as RouterLink } from 'react-router-dom';
 
 import {
   formatDirectionsUrl,
-  formatFeedbackEmail,
   formatIcs,
   formatString as i18n,
   formatUrl,
@@ -28,12 +27,10 @@ import Map from './Map';
 import type { Meeting as MeetingType, State } from '../types';
 
 export default function Meeting({
-  feedback_emails = [],
   mapbox,
   setState,
   state,
 }: {
-  feedback_emails?: string[];
   mapbox?: string;
   setState: Dispatch<SetStateAction<State>>;
   state: State;
@@ -114,16 +111,6 @@ export default function Meeting({
   // set page title
   if (meeting.name) {
     document.title = meeting.name;
-  }
-
-  // feedback URL link
-  if (!meeting.feedback_url && feedback_emails.length) {
-    meeting.feedback_url = formatFeedbackEmail(
-      settings.feedback_emails,
-      meeting,
-      settings,
-      strings
-    );
   }
 
   const contactButtons: {
@@ -428,18 +415,51 @@ export default function Meeting({
                   {formatWeekdays(groupWeekdays, meeting.slug, state, setState)}
                 </div>
               )}
-            {meeting.updated && (
-              <div>{i18n(strings.updated, { updated: meeting.updated })}</div>
+            {(meeting.updated || meeting.feedback_url || meeting.entity) && (
+              <div>
+                {meeting.entity && (
+                  <>
+                    <small>{strings.provided_by}</small>
+                    <header>
+                      <h2>{meeting.entity}</h2>
+                      {meeting.entity_location && (
+                        <p>{meeting.entity_location}</p>
+                      )}
+                    </header>
+                    {meeting.entity_phone && (
+                      <Button
+                        href={`tel:${meeting.entity_phone}`}
+                        text={meeting.entity_phone}
+                        icon="phone"
+                      />
+                    )}
+                    {meeting.entity_url && (
+                      <Button
+                        href={meeting.entity_url}
+                        text={new URL(meeting.entity_url).host.replace(
+                          'www.',
+                          ''
+                        )}
+                        icon="link"
+                      />
+                    )}
+                  </>
+                )}
+
+                {meeting.feedback_url && (
+                  <Button
+                    href={meeting.feedback_url}
+                    icon="edit"
+                    text={strings.feedback}
+                  />
+                )}
+
+                {meeting.updated && (
+                  <p>{i18n(strings.updated, { updated: meeting.updated })}</p>
+                )}
+              </div>
             )}
           </div>
-
-          {meeting.feedback_url && (
-            <Button
-              href={meeting.feedback_url}
-              icon="edit"
-              text={strings.feedback}
-            />
-          )}
         </div>
         <div
           css={

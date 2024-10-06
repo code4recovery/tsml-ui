@@ -52,6 +52,12 @@ export const meetingColumnsCss = css`
     }
   }
 
+  header {
+    text-align: center;
+    display: grid;
+    gap: ${size.gutter / 2}px;
+  }
+
   h3 {
     font-size: var(--font-size);
     font-weight: 500;
