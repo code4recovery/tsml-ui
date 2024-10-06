@@ -403,12 +403,16 @@ export function loadMeetingData(
       .join('\t')
       .toLowerCase();
 
-    const feedback_emails = meeting.feedback_emails
-      ? meeting.feedback_emails
-          .split(',')
-          .map(e => e.trim())
-          .filter(e => e)
-      : settings.feedback_emails;
+    let feedback_emails = settings.feedback_emails;
+    if (Array.isArray(meeting.feedback_emails)) {
+      feedback_emails = meeting.feedback_emails;
+    }
+    if ('string' === typeof meeting.feedback_emails) {
+      feedback_emails = meeting.feedback_emails
+        .split(',')
+        .map(e => e.trim())
+        .filter(e => e);
+    }
 
     if (!feedback_url && feedback_emails.length) {
       feedback_url = formatFeedbackEmail({

@@ -54,7 +54,13 @@
     "group_id": 65346,
     "group": "Serenity and Spirituality",
     "website": "https://howplace.org/",
-    "attendance_option": "in_person"
+    "attendance_option": "in_person",
+    "entity": "Site Group",
+    "entity_email": "admin@test.com",
+    "entity_phone": "555-555-4567",
+    "entity_location": "Macon, Georgia",
+    "entity_url": "http://site.com",
+    "feedback_emails": "user1@test.com,user2@test.com"
   },
   {
     "id": 65411,
@@ -80,7 +86,13 @@
     "region": "Acworth",
     "regions": ["Acworth"],
     "website": "https://howplace.org/",
-    "attendance_option": "in_person"
+    "attendance_option": "in_person",
+    "entity": "Site Group",
+    "entity_email": "admin@test.com",
+    "entity_phone": "555-555-4567",
+    "entity_location": "Macon, Georgia",
+    "entity_url": "http://site.com",
+    "feedback_emails": ["user1@test.com", "user2@test.com"]
   },
   {
     "id": 65483,
@@ -108,7 +120,13 @@
     "group_id": 65482,
     "group": "Original H.O.W.",
     "website": "https://howplace.org/",
-    "attendance_option": "in_person"
+    "attendance_option": "in_person",
+    "entity": "Site Group",
+    "entity_email": "admin@test.com",
+    "entity_phone": "555-555-4567",
+    "entity_location": "Macon, Georgia",
+    "entity_url": "http://site.com",
+    "feedback_emails": ["user1@test.com", "user2@test.com"]
   },
   {
     "id": 65376,
@@ -164,6 +182,12 @@
     "group_id": 65374,
     "group": "Covington",
     "last_contact": "2021-08-16",
-    "attendance_option": "in_person"
+    "attendance_option": "in_person",
+    "entity": "Site Group",
+    "entity_email": "admin@test.com",
+    "entity_phone": "555-555-4567",
+    "entity_location": "Macon, Georgia",
+    "entity_url": "http://site.com",
+    "feedback_emails": ["user1@test.com", "user2@test.com"]    
   }  
 ]
