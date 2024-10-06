@@ -39,5 +39,6 @@ export function formatFeedbackEmail({
     body: lines.join('\n'),
   })
     .toString()
-    .replaceAll('+', ' ')}`;
+    .split('+')
+    .join(' ')}`;
 }

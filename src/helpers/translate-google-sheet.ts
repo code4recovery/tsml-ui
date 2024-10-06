@@ -23,7 +23,7 @@ export function translateGoogleSheet(
   // @ts-expect-error TODO
   const headers = data.values
     .shift()
-    .map(header => formatSlug(header).replaceAll('-', '_'))
+    .map(header => formatSlug(header).split('-').join('_'))
     .map(header => (header === 'id' ? 'slug' : header))
     .map(header => (header === 'full_address' ? 'formatted_address' : header));
 

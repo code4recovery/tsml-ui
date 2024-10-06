@@ -34,6 +34,7 @@ export function filterMeetingData(
       } else {
         //get the union of other filters (Monday OR Tuesday)
         matchGroups.push(
+          // eslint-disable-next-line prefer-spread
           [].concat.apply(
             [],
             // @ts-expect-error TODO
@@ -51,7 +52,8 @@ export function filterMeetingData(
     if (state.input.search) {
       const orTerms = state.input.search
         .replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-        .replaceAll(' OR ', '|')
+        .split(' OR ')
+        .join('|')
         .toLowerCase()
         .split('|')
         .map(phrase => phrase.split('"'))
@@ -77,6 +79,7 @@ export function filterMeetingData(
         )
       );
       // @ts-expect-error TODO
+      // eslint-disable-next-line prefer-spread
       matchGroups.push([].concat.apply([], matches));
     }
   } else if (['me', 'location'].includes(state.input.mode)) {
