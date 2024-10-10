@@ -51,10 +51,10 @@ interface TSMLReactConfig {
   weekdays: string[];
 }
 
-declare var tsml_react_config: TSMLReactConfig | undefined;
+declare const tsml_react_config: TSMLReactConfig | undefined;
 
 //google analytics globals
-declare var gtag:
+declare const gtag:
   | ((
       type: 'event',
       action: string,
@@ -65,7 +65,7 @@ declare var gtag:
     ) => void)
   | undefined;
 
-declare var ga:
+declare const ga:
   | ((
       type: 'send',
       params: {
