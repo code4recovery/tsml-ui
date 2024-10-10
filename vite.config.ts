@@ -13,8 +13,10 @@ export default defineConfig({
       output: {
         entryFileNames: 'app.js',
         manualChunks: undefined,
+        inlineDynamicImports: true,
       },
     },
+    target: 'es2021',
   },
   plugins: [cssInjectedByJsPlugin(), react()],
 });
