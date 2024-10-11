@@ -4,7 +4,7 @@ import { en, es, fr, ja, sv, sk } from '../i18n';
 
 import { formatSlug } from './format-slug';
 
-import type { JSONData, Translation } from '../types';
+import type { JSONData, Settings, Translation } from '../types';
 
 export type GoogleSheetData = {
   values: string[][];
@@ -14,7 +14,7 @@ export type GoogleSheetData = {
 export function translateGoogleSheet(
   data: GoogleSheetData,
   sheetId: string,
-  settings: TSMLReactConfig
+  settings: Settings
 ) {
   if (!data.values || !data.values.length) return;
 

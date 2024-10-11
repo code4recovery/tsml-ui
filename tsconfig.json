@@ -1,5 +1,7 @@
 {
   "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
     "jsx": "react-jsx", // can remove if we shift off of emotion
     "jsxImportSource": "@emotion/react", // can remove if we shift off of emotion
   },

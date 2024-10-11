@@ -1,29 +1,84 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<Loading /> 1`] = `
-<div
-  css={
-    {
-      "map": "/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImxvYWRpbmcudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBUzZCIiwiZmlsZSI6ImxvYWRpbmcudHMiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgeyBjc3MsIGtleWZyYW1lcyB9IGZyb20gJ0BlbW90aW9uL3JlYWN0JztcblxuaW1wb3J0IHsgY29sb3IsIHNpemUgfSBmcm9tICcuL3ZhcmlhYmxlcyc7XG5cbmNvbnN0IGFuaW1hdGlvbiA9IGtleWZyYW1lc2BcbiAgZnJvbSB7IHRyYW5zZm9ybTogcm90YXRlKDBkZWcpOyB9XG4gIHRvIHsgdHJhbnNmb3JtOiByb3RhdGUoMzYwZGVnKTsgfVxuYDtcblxuZXhwb3J0IGNvbnN0IGxvYWRpbmdDc3MgPSBjc3NgXG4gIGFsaWduLWl0ZW1zOiBjZW50ZXI7XG4gIGRpc3BsYXk6IGZsZXg7XG4gIGZsZXgtZ3JvdzogMTtcbiAganVzdGlmeS1jb250ZW50OiBjZW50ZXI7XG4gIG1pbi1oZWlnaHQ6IDUwMHB4O1xuXG4gID4gZGl2IHtcbiAgICBoZWlnaHQ6ICR7c2l6ZS5sb2FkaW5nfXB4O1xuICAgIHBvc2l0aW9uOiByZWxhdGl2ZTtcbiAgICB3aWR0aDogJHtzaXplLmxvYWRpbmd9cHg7XG4gICAgZGl2IHtcbiAgICAgIGFuaW1hdGlvbjogJHthbmltYXRpb259IDEuMnMgY3ViaWMtYmV6aWVyKDAuNSwgMCwgMC41LCAxKSBpbmZpbml0ZTtcbiAgICAgIGJvcmRlci1jb2xvcjogJHtjb2xvci5tZWRpdW19IHRyYW5zcGFyZW50IHRyYW5zcGFyZW50IHRyYW5zcGFyZW50O1xuICAgICAgYm9yZGVyLXJhZGl1czogNTAlO1xuICAgICAgYm9yZGVyLXN0eWxlOiBzb2xpZDtcbiAgICAgIGJvcmRlci13aWR0aDogJHtzaXplLmxvYWRpbmcgLyAxMH1weDtcbiAgICAgIGhlaWdodDogMTAwJTtcbiAgICAgIHBvc2l0aW9uOiBhYnNvbHV0ZTtcbiAgICAgIHdpZHRoOiAxMDAlO1xuICAgICAgJjpudGgtb2YtdHlwZSgxKSB7XG4gICAgICAgIGFuaW1hdGlvbi1kZWxheTogLTAuNDVzO1xuICAgICAgfVxuICAgICAgJjpudGgtb2YtdHlwZSgyKSB7XG4gICAgICAgIGFuaW1hdGlvbi1kZWxheTogLTAuM3M7XG4gICAgICB9XG4gICAgICAmOm50aC1vZi10eXBlKDMpIHtcbiAgICAgICAgYW5pbWF0aW9uLWRlbGF5OiAtMC4xNXM7XG4gICAgICB9XG4gICAgfVxuICB9XG5gO1xuIl19 */",
-      "name": "tuls2x-loadingCss",
-      "next": {
-        "name": "animation-w6tfot",
-        "next": undefined,
-        "styles": "@keyframes animation-w6tfot{
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}",
-      },
-      "styles": "align-items:center;display:flex;flex-grow:1;justify-content:center;min-height:500px;>div{height:64px;position:relative;width:64px;div{animation:animation-w6tfot 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;border-color:color-mix(in srgb, var(--background), var(--text) 15%) transparent transparent transparent;border-radius:50%;border-style:solid;border-width:6.4px;height:100%;position:absolute;width:100%;&:nth-of-type(1){animation-delay:-0.45s;}&:nth-of-type(2){animation-delay:-0.3s;}&:nth-of-type(3){animation-delay:-0.15s;}}};label:loadingCss;",
-      "toString": [Function],
-    }
-  }
->
-  <div>
-    <div />
-    <div />
-    <div />
-    <div />
-  </div>
-</div>
+{
+  "asFragment": [Function],
+  "baseElement": <body>
+    <div>
+      <div
+        class="css-1hxcyh4"
+      >
+        <div>
+          <div />
+          <div />
+          <div />
+          <div />
+        </div>
+      </div>
+    </div>
+  </body>,
+  "container": <div>
+    <div
+      class="css-1hxcyh4"
+    >
+      <div>
+        <div />
+        <div />
+        <div />
+        <div />
+      </div>
+    </div>
+  </div>,
+  "debug": [Function],
+  "findAllByAltText": [Function],
+  "findAllByDisplayValue": [Function],
+  "findAllByLabelText": [Function],
+  "findAllByPlaceholderText": [Function],
+  "findAllByRole": [Function],
+  "findAllByTestId": [Function],
+  "findAllByText": [Function],
+  "findAllByTitle": [Function],
+  "findByAltText": [Function],
+  "findByDisplayValue": [Function],
+  "findByLabelText": [Function],
+  "findByPlaceholderText": [Function],
+  "findByRole": [Function],
+  "findByTestId": [Function],
+  "findByText": [Function],
+  "findByTitle": [Function],
+  "getAllByAltText": [Function],
+  "getAllByDisplayValue": [Function],
+  "getAllByLabelText": [Function],
+  "getAllByPlaceholderText": [Function],
+  "getAllByRole": [Function],
+  "getAllByTestId": [Function],
+  "getAllByText": [Function],
+  "getAllByTitle": [Function],
+  "getByAltText": [Function],
+  "getByDisplayValue": [Function],
+  "getByLabelText": [Function],
+  "getByPlaceholderText": [Function],
+  "getByRole": [Function],
+  "getByTestId": [Function],
+  "getByText": [Function],
+  "getByTitle": [Function],
+  "queryAllByAltText": [Function],
+  "queryAllByDisplayValue": [Function],
+  "queryAllByLabelText": [Function],
+  "queryAllByPlaceholderText": [Function],
+  "queryAllByRole": [Function],
+  "queryAllByTestId": [Function],
+  "queryAllByText": [Function],
+  "queryAllByTitle": [Function],
+  "queryByAltText": [Function],
+  "queryByDisplayValue": [Function],
+  "queryByLabelText": [Function],
+  "queryByPlaceholderText": [Function],
+  "queryByRole": [Function],
+  "queryByTestId": [Function],
+  "queryByText": [Function],
+  "queryByTitle": [Function],
+  "rerender": [Function],
+  "unmount": [Function],
+}
 `;

@@ -1,5 +1,7 @@
 import { getTypesForLanguage } from '@code4recovery/spec';
 
+import type { Translation } from '../types';
+
 export const ja: Translation = {
   add_to_calendar: 'カレンダーに追加',
   address: '住所・プラットフォーム',

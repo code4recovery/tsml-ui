@@ -1,4 +1,5 @@
 import type { Meeting } from './Meeting';
+import type { Settings } from './Settings';
 
 export type Index = {
   key: string;
@@ -37,10 +38,10 @@ export type State = {
     mode: 'search' | 'location' | 'me';
     region: string[];
     search?: string;
-    time: TSMLReactConfig['times'];
+    time: Settings['times'];
     type: string[];
     view: 'table' | 'map';
-    weekday: TSMLReactConfig['weekdays'];
+    weekday: Settings['weekdays'];
   };
   loading: boolean;
   meetings: {

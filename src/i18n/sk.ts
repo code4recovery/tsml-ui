@@ -1,5 +1,7 @@
 import { getTypesForLanguage } from '@code4recovery/spec';
 
+import type { Translation } from '../types';
+
 export const sk: Translation = {
   add_to_calendar: 'Pridať do kalendára',
   address: 'Adresa / Platforma',

@@ -5,13 +5,13 @@ import { DateTime } from 'luxon';
 import { calculateDistances } from './calculate-distances';
 import { getIndexByKey } from './get-index-by-key';
 
-import type { State } from '../types';
+import type { Settings, State, Translation } from '../types';
 
 //run filters on meetings; this is run at every render
 export function filterMeetingData(
   state: State,
   setState: Dispatch<SetStateAction<State>>,
-  settings: TSMLReactConfig,
+  settings: Settings,
   strings: Translation,
   mapbox?: string
 ) {
@@ -78,9 +78,8 @@ export function filterMeetingData(
           )
         )
       );
-      // @ts-expect-error TODO
-      // eslint-disable-next-line prefer-spread
-      matchGroups.push([].concat.apply([], matches));
+
+      matchGroups.push([...matches]);
     }
   } else if (['me', 'location'].includes(state.input.mode)) {
     //only show meetings with physical locations
@@ -141,8 +140,7 @@ export function filterMeetingData(
 
   //do the filtering, if necessary
   const filteredSlugs = matchGroups.length
-    ? // @ts-expect-error TODO
-      matchGroups.shift().filter(v => matchGroups.every(a => a.includes(v))) //get intersection of slug arrays
+    ? matchGroups.shift()?.filter(v => matchGroups.every(a => a.includes(v))) //get intersection of slug arrays
     : slugs; //get everything
 
   //build lookup for meeting times based on now
@@ -156,7 +154,7 @@ export function filterMeetingData(
   });
 
   //sort slugs
-  filteredSlugs.sort((a, b) => {
+  filteredSlugs?.sort((a, b) => {
     const meetingA = state.meetings[a];
     const meetingB = state.meetings[b];
 
@@ -204,7 +202,7 @@ export function filterMeetingData(
   //find in-progress meetings
   const inProgress = state.input.weekday?.length
     ? []
-    : filteredSlugs.filter(slug => {
+    : filteredSlugs?.filter(slug => {
         const { start, end, types } = state.meetings[slug];
         if (!start || !end) return false;
         return start < now_offset && end > now && !types?.includes('inactive');

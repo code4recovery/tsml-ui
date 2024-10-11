@@ -1,5 +1,7 @@
 import React from 'react';
 
+import '@testing-library/jest-dom';
+
 import { fireEvent, render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 
@@ -90,7 +92,7 @@ describe('<Dropdown />', () => {
 
   it('has working links', async () => {
     const mockSetDropdown = jest.fn();
-    const mockSetState = jest.fn();
+    // const mockSetState = jest.fn();
 
     render(
       <MemoryRouter>
@@ -107,15 +109,15 @@ describe('<Dropdown />', () => {
       </MemoryRouter>
     );
 
-    function modify<
-      K extends keyof (typeof mockStateWithFilter)['input'],
-      T extends (typeof mockStateWithFilter)['input'][K]
-    >(key: K, value: T) {
-      return {
-        ...mockStateWithFilter,
-        input: { ...mockStateWithFilter.input, [key]: value },
-      };
-    }
+    // function modify<
+    //   K extends keyof (typeof mockStateWithFilter)['input'],
+    //   T extends (typeof mockStateWithFilter)['input'][K]
+    // >(key: K, value: T) {
+    //   return {
+    //     ...mockStateWithFilter,
+    //     input: { ...mockStateWithFilter.input, [key]: value },
+    //   };
+    // }
 
     //dropdown starts open
     const dropdown = screen.getByLabelText(defaultValue);

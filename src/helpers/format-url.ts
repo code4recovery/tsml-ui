@@ -1,7 +1,9 @@
+import { Settings } from '../types';
+
 // format an internal link with correct query params
 export function formatUrl(
-  input: Partial<TSMLReactConfig['defaults']>,
-  settings: TSMLReactConfig
+  input: Partial<Settings['defaults']>,
+  settings: Settings
 ) {
   const query = {};
 

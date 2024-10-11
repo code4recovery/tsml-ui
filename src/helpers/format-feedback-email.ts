@@ -1,3 +1,5 @@
+import type { Settings, Translation } from '../types';
+
 import { formatArray } from './format-array';
 import { formatString as i18n } from './format-string';
 import { formatUrl } from './format-url';
@@ -14,7 +16,7 @@ export function formatFeedbackEmail({
   feedback_emails: string[];
   edit_url?: string;
   name?: string;
-  settings: TSMLReactConfig;
+  settings: Settings;
   strings: Translation;
 }) {
   // remove extra query params from meeting URL

@@ -1,5 +1,7 @@
 import React from 'react';
 
+import '@testing-library/jest-dom';
+
 import { render, fireEvent } from '@testing-library/react';
 import { DateTime } from 'luxon';
 import { MemoryRouter } from 'react-router-dom';

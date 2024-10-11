@@ -10,7 +10,7 @@ import {
   tableInProgressCss,
   tableWrapperCss,
 } from '../styles';
-import { Meeting, State } from '../types';
+import { Meeting, State, Translation } from '../types';
 
 import Icon, { icons } from './Icon';
 import Link from './Link';
@@ -27,6 +27,8 @@ export default function Table({
   state: State;
 }) {
   const { settings, strings } = useSettings();
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, setSearchParams] = useSearchParams();
   const meetingsPerPage = 10;
   const supported_columns = [
