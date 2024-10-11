@@ -5,15 +5,18 @@ export function formatUrl(
   input: Partial<Settings['defaults']>,
   settings: Settings
 ) {
-  const query = {};
+  const query: { [id: string]: string } = {};
 
   // distance, region, time, type, and weekday
   settings.filters
     .filter(filter => typeof input[filter] !== 'undefined')
     .filter(filter => input[filter]?.length)
     .forEach(filter => {
-      // @ts-expect-error TODO
-      query[filter] = input[filter].join('/');
+      // todo make less ugly
+      const value = input[filter]?.join('/');
+      if (filter && value) {
+        query[filter] = value;
+      }
     });
 
   // meeting, mode, search, view
@@ -21,8 +24,9 @@ export function formatUrl(
     .filter(param => typeof input[param] !== 'undefined')
     .filter(param => input[param] !== settings.defaults[param])
     .forEach(param => {
-      // @ts-expect-error TODO
-      query[param] = input[param];
+      if (input[param]) {
+        query[param] = input[param];
+      }
     });
 
   // create a query string with only values in use

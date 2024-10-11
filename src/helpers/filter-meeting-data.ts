@@ -33,16 +33,11 @@ export function filterMeetingData(
         );
       } else {
         //get the union of other filters (Monday OR Tuesday)
-        matchGroups.push(
-          // eslint-disable-next-line prefer-spread
-          [].concat.apply(
-            [],
-            // @ts-expect-error TODO
-            state.input[filter].map(
-              key => getIndexByKey(state.indexes[filter], key)?.slugs ?? []
-            )
-          )
-        );
+        matchGroups.push([
+          ...state.input[filter]
+            .map(key => getIndexByKey(state.indexes[filter], key)?.slugs ?? [])
+            .flat(),
+        ]);
       }
     }
   });

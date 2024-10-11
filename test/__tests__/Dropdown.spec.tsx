@@ -50,7 +50,6 @@ describe('<Dropdown />', () => {
           <Dropdown
             filter={filter}
             open={false}
-            end={false}
             defaultValue={defaultValue}
             setDropdown={jest.fn()}
             state={{
@@ -73,7 +72,6 @@ describe('<Dropdown />', () => {
           <Dropdown
             filter={filter}
             open={false}
-            end={false}
             defaultValue={defaultValue}
             setDropdown={mockSetDropdown}
             state={mockState}
@@ -99,7 +97,6 @@ describe('<Dropdown />', () => {
         <SettingsContext.Provider value={settings}>
           <Dropdown
             defaultValue={defaultValue}
-            end={false}
             filter={filter}
             open={true}
             setDropdown={mockSetDropdown}

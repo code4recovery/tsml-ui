@@ -20,12 +20,13 @@ export function translateGoogleSheet(
 
   const meetings: JSONData[] = [];
 
-  // @ts-expect-error TODO
   const headers = data.values
     .shift()
-    .map(header => formatSlug(header).split('-').join('_'))
+    ?.map(header => formatSlug(header).split('-').join('_'))
     .map(header => (header === 'id' ? 'slug' : header))
-    .map(header => (header === 'full_address' ? 'formatted_address' : header));
+    .map(header =>
+      header === 'full_address' ? 'formatted_address' : header
+    ) as Array<keyof JSONData>;
 
   const validTypes: { [index: string]: string } = {};
   const validCodes = Object.keys(en.types);
@@ -56,7 +57,7 @@ export function translateGoogleSheet(
     row = row.map(cell => String(cell).trim());
 
     // fill values
-    headers.forEach((header, index) => {
+    headers?.forEach((header, index) => {
       if (row[index]) {
         if (header === 'types') {
           meeting.types = row[index]
@@ -67,8 +68,7 @@ export function translateGoogleSheet(
         } else if (header === 'regions') {
           meeting.regions = row[index].split('>').map(e => e.trim());
         } else {
-          // @ts-expect-error TODO
-          meeting[header as keyof JSONData] = row[index];
+          meeting[header] = row[index];
         }
       }
     });
