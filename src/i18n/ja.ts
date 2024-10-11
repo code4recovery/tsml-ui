@@ -32,6 +32,7 @@ export const ja: Translation = {
   in_progress_single: '1件のミーティングが進行中です',
   in_progress_multiple: '%count% ミーティングが進行中です',
   km: 'キロ',
+  loading: '読み込み中',
   location: '位置',
   location_group: '場所・グループ',
   match_single: '1件の結果',

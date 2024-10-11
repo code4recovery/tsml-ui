@@ -32,6 +32,7 @@ export const nl: Translation = {
   in_progress_single: '1 meeting bezig',
   in_progress_multiple: '%count% meetings bezig',
   km: 'km',
+  loading: 'Laden',
   location: 'Locatie',
   location_group: 'Locatie / Groep',
   match_single: '1 resultaat',

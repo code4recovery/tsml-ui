@@ -32,6 +32,7 @@ export const fr: Translation = {
   in_progress_single: '1 réunion en cours',
   in_progress_multiple: '%count% rendez-vous en cours',
   km: 'km',
+  loading: 'Chargement',
   location: 'Emplacement',
   location_group: 'Emplacement / Groupe',
   match_single: '1 résultat',

@@ -1,12 +1,11 @@
 import { createContext, useContext } from 'react';
 
-import { Settings as LuxonSettings } from 'luxon';
-
 import merge from 'deepmerge';
-import { Settings, Translation } from '../types';
+import { Settings as LuxonSettings } from 'luxon';
+import { Language } from '@code4recovery/spec';
 
 import { en, es, fr, ja, nl, pt, sk, sv } from '../i18n';
-import { Language } from '@code4recovery/spec';
+import { Settings, Translation } from '../types';
 
 // override these on your page with tsml_react_config
 export const defaults: Settings = {
