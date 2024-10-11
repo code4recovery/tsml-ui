@@ -86,7 +86,7 @@ export default function TsmlUI({
   useEffect(() => {
     const input = getQueryString(settings);
     if (input !== state.input) {
-      setState({ ...state, input });
+      setState(state => ({ ...state, input }));
     }
   }, [searchParams]);
 
@@ -230,7 +230,7 @@ export default function TsmlUI({
   }, []);
 
   // filter data
-  const [filteredSlugs, inProgress] = filterMeetingData(
+  const [filteredSlugs = [], inProgress = []] = filterMeetingData(
     state,
     setState,
     settings,
