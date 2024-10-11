@@ -1,5 +1,7 @@
 import { DateTime, WeekdayNumbers } from 'luxon';
 
+import { Settings, Translation } from '../types';
+
 import { flattenAndSortIndexes } from './flatten-and-sort-indexes';
 import { formatAddress } from './format-address';
 import { formatConferenceProvider } from './format-conference-provider';
@@ -12,7 +14,7 @@ import type { JSONData, JSONDataFlat, State, Meeting, Index } from '../types';
 export function loadMeetingData(
   data: JSONData[],
   capabilities: State['capabilities'],
-  settings: TSMLReactConfig,
+  settings: Settings,
   strings: Translation,
   timezone?: string
 ): [State['meetings'], State['indexes'], State['capabilities']] {

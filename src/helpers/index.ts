@@ -8,7 +8,6 @@ export * from './format-conference-provider';
 export * from './format-directions-url';
 export * from './format-feedback-email';
 export * from './format-ics';
-export * from './format-search-params';
 export * from './format-slug';
 export * from './format-string';
 export * from './format-url';

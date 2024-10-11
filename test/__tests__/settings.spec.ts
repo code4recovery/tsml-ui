@@ -1,3 +1,5 @@
+import type { Settings } from '../../src/types';
+
 import { mergeSettings } from '../../src/helpers/settings';
 
 describe('settings', () => {
@@ -34,19 +36,19 @@ describe('settings', () => {
   });
 
   it('should import user filters', () => {
-    const filters = ['region'] as TSMLReactConfig['filters'];
+    const filters = ['region'] as Settings['filters'];
     const { settings } = mergeSettings({ filters });
     expect(settings.filters).toEqual(filters);
   });
 
   it('should import user params', () => {
-    const params = ['search'] as TSMLReactConfig['params'];
+    const params = ['search'] as Settings['params'];
     const { settings } = mergeSettings({ params });
     expect(settings.params).toEqual(params);
   });
 
   it('should import user times', () => {
-    const times = ['morning'] as TSMLReactConfig['times'];
+    const times = ['morning'] as Settings['times'];
     const { settings } = mergeSettings({ times });
     expect(settings.times).toEqual(times);
   });

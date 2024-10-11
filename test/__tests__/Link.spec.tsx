@@ -1,4 +1,7 @@
 import React from 'react';
+
+import '@testing-library/jest-dom';
+
 import { screen, render, fireEvent } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 
