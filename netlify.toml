@@ -1,4 +1,4 @@
 [build]
-  publish = "public/"
-  command = "npx mix --production"
+  publish = "dist/"
+  command = "npm run build"
 

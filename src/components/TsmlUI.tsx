@@ -15,7 +15,7 @@ import { globalCss } from '../styles';
 
 import { Alert, Controls, Loading, Map, Meeting, Table, Title } from './';
 
-import type { State } from '../types';
+import type { Settings, State } from '../types';
 
 export default function TsmlUI({
   google,
@@ -26,7 +26,7 @@ export default function TsmlUI({
 }: {
   google?: string;
   mapbox?: string;
-  settings?: TSMLReactConfig;
+  settings?: Settings;
   src?: string;
   timezone?: string;
 }) {
@@ -86,7 +86,7 @@ export default function TsmlUI({
   useEffect(() => {
     const input = getQueryString(settings);
     if (input !== state.input) {
-      setState({ ...state, input });
+      setState(state => ({ ...state, input }));
     }
   }, [searchParams]);
 
@@ -152,7 +152,7 @@ export default function TsmlUI({
               try {
                 // check if timezone is valid
                 Intl.DateTimeFormat(undefined, { timeZone: timezone });
-              } catch (e) {
+              } catch {
                 return setState({
                   ...state,
                   error: `Timezone ${timezone} is not valid. Please use one like Europe/Rome.`,
@@ -230,7 +230,7 @@ export default function TsmlUI({
   }, []);
 
   // filter data
-  const [filteredSlugs, inProgress] = filterMeetingData(
+  const [filteredSlugs = [], inProgress = []] = filterMeetingData(
     state,
     setState,
     settings,

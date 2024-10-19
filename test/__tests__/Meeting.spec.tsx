@@ -1,5 +1,7 @@
 import React from 'react';
 
+import '@testing-library/jest-dom';
+
 import { render, fireEvent } from '@testing-library/react';
 import { DateTime } from 'luxon';
 import { MemoryRouter } from 'react-router-dom';
@@ -9,6 +11,10 @@ import { SettingsContext, mergeSettings } from '../../src/helpers';
 import { en } from '../../src/i18n';
 
 import type { Meeting as MeetingType, State } from '../../src/types';
+
+jest.mock('mapbox-gl/dist/mapbox-gl', () => ({
+  Map: () => ({}),
+}));
 
 describe('<Meeting />', () => {
   beforeEach(() => {
@@ -97,7 +103,7 @@ describe('<Meeting />', () => {
     const { getByText } = render(
       <MemoryRouter>
         <SettingsContext.Provider value={mergeSettings()}>
-          <Meeting state={mockState} setState={jest.fn()} mapbox="pk.123456" />
+          <Meeting state={mockState} setState={jest.fn()} />
         </SettingsContext.Provider>
       </MemoryRouter>
     );
@@ -125,7 +131,7 @@ describe('<Meeting />', () => {
   it('renders with group info', () => {
     const { getByText } = render(
       <MemoryRouter>
-        <Meeting state={mockState} setState={jest.fn()} mapbox="pk.123456" />
+        <Meeting state={mockState} setState={jest.fn()} />
       </MemoryRouter>
     );
 
@@ -139,7 +145,7 @@ describe('<Meeting />', () => {
   it('renders with contact 1 but no contact 2', () => {
     const { getByText, queryByText } = render(
       <MemoryRouter>
-        <Meeting state={mockState} setState={jest.fn()} mapbox="pk.123456" />
+        <Meeting state={mockState} setState={jest.fn()} />
       </MemoryRouter>
     );
     const contact1text = getByText(`Text ${mockMeeting.contact_1_name}`);

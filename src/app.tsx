@@ -7,10 +7,12 @@ import {
 
 import { TsmlUI } from './components';
 
+import type { Settings } from './types';
+
 // locate element
 const element = document.getElementById('tsml-ui');
 
-export let routes: RouteObject[] = [];
+export const routes: RouteObject[] = [];
 export let router: ReturnType<typeof createBrowserRouter>;
 
 if (element) {
@@ -24,8 +26,7 @@ if (element) {
           settings={
             typeof tsml_react_config === 'undefined'
               ? undefined
-              : // eslint-disable-next-line no-undef
-                tsml_react_config
+              : tsml_react_config
           }
           src={element.getAttribute('data-src') || undefined}
           timezone={element.getAttribute('data-timezone') || undefined}
@@ -38,3 +39,5 @@ if (element) {
 } else {
   console.warn('TSML UI could not find a div#tsml-ui element');
 }
+
+declare const tsml_react_config: Settings | undefined;

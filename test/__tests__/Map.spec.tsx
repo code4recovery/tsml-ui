@@ -1,10 +1,16 @@
 import React from 'react';
 
+import '@testing-library/jest-dom';
+
 import { render } from '@testing-library/react';
 import { DateTime } from 'luxon';
 
 import Map from '../../src/components/Map';
 import { mockState } from '../__fixtures__';
+
+jest.mock('mapbox-gl/dist/mapbox-gl', () => ({
+  Map: () => ({}),
+}));
 
 describe('<Map />', () => {
   const mockStateWithMeeting = {
@@ -52,7 +58,6 @@ describe('<Map />', () => {
         listMeetingsInPopup={false}
         state={mockStateWithMeeting}
         setState={jest.fn()}
-        mapbox="pk.123456"
       />
     );
     expect(container).toBeTruthy();
@@ -80,7 +85,6 @@ describe('<Map />', () => {
         listMeetingsInPopup={true}
         state={mockStateMultiple}
         setState={jest.fn()}
-        mapbox="pk.123456"
       />
     );
     expect(container).toBeTruthy();

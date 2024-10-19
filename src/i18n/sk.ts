@@ -1,5 +1,7 @@
 import { getTypesForLanguage } from '@code4recovery/spec';
 
+import type { Translation } from '../types';
+
 export const sk: Translation = {
   add_to_calendar: 'Pridať do kalendára',
   address: 'Adresa / Platforma',
@@ -30,6 +32,7 @@ export const sk: Translation = {
   in_progress_single: '1 stretnutie práve prebieha',
   in_progress_multiple: '%count% práve prebiehajúce stretnutia',
   km: 'km',
+  loading: 'Načítavanie',
   location: 'Poloha',
   location_group: 'Poloha / Skupina',
   match_single: '1 výsledok',
