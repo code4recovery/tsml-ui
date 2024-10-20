@@ -6,6 +6,7 @@ import cssInjectedByJsPlugin from 'vite-plugin-css-injected-by-js';
 // https://vitejs.dev/config/
 export default defineConfig({
   build: {
+    minify: 'terser',
     rollupOptions: {
       input: {
         main: resolve(__dirname, 'example.html'),
