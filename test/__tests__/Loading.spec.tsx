@@ -1,12 +1,10 @@
 import React from 'react';
 
-import '@testing-library/jest-dom';
+import renderer from 'react-test-renderer';
 
 import Loading from '../../src/components/Loading';
 
-import { render, screen } from '@testing-library/react';
-
 test('<Loading />', () => {
-  render(<Loading />);
-  expect(screen.getByRole('progressbar', { busy: true })).toBeInTheDocument();
+  const tree = renderer.create(<Loading />).toJSON();
+  expect(tree).toMatchSnapshot();
 });

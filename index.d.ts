@@ -1,8 +1,10 @@
-import type { Language } from '@code4recovery/spec';
+/* eslint-disable no-unused-vars */
 
-import type { Translation } from './Translation';
+type Translation = import('./src/types/Translation').Translation;
+type Lang = import('@code4recovery/spec').Language;
 
-export type Settings = {
+interface TSMLReactConfig {
+  cache: boolean;
   calendar_enabled: boolean;
   columns: string[];
   conference_providers: Record<string, string>;
@@ -12,10 +14,10 @@ export type Settings = {
     mode: 'search' | 'location' | 'me';
     region: string[];
     search: string;
-    time: Settings['times'];
+    time: TSMLReactConfig['times'];
     type: string[];
     view: 'table' | 'map';
-    weekday: Settings['weekdays'];
+    weekday: TSMLReactConfig['weekdays'];
   };
   distance_options: number[];
   distance_unit: 'mi' | 'km';
@@ -24,7 +26,7 @@ export type Settings = {
   filters: Array<'region' | 'distance' | 'weekday' | 'time' | 'type'>;
   flags?: string[];
   in_person_types: string[];
-  language: Language;
+  language: Lang;
   map: {
     markers: {
       location: {
@@ -43,8 +45,39 @@ export type Settings = {
     title: boolean;
   };
   strings: {
-    [lang in Language]: Translation;
+    [lang in Lang]: Translation;
   };
   times: Array<'morning' | 'midday' | 'evening' | 'night'>;
   weekdays: string[];
-};
+}
+
+declare var tsml_react_config: TSMLReactConfig | undefined;
+
+//google analytics globals
+declare var gtag:
+  | ((
+      type: 'event',
+      action: string,
+      params: {
+        event_category: string;
+        event_label: string;
+      }
+    ) => void)
+  | undefined;
+
+declare var ga:
+  | ((
+      type: 'send',
+      params: {
+        hitType: 'event';
+        eventCategory: string;
+        eventAction: string;
+        eventLabel: string;
+      }
+    ) => void)
+  | undefined;
+
+//declaration merge for IE compat
+interface Navigator {
+  msSaveBlob: (blob: Blob, name: string) => void;
+}

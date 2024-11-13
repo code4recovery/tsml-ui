@@ -1,7 +1,5 @@
 import { getTypesForLanguage } from '@code4recovery/spec';
 
-import type { Translation } from '../types';
-
 export const nl: Translation = {
   add_to_calendar: 'Toevoegen aan agenda',
   address: 'Addres',
@@ -32,7 +30,6 @@ export const nl: Translation = {
   in_progress_single: '1 meeting bezig',
   in_progress_multiple: '%count% meetings bezig',
   km: 'km',
-  loading: 'Laden',
   location: 'Locatie',
   location_group: 'Locatie / Groep',
   match_single: '1 resultaat',

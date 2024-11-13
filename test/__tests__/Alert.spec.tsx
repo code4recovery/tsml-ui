@@ -1,13 +1,10 @@
 import React from 'react';
-
-import '@testing-library/jest-dom';
 import { MemoryRouter } from 'react-router-dom';
 import { fireEvent, render, screen } from '@testing-library/react';
 
 import Alert from '../../src/components/Alert';
 import { en } from '../../src/i18n';
 import { mockState } from '../__fixtures__';
-import { State } from '../../src/types';
 
 describe('<Alert />', () => {
   it('renders null with no alerts or errors', () => {
@@ -37,7 +34,7 @@ describe('<Alert />', () => {
   });
 
   it('works with clearing filters with no results', async () => {
-    // const mockSetState = jest.fn();
+    const mockSetState = jest.fn();
 
     const mockStateWithFilters = {
       ...mockState,
@@ -46,22 +43,22 @@ describe('<Alert />', () => {
         ...mockState.input,
         region: ['foo'],
         search: 'bar',
-        time: ['night'],
+        time: ['baz'],
         type: ['qux'],
-        weekday: ['morning'],
+        weekday: ['0'],
       },
       indexes: {
         ...mockState.indexes,
         region: [{ key: 'foo', name: 'Foo', slugs: ['test'] }],
-        time: [{ key: 'night', name: 'Baz', slugs: [] }],
+        time: [{ key: 'baz', name: 'Baz', slugs: [] }],
         type: [{ key: 'qux', name: 'Qux', slugs: [] }],
-        weekday: [{ key: 'morning', name: 'Monday', slugs: [] }],
+        weekday: [{ key: '0', name: 'Monday', slugs: [] }],
       },
     };
 
     render(
       <MemoryRouter>
-        <Alert state={mockStateWithFilters as State} />
+        <Alert state={mockStateWithFilters} />
       </MemoryRouter>
     );
 
@@ -73,15 +70,15 @@ describe('<Alert />', () => {
     const removeTypeButton = screen.getByText(/remove qux/i);
     const removeWeekdayButton = screen.getByText(/remove monday/i);
 
-    // function modify<
-    //   K extends keyof (typeof mockStateWithFilters)['input'],
-    //   T extends (typeof mockStateWithFilters)['input'][K]
-    // >(key: K, value: T) {
-    //   return {
-    //     ...mockStateWithFilters,
-    //     input: { ...mockStateWithFilters.input, [key]: value },
-    //   };
-    // }
+    function modify<
+      K extends keyof (typeof mockStateWithFilters)['input'],
+      T extends (typeof mockStateWithFilters)['input'][K]
+    >(key: K, value: T) {
+      return {
+        ...mockStateWithFilters,
+        input: { ...mockStateWithFilters.input, [key]: value },
+      };
+    }
 
     fireEvent.click(removeSearchButton);
     // expect(mockSetState).toHaveBeenLastCalledWith(modify('search', ''));

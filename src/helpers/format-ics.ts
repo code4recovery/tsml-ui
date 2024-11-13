@@ -20,12 +20,8 @@ export function formatIcs(meeting: Meeting) {
   const event = [
     `SUMMARY:${meeting.name}`,
     `DTSTAMP:${meeting.start.setZone('UTC').toFormat(fmt)}Z`,
-    `DTSTART;TZID=${meeting.timezone}:${meeting.start
-      .setZone(meeting.timezone)
-      .toFormat(fmt)}`,
-    `DTEND;TZID=${meeting.timezone}:${meeting.end
-      .setZone(meeting.timezone)
-      .toFormat(fmt)}`,
+    `DTSTART;TZID=${meeting.timezone}:${meeting.start.setZone(meeting.timezone).toFormat(fmt)}`,
+    `DTEND;TZID=${meeting.timezone}:${meeting.end.setZone(meeting.timezone).toFormat(fmt)}`,
   ];
 
   // start building description
@@ -78,7 +74,7 @@ export function formatIcs(meeting: Meeting) {
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
     'BEGIN:VEVENT',
-    ...event.map(line => line.split('\n').join('\\n').split(',').join('\\,')),
+    ...event.map(line => line.replaceAll('\n', '\\n').replaceAll(',', '\\,')),
     'END:VEVENT',
     'END:VCALENDAR',
   ].join('\n');

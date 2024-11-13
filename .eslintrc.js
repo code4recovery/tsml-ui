@@ -10,6 +10,11 @@ module.exports = {
     'plugin:import/errors',
     'plugin:import/typescript',
   ],
+  globals: {
+    Lang: 'readonly',
+    TSMLReactConfig: 'readonly',
+    Translation: 'readonly',
+  },
   'overrides': [
     {
       'env': {

@@ -1,14 +1,13 @@
 import { createContext, useContext } from 'react';
 
 import merge from 'deepmerge';
-import { Settings as LuxonSettings } from 'luxon';
-import { Language } from '@code4recovery/spec';
+import { Settings } from 'luxon';
 
 import { en, es, fr, ja, nl, pt, sk, sv } from '../i18n';
-import { Settings, Translation } from '../types';
 
 // override these on your page with tsml_react_config
-export const defaults: Settings = {
+export const defaults: TSMLReactConfig = {
+  cache: false,
   calendar_enabled: true,
   columns: ['time', 'distance', 'name', 'location_group', 'address', 'region'],
   conference_providers: {
@@ -97,7 +96,7 @@ export const defaults: Settings = {
   ],
 };
 
-export function mergeSettings(userSettings?: Partial<Settings>) {
+export function mergeSettings(userSettings?: Partial<TSMLReactConfig>) {
   const settings = userSettings ? merge(defaults, userSettings) : defaults;
 
   // flags can be specified to override the default. also [] means unset
@@ -127,18 +126,18 @@ export function mergeSettings(userSettings?: Partial<Settings>) {
   const preferredLanguage = navigator.language.substring(0, 2);
 
   if (preferredLanguage in settings.strings) {
-    settings.language = preferredLanguage as Language;
+    settings.language = preferredLanguage as Lang;
   }
 
   const strings = settings.strings[settings.language];
 
-  LuxonSettings.defaultLocale = navigator.language;
+  Settings.defaultLocale = navigator.language;
 
   return { settings, strings };
 }
 
 export const SettingsContext = createContext<{
-  settings: Settings;
+  settings: TSMLReactConfig;
   strings: Translation;
 }>({ settings: defaults, strings: en });
 

@@ -3,7 +3,7 @@ import { Dispatch, SetStateAction } from 'react';
 import { flattenAndSortIndexes } from './flatten-and-sort-indexes';
 import { formatString as i18n } from './format-string';
 
-import type { Index, Meeting, Settings, State, Translation } from '../types';
+import type { Index, Meeting, State } from '../types';
 
 //calculate distances
 export function calculateDistances({
@@ -17,7 +17,7 @@ export function calculateDistances({
   latitude: number;
   longitude: number;
   setState: Dispatch<SetStateAction<State>>;
-  settings: Settings;
+  settings: TSMLReactConfig;
   state: State;
   strings: Translation;
 }) {
@@ -66,9 +66,7 @@ export function calculateDistances({
 
   //remove redundant distances at 50 and higher distances, unless requested via query param
   let slugMax = 0;
-  const queryDistance = Array.isArray(state.input?.distance)
-    ? state.input.distance[0]
-    : 0;
+  let queryDistance = Array.isArray(state.input?.distance) ? state.input.distance[0] : 0;
   Object.entries(distances).forEach(([val, distance]) => {
     if (50 <= parseInt(val) && val !== queryDistance) {
       if (slugMax >= distance.slugs.length) {
@@ -76,7 +74,7 @@ export function calculateDistances({
       }
     }
     slugMax = Math.max(slugMax, distance.slugs.length);
-  });
+  })
 
   //flatten index and set capability
   const distanceIndex = flattenAndSortIndexes(
@@ -108,7 +106,7 @@ export function calculateDistances({
 export function getDistance(
   a: { latitude: number; longitude: number },
   b: Meeting,
-  settings: Settings
+  settings: TSMLReactConfig
 ) {
   if (!a?.latitude || !b?.latitude || !a?.longitude || !b?.longitude) return;
 

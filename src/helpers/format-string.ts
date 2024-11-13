@@ -3,7 +3,7 @@ export function formatString(
   replacements: { [id: string]: string | number | undefined }
 ) {
   Object.keys(replacements).forEach(key => {
-    str = str.split(`%${key}%`).join(getString(replacements[key]));
+    str = str.replaceAll(`%${key}%`, getString(replacements[key]));
   });
   return str;
 }

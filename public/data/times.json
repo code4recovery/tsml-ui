@@ -1,0 +1,99 @@
+[
+  {
+    "slug": "monday-7pm",
+    "name": "Monday 7pm",
+    "day": "1",
+    "time": "19:00",
+    "end_time": "21:00",
+    "group": "Online Group",
+    "types": ["O", "M"],
+    "formatted_address": "123 Main St, Anytown, OK 12345, USA",
+    "conference_url": "https://zoom.us/d/1234567",
+    "contact_1_name": "John D",
+    "contact_1_phone": "123-456-7890",
+    "contact_1_email": "johnd@gmail.com"
+  },
+  {
+    "slug": "saturday-8pm",
+    "name": "Saturday 8pm",
+    "day": "6",
+    "time": "20:00",
+    "end_time": "21:00",
+    "group": "Online Group",
+    "types": ["O", "SM"],
+    "formatted_address": "123 Main St, Anytown, OK 12345, USA",
+    "conference_url": "https://zoom.us/d/1234567"
+  },
+  {
+    "slug": "saturday-10am",
+    "name": "Saturday 10am",
+    "day": "6",
+    "time": "10:00",
+    "end_time": "11:00",
+    "group": "Online Group",
+    "types": ["O", "SM"],
+    "formatted_address": "123 Main St, Anytown, OK 12345, USA",
+    "conference_url": "https://zoom.us/d/1234567"
+  },
+  {
+    "slug": "saturday-7pm",
+    "name": "Saturday 7pm",
+    "day": "6",
+    "time": "19:00",
+    "end_time": "21:00",
+    "group": "Online Group",
+    "types": ["O", "SM"],
+    "formatted_address": "123 Main St, Anytown, OK 12345, USA",
+    "conference_url": "https://zoom.us/d/1234567"
+  },
+  {
+    "slug": "appointment",
+    "name": "Appt",
+    "group": "Online Group",
+    "types": ["O", "SM"],
+    "formatted_address": "123 Main St, Anytown, OK 12345, USA",
+    "conference_url": "https://zoom.us/d/1234567"
+  },
+  {
+    "slug": "monday-7am",
+    "name": "Monday 7am",
+    "day": "1",
+    "time": "07:00",
+    "group": "Online Group",
+    "types": ["O", "D"],
+    "formatted_address": "123 Main St, Anytown, OK 12345, USA",
+    "conference_url": "https://zoom.us/d/1234567"
+  },
+  {
+    "slug": "sunday-8pm",
+    "name": "Sunday 8pm",
+    "day": "0",
+    "time": "20:00",
+    "end_time": "21:00",
+    "group": "Online Group",
+    "types": ["O", "SM"],
+    "formatted_address": "123 Main St, Anytown, OK 12345, USA",
+    "conference_url": "https://zoom.us/d/1234567"
+  },
+  {
+    "slug": "sunday-8am",
+    "name": "Sunday 8am",
+    "day": "0",
+    "time": "08:00",
+    "end_time": "10:00",
+    "group": "Online Group",
+    "types": ["O", "SM"],
+    "formatted_address": "123 Main St, Anytown, OK 12345, USA",
+    "conference_url": "https://zoom.us/d/1234567"
+  },
+  {
+    "slug": "approximate",
+    "name": "Approximate Inactive Test",
+    "day": "0",
+    "time": "08:00",
+    "end_time": "10:00",
+    "group": "Online Group",
+    "types": ["O", "NA"],
+    "formatted_address": "Anytown, OK 12345, USA"
+  }
+]
