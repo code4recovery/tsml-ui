@@ -7,7 +7,8 @@ describe('analytics', () => {
   it('calls gtag if defined', () => {
     analyticsEvent({ action: 'foo', category: 'bar', label: 'baz' });
 
-    expect(window.gtag).toHaveBeenCalledWith('event', 'foo', {
+    // eslint-disable-next-line no-undef
+    expect(gtag).toHaveBeenCalledWith('event', 'foo', {
       event_category: 'bar',
       event_label: 'baz',
     });
@@ -18,7 +19,8 @@ describe('analytics', () => {
 
     analyticsEvent({ action: 'foo', category: 'bar', label: 'baz' });
 
-    expect(window.ga).toHaveBeenCalledWith('send', {
+    // eslint-disable-next-line no-undef
+    expect(ga).toHaveBeenCalledWith('send', {
       eventAction: 'foo',
       eventCategory: 'bar',
       eventLabel: 'baz',
@@ -26,13 +28,3 @@ describe('analytics', () => {
     });
   });
 });
-
-// declare gtag and ga as global variables
-declare global {
-  interface Window {
-    // eslint-disable-next-line
-    gtag?: (...args: any[]) => void;
-    // eslint-disable-next-line
-    ga?: (...args: any[]) => void;
-  }
-}

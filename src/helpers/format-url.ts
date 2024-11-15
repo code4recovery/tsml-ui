@@ -1,22 +1,17 @@
-import { Settings } from '../types';
-
 // format an internal link with correct query params
 export function formatUrl(
-  input: Partial<Settings['defaults']>,
-  settings: Settings
+  input: Partial<TSMLReactConfig['defaults']>,
+  settings: TSMLReactConfig
 ) {
-  const query: { [id: string]: string } = {};
+  const query = {};
 
   // distance, region, time, type, and weekday
   settings.filters
     .filter(filter => typeof input[filter] !== 'undefined')
     .filter(filter => input[filter]?.length)
     .forEach(filter => {
-      // todo make less ugly
-      const value = input[filter]?.join('/');
-      if (filter && value) {
-        query[filter] = value;
-      }
+      // @ts-expect-error TODO
+      query[filter] = input[filter].join('/');
     });
 
   // meeting, mode, search, view
@@ -24,9 +19,8 @@ export function formatUrl(
     .filter(param => typeof input[param] !== 'undefined')
     .filter(param => input[param] !== settings.defaults[param])
     .forEach(param => {
-      if (input[param]) {
-        query[param] = input[param];
-      }
+      // @ts-expect-error TODO
+      query[param] = input[param];
     });
 
   // create a query string with only values in use

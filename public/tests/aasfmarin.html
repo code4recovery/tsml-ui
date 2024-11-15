@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta name="description" content="React JS recovery meeting finder demo" />
+    <link rel="icon" type="image/png" href="/logo.png" />
+    <title>Meetings</title>
+    <style type="text/css">
+      body {
+        margin: 0;
+      }
+      #tsml-ui {
+        min-height: 100vh;
+        min-height: -webkit-fill-available;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="tsml-ui"
+      data-src="https://sheets.code4recovery.org/storage/aasfmarin.json"
+      data-mapbox="pk.eyJ1IjoiYWFzZi1tcGFsIiwiYSI6ImNqaHl6NHY0NzByemszcHBkcHpib296OHkifQ.F7GfpF1jRosyQ0PGNUfDkA"
+    ></div>
+    <script>
+      var tsml_react_config = {
+        conference_providers: {
+          'sites.google.com': 'Custom',
+          'tinyurl.com': 'Custom',
+          'MillValleyCabin.com': 'Custom',
+        },
+      };
+    </script>
+    <script src="/app.js" async></script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-2GC6TL7ZG9"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+      gtag('config', 'G-2GC6TL7ZG9');
+    </script>
+  </body>
+</html>

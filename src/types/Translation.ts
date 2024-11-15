@@ -28,7 +28,6 @@ export interface Translation {
   in_progress_single: string;
   in_progress_multiple: string;
   km: string;
-  loading: string;
   location: string;
   location_group: string;
   match_single: string;

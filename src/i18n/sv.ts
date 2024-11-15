@@ -1,7 +1,5 @@
 import { getTypesForLanguage } from '@code4recovery/spec';
 
-import type { Translation } from '../types';
-
 export const sv: Translation = {
   add_to_calendar: 'Lägg till i kalender',
   address: 'Adress / Plattform',
@@ -32,7 +30,6 @@ export const sv: Translation = {
   in_progress_single: '1 möte pågår',
   in_progress_multiple: '%count% möten pågår',
   km: 'km',
-  loading: 'Laddar',
   location: 'Plats',
   location_group: 'Plats / Grupp',
   match_single: '1 resultat',

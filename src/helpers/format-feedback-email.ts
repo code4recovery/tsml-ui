@@ -1,5 +1,3 @@
-import type { Settings, Translation } from '../types';
-
 import { formatArray } from './format-array';
 import { formatString as i18n } from './format-string';
 import { formatUrl } from './format-url';
@@ -16,7 +14,7 @@ export function formatFeedbackEmail({
   feedback_emails: string[];
   edit_url?: string;
   name?: string;
-  settings: Settings;
+  settings: TSMLReactConfig;
   strings: Translation;
 }) {
   // remove extra query params from meeting URL
@@ -41,6 +39,5 @@ export function formatFeedbackEmail({
     body: lines.join('\n'),
   })
     .toString()
-    .split('+')
-    .join(' ')}`;
+    .replaceAll('+', ' ')}`;
 }

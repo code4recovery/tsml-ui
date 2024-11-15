@@ -17,21 +17,6 @@
         min-height: 100vh;
         min-height: -webkit-fill-available;
       }
-      @media (prefers-color-scheme: dark) {
-        body {
-          background-color: black;
-          color: white;
-        }
-        #tsml-ui {
-          --alert-background: #191919;
-          --alert-text: #bbb;
-          --background: #000;
-          --in-person: #66aa66;
-          --link: #6699cc;
-          --online: #6699cc;
-          --text: #fff;
-        }
-      }
     </style>
   </head>
   <body>
@@ -42,17 +27,14 @@
       data-timezone="America/Los_Angeles"
     ></div>
     <script>
-      var darkMode =
-        window.matchMedia &&
-        window.matchMedia('(prefers-color-scheme: dark)').matches;
-
       var tsml_react_config = {
-        feedback_emails: ['meetings@aasanjose.org'],
-        map: darkMode
-          ? { style: 'mapbox://styles/mapbox/navigation-night-v1' }
-          : {},
+        defaults: { type: ['women'] },
+        show: {
+          controls: false,
+          title: false,
+        },
       };
     </script>
-    <script src="/src/app.tsx" type="module" async></script>
+    <script src="/app.js" async></script>
   </body>
 </html>

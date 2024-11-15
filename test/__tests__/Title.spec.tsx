@@ -1,7 +1,5 @@
 import React from 'react';
 
-import '@testing-library/jest-dom';
-
 import { screen, render } from '@testing-library/react';
 
 import Title from '../../src/components/Title';
@@ -82,13 +80,13 @@ describe('<Title />', () => {
             ...mockState.indexes,
             weekday: [{ key: '0', name: 'foo', slugs: [] }],
             region: [{ key: '0', name: 'bar', slugs: [] }],
-            time: [{ key: 'morning', name: 'baz', slugs: [] }],
+            time: [{ key: '0', name: 'baz', slugs: [] }],
           },
           input: {
             ...mockState.input,
             weekday: ['0'],
             region: ['0'],
-            time: ['morning'],
+            time: ['0'],
           },
         }}
       />
