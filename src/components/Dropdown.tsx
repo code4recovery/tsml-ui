@@ -1,4 +1,4 @@
-import { Dispatch, Fragment, MouseEvent, SetStateAction } from 'react';
+import { Dispatch, Fragment, MouseEvent, SetStateAction, useState } from 'react';
 
 import { useSearchParams } from 'react-router-dom';
 
@@ -24,6 +24,21 @@ export default function Dropdown({
   const { strings } = useSettings();
   const options = state.indexes[filter];
   const values = state.input[filter];
+  const [expanded, setExpanded] = useState<string[]>([]);
+
+  //handle expand toggle
+  const toggleExpanded = (
+    e: MouseEvent<HTMLButtonElement>,
+    key: string
+  ) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!expanded.includes(key)) {
+      setExpanded(expanded.concat(key));
+    } else {
+      setExpanded(expanded.filter(item => item !== key));    
+    }
+  }
 
   //set filter: pass it up to parent
   const setFilter = (
@@ -38,7 +53,7 @@ export default function Dropdown({
 
     if (value) {
       const index = currentValues.indexOf(value);
-      if (e.metaKey) {
+      if (e.metaKey || e.ctrlKey) {
         if (index === -1) {
           currentValues.push(value);
         } else {
@@ -71,26 +86,45 @@ export default function Dropdown({
 
   const renderDropdownItem = ({ key, name, slugs, children }: Index) => (
     <Fragment key={key}>
-      <button
+      <div
+        className="tsml-dropdown__item"
         // @ts-expect-error TODO
         data-active={values.includes(key)}
-        onClick={e => setFilter(e, filter, key)}
       >
-        {name}
-        <span
-          aria-label={
-            slugs.length === 1
-              ? strings.match_single
-              : i18n(strings.match_multiple, {
-                  count: slugs.length,
-                })
-          }
-        >
-          {slugs.length}
-        </span>
-      </button>
+        <button
+          className="tsml-dropdown__button"
+          onClick={e => setFilter(e, filter, key)}
+          >
+          {name}
+          <span
+            aria-label={
+              slugs.length === 1
+                ? strings.match_single
+                : i18n(strings.match_multiple, {
+                    count: slugs.length,
+                  })
+            }
+          >
+            {slugs.length}
+          </span>
+        </button>
+        {!!children?.length && (
+          <button 
+            className="tsml-dropdown__expand"
+            data-expanded={expanded.includes(key)}
+            onClick={(e) => toggleExpanded(e, key)}
+            aria-label={expanded.includes(key) ? strings.collapse : strings.expand}
+          >
+          </button>
+        )}
+      </div>
       {!!children?.length && (
-        <div>{children.map(child => renderDropdownItem(child))}</div>
+        <div 
+          className="tsml-dropdown__children"
+          data-expanded={expanded.includes(key)}
+          >
+          {children.map(child => renderDropdownItem(child))}
+        </div>
       )}
     </Fragment>
   );
@@ -117,14 +151,20 @@ export default function Dropdown({
       </button>
       <div
         aria-labelledby={filter}
+        className="tsml-dropdown"
         style={{ display: open ? 'block' : 'none' }}
       >
-        <button
+        <div 
           data-active={!values.length}
-          onClick={e => setFilter(e, filter, undefined)}
-        >
-          {defaultValue}
-        </button>
+          className="tsml-dropdown__item"
+          >
+          <button
+            className="tsml-dropdown__button"
+            onClick={e => setFilter(e, filter, undefined)}
+          >
+            {defaultValue}
+          </button>
+        </div>
         {[
           options
             ?.filter(option =>
