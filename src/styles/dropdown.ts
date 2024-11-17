@@ -103,7 +103,7 @@ export const dropdownCss = css`
       overflow: hidden;      
       
       &[data-expanded="true"] {
-        max-height: 600px
+        max-height: 2000px
       }
     }
 
