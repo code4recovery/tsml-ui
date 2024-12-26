@@ -59,18 +59,22 @@ export const controlsGroupLastCss = css`
 `;
 
 export const controlsInputCss = css`
-  ${formControlCss}
-  border: 1px solid ${color.medium};
-  &:focus {
-    border: 1px solid ${color.dark};
-    outline: none;
+  &[type='search'] {
+    ${formControlCss}
+    border: 1px solid ${color.medium};
+    &:focus {
+      border: 1px solid ${color.dark};
+      outline: none;
+    }
   }
 `;
 
 export const controlsInputFirstCss = css`
   ${controlsInputCss}
-  border-bottom-right-radius: 0 !important;
-  border-top-right-radius: 0 !important;
+  &[type='search'] {
+    border-bottom-right-radius: 0 !important;
+    border-top-right-radius: 0 !important;
+  }
 `;
 
 export const controlsSearchDropdownCss = css`
