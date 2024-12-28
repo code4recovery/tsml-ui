@@ -17,6 +17,10 @@ export const dropdownCss = css`
     position: absolute;
     z-index: 1000;
 
+    // scroll
+    max-height: 80vh;
+    overflow-y: auto;
+
     hr {
       background-color: ${color.medium};
       border: 0;
@@ -24,36 +28,78 @@ export const dropdownCss = css`
       margin: 0;
       width: 100%;
     }
-
-    button {
-      align-items: center;
-      background-color: transparent;
-      border-radius: 0;
+  }
+  .tsml-dropdown {
+  
+    &__expand {
+      background-color: ${color.light};
+      padding: 0.25rem 1rem;
       border: 0;
-      color: var(--text);
       cursor: pointer;
-      display: flex;
-      font-size: var(--font-size);
-      gap: 16px;
-      justify-content: space-between;
-      margin: 0;
-      padding: ${size.gutter / 2}px ${size.gutter}px;
-      text-align: left;
-      white-space: normal;
-      width: 100%;
-
-      span {
+      svg {
+        vertical-align: middle;
+      }
+      &::after {
+        border-bottom: 0;
+        border-left: 0.4em solid transparent;
+        border-right: 0.4em solid transparent;
+        border-top: 0.4em solid ${color.dark};
+        content: '';
+        display: inline-block;
+        vertical-align: 0.2em;      
+      }
+      &[data-expanded="true"]::after {
+        transform: rotate(180deg);
+      }
+      &:hover {
         background-color: ${color.medium};
-        border-radius: var(--border-radius);
+      }
+    }
+
+    &__item {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: none;
+      border-bottom: 1px solid ${color.light};
+
+      .tsml-dropdown__button {
+        flex: auto;
+        align-items: center;
+        background-color: transparent;
+        border-radius: 0;
+        border: 0;
+        //display: flex;
         color: var(--text);
-        font-weight: bold;
-        font-size: 75%;
-        padding: 2px 4px;
+        cursor: pointer;
+        font-size: var(--font-size);
+        gap: 16px;
+        justify-content: space-between;
+        margin: 0;
+        padding: ${size.gutter / 2}px ${size.gutter}px;
+        text-align: left;
+        white-space: normal;
+
+        span {
+          border-radius: var(--border-radius);
+          color: ${color.dark};
+          font-size: 0.75em;
+          margin-left: 0.5rem;
+          float: right;
+        }
       }
 
       &[data-active='true'] {
         background-color: ${color.dark};
-        color: var(--background);
+        button {
+          background: transparent;
+          color: var(--background);
+        }
+        span {
+          color: ${color.light}
+        }
+        .tsml-dropdown__expand::after {
+          border-top: 0.4em solid ${color.light};        
+        }
       }
 
       &[data-active='false']:hover {
@@ -62,17 +108,38 @@ export const dropdownCss = css`
       }
     }
 
-    div button {
-      padding-left: 32px !important;
+    &__children {
+      //padding-left: 1rem;
+      max-height: 0;
+      transition: max-height 0.3s;
+      overflow: hidden;      
+      
+      &[data-expanded="true"] {
+        max-height: 2000px
+      }
+
+      // child nesting levels
+      .tsml-dropdown__button {
+        margin-left: 1rem;
+      }
+      .tsml-dropdown__children {
+        .tsml-dropdown__button {
+          margin-left: 2rem;
+        }
+        .tsml-dropdown__children {
+          .tsml-dropdown__button {
+            margin-left: 3rem;
+          }
+          .tsml-dropdown__children {
+            .tsml-dropdown__button {
+              margin-left: 4rem;
+            }
+          }
+        }
+      }
+
     }
 
-    div div button {
-      padding-left: 48px !important;
-    }
-
-    div div div button {
-      padding-left: 64px !important;
-    }
   }
 `;
 
