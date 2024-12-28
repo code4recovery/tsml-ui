@@ -27,11 +27,37 @@ export const dropdownCss = css`
     }
   }
   .tsml-dropdown {
+  
+    &__expand {
+      background-color: ${color.light};
+      padding: 0.25rem 1rem;
+      border: 0;
+      cursor: pointer;
+      svg {
+        vertical-align: middle;
+      }
+      &::after {
+        border-bottom: 0;
+        border-left: 0.4em solid transparent;
+        border-right: 0.4em solid transparent;
+        border-top: 0.4em solid ${color.dark};
+        content: '';
+        display: inline-block;
+        vertical-align: 0.2em;      
+      }
+      &[data-expanded="true"]::after {
+        transform: rotate(180deg);
+      }
+      &:hover {
+        background-color: ${color.medium};
+      }
+    }
 
     &__item {
       display: flex;
       flex-direction: row;
       flex-wrap: none;
+      border-bottom: 1px solid ${color.light};
 
       .tsml-dropdown__button {
         flex: auto;
@@ -51,18 +77,11 @@ export const dropdownCss = css`
         white-space: normal;
 
         span {
-          //background-color: ${color.medium};
           border-radius: var(--border-radius);
           color: ${color.dark};
-          //font-weight: bold;
           font-size: 0.75em;
           margin-left: 0.5rem;
-
-        }
-
-        &[data-active='false']:hover {
-          background-color: ${color.medium};
-          color: var(--text);
+          float: right;
         }
       }
 
@@ -72,32 +91,22 @@ export const dropdownCss = css`
           background: transparent;
           color: var(--background);
         }
+        span {
+          color: ${color.light}
+        }
+        .tsml-dropdown__expand::after {
+          border-top: 0.4em solid ${color.light};        
+        }
       }
-    }
 
-    &__expand {
-      background-color: ${color.light};
-      padding: 0.25rem 1rem;
-      border: 0;
-      svg {
-        vertical-align: middle;
-      }
-      &::after {
-        border-bottom: 0;
-        border-left: 0.3em solid transparent;
-        border-right: 0.3em solid transparent;
-        border-top: 0.3em solid;
-        content: '';
-        display: inline-block;
-        vertical-align: 0.255em;      
-      }
-      &[data-expanded="true"]::after {
-        transform: rotate(180deg);
+      &[data-active='false']:hover {
+        background-color: ${color.medium};
+        color: var(--text);
       }
     }
 
     &__children {
-      padding-left: 1rem;
+      //padding-left: 1rem;
       max-height: 0;
       transition: max-height 0.3s;
       overflow: hidden;      
@@ -105,6 +114,27 @@ export const dropdownCss = css`
       &[data-expanded="true"] {
         max-height: 2000px
       }
+
+      // child nesting levels
+      .tsml-dropdown__button {
+        margin-left: 1rem;
+      }
+      .tsml-dropdown__children {
+        .tsml-dropdown__button {
+          margin-left: 2rem;
+        }
+        .tsml-dropdown__children {
+          .tsml-dropdown__button {
+            margin-left: 3rem;
+          }
+          .tsml-dropdown__children {
+            .tsml-dropdown__button {
+              margin-left: 4rem;
+            }
+          }
+        }
+      }
+
     }
 
   }
