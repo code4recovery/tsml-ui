@@ -10,8 +10,10 @@ export const dropdownCss = css`
     border-radius: var(--border-radius);
     border: 1px solid ${color.medium};
     margin-top: 4px;
+    max-height: 50vh;
     min-width: 100%;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
     position: absolute;
     z-index: 1000;
 
@@ -24,6 +26,7 @@ export const dropdownCss = css`
       border: 0;
       height: 1px;
       margin: 0;
+      width: 100%;
     }
   }
   .tsml-dropdown {
