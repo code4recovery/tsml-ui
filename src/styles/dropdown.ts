@@ -29,9 +29,9 @@ export const dropdownCss = css`
   
     &__expand {
       background-color: ${color.light};
-      padding: 0.25rem 1rem;
       border: 0;
       cursor: pointer;
+      padding: 0.25rem 1rem;
       svg {
         vertical-align: middle;
       }
@@ -42,7 +42,7 @@ export const dropdownCss = css`
         border-top: 0.4em solid ${color.dark};
         content: '';
         display: inline-block;
-        vertical-align: 0.2em;      
+        vertical-align: 0.2em;
       }
       &[data-expanded="true"]::after {
         transform: rotate(180deg);
@@ -56,7 +56,6 @@ export const dropdownCss = css`
       display: flex;
       flex-direction: row;
       flex-wrap: none;
-      border-bottom: 1px solid ${color.light};
 
       .tsml-dropdown__button {
         align-items: center;
@@ -77,9 +76,9 @@ export const dropdownCss = css`
         span {
           border-radius: var(--border-radius);
           color: ${color.dark};
+          float: right;
           font-size: 0.75em;
           margin-left: 0.5rem;
-          float: right;
         }
       }
 
@@ -104,11 +103,11 @@ export const dropdownCss = css`
     }
 
     &__children {
-      //padding-left: 1rem;
+      //padding-left: 1rem;  
       max-height: 0;
+      overflow: hidden;
       transition: max-height 0.3s;
-      overflow: hidden;      
-      
+
       &[data-expanded="true"] {
         max-height: 2000px
       }
