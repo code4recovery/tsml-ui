@@ -241,13 +241,18 @@ export default function Controls({
             }}
           >
             {modes.map(mode => (
-              <button
+              <div 
+                className="tsml-dropdown__item"
                 data-active={state.input.mode === mode}
                 key={mode}
-                onClick={e => setMode(e, mode)}
-              >
-                {strings.modes[mode]}
-              </button>
+                >
+                <button
+                  className="tsml-dropdown__button"
+                  onClick={e => setMode(e, mode)}
+                >
+                  {strings.modes[mode]}
+                </button>
+              </div>
             ))}
           </div>
         )}
