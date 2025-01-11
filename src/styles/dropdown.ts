@@ -17,10 +17,6 @@ export const dropdownCss = css`
     position: absolute;
     z-index: 1000;
 
-    // scroll
-    max-height: 80vh;
-    overflow-y: auto;
-
     hr {
       background-color: ${color.medium};
       border: 0;
@@ -63,14 +59,13 @@ export const dropdownCss = css`
       border-bottom: 1px solid ${color.light};
 
       .tsml-dropdown__button {
-        flex: auto;
         align-items: center;
         background-color: transparent;
         border-radius: 0;
         border: 0;
-        //display: flex;
         color: var(--text);
         cursor: pointer;
+        flex: auto;
         font-size: var(--font-size);
         gap: 16px;
         justify-content: space-between;
