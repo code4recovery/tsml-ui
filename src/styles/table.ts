@@ -54,10 +54,10 @@ export const tableCss = css`
   td {
     cursor: pointer;
     display: block;
-    padding: 0 ${size.gutter / 2}px 0 103px;
+    padding: 0 ${size.gutter / 2}px 0 103px !important;
     &.tsml-time,
     &.tsml-distance {
-      padding-left: ${size.gutter / 2}px;
+      padding-left: ${size.gutter / 2}px !important;
       position: absolute;
     }
     &.tsml-distance {
@@ -67,14 +67,14 @@ export const tableCss = css`
     @media ${media.mdAndUp} {
       border-bottom: 1px solid ${color.medium};
       display: table-cell;
-      padding: ${size.gutter / 2}px;
+      padding: ${size.gutter / 2}px !important;
       position: static !important;
       &.tsml-time,
       &.tsml-distance {
-        padding-left: ${size.gutter}px;
+        padding-left: ${size.gutter}px !important;
       }
       &:last-of-type {
-        padding-right: ${size.gutter}px;
+        padding-right: ${size.gutter}px !important;
       }
     }
   }
