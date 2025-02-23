@@ -54,7 +54,10 @@ export const tableCss = css`
   td {
     cursor: pointer;
     display: block;
-    padding: 0 ${size.gutter / 2}px 0 103px !important;
+    padding: 0 ${size.gutter / 2}px !important;
+    &:not([colspan]) {
+      padding-left: 103px !important;
+    }
     &.tsml-time,
     &.tsml-distance {
       padding-left: ${size.gutter / 2}px !important;
@@ -143,11 +146,6 @@ export const tableCss = css`
 export const tableInProgressCss = css`
   tr {
     background-color: var(--alert-background) !important;
-  }
-
-  td[colspan] {
-    padding: 0 !important;
-    position: static;
   }
 
   button {
