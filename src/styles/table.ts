@@ -64,6 +64,9 @@ export const tableCss = css`
       font-size: calc(var(--font-size) * 1.25);
       top: 56px;
     }
+    &[colspan] {
+      padding-left: ${size.gutter / 2}px !important;
+    }
     @media ${media.mdAndUp} {
       border-bottom: 1px solid ${color.medium};
       display: table-cell;
@@ -143,11 +146,6 @@ export const tableCss = css`
 export const tableInProgressCss = css`
   tr {
     background-color: var(--alert-background) !important;
-  }
-
-  td[colspan] {
-    padding: 0 !important;
-    position: static;
   }
 
   button {
