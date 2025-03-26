@@ -453,6 +453,7 @@ export function loadMeetingData(
       formatted_address,
       group,
       group_notes,
+      homegroup_online: validateHomegroupOnline(meeting),
       isActive,
       isInPerson,
       isOnline,
@@ -620,6 +621,17 @@ function validateConferencePhone(meeting: JSONDataFlat) {
       return conference_phone_clean;
     }
     warn(`invalid conference_phone ${conference_phone}`, meeting);
+  }
+  return undefined;
+}
+
+function validateHomegroupOnline(meeting: JSONDataFlat) {
+  const { homegroup_online } = meeting;
+  if (homegroup_online) {
+    if (/^[a-zA-Z0-9_-]*$/.test(homegroup_online)) {
+      return homegroup_online;
+    }
+    warn(`invalid homegroup_online ${homegroup_online}`, meeting);
   }
   return undefined;
 }

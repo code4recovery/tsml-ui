@@ -163,6 +163,13 @@ export default function Meeting({
       text: i18n(strings.contribute_with, { service: 'PayPal' }),
     });
   }
+  if (meeting.homegroup_online) {
+    contactButtons.push({
+      href: `https://donate.homegroup.online/${meeting.homegroup_online}/`,
+      icon: 'cash',
+      text: i18n(strings.contribute_with, { service: 'Homegroup Online' }),
+    });
+  }
   for (let i = 1; i < 4; i++) {
     if (!meeting[`contact_${i}_name` as keyof typeof Meeting]) continue;
     if (meeting[`contact_${i}_email` as keyof typeof Meeting])

@@ -31,6 +31,7 @@ export interface Meeting {
   formatted_address: string;
   group?: string;
   group_notes?: string;
+  homegroup_online?: string;
   isActive?: boolean;
   isInPerson?: boolean;
   isOnline?: boolean;
