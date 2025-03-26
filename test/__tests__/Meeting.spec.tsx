@@ -33,6 +33,7 @@ describe('<Meeting />', () => {
     venmo: '@test',
     square: '$test',
     paypal: 'https://paypal.me/test',
+    homegroup_online: 'test',
     location: 'Empire State Building',
     notes: 'Testing meeting notes\n\nTesting new line',
     location_notes: 'Testing location notes\n\nTesting new line',

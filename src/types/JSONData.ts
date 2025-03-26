@@ -31,6 +31,7 @@ export type JSONData = {
   formatted_address?: string;
   group?: string;
   group_notes?: string;
+  homegroup_online?: string;
   latitude?: string | number;
   location?: string;
   location_notes?: string;
