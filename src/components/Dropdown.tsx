@@ -84,7 +84,7 @@ export default function Dropdown({
     setSearchParams(searchParams);
   };
 
-  const renderDropdownItem = ({ key, name, slugs, children }: Index) => (
+  const renderDropdownItem = ({ key, name, slugs, children }: Index, parentExpanded: boolean = true) => (
     <Fragment key={key}>
       <div
         className="tsml-dropdown__item"
@@ -94,6 +94,7 @@ export default function Dropdown({
         <button
           className="tsml-dropdown__button"
           onClick={e => setFilter(e, filter, key)}
+          tabIndex={parentExpanded ? 0 : -1}
           >
           {name}
           <span
@@ -123,7 +124,7 @@ export default function Dropdown({
           className="tsml-dropdown__children"
           data-expanded={expanded.includes(key)}
           >
-          {children.map(child => renderDropdownItem(child))}
+          {children.map(child => renderDropdownItem(child, expanded.includes(key)))}
         </div>
       )}
     </Fragment>

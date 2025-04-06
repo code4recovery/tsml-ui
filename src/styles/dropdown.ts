@@ -4,6 +4,10 @@ import { dropdownButtonCss } from './button';
 import { color, size } from './variables';
 
 export const dropdownCss = css`
+  *:focus-visible {
+    box-shadow: 0 0 0 4px var(--focus);
+  }
+  
   position: relative;
   > div {
     background-color: var(--background);
