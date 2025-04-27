@@ -5,7 +5,7 @@ import { formatAddress } from './format-address';
 import { formatConferenceProvider } from './format-conference-provider';
 import { formatFeedbackEmail } from './format-feedback-email';
 import { formatSlug } from './format-slug';
-import { us_states } from './us-states';
+import { states } from './states';
 
 import type { JSONData, JSONDataFlat, State, Meeting, Index } from '../types';
 
@@ -102,12 +102,12 @@ export function loadMeetingData(
     // creates formatted_address if necessary
     if (!formatted_address) {
       // infer USA if state is in list
-      if (
-        !meeting.country &&
-        meeting.state &&
-        us_states.includes(meeting.state)
-      ) {
-        meeting.country = 'USA';
+      if (!meeting.country && meeting.state) {
+        if (states.canada.includes(meeting.state)) {
+          meeting.country = 'Canada';
+        } else if (states.usa.includes(meeting.state)) {
+          meeting.country = 'USA';
+        }
       }
 
       formatted_address = [
