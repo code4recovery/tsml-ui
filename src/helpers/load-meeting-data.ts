@@ -101,7 +101,7 @@ export function loadMeetingData(
 
     // creates formatted_address if necessary
     if (!formatted_address) {
-      // infer USA if state is in list
+      // infer country if state is in Canada or USA
       if (!meeting.country && meeting.state) {
         if (states.canada.includes(meeting.state)) {
           meeting.country = 'Canada';
