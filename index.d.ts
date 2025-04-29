@@ -47,7 +47,7 @@ interface TSMLReactConfig {
   strings: {
     [lang in Lang]: Translation;
   };
-  times: Array<'morning' | 'midday' | 'evening' | 'night'>;
+  times: Array<'morning' | 'midday' | 'evening' | 'night' | 'appointment'>;
   weekdays: string[];
 }
 

@@ -5,6 +5,7 @@ import { formatAddress } from './format-address';
 import { formatConferenceProvider } from './format-conference-provider';
 import { formatFeedbackEmail } from './format-feedback-email';
 import { formatSlug } from './format-slug';
+import { states } from './states';
 
 import type { JSONData, JSONDataFlat, State, Meeting, Index } from '../types';
 
@@ -100,6 +101,15 @@ export function loadMeetingData(
 
     // creates formatted_address if necessary
     if (!formatted_address) {
+      // infer country if state is in Canada or USA
+      if (!meeting.country && meeting.state) {
+        if (states.canada.includes(meeting.state)) {
+          meeting.country = 'Canada';
+        } else if (states.usa.includes(meeting.state)) {
+          meeting.country = 'USA';
+        }
+      }
+
       formatted_address = [
         meeting.address,
         meeting.city,
@@ -320,6 +330,19 @@ export function loadMeetingData(
             indexes.time[timeIndex].slugs.push(slug);
           }
         });
+      }
+    } else {
+      const timeIndex = indexes.time.findIndex(
+        ({ key }) => key === 'appointment'
+      );
+      if (timeIndex === -1) {
+        indexes.time.push({
+          key: 'appointment',
+          name: strings.appointment,
+          slugs: [slug],
+        });
+      } else {
+        indexes.time[timeIndex].slugs.push(slug);
       }
     }
 
