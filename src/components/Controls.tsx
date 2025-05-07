@@ -48,7 +48,7 @@ export default function Controls({
   const allModes = ['search', 'location', 'me'] as const;
   const modes = allModes
     .filter(
-      mode => mode !== 'location' || (state.capabilities.coordinates && mapbox)
+      mode => mode !== 'location' || state.capabilities.coordinates
     )
     .filter(
       mode =>
@@ -65,7 +65,7 @@ export default function Controls({
   //get available views
   const allViews = ['table', 'map'] as const;
   const views = allViews.filter(
-    view => view !== 'map' || (state.capabilities.coordinates && mapbox)
+    view => view !== 'map' || state.capabilities.coordinates
   );
 
   //whether to show the views segmented button

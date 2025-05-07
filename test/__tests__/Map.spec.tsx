@@ -6,6 +6,25 @@ import { DateTime } from 'luxon';
 import Map from '../../src/components/Map';
 import { mockState } from '../__fixtures__';
 
+// Mock react-leaflet
+jest.mock('react-leaflet', () => ({
+  MapContainer: ({ children }: { children: React.ReactNode }) => (
+    <div data-testid="map-container">{children}</div>
+  ),
+  TileLayer: () => <div data-testid="tile-layer" />,
+  Marker: () => <div data-testid="marker" />,
+  Popup: () => <div data-testid="popup" />,
+}));
+
+// Mock leaflet
+jest.mock('leaflet', () => ({
+  Icon: {
+    Default: {
+      mergeOptions: jest.fn(),
+    },
+  },
+}));
+
 describe('<Map />', () => {
   const mockStateWithMeeting = {
     ...mockState,
@@ -52,7 +71,6 @@ describe('<Map />', () => {
         listMeetingsInPopup={false}
         state={mockStateWithMeeting}
         setState={jest.fn()}
-        mapbox="pk.123456"
       />
     );
     expect(container).toBeTruthy();
@@ -80,9 +98,26 @@ describe('<Map />', () => {
         listMeetingsInPopup={true}
         state={mockStateMultiple}
         setState={jest.fn()}
-        mapbox="pk.123456"
       />
     );
     expect(container).toBeTruthy();
+  });
+
+  it('configures Leaflet marker icons correctly', () => {
+    const { Icon } = require('leaflet');
+    render(
+      <Map
+        filteredSlugs={Object.keys(mockStateWithMeeting.meetings)}
+        listMeetingsInPopup={false}
+        state={mockStateWithMeeting}
+        setState={jest.fn()}
+      />
+    );
+    
+    expect(Icon.Default.mergeOptions).toHaveBeenCalledWith({
+      iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
+      iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+      shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+    });
   });
 });

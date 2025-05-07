@@ -8,3 +8,4 @@ public/custom
 .vscode
 .DS_Store
 .idea
+public/images/vendor/leaflet
