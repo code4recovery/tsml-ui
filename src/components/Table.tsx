@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction, useState, useMemo } from 'react';
 
 import InfiniteScroll from 'react-infinite-scroller';
 import { useSearchParams } from 'react-router-dom';
@@ -9,6 +9,7 @@ import {
   tableChicletsCss,
   tableInProgressCss,
   tableWrapperCss,
+  tableChevronCss,
 } from '../styles';
 import { Meeting, State } from '../types';
 
@@ -16,11 +17,11 @@ import Icon, { icons } from './Icon';
 import Link from './Link';
 
 export default function Table({
-  filteredSlugs = [],
-  inProgress = [],
-  setState,
-  state,
-}: {
+                                filteredSlugs = [],
+                                inProgress = [],
+                                setState,
+                                state,
+                              }: {
   filteredSlugs: string[];
   inProgress: string[];
   setState: Dispatch<SetStateAction<State>>;
@@ -41,6 +42,60 @@ export default function Table({
   const [limit, setLimit] = useState(meetingsPerPage);
   const [showInProgress, setShowInProgress] = useState(false);
   const { distance, location, region } = state.capabilities;
+  const [sortColumn, setSortColumn] = useState<string | undefined>();
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+  const sortableColumns = ['time', 'name', 'location_group', 'address', 'region', 'distance'];
+  const sortedSlugs = useMemo(() => {
+    if (!sortColumn || !sortableColumns.includes(sortColumn)) return filteredSlugs;
+    const compare = (aSlug: string, bSlug: string) => {
+      const a = state.meetings[aSlug];
+      const b = state.meetings[bSlug];
+      let aValue: any;
+      let bValue: any;
+      switch (sortColumn) {
+        case 'time':
+          if (!a.start && !b.start) return 0;
+          if (!a.start) return 1;
+          if (!b.start) return -1;
+          // Map ISO to 0=Sun,1=Mon..
+          const aDay = a.start.weekday === 7 ? 0 : a.start.weekday;
+          const bDay = b.start.weekday === 7 ? 0 : b.start.weekday;
+          if (aDay !== bDay) {
+            return sortDirection === 'asc' ? aDay - bDay : bDay - aDay;
+          }
+          const aTime = a.start.hour * 60 + a.start.minute;
+          const bTime = b.start.hour * 60 + b.start.minute;
+          return aTime - bTime;
+        case 'name':
+          aValue = a.name || '';
+          bValue = b.name || '';
+          break;
+        case 'location_group':
+          aValue = a.isInPerson ? a.location : a.group || '';
+          bValue = b.isInPerson ? b.location : b.group || '';
+          break;
+        case 'address':
+          aValue = a.formatted_address || '';
+          bValue = b.formatted_address || '';
+          break;
+        case 'region':
+          aValue = Array.isArray(a.regions) && a.regions.length ? a.regions[a.regions.length - 1] : '';
+          bValue = Array.isArray(b.regions) && b.regions.length ? b.regions[b.regions.length - 1] : '';
+          break;
+        case 'distance':
+          aValue = typeof a.distance === 'number' ? a.distance : Number.POSITIVE_INFINITY;
+          bValue = typeof b.distance === 'number' ? b.distance : Number.POSITIVE_INFINITY;
+          break;
+        default:
+          aValue = '';
+          bValue = '';
+      }
+      if (aValue < bValue) return sortDirection === 'asc' ? -1 : 1;
+      if (aValue > bValue) return sortDirection === 'asc' ? 1 : -1;
+      return 0;
+    };
+    return [...filteredSlugs].sort(compare);
+  }, [filteredSlugs, sortColumn, sortDirection, state.meetings]);
 
   //show columns based on capabilities
   const columns = settings.columns
@@ -151,31 +206,56 @@ export default function Table({
     <div css={tableWrapperCss}>
       <table>
         <thead>
-          <tr>
-            {columns.map((column, index) => (
-              <th key={index}>
+        <tr>
+          {columns.map((column, index) => {
+            const isSortable = sortableColumns.includes(column);
+            const isActive = sortColumn === column;
+            return (
+              <th
+                key={index}
+                style={isSortable ? { cursor: 'pointer', userSelect: 'none' } : {}}
+                onClick={
+                  isSortable
+                    ? () => {
+                      if (sortColumn === column) {
+                        setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+                      } else {
+                        setSortColumn(column);
+                        setSortDirection('asc');
+                      }
+                    }
+                    : undefined
+                }
+              >
                 {strings[column as keyof Translation] as string}
+                {isActive && (
+                  <span
+                    css={tableChevronCss}
+                    className={sortDirection === 'desc' ? 'down' : ''}
+                  />
+                )}
               </th>
-            ))}
-          </tr>
+            );
+          })}
+        </tr>
         </thead>
         {!!inProgress.length && (
           <tbody css={tableInProgressCss}>
-            {showInProgress ? (
-              inProgress.map((slug, index) => <Row slug={slug} key={index} />)
-            ) : (
-              <tr>
-                <td colSpan={columns.length}>
-                  <button onClick={() => setShowInProgress(true)}>
-                    {inProgress.length === 1
-                      ? strings.in_progress_single
-                      : i18n(strings.in_progress_multiple, {
-                          count: inProgress.length,
-                        })}
-                  </button>
-                </td>
-              </tr>
-            )}
+          {showInProgress ? (
+            inProgress.map((slug, index) => <Row slug={slug} key={index} />)
+          ) : (
+            <tr>
+              <td colSpan={columns.length}>
+                <button onClick={() => setShowInProgress(true)}>
+                  {inProgress.length === 1
+                    ? strings.in_progress_single
+                    : i18n(strings.in_progress_multiple, {
+                      count: inProgress.length,
+                    })}
+                </button>
+              </td>
+            </tr>
+          )}
           </tbody>
         )}
         <InfiniteScroll
@@ -183,7 +263,7 @@ export default function Table({
           hasMore={filteredSlugs.length > limit}
           loadMore={() => setLimit(limit + meetingsPerPage)}
         >
-          {filteredSlugs.slice(0, limit).map((slug, index) => (
+          {sortedSlugs.slice(0, limit).map((slug, index) => (
             <Row slug={slug} key={index} />
           ))}
         </InfiniteScroll>
