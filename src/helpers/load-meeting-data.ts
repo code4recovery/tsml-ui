@@ -375,21 +375,23 @@ export function loadMeetingData(
 
     // build type index (can be multiple) -- if inactive, only index the 'inactive' type
     const typesToIndex: string[] = isActive ? types : ['inactive'];
-    typesToIndex.forEach(type => {
-      const typeSlug = formatSlug(
-        strings.types[type as keyof typeof strings.types]
-      );
-      const typeIndex = indexes.type.findIndex(({ key }) => key === typeSlug);
-      if (typeIndex === -1) {
-        indexes.type.push({
-          key: typeSlug,
-          name: strings.types[type as keyof typeof strings.types],
-          slugs: [slug],
-        });
-      } else {
-        indexes.type[typeIndex].slugs.push(slug);
-      }
-    });
+    typesToIndex
+      .filter(type => type in strings.types)
+      .forEach(type => {
+        const typeSlug = formatSlug(
+          strings.types[type as keyof typeof strings.types]
+        );
+        const typeIndex = indexes.type.findIndex(({ key }) => key === typeSlug);
+        if (typeIndex === -1) {
+          indexes.type.push({
+            key: typeSlug,
+            name: strings.types[type as keyof typeof strings.types],
+            slugs: [slug],
+          });
+        } else {
+          indexes.type[typeIndex].slugs.push(slug);
+        }
+      });
 
     // optional updated date
     let updated;
