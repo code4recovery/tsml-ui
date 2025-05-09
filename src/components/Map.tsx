@@ -99,7 +99,7 @@ export default function Map({
         const coords = meeting.latitude + ',' + meeting.longitude;
 
         //create a new pin
-        if (!locations.coords) {
+        if (!locations[coords]) {
           locations[coords] = {
             directions_url: formatDirectionsUrl(meeting),
             formatted_address: meeting.formatted_address,
