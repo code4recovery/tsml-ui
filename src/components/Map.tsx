@@ -11,13 +11,19 @@ import Link from './Link';
 
 import type { Meeting, State } from '../types';
 
-import { MapContainer, TileLayer, Marker as LeafletMarker, Popup as LeafletPopup } from 'react-leaflet';
+import {
+  MapContainer,
+  TileLayer,
+  Marker as LeafletMarker,
+  Popup as LeafletPopup,
+} from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
 // Override default icon paths for Leaflet markers using CDN URLs
 L.Icon.Default.mergeOptions({
-  iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
+  iconRetinaUrl:
+    'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
   iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
   shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
 });
@@ -49,12 +55,12 @@ type Viewport = {
 };
 
 export default function Map({
-                              filteredSlugs,
-                              listMeetingsInPopup = true,
-                              state,
-                              setState,
-                              mapbox,
-                            }: {
+  filteredSlugs,
+  listMeetingsInPopup = true,
+  state,
+  setState,
+  mapbox,
+}: {
   filteredSlugs: string[];
   listMeetingsInPopup: boolean;
   mapbox?: string;
@@ -168,27 +174,28 @@ export default function Map({
     setViewport(
       data.bounds.west === data.bounds.east
         ? {
-          ...dimensions,
-          latitude: data.bounds.north,
-          longitude: data.bounds.west,
-          zoom: 14,
-        }
-        : new WebMercatorViewport(dimensions).fitBounds(
-          [
-            [data.bounds.west, data.bounds.south],
-            [data.bounds.east, data.bounds.north],
-          ],
-          {
-            padding: Math.min(dimensions.width, dimensions.height) / 10,
+            ...dimensions,
+            latitude: data.bounds.north,
+            longitude: data.bounds.west,
+            zoom: 14,
           }
-        )
+        : new WebMercatorViewport(dimensions).fitBounds(
+            [
+              [data.bounds.west, data.bounds.south],
+              [data.bounds.east, data.bounds.north],
+            ],
+            {
+              padding: Math.min(dimensions.width, dimensions.height) / 10,
+            }
+          )
     );
   }, [data, dimensions]);
 
   return (
     <div aria-hidden={true} css={mapCss} ref={mapFrame}>
-      {viewport && !!data.locationKeys.length && (
-        mapbox ? (
+      {viewport &&
+        !!data.locationKeys.length &&
+        (mapbox ? (
           <ReactMapGL
             mapStyle={settings.map.style}
             mapboxAccessToken={mapbox}
@@ -269,7 +276,9 @@ export default function Map({
           </ReactMapGL>
         ) : (
           <MapContainer
-            center={[viewport.latitude, viewport.longitude] as L.LatLngExpression}
+            center={
+              [viewport.latitude, viewport.longitude] as L.LatLngExpression
+            }
             zoom={viewport.zoom}
             style={{ height: '100%', width: '100%' }}
           >
@@ -280,7 +289,10 @@ export default function Map({
             {data.locationKeys.map(key => (
               <LeafletMarker
                 key={key}
-                position={[data.locations[key].latitude, data.locations[key].longitude]}
+                position={[
+                  data.locations[key].latitude,
+                  data.locations[key].longitude,
+                ]}
               >
                 <LeafletPopup>
                   <div css={mapPopupCss}>
@@ -322,8 +334,7 @@ export default function Map({
               </LeafletMarker>
             ))}
           </MapContainer>
-        )
-      )}
+        ))}
     </div>
   );
 }
