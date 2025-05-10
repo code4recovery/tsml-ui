@@ -30,8 +30,7 @@ interface TSMLReactConfig {
   map: {
     markers: {
       location: {
-        backgroundImage: string;
-        cursor: string;
+        html: string;
         height: number;
         width: number;
       };

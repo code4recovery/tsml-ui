@@ -19,14 +19,6 @@ import {
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
-// Override default icon paths for Leaflet markers using CDN URLs
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl:
-    'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
-  iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
-  shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
-});
-
 type Locations = {
   [index: string]: {
     directions_url: string;
@@ -64,8 +56,20 @@ export default function Map({
   setState: Dispatch<SetStateAction<State>>;
   state: State;
 }) {
+  const { settings, strings } = useSettings();
   const markerRef = useRef(null);
-  const { strings } = useSettings();
+  const markerIcon = L.divIcon({
+    className: 'tsml-ui-marker',
+    html: settings.map.markers.location.html,
+    iconAnchor: [
+      settings.map.markers.location.width / 2,
+      settings.map.markers.location.height,
+    ],
+    iconSize: new L.Point(
+      settings.map.markers.location.width,
+      settings.map.markers.location.height
+    ),
+  });
   const [viewport, setViewport] = useState<Viewport | undefined>();
   const [data, setData] = useState<{
     locations: Locations;
@@ -212,6 +216,7 @@ export default function Map({
                 data.locations[key].longitude,
               ]}
               ref={markerRef}
+              icon={markerIcon}
             >
               <LeafletPopup>
                 <h2>{data.locations[key].name}</h2>
