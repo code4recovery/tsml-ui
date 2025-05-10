@@ -194,6 +194,7 @@ export default function Map({
           center={[viewport.latitude, viewport.longitude]}
           zoom={viewport.zoom}
           style={{ height: '100%', width: '100%' }}
+          zoomControl={!('ontouchstart' in window || !!window.TouchEvent)}
           whenReady={() => {
             if (filteredSlugs.length === 1) {
               // todo make less janky
