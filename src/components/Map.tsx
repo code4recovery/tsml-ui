@@ -1,10 +1,9 @@
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 
-import ReactMapGL, { Marker, NavigationControl, Popup } from 'react-map-gl';
 import WebMercatorViewport from 'viewport-mercator-project';
 
 import { formatDirectionsUrl, useSettings } from '../helpers';
-import { mapCss, mapPopupCss, mapPopupMeetingsCss } from '../styles';
+import { mapCss, mapPopupMeetingsCss } from '../styles';
 
 import Button from './Button';
 import Link from './Link';
@@ -59,16 +58,14 @@ export default function Map({
   listMeetingsInPopup = true,
   state,
   setState,
-  mapbox,
 }: {
   filteredSlugs: string[];
   listMeetingsInPopup: boolean;
-  mapbox?: string;
   setState: Dispatch<SetStateAction<State>>;
   state: State;
 }) {
-  const { settings, strings } = useSettings();
-  const [popup, setPopup] = useState<string | undefined>();
+  const markerRef = useRef(null);
+  const { strings } = useSettings();
   const [viewport, setViewport] = useState<Viewport | undefined>();
   const [data, setData] = useState<{
     locations: Locations;
@@ -153,11 +150,6 @@ export default function Map({
       locations: locations,
       locationKeys: locationKeys,
     });
-
-    //show popup if only one
-    if (locationKeys.length === 1) {
-      setPopup(locationKeys[0]);
-    }
   }, [filteredSlugs]);
 
   //reset viewport when data or dimensions change
@@ -177,7 +169,7 @@ export default function Map({
             ...dimensions,
             latitude: data.bounds.north,
             longitude: data.bounds.west,
-            zoom: 14,
+            zoom: 16,
           }
         : new WebMercatorViewport(dimensions).fitBounds(
             [
@@ -193,148 +185,73 @@ export default function Map({
 
   return (
     <div aria-hidden={true} css={mapCss} ref={mapFrame}>
-      {viewport &&
-        !!data.locationKeys.length &&
-        (mapbox ? (
-          <ReactMapGL
-            mapStyle={settings.map.style}
-            mapboxAccessToken={mapbox}
-            initialViewState={viewport}
-            onMove={event => {
-              setViewport({
-                ...viewport,
-                zoom: event.viewState.zoom,
-                latitude: event.viewState.latitude,
-                longitude: event.viewState.longitude,
+      {viewport && !!data.locationKeys.length && (
+        <MapContainer
+          center={[viewport.latitude, viewport.longitude]}
+          zoom={viewport.zoom}
+          style={{ height: '100%', width: '100%' }}
+          whenReady={() => {
+            if (filteredSlugs.length === 1) {
+              // todo make less janky
+              setTimeout(() => {
+                // @ts-ignore
+                markerRef.current?.openPopup();
               });
-            }}
-          >
-            {data.locationKeys.map(key => (
-              <div key={key}>
-                <Marker
-                  latitude={data.locations[key].latitude}
-                  longitude={data.locations[key].longitude}
-                >
-                  <div
-                    data-testid={key}
-                    onClick={() => setPopup(key)}
-                    style={settings.map.markers.location}
-                    title={data.locations[key].name}
-                  />
-                </Marker>
-                {popup === key && (
-                  <Popup
-                    closeOnClick={false}
-                    focusAfterOpen={false}
-                    latitude={data.locations[key].latitude}
-                    longitude={data.locations[key].longitude}
-                    onClose={() => setPopup(undefined)}
-                  >
-                    <div css={mapPopupCss}>
-                      <h2>{data.locations[key].name}</h2>
-                      <p className="notranslate">
-                        {data.locations[key].formatted_address}
-                      </p>
-                      {listMeetingsInPopup && (
-                        <div css={mapPopupMeetingsCss}>
-                          {data.locations[key].meetings
-                            .sort((a, b) =>
-                              a.start && b.start && a.start > b.start ? 1 : 0
-                            )
-                            .map((meeting, index) => (
-                              <div key={index}>
-                                <time>
-                                  {meeting.start?.toFormat('t')}
-                                  <span>{meeting.start?.toFormat('cccc')}</span>
-                                </time>
-                                <Link
-                                  meeting={meeting}
-                                  setState={setState}
-                                  state={state}
-                                />
-                              </div>
-                            ))}
-                        </div>
-                      )}
-                      {data.locations[key].directions_url && (
-                        <Button
-                          href={data.locations[key].directions_url}
-                          icon="geo"
-                          text={strings.get_directions}
-                          type="in-person"
-                        />
-                      )}
-                    </div>
-                  </Popup>
-                )}
-              </div>
-            ))}
-            <NavigationControl
-              showCompass={false}
-              style={{ top: 10, right: 10 }}
-            />
-          </ReactMapGL>
-        ) : (
-          <MapContainer
-            center={
-              [viewport.latitude, viewport.longitude] as L.LatLngExpression
             }
-            zoom={viewport.zoom}
-            style={{ height: '100%', width: '100%' }}
-          >
-            <TileLayer
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            />
-            {data.locationKeys.map(key => (
-              <LeafletMarker
-                key={key}
-                position={[
-                  data.locations[key].latitude,
-                  data.locations[key].longitude,
-                ]}
-              >
-                <LeafletPopup>
-                  <div css={mapPopupCss}>
-                    <h2>{data.locations[key].name}</h2>
-                    <p className="notranslate">
-                      {data.locations[key].formatted_address}
-                    </p>
-                    {listMeetingsInPopup && (
-                      <div css={mapPopupMeetingsCss}>
-                        {data.locations[key].meetings
-                          .sort((a, b) =>
-                            a.start && b.start && a.start > b.start ? 1 : 0
-                          )
-                          .map((meeting, index) => (
-                            <div key={index}>
-                              <time>
-                                {meeting.start?.toFormat('t')}
-                                <span>{meeting.start?.toFormat('cccc')}</span>
-                              </time>
-                              <Link
-                                meeting={meeting}
-                                setState={setState}
-                                state={state}
-                              />
-                            </div>
-                          ))}
-                      </div>
-                    )}
-                    {data.locations[key].directions_url && (
-                      <Button
-                        href={data.locations[key].directions_url}
-                        icon="geo"
-                        text={strings.get_directions}
-                        type="in-person"
-                      />
-                    )}
+          }}
+        >
+          <TileLayer
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          />
+          {data.locationKeys.map(key => (
+            <LeafletMarker
+              key={key}
+              position={[
+                data.locations[key].latitude,
+                data.locations[key].longitude,
+              ]}
+              ref={markerRef}
+            >
+              <LeafletPopup>
+                <h2>{data.locations[key].name}</h2>
+                <p className="notranslate">
+                  {data.locations[key].formatted_address}
+                </p>
+                {listMeetingsInPopup && (
+                  <div css={mapPopupMeetingsCss}>
+                    {data.locations[key].meetings
+                      .sort((a, b) =>
+                        a.start && b.start && a.start > b.start ? 1 : 0
+                      )
+                      .map((meeting, index) => (
+                        <div key={index}>
+                          <time>
+                            {meeting.start?.toFormat('t')}
+                            <span>{meeting.start?.toFormat('cccc')}</span>
+                          </time>
+                          <Link
+                            meeting={meeting}
+                            setState={setState}
+                            state={state}
+                          />
+                        </div>
+                      ))}
                   </div>
-                </LeafletPopup>
-              </LeafletMarker>
-            ))}
-          </MapContainer>
-        ))}
+                )}
+                {data.locations[key].directions_url && (
+                  <Button
+                    href={data.locations[key].directions_url}
+                    icon="geo"
+                    text={strings.get_directions}
+                    type="in-person"
+                  />
+                )}
+              </LeafletPopup>
+            </LeafletMarker>
+          ))}
+        </MapContainer>
+      )}
     </div>
   );
 }

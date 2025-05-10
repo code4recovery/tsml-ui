@@ -73,7 +73,6 @@ export const defaults: TSMLReactConfig = {
         width: 26,
       },
     },
-    style: 'mapbox://styles/mapbox/streets-v10',
   },
   now_offset: -10, // "now" includes meetings that started in the last 10 minutes
   params: ['search', 'mode', 'view', 'meeting'], //input other than filters

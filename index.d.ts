@@ -36,7 +36,6 @@ interface TSMLReactConfig {
         width: number;
       };
     };
-    style: string;
   };
   now_offset: number;
   params: Array<'search' | 'mode' | 'view' | 'meeting'>;

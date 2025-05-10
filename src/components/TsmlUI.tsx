@@ -252,7 +252,7 @@ export default function TsmlUI({
       {!state.ready ? (
         <Loading />
       ) : state.input.meeting && state.input.meeting in state.meetings ? (
-        <Meeting mapbox={mapbox} setState={setState} state={state} />
+        <Meeting setState={setState} state={state} />
       ) : (
         <>
           {settings.show.title && <Title state={state} />}
@@ -272,7 +272,6 @@ export default function TsmlUI({
               <Map
                 filteredSlugs={filteredSlugs}
                 listMeetingsInPopup={true}
-                mapbox={mapbox}
                 setState={setState}
                 state={state}
               />

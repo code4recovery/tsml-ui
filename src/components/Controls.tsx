@@ -48,7 +48,7 @@ export default function Controls({
   const allModes = ['search', 'location', 'me'] as const;
   const modes = allModes
     .filter(
-      mode => mode !== 'location' || state.capabilities.coordinates
+      mode => mode !== 'location' || (state.capabilities.coordinates && mapbox)
     )
     .filter(
       mode =>
@@ -241,11 +241,11 @@ export default function Controls({
             }}
           >
             {modes.map(mode => (
-              <div 
+              <div
                 className="tsml-dropdown__item"
                 data-active={state.input.mode === mode}
                 key={mode}
-                >
+              >
                 <button
                   className="tsml-dropdown__button"
                   onClick={e => setMode(e, mode)}
