@@ -63,7 +63,7 @@ export default function Map({
     html: settings.map.markers.location.html,
     iconAnchor: [
       settings.map.markers.location.width / 2,
-      settings.map.markers.location.height,
+      settings.map.markers.location.height / 2,
     ],
     iconSize: new L.Point(
       settings.map.markers.location.width,

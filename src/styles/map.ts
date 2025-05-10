@@ -26,7 +26,7 @@ export const mapCss = css`
 
     a.leaflet-popup-close-button {
       align-items: center;
-      background-color: white !important;
+      background: var(--background);
       border-radius: 50%;
       border: 1px solid ${color.medium} !important;
       color: ${color.dark} !important;
@@ -47,6 +47,8 @@ export const mapCss = css`
 
     .leaflet-popup-content-wrapper {
       border-radius: calc(var(--border-radius) * 2) !important;
+      background: var(--background);
+      color: var(--text);
 
       .leaflet-popup-content {
         display: grid;
