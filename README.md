@@ -85,18 +85,6 @@ var tsml_react_config = {
 };
 ```
 
-### Change the map style
-
-Mapbox maps can be styled by picking a [classic Mapbox style](https://docs.mapbox.com/api/maps/styles/#classic-mapbox-styles) or creating a [custom map style](https://docs.mapbox.com/studio-manual/guides/map-styling/) and adding it to the `tsml_react_config` object.
-
-```js
-var tsml_react_config = {
-  map: {
-    style: 'mapbox://styles/username/abcdefg',
-  },
-};
-```
-
 ### Customize theme colors
 
 You can use CSS variables to customize TSML UI’s appearance. Here are the defaults:

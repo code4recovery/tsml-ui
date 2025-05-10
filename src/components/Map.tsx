@@ -1,15 +1,23 @@
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 
-import ReactMapGL, { Marker, NavigationControl, Popup } from 'react-map-gl';
 import WebMercatorViewport from 'viewport-mercator-project';
 
 import { formatDirectionsUrl, useSettings } from '../helpers';
-import { mapCss, mapPopupCss, mapPopupMeetingsCss } from '../styles';
+import { mapCss, mapPopupMeetingsCss } from '../styles';
 
 import Button from './Button';
 import Link from './Link';
 
 import type { Meeting, State } from '../types';
+
+import {
+  MapContainer,
+  TileLayer,
+  Marker as LeafletMarker,
+  Popup as LeafletPopup,
+} from 'react-leaflet';
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 
 type Locations = {
   [index: string]: {
@@ -42,16 +50,26 @@ export default function Map({
   listMeetingsInPopup = true,
   state,
   setState,
-  mapbox,
 }: {
   filteredSlugs: string[];
   listMeetingsInPopup: boolean;
-  mapbox?: string;
   setState: Dispatch<SetStateAction<State>>;
   state: State;
 }) {
   const { settings, strings } = useSettings();
-  const [popup, setPopup] = useState<string | undefined>();
+  const markerRef = useRef(null);
+  const markerIcon = L.divIcon({
+    className: 'tsml-ui-marker',
+    html: settings.map.markers.location.html,
+    iconAnchor: [
+      settings.map.markers.location.width / 2,
+      settings.map.markers.location.height / 2,
+    ],
+    iconSize: new L.Point(
+      settings.map.markers.location.width,
+      settings.map.markers.location.height
+    ),
+  });
   const [viewport, setViewport] = useState<Viewport | undefined>();
   const [data, setData] = useState<{
     locations: Locations;
@@ -136,17 +154,11 @@ export default function Map({
       locations: locations,
       locationKeys: locationKeys,
     });
-
-    //show popup if only one
-    if (locationKeys.length === 1) {
-      setPopup(locationKeys[0]);
-    }
   }, [filteredSlugs]);
 
   //reset viewport when data or dimensions change
   useEffect(() => {
     if (
-      !mapbox ||
       !dimensions ||
       !data.bounds ||
       !data.bounds.north ||
@@ -161,7 +173,7 @@ export default function Map({
             ...dimensions,
             latitude: data.bounds.north,
             longitude: data.bounds.west,
-            zoom: 14,
+            zoom: 16,
           }
         : new WebMercatorViewport(dimensions).fitBounds(
             [
@@ -178,84 +190,73 @@ export default function Map({
   return (
     <div aria-hidden={true} css={mapCss} ref={mapFrame}>
       {viewport && !!data.locationKeys.length && (
-        <ReactMapGL
-          mapStyle={settings.map.style}
-          mapboxAccessToken={mapbox}
-          initialViewState={viewport}
-          onMove={event => {
-            setViewport({
-              ...viewport,
-              zoom: event.viewState.zoom,
-              latitude: event.viewState.latitude,
-              longitude: event.viewState.longitude,
-            });
+        <MapContainer
+          center={[viewport.latitude, viewport.longitude]}
+          zoom={viewport.zoom}
+          style={{ height: '100%', width: '100%' }}
+          zoomControl={!('ontouchstart' in window || !!window.TouchEvent)}
+          whenReady={() => {
+            if (filteredSlugs.length === 1) {
+              // todo make less janky
+              setTimeout(() => {
+                // @ts-ignore
+                markerRef.current?.openPopup();
+              });
+            }
           }}
         >
-          {data.locationKeys.map(key => (
-            <div key={key}>
-              <Marker
-                latitude={data.locations[key].latitude}
-                longitude={data.locations[key].longitude}
-              >
-                <div
-                  data-testid={key}
-                  onClick={() => setPopup(key)}
-                  style={settings.map.markers.location}
-                  title={data.locations[key].name}
-                />
-              </Marker>
-              {popup === key && (
-                <Popup
-                  closeOnClick={false}
-                  focusAfterOpen={false}
-                  latitude={data.locations[key].latitude}
-                  longitude={data.locations[key].longitude}
-                  onClose={() => setPopup(undefined)}
-                >
-                  <div css={mapPopupCss}>
-                    <h2>{data.locations[key].name}</h2>
-                    <p className="notranslate">
-                      {data.locations[key].formatted_address}
-                    </p>
-                    {listMeetingsInPopup && (
-                      <div css={mapPopupMeetingsCss}>
-                        {data.locations[key].meetings
-                          .sort((a, b) =>
-                            a.start && b.start && a.start > b.start ? 1 : 0
-                          )
-                          .map((meeting, index) => (
-                            <div key={index}>
-                              <time>
-                                {meeting.start?.toFormat('t')}
-                                <span>{meeting.start?.toFormat('cccc')}</span>
-                              </time>
-                              <Link
-                                meeting={meeting}
-                                setState={setState}
-                                state={state}
-                              />
-                            </div>
-                          ))}
-                      </div>
-                    )}
-                    {data.locations[key].directions_url && (
-                      <Button
-                        href={data.locations[key].directions_url}
-                        icon="geo"
-                        text={strings.get_directions}
-                        type="in-person"
-                      />
-                    )}
-                  </div>
-                </Popup>
-              )}
-            </div>
-          ))}
-          <NavigationControl
-            showCompass={false}
-            style={{ top: 10, right: 10 }}
+          <TileLayer
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           />
-        </ReactMapGL>
+          {data.locationKeys.map(key => (
+            <LeafletMarker
+              key={key}
+              position={[
+                data.locations[key].latitude,
+                data.locations[key].longitude,
+              ]}
+              ref={markerRef}
+              icon={markerIcon}
+            >
+              <LeafletPopup>
+                <h2>{data.locations[key].name}</h2>
+                <p className="notranslate">
+                  {data.locations[key].formatted_address}
+                </p>
+                {listMeetingsInPopup && (
+                  <div css={mapPopupMeetingsCss}>
+                    {data.locations[key].meetings
+                      .sort((a, b) =>
+                        a.start && b.start && a.start > b.start ? 1 : 0
+                      )
+                      .map((meeting, index) => (
+                        <div key={index}>
+                          <time>
+                            {meeting.start?.toFormat('t')}
+                            <span>{meeting.start?.toFormat('cccc')}</span>
+                          </time>
+                          <Link
+                            meeting={meeting}
+                            setState={setState}
+                            state={state}
+                          />
+                        </div>
+                      ))}
+                  </div>
+                )}
+                {data.locations[key].directions_url && (
+                  <Button
+                    href={data.locations[key].directions_url}
+                    icon="geo"
+                    text={strings.get_directions}
+                    type="in-person"
+                  />
+                )}
+              </LeafletPopup>
+            </LeafletMarker>
+          ))}
+        </MapContainer>
       )}
     </div>
   );

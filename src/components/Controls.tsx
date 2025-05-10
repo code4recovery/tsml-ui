@@ -65,7 +65,7 @@ export default function Controls({
   //get available views
   const allViews = ['table', 'map'] as const;
   const views = allViews.filter(
-    view => view !== 'map' || (state.capabilities.coordinates && mapbox)
+    view => view !== 'map' || state.capabilities.coordinates
   );
 
   //whether to show the views segmented button
@@ -241,11 +241,11 @@ export default function Controls({
             }}
           >
             {modes.map(mode => (
-              <div 
+              <div
                 className="tsml-dropdown__item"
                 data-active={state.input.mode === mode}
                 key={mode}
-                >
+              >
                 <button
                   className="tsml-dropdown__button"
                   onClick={e => setMode(e, mode)}

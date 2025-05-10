@@ -30,13 +30,11 @@ interface TSMLReactConfig {
   map: {
     markers: {
       location: {
-        backgroundImage: string;
-        cursor: string;
+        html: string;
         height: number;
         width: number;
       };
     };
-    style: string;
   };
   now_offset: number;
   params: Array<'search' | 'mode' | 'view' | 'meeting'>;

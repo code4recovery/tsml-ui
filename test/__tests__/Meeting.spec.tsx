@@ -98,7 +98,7 @@ describe('<Meeting />', () => {
     const { getByText } = render(
       <MemoryRouter>
         <SettingsContext.Provider value={mergeSettings()}>
-          <Meeting state={mockState} setState={jest.fn()} mapbox="pk.123456" />
+          <Meeting state={mockState} setState={jest.fn()} />
         </SettingsContext.Provider>
       </MemoryRouter>
     );
@@ -126,7 +126,7 @@ describe('<Meeting />', () => {
   it('renders with group info', () => {
     const { getByText } = render(
       <MemoryRouter>
-        <Meeting state={mockState} setState={jest.fn()} mapbox="pk.123456" />
+        <Meeting state={mockState} setState={jest.fn()} />
       </MemoryRouter>
     );
 
@@ -140,7 +140,7 @@ describe('<Meeting />', () => {
   it('renders with contact 1 but no contact 2', () => {
     const { getByText, queryByText } = render(
       <MemoryRouter>
-        <Meeting state={mockState} setState={jest.fn()} mapbox="pk.123456" />
+        <Meeting state={mockState} setState={jest.fn()} />
       </MemoryRouter>
     );
     const contact1text = getByText(`Text ${mockMeeting.contact_1_name}`);
@@ -174,7 +174,6 @@ describe('<Meeting />', () => {
             },
           }}
           setState={jest.fn()}
-          mapbox="pk.123456"
         />
       </MemoryRouter>
     );
@@ -197,7 +196,6 @@ describe('<Meeting />', () => {
             },
           }}
           setState={jest.fn()}
-          mapbox="pk.123456"
         />
       </MemoryRouter>
     );

@@ -11,4 +11,7 @@ module.exports = {
   moduleNameMapper: {
     '\\.(css)$': '<rootDir>/test/__mocks__/styleMock.js',
   },
+  transformIgnorePatterns: [
+    '/node_modules/(?!(react-leaflet|@react-leaflet|leaflet)/)',
+  ],
 };
