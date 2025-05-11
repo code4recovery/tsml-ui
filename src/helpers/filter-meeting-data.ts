@@ -12,8 +12,7 @@ export function filterMeetingData(
   state: State,
   setState: Dispatch<SetStateAction<State>>,
   settings: TSMLReactConfig,
-  strings: Translation,
-  mapbox?: string
+  strings: Translation
 ) {
   const matchGroups: string[][] = [];
   const now = DateTime.now();
@@ -89,23 +88,25 @@ export function filterMeetingData(
 
     if (!state.input.latitude || !state.input.longitude) {
       if (state.input.search && state.input.mode === 'location') {
-        //make mapbox API request https://docs.mapbox.com/api/search/
+        const url =
+          window.location.host === 'tsml-ui.test'
+            ? 'geo.test'
+            : 'geo.code4recovery.org';
         fetch(
-          `https://api.mapbox.com/geocoding/v5/mapbox.places/${
-            state.input.search
-          }.json?${new URLSearchParams({
-            access_token: mapbox ?? '',
-            autocomplete: 'false',
+          `https://${url}/api/geocode?${new URLSearchParams({
+            application: 'tsml-ui',
             language: settings.language,
+            referrer: window.location.href,
+            search: state.input.search,
           })}`
         )
           .then(result => result.json())
           .then(result => {
-            if (result.features && result.features.length) {
+            if (result.results && result.results.length) {
               //re-render page with new params
               calculateDistances({
-                latitude: result.features[0].center[1],
-                longitude: result.features[0].center[0],
+                latitude: result.results[0].geometry.location.lat,
+                longitude: result.results[0].geometry.location.lng,
                 setState,
                 settings,
                 state,

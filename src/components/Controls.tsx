@@ -30,11 +30,9 @@ import type { State } from '../types';
 export default function Controls({
   state,
   setState,
-  mapbox,
 }: {
   state: State;
   setState: Dispatch<SetStateAction<State>>;
-  mapbox?: string;
 }) {
   const { settings, strings } = useSettings();
   const [dropdown, setDropdown] = useState<string>();
@@ -47,9 +45,7 @@ export default function Controls({
   //get available search options based on capabilities
   const allModes = ['search', 'location', 'me'] as const;
   const modes = allModes
-    .filter(
-      mode => mode !== 'location' || (state.capabilities.coordinates && mapbox)
-    )
+    .filter(mode => mode !== 'location' || state.capabilities.coordinates)
     .filter(
       mode =>
         mode !== 'me' ||

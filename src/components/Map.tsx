@@ -175,15 +175,10 @@ export default function Map({
             longitude: data.bounds.west,
             zoom: 16,
           }
-        : new WebMercatorViewport(dimensions).fitBounds(
-            [
-              [data.bounds.west, data.bounds.south],
-              [data.bounds.east, data.bounds.north],
-            ],
-            {
-              padding: Math.min(dimensions.width, dimensions.height) / 10,
-            }
-          )
+        : new WebMercatorViewport(dimensions).fitBounds([
+            [data.bounds.west, data.bounds.south],
+            [data.bounds.east, data.bounds.north],
+          ])
     );
   }, [data, dimensions]);
 

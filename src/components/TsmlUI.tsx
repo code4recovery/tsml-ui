@@ -19,13 +19,11 @@ import type { State } from '../types';
 
 export default function TsmlUI({
   google,
-  mapbox,
   settings: userSettings,
   src,
   timezone,
 }: {
   google?: string;
-  mapbox?: string;
   settings?: TSMLReactConfig;
   src?: string;
   timezone?: string;
@@ -234,8 +232,7 @@ export default function TsmlUI({
     state,
     setState,
     settings,
-    strings,
-    mapbox
+    strings
   );
 
   // show alert?
@@ -257,7 +254,7 @@ export default function TsmlUI({
         <>
           {settings.show.title && <Title state={state} />}
           {settings.show.controls && (
-            <Controls state={state} setState={setState} mapbox={mapbox} />
+            <Controls state={state} setState={setState} />
           )}
           {(state.alert || state.error) && <Alert state={state} />}
           {state.input.view === 'table' ? (
