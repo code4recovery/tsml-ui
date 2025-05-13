@@ -64,6 +64,7 @@ export const mapCss = css`
       margin-left: -20px !important;
       margin-top: -1px !important;
       .leaflet-popup-tip {
+        background: var(--background);
         margin: -10px auto 0 !important;
       }
     }
