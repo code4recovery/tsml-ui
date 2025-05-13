@@ -49,6 +49,7 @@ export default function Map({
     locations: {},
     locationKeys: [],
   });
+  const { settings } = useSettings();
 
   // reset locations when filteredSlugs changes
   useEffect(() => {
@@ -94,10 +95,7 @@ export default function Map({
           style={{ height: '100%', width: '100%' }}
           zoomControl={!('ontouchstart' in window || !!window.TouchEvent)}
         >
-          <TileLayer
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          />
+          <TileLayer {...settings.map.tiles} />
           <Markers
             {...data}
             listMeetingsInPopup={listMeetingsInPopup}

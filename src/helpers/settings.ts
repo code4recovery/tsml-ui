@@ -70,6 +70,11 @@ export const defaults: TSMLReactConfig = {
         width: 26,
       },
     },
+    tiles: {
+      attribution:
+        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    },
   },
   now_offset: -10, // "now" includes meetings that started in the last 10 minutes
   params: ['search', 'mode', 'view', 'meeting'], //input other than filters

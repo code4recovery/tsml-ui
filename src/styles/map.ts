@@ -16,7 +16,9 @@ export const mapCss = css`
   }
 
   a[class^='leaflet-control-zoom-'] {
-    color: ${color.dark} !important;
+    background: var(--background);
+    border-color: ${color.medium};
+    color: var(--text) !important;
     line-height: 26px !important;
     text-decoration: none !important;
   }

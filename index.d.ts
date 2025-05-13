@@ -35,6 +35,10 @@ interface TSMLReactConfig {
         width: number;
       };
     };
+    tiles: {
+      attribution: string;
+      url: string;
+    };
   };
   now_offset: number;
   params: Array<'search' | 'mode' | 'view' | 'meeting'>;

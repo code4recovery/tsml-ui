@@ -85,6 +85,22 @@ var tsml_react_config = {
 };
 ```
 
+### Change the map style
+
+Open Street Maps can be styled by picking a different tile layer URL and attribution and adding them to the `tsml_react_config` object.
+
+```js
+var tsml_react_config = {
+  map: {
+    tiles: {
+      attribution:
+        '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      url: 'https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png',
+    },
+  },
+};
+```
+
 ### Customize theme colors
 
 You can use CSS variables to customize TSML UI’s appearance. Here are the defaults:
