@@ -58,6 +58,7 @@ export const controlsGroupLastCss = css`
   margin-left: -1px !important;
 `;
 
+// todo figure out how to color the cancel button - then we can re-enable
 export const controlsInputCss = css`
   &[type='search'] {
     ${formControlCss}
@@ -65,6 +66,9 @@ export const controlsInputCss = css`
     &:focus {
       border: 1px solid ${color.dark};
       outline: none;
+    }
+    &::-webkit-search-cancel-button {
+      -webkit-appearance: none;
     }
   }
 `;

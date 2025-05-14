@@ -34,7 +34,7 @@ export const defaults: TSMLReactConfig = {
     'zoom.us': 'Zoom',
   },
   defaults: {
-    distance: [],
+    distance: ['5'],
     mode: 'search',
     region: [],
     search: '',

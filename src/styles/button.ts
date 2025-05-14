@@ -18,7 +18,7 @@ export const formControlCss = css`
   line-height: 1.5 !important;
   margin: 0 !important;
   min-height: auto;
-  padding: ${size.gutter / 2.66666}px ${size.gutter}px !important;
+  padding: ${size.gutter / 2.66666}px ${size.gutter / 2}px !important;
   text-decoration: none !important;
   transition: all 0.15s ease-in-out;
   width: 100%;

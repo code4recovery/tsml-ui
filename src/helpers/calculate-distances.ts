@@ -66,7 +66,9 @@ export function calculateDistances({
 
   //remove redundant distances at 50 and higher distances, unless requested via query param
   let slugMax = 0;
-  let queryDistance = Array.isArray(state.input?.distance) ? state.input.distance[0] : 0;
+  let queryDistance = Array.isArray(state.input?.distance)
+    ? state.input.distance[0]
+    : 0;
   Object.entries(distances).forEach(([val, distance]) => {
     if (50 <= parseInt(val) && val !== queryDistance) {
       if (slugMax >= distance.slugs.length) {
@@ -74,7 +76,7 @@ export function calculateDistances({
       }
     }
     slugMax = Math.max(slugMax, distance.slugs.length);
-  })
+  });
 
   //flatten index and set capability
   const distanceIndex = flattenAndSortIndexes(
@@ -85,7 +87,7 @@ export function calculateDistances({
   state.capabilities.distance = !!distanceIndex.length;
 
   //this will cause a re-render with latitude and longitude now set
-  setState({
+  setState(state => ({
     ...state,
     capabilities: state.capabilities,
     indexes: {
@@ -94,11 +96,14 @@ export function calculateDistances({
     },
     input: {
       ...state.input,
+      distance: state.input.distance.length
+        ? state.input.distance
+        : settings.defaults.distance,
       latitude: parseFloat(latitude.toFixed(5)),
       longitude: parseFloat(longitude.toFixed(5)),
     },
     ready: true,
-  });
+  }));
 }
 
 // Calculate the distance as the crow flies between two geometric points

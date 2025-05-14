@@ -56,7 +56,11 @@ export default function Controls({
   const filters = settings.filters
     .filter(filter => state.capabilities[filter])
     .filter(filter => filter !== 'region' || state.input.mode === 'search')
-    .filter(filter => filter !== 'distance' || state.input.mode !== 'search');
+    .filter(
+      filter =>
+        filter !== 'distance' ||
+        (state.input.mode !== 'search' && state.input.latitude)
+    );
 
   //get available views
   const allViews = ['table', 'map'] as const;

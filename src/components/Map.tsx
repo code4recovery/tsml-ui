@@ -118,7 +118,7 @@ const Markers = ({
           [Math.max(...latitudes), Math.min(...longitudes)],
           [Math.min(...latitudes), Math.max(...longitudes)],
         ],
-        { padding: [5, 5] }
+        { padding: [10, 10] }
       );
     }
   }, [locations]);
