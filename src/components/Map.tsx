@@ -8,13 +8,7 @@ import Link from './Link';
 
 import type { MapLocation, State } from '../types';
 
-import {
-  MapContainer,
-  TileLayer,
-  Marker as LeafletMarker,
-  Popup as LeafletPopup,
-  useMap,
-} from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
@@ -126,13 +120,13 @@ const Markers = ({
   }, [locations]);
 
   return locations.map(location => (
-    <LeafletMarker
+    <Marker
       key={location.key}
       position={[location.latitude, location.longitude]}
       ref={markerRef}
       icon={markerIcon}
     >
-      <LeafletPopup>
+      <Popup>
         <h2>{location.name}</h2>
         <p className="notranslate">{location.formatted_address}</p>
         {listMeetingsInPopup && (
@@ -158,7 +152,7 @@ const Markers = ({
             type="in-person"
           />
         )}
-      </LeafletPopup>
-    </LeafletMarker>
+      </Popup>
+    </Marker>
   ));
 };
