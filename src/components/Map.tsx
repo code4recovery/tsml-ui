@@ -94,6 +94,7 @@ const Markers = ({
   const { settings, strings } = useSettings();
   const markerRef = useRef<L.Marker>(null);
   const markerIcon = L.divIcon({
+    className: 'tsml-ui-marker',
     html: settings.map.markers.location.html,
     iconAnchor: [
       settings.map.markers.location.width / 2,

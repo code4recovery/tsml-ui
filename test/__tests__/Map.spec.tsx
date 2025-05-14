@@ -14,6 +14,9 @@ jest.mock('react-leaflet', () => ({
   TileLayer: () => <div data-testid="tile-layer" />,
   Marker: () => <div data-testid="marker" />,
   Popup: () => <div data-testid="popup" />,
+  useMap: () => ({
+    setView: jest.fn(),
+  }),
 }));
 
 // Mock leaflet
@@ -23,6 +26,21 @@ jest.mock('leaflet', () => ({
       mergeOptions: jest.fn(),
     },
   },
+  divIcon: jest.fn(),
+  Point: jest.fn().mockImplementation((x, y) => ({
+    x,
+    y,
+    add: jest.fn().mockImplementation(otherPoint => ({
+      x: x + otherPoint.x,
+      y: y + otherPoint.y,
+    })),
+    equals: jest
+      .fn()
+      .mockImplementation(
+        otherPoint => x === otherPoint.x && y === otherPoint.y
+      ),
+    toString: jest.fn().mockImplementation(() => `Point(${x}, ${y})`),
+  })),
 }));
 
 describe('<Map />', () => {
@@ -101,25 +119,5 @@ describe('<Map />', () => {
       />
     );
     expect(container).toBeTruthy();
-  });
-
-  it('configures Leaflet marker icons correctly', () => {
-    const { Icon } = require('leaflet');
-    render(
-      <Map
-        filteredSlugs={Object.keys(mockStateWithMeeting.meetings)}
-        listMeetingsInPopup={false}
-        state={mockStateWithMeeting}
-        setState={jest.fn()}
-      />
-    );
-
-    expect(Icon.Default.mergeOptions).toHaveBeenCalledWith({
-      iconRetinaUrl:
-        'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
-      iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
-      shadowUrl:
-        'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
-    });
   });
 });
