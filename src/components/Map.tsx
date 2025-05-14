@@ -113,10 +113,13 @@ const Markers = ({
     } else {
       const latitudes = locations.map(({ latitude }) => latitude);
       const longitudes = locations.map(({ longitude }) => longitude);
-      map.fitBounds([
-        [Math.max(...latitudes), Math.min(...longitudes)],
-        [Math.min(...latitudes), Math.max(...longitudes)],
-      ]);
+      map.fitBounds(
+        [
+          [Math.max(...latitudes), Math.min(...longitudes)],
+          [Math.min(...latitudes), Math.max(...longitudes)],
+        ],
+        { padding: [5, 5] }
+      );
     }
   }, [locations]);
 
@@ -124,7 +127,7 @@ const Markers = ({
     <Marker
       key={location.key}
       position={[location.latitude, location.longitude]}
-      ref={markerRef}
+      ref={locations.length === 1 ? markerRef : null}
       icon={markerIcon}
     >
       <Popup>
