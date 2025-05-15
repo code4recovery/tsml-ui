@@ -71,9 +71,8 @@ export const defaults: TSMLReactConfig = {
       },
     },
     tiles: {
-      attribution:
-        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-      url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+      attribution: `&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>`,
+      url: 'https://{s}s.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
     },
   },
   now_offset: -10, // "now" includes meetings that started in the last 10 minutes

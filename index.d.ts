@@ -39,6 +39,10 @@ interface TSMLReactConfig {
       attribution: string;
       url: string;
     };
+    tiles_dark?: {
+      attribution: string;
+      url: string;
+    };
   };
   now_offset: number;
   params: Array<'search' | 'mode' | 'view' | 'meeting'>;

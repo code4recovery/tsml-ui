@@ -101,6 +101,20 @@ var tsml_react_config = {
 };
 ```
 
+You can optionally also specify a `tiles_dark` attribute which will be used when `prefers-color-scheme: dark`.
+
+```js
+var tsml_react_config = {
+  map: {
+    tiles_dark: {
+      attribution:
+        '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      url: 'https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png',
+    },
+  },
+};
+```
+
 ### Customize theme colors
 
 You can use CSS variables to customize TSML UI’s appearance. Here are the defaults:

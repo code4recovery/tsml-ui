@@ -26,28 +26,49 @@ export const mapCss = css`
     background-color: ${color.medium};
   }
 
+  .leaflet-control-zoom {
+    border-width: 1px;
+  }
+
   .leaflet-popup {
     margin-bottom: 20px !important;
 
     a.leaflet-popup-close-button {
       align-items: center;
       background: var(--background);
-      border-radius: 50%;
-      border: 1px solid ${color.medium} !important;
+      border: 1px solid ${color.medium};
       color: ${color.dark} !important;
-      display: flex;
       font-family: var(--font-family);
       font-size: 24px !important;
-      height: 30px !important;
       justify-content: center;
-      position: absolute;
-      right: -15px !important;
       text-decoration: none !important;
-      top: -15px !important;
-      width: 30px !important;
       span {
         margin-top: -3px;
       }
+      :hover {
+        background-color: ${color.medium};
+      }
+    }
+
+    a.leaflet-popup-close-button,
+    ::after {
+      border-radius: 50%;
+      display: flex;
+      height: 30px !important;
+      position: absolute;
+      right: -15px !important;
+      top: -15px !important;
+      width: 30px !important;
+    }
+
+    ::after,
+    .leaflet-popup-content-wrapper {
+      box-shadow: rgba(0, 0, 0, 0.2) 3px 3px 5px !important;
+    }
+
+    ::after {
+      content: '';
+      z-index: -1;
     }
 
     .leaflet-popup-content-wrapper {

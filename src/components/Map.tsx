@@ -25,6 +25,20 @@ export default function Map({
 }) {
   const [locations, setLocations] = useState<MapLocation[]>([]);
   const { settings } = useSettings();
+  const [darkMode, setDarkMode] = useState(
+    window.matchMedia('(prefers-color-scheme: dark)').matches
+  );
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    const handleChange = ({ matches }: MediaQueryListEvent) => {
+      setDarkMode(matches);
+    };
+    mediaQuery.addEventListener('change', handleChange);
+    return () => {
+      mediaQuery.removeEventListener('change', handleChange);
+    };
+  }, []);
 
   // reset locations when filteredSlugs changes
   useEffect(() => {
@@ -66,7 +80,11 @@ export default function Map({
           style={{ height: '100%', width: '100%' }}
           zoomControl={!('ontouchstart' in window || !!window.TouchEvent)}
         >
-          <TileLayer {...settings.map.tiles} />
+          <TileLayer
+            {...(settings.map.tiles_dark && darkMode
+              ? settings.map.tiles_dark
+              : settings.map.tiles)}
+          />
           <Markers
             listMeetingsInPopup={listMeetingsInPopup}
             locations={locations}
