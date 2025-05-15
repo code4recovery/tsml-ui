@@ -120,21 +120,34 @@ export default function Controls({
 
     if (state.input.mode !== 'location') return;
 
-    setState({
+    if (search) {
+      searchParams.set('search', search);
+    } else {
+      searchParams.delete('search');
+      Object.keys(state.meetings).forEach(slug => {
+        state.meetings[slug].distance = undefined;
+      });
+    }
+
+    setState(state => ({
       ...state,
+      capabilities: {
+        ...state.capabilities,
+        distance: false,
+      },
+      filtering: !!search,
+      indexes: {
+        ...state.indexes,
+        distance: [],
+      },
       input: {
         ...state.input,
         latitude: undefined,
         longitude: undefined,
         search,
       },
-    });
-
-    if (search) {
-      searchParams.set('search', search);
-    } else {
-      searchParams.delete('search');
-    }
+      meetings: state.meetings,
+    }));
 
     setSearchParams(searchParams);
   };
@@ -148,8 +161,8 @@ export default function Controls({
     });
 
     setSearch('');
-    if (mode !== 'search') {
-      searchParams.delete('search');
+    searchParams.delete('search');
+    if (mode !== settings.defaults.mode) {
       searchParams.set('mode', mode);
     } else {
       searchParams.delete('mode');
@@ -158,7 +171,7 @@ export default function Controls({
     //focus after waiting for disabled to clear
     setTimeout(() => searchInput.current?.focus(), 100);
 
-    setState({
+    setState(state => ({
       ...state,
       capabilities: {
         ...state.capabilities,
@@ -170,13 +183,13 @@ export default function Controls({
       },
       input: {
         ...state.input,
-        distance: [],
         latitude: undefined,
         longitude: undefined,
-        mode: mode,
+        mode,
         search: '',
       },
-    });
+      meetings: state.meetings,
+    }));
 
     setSearchParams(searchParams);
   };

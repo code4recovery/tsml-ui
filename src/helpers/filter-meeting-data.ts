@@ -7,7 +7,7 @@ import { getIndexByKey } from './get-index-by-key';
 
 import type { State } from '../types';
 
-//run filters on meetings; this is run at every render
+// filter meetings based on input
 export function filterMeetingData(
   state: State,
   setState: Dispatch<SetStateAction<State>>,
@@ -19,6 +19,10 @@ export function filterMeetingData(
   const now_offset = now.plus({ minute: settings.now_offset });
   const slugs = Object.keys(state.meetings);
   const timeDiff: { [index: string]: number } = {};
+
+  if (state.loading) {
+    return [[], []];
+  }
 
   //filter by distance, region, time, type, and weekday
   settings.filters.forEach(filter => {
@@ -87,7 +91,11 @@ export function filterMeetingData(
     );
 
     if (!state.input.latitude || !state.input.longitude) {
-      if (state.input.search && state.input.mode === 'location') {
+      if (
+        state.input.mode === 'location' &&
+        state.input.search &&
+        state.filtering
+      ) {
         const url =
           window.location.host === 'tsml-ui.test'
             ? 'geo.test'
@@ -101,14 +109,14 @@ export function filterMeetingData(
           })}`
         )
           .then(result => result.json())
-          .then(result => {
-            if (result.results && result.results.length) {
-              //re-render page with new params
+          .then(({ results }) => {
+            if (results?.length) {
               calculateDistances({
-                latitude: result.results[0].geometry.location.lat,
-                longitude: result.results[0].geometry.location.lng,
+                latitude: results[0].geometry.location.lat,
+                longitude: results[0].geometry.location.lng,
                 setState,
                 settings,
+                slugs,
                 state,
                 strings,
               });
@@ -117,6 +125,7 @@ export function filterMeetingData(
             }
           });
       } else if (state.input.mode === 'me') {
+        setState(state => ({ ...state, filtering: true }));
         navigator.geolocation.getCurrentPosition(
           position => {
             calculateDistances({
@@ -124,12 +133,14 @@ export function filterMeetingData(
               longitude: position.coords.longitude,
               setState,
               settings,
+              slugs,
               state,
               strings,
             });
           },
           error => {
             console.warn(`TSML UI geolocation error: ${error.message}`);
+            setState(state => ({ ...state, filtering: false }));
           },
           { timeout: 5000 }
         );

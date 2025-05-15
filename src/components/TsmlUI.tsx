@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { Global } from '@emotion/react';
 import { useSearchParams } from 'react-router-dom';
@@ -28,6 +28,8 @@ export default function TsmlUI({
   src?: string;
   timezone?: string;
 }) {
+  const { settings, strings } = mergeSettings(userSettings);
+  const [searchParams] = useSearchParams();
   const [state, setState] = useState<State>({
     capabilities: {
       coordinates: false,
@@ -41,15 +43,8 @@ export default function TsmlUI({
       type: false,
       weekday: false,
     },
-    input: {
-      distance: [],
-      mode: 'search',
-      region: [],
-      time: [],
-      type: [],
-      view: 'table',
-      weekday: [],
-    },
+    filtering: true,
+    input: settings.defaults,
     indexes: {
       distance: [],
       region: [],
@@ -59,11 +54,7 @@ export default function TsmlUI({
     },
     loading: true,
     meetings: {},
-    ready: false,
   });
-
-  const { settings, strings } = mergeSettings(userSettings);
-  const [searchParams] = useSearchParams();
 
   //   // update canonical
   //   let canonical = document.querySelector('link[rel="canonical"]');
@@ -98,12 +89,12 @@ export default function TsmlUI({
       const input = getQueryString(settings);
 
       if (!src) {
-        setState({
+        setState(state => ({
           ...state,
           error: 'Configuration error: a data source must be specified.',
+          filtering: false,
           loading: false,
-          ready: true,
-        });
+        }));
       } else {
         const sheetId = src.startsWith(
           'https://docs.google.com/spreadsheets/d/'
@@ -114,11 +105,12 @@ export default function TsmlUI({
         // google sheet
         if (sheetId) {
           if (!google) {
-            setState({
+            setState(state => ({
               ...state,
               error: 'Configuration error: a Google API key is required.',
+              filtering: false,
               loading: false,
-            });
+            }));
           }
           src = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/A1:ZZ?key=${google}`;
         }
@@ -137,13 +129,13 @@ export default function TsmlUI({
             }
 
             if (!Array.isArray(data) || !data.length) {
-              return setState({
+              return setState(state => ({
                 ...state,
                 error:
                   'Configuration error: data is not in the correct format.',
+                filtering: false,
                 loading: false,
-                ready: true,
-              });
+              }));
             }
 
             if (timezone) {
@@ -151,12 +143,12 @@ export default function TsmlUI({
                 // check if timezone is valid
                 Intl.DateTimeFormat(undefined, { timeZone: timezone });
               } catch (e) {
-                return setState({
+                return setState(state => ({
                   ...state,
                   error: `Timezone ${timezone} is not valid. Please use one like Europe/Rome.`,
+                  filtering: false,
                   loading: false,
-                  ready: true,
-                });
+                }));
               }
             }
 
@@ -169,12 +161,12 @@ export default function TsmlUI({
             );
 
             if (!timezone && !Object.keys(meetings).length) {
-              return setState({
+              return setState(state => ({
                 ...state,
                 error: 'Configuration error: time zone is not set.',
+                filtering: false,
                 loading: false,
-                ready: true,
-              });
+              }));
             }
 
             const waitingForGeo =
@@ -182,15 +174,15 @@ export default function TsmlUI({
               ((input.mode === 'location' && input.search) ||
                 input.mode === 'me');
 
-            setState({
+            setState(state => ({
               ...state,
               capabilities,
+              filtering: !!waitingForGeo,
               indexes,
               input,
               loading: false,
               meetings,
-              ready: !waitingForGeo,
-            });
+            }));
           })
           .catch(error => {
             const errors = {
@@ -204,7 +196,7 @@ export default function TsmlUI({
               503: 'service unavailable',
               504: 'gateway timeout',
             };
-            setState({
+            setState(state => ({
               ...state,
               error: errors[error as keyof typeof errors]
                 ? `Error: ${
@@ -213,9 +205,9 @@ export default function TsmlUI({
                     sheetId ? 'contacting Google' : 'loading data'
                   }.`
                 : error.toString(),
+              filtering: false,
               loading: false,
-              ready: true,
-            });
+            }));
           });
       }
     }
@@ -228,11 +220,9 @@ export default function TsmlUI({
   }, []);
 
   // filter data
-  const [filteredSlugs, inProgress] = filterMeetingData(
-    state,
-    setState,
-    settings,
-    strings
+  const [filteredSlugs, inProgress] = useMemo(
+    () => filterMeetingData(state, setState, settings, strings),
+    [state.loading, state.filtering, JSON.stringify(state.input)]
   );
 
   // show alert?
@@ -246,7 +236,7 @@ export default function TsmlUI({
   return (
     <SettingsContext.Provider value={{ settings, strings }}>
       <Global styles={globalCss} />
-      {!state.ready ? (
+      {state.loading ? (
         <Loading />
       ) : state.input.meeting && state.input.meeting in state.meetings ? (
         <Meeting setState={setState} state={state} />
@@ -257,7 +247,9 @@ export default function TsmlUI({
             <Controls state={state} setState={setState} />
           )}
           {(state.alert || state.error) && <Alert state={state} />}
-          {state.input.view === 'table' ? (
+          {state.filtering ? (
+            <Loading />
+          ) : state.input.view === 'table' ? (
             <Table
               filteredSlugs={filteredSlugs}
               inProgress={inProgress}
