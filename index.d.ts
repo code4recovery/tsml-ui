@@ -1,7 +1,10 @@
-/* eslint-disable no-unused-vars */
-
 type Translation = import('./src/types/Translation').Translation;
 type Lang = import('@code4recovery/spec').Language;
+type MapMarker = {
+  html: string;
+  height: number;
+  width: number;
+};
 
 interface TSMLReactConfig {
   cache: boolean;
@@ -29,11 +32,9 @@ interface TSMLReactConfig {
   language: Lang;
   map: {
     markers: {
-      location: {
-        html: string;
-        height: number;
-        width: number;
-      };
+      geocode: MapMarker;
+      geolocation: MapMarker;
+      location: MapMarker;
     };
     tiles: {
       attribution: string;

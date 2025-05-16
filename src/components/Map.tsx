@@ -28,6 +28,7 @@ export default function Map({
   const [darkMode, setDarkMode] = useState(
     window.matchMedia('(prefers-color-scheme: dark)').matches
   );
+  const { latitude, longitude, mode } = state.input;
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
@@ -91,6 +92,18 @@ export default function Map({
             state={state}
             setState={setState}
           />
+          {latitude && longitude && mode === 'location' && (
+            <Marker
+              icon={mapMarkerIcon(settings.map.markers.geocode)}
+              position={[latitude, longitude]}
+            />
+          )}
+          {latitude && longitude && mode === 'me' && (
+            <Marker
+              icon={mapMarkerIcon(settings.map.markers.geolocation)}
+              position={[latitude, longitude]}
+            />
+          )}
         </MapContainer>
       )}
     </div>
@@ -111,18 +124,7 @@ const Markers = ({
   const map = useMap();
   const { settings, strings } = useSettings();
   const markerRef = useRef<L.Marker>(null);
-  const markerIcon = L.divIcon({
-    className: 'tsml-ui-marker',
-    html: settings.map.markers.location.html,
-    iconAnchor: [
-      settings.map.markers.location.width / 2,
-      settings.map.markers.location.height / 2,
-    ],
-    iconSize: new L.Point(
-      settings.map.markers.location.width,
-      settings.map.markers.location.height
-    ),
-  });
+  const markerIcon = mapMarkerIcon(settings.map.markers.location);
 
   useEffect(() => {
     if (locations.length === 1) {
@@ -178,3 +180,11 @@ const Markers = ({
     </Marker>
   ));
 };
+
+const mapMarkerIcon = ({ height, html, width }: MapMarker) =>
+  L.divIcon({
+    className: 'tsml-ui-marker',
+    html,
+    iconAnchor: [width / 2, height / 2],
+    iconSize: new L.Point(width, height),
+  });
