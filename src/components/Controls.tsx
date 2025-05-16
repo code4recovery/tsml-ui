@@ -135,6 +135,7 @@ export default function Controls({
         ...state.capabilities,
         distance: false,
       },
+      error: undefined,
       filtering: !!search,
       indexes: {
         ...state.indexes,
@@ -177,6 +178,8 @@ export default function Controls({
         ...state.capabilities,
         distance: false,
       },
+      error: undefined,
+      filtering: mode === 'me',
       indexes: {
         ...state.indexes,
         distance: [],

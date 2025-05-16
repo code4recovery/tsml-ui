@@ -3,6 +3,7 @@ import { Dispatch, SetStateAction } from 'react';
 import { DateTime } from 'luxon';
 
 import { calculateDistances } from './calculate-distances';
+import { formatString as i18n } from './format-string';
 import { getIndexByKey } from './get-index-by-key';
 
 import type { State } from '../types';
@@ -121,11 +122,16 @@ export function filterMeetingData(
                 strings,
               });
             } else {
-              //show error
+              setState(state => ({
+                ...state,
+                error: i18n(strings.errors.geocoding, {
+                  address: state.input.search,
+                }),
+                filtering: false,
+              }));
             }
           });
-      } else if (state.input.mode === 'me') {
-        setState(state => ({ ...state, filtering: true }));
+      } else if (state.input.mode === 'me' && state.filtering) {
         navigator.geolocation.getCurrentPosition(
           position => {
             calculateDistances({
@@ -140,7 +146,11 @@ export function filterMeetingData(
           },
           error => {
             console.warn(`TSML UI geolocation error: ${error.message}`);
-            setState(state => ({ ...state, filtering: false }));
+            setState(state => ({
+              ...state,
+              error: strings.errors.geolocation,
+              filtering: false,
+            }));
           },
           { timeout: 5000 }
         );

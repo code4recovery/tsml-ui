@@ -87,7 +87,7 @@ var tsml_react_config = {
 
 ### Change the map style
 
-Open Street Maps can be styled by picking a different tile layer URL and attribution and adding them to the `tsml_react_config` object.
+Open Street Maps can be styled by picking a different tile layer URL and attribution and adding them to the `tsml_react_config` object. There are several free and paid tile layers [listed here](https://leaflet-extras.github.io/leaflet-providers/preview/).
 
 ```js
 var tsml_react_config = {
@@ -101,15 +101,30 @@ var tsml_react_config = {
 };
 ```
 
-You can optionally also specify a `tiles_dark` attribute which will be used when `prefers-color-scheme: dark`.
+You can optionally specify a `tiles_dark` attribute which will be used when `prefers-color-scheme: dark`.
 
 ```js
 var tsml_react_config = {
   map: {
     tiles_dark: {
-      attribution:
-        '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-      url: 'https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png',
+      attribution: '&copy; ...',
+      url: 'https://...',
+    },
+  },
+};
+```
+
+Markers can be adjusted by supplying an alternate SVG image:
+
+```js
+var tsml_react_config = {
+  map: {
+    markers: {
+      location: {
+        html: `<svg…`,
+        height: 48,
+        width: 12,
+      },
     },
   },
 };

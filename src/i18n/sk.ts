@@ -25,6 +25,10 @@ export const sk: Translation = {
   email_edit_url: 'Upraviť URL: %url%',
   email_public_url: 'Verejná URL: %url%',
   email_subject: 'Spätná väzba na stretnutie: %name%',
+  errors: {
+    geocoding: `Nepodarilo sa nájsť „%address%“, vyberte si iné miesto.`,
+    geolocation: `Nepodarilo sa nájsť vašu polohu, skontrolujte nastavenia prehliadača.`,
+  },
   evening: 'Večer',
   expand: 'Rozšíriť',
   feedback: 'Aktualizovať informácie o stretnutí',
