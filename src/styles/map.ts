@@ -14,20 +14,22 @@ export const mapCss = css`
     background-image: none !important;
   }
 
-  a[class^='leaflet-control-zoom-'] {
-    background: var(--background);
-    border-color: ${color.medium};
-    color: var(--text) !important;
-    line-height: 26px !important;
-    text-decoration: none !important;
-  }
-
   .leaflet-container {
     background-color: ${color.medium};
   }
 
-  .leaflet-control-zoom {
-    border-width: 1px;
+  .leaflet-top {
+    z-index: 750;
+    .leaflet-control-zoom {
+      border-width: 1px;
+      a {
+        background: var(--background);
+        border-color: ${color.medium};
+        color: var(--text) !important;
+        line-height: 26px !important;
+        text-decoration: none !important;
+      }
+    }
   }
 
   .leaflet-popup {

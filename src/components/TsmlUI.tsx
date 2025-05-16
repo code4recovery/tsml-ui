@@ -75,7 +75,14 @@ export default function TsmlUI({
   useEffect(() => {
     const input = getQueryString(settings);
     if (input !== state.input) {
-      setState({ ...state, input });
+      setState(state => ({
+        ...state,
+        input: {
+          ...input,
+          latitude: state.input.latitude,
+          longitude: state.input.longitude,
+        },
+      }));
     }
   }, [searchParams]);
 
