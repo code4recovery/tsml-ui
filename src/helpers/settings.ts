@@ -65,7 +65,7 @@ export const defaults: TSMLReactConfig = {
   map: {
     markers: {
       geocode: {
-        html: `<svg viewBox="-1.1 -1.086 43.182 63.273" xmlns="http://www.w3.org/2000/svg"><path fill="#0d6efd" stroke="#0a58ca" stroke-width="3" d="M20.5,0.5 c11.046,0,20,8.656,20,19.333c0,10.677-12.059,21.939-20,38.667c-5.619-14.433-20-27.989-20-38.667C0.5,9.156,9.454,0.5,20.5,0.5z"/></svg>`,
+        html: `<svg viewBox="-1.1 -1.086 43.182 63.273"><path fill="#2c78b3" stroke="#2c52b3" stroke-width="3" d="M20.5.5c11.046 0 20 8.656 20 19.333 0 10.677-12.059 21.939-20 38.667C14.881 44.067.5 30.511.5 19.833.5 9.156 9.454.5 20.5.5z"/></svg>`,
         height: 38.4,
         width: 26,
       },
@@ -75,7 +75,7 @@ export const defaults: TSMLReactConfig = {
         width: 16,
       },
       location: {
-        html: `<svg viewBox="-1.1 -1.086 43.182 63.273" xmlns="http://www.w3.org/2000/svg"><path fill="#f76458" stroke="#b3382c" stroke-width="3" d="M20.5,0.5 c11.046,0,20,8.656,20,19.333c0,10.677-12.059,21.939-20,38.667c-5.619-14.433-20-27.989-20-38.667C0.5,9.156,9.454,0.5,20.5,0.5z"/></svg>`,
+        html: `<svg viewBox="-1.1 -1.086 43.182 63.273"><path fill="#f76458" stroke="#b3382c" stroke-width="3" d="M20.5.5c11.046 0 20 8.656 20 19.333 0 10.677-12.059 21.939-20 38.667C14.881 44.067.5 30.511.5 19.833.5 9.156 9.454.5 20.5.5z"/></svg>`,
         height: 38.4,
         width: 26,
       },

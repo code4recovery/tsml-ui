@@ -147,7 +147,6 @@ export default function Controls({
         longitude: undefined,
         search,
       },
-      meetings: state.meetings,
     }));
 
     setSearchParams(searchParams);
