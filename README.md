@@ -114,6 +114,23 @@ var tsml_react_config = {
 };
 ```
 
+If you prefer the Mapbox map appearance (we switched away from Mapbox in May 2025), you can add this to your site (just replace `<pk.your.access.token>` with your Mabpox access token):
+
+```js
+var tsml_react_config = {
+  map: {
+    tiles: {
+      attribution: `Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>`,
+      url: 'https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token=<pk.your.access.token>',
+    },
+    tiles_dark: {
+      attribution: `Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>`,
+      url: 'https://api.mapbox.com/styles/v1/mapbox/dark-v10/tiles/{z}/{x}/{y}?access_token=<pk.your.access.token>',
+    },
+  },
+};
+```
+
 Markers can be adjusted by supplying an alternate SVG image:
 
 ```js
