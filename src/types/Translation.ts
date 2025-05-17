@@ -3,7 +3,7 @@ export interface Translation {
   address: string;
   appointment: string;
   back_to_meetings: string;
-  collapse: string,
+  collapse: string;
   contact_email: string;
   contact_text: string;
   contribute_with: string;
@@ -23,6 +23,10 @@ export interface Translation {
   email_edit_url: string;
   email_public_url: string;
   email_subject: string;
+  errors: {
+    geocoding: string;
+    geolocation: string;
+  };
   evening: string;
   expand: string;
   feedback: string;

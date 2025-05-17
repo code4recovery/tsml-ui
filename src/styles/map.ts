@@ -2,10 +2,7 @@ import { css } from '@emotion/react';
 
 import { color } from './variables';
 
-import 'mapbox-gl/dist/mapbox-gl.css';
-
 export const mapCss = css`
-  background-color: ${color.medium};
   border-radius: var(--border-radius);
   display: flex;
   flex-grow: 1;
@@ -13,98 +10,93 @@ export const mapCss = css`
   overflow: hidden !important;
   position: relative;
 
-  > div {
-    height: 100% !important;
-    width: 100% !important;
-  }
-
   button {
     background-image: none !important;
   }
 
-  .mapboxgl-ctrl-attrib {
-    background: var(--background) !important;
-    a {
-      color: ${color.dark} !important;
+  .leaflet-container {
+    background-color: ${color.medium};
+  }
+
+  .leaflet-top {
+    z-index: 750;
+    .leaflet-control-zoom {
+      border-width: 1px;
+      a {
+        background: var(--background);
+        border-color: ${color.medium};
+        color: var(--text) !important;
+        line-height: 26px !important;
+        text-decoration: none !important;
+      }
     }
   }
 
-  .mapboxgl-ctrl-group {
-    button {
-      background-color: var(--background);
-      border-top-color: ${color.medium};
-    }
-  }
+  .leaflet-popup {
+    margin-bottom: 20px !important;
 
-  .mapboxgl-ctrl-logo {
-    opacity: 0.5;
-  }
-
-  .mapboxgl-popup {
-    max-width: 85%;
-    width: 320px;
-    z-index: 100;
-
-    .mapboxgl-popup-close-button {
+    a.leaflet-popup-close-button {
+      align-items: center;
       background: var(--background);
-      border-radius: 100%;
       border: 1px solid ${color.medium};
-      color: ${color.dark};
-      font-size: 24px;
-      height: 30px;
-      line-height: 1;
-      padding: 0 4px 4px 4px;
+      color: ${color.dark} !important;
+      font-family: var(--font-family);
+      font-size: 24px !important;
+      justify-content: center;
+      text-decoration: none !important;
+      span {
+        margin-top: -3px;
+      }
+      :hover {
+        background-color: ${color.medium};
+      }
+    }
+
+    a.leaflet-popup-close-button,
+    ::after {
+      border-radius: 50%;
+      display: flex;
+      height: 30px !important;
       position: absolute;
-      right: -10px;
-      top: -10px;
-      width: 30px;
-
-      &:hover {
-        color: var(--text);
-      }
+      right: -15px !important;
+      top: -15px !important;
+      width: 30px !important;
     }
 
-    .mapboxgl-popup-content {
+    ::after,
+    .leaflet-popup-content-wrapper {
+      box-shadow: rgba(0, 0, 0, 0.2) 3px 3px 5px !important;
+    }
+
+    ::after {
+      content: '';
+      z-index: -1;
+    }
+
+    .leaflet-popup-content-wrapper {
+      border-radius: calc(var(--border-radius) * 2) !important;
       background: var(--background);
-      padding: 12px;
-      position: relative;
+      color: var(--text);
 
-      h2 {
-        font-size: 20px;
-        margin: 0;
-        line-height: 1.2;
-      }
-
-      > div {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-        p {
-          margin: 0;
-        }
+      .leaflet-popup-content {
+        display: grid;
+        font-family: var(--font-family);
+        font-size: var(--font-size);
+        gap: 12px;
+        margin: 0 !important;
+        padding: 16px !important;
       }
     }
 
-    &[class*='anchor-bottom'] .mapboxgl-popup-tip {
-      border-top-color: var(--background);
-    }
-    &[class*='anchor-left'] .mapboxgl-popup-tip {
-      border-right-color: var(--background);
-    }
-    &[class*='anchor-right'] .mapboxgl-popup-tip {
-      border-left-color: var(--background);
-    }
-    &[class*='anchor-top'] .mapboxgl-popup-tip {
-      border-bottom-color: var(--background);
+    .leaflet-popup-tip-container {
+      margin-left: -20px !important;
+      margin-top: -1px !important;
+      .leaflet-popup-tip {
+        background: var(--background);
+        margin: -10px auto 0 !important;
+      }
     }
   }
-`;
-
-export const mapPopupCss = css`
-  display: grid;
-  font-family: var(--font-family);
-  font-size: var(--font-size);
-  gap: 12px;
 `;
 
 export const mapPopupMeetingsCss = css`

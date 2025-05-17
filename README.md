@@ -87,12 +87,62 @@ var tsml_react_config = {
 
 ### Change the map style
 
-Mapbox maps can be styled by picking a [classic Mapbox style](https://docs.mapbox.com/api/maps/styles/#classic-mapbox-styles) or creating a [custom map style](https://docs.mapbox.com/studio-manual/guides/map-styling/) and adding it to the `tsml_react_config` object.
+Open Street Maps can be styled by picking a different tile layer URL and attribution and adding them to the `tsml_react_config` object. There are several free and paid tile layers [listed here](https://leaflet-extras.github.io/leaflet-providers/preview/).
 
 ```js
 var tsml_react_config = {
   map: {
-    style: 'mapbox://styles/username/abcdefg',
+    tiles: {
+      attribution:
+        '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      url: 'https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png',
+    },
+  },
+};
+```
+
+You can optionally specify a `tiles_dark` attribute which will be used when `prefers-color-scheme: dark`.
+
+```js
+var tsml_react_config = {
+  map: {
+    tiles_dark: {
+      attribution: '&copy; ...',
+      url: 'https://...',
+    },
+  },
+};
+```
+
+If you prefer the Mapbox map appearance (we switched away from Mapbox in May 2025), you can add this to your site (just replace `<pk.your.access.token>` with your Mabpox access token):
+
+```js
+var tsml_react_config = {
+  map: {
+    tiles: {
+      attribution: `Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>`,
+      url: 'https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token=<pk.your.access.token>',
+    },
+    tiles_dark: {
+      attribution: `Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>`,
+      url: 'https://api.mapbox.com/styles/v1/mapbox/dark-v10/tiles/{z}/{x}/{y}?access_token=<pk.your.access.token>',
+    },
+  },
+};
+```
+
+Markers can be adjusted by supplying an alternate SVG image:
+
+```js
+var tsml_react_config = {
+  map: {
+    markers: {
+      location: {
+        html: `<svg…`,
+        height: 48,
+        width: 12,
+      },
+    },
   },
 };
 ```

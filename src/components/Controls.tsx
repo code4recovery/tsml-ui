@@ -30,11 +30,9 @@ import type { State } from '../types';
 export default function Controls({
   state,
   setState,
-  mapbox,
 }: {
   state: State;
   setState: Dispatch<SetStateAction<State>>;
-  mapbox?: string;
 }) {
   const { settings, strings } = useSettings();
   const [dropdown, setDropdown] = useState<string>();
@@ -47,9 +45,7 @@ export default function Controls({
   //get available search options based on capabilities
   const allModes = ['search', 'location', 'me'] as const;
   const modes = allModes
-    .filter(
-      mode => mode !== 'location' || (state.capabilities.coordinates && mapbox)
-    )
+    .filter(mode => mode !== 'location' || state.capabilities.coordinates)
     .filter(
       mode =>
         mode !== 'me' ||
@@ -60,12 +56,16 @@ export default function Controls({
   const filters = settings.filters
     .filter(filter => state.capabilities[filter])
     .filter(filter => filter !== 'region' || state.input.mode === 'search')
-    .filter(filter => filter !== 'distance' || state.input.mode !== 'search');
+    .filter(
+      filter =>
+        filter !== 'distance' ||
+        (state.input.mode !== 'search' && state.input.latitude)
+    );
 
   //get available views
   const allViews = ['table', 'map'] as const;
   const views = allViews.filter(
-    view => view !== 'map' || (state.capabilities.coordinates && mapbox)
+    view => view !== 'map' || state.capabilities.coordinates
   );
 
   //whether to show the views segmented button
@@ -120,26 +120,39 @@ export default function Controls({
 
     if (state.input.mode !== 'location') return;
 
-    setState({
+    if (search) {
+      searchParams.set('search', search);
+    } else {
+      searchParams.delete('search');
+      Object.keys(state.meetings).forEach(slug => {
+        state.meetings[slug].distance = undefined;
+      });
+    }
+
+    setState(state => ({
       ...state,
+      capabilities: {
+        ...state.capabilities,
+        distance: false,
+      },
+      error: undefined,
+      filtering: !!search,
+      indexes: {
+        ...state.indexes,
+        distance: [],
+      },
       input: {
         ...state.input,
         latitude: undefined,
         longitude: undefined,
         search,
       },
-    });
-
-    if (search) {
-      searchParams.set('search', search);
-    } else {
-      searchParams.delete('search');
-    }
+    }));
 
     setSearchParams(searchParams);
   };
 
-  //set search mode dropdown and clear all distances
+  // set search mode dropdown and reset distances
   const setMode = (e: MouseEvent, mode: 'search' | 'location' | 'me') => {
     e.preventDefault();
 
@@ -147,36 +160,43 @@ export default function Controls({
       state.meetings[slug].distance = undefined;
     });
 
-    setSearch('');
-    if (mode !== 'search') {
+    if (mode === 'me') {
+      setSearch('');
       searchParams.delete('search');
+    } else if (mode === 'location') {
+      // sync local with state
+      setSearch(state.input.search);
+    }
+
+    if (mode !== settings.defaults.mode) {
       searchParams.set('mode', mode);
     } else {
       searchParams.delete('mode');
     }
 
-    //focus after waiting for disabled to clear
+    // focus after waiting for disabled to clear
     setTimeout(() => searchInput.current?.focus(), 100);
 
-    setState({
+    setState(state => ({
       ...state,
       capabilities: {
         ...state.capabilities,
         distance: false,
       },
+      error: undefined,
+      filtering: mode === 'me' || (mode === 'location' && !!state.input.search),
       indexes: {
         ...state.indexes,
         distance: [],
       },
       input: {
         ...state.input,
-        distance: [],
         latitude: undefined,
         longitude: undefined,
-        mode: mode,
-        search: '',
+        mode,
+        search,
       },
-    });
+    }));
 
     setSearchParams(searchParams);
   };
@@ -206,8 +226,10 @@ export default function Controls({
             disabled={state.input.mode === 'me'}
             onChange={e => {
               if (state.input.mode === 'search') {
-                state.input.search = e.target.value;
-                setState({ ...state });
+                setState(state => ({
+                  ...state,
+                  input: { ...state.input, search: e.target.value },
+                }));
               } else {
                 setSearch(e.target.value);
               }
@@ -241,11 +263,11 @@ export default function Controls({
             }}
           >
             {modes.map(mode => (
-              <div 
+              <div
                 className="tsml-dropdown__item"
                 data-active={state.input.mode === mode}
                 key={mode}
-                >
+              >
                 <button
                   className="tsml-dropdown__button"
                   onClick={e => setMode(e, mode)}

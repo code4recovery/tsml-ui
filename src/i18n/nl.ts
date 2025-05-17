@@ -25,6 +25,10 @@ export const nl: Translation = {
   email_edit_url: 'Wijzig URL: %url%',
   email_public_url: 'Publieke URL: %url%',
   email_subject: 'Meeting Feedback: %name%',
+  errors: {
+    geocoding: `Kon ‘%address%’ niet vinden, kies een andere locatie.`,
+    geolocation: `Kon uw locatie niet vinden. Controleer uw browserinstellingen.`,
+  },
   evening: 'Avond',
   expand: 'Uitbreiden',
   feedback: 'Update Meeting Info',

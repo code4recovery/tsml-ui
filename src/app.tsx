@@ -20,7 +20,6 @@ if (element) {
       element: (
         <TsmlUI
           google={element.getAttribute('data-google') || undefined}
-          mapbox={element.getAttribute('data-mapbox') || undefined}
           settings={
             typeof tsml_react_config === 'undefined'
               ? undefined

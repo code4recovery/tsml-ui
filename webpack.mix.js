@@ -1,7 +1,7 @@
 let mix = require('laravel-mix');
 const webpack = require('webpack');
 
-mix.options({publicPath: 'public/'});
+mix.options({ publicPath: 'public/', processCssUrls: false });
 // keep 1 unified app.js output file
 mix.webpackConfig({
   plugins: [

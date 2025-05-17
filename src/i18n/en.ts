@@ -25,6 +25,10 @@ export const en: Translation = {
   email_edit_url: 'Edit URL: %url%',
   email_public_url: 'Public URL: %url%',
   email_subject: 'Meeting Feedback: %name%',
+  errors: {
+    geocoding: `Could not find ‘%address%’, please pick another location.`,
+    geolocation: `Could not find your location, please check your browser settings.`,
+  },
   evening: 'Evening',
   expand: 'Expand',
   feedback: 'Update Meeting Info',

@@ -27,7 +27,7 @@ export const controlsCss = css`
   }
 
   /* position right-edge dropdown menus so they dont go off-screen */
-  & > div:nth-child(2) > div > div {
+  & > div:nth-of-type(2) > div > div {
     right: 0;
   }
 
@@ -35,7 +35,7 @@ export const controlsCss = css`
     grid-auto-columns: minmax(0, 1fr);
     grid-auto-flow: column;
 
-    & > div:nth-child(2) > div > div {
+    & > div:nth-of-type(2) > div > div {
       right: auto;
     }
 
@@ -58,6 +58,7 @@ export const controlsGroupLastCss = css`
   margin-left: -1px !important;
 `;
 
+// todo figure out how to color the cancel button - then we can re-enable
 export const controlsInputCss = css`
   &[type='search'] {
     ${formControlCss}
@@ -65,6 +66,9 @@ export const controlsInputCss = css`
     &:focus {
       border: 1px solid ${color.dark};
       outline: none;
+    }
+    &::-webkit-search-cancel-button {
+      -webkit-appearance: none;
     }
   }
 `;

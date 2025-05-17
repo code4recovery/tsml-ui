@@ -32,8 +32,6 @@ describe('<Controls />', () => {
 
   const mockSetState = jest.fn();
 
-  const mapbox = 'pk.abc123';
-
   const settings = mergeSettings();
   const { region_any, modes, views } = settings.strings;
 
@@ -51,11 +49,7 @@ describe('<Controls />', () => {
   it('has clickable dropdowns', () => {
     render(
       <MemoryRouter>
-        <Controls
-          state={mockStateWithControls}
-          setState={mockSetState}
-          mapbox={mapbox}
-        />
+        <Controls state={mockStateWithControls} setState={mockSetState} />
       </MemoryRouter>
     );
 
@@ -116,7 +110,6 @@ describe('<Controls />', () => {
             },
           }}
           setState={mockSetState}
-          mapbox={mapbox}
         />
       </MemoryRouter>
     );

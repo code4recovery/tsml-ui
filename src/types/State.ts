@@ -22,6 +22,7 @@ export type State = {
     weekday: boolean;
   };
   error?: string;
+  filtering: boolean;
   indexes: {
     distance: Index[];
     region: Index[];
@@ -46,5 +47,4 @@ export type State = {
   meetings: {
     [index: string]: Meeting;
   };
-  ready: boolean;
 };
