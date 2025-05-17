@@ -153,7 +153,7 @@ export default function Controls({
     setSearchParams(searchParams);
   };
 
-  //set search mode dropdown and clear all distances
+  // set search mode dropdown and reset distances
   const setMode = (e: MouseEvent, mode: 'search' | 'location' | 'me') => {
     e.preventDefault();
 
@@ -161,15 +161,21 @@ export default function Controls({
       state.meetings[slug].distance = undefined;
     });
 
-    setSearch('');
-    searchParams.delete('search');
+    if (mode === 'me') {
+      setSearch('');
+      searchParams.delete('search');
+    } else if (mode === 'location') {
+      // sync local with state
+      setSearch(state.input.search);
+    }
+
     if (mode !== settings.defaults.mode) {
       searchParams.set('mode', mode);
     } else {
       searchParams.delete('mode');
     }
 
-    //focus after waiting for disabled to clear
+    // focus after waiting for disabled to clear
     setTimeout(() => searchInput.current?.focus(), 100);
 
     setState(state => ({
@@ -179,7 +185,7 @@ export default function Controls({
         distance: false,
       },
       error: undefined,
-      filtering: mode === 'me',
+      filtering: mode === 'me' || (mode === 'location' && !!state.input.search),
       indexes: {
         ...state.indexes,
         distance: [],
@@ -189,9 +195,8 @@ export default function Controls({
         latitude: undefined,
         longitude: undefined,
         mode,
-        search: '',
+        search,
       },
-      meetings: state.meetings,
     }));
 
     setSearchParams(searchParams);
@@ -222,8 +227,10 @@ export default function Controls({
             disabled={state.input.mode === 'me'}
             onChange={e => {
               if (state.input.mode === 'search') {
-                state.input.search = e.target.value;
-                setState({ ...state });
+                setState(state => ({
+                  ...state,
+                  input: { ...state.input, search: e.target.value },
+                }));
               } else {
                 setSearch(e.target.value);
               }
