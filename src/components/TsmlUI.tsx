@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { Global } from '@emotion/react';
 import { useSearchParams } from 'react-router-dom';
@@ -221,13 +221,15 @@ export default function TsmlUI({
     }
 
     // measure area covered up by fixed elements
-    window.addEventListener('resize', getOccludedHeight);
+    window.addEventListener('resize', debouncedGetOccludedHeight);
+    window.addEventListener('scroll', debouncedGetOccludedHeight);
     getOccludedHeight();
 
     // manage classes
     document.body.classList.add('tsml-ui');
     return () => {
-      window.removeEventListener('resize', getOccludedHeight);
+      window.removeEventListener('resize', debouncedGetOccludedHeight);
+      window.removeEventListener('scroll', debouncedGetOccludedHeight);
       document.body.classList.remove('tsml-ui');
     };
   }, []);
@@ -245,6 +247,13 @@ export default function TsmlUI({
       }
     }
     setOccludedHeight(occludedHeight);
+  };
+
+  const timeoutId = useRef<ReturnType<typeof setTimeout>>();
+
+  const debouncedGetOccludedHeight = () => {
+    clearTimeout(timeoutId.current);
+    timeoutId.current = setTimeout(getOccludedHeight, 250);
   };
 
   // filter data

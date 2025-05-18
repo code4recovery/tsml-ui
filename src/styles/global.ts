@@ -31,6 +31,7 @@ export const globalCss = css`
     font-size: var(--font-size);
     line-height: 1.5;
     padding: ${size.gutter}px;
+    transition: min-height 0.5s;
     width: 100%;
 
     * {
