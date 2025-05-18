@@ -188,6 +188,12 @@ export default function Controls({
     // focus after waiting for disabled to clear
     setTimeout(() => searchInput.current?.focus(), 100);
 
+    const distance = state.input.distance.length
+      ? state.input.distance
+      : settings.default_distance;
+
+    searchParams.set('distance', settings.default_distance.join('/'));
+
     setState(state => ({
       ...state,
       capabilities: {
@@ -202,6 +208,7 @@ export default function Controls({
       },
       input: {
         ...state.input,
+        distance,
         latitude: undefined,
         longitude: undefined,
         mode,
