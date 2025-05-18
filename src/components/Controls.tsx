@@ -129,6 +129,16 @@ export default function Controls({
       });
     }
 
+    const distance =
+      !state.input.distance.length && search
+        ? settings.default_distance
+        : state.input.distance;
+    if (distance.length) {
+      searchParams.set('distance', distance.join('/'));
+    } else {
+      searchParams.delete('distance');
+    }
+
     setState(state => ({
       ...state,
       capabilities: {
@@ -143,6 +153,7 @@ export default function Controls({
       },
       input: {
         ...state.input,
+        distance,
         latitude: undefined,
         longitude: undefined,
         search,

@@ -33,8 +33,9 @@ export const defaults: TSMLReactConfig = {
     'zoho.com': 'Zoho',
     'zoom.us': 'Zoom',
   },
+  default_distance: ['5'],
   defaults: {
-    distance: ['5'],
+    distance: [],
     mode: 'search',
     region: [],
     search: '',

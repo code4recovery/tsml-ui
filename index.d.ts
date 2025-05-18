@@ -11,6 +11,7 @@ interface TSMLReactConfig {
   calendar_enabled: boolean;
   columns: string[];
   conference_providers: Record<string, string>;
+  default_distance: string[];
   defaults: {
     distance: string[];
     meeting?: string;

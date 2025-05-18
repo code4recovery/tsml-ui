@@ -98,9 +98,6 @@ export function calculateDistances({
     },
     input: {
       ...state.input,
-      distance: state.input.distance.length
-        ? state.input.distance
-        : settings.defaults.distance,
       latitude: parseFloat(latitude.toFixed(5)),
       longitude: parseFloat(longitude.toFixed(5)),
     },
