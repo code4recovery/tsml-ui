@@ -25,6 +25,10 @@ export const sv: Translation = {
   email_edit_url: 'Redigera URL: %url%',
   email_public_url: 'Publik URL: %url%',
   email_subject: 'Mötes Feedback: %name%',
+  errors: {
+    geocoding: `Kunde inte hitta ‘%address%’, vänligen välj en annan plats.`,
+    geolocation: `Kunde inte hitta din plats, kontrollera dina webbläsarinställningar.`,
+  },
   evening: 'Kväll',
   expand: 'Expandera',
   feedback: 'Uppdatera Mötesinformation',

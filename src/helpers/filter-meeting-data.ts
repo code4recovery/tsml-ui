@@ -3,23 +3,27 @@ import { Dispatch, SetStateAction } from 'react';
 import { DateTime } from 'luxon';
 
 import { calculateDistances } from './calculate-distances';
+import { formatString as i18n } from './format-string';
 import { getIndexByKey } from './get-index-by-key';
 
 import type { State } from '../types';
 
-//run filters on meetings; this is run at every render
+// filter meetings based on input
 export function filterMeetingData(
   state: State,
   setState: Dispatch<SetStateAction<State>>,
   settings: TSMLReactConfig,
-  strings: Translation,
-  mapbox?: string
+  strings: Translation
 ) {
   const matchGroups: string[][] = [];
   const now = DateTime.now();
   const now_offset = now.plus({ minute: settings.now_offset });
   const slugs = Object.keys(state.meetings);
   const timeDiff: { [index: string]: number } = {};
+
+  if (state.loading) {
+    return [[], []];
+  }
 
   //filter by distance, region, time, type, and weekday
   settings.filters.forEach(filter => {
@@ -88,34 +92,46 @@ export function filterMeetingData(
     );
 
     if (!state.input.latitude || !state.input.longitude) {
-      if (state.input.search && state.input.mode === 'location') {
-        //make mapbox API request https://docs.mapbox.com/api/search/
+      if (
+        state.input.mode === 'location' &&
+        state.input.search &&
+        state.filtering
+      ) {
+        const url =
+          window.location.host === 'tsml-ui.test'
+            ? 'geo.test'
+            : 'geo.code4recovery.org';
         fetch(
-          `https://api.mapbox.com/geocoding/v5/mapbox.places/${
-            state.input.search
-          }.json?${new URLSearchParams({
-            access_token: mapbox ?? '',
-            autocomplete: 'false',
+          `https://${url}/api/geocode?${new URLSearchParams({
+            application: 'tsml-ui',
             language: settings.language,
+            referrer: window.location.href,
+            search: state.input.search,
           })}`
         )
           .then(result => result.json())
-          .then(result => {
-            if (result.features && result.features.length) {
-              //re-render page with new params
+          .then(({ results }) => {
+            if (results?.length) {
               calculateDistances({
-                latitude: result.features[0].center[1],
-                longitude: result.features[0].center[0],
+                latitude: results[0].geometry.location.lat,
+                longitude: results[0].geometry.location.lng,
                 setState,
                 settings,
+                slugs,
                 state,
                 strings,
               });
             } else {
-              //show error
+              setState(state => ({
+                ...state,
+                error: i18n(strings.errors.geocoding, {
+                  address: state.input.search,
+                }),
+                filtering: false,
+              }));
             }
           });
-      } else if (state.input.mode === 'me') {
+      } else if (state.input.mode === 'me' && state.filtering) {
         navigator.geolocation.getCurrentPosition(
           position => {
             calculateDistances({
@@ -123,12 +139,18 @@ export function filterMeetingData(
               longitude: position.coords.longitude,
               setState,
               settings,
+              slugs,
               state,
               strings,
             });
           },
           error => {
             console.warn(`TSML UI geolocation error: ${error.message}`);
+            setState(state => ({
+              ...state,
+              error: strings.errors.geolocation,
+              filtering: false,
+            }));
           },
           { timeout: 5000 }
         );

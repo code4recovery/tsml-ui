@@ -11,6 +11,7 @@ export function calculateDistances({
   longitude,
   setState,
   settings,
+  slugs,
   state,
   strings,
 }: {
@@ -18,12 +19,10 @@ export function calculateDistances({
   longitude: number;
   setState: Dispatch<SetStateAction<State>>;
   settings: TSMLReactConfig;
+  slugs: string[];
   state: State;
   strings: Translation;
 }) {
-  const slugs = Object.keys(state.meetings);
-  if (!slugs.length) return;
-
   //build new index and meetings array
   const distances: {
     [index: string]: Index;
@@ -66,7 +65,9 @@ export function calculateDistances({
 
   //remove redundant distances at 50 and higher distances, unless requested via query param
   let slugMax = 0;
-  let queryDistance = Array.isArray(state.input?.distance) ? state.input.distance[0] : 0;
+  let queryDistance = Array.isArray(state.input?.distance)
+    ? state.input.distance[0]
+    : 0;
   Object.entries(distances).forEach(([val, distance]) => {
     if (50 <= parseInt(val) && val !== queryDistance) {
       if (slugMax >= distance.slugs.length) {
@@ -74,7 +75,7 @@ export function calculateDistances({
       }
     }
     slugMax = Math.max(slugMax, distance.slugs.length);
-  })
+  });
 
   //flatten index and set capability
   const distanceIndex = flattenAndSortIndexes(
@@ -82,23 +83,28 @@ export function calculateDistances({
     distances,
     (a: Index, b: Index) => parseInt(a.key) - parseInt(b.key)
   );
-  state.capabilities.distance = !!distanceIndex.length;
 
   //this will cause a re-render with latitude and longitude now set
-  setState({
+  setState(state => ({
     ...state,
-    capabilities: state.capabilities,
+    capabilities: {
+      ...state.capabilities,
+      distance: !!distanceIndex.length,
+    },
+    filtering: false,
     indexes: {
       ...state.indexes,
       distance: distanceIndex,
     },
     input: {
       ...state.input,
+      distance: state.input.distance.length
+        ? state.input.distance
+        : settings.defaults.distance,
       latitude: parseFloat(latitude.toFixed(5)),
       longitude: parseFloat(longitude.toFixed(5)),
     },
-    ready: true,
-  });
+  }));
 }
 
 // Calculate the distance as the crow flies between two geometric points

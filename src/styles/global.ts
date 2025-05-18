@@ -4,12 +4,6 @@ import { tableCss } from './table';
 import { media, size } from './variables';
 
 export const globalCss = css`
-  html,
-  body {
-    min-height: 100vh;
-    min-height: -webkit-fill-available;
-  }
-
   :root {
     --alert-background: #faf4e0;
     --alert-text: #736646;
@@ -36,6 +30,7 @@ export const globalCss = css`
     font-family: var(--font-family);
     font-size: var(--font-size);
     line-height: 1.5;
+    min-height: 100dvh;
     padding: ${size.gutter}px;
     width: 100%;
 

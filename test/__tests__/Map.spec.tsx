@@ -6,6 +6,43 @@ import { DateTime } from 'luxon';
 import Map from '../../src/components/Map';
 import { mockState } from '../__fixtures__';
 
+// Mock react-leaflet
+jest.mock('react-leaflet', () => ({
+  MapContainer: ({ children }: { children: React.ReactNode }) => (
+    <div data-testid="map-container">{children}</div>
+  ),
+  TileLayer: () => <div data-testid="tile-layer" />,
+  Marker: () => <div data-testid="marker" />,
+  Popup: () => <div data-testid="popup" />,
+  useMap: () => ({
+    setView: jest.fn(),
+  }),
+}));
+
+// Mock leaflet
+jest.mock('leaflet', () => ({
+  Icon: {
+    Default: {
+      mergeOptions: jest.fn(),
+    },
+  },
+  divIcon: jest.fn(),
+  Point: jest.fn().mockImplementation((x, y) => ({
+    x,
+    y,
+    add: jest.fn().mockImplementation(otherPoint => ({
+      x: x + otherPoint.x,
+      y: y + otherPoint.y,
+    })),
+    equals: jest
+      .fn()
+      .mockImplementation(
+        otherPoint => x === otherPoint.x && y === otherPoint.y
+      ),
+    toString: jest.fn().mockImplementation(() => `Point(${x}, ${y})`),
+  })),
+}));
+
 describe('<Map />', () => {
   const mockStateWithMeeting = {
     ...mockState,
@@ -52,7 +89,6 @@ describe('<Map />', () => {
         listMeetingsInPopup={false}
         state={mockStateWithMeeting}
         setState={jest.fn()}
-        mapbox="pk.123456"
       />
     );
     expect(container).toBeTruthy();
@@ -80,7 +116,6 @@ describe('<Map />', () => {
         listMeetingsInPopup={true}
         state={mockStateMultiple}
         setState={jest.fn()}
-        mapbox="pk.123456"
       />
     );
     expect(container).toBeTruthy();

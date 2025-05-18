@@ -27,11 +27,9 @@ import Map from './Map';
 import type { Meeting as MeetingType, State } from '../types';
 
 export default function Meeting({
-  mapbox,
   setState,
   state,
 }: {
-  mapbox?: string;
   setState: Dispatch<SetStateAction<State>>;
   state: State;
 }) {
@@ -480,7 +478,6 @@ export default function Meeting({
             listMeetingsInPopup={false}
             state={state}
             setState={setState}
-            mapbox={mapbox}
           />
         </div>
       </div>
