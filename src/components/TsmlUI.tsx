@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { Global } from '@emotion/react';
 import { useSearchParams } from 'react-router-dom';
@@ -28,6 +28,7 @@ export default function TsmlUI({
   src?: string;
   timezone?: string;
 }) {
+  const [occludedHeight, setOccludedHeight] = useState(0);
   const { settings, strings } = mergeSettings(userSettings);
   const [searchParams] = useSearchParams();
   const [state, setState] = useState<State>({
@@ -219,12 +220,41 @@ export default function TsmlUI({
       }
     }
 
+    // measure area covered up by fixed elements
+    window.addEventListener('resize', debouncedGetOccludedHeight);
+    window.addEventListener('scroll', debouncedGetOccludedHeight);
+    getOccludedHeight();
+
     // manage classes
     document.body.classList.add('tsml-ui');
     return () => {
+      window.removeEventListener('resize', debouncedGetOccludedHeight);
+      window.removeEventListener('scroll', debouncedGetOccludedHeight);
       document.body.classList.remove('tsml-ui');
     };
   }, []);
+
+  const getOccludedHeight = () => {
+    const elements = document.body.getElementsByTagName('*');
+    let occludedHeight = 0;
+    for (const element of elements) {
+      const style = window.getComputedStyle(element);
+      if (
+        style.position === 'fixed' &&
+        parseFloat(style.width) === window.innerWidth
+      ) {
+        occludedHeight += parseFloat(style.height);
+      }
+    }
+    setOccludedHeight(occludedHeight);
+  };
+
+  const timeoutId = useRef<ReturnType<typeof setTimeout>>();
+
+  const debouncedGetOccludedHeight = () => {
+    clearTimeout(timeoutId.current);
+    timeoutId.current = setTimeout(getOccludedHeight, 250);
+  };
 
   // filter data
   const [filteredSlugs, inProgress] = useMemo(
@@ -241,40 +271,42 @@ export default function TsmlUI({
   }
 
   return (
-    <SettingsContext.Provider value={{ settings, strings }}>
-      <Global styles={globalCss} />
-      {state.loading ? (
-        <Loading />
-      ) : state.input.meeting && state.input.meeting in state.meetings ? (
-        <Meeting setState={setState} state={state} />
-      ) : (
-        <>
-          {settings.show.title && <Title state={state} />}
-          {settings.show.controls && (
-            <Controls state={state} setState={setState} />
-          )}
-          {(state.alert || state.error) && <Alert state={state} />}
-          {state.filtering ? (
-            <Loading />
-          ) : state.input.view === 'table' ? (
-            <Table
-              filteredSlugs={filteredSlugs}
-              inProgress={inProgress}
-              setState={setState}
-              state={state}
-            />
-          ) : (
-            <div style={{ display: 'flex', flexGrow: 1 }}>
-              <Map
+    <div style={{ minHeight: `calc(100dvh - ${occludedHeight}px)` }}>
+      <SettingsContext.Provider value={{ settings, strings }}>
+        <Global styles={globalCss} />
+        {state.loading ? (
+          <Loading />
+        ) : state.input.meeting && state.input.meeting in state.meetings ? (
+          <Meeting setState={setState} state={state} />
+        ) : (
+          <>
+            {settings.show.title && <Title state={state} />}
+            {settings.show.controls && (
+              <Controls state={state} setState={setState} />
+            )}
+            {(state.alert || state.error) && <Alert state={state} />}
+            {state.filtering ? (
+              <Loading />
+            ) : state.input.view === 'table' ? (
+              <Table
                 filteredSlugs={filteredSlugs}
-                listMeetingsInPopup={true}
+                inProgress={inProgress}
                 setState={setState}
                 state={state}
               />
-            </div>
-          )}
-        </>
-      )}
-    </SettingsContext.Provider>
+            ) : (
+              <div style={{ display: 'flex', flexGrow: 1 }}>
+                <Map
+                  filteredSlugs={filteredSlugs}
+                  listMeetingsInPopup={true}
+                  setState={setState}
+                  state={state}
+                />
+              </div>
+            )}
+          </>
+        )}
+      </SettingsContext.Provider>
+    </div>
   );
 }

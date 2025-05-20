@@ -20,7 +20,7 @@ export const globalCss = css`
     --text: #212529;
   }
 
-  #tsml-ui {
+  #tsml-ui > div {
     background-color: var(--background);
     box-sizing: border-box;
     color: var(--text);
@@ -30,8 +30,8 @@ export const globalCss = css`
     font-family: var(--font-family);
     font-size: var(--font-size);
     line-height: 1.5;
-    min-height: 100dvh;
     padding: ${size.gutter}px;
+    transition: min-height 0.5s;
     width: 100%;
 
     * {
