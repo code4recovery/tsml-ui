@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { Global } from '@emotion/react';
 import { useSearchParams } from 'react-router-dom';
@@ -13,7 +13,16 @@ import {
 } from '../helpers';
 import { globalCss } from '../styles';
 
-import { Alert, Controls, Loading, Map, Meeting, Table, Title } from './';
+import {
+  Alert,
+  Controls,
+  DynamicHeight,
+  Loading,
+  Map,
+  Meeting,
+  Table,
+  Title,
+} from './';
 
 import type { State } from '../types';
 
@@ -28,7 +37,6 @@ export default function TsmlUI({
   src?: string;
   timezone?: string;
 }) {
-  const [occludedHeight, setOccludedHeight] = useState(0);
   const { settings, strings } = mergeSettings(userSettings);
   const [searchParams] = useSearchParams();
   const [state, setState] = useState<State>({
@@ -220,41 +228,12 @@ export default function TsmlUI({
       }
     }
 
-    // measure area covered up by fixed elements
-    window.addEventListener('resize', debouncedGetOccludedHeight);
-    window.addEventListener('scroll', debouncedGetOccludedHeight);
-    getOccludedHeight();
-
     // manage classes
     document.body.classList.add('tsml-ui');
     return () => {
-      window.removeEventListener('resize', debouncedGetOccludedHeight);
-      window.removeEventListener('scroll', debouncedGetOccludedHeight);
       document.body.classList.remove('tsml-ui');
     };
   }, []);
-
-  const getOccludedHeight = () => {
-    const elements = document.body.getElementsByTagName('*');
-    let occludedHeight = 0;
-    for (const element of elements) {
-      const style = window.getComputedStyle(element);
-      if (
-        style.position === 'fixed' &&
-        parseFloat(style.width) === window.innerWidth
-      ) {
-        occludedHeight += parseFloat(style.height);
-      }
-    }
-    setOccludedHeight(occludedHeight);
-  };
-
-  const timeoutId = useRef<ReturnType<typeof setTimeout>>();
-
-  const debouncedGetOccludedHeight = () => {
-    clearTimeout(timeoutId.current);
-    timeoutId.current = setTimeout(getOccludedHeight, 250);
-  };
 
   // filter data
   const [filteredSlugs, inProgress] = useMemo(
@@ -271,9 +250,9 @@ export default function TsmlUI({
   }
 
   return (
-    <div style={{ minHeight: `calc(100dvh - ${occludedHeight}px)` }}>
-      <SettingsContext.Provider value={{ settings, strings }}>
-        <Global styles={globalCss} />
+    <SettingsContext.Provider value={{ settings, strings }}>
+      <Global styles={globalCss} />
+      <DynamicHeight>
         {state.loading ? (
           <Loading />
         ) : state.input.meeting && state.input.meeting in state.meetings ? (
@@ -306,7 +285,7 @@ export default function TsmlUI({
             )}
           </>
         )}
-      </SettingsContext.Provider>
-    </div>
+      </DynamicHeight>
+    </SettingsContext.Provider>
   );
 }
