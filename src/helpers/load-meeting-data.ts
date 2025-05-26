@@ -3,11 +3,10 @@ import { DateTime, WeekdayNumbers } from 'luxon';
 import { flattenAndSortIndexes } from './flatten-and-sort-indexes';
 import { formatAddress } from './format-address';
 import { formatConferenceProvider } from './format-conference-provider';
-import { formatFeedbackEmail } from './format-feedback-email';
 import { formatSlug } from './format-slug';
 import { states } from './states';
 
-import type { JSONData, JSONDataFlat, State, Meeting, Index } from '../types';
+import type { Index, JSONData, JSONDataFlat, Meeting, State } from '../types';
 
 // set up meeting data; this is only run once when the app loads
 export function loadMeetingData(
@@ -427,27 +426,6 @@ export function loadMeetingData(
       .filter(e => e)
       .join('\t')
       .toLowerCase();
-
-    let feedback_emails = settings.feedback_emails;
-    if (Array.isArray(meeting.feedback_emails)) {
-      feedback_emails = meeting.feedback_emails;
-    }
-    if ('string' === typeof meeting.feedback_emails) {
-      feedback_emails = meeting.feedback_emails
-        .split(',')
-        .map(e => e.trim())
-        .filter(e => e);
-    }
-
-    if (!feedback_url && feedback_emails.length) {
-      feedback_url = formatFeedbackEmail({
-        feedback_emails,
-        name,
-        edit_url,
-        settings,
-        strings,
-      });
-    }
 
     meetings[slug] = {
       address,

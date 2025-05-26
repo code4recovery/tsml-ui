@@ -5,9 +5,10 @@ import { Link as RouterLink } from 'react-router-dom';
 
 import {
   formatDirectionsUrl,
+  formatFeedbackEmail,
   formatIcs,
-  formatString as i18n,
   formatUrl,
+  formatString as i18n,
   useSettings,
 } from '../helpers';
 import {
@@ -46,6 +47,28 @@ export default function Meeting({
     title: meeting.name,
     url: meeting.url ?? location.href,
   };
+
+  let feedback_emails = settings.feedback_emails;
+  if (Array.isArray(meeting.feedback_emails)) {
+    feedback_emails = meeting.feedback_emails;
+  }
+  if ('string' === typeof meeting.feedback_emails) {
+    feedback_emails = (meeting.feedback_emails as string)
+      .split(',')
+      .map(e => e.trim())
+      .filter(e => e);
+  }
+
+  let feedback_url;
+  if (!meeting.feedback_url && feedback_emails.length) {
+    feedback_url = formatFeedbackEmail({
+      feedback_emails,
+      name: meeting.name,
+      edit_url: meeting.edit_url,
+      settings,
+      strings,
+    });
+  }
 
   // format time string (duration? or appointment?)
   const formatTime = (start?: DateTime, end?: DateTime) => {
@@ -420,7 +443,7 @@ export default function Meeting({
                   {formatWeekdays(groupWeekdays, meeting.slug, state, setState)}
                 </div>
               )}
-            {(meeting.updated || meeting.feedback_url || meeting.entity) && (
+            {(meeting.updated || feedback_url || meeting.entity) && (
               <div>
                 {meeting.entity && (
                   <>
@@ -451,9 +474,9 @@ export default function Meeting({
                   </>
                 )}
 
-                {meeting.feedback_url && (
+                {feedback_url && (
                   <Button
-                    href={meeting.feedback_url}
+                    href={feedback_url}
                     icon="edit"
                     text={strings.feedback}
                   />
