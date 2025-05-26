@@ -1,8 +1,14 @@
-import { Dispatch, Fragment, MouseEvent, SetStateAction, useState } from 'react';
+import {
+  Dispatch,
+  Fragment,
+  MouseEvent,
+  SetStateAction,
+  useState,
+} from 'react';
 
 import { useSearchParams } from 'react-router-dom';
 
-import { formatString as i18n, getIndexByKey, useSettings } from '../helpers';
+import { getIndexByKey, formatString as i18n, useSettings } from '../helpers';
 import { dropdownButtonCss, dropdownCss } from '../styles';
 
 import type { Index, State } from '../types';
@@ -27,18 +33,15 @@ export default function Dropdown({
   const [expanded, setExpanded] = useState<string[]>([]);
 
   //handle expand toggle
-  const toggleExpanded = (
-    e: MouseEvent<HTMLButtonElement>,
-    key: string
-  ) => {
+  const toggleExpanded = (e: MouseEvent<HTMLButtonElement>, key: string) => {
     e.preventDefault();
     e.stopPropagation();
     if (!expanded.includes(key)) {
       setExpanded(expanded.concat(key));
     } else {
-      setExpanded(expanded.filter(item => item !== key));    
+      setExpanded(expanded.filter(item => item !== key));
     }
-  }
+  };
 
   //set filter: pass it up to parent
   const setFilter = (
@@ -84,7 +87,10 @@ export default function Dropdown({
     setSearchParams(searchParams);
   };
 
-  const renderDropdownItem = ({ key, name, slugs, children }: Index, parentExpanded: boolean = true) => (
+  const renderDropdownItem = (
+    { key, name, slugs, children }: Index,
+    parentExpanded: boolean = true
+  ) => (
     <Fragment key={key}>
       <div
         className="tsml-dropdown__item"
@@ -95,8 +101,8 @@ export default function Dropdown({
           className="tsml-dropdown__button"
           onClick={e => setFilter(e, filter, key)}
           tabIndex={parentExpanded ? 0 : -1}
-          >
-          {name}
+        >
+          <span>{name}</span>
           <span
             aria-label={
               slugs.length === 1
@@ -110,21 +116,24 @@ export default function Dropdown({
           </span>
         </button>
         {!!children?.length && (
-          <button 
+          <button
             className="tsml-dropdown__expand"
             data-expanded={expanded.includes(key)}
-            onClick={(e) => toggleExpanded(e, key)}
-            aria-label={expanded.includes(key) ? strings.collapse : strings.expand}
-          >
-          </button>
+            onClick={e => toggleExpanded(e, key)}
+            aria-label={
+              expanded.includes(key) ? strings.collapse : strings.expand
+            }
+          ></button>
         )}
       </div>
       {!!children?.length && (
-        <div 
+        <div
           className="tsml-dropdown__children"
           data-expanded={expanded.includes(key)}
-          >
-          {children.map(child => renderDropdownItem(child, expanded.includes(key)))}
+        >
+          {children.map(child =>
+            renderDropdownItem(child, expanded.includes(key))
+          )}
         </div>
       )}
     </Fragment>
@@ -155,10 +164,7 @@ export default function Dropdown({
         className="tsml-dropdown"
         style={{ display: open ? 'block' : 'none' }}
       >
-        <div 
-          data-active={!values.length}
-          className="tsml-dropdown__item"
-          >
+        <div data-active={!values.length} className="tsml-dropdown__item">
           <button
             className="tsml-dropdown__button"
             onClick={e => setFilter(e, filter, undefined)}

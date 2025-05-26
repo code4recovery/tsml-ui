@@ -7,7 +7,7 @@ export const dropdownCss = css`
   *:focus-visible {
     box-shadow: 0 0 0 4px var(--focus);
   }
-  
+
   position: relative;
   > div {
     background-color: var(--background);
@@ -30,7 +30,6 @@ export const dropdownCss = css`
     }
   }
   .tsml-dropdown {
-  
     &__expand {
       background-color: ${color.light};
       border: 0;
@@ -48,7 +47,7 @@ export const dropdownCss = css`
         display: inline-block;
         vertical-align: 0.2em;
       }
-      &[data-expanded="true"]::after {
+      &[data-expanded='true']::after {
         transform: rotate(180deg);
       }
       &:hover {
@@ -68,6 +67,7 @@ export const dropdownCss = css`
         border: 0;
         color: var(--text);
         cursor: pointer;
+        display: flex;
         flex: auto;
         font-size: var(--font-size);
         gap: 16px;
@@ -75,9 +75,12 @@ export const dropdownCss = css`
         margin: 0;
         padding: ${size.gutter / 2}px ${size.gutter}px;
         text-align: left;
-        white-space: normal;
 
         span {
+          white-space: nowrap;
+        }
+
+        span:last-child {
           border-radius: var(--border-radius);
           color: ${color.dark};
           float: right;
@@ -93,10 +96,10 @@ export const dropdownCss = css`
           color: var(--background);
         }
         span {
-          color: ${color.light}
+          color: ${color.light};
         }
         .tsml-dropdown__expand::after {
-          border-top: 0.4em solid ${color.light};        
+          border-top: 0.4em solid ${color.light};
         }
       }
 
@@ -107,13 +110,13 @@ export const dropdownCss = css`
     }
 
     &__children {
-      //padding-left: 1rem;  
+      //padding-left: 1rem;
       max-height: 0;
       overflow: hidden;
       transition: max-height 0.3s;
 
-      &[data-expanded="true"] {
-        max-height: 2000px
+      &[data-expanded='true'] {
+        max-height: 2000px;
       }
 
       // child nesting levels
@@ -135,9 +138,7 @@ export const dropdownCss = css`
           }
         }
       }
-
     }
-
   }
 `;
 

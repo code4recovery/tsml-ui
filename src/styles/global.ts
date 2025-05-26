@@ -28,8 +28,6 @@ export const globalCss = css`
     gap: ${size.gutter}px;
     flex-direction: column;
     font-family: var(--font-family);
-    font-size: var(--font-size);
-    line-height: 1.5;
     padding: ${size.gutter}px;
     transition: min-height 0.5s;
     width: 100%;
@@ -55,6 +53,14 @@ export const globalCss = css`
       letter-spacing: normal;
       text-shadow: none;
       text-transform: none;
+    }
+
+    button,
+    input,
+    p,
+    li {
+      font-size: var(--font-size);
+      line-height: 1.5;
     }
 
     h1,

@@ -245,7 +245,11 @@ export default function TsmlUI({
   state.alert = !filteredSlugs.length ? strings.no_results : undefined;
 
   // show error?
-  if (state.input.meeting && !state.meetings[state.input.meeting]) {
+  if (
+    state.input.meeting &&
+    !state.loading &&
+    !state.meetings[state.input.meeting]
+  ) {
     state.error = strings.not_found;
   }
 
