@@ -53,16 +53,17 @@ export default function Meeting() {
       .filter(e => e);
   }
 
-  let feedback_url;
-  if (!meeting.feedback_url && feedback_emails.length) {
-    feedback_url = formatFeedbackEmail({
-      feedback_emails,
-      name: meeting.name,
-      edit_url: meeting.edit_url,
-      settings,
-      strings,
-    });
-  }
+  const feedback_url = meeting.feedback_url
+    ? meeting.feedback_url
+    : feedback_emails.length
+    ? formatFeedbackEmail({
+        feedback_emails,
+        name: meeting.name,
+        edit_url: meeting.edit_url,
+        settings,
+        strings,
+      })
+    : undefined;
 
   // format time string (duration? or appointment?)
   const formatTime = (start?: DateTime, end?: DateTime) => {
