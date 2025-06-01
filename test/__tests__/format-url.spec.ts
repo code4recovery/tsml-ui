@@ -1,5 +1,5 @@
 import { formatUrl } from '../../src/helpers/format-url';
-import { defaults } from '../../src/helpers/settings';
+import { defaults } from '../../src/hooks';
 
 describe('formatUrl', () => {
   it('works with no params', () => {

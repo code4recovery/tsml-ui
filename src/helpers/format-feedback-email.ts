@@ -1,7 +1,7 @@
+import { useData } from '../hooks';
 import { formatArray } from './format-array';
 import { formatString as i18n } from './format-string';
 import { formatUrl } from './format-url';
-import { getQueryString } from './query-string';
 
 // send back a mailto link to a feedback email
 export function formatFeedbackEmail({
@@ -18,8 +18,8 @@ export function formatFeedbackEmail({
   strings: Translation;
 }) {
   // remove extra query params from meeting URL
-  const input = getQueryString(settings);
-  const meetingUrl = formatUrl({ meeting: input.meeting }, settings);
+  const { meeting } = useData();
+  const meetingUrl = formatUrl({ meeting: meeting?.slug }, settings);
 
   // build message
   const lines = [

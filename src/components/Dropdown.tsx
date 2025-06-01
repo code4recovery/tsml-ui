@@ -8,28 +8,28 @@ import {
 
 import { useSearchParams } from 'react-router-dom';
 
-import { getIndexByKey, formatString as i18n, useSettings } from '../helpers';
+import { getIndexByKey, formatString as i18n } from '../helpers';
+import { type Data, useData, useInput, useSettings } from '../hooks';
 import { dropdownButtonCss, dropdownCss } from '../styles';
-
-import type { Index, State } from '../types';
+import type { Index } from '../types';
 
 export default function Dropdown({
   defaultValue,
   filter,
   open,
   setDropdown,
-  state,
 }: {
   defaultValue: string;
-  filter: keyof State['indexes'];
+  filter: keyof Data['indexes'];
   open: boolean;
   setDropdown: Dispatch<SetStateAction<string | undefined>>;
-  state: State;
 }) {
+  const { indexes } = useData();
   const [searchParams, setSearchParams] = useSearchParams();
   const { strings } = useSettings();
-  const options = state.indexes[filter];
-  const values = state.input[filter];
+  const input = useInput();
+  const options = indexes[filter];
+  const values = input[filter as keyof typeof input] as string[];
   const [expanded, setExpanded] = useState<string[]>([]);
 
   //handle expand toggle
@@ -46,13 +46,13 @@ export default function Dropdown({
   //set filter: pass it up to parent
   const setFilter = (
     e: MouseEvent<HTMLButtonElement>,
-    filter: keyof typeof state.indexes,
+    filter: keyof typeof indexes,
     value?: string
   ) => {
     e.preventDefault();
 
     // add or remove from filters
-    let currentValues = searchParams.get(filter)?.split('/') ?? [];
+    let currentValues = `${searchParams.get(filter)}`.split('/');
 
     if (value) {
       const index = currentValues.indexOf(value);
@@ -92,11 +92,7 @@ export default function Dropdown({
     parentExpanded: boolean = true
   ) => (
     <Fragment key={key}>
-      <div
-        className="tsml-dropdown__item"
-        // @ts-expect-error TODO
-        data-active={values.includes(key)}
-      >
+      <div className="tsml-dropdown__item" data-active={values.includes(key)}>
         <button
           className="tsml-dropdown__button"
           onClick={e => setFilter(e, filter, key)}
@@ -123,7 +119,7 @@ export default function Dropdown({
             aria-label={
               expanded.includes(key) ? strings.collapse : strings.expand
             }
-          ></button>
+          />
         )}
       </div>
       {!!children?.length && (

@@ -1,10 +1,8 @@
-import React from 'react';
-
 import { fireEvent, render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 
 import Dropdown from '../../src/components/Dropdown';
-import { SettingsContext, mergeSettings } from '../../src/helpers';
+import { defaults, SettingsProvider } from '../../src/hooks';
 import { State } from '../../src/types';
 import { mockState } from '../__fixtures__';
 
@@ -17,7 +15,7 @@ jest.mock('react-router-dom', () => ({
 
 describe('<Dropdown />', () => {
   const filter = 'type';
-  const settings = mergeSettings();
+  const settings = defaults;
   const defaultValue = settings.strings[`${filter}_any`];
   const mockStateWithFilter: State = {
     ...mockState,
@@ -44,19 +42,14 @@ describe('<Dropdown />', () => {
   it('renders', () => {
     render(
       <MemoryRouter>
-        <SettingsContext.Provider value={settings}>
+        <SettingsProvider userSettings={settings}>
           <Dropdown
             filter={filter}
             open={false}
-            end={false}
             defaultValue={defaultValue}
             setDropdown={jest.fn()}
-            state={{
-              ...mockStateWithFilter,
-              input: { ...mockStateWithFilter.input, [filter]: ['bar'] },
-            }}
           />
-        </SettingsContext.Provider>
+        </SettingsProvider>
       </MemoryRouter>
     );
     expect(screen.getAllByText(defaultValue)).toHaveLength(1);
@@ -67,16 +60,14 @@ describe('<Dropdown />', () => {
 
     render(
       <MemoryRouter>
-        <SettingsContext.Provider value={settings}>
+        <SettingsProvider userSettings={settings}>
           <Dropdown
             filter={filter}
             open={false}
-            end={false}
             defaultValue={defaultValue}
             setDropdown={mockSetDropdown}
-            state={mockState}
           />
-        </SettingsContext.Provider>
+        </SettingsProvider>
       </MemoryRouter>
     );
 
@@ -94,16 +85,14 @@ describe('<Dropdown />', () => {
 
     render(
       <MemoryRouter>
-        <SettingsContext.Provider value={settings}>
+        <SettingsProvider userSettings={settings}>
           <Dropdown
             defaultValue={defaultValue}
-            end={false}
             filter={filter}
             open={true}
             setDropdown={mockSetDropdown}
-            state={mockStateWithFilter}
           />
-        </SettingsContext.Provider>
+        </SettingsProvider>
       </MemoryRouter>
     );
 

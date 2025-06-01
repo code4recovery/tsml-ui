@@ -6,21 +6,23 @@ import { formatConferenceProvider } from './format-conference-provider';
 import { formatSlug } from './format-slug';
 import { states } from './states';
 
-import type { Index, JSONData, JSONDataFlat, Meeting, State } from '../types';
+import { type Data } from '../hooks';
+
+import type { Index, JSONData, JSONDataFlat, Meeting } from '../types';
 
 // set up meeting data; this is only run once when the app loads
 export function loadMeetingData(
   data: JSONData[],
-  capabilities: State['capabilities'],
+  capabilities: Data['capabilities'],
   settings: TSMLReactConfig,
   strings: Translation,
   timezone?: string
-): [State['meetings'], State['indexes'], State['capabilities']] {
+): [Data['meetings'], Data['indexes'], Data['capabilities']] {
   // meetings is a lookup
   const meetings: { [index: string]: Meeting } = {};
 
   // indexes start as objects, will be converted to arrays
-  const indexes: State['indexes'] = {
+  const indexes: Data['indexes'] = {
     region: [],
     time: [],
     type: [],

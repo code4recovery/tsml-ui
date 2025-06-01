@@ -12,7 +12,7 @@ import { loadMeetingData, translateGoogleSheet } from '../helpers';
 import { Index, Meeting } from '../types';
 import { useSettings } from './settings';
 
-type Data = {
+export type Data = {
   capabilities: {
     coordinates: boolean;
     distance: boolean;
@@ -25,6 +25,7 @@ type Data = {
     type: boolean;
     weekday: boolean;
   };
+  loading: boolean;
   meeting?: Meeting;
   meetings: { [index: string]: Meeting };
   indexes: {
@@ -49,6 +50,7 @@ const defaultData: Data = {
     type: false,
     weekday: false,
   },
+  loading: true,
   meetings: {},
   indexes: {
     distance: [],
@@ -132,7 +134,7 @@ export const DataProvider = ({
             return setError('Configuration error: time zone is not set.');
           }
 
-          setData({ capabilities, indexes, meetings });
+          setData({ capabilities, indexes, meetings, loading: false });
         })
         .catch(error => {
           const errors = {

@@ -1,33 +1,36 @@
 import { useSearchParams } from 'react-router-dom';
 
-import { formatString as i18n, getIndexByKey, useSettings } from '../helpers';
+import { getIndexByKey, formatString as i18n } from '../helpers';
+import { useData, useFilter, useSettings } from '../hooks';
 import { alertCss, errorCss } from '../styles';
 
 import Button from './Button';
 
-import type { State } from '../types';
-
-export default function Alert({ state }: { state: State }) {
+export default function Alert() {
+  const { error, indexes } = useData();
+  const { alert } = useFilter();
   const [searchParams, setSearchParams] = useSearchParams();
   const { settings, strings } = useSettings();
-  return state.error ? (
-    <div css={errorCss}>{state.error}</div>
-  ) : state.alert ? (
+  return error ? (
+    <div css={errorCss}>{error}</div>
+  ) : alert ? (
     <>
-      <div css={alertCss}>{state.alert}</div>
-      {state.alert === strings.no_results && state.input.search && (
+      <div css={alertCss}>{alert}</div>
+      {alert === strings.no_results && searchParams.has('search') && (
         <Button
           onClick={() => {
             searchParams.delete('search');
             setSearchParams(searchParams);
           }}
-          text={i18n(strings.remove, { filter: `‘${state.input.search}’` })}
+          text={i18n(strings.remove, {
+            filter: `‘${searchParams.get('search')}’`,
+          })}
           icon="close"
         />
       )}
-      {state.alert === strings.no_results &&
+      {alert === strings.no_results &&
         settings.filters.map(filter =>
-          state.input[filter].map(value => (
+          `${searchParams.get(filter)}`.split('/').map(value => (
             <Button
               key={value}
               icon="close"
@@ -36,7 +39,7 @@ export default function Alert({ state }: { state: State }) {
                 setSearchParams(searchParams);
               }}
               text={i18n(strings.remove, {
-                filter: getIndexByKey(state.indexes[filter], value)?.name,
+                filter: getIndexByKey(indexes[filter], value)?.name,
               })}
             />
           ))

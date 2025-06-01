@@ -2,7 +2,12 @@ import { useEffect } from 'react';
 
 import { Global } from '@emotion/react';
 
-import { DataProvider, FilterProvider, SettingsProvider } from '../hooks';
+import {
+  DataProvider,
+  FilterProvider,
+  InputProvider,
+  SettingsProvider,
+} from '../hooks';
 import { globalCss } from '../styles';
 
 import { Alert, Controls, DynamicHeight, Map, Meeting, Table, Title } from './';
@@ -23,6 +28,7 @@ export default function TsmlUI({
       'TSML UI meeting finder: https://github.com/code4recovery/tsml-ui'
     );
 
+    // add body class to help people style their pages
     document.body.classList.add('tsml-ui');
     return () => {
       document.body.classList.remove('tsml-ui');
@@ -31,19 +37,21 @@ export default function TsmlUI({
 
   return (
     <SettingsProvider userSettings={userSettings}>
-      <Global styles={globalCss} />
-      <DynamicHeight>
+      <InputProvider>
         <DataProvider google={google} src={src} timezone={timezone}>
           <FilterProvider>
-            <Meeting />
-            <Title />
-            <Controls />
-            <Alert />
-            <Table />
-            <Map />
+            <Global styles={globalCss} />
+            <DynamicHeight>
+              <Meeting />
+              <Title />
+              <Controls />
+              <Alert />
+              <Table />
+              <Map />
+            </DynamicHeight>
           </FilterProvider>
         </DataProvider>
-      </DynamicHeight>
+      </InputProvider>
     </SettingsProvider>
   );
 }

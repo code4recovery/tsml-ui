@@ -1,28 +1,32 @@
-import { Dispatch, SetStateAction } from 'react';
-
 import { flattenAndSortIndexes } from './flatten-and-sort-indexes';
 import { formatString as i18n } from './format-string';
 
-import type { Index, Meeting, State } from '../types';
+import { useData, useInput } from '../hooks';
+import type { Index, Meeting } from '../types';
 
 //calculate distances
 export function calculateDistances({
   latitude,
   longitude,
-  setState,
+  setCoordinates,
   settings,
   slugs,
-  state,
   strings,
 }: {
   latitude: number;
   longitude: number;
-  setState: Dispatch<SetStateAction<State>>;
+  setCoordinates: (coordinates: {
+    latitude?: number;
+    longitude?: number;
+    waiting: boolean;
+  }) => void;
   settings: TSMLReactConfig;
   slugs: string[];
-  state: State;
   strings: Translation;
 }) {
+  const input = useInput();
+  const { meetings } = useData();
+
   //build new index and meetings array
   const distances: {
     [index: string]: Index;
@@ -45,14 +49,14 @@ export function calculateDistances({
   slugs.forEach(slug => {
     const distance = getDistance(
       { latitude, longitude },
-      state.meetings[slug],
+      meetings[slug],
       settings
     );
 
     if (typeof distance === 'undefined') return;
 
-    state.meetings[slug] = {
-      ...state.meetings[slug],
+    meetings[slug] = {
+      ...meetings[slug],
       distance,
     };
 
@@ -65,9 +69,7 @@ export function calculateDistances({
 
   //remove redundant distances at 50 and higher distances, unless requested via query param
   let slugMax = 0;
-  let queryDistance = Array.isArray(state.input?.distance)
-    ? state.input.distance[0]
-    : 0;
+  let queryDistance = Array.isArray(input?.distance) ? input.distance[0] : 0;
   Object.entries(distances).forEach(([val, distance]) => {
     if (50 <= parseInt(val) && val !== queryDistance) {
       if (slugMax >= distance.slugs.length) {
@@ -84,24 +86,24 @@ export function calculateDistances({
     (a: Index, b: Index) => parseInt(a.key) - parseInt(b.key)
   );
 
-  //this will cause a re-render with latitude and longitude now set
-  setState(state => ({
-    ...state,
-    capabilities: {
-      ...state.capabilities,
-      distance: !!distanceIndex.length,
-    },
-    filtering: false,
-    indexes: {
-      ...state.indexes,
-      distance: distanceIndex,
-    },
-    input: {
-      ...state.input,
-      latitude: parseFloat(latitude.toFixed(5)),
-      longitude: parseFloat(longitude.toFixed(5)),
-    },
-  }));
+  // //this will cause a re-render with latitude and longitude now set
+  // setState(state => ({
+  //   ...state,
+  //   capabilities: {
+  //     ...state.capabilities,
+  //     distance: !!distanceIndex.length,
+  //   },
+  //   filtering: false,
+  //   indexes: {
+  //     ...state.indexes,
+  //     distance: distanceIndex,
+  //   },
+  //   input: {
+  //     ...state.input,
+  //     latitude: parseFloat(latitude.toFixed(5)),
+  //     longitude: parseFloat(longitude.toFixed(5)),
+  //   },
+  // }));
 }
 
 // Calculate the distance as the crow flies between two geometric points

@@ -3207,50 +3207,57 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ Alert)
 /* harmony export */ });
-/* harmony import */ var _emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @emotion/react/jsx-runtime */ "./node_modules/@emotion/react/jsx-runtime/dist/emotion-react-jsx-runtime.browser.esm.js");
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/development/chunk-AYJ5UCUI.mjs");
+/* harmony import */ var _emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @emotion/react/jsx-runtime */ "./node_modules/@emotion/react/jsx-runtime/dist/emotion-react-jsx-runtime.browser.esm.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/development/chunk-AYJ5UCUI.mjs");
 /* harmony import */ var _helpers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../helpers */ "./src/helpers/index.ts");
-/* harmony import */ var _styles__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../styles */ "./src/styles/index.ts");
-/* harmony import */ var _Button__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Button */ "./src/components/Button.tsx");
+/* harmony import */ var _hooks__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../hooks */ "./src/hooks/index.ts");
+/* harmony import */ var _styles__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../styles */ "./src/styles/index.ts");
+/* harmony import */ var _Button__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Button */ "./src/components/Button.tsx");
 
 
 
 
 
-function Alert({
-  state
-}) {
-  const [searchParams, setSearchParams] = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_3__.useSearchParams)();
+
+function Alert() {
+  const {
+    error,
+    indexes
+  } = (0,_hooks__WEBPACK_IMPORTED_MODULE_1__.useData)();
+  const {
+    alert
+  } = (0,_hooks__WEBPACK_IMPORTED_MODULE_1__.useFilter)();
+  const [searchParams, setSearchParams] = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_4__.useSearchParams)();
   const {
     settings,
     strings
-  } = (0,_helpers__WEBPACK_IMPORTED_MODULE_0__.useSettings)();
-  return state.error ? (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
-    css: _styles__WEBPACK_IMPORTED_MODULE_1__.errorCss,
-    children: state.error
-  }) : state.alert ? (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.Fragment, {
-    children: [(0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
-      css: _styles__WEBPACK_IMPORTED_MODULE_1__.alertCss,
-      children: state.alert
-    }), state.alert === strings.no_results && state.input.search && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_Button__WEBPACK_IMPORTED_MODULE_2__["default"], {
+  } = (0,_hooks__WEBPACK_IMPORTED_MODULE_1__.useSettings)();
+  return error ? (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+    css: _styles__WEBPACK_IMPORTED_MODULE_2__.errorCss,
+    children: error
+  }) : alert ? (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.Fragment, {
+    children: [(0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+      css: _styles__WEBPACK_IMPORTED_MODULE_2__.alertCss,
+      children: alert
+    }), alert === strings.no_results && searchParams.has('search') && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_Button__WEBPACK_IMPORTED_MODULE_3__["default"], {
       onClick: () => {
         searchParams.delete('search');
         setSearchParams(searchParams);
       },
       text: (0,_helpers__WEBPACK_IMPORTED_MODULE_0__.formatString)(strings.remove, {
-        filter: `‘${state.input.search}’`
+        filter: `‘${searchParams.get('search')}’`
       }),
       icon: "close"
-    }), state.alert === strings.no_results && settings.filters.map(filter => state.input[filter].map(value => {
+    }), alert === strings.no_results && settings.filters.map(filter => `${searchParams.get(filter)}`.split('/').map(value => {
       var _a;
-      return (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_Button__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      return (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_Button__WEBPACK_IMPORTED_MODULE_3__["default"], {
         icon: "close",
         onClick: () => {
           searchParams.delete(filter);
           setSearchParams(searchParams);
         },
         text: (0,_helpers__WEBPACK_IMPORTED_MODULE_0__.formatString)(strings.remove, {
-          filter: (_a = (0,_helpers__WEBPACK_IMPORTED_MODULE_0__.getIndexByKey)(state.indexes[filter], value)) === null || _a === void 0 ? void 0 : _a.name
+          filter: (_a = (0,_helpers__WEBPACK_IMPORTED_MODULE_0__.getIndexByKey)(indexes[filter], value)) === null || _a === void 0 ? void 0 : _a.name
         })
       }, value);
     }))]
@@ -3308,61 +3315,68 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ Controls)
 /* harmony export */ });
-/* harmony import */ var _emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @emotion/react/jsx-runtime */ "./node_modules/@emotion/react/jsx-runtime/dist/emotion-react-jsx-runtime.browser.esm.js");
+/* harmony import */ var _emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @emotion/react/jsx-runtime */ "./node_modules/@emotion/react/jsx-runtime/dist/emotion-react-jsx-runtime.browser.esm.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/development/chunk-AYJ5UCUI.mjs");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/development/chunk-AYJ5UCUI.mjs");
 /* harmony import */ var _helpers__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../helpers */ "./src/helpers/index.ts");
-/* harmony import */ var _styles__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../styles */ "./src/styles/index.ts");
-/* harmony import */ var _Dropdown__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Dropdown */ "./src/components/Dropdown.tsx");
+/* harmony import */ var _hooks__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../hooks */ "./src/hooks/index.ts");
+/* harmony import */ var _styles__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../styles */ "./src/styles/index.ts");
+/* harmony import */ var _Dropdown__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Dropdown */ "./src/components/Dropdown.tsx");
 
 
 
 
 
 
-function Controls({
-  state,
-  setState
-}) {
+
+function Controls() {
   var _a;
+  const {
+    capabilities,
+    meetings
+  } = (0,_hooks__WEBPACK_IMPORTED_MODULE_2__.useData)();
+  const {
+    latitude
+  } = (0,_hooks__WEBPACK_IMPORTED_MODULE_2__.useFilter)();
   const {
     settings,
     strings
-  } = (0,_helpers__WEBPACK_IMPORTED_MODULE_1__.useSettings)();
+  } = (0,_hooks__WEBPACK_IMPORTED_MODULE_2__.useSettings)();
   const [dropdown, setDropdown] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)();
-  const [search, setSearch] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(state.input.mode === 'location' ? state.input.search : '');
-  const [searchParams, setSearchParams] = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_4__.useSearchParams)();
+  const [searchParams, setSearchParams] = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_5__.useSearchParams)();
+  const input = (0,_hooks__WEBPACK_IMPORTED_MODULE_2__.useInput)();
+  const [search, setSearch] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(input.mode === 'location' ? input.search : '');
   const searchInput = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
-  //get available search options based on capabilities
+  // get available search options based on capabilities
   const allModes = ['search', 'location', 'me'];
-  const modes = allModes.filter(mode => mode !== 'location' || state.capabilities.coordinates).filter(mode => mode !== 'me' || state.capabilities.coordinates && state.capabilities.geolocation);
-  //get available filters
-  const filters = settings.filters.filter(filter => state.capabilities[filter]).filter(filter => filter !== 'region' || state.input.mode === 'search').filter(filter => filter !== 'distance' || state.input.mode !== 'search' && state.input.latitude);
-  //get available views
+  const modes = allModes.filter(mode => mode !== 'location' || capabilities.coordinates).filter(mode => mode !== 'me' || capabilities.coordinates && capabilities.geolocation);
+  // get available filters
+  const filters = settings.filters.filter(filter => capabilities[filter]).filter(filter => filter !== 'region' || input.mode === 'search').filter(filter => filter !== 'distance' || input.mode !== 'search' && latitude);
+  // get available views
   const allViews = ['table', 'map'];
-  const views = allViews.filter(view => view !== 'map' || state.capabilities.coordinates);
-  //whether to show the views segmented button
+  const views = allViews.filter(view => view !== 'map' || capabilities.coordinates);
+  // whether to show the views segmented button
   const canShowViews = views.length > 1;
-  //add click listener for dropdowns (in lieu of including bootstrap js + jquery)
+  // add click listener for dropdowns (in lieu of including bootstrap js + jquery)
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     document.body.addEventListener('click', closeDropdown);
     return () => {
       document.body.removeEventListener('click', closeDropdown);
     };
   }, [document]);
-  //search effect
+  // search effect
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     const timer = setTimeout(() => {
-      if (!state.input.search) return;
+      if (!input.search) return;
       (0,_helpers__WEBPACK_IMPORTED_MODULE_1__.analyticsEvent)({
         category: 'search',
-        action: state.input.mode,
-        label: state.input.search
+        action: input.mode,
+        label: input.search
       });
     }, 2000);
     return () => clearTimeout(timer);
-  }, [state.input.search]);
+  }, [input.search]);
   // update url params when search changes
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (!searchInput.current) return;
@@ -3370,7 +3384,7 @@ function Controls({
       value
     } = searchInput.current;
     if (value === search) return;
-    if (searchParams.get('search') === value) return;
+    if (input.search === value) return;
     if (value) {
       searchParams.set('search', value);
     } else {
@@ -3378,58 +3392,36 @@ function Controls({
     }
     setSearchParams(searchParams);
   }, [(_a = searchInput.current) === null || _a === void 0 ? void 0 : _a.value]);
-  //close current dropdown (on body click)
+  // close current dropdown (on body click)
   const closeDropdown = () => {
     setDropdown(undefined);
   };
-  //near location search
+  // near location search
   const locationSearch = e => {
     e.preventDefault();
-    if (state.input.mode !== 'location') return;
+    if (input.mode !== 'location') return;
     if (search) {
       searchParams.set('search', search);
     } else {
       searchParams.delete('search');
-      Object.keys(state.meetings).forEach(slug => {
-        state.meetings[slug].distance = undefined;
+      Object.keys(meetings).forEach(slug => {
+        meetings[slug].distance = undefined;
       });
     }
-    const distance = !state.input.distance.length && search ? settings.default_distance : state.input.distance;
-    if (distance.length) {
-      searchParams.set('distance', distance.join('/'));
-    } else {
-      searchParams.delete('distance');
-    }
-    setState(state => Object.assign(Object.assign({}, state), {
-      capabilities: Object.assign(Object.assign({}, state.capabilities), {
-        distance: false
-      }),
-      error: undefined,
-      filtering: !!search,
-      indexes: Object.assign(Object.assign({}, state.indexes), {
-        distance: []
-      }),
-      input: Object.assign(Object.assign({}, state.input), {
-        distance,
-        latitude: undefined,
-        longitude: undefined,
-        search
-      })
-    }));
     setSearchParams(searchParams);
   };
   // set search mode dropdown and reset distances
   const setMode = (e, mode) => {
     e.preventDefault();
-    Object.keys(state.meetings).forEach(slug => {
-      state.meetings[slug].distance = undefined;
+    Object.keys(meetings).forEach(slug => {
+      meetings[slug].distance = undefined;
     });
     if (mode === 'me') {
       setSearch('');
       searchParams.delete('search');
     } else if (mode === 'location') {
       // sync local with state
-      setSearch(state.input.search);
+      setSearch(input.search);
     }
     if (mode !== settings.defaults.mode) {
       searchParams.set('mode', mode);
@@ -3441,25 +3433,7 @@ function Controls({
       var _a;
       return (_a = searchInput.current) === null || _a === void 0 ? void 0 : _a.focus();
     }, 100);
-    const distance = state.input.distance.length ? state.input.distance : settings.default_distance;
     searchParams.set('distance', settings.default_distance.join('/'));
-    setState(state => Object.assign(Object.assign({}, state), {
-      capabilities: Object.assign(Object.assign({}, state.capabilities), {
-        distance: false
-      }),
-      error: undefined,
-      filtering: mode === 'me' || mode === 'location' && !!state.input.search,
-      indexes: Object.assign(Object.assign({}, state.indexes), {
-        distance: []
-      }),
-      input: Object.assign(Object.assign({}, state.input), {
-        distance,
-        latitude: undefined,
-        longitude: undefined,
-        mode,
-        search
-      })
-    }));
     setSearchParams(searchParams);
   };
   //toggle list/map view
@@ -3470,81 +3444,75 @@ function Controls({
     } else {
       searchParams.delete('view');
     }
-    setState(Object.assign(Object.assign({}, state), {
-      input: Object.assign(Object.assign({}, state.input), {
-        view
-      })
-    }));
+    // setState({ ...state, input: { ...state.input, view } });
     setSearchParams(searchParams);
   };
-  return !Object.keys(state.meetings).length ? null : (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
-    css: _styles__WEBPACK_IMPORTED_MODULE_2__.controlsCss,
-    children: [(0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("form", {
+  return !Object.keys(meetings).length ? null : (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+    css: _styles__WEBPACK_IMPORTED_MODULE_3__.controlsCss,
+    children: [(0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("form", {
       onSubmit: locationSearch,
-      css: _styles__WEBPACK_IMPORTED_MODULE_2__.dropdownCss,
-      children: [(0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("fieldset", {
+      css: _styles__WEBPACK_IMPORTED_MODULE_3__.dropdownCss,
+      children: [(0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("fieldset", {
         role: "group",
-        children: [(0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("input", {
-          "aria-label": strings.modes[state.input.mode],
-          css: modes.length > 1 ? _styles__WEBPACK_IMPORTED_MODULE_2__.controlsInputFirstCss : _styles__WEBPACK_IMPORTED_MODULE_2__.controlsInputCss,
-          disabled: state.input.mode === 'me',
+        children: [(0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("input", {
+          "aria-label": strings.modes[input.mode],
+          css: modes.length > 1 ? _styles__WEBPACK_IMPORTED_MODULE_3__.controlsInputFirstCss : _styles__WEBPACK_IMPORTED_MODULE_3__.controlsInputCss,
+          disabled: input.mode === 'me',
           onChange: e => {
-            if (state.input.mode === 'search') {
-              setState(state => Object.assign(Object.assign({}, state), {
-                input: Object.assign(Object.assign({}, state.input), {
-                  search: e.target.value
-                })
-              }));
+            if (input.mode === 'search') {
+              // setState(state => ({
+              //   ...state,
+              //   input: { ...state.input, search: e.target.value },
+              // }));
             } else {
               setSearch(e.target.value);
             }
           },
-          placeholder: strings.modes[state.input.mode],
+          placeholder: strings.modes[input.mode],
           ref: searchInput,
           spellCheck: "false",
           type: "search",
-          value: state.input.mode === 'location' ? search : state.input.search
-        }), (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("input", {
+          value: input.mode === 'location' ? search : input.search
+        }), (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("input", {
           type: "submit",
           hidden: true,
-          css: _styles__WEBPACK_IMPORTED_MODULE_2__.controlsInputSearchSubmitCss
-        }), modes.length > 1 && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
-          "aria-label": strings.modes[state.input.mode],
-          css: _styles__WEBPACK_IMPORTED_MODULE_2__.dropdownButtonLastCss,
+          css: _styles__WEBPACK_IMPORTED_MODULE_3__.controlsInputSearchSubmitCss
+        }), modes.length > 1 && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
+          "aria-label": strings.modes[input.mode],
+          css: _styles__WEBPACK_IMPORTED_MODULE_3__.dropdownButtonLastCss,
           onClick: e => {
             setDropdown(dropdown === 'search' ? undefined : 'search');
             e.stopPropagation();
           },
           type: "button"
         })]
-      }), modes.length > 1 && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
-        css: _styles__WEBPACK_IMPORTED_MODULE_2__.controlsSearchDropdownCss,
+      }), modes.length > 1 && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+        css: _styles__WEBPACK_IMPORTED_MODULE_3__.controlsSearchDropdownCss,
         style: {
           display: dropdown === 'search' ? 'block' : 'none'
         },
-        children: modes.map(mode => (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+        children: modes.map(mode => (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
           className: "tsml-dropdown__item",
-          "data-active": state.input.mode === mode,
-          children: (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
+          "data-active": mode === input.mode,
+          children: (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
             className: "tsml-dropdown__button",
             onClick: e => setMode(e, mode),
             children: strings.modes[mode]
           })
         }, mode))
       })]
-    }), filters.map(filter => (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
-      children: (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_Dropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    }), filters.map(filter => (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+      children: (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_Dropdown__WEBPACK_IMPORTED_MODULE_4__["default"], {
         defaultValue: strings[`${filter}_any`],
         filter: filter,
         open: dropdown === filter,
-        setDropdown: setDropdown,
-        state: state
+        setDropdown: setDropdown
       })
-    }, filter)), canShowViews && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+    }, filter)), canShowViews && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
       role: "group",
-      children: views.map((view, index) => (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
-        css: index ? _styles__WEBPACK_IMPORTED_MODULE_2__.controlsGroupLastCss : _styles__WEBPACK_IMPORTED_MODULE_2__.controlsGroupFirstCss,
-        "data-active": state.input.view === view,
+      children: views.map((view, index) => (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
+        css: index ? _styles__WEBPACK_IMPORTED_MODULE_3__.controlsGroupLastCss : _styles__WEBPACK_IMPORTED_MODULE_3__.controlsGroupFirstCss,
+        "data-active": view === input.view,
         onClick: e => setView(e, view),
         type: "button",
         children: strings.views[view]
@@ -3566,12 +3534,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ Dropdown)
 /* harmony export */ });
-/* harmony import */ var _emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @emotion/react/jsx-runtime */ "./node_modules/@emotion/react/jsx-runtime/dist/emotion-react-jsx-runtime.browser.esm.js");
+/* harmony import */ var _emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @emotion/react/jsx-runtime */ "./node_modules/@emotion/react/jsx-runtime/dist/emotion-react-jsx-runtime.browser.esm.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/development/chunk-AYJ5UCUI.mjs");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/development/chunk-AYJ5UCUI.mjs");
 /* harmony import */ var _helpers__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../helpers */ "./src/helpers/index.ts");
-/* harmony import */ var _styles__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../styles */ "./src/styles/index.ts");
+/* harmony import */ var _hooks__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../hooks */ "./src/hooks/index.ts");
+/* harmony import */ var _styles__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../styles */ "./src/styles/index.ts");
+
 
 
 
@@ -3581,15 +3551,18 @@ function Dropdown({
   defaultValue,
   filter,
   open,
-  setDropdown,
-  state
+  setDropdown
 }) {
-  const [searchParams, setSearchParams] = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_3__.useSearchParams)();
+  const {
+    indexes
+  } = (0,_hooks__WEBPACK_IMPORTED_MODULE_2__.useData)();
+  const [searchParams, setSearchParams] = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_4__.useSearchParams)();
   const {
     strings
-  } = (0,_helpers__WEBPACK_IMPORTED_MODULE_1__.useSettings)();
-  const options = state.indexes[filter];
-  const values = state.input[filter];
+  } = (0,_hooks__WEBPACK_IMPORTED_MODULE_2__.useSettings)();
+  const input = (0,_hooks__WEBPACK_IMPORTED_MODULE_2__.useInput)();
+  const options = indexes[filter];
+  const values = input[filter];
   const [expanded, setExpanded] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
   //handle expand toggle
   const toggleExpanded = (e, key) => {
@@ -3603,10 +3576,9 @@ function Dropdown({
   };
   //set filter: pass it up to parent
   const setFilter = (e, filter, value) => {
-    var _a, _b;
     e.preventDefault();
     // add or remove from filters
-    let currentValues = (_b = (_a = searchParams.get(filter)) === null || _a === void 0 ? void 0 : _a.split('/')) !== null && _b !== void 0 ? _b : [];
+    let currentValues = `${searchParams.get(filter)}`.split('/');
     if (value) {
       const index = currentValues.indexOf(value);
       if (e.metaKey || e.ctrlKey) {
@@ -3642,29 +3614,29 @@ function Dropdown({
     name,
     slugs,
     children
-  }, parentExpanded = true) => (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
-    children: [(0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+  }, parentExpanded = true) => (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
+    children: [(0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
       className: "tsml-dropdown__item",
       "data-active": values.includes(key),
-      children: [(0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("button", {
+      children: [(0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("button", {
         className: "tsml-dropdown__button",
         onClick: e => setFilter(e, filter, key),
         tabIndex: parentExpanded ? 0 : -1,
-        children: [(0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+        children: [(0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
           children: name
-        }), (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+        }), (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
           "aria-label": slugs.length === 1 ? strings.match_single : (0,_helpers__WEBPACK_IMPORTED_MODULE_1__.formatString)(strings.match_multiple, {
             count: slugs.length
           }),
           children: slugs.length
         })]
-      }), !!(children === null || children === void 0 ? void 0 : children.length) && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
+      }), !!(children === null || children === void 0 ? void 0 : children.length) && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
         className: "tsml-dropdown__expand",
         "data-expanded": expanded.includes(key),
         onClick: e => toggleExpanded(e, key),
         "aria-label": expanded.includes(key) ? strings.collapse : strings.expand
       })]
-    }), !!(children === null || children === void 0 ? void 0 : children.length) && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+    }), !!(children === null || children === void 0 ? void 0 : children.length) && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
       className: "tsml-dropdown__children",
       "data-expanded": expanded.includes(key),
       children: children.map(child => renderDropdownItem(child, expanded.includes(key)))
@@ -3674,11 +3646,11 @@ function Dropdown({
   const special = {
     type: ['active', 'in-person', 'online']
   };
-  return (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
-    css: _styles__WEBPACK_IMPORTED_MODULE_2__.dropdownCss,
-    children: [(0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
+  return (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+    css: _styles__WEBPACK_IMPORTED_MODULE_3__.dropdownCss,
+    children: [(0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
       "aria-expanded": open,
-      css: _styles__WEBPACK_IMPORTED_MODULE_2__.dropdownButtonCss,
+      css: _styles__WEBPACK_IMPORTED_MODULE_3__.dropdownButtonCss,
       id: filter,
       onClick: e => {
         setDropdown(open ? undefined : filter);
@@ -3688,16 +3660,16 @@ function Dropdown({
         var _a;
         return (_a = (0,_helpers__WEBPACK_IMPORTED_MODULE_1__.getIndexByKey)(options, value)) === null || _a === void 0 ? void 0 : _a.name;
       }).join(' + ') : defaultValue
-    }), (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+    }), (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
       "aria-labelledby": filter,
       className: "tsml-dropdown",
       style: {
         display: open ? 'block' : 'none'
       },
-      children: [(0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+      children: [(0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
         "data-active": !values.length,
         className: "tsml-dropdown__item",
-        children: (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
+        children: (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
           className: "tsml-dropdown__button",
           onClick: e => setFilter(e, filter, undefined),
           children: defaultValue
@@ -3711,8 +3683,8 @@ function Dropdown({
       }), options === null || options === void 0 ? void 0 : options.filter(option => {
         var _a;
         return !((_a = special[filter]) === null || _a === void 0 ? void 0 : _a.includes(option.key));
-      })].filter(e => e.length).map((group, index) => (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
-        children: [(0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("hr", {}), group.map(option => renderDropdownItem(option))]
+      })].filter(e => e.length).map((group, index) => (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
+        children: [(0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("hr", {}), group.map(option => renderDropdownItem(option))]
       }, index))]
     })]
   });
@@ -3836,47 +3808,47 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ Link)
 /* harmony export */ });
-/* harmony import */ var _emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @emotion/react/jsx-runtime */ "./node_modules/@emotion/react/jsx-runtime/dist/emotion-react-jsx-runtime.browser.esm.js");
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/development/chunk-AYJ5UCUI.mjs");
-/* harmony import */ var _helpers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../helpers */ "./src/helpers/index.ts");
+/* harmony import */ var _emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @emotion/react/jsx-runtime */ "./node_modules/@emotion/react/jsx-runtime/dist/emotion-react-jsx-runtime.browser.esm.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/development/chunk-AYJ5UCUI.mjs");
+/* harmony import */ var _hooks__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../hooks */ "./src/hooks/index.ts");
 
 
 
 function Link({
-  meeting,
-  setState,
-  state
+  meeting
 }) {
   var _a, _b;
   const {
+    meeting: thisMeeting
+  } = (0,_hooks__WEBPACK_IMPORTED_MODULE_0__.useData)();
+  const {
     settings,
     strings
-  } = (0,_helpers__WEBPACK_IMPORTED_MODULE_0__.useSettings)();
+  } = (0,_hooks__WEBPACK_IMPORTED_MODULE_0__.useSettings)();
+  const [searchParams] = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_1__.useSearchParams)();
   const flags = (_b = (_a = settings.flags) === null || _a === void 0 ? void 0 : _a.filter(flag => {
     var _a;
     return (_a = meeting.types) === null || _a === void 0 ? void 0 : _a.includes(flag);
   }).map(flag => strings.types[flag]).sort().join(', ')) !== null && _b !== void 0 ? _b : [];
-  if (!state || !setState) {
-    return !flags.length ? (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.Fragment, {
+  if ((thisMeeting === null || thisMeeting === void 0 ? void 0 : thisMeeting.slug) === meeting.slug) {
+    return !flags.length ? (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.Fragment, {
       children: meeting.name
-    }) : (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)(_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.Fragment, {
-      children: [(0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
+    }) : (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.Fragment, {
+      children: [(0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
         children: meeting.name
-      }), (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("small", {
+      }), (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("small", {
         children: flags
       })]
     });
   }
-  return (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)(_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.Fragment, {
-    children: [(0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.NavLink, {
-      to: (0,_helpers__WEBPACK_IMPORTED_MODULE_0__.formatUrl)(Object.assign(Object.assign({}, state.input), {
-        meeting: meeting.slug
-      }), settings),
+  return (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.Fragment, {
+    children: [(0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_1__.NavLink, {
+      to: `${new URLSearchParams(searchParams).set('meeting', meeting.slug)}`,
       onClick: e => {
         e.stopPropagation();
       },
       children: meeting.name
-    }), flags && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("small", {
+    }), flags && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("small", {
       children: flags
     })]
   });
@@ -3921,21 +3893,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ Map)
 /* harmony export */ });
-/* harmony import */ var _emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @emotion/react/jsx-runtime */ "./node_modules/@emotion/react/jsx-runtime/dist/emotion-react-jsx-runtime.browser.esm.js");
+/* harmony import */ var _emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @emotion/react/jsx-runtime */ "./node_modules/@emotion/react/jsx-runtime/dist/emotion-react-jsx-runtime.browser.esm.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _helpers__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../helpers */ "./src/helpers/index.ts");
-/* harmony import */ var _styles__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../styles */ "./src/styles/index.ts");
-/* harmony import */ var _Button__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Button */ "./src/components/Button.tsx");
-/* harmony import */ var _Link__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Link */ "./src/components/Link.tsx");
-/* harmony import */ var react_leaflet__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react-leaflet */ "./node_modules/react-leaflet/lib/MapContainer.js");
-/* harmony import */ var react_leaflet__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react-leaflet */ "./node_modules/react-leaflet/lib/TileLayer.js");
-/* harmony import */ var react_leaflet__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! react-leaflet */ "./node_modules/react-leaflet/lib/Marker.js");
-/* harmony import */ var react_leaflet__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! react-leaflet */ "./node_modules/react-leaflet/lib/hooks.js");
-/* harmony import */ var react_leaflet__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! react-leaflet */ "./node_modules/react-leaflet/lib/Popup.js");
-/* harmony import */ var leaflet__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! leaflet */ "./node_modules/leaflet/dist/leaflet-src.js");
-/* harmony import */ var leaflet__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(leaflet__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var leaflet_dist_leaflet_css__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! leaflet/dist/leaflet.css */ "./node_modules/leaflet/dist/leaflet.css");
+/* harmony import */ var leaflet__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! leaflet */ "./node_modules/leaflet/dist/leaflet-src.js");
+/* harmony import */ var leaflet__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(leaflet__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var leaflet_dist_leaflet_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! leaflet/dist/leaflet.css */ "./node_modules/leaflet/dist/leaflet.css");
+/* harmony import */ var react_leaflet__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! react-leaflet */ "./node_modules/react-leaflet/lib/MapContainer.js");
+/* harmony import */ var react_leaflet__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! react-leaflet */ "./node_modules/react-leaflet/lib/TileLayer.js");
+/* harmony import */ var react_leaflet__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! react-leaflet */ "./node_modules/react-leaflet/lib/Marker.js");
+/* harmony import */ var react_leaflet__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! react-leaflet */ "./node_modules/react-leaflet/lib/hooks.js");
+/* harmony import */ var react_leaflet__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! react-leaflet */ "./node_modules/react-leaflet/lib/Popup.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/development/chunk-AYJ5UCUI.mjs");
+/* harmony import */ var _helpers__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../helpers */ "./src/helpers/index.ts");
+/* harmony import */ var _hooks__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../hooks */ "./src/hooks/index.ts");
+/* harmony import */ var _styles__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../styles */ "./src/styles/index.ts");
+/* harmony import */ var _Button__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./Button */ "./src/components/Button.tsx");
+/* harmony import */ var _Link__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./Link */ "./src/components/Link.tsx");
 
 
 
@@ -3945,22 +3919,25 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-function Map({
-  filteredSlugs,
-  listMeetingsInPopup = true,
-  setState,
-  state
-}) {
+
+
+function Map() {
   const [locations, setLocations] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
   const {
     settings
-  } = (0,_helpers__WEBPACK_IMPORTED_MODULE_1__.useSettings)();
+  } = (0,_hooks__WEBPACK_IMPORTED_MODULE_4__.useSettings)();
   const [darkMode, setDarkMode] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(window.matchMedia('(prefers-color-scheme: dark)').matches);
   const {
+    filteredSlugs,
     latitude,
-    longitude,
-    mode
-  } = state.input;
+    longitude
+  } = (0,_hooks__WEBPACK_IMPORTED_MODULE_4__.useFilter)();
+  const {
+    meeting,
+    meetings
+  } = (0,_hooks__WEBPACK_IMPORTED_MODULE_4__.useData)();
+  const [searchParams] = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_8__.useSearchParams)();
+  const input = (0,_hooks__WEBPACK_IMPORTED_MODULE_4__.useInput)();
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
     const handleChange = ({
@@ -3976,14 +3953,14 @@ function Map({
   // reset locations when filteredSlugs changes
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     const locations = {};
-    filteredSlugs.forEach(slug => {
-      const meeting = state.meetings[slug];
+    filteredSlugs === null || filteredSlugs === void 0 ? void 0 : filteredSlugs.forEach(slug => {
+      const meeting = meetings[slug];
       if ((meeting === null || meeting === void 0 ? void 0 : meeting.latitude) && (meeting === null || meeting === void 0 ? void 0 : meeting.longitude) && (meeting === null || meeting === void 0 ? void 0 : meeting.isInPerson)) {
         const coords = meeting.latitude + ',' + meeting.longitude;
         // create a new pin
         if (!locations[coords]) {
           locations[coords] = {
-            directions_url: (0,_helpers__WEBPACK_IMPORTED_MODULE_1__.formatDirectionsUrl)(meeting),
+            directions_url: (0,_helpers__WEBPACK_IMPORTED_MODULE_3__.formatDirectionsUrl)(meeting),
             formatted_address: meeting.formatted_address,
             key: coords,
             latitude: meeting.latitude,
@@ -3999,24 +3976,25 @@ function Map({
     // quick reference array (sort so southern pins appear in front)
     setLocations(Object.values(locations).sort((a, b) => a.latitude - b.latitude));
   }, [filteredSlugs]);
-  return (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+  if (meeting || input.view !== 'map') {
+    return null;
+  }
+  return (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
     "aria-hidden": true,
-    css: _styles__WEBPACK_IMPORTED_MODULE_2__.mapCss,
-    children: !!locations.length && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)(react_leaflet__WEBPACK_IMPORTED_MODULE_8__.MapContainer, {
+    css: _styles__WEBPACK_IMPORTED_MODULE_5__.mapCss,
+    children: !!locations.length && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)(react_leaflet__WEBPACK_IMPORTED_MODULE_10__.MapContainer, {
       style: {
         height: '100%',
-        width: '100%'
+        width: '100%',
+        position: 'absolute'
       },
       zoomControl: !('ontouchstart' in window || !!window.TouchEvent),
-      children: [(0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(react_leaflet__WEBPACK_IMPORTED_MODULE_9__.TileLayer, Object.assign({}, settings.map.tiles_dark && darkMode ? settings.map.tiles_dark : settings.map.tiles)), (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(Markers, {
-        listMeetingsInPopup: listMeetingsInPopup,
-        locations: locations,
-        state: state,
-        setState: setState
-      }), latitude && longitude && mode === 'location' && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(react_leaflet__WEBPACK_IMPORTED_MODULE_10__.Marker, {
+      children: [(0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(react_leaflet__WEBPACK_IMPORTED_MODULE_11__.TileLayer, Object.assign({}, settings.map.tiles_dark && darkMode ? settings.map.tiles_dark : settings.map.tiles)), (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(Markers, {
+        locations: locations
+      }), latitude && longitude && searchParams.get('mode') === 'location' && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(react_leaflet__WEBPACK_IMPORTED_MODULE_12__.Marker, {
         icon: mapMarkerIcon(settings.map.markers.geocode),
         position: [latitude, longitude]
-      }), latitude && longitude && mode === 'me' && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(react_leaflet__WEBPACK_IMPORTED_MODULE_10__.Marker, {
+      }), latitude && longitude && searchParams.get('mode') === 'me' && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(react_leaflet__WEBPACK_IMPORTED_MODULE_12__.Marker, {
         icon: mapMarkerIcon(settings.map.markers.geolocation),
         position: [latitude, longitude]
       })]
@@ -4024,16 +4002,16 @@ function Map({
   });
 }
 const Markers = ({
-  listMeetingsInPopup,
-  locations,
-  state,
-  setState
+  locations
 }) => {
-  const map = (0,react_leaflet__WEBPACK_IMPORTED_MODULE_11__.useMap)();
+  const map = (0,react_leaflet__WEBPACK_IMPORTED_MODULE_13__.useMap)();
+  const {
+    meeting
+  } = (0,_hooks__WEBPACK_IMPORTED_MODULE_4__.useData)();
   const {
     settings,
     strings
-  } = (0,_helpers__WEBPACK_IMPORTED_MODULE_1__.useSettings)();
+  } = (0,_hooks__WEBPACK_IMPORTED_MODULE_4__.useSettings)();
   const markerRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   const markerIcon = mapMarkerIcon(settings.map.markers.location);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
@@ -4053,33 +4031,31 @@ const Markers = ({
       });
     }
   }, [locations]);
-  return locations.map(location => (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(react_leaflet__WEBPACK_IMPORTED_MODULE_10__.Marker, {
+  return locations.map(location => (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(react_leaflet__WEBPACK_IMPORTED_MODULE_12__.Marker, {
     position: [location.latitude, location.longitude],
     ref: locations.length === 1 ? markerRef : null,
     icon: markerIcon,
-    children: (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)(react_leaflet__WEBPACK_IMPORTED_MODULE_12__.Popup, {
-      children: [(0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("h2", {
+    children: (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)(react_leaflet__WEBPACK_IMPORTED_MODULE_14__.Popup, {
+      children: [(0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("h2", {
         children: location.name
-      }), (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("p", {
+      }), (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("p", {
         className: "notranslate",
         children: location.formatted_address
-      }), listMeetingsInPopup && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
-        css: _styles__WEBPACK_IMPORTED_MODULE_2__.mapPopupMeetingsCss,
+      }), !meeting && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
+        css: _styles__WEBPACK_IMPORTED_MODULE_5__.mapPopupMeetingsCss,
         children: location.meetings.sort((a, b) => a.start && b.start && a.start > b.start ? 1 : 0).map((meeting, index) => {
           var _a, _b;
-          return (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
-            children: [(0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("time", {
-              children: [(_a = meeting.start) === null || _a === void 0 ? void 0 : _a.toFormat('t'), (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("span", {
+          return (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
+            children: [(0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("time", {
+              children: [(_a = meeting.start) === null || _a === void 0 ? void 0 : _a.toFormat('t'), (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("span", {
                 children: (_b = meeting.start) === null || _b === void 0 ? void 0 : _b.toFormat('cccc')
               })]
-            }), (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_Link__WEBPACK_IMPORTED_MODULE_4__["default"], {
-              meeting: meeting,
-              setState: setState,
-              state: state
+            }), (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_Link__WEBPACK_IMPORTED_MODULE_7__["default"], {
+              meeting: meeting
             })]
           }, index);
         })
-      }), location.directions_url && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_Button__WEBPACK_IMPORTED_MODULE_3__["default"], {
+      }), location.directions_url && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_Button__WEBPACK_IMPORTED_MODULE_6__["default"], {
         href: location.directions_url,
         icon: "geo",
         text: strings.get_directions,
@@ -4092,11 +4068,11 @@ const mapMarkerIcon = ({
   height,
   html,
   width
-}) => leaflet__WEBPACK_IMPORTED_MODULE_5___default().divIcon({
+}) => leaflet__WEBPACK_IMPORTED_MODULE_1___default().divIcon({
   className: 'tsml-ui-marker',
   html,
   iconAnchor: [width / 2, height / 2],
-  iconSize: new (leaflet__WEBPACK_IMPORTED_MODULE_5___default().Point)(width, height)
+  iconSize: new (leaflet__WEBPACK_IMPORTED_MODULE_1___default().Point)(width, height)
 });
 
 /***/ }),
@@ -4112,8 +4088,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ Meeting)
 /* harmony export */ });
-/* harmony import */ var _emotion_react__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @emotion/react */ "./node_modules/@emotion/react/dist/emotion-react.browser.esm.js");
-/* harmony import */ var _emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @emotion/react/jsx-runtime */ "./node_modules/@emotion/react/jsx-runtime/dist/emotion-react-jsx-runtime.browser.esm.js");
+/* harmony import */ var _emotion_react__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @emotion/react */ "./node_modules/@emotion/react/dist/emotion-react.browser.esm.js");
+/* harmony import */ var _emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @emotion/react/jsx-runtime */ "./node_modules/@emotion/react/jsx-runtime/dist/emotion-react-jsx-runtime.browser.esm.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var luxon__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! luxon */ "./node_modules/luxon/src/luxon.js");
@@ -4124,6 +4100,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Icon__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Icon */ "./src/components/Icon.tsx");
 /* harmony import */ var _Link__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./Link */ "./src/components/Link.tsx");
 /* harmony import */ var _Map__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./Map */ "./src/components/Map.tsx");
+/* harmony import */ var _hooks__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../hooks */ "./src/hooks/index.ts");
 
 
 
@@ -4135,19 +4112,22 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-function Meeting({
-  setState,
-  state
-}) {
+
+function Meeting() {
   var _a, _b, _c;
   const {
     settings,
     strings
-  } = (0,_helpers__WEBPACK_IMPORTED_MODULE_2__.useSettings)();
+  } = (0,_hooks__WEBPACK_IMPORTED_MODULE_8__.useSettings)();
+  const [searchParams] = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_9__.useSearchParams)();
   // open types
   const [define, setDefine] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)();
-  // existence checked in the parent component
-  const meeting = state.meetings[state.input.meeting];
+  const {
+    capabilities,
+    meeting,
+    meetings
+  } = (0,_hooks__WEBPACK_IMPORTED_MODULE_8__.useData)();
+  if (!meeting) return null;
   const sharePayload = {
     title: meeting.name,
     url: (_a = meeting.url) !== null && _a !== void 0 ? _a : location.href
@@ -4159,16 +4139,13 @@ function Meeting({
   if ('string' === typeof meeting.feedback_emails) {
     feedback_emails = meeting.feedback_emails.split(',').map(e => e.trim()).filter(e => e);
   }
-  let feedback_url;
-  if (!meeting.feedback_url && feedback_emails.length) {
-    feedback_url = (0,_helpers__WEBPACK_IMPORTED_MODULE_2__.formatFeedbackEmail)({
-      feedback_emails,
-      name: meeting.name,
-      edit_url: meeting.edit_url,
-      settings,
-      strings
-    });
-  }
+  const feedback_url = meeting.feedback_url ? meeting.feedback_url : feedback_emails.length ? (0,_helpers__WEBPACK_IMPORTED_MODULE_2__.formatFeedbackEmail)({
+    feedback_emails,
+    name: meeting.name,
+    edit_url: meeting.edit_url,
+    settings,
+    strings
+  }) : undefined;
   // format time string (duration? or appointment?)
   const formatTime = (start, end) => {
     if (!start) {
@@ -4202,7 +4179,7 @@ function Meeting({
     return () => {
       wordPressEditLink();
     };
-  }, [state.input.meeting]);
+  }, [meeting]);
   // directions URL link
   const directionsUrl = meeting.isInPerson ? (0,_helpers__WEBPACK_IMPORTED_MODULE_2__.formatDirectionsUrl)(meeting) : undefined;
   // set page title
@@ -4287,7 +4264,7 @@ function Meeting({
   }
   const locationWeekdays = luxon__WEBPACK_IMPORTED_MODULE_1__.Info.weekdays().map((weekday, index) => ({
     name: weekday,
-    meetings: Object.values(state.meetings).filter(m => {
+    meetings: Object.values(meetings).filter(m => {
       var _a;
       return ((_a = m.start) === null || _a === void 0 ? void 0 : _a.weekday) === index + 1;
     }).filter(m => meeting.isInPerson && m.isInPerson && m.formatted_address === meeting.formatted_address).sort((a, b) => !a.start ? -1 : !b.start ? 1 : a.start.toMillis() - b.start.toMillis())
@@ -4298,7 +4275,7 @@ function Meeting({
   }
   const groupWeekdays = luxon__WEBPACK_IMPORTED_MODULE_1__.Info.weekdays().map((weekday, index) => ({
     name: weekday,
-    meetings: Object.values(state.meetings).filter(m => {
+    meetings: Object.values(meetings).filter(m => {
       var _a;
       return ((_a = m.start) === null || _a === void 0 ? void 0 : _a.weekday) === index + 1;
     }).filter(m => meeting.group && (m.isOnline || m.isInPerson) && m.group === meeting.group).sort((a, b) => !a.start ? -1 : !b.start ? 1 : a.start.toMillis() - b.start.toMillis())
@@ -4307,161 +4284,147 @@ function Meeting({
   if (groupWeekdays.length === 1 && groupWeekdays[0].meetings.length === 1) {
     groupWeekdays.splice(0, 1);
   }
-  return (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+  return (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
     css: _styles__WEBPACK_IMPORTED_MODULE_3__.meetingCss,
-    children: [(0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("h1", {
+    children: [(0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("h1", {
       id: "tsml-title",
       tabIndex: -1,
-      children: (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Link__WEBPACK_IMPORTED_MODULE_6__["default"], {
+      children: (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_Link__WEBPACK_IMPORTED_MODULE_6__["default"], {
         meeting: meeting
       })
-    }), (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+    }), (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
       css: _styles__WEBPACK_IMPORTED_MODULE_3__.meetingBackCss,
-      children: [(0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Icon__WEBPACK_IMPORTED_MODULE_5__["default"], {
+      children: [(0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_Icon__WEBPACK_IMPORTED_MODULE_5__["default"], {
         icon: "back"
-      }), (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_9__.Link, {
-        to: (0,_helpers__WEBPACK_IMPORTED_MODULE_2__.formatUrl)(Object.assign(Object.assign({}, state.input), {
-          meeting: undefined
-        }), settings),
-        onClick: () => {
-          setState(Object.assign(Object.assign({}, state), {
-            input: Object.assign(Object.assign({}, state.input), {
-              meeting: undefined
-            })
-          }));
-        },
+      }), (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_9__.Link, {
+        to: `${new URLSearchParams(searchParams).delete('meeting')}`,
         children: strings.back_to_meetings
       })]
-    }), (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+    }), (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
       css: _styles__WEBPACK_IMPORTED_MODULE_3__.meetingColumnsCss,
-      children: [(0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
-        children: [directionsUrl && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Button__WEBPACK_IMPORTED_MODULE_4__["default"], {
+      children: [(0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
+        children: [directionsUrl && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_Button__WEBPACK_IMPORTED_MODULE_4__["default"], {
           href: directionsUrl,
           icon: "geo",
           text: strings.get_directions,
           type: "in-person"
-        }), (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
-          children: [(0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
-            children: [(0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("h2", {
+        }), (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
+          children: [(0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
+            children: [(0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("h2", {
               children: strings.meeting_information
-            }), (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("p", {
+            }), (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("p", {
               children: formatTime(meeting.start, meeting.end)
-            }), meeting.start && meeting.start.zoneName !== meeting.timezone && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("p", {
+            }), meeting.start && meeting.start.zoneName !== meeting.timezone && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("p", {
               children: ["(", formatTime(meeting.start.setZone(meeting.timezone), (_b = meeting.end) === null || _b === void 0 ? void 0 : _b.setZone(meeting.timezone)), ")"]
-            }), state.capabilities.type && meeting.types && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("ul", {
+            }), capabilities.type && meeting.types && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("ul", {
               children: meeting.types.filter(type => type !== 'active').sort((a, b) => strings.types[a].localeCompare(strings.types[b])).map((type, index) => {
                 var _a;
-                return (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("li", {
-                  children: ((_a = strings.type_descriptions) === null || _a === void 0 ? void 0 : _a[type]) ? (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("button", {
+                return (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("li", {
+                  children: ((_a = strings.type_descriptions) === null || _a === void 0 ? void 0 : _a[type]) ? (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("button", {
                     onClick: () => setDefine(define === type ? undefined : type),
-                    children: [(0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
-                      children: [(0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
+                    children: [(0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
+                      children: [(0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
                         children: strings.types[type]
-                      }), (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Icon__WEBPACK_IMPORTED_MODULE_5__["default"], {
+                      }), (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_Icon__WEBPACK_IMPORTED_MODULE_5__["default"], {
                         icon: "info",
                         size: 13
                       })]
-                    }), define === type && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("small", {
+                    }), define === type && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("small", {
                       children: strings.type_descriptions[type]
                     })]
                   }) : strings.types[type]
                 }, index);
               })
-            }), meeting.notes && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(Paragraphs, {
+            }), meeting.notes && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(Paragraphs, {
               text: meeting.notes
-            }), (meeting.isActive || !meeting.group && !!contactButtons.length) && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)(_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.Fragment, {
-              children: [meeting.conference_provider && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+            }), (meeting.isActive || !meeting.group && !!contactButtons.length) && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)(_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.Fragment, {
+              children: [meeting.conference_provider && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
                 css: _styles__WEBPACK_IMPORTED_MODULE_3__.buttonHelpCss,
-                children: [(0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Button__WEBPACK_IMPORTED_MODULE_4__["default"], {
+                children: [(0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_Button__WEBPACK_IMPORTED_MODULE_4__["default"], {
                   href: meeting.conference_url,
                   icon: "camera",
                   text: meeting.conference_provider,
                   type: "online"
-                }), meeting.conference_url_notes && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(Paragraphs, {
+                }), meeting.conference_url_notes && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(Paragraphs, {
                   text: meeting.conference_url_notes
                 })]
-              }), meeting.conference_phone && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+              }), meeting.conference_phone && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
                 css: _styles__WEBPACK_IMPORTED_MODULE_3__.buttonHelpCss,
-                children: [(0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Button__WEBPACK_IMPORTED_MODULE_4__["default"], {
+                children: [(0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_Button__WEBPACK_IMPORTED_MODULE_4__["default"], {
                   href: `tel:${meeting.conference_phone}`,
                   icon: "phone",
                   text: strings.phone,
                   type: "online"
-                }), meeting.conference_phone_notes && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(Paragraphs, {
+                }), meeting.conference_phone_notes && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(Paragraphs, {
                   text: meeting.conference_phone_notes
                 })]
-              }), state.capabilities.sharing && navigator.canShare(sharePayload) && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Button__WEBPACK_IMPORTED_MODULE_4__["default"], {
+              }), capabilities.sharing && navigator.canShare(sharePayload) && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_Button__WEBPACK_IMPORTED_MODULE_4__["default"], {
                 icon: "share",
                 onClick: () => navigator.share(sharePayload).catch(() => {}),
                 text: strings.share
-              }), meeting.start && meeting.isActive && settings.calendar_enabled && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Button__WEBPACK_IMPORTED_MODULE_4__["default"], {
+              }), meeting.start && meeting.isActive && settings.calendar_enabled && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_Button__WEBPACK_IMPORTED_MODULE_4__["default"], {
                 icon: "calendar",
                 onClick: () => (0,_helpers__WEBPACK_IMPORTED_MODULE_2__.formatIcs)(meeting),
                 text: strings.add_to_calendar
-              }), !meeting.group && contactButtons.map((button, index) => (0,_emotion_react__WEBPACK_IMPORTED_MODULE_10__.createElement)(_Button__WEBPACK_IMPORTED_MODULE_4__["default"], Object.assign({}, button, {
+              }), !meeting.group && contactButtons.map((button, index) => (0,_emotion_react__WEBPACK_IMPORTED_MODULE_11__.createElement)(_Button__WEBPACK_IMPORTED_MODULE_4__["default"], Object.assign({}, button, {
                 key: index
               })))]
             })]
-          }), !meeting.approximate && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+          }), !meeting.approximate && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
             "data-disabled": meeting.isTempClosed,
-            children: [meeting.location && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("h2", {
+            children: [meeting.location && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("h2", {
               children: meeting.location
-            }), meeting.formatted_address && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("p", {
+            }), meeting.formatted_address && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("p", {
               className: "notranslate",
               children: meeting.formatted_address
-            }), !!((_c = meeting.regions) === null || _c === void 0 ? void 0 : _c.length) && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("p", {
+            }), !!((_c = meeting.regions) === null || _c === void 0 ? void 0 : _c.length) && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("p", {
               children: meeting.regions.join(' > ')
-            }), meeting.location_notes && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(Paragraphs, {
+            }), meeting.location_notes && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(Paragraphs, {
               text: meeting.location_notes
-            }), formatWeekdays(locationWeekdays, meeting.slug, state, setState)]
-          }), meeting.group && (meeting.district || meeting.group_notes || !!groupWeekdays.length || !!contactButtons.length) && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
-            children: [(0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("h2", {
+            }), formatWeekdays(locationWeekdays, meeting.slug)]
+          }), meeting.group && (meeting.district || meeting.group_notes || !!groupWeekdays.length || !!contactButtons.length) && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
+            children: [(0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("h2", {
               children: meeting.group
-            }), meeting.district && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("p", {
+            }), meeting.district && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("p", {
               children: meeting.district
-            }), meeting.group_notes && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(Paragraphs, {
+            }), meeting.group_notes && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(Paragraphs, {
               text: meeting.group_notes
-            }), contactButtons.map((button, index) => (0,_emotion_react__WEBPACK_IMPORTED_MODULE_10__.createElement)(_Button__WEBPACK_IMPORTED_MODULE_4__["default"], Object.assign({}, button, {
+            }), contactButtons.map((button, index) => (0,_emotion_react__WEBPACK_IMPORTED_MODULE_11__.createElement)(_Button__WEBPACK_IMPORTED_MODULE_4__["default"], Object.assign({}, button, {
               key: index
-            }))), formatWeekdays(groupWeekdays, meeting.slug, state, setState)]
-          }), (meeting.updated || feedback_url || meeting.entity) && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
-            children: [meeting.entity && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)(_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.Fragment, {
-              children: [(0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("small", {
+            }))), formatWeekdays(groupWeekdays, meeting.slug)]
+          }), (meeting.updated || feedback_url || meeting.entity) && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
+            children: [meeting.entity && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)(_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.Fragment, {
+              children: [(0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("small", {
                 children: strings.provided_by
-              }), (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("header", {
-                children: [(0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("h2", {
+              }), (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("header", {
+                children: [(0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("h2", {
                   children: meeting.entity
-                }), meeting.entity_location && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("p", {
+                }), meeting.entity_location && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("p", {
                   children: meeting.entity_location
                 })]
-              }), meeting.entity_phone && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Button__WEBPACK_IMPORTED_MODULE_4__["default"], {
+              }), meeting.entity_phone && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_Button__WEBPACK_IMPORTED_MODULE_4__["default"], {
                 href: `tel:${meeting.entity_phone}`,
                 text: meeting.entity_phone,
                 icon: "phone"
-              }), meeting.entity_url && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Button__WEBPACK_IMPORTED_MODULE_4__["default"], {
+              }), meeting.entity_url && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_Button__WEBPACK_IMPORTED_MODULE_4__["default"], {
                 href: meeting.entity_url,
                 text: new URL(meeting.entity_url).host.replace('www.', ''),
                 icon: "link"
               })]
-            }), feedback_url && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Button__WEBPACK_IMPORTED_MODULE_4__["default"], {
+            }), feedback_url && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_Button__WEBPACK_IMPORTED_MODULE_4__["default"], {
               href: feedback_url,
               icon: "edit",
               text: strings.feedback
-            }), meeting.updated && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("p", {
+            }), meeting.updated && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("p", {
               children: (0,_helpers__WEBPACK_IMPORTED_MODULE_2__.formatString)(strings.updated, {
                 updated: meeting.updated
               })
             })]
           })]
         })]
-      }), (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+      }), (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
         css: meeting.isOnline && !meeting.isInPerson ? _styles__WEBPACK_IMPORTED_MODULE_3__.meetingOnlineCss : undefined,
-        children: (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Map__WEBPACK_IMPORTED_MODULE_7__["default"], {
-          filteredSlugs: [meeting.slug],
-          listMeetingsInPopup: false,
-          state: state,
-          setState: setState
-        })
+        children: (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_Map__WEBPACK_IMPORTED_MODULE_7__["default"], {})
       })]
     })]
   });
@@ -4470,46 +4433,44 @@ function Meeting({
 function Paragraphs({
   text
 }) {
-  return (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
-    children: text.split('\n').filter(e => e).map((p, index) => (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("p", {
+  return (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
+    children: text.split('\n').filter(e => e).map((p, index) => (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("p", {
       children: p
     }, index))
   });
 }
-function formatWeekdays(weekday, slug, state, setState) {
+function formatWeekdays(weekday, slug) {
   return weekday.map(({
     meetings,
     name
-  }, index) => (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
-    children: [(0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("h3", {
+  }, index) => (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
+    children: [(0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("h3", {
       children: name
-    }), (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("ol", {
+    }), (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("ol", {
       children: meetings.map((m, index) => {
         var _a;
-        return (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("li", {
-          children: [(0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+        return (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("li", {
+          children: [(0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
             children: (_a = m.start) === null || _a === void 0 ? void 0 : _a.toFormat('t')
-          }), (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
-            children: m.slug === slug ? (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Link__WEBPACK_IMPORTED_MODULE_6__["default"], {
+          }), (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
+            children: m.slug === slug ? (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_Link__WEBPACK_IMPORTED_MODULE_6__["default"], {
               meeting: m
-            }) : (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Link__WEBPACK_IMPORTED_MODULE_6__["default"], {
-              meeting: m,
-              setState: setState,
-              state: state
+            }) : (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_Link__WEBPACK_IMPORTED_MODULE_6__["default"], {
+              meeting: m
             })
-          }), (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
-            children: [m.isInPerson && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("small", {
+          }), (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
+            children: [m.isInPerson && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("small", {
               css: (0,_styles__WEBPACK_IMPORTED_MODULE_3__.tableChicletCss)('in-person'),
-              children: (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Icon__WEBPACK_IMPORTED_MODULE_5__["default"], {
+              children: (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_Icon__WEBPACK_IMPORTED_MODULE_5__["default"], {
                 icon: "geo",
                 size: 13
               })
-            }), m.isOnline && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("small", {
+            }), m.isOnline && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("small", {
               css: (0,_styles__WEBPACK_IMPORTED_MODULE_3__.tableChicletCss)('online'),
-              children: [m.conference_provider && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Icon__WEBPACK_IMPORTED_MODULE_5__["default"], {
+              children: [m.conference_provider && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_Icon__WEBPACK_IMPORTED_MODULE_5__["default"], {
                 icon: "camera",
                 size: 13
-              }), m.conference_phone && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Icon__WEBPACK_IMPORTED_MODULE_5__["default"], {
+              }), m.conference_phone && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_Icon__WEBPACK_IMPORTED_MODULE_5__["default"], {
                 icon: "phone",
                 size: 13
               })]
@@ -4556,16 +4517,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ Table)
 /* harmony export */ });
-/* harmony import */ var _emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @emotion/react/jsx-runtime */ "./node_modules/@emotion/react/jsx-runtime/dist/emotion-react-jsx-runtime.browser.esm.js");
+/* harmony import */ var _emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @emotion/react/jsx-runtime */ "./node_modules/@emotion/react/jsx-runtime/dist/emotion-react-jsx-runtime.browser.esm.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_infinite_scroller__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-infinite-scroller */ "./node_modules/react-infinite-scroller/index.js");
 /* harmony import */ var react_infinite_scroller__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_infinite_scroller__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/development/chunk-AYJ5UCUI.mjs");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/development/chunk-AYJ5UCUI.mjs");
 /* harmony import */ var _helpers__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../helpers */ "./src/helpers/index.ts");
-/* harmony import */ var _styles__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../styles */ "./src/styles/index.ts");
-/* harmony import */ var _Icon__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Icon */ "./src/components/Icon.tsx");
-/* harmony import */ var _Link__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Link */ "./src/components/Link.tsx");
+/* harmony import */ var _hooks__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../hooks */ "./src/hooks/index.ts");
+/* harmony import */ var _styles__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../styles */ "./src/styles/index.ts");
+/* harmony import */ var _Icon__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Icon */ "./src/components/Icon.tsx");
+/* harmony import */ var _Link__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./Link */ "./src/components/Link.tsx");
 
 
 
@@ -4574,26 +4536,35 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-function Table({
-  filteredSlugs = [],
-  inProgress = [],
-  setState,
-  state
-}) {
+
+function Table() {
+  const {
+    capabilities,
+    meeting,
+    meetings
+  } = (0,_hooks__WEBPACK_IMPORTED_MODULE_3__.useData)();
+  const {
+    filteredSlugs,
+    inProgress
+  } = (0,_hooks__WEBPACK_IMPORTED_MODULE_3__.useFilter)();
   const {
     settings,
     strings
-  } = (0,_helpers__WEBPACK_IMPORTED_MODULE_2__.useSettings)();
-  const [_, setSearchParams] = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_6__.useSearchParams)();
+  } = (0,_hooks__WEBPACK_IMPORTED_MODULE_3__.useSettings)();
+  const input = (0,_hooks__WEBPACK_IMPORTED_MODULE_3__.useInput)();
+  const [_, setSearchParams] = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_7__.useSearchParams)();
   const meetingsPerPage = 10;
   const supported_columns = ['address', 'distance', 'location', 'location_group', 'name', 'region', 'time'];
   const [limit, setLimit] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(meetingsPerPage);
   const [showInProgress, setShowInProgress] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  if (meeting || input.view !== 'table') {
+    return null;
+  }
   const {
     distance,
     location,
     region
-  } = state.capabilities;
+  } = capabilities;
   //show columns based on capabilities
   const columns = settings.columns.filter(col => supported_columns.includes(col)).filter(col => region || col !== 'region').filter(col => distance || col !== 'distance').filter(col => location || !['location', 'location_group'].includes(col));
   const getValue = (meeting, key) => {
@@ -4628,29 +4599,29 @@ function Table({
           type: 'inactive'
         });
       }
-      return (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
-        css: _styles__WEBPACK_IMPORTED_MODULE_3__.tableChicletsCss,
+      return (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+        css: _styles__WEBPACK_IMPORTED_MODULE_4__.tableChicletsCss,
         children: attendance.map(({
           icon,
           text,
           type,
           noTranslate
-        }, index) => (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("span", {
-          css: (0,_styles__WEBPACK_IMPORTED_MODULE_3__.tableChicletCss)(type),
-          children: [(0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_Icon__WEBPACK_IMPORTED_MODULE_4__["default"], {
+        }, index) => (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("span", {
+          css: (0,_styles__WEBPACK_IMPORTED_MODULE_4__.tableChicletCss)(type),
+          children: [(0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Icon__WEBPACK_IMPORTED_MODULE_5__["default"], {
             icon: icon,
             size: 18
-          }), text && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("span", {
+          }), text && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
             className: noTranslate ? 'notranslate' : undefined,
             children: text
           })]
         }, index))
       });
     } else if (key === 'distance' && meeting.distance) {
-      return (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
-        children: [(0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("span", {
+      return (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+        children: [(0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
           children: meeting.distance.toLocaleString(navigator.language)
-        }), (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("small", {
+        }), (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("small", {
           children: strings[settings.distance_unit]
         })]
       });
@@ -4659,18 +4630,16 @@ function Table({
     } else if (key === 'location_group') {
       return meeting.isInPerson ? meeting.location : meeting.group;
     } else if (key === 'name' && meeting.slug) {
-      return (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_Link__WEBPACK_IMPORTED_MODULE_5__["default"], {
-        meeting: meeting,
-        state: state,
-        setState: setState
+      return (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Link__WEBPACK_IMPORTED_MODULE_6__["default"], {
+        meeting: meeting
       });
     } else if (key === 'region' && meeting.regions) {
       return meeting.regions[meeting.regions.length - 1];
     } else if (key === 'time') {
-      return meeting.start ? (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("time", {
-        children: [(0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("span", {
+      return meeting.start ? (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("time", {
+        children: [(0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
           children: meeting.start.toFormat('t')
-        }), (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("span", {
+        }), (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
           children: meeting.start.toFormat('cccc')
         })]
       }) : strings.appointment;
@@ -4680,34 +4649,34 @@ function Table({
   const Row = ({
     slug
   }) => {
-    const meeting = state.meetings[slug];
-    return (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("tr", {
+    const meeting = meetings[slug];
+    return (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("tr", {
       onClick: () => setSearchParams({
         meeting: meeting.slug
       }),
-      children: columns.map((column, index) => (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("td", {
+      children: columns.map((column, index) => (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("td", {
         className: `tsml-${column}`,
         children: getValue(meeting, column)
       }, index))
     });
   };
-  return !filteredSlugs.length ? null : (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
-    css: _styles__WEBPACK_IMPORTED_MODULE_3__.tableWrapperCss,
-    children: (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("table", {
-      children: [(0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("thead", {
-        children: (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("tr", {
-          children: columns.map((column, index) => (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("th", {
+  return !(filteredSlugs === null || filteredSlugs === void 0 ? void 0 : filteredSlugs.length) ? null : (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+    css: _styles__WEBPACK_IMPORTED_MODULE_4__.tableWrapperCss,
+    children: (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("table", {
+      children: [(0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("thead", {
+        children: (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("tr", {
+          children: columns.map((column, index) => (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("th", {
             children: strings[column]
           }, index))
         })
-      }), !!inProgress.length && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("tbody", {
-        css: _styles__WEBPACK_IMPORTED_MODULE_3__.tableInProgressCss,
-        children: showInProgress ? inProgress.map((slug, index) => (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(Row, {
+      }), !!(inProgress === null || inProgress === void 0 ? void 0 : inProgress.length) && (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("tbody", {
+        css: _styles__WEBPACK_IMPORTED_MODULE_4__.tableInProgressCss,
+        children: showInProgress ? inProgress.map((slug, index) => (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(Row, {
           slug: slug
-        }, index)) : (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("tr", {
-          children: (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("td", {
+        }, index)) : (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("tr", {
+          children: (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("td", {
             colSpan: columns.length,
-            children: (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("button", {
+            children: (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("button", {
               onClick: () => setShowInProgress(true),
               children: inProgress.length === 1 ? strings.in_progress_single : (0,_helpers__WEBPACK_IMPORTED_MODULE_2__.formatString)(strings.in_progress_multiple, {
                 count: inProgress.length
@@ -4715,11 +4684,11 @@ function Table({
             })
           })
         })
-      }), (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)((react_infinite_scroller__WEBPACK_IMPORTED_MODULE_1___default()), {
+      }), (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)((react_infinite_scroller__WEBPACK_IMPORTED_MODULE_1___default()), {
         element: "tbody",
         hasMore: filteredSlugs.length > limit,
         loadMore: () => setLimit(limit + meetingsPerPage),
-        children: filteredSlugs.slice(0, limit).map((slug, index) => (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(Row, {
+        children: filteredSlugs.slice(0, limit).map((slug, index) => (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(Row, {
           slug: slug
         }, index))
       })]
@@ -4740,38 +4709,42 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ Title)
 /* harmony export */ });
-/* harmony import */ var _emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @emotion/react/jsx-runtime */ "./node_modules/@emotion/react/jsx-runtime/dist/emotion-react-jsx-runtime.browser.esm.js");
+/* harmony import */ var _emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @emotion/react/jsx-runtime */ "./node_modules/@emotion/react/jsx-runtime/dist/emotion-react-jsx-runtime.browser.esm.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/development/chunk-AYJ5UCUI.mjs");
 /* harmony import */ var _helpers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../helpers */ "./src/helpers/index.ts");
+/* harmony import */ var _hooks__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../hooks */ "./src/hooks/index.ts");
 
 
-function Title({
-  state: {
-    indexes,
-    input
-  }
-}) {
+
+
+function Title() {
+  const {
+    indexes
+  } = (0,_hooks__WEBPACK_IMPORTED_MODULE_1__.useData)();
+  const [searchParams] = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_2__.useSearchParams)();
   const {
     strings
-  } = (0,_helpers__WEBPACK_IMPORTED_MODULE_0__.useSettings)();
+  } = (0,_hooks__WEBPACK_IMPORTED_MODULE_1__.useSettings)();
   // build title from strings.title
   const parts = [];
   Object.keys(strings.title).forEach(key => {
+    var _a;
     if (key === 'meetings') {
       parts.push(strings.meetings);
-    } else if (key === 'search_with' && input.mode === 'search' && input.search) {
+    } else if (key === 'search_with' && searchParams.get('mode') === 'search' && searchParams.has('search')) {
       parts.push((0,_helpers__WEBPACK_IMPORTED_MODULE_0__.formatString)(strings.title.search_with, {
-        search: `‘${input.search}’`
+        search: `‘${searchParams.get('search')}’`
       }));
-    } else if (key === 'search_near' && input.mode === 'location' && input.search) {
+    } else if (key === 'search_near' && searchParams.get('mode') === 'location' && searchParams.has('search')) {
       parts.push((0,_helpers__WEBPACK_IMPORTED_MODULE_0__.formatString)(strings.title.search_near, {
-        search: `‘${input.search}’`
+        search: `‘${searchParams.get('search')}’`
       }));
-    } else if (indexes[key]) {
-      const value = input[key].map(value => {
+    } else if (searchParams.has(key) && indexes[key]) {
+      const value = (_a = searchParams.get(key)) === null || _a === void 0 ? void 0 : _a.split('/').map(value => {
         var _a;
         return (_a = (0,_helpers__WEBPACK_IMPORTED_MODULE_0__.getIndexByKey)(indexes[key], value)) === null || _a === void 0 ? void 0 : _a.name;
       }).join(' + ');
-      if (value.length) {
+      if (value === null || value === void 0 ? void 0 : value.length) {
         parts.push((0,_helpers__WEBPACK_IMPORTED_MODULE_0__.formatString)(strings.title[key], {
           [key]: value
         }));
@@ -4781,7 +4754,7 @@ function Title({
   const title = parts.join(' ');
   // set window title
   document.title = title;
-  return (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("h1", {
+  return (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("h1", {
     "aria-live": "polite",
     children: title
   });
@@ -4821,27 +4794,28 @@ function TsmlUI({
 }) {
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     console.log('TSML UI meeting finder: https://github.com/code4recovery/tsml-ui');
+    // add body class to help people style their pages
     document.body.classList.add('tsml-ui');
     return () => {
       document.body.classList.remove('tsml-ui');
     };
   }, []);
-  return (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(_hooks__WEBPACK_IMPORTED_MODULE_1__.SettingsProvider, {
+  return (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_hooks__WEBPACK_IMPORTED_MODULE_1__.SettingsProvider, {
     userSettings: userSettings,
-    children: [(0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_emotion_react__WEBPACK_IMPORTED_MODULE_5__.Global, {
-      styles: _styles__WEBPACK_IMPORTED_MODULE_2__.globalCss
-    }), (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(___WEBPACK_IMPORTED_MODULE_3__.DynamicHeight, {
-      children: (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_hooks__WEBPACK_IMPORTED_MODULE_1__.InputProvider, {
-        children: (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_hooks__WEBPACK_IMPORTED_MODULE_1__.DataProvider, {
-          google: google,
-          src: src,
-          timezone: timezone,
-          children: (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(FilterProvider, {
+    children: (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_hooks__WEBPACK_IMPORTED_MODULE_1__.InputProvider, {
+      children: (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_hooks__WEBPACK_IMPORTED_MODULE_1__.DataProvider, {
+        google: google,
+        src: src,
+        timezone: timezone,
+        children: (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(_hooks__WEBPACK_IMPORTED_MODULE_1__.FilterProvider, {
+          children: [(0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_emotion_react__WEBPACK_IMPORTED_MODULE_5__.Global, {
+            styles: _styles__WEBPACK_IMPORTED_MODULE_2__.globalCss
+          }), (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(___WEBPACK_IMPORTED_MODULE_3__.DynamicHeight, {
             children: [(0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(___WEBPACK_IMPORTED_MODULE_3__.Meeting, {}), (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(___WEBPACK_IMPORTED_MODULE_3__.Title, {}), (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(___WEBPACK_IMPORTED_MODULE_3__.Controls, {}), (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(___WEBPACK_IMPORTED_MODULE_3__.Alert, {}), (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(___WEBPACK_IMPORTED_MODULE_3__.Table, {}), (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(___WEBPACK_IMPORTED_MODULE_3__.Map, {})]
-          })
+          })]
         })
       })
-    })]
+    })
   });
 }
 
@@ -4956,19 +4930,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _flatten_and_sort_indexes__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./flatten-and-sort-indexes */ "./src/helpers/flatten-and-sort-indexes.ts");
 /* harmony import */ var _format_string__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./format-string */ "./src/helpers/format-string.ts");
+/* harmony import */ var _hooks__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../hooks */ "./src/hooks/index.ts");
+
 
 
 //calculate distances
 function calculateDistances({
   latitude,
   longitude,
-  setState,
+  setCoordinates,
   settings,
   slugs,
-  state,
   strings
 }) {
-  var _a;
+  const input = (0,_hooks__WEBPACK_IMPORTED_MODULE_2__.useInput)();
+  const {
+    meetings
+  } = (0,_hooks__WEBPACK_IMPORTED_MODULE_2__.useData)();
   //build new index and meetings array
   const distances = {};
   settings.distance_options.forEach(option => {
@@ -4986,9 +4964,9 @@ function calculateDistances({
     const distance = getDistance({
       latitude,
       longitude
-    }, state.meetings[slug], settings);
+    }, meetings[slug], settings);
     if (typeof distance === 'undefined') return;
-    state.meetings[slug] = Object.assign(Object.assign({}, state.meetings[slug]), {
+    meetings[slug] = Object.assign(Object.assign({}, meetings[slug]), {
       distance
     });
     settings.distance_options.forEach(option => {
@@ -4999,7 +4977,7 @@ function calculateDistances({
   });
   //remove redundant distances at 50 and higher distances, unless requested via query param
   let slugMax = 0;
-  let queryDistance = Array.isArray((_a = state.input) === null || _a === void 0 ? void 0 : _a.distance) ? state.input.distance[0] : 0;
+  let queryDistance = Array.isArray(input === null || input === void 0 ? void 0 : input.distance) ? input.distance[0] : 0;
   Object.entries(distances).forEach(([val, distance]) => {
     if (50 <= parseInt(val) && val !== queryDistance) {
       if (slugMax >= distance.slugs.length) {
@@ -5012,20 +4990,24 @@ function calculateDistances({
   const distanceIndex = (0,_flatten_and_sort_indexes__WEBPACK_IMPORTED_MODULE_0__.flattenAndSortIndexes)(
   // @ts-expect-error TODO
   distances, (a, b) => parseInt(a.key) - parseInt(b.key));
-  //this will cause a re-render with latitude and longitude now set
-  setState(state => Object.assign(Object.assign({}, state), {
-    capabilities: Object.assign(Object.assign({}, state.capabilities), {
-      distance: !!distanceIndex.length
-    }),
-    filtering: false,
-    indexes: Object.assign(Object.assign({}, state.indexes), {
-      distance: distanceIndex
-    }),
-    input: Object.assign(Object.assign({}, state.input), {
-      latitude: parseFloat(latitude.toFixed(5)),
-      longitude: parseFloat(longitude.toFixed(5))
-    })
-  }));
+  // //this will cause a re-render with latitude and longitude now set
+  // setState(state => ({
+  //   ...state,
+  //   capabilities: {
+  //     ...state.capabilities,
+  //     distance: !!distanceIndex.length,
+  //   },
+  //   filtering: false,
+  //   indexes: {
+  //     ...state.indexes,
+  //     distance: distanceIndex,
+  //   },
+  //   input: {
+  //     ...state.input,
+  //     latitude: parseFloat(latitude.toFixed(5)),
+  //     longitude: parseFloat(longitude.toFixed(5)),
+  //   },
+  // }));
 }
 // Calculate the distance as the crow flies between two geometric points
 // Adapted from: https://www.geodatasource.com/developers/javascript
@@ -5052,194 +5034,6 @@ function getDistance(a, b, settings) {
     }
     return Math.round(dist);
   }
-}
-
-/***/ }),
-
-/***/ "./src/helpers/filter-meeting-data.ts":
-/*!********************************************!*\
-  !*** ./src/helpers/filter-meeting-data.ts ***!
-  \********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   filterMeetingData: () => (/* binding */ filterMeetingData)
-/* harmony export */ });
-/* harmony import */ var luxon__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! luxon */ "./node_modules/luxon/src/luxon.js");
-/* harmony import */ var _calculate_distances__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./calculate-distances */ "./src/helpers/calculate-distances.ts");
-/* harmony import */ var _format_string__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./format-string */ "./src/helpers/format-string.ts");
-/* harmony import */ var _get_index_by_key__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./get-index-by-key */ "./src/helpers/get-index-by-key.ts");
-
-
-
-
-// filter meetings based on input
-function filterMeetingData(state, setState, settings, strings) {
-  var _a;
-  const matchGroups = [];
-  const now = luxon__WEBPACK_IMPORTED_MODULE_0__.DateTime.now();
-  const now_offset = now.plus({
-    minute: settings.now_offset
-  });
-  const slugs = Object.keys(state.meetings);
-  const timeDiff = {};
-  if (state.loading) {
-    return [[], []];
-  }
-  //filter by distance, region, time, type, and weekday
-  settings.filters.forEach(filter => {
-    var _a;
-    if (((_a = state.input[filter]) === null || _a === void 0 ? void 0 : _a.length) && state.capabilities[filter]) {
-      if (filter === 'type') {
-        //get the intersection of types (Open AND Discussion)
-        state.input['type'].forEach(type => {
-          var _a, _b;
-          return matchGroups.push((_b = (_a = (0,_get_index_by_key__WEBPACK_IMPORTED_MODULE_3__.getIndexByKey)(state.indexes[filter], type)) === null || _a === void 0 ? void 0 : _a.slugs) !== null && _b !== void 0 ? _b : []);
-        });
-      } else {
-        //get the union of other filters (Monday OR Tuesday)
-        matchGroups.push([].concat.apply([],
-        // @ts-expect-error TODO
-        state.input[filter].map(key => {
-          var _a, _b;
-          return (_b = (_a = (0,_get_index_by_key__WEBPACK_IMPORTED_MODULE_3__.getIndexByKey)(state.indexes[filter], key)) === null || _a === void 0 ? void 0 : _a.slugs) !== null && _b !== void 0 ? _b : [];
-        })));
-      }
-    }
-  });
-  //handle keyword search or geolocation
-  if (state.input.mode === 'search') {
-    if (state.input.search) {
-      const orTerms = state.input.search.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replaceAll(' OR ', '|').toLowerCase().split('|').map(phrase => phrase.split('"')).map(phrase => [...new Set(phrase.filter((_e, index) => index % 2).concat(phrase.filter((_e, index) => !(index % 2)).join(' ').split(' ')).filter(e => e))]).filter(e => e.length);
-      const matches = slugs.filter(slug => orTerms.some(andTerm => andTerm.every(term => {
-        var _a;
-        return ((_a = state.meetings[slug].search) === null || _a === void 0 ? void 0 : _a.search(term)) !== -1;
-      })));
-      // @ts-expect-error TODO
-      matchGroups.push([].concat.apply([], matches));
-    }
-  } else if (['me', 'location'].includes(state.input.mode)) {
-    //only show meetings with physical locations
-    matchGroups.push(slugs.filter(slug => state.meetings[slug].latitude && state.meetings[slug].latitude));
-    if (!state.input.latitude || !state.input.longitude) {
-      if (state.input.mode === 'location' && state.input.search && state.filtering) {
-        const url = window.location.host === 'tsml-ui.test' ? 'geo.test' : 'geo.code4recovery.org';
-        fetch(`https://${url}/api/geocode?${new URLSearchParams({
-          application: 'tsml-ui',
-          language: settings.language,
-          referrer: window.location.href,
-          search: state.input.search
-        })}`).then(result => result.json()).then(({
-          results
-        }) => {
-          if (results === null || results === void 0 ? void 0 : results.length) {
-            (0,_calculate_distances__WEBPACK_IMPORTED_MODULE_1__.calculateDistances)({
-              latitude: results[0].geometry.location.lat,
-              longitude: results[0].geometry.location.lng,
-              setState,
-              settings,
-              slugs,
-              state,
-              strings
-            });
-          } else {
-            setState(state => Object.assign(Object.assign({}, state), {
-              error: (0,_format_string__WEBPACK_IMPORTED_MODULE_2__.formatString)(strings.errors.geocoding, {
-                address: state.input.search
-              }),
-              filtering: false
-            }));
-          }
-        });
-      } else if (state.input.mode === 'me' && state.filtering) {
-        navigator.geolocation.getCurrentPosition(position => {
-          (0,_calculate_distances__WEBPACK_IMPORTED_MODULE_1__.calculateDistances)({
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-            setState,
-            settings,
-            slugs,
-            state,
-            strings
-          });
-        }, error => {
-          console.warn(`TSML UI geolocation error: ${error.message}`);
-          setState(state => Object.assign(Object.assign({}, state), {
-            error: strings.errors.geolocation,
-            filtering: false
-          }));
-        }, {
-          timeout: 5000
-        });
-      }
-    }
-  }
-  //do the filtering, if necessary
-  const filteredSlugs = matchGroups.length ?
-  // @ts-expect-error TODO
-  matchGroups.shift().filter(v => matchGroups.every(a => a.includes(v))) //get intersection of slug arrays
-  : slugs; //get everything
-  //build lookup for meeting times based on now
-  slugs.forEach(slug => {
-    var _a, _b;
-    timeDiff[slug] = (_b = (_a = state.meetings[slug].start) === null || _a === void 0 ? void 0 : _a.diff(now, 'minutes').minutes) !== null && _b !== void 0 ? _b : -9999;
-    //if time is earlier than X minutes ago, increment diff by a week
-    if (timeDiff[slug] < settings.now_offset) {
-      timeDiff[slug] += 10080;
-    }
-  });
-  //sort slugs
-  filteredSlugs.sort((a, b) => {
-    const meetingA = state.meetings[a];
-    const meetingB = state.meetings[b];
-    //sort appointment meetings to the end
-    if (meetingA.start && !meetingB.start) return -1;
-    if (!meetingA.start && meetingB.start) return 1;
-    //sort by time
-    if (!state.input.weekday.length) {
-      if (timeDiff[a] !== timeDiff[b]) {
-        return timeDiff[a] - timeDiff[b];
-      }
-    } else {
-      if (meetingA.minutes_week !== meetingB.minutes_week) {
-        if (!meetingA.minutes_week) return -1;
-        if (!meetingB.minutes_week) return 1;
-        return meetingA.minutes_week - meetingB.minutes_week;
-      }
-    }
-    //then by distance
-    if (meetingA.distance !== meetingB.distance) {
-      if (!meetingA.distance) return -1;
-      if (!meetingB.distance) return 1;
-      return meetingA.distance - meetingB.distance;
-    }
-    //then by meeting name
-    if (meetingA.name !== meetingB.name) {
-      if (!meetingA.name) return -1;
-      if (!meetingB.name) return 1;
-      return meetingA.name.localeCompare(meetingB.name);
-    }
-    //then by location name
-    if (meetingA.location !== meetingB.location) {
-      if (!meetingA.location) return -1;
-      if (!meetingB.location) return 1;
-      return meetingA.location.localeCompare(meetingB.location);
-    }
-    return 0;
-  });
-  //find in-progress meetings
-  const inProgress = ((_a = state.input.weekday) === null || _a === void 0 ? void 0 : _a.length) ? [] : filteredSlugs.filter(slug => {
-    const {
-      start,
-      end,
-      types
-    } = state.meetings[slug];
-    if (!start || !end) return false;
-    return start < now_offset && end > now && !(types === null || types === void 0 ? void 0 : types.includes('inactive'));
-  });
-  return [filteredSlugs, inProgress];
 }
 
 /***/ }),
@@ -5376,10 +5170,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   formatFeedbackEmail: () => (/* binding */ formatFeedbackEmail)
 /* harmony export */ });
-/* harmony import */ var _format_array__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./format-array */ "./src/helpers/format-array.ts");
-/* harmony import */ var _format_string__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./format-string */ "./src/helpers/format-string.ts");
-/* harmony import */ var _format_url__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./format-url */ "./src/helpers/format-url.ts");
-/* harmony import */ var _query_string__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./query-string */ "./src/helpers/query-string.ts");
+/* harmony import */ var _hooks__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../hooks */ "./src/hooks/index.ts");
+/* harmony import */ var _format_array__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./format-array */ "./src/helpers/format-array.ts");
+/* harmony import */ var _format_string__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./format-string */ "./src/helpers/format-string.ts");
+/* harmony import */ var _format_url__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./format-url */ "./src/helpers/format-url.ts");
 
 
 
@@ -5393,22 +5187,24 @@ function formatFeedbackEmail({
   strings
 }) {
   // remove extra query params from meeting URL
-  const input = (0,_query_string__WEBPACK_IMPORTED_MODULE_3__.getQueryString)(settings);
-  const meetingUrl = (0,_format_url__WEBPACK_IMPORTED_MODULE_2__.formatUrl)({
-    meeting: input.meeting
+  const {
+    meeting
+  } = (0,_hooks__WEBPACK_IMPORTED_MODULE_0__.useData)();
+  const meetingUrl = (0,_format_url__WEBPACK_IMPORTED_MODULE_3__.formatUrl)({
+    meeting: meeting === null || meeting === void 0 ? void 0 : meeting.slug
   }, settings);
   // build message
-  const lines = [``, '', '', '-----', (0,_format_string__WEBPACK_IMPORTED_MODULE_1__.formatString)(strings.email_public_url, {
+  const lines = [``, '', '', '-----', (0,_format_string__WEBPACK_IMPORTED_MODULE_2__.formatString)(strings.email_public_url, {
     url: meetingUrl
   })];
   if (edit_url) {
-    lines.push((0,_format_string__WEBPACK_IMPORTED_MODULE_1__.formatString)(strings.email_edit_url, {
+    lines.push((0,_format_string__WEBPACK_IMPORTED_MODULE_2__.formatString)(strings.email_edit_url, {
       url: edit_url
     }));
   }
   // build mailto link
-  return `mailto:${(0,_format_array__WEBPACK_IMPORTED_MODULE_0__.formatArray)(feedback_emails).join()}?${new URLSearchParams({
-    subject: (0,_format_string__WEBPACK_IMPORTED_MODULE_1__.formatString)(strings.email_subject, {
+  return `mailto:${(0,_format_array__WEBPACK_IMPORTED_MODULE_1__.formatArray)(feedback_emails).join()}?${new URLSearchParams({
+    subject: (0,_format_string__WEBPACK_IMPORTED_MODULE_2__.formatString)(strings.email_subject, {
       name
     }),
     body: lines.join('\n')
@@ -5665,51 +5461,41 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   analyticsEvent: () => (/* reexport safe */ _analytics__WEBPACK_IMPORTED_MODULE_0__.analyticsEvent),
 /* harmony export */   calculateDistances: () => (/* reexport safe */ _calculate_distances__WEBPACK_IMPORTED_MODULE_1__.calculateDistances),
-/* harmony export */   filterMeetingData: () => (/* reexport safe */ _filter_meeting_data__WEBPACK_IMPORTED_MODULE_2__.filterMeetingData),
-/* harmony export */   flattenAndSortIndexes: () => (/* reexport safe */ _flatten_and_sort_indexes__WEBPACK_IMPORTED_MODULE_3__.flattenAndSortIndexes),
-/* harmony export */   flattenDays: () => (/* reexport safe */ _load_meeting_data__WEBPACK_IMPORTED_MODULE_15__.flattenDays),
-/* harmony export */   formatAddress: () => (/* reexport safe */ _format_address__WEBPACK_IMPORTED_MODULE_4__.formatAddress),
-/* harmony export */   formatArray: () => (/* reexport safe */ _format_array__WEBPACK_IMPORTED_MODULE_5__.formatArray),
-/* harmony export */   formatConferenceProvider: () => (/* reexport safe */ _format_conference_provider__WEBPACK_IMPORTED_MODULE_6__.formatConferenceProvider),
-/* harmony export */   formatDirectionsUrl: () => (/* reexport safe */ _format_directions_url__WEBPACK_IMPORTED_MODULE_7__.formatDirectionsUrl),
-/* harmony export */   formatFeedbackEmail: () => (/* reexport safe */ _format_feedback_email__WEBPACK_IMPORTED_MODULE_8__.formatFeedbackEmail),
-/* harmony export */   formatIcs: () => (/* reexport safe */ _format_ics__WEBPACK_IMPORTED_MODULE_9__.formatIcs),
-/* harmony export */   formatSearchParams: () => (/* reexport safe */ _format_search_params__WEBPACK_IMPORTED_MODULE_10__.formatSearchParams),
-/* harmony export */   formatSlug: () => (/* reexport safe */ _format_slug__WEBPACK_IMPORTED_MODULE_11__.formatSlug),
-/* harmony export */   formatString: () => (/* reexport safe */ _format_string__WEBPACK_IMPORTED_MODULE_12__.formatString),
-/* harmony export */   formatUrl: () => (/* reexport safe */ _format_url__WEBPACK_IMPORTED_MODULE_13__.formatUrl),
+/* harmony export */   flattenAndSortIndexes: () => (/* reexport safe */ _flatten_and_sort_indexes__WEBPACK_IMPORTED_MODULE_2__.flattenAndSortIndexes),
+/* harmony export */   flattenDays: () => (/* reexport safe */ _load_meeting_data__WEBPACK_IMPORTED_MODULE_14__.flattenDays),
+/* harmony export */   formatAddress: () => (/* reexport safe */ _format_address__WEBPACK_IMPORTED_MODULE_3__.formatAddress),
+/* harmony export */   formatArray: () => (/* reexport safe */ _format_array__WEBPACK_IMPORTED_MODULE_4__.formatArray),
+/* harmony export */   formatConferenceProvider: () => (/* reexport safe */ _format_conference_provider__WEBPACK_IMPORTED_MODULE_5__.formatConferenceProvider),
+/* harmony export */   formatDirectionsUrl: () => (/* reexport safe */ _format_directions_url__WEBPACK_IMPORTED_MODULE_6__.formatDirectionsUrl),
+/* harmony export */   formatFeedbackEmail: () => (/* reexport safe */ _format_feedback_email__WEBPACK_IMPORTED_MODULE_7__.formatFeedbackEmail),
+/* harmony export */   formatIcs: () => (/* reexport safe */ _format_ics__WEBPACK_IMPORTED_MODULE_8__.formatIcs),
+/* harmony export */   formatSearchParams: () => (/* reexport safe */ _format_search_params__WEBPACK_IMPORTED_MODULE_9__.formatSearchParams),
+/* harmony export */   formatSlug: () => (/* reexport safe */ _format_slug__WEBPACK_IMPORTED_MODULE_10__.formatSlug),
+/* harmony export */   formatString: () => (/* reexport safe */ _format_string__WEBPACK_IMPORTED_MODULE_11__.formatString),
+/* harmony export */   formatUrl: () => (/* reexport safe */ _format_url__WEBPACK_IMPORTED_MODULE_12__.formatUrl),
 /* harmony export */   getDistance: () => (/* reexport safe */ _calculate_distances__WEBPACK_IMPORTED_MODULE_1__.getDistance),
-/* harmony export */   getIndexByKey: () => (/* reexport safe */ _get_index_by_key__WEBPACK_IMPORTED_MODULE_14__.getIndexByKey),
-/* harmony export */   getQueryString: () => (/* reexport safe */ _query_string__WEBPACK_IMPORTED_MODULE_16__.getQueryString),
-/* harmony export */   iOS: () => (/* reexport safe */ _user_agent__WEBPACK_IMPORTED_MODULE_19__.iOS),
-/* harmony export */   loadMeetingData: () => (/* reexport safe */ _load_meeting_data__WEBPACK_IMPORTED_MODULE_15__.loadMeetingData),
-/* harmony export */   setQueryString: () => (/* reexport safe */ _query_string__WEBPACK_IMPORTED_MODULE_16__.setQueryString),
-/* harmony export */   translateGoogleSheet: () => (/* reexport safe */ _translate_google_sheet__WEBPACK_IMPORTED_MODULE_18__.translateGoogleSheet)
+/* harmony export */   getIndexByKey: () => (/* reexport safe */ _get_index_by_key__WEBPACK_IMPORTED_MODULE_13__.getIndexByKey),
+/* harmony export */   iOS: () => (/* reexport safe */ _user_agent__WEBPACK_IMPORTED_MODULE_16__.iOS),
+/* harmony export */   loadMeetingData: () => (/* reexport safe */ _load_meeting_data__WEBPACK_IMPORTED_MODULE_14__.loadMeetingData),
+/* harmony export */   translateGoogleSheet: () => (/* reexport safe */ _translate_google_sheet__WEBPACK_IMPORTED_MODULE_15__.translateGoogleSheet)
 /* harmony export */ });
-/* empty/unused harmony star reexport */
 /* harmony import */ var _analytics__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./analytics */ "./src/helpers/analytics.ts");
 /* harmony import */ var _calculate_distances__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./calculate-distances */ "./src/helpers/calculate-distances.ts");
-/* harmony import */ var _filter_meeting_data__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./filter-meeting-data */ "./src/helpers/filter-meeting-data.ts");
-/* harmony import */ var _flatten_and_sort_indexes__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./flatten-and-sort-indexes */ "./src/helpers/flatten-and-sort-indexes.ts");
-/* harmony import */ var _format_address__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./format-address */ "./src/helpers/format-address.ts");
-/* harmony import */ var _format_array__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./format-array */ "./src/helpers/format-array.ts");
-/* harmony import */ var _format_conference_provider__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./format-conference-provider */ "./src/helpers/format-conference-provider.ts");
-/* harmony import */ var _format_directions_url__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./format-directions-url */ "./src/helpers/format-directions-url.ts");
-/* harmony import */ var _format_feedback_email__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./format-feedback-email */ "./src/helpers/format-feedback-email.ts");
-/* harmony import */ var _format_ics__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./format-ics */ "./src/helpers/format-ics.ts");
-/* harmony import */ var _format_search_params__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./format-search-params */ "./src/helpers/format-search-params.ts");
-/* harmony import */ var _format_slug__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./format-slug */ "./src/helpers/format-slug.ts");
-/* harmony import */ var _format_string__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./format-string */ "./src/helpers/format-string.ts");
-/* harmony import */ var _format_url__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./format-url */ "./src/helpers/format-url.ts");
-/* harmony import */ var _get_index_by_key__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./get-index-by-key */ "./src/helpers/get-index-by-key.ts");
-/* harmony import */ var _load_meeting_data__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./load-meeting-data */ "./src/helpers/load-meeting-data.ts");
-/* harmony import */ var _query_string__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./query-string */ "./src/helpers/query-string.ts");
-Object(function webpackMissingModule() { var e = new Error("Cannot find module './settings'"); e.code = 'MODULE_NOT_FOUND'; throw e; }());
-/* harmony import */ var _translate_google_sheet__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./translate-google-sheet */ "./src/helpers/translate-google-sheet.ts");
-/* harmony import */ var _user_agent__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./user-agent */ "./src/helpers/user-agent.ts");
-
-
-
+/* harmony import */ var _flatten_and_sort_indexes__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./flatten-and-sort-indexes */ "./src/helpers/flatten-and-sort-indexes.ts");
+/* harmony import */ var _format_address__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./format-address */ "./src/helpers/format-address.ts");
+/* harmony import */ var _format_array__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./format-array */ "./src/helpers/format-array.ts");
+/* harmony import */ var _format_conference_provider__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./format-conference-provider */ "./src/helpers/format-conference-provider.ts");
+/* harmony import */ var _format_directions_url__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./format-directions-url */ "./src/helpers/format-directions-url.ts");
+/* harmony import */ var _format_feedback_email__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./format-feedback-email */ "./src/helpers/format-feedback-email.ts");
+/* harmony import */ var _format_ics__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./format-ics */ "./src/helpers/format-ics.ts");
+/* harmony import */ var _format_search_params__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./format-search-params */ "./src/helpers/format-search-params.ts");
+/* harmony import */ var _format_slug__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./format-slug */ "./src/helpers/format-slug.ts");
+/* harmony import */ var _format_string__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./format-string */ "./src/helpers/format-string.ts");
+/* harmony import */ var _format_url__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./format-url */ "./src/helpers/format-url.ts");
+/* harmony import */ var _get_index_by_key__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./get-index-by-key */ "./src/helpers/get-index-by-key.ts");
+/* harmony import */ var _load_meeting_data__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./load-meeting-data */ "./src/helpers/load-meeting-data.ts");
+/* harmony import */ var _translate_google_sheet__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./translate-google-sheet */ "./src/helpers/translate-google-sheet.ts");
+/* harmony import */ var _user_agent__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./user-agent */ "./src/helpers/user-agent.ts");
 
 
 
@@ -6304,52 +6090,6 @@ function warn(issue, meeting) {
 
 /***/ }),
 
-/***/ "./src/helpers/query-string.ts":
-/*!*************************************!*\
-  !*** ./src/helpers/query-string.ts ***!
-  \*************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   getQueryString: () => (/* binding */ getQueryString),
-/* harmony export */   setQueryString: () => (/* binding */ setQueryString)
-/* harmony export */ });
-/* harmony import */ var _format_url__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./format-url */ "./src/helpers/format-url.ts");
-
-// load input values from query string
-function getQueryString(settings) {
-  const input = Object.assign({}, settings.defaults);
-  // load input from query string
-  const query = new URLSearchParams(window.location.search);
-  // loop through filters
-  settings.filters.filter(filter => query.has(filter)).forEach(filter => {
-    // @ts-expect-error TODO
-    input[filter] = query.get(filter).split('/');
-  });
-  // loop through additional values
-  settings.params.filter(param => query.has(param)).forEach(param => {
-    // @ts-expect-error TODO
-    input[param] = query.get(param);
-  });
-  // temporary band-aid to support weekday=0 URLs
-  if (input.weekday) {
-    input.weekday = input.weekday.map(day => ['0', '1', '2', '3', '4', '5', '6'].includes(day) ? settings.weekdays[parseInt(day)] : day);
-  }
-  return Object.assign(Object.assign({}, settings.defaults), input);
-}
-// save input values to query string
-function setQueryString(input, settings) {
-  const url = (0,_format_url__WEBPACK_IMPORTED_MODULE_0__.formatUrl)(input, settings);
-  // set the query string with the history api
-  if (window.location.href !== url) {
-    window.history.pushState('', '', url);
-  }
-}
-
-/***/ }),
-
 /***/ "./src/helpers/states.ts":
 /*!*******************************!*\
   !*** ./src/helpers/states.ts ***!
@@ -6507,9 +6247,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @emotion/react/jsx-runtime */ "./node_modules/@emotion/react/jsx-runtime/dist/emotion-react-jsx-runtime.browser.esm.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/development/chunk-AYJ5UCUI.mjs");
 /* harmony import */ var _helpers__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../helpers */ "./src/helpers/index.ts");
-/* harmony import */ var _input__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./input */ "./src/hooks/input.tsx");
-/* harmony import */ var _settings__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./settings */ "./src/hooks/settings.tsx");
+/* harmony import */ var _settings__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./settings */ "./src/hooks/settings.tsx");
 
 
 
@@ -6528,6 +6268,7 @@ const defaultData = {
     type: false,
     weekday: false
   },
+  loading: true,
   meetings: {},
   indexes: {
     distance: [],
@@ -6538,7 +6279,7 @@ const defaultData = {
   }
 };
 const DataContext = /*#__PURE__*/(0,react__WEBPACK_IMPORTED_MODULE_0__.createContext)(defaultData);
-const useData = (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(DataContext);
+const useData = () => (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(DataContext);
 const DataProvider = ({
   children,
   google,
@@ -6547,13 +6288,11 @@ const DataProvider = ({
 }) => {
   const [error, setError] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)();
   const [data, setData] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(defaultData);
-  const {
-    meeting
-  } = (0,_input__WEBPACK_IMPORTED_MODULE_2__.useInput)();
+  const [searchParams] = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_3__.useSearchParams)();
   const {
     settings,
     strings
-  } = (0,_settings__WEBPACK_IMPORTED_MODULE_3__.useSettings)();
+  } = (0,_settings__WEBPACK_IMPORTED_MODULE_2__.useSettings)();
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (!src) {
       setError('Configuration error: a data source must be specified.');
@@ -6567,7 +6306,7 @@ const DataProvider = ({
         src = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/A1:ZZ?key=${google}`;
       }
       // cache busting
-      if (src.endsWith('.json') && meeting) {
+      if (src.endsWith('.json') && searchParams.has('meeting')) {
         src = `${src}?${new Date().getTime()}`;
       }
       // fetch json data file and build indexes
@@ -6595,7 +6334,8 @@ const DataProvider = ({
         setData({
           capabilities,
           indexes,
-          meetings
+          meetings,
+          loading: false
         });
       }).catch(error => {
         const errors = {
@@ -6623,6 +6363,236 @@ const DataProvider = ({
 
 /***/ }),
 
+/***/ "./src/hooks/filter.tsx":
+/*!******************************!*\
+  !*** ./src/hooks/filter.tsx ***!
+  \******************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   FilterProvider: () => (/* binding */ FilterProvider),
+/* harmony export */   useFilter: () => (/* binding */ useFilter)
+/* harmony export */ });
+/* harmony import */ var _emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @emotion/react/jsx-runtime */ "./node_modules/@emotion/react/jsx-runtime/dist/emotion-react-jsx-runtime.browser.esm.js");
+/* harmony import */ var luxon__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! luxon */ "./node_modules/luxon/src/luxon.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _helpers__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../helpers */ "./src/helpers/index.ts");
+/* harmony import */ var _data__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./data */ "./src/hooks/data.tsx");
+/* harmony import */ var _input__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./input */ "./src/hooks/input.tsx");
+/* harmony import */ var _settings__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./settings */ "./src/hooks/settings.tsx");
+
+
+
+
+
+
+
+const FilterContext = /*#__PURE__*/(0,react__WEBPACK_IMPORTED_MODULE_1__.createContext)({
+  filteredSlugs: [],
+  inProgress: []
+});
+const FilterProvider = ({
+  children
+}) => {
+  const [alert, setAlert] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)();
+  const [filter, setFilter] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)({
+    filteredSlugs: [],
+    inProgress: []
+  });
+  const [coordinates, setCoordinates] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)({
+    waiting: false
+  });
+  const {
+    settings,
+    strings
+  } = (0,_settings__WEBPACK_IMPORTED_MODULE_5__.useSettings)();
+  const {
+    capabilities,
+    indexes,
+    loading,
+    meetings
+  } = (0,_data__WEBPACK_IMPORTED_MODULE_3__.useData)();
+  const input = (0,_input__WEBPACK_IMPORTED_MODULE_4__.useInput)();
+  (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
+    var _a;
+    const matchGroups = [];
+    const now = luxon__WEBPACK_IMPORTED_MODULE_0__.DateTime.now();
+    const now_offset = now.plus({
+      minute: settings.now_offset
+    });
+    const slugs = Object.keys(meetings);
+    const timeDiff = {};
+    //filter by distance, region, time, type, and weekday
+    settings.filters.forEach(filter => {
+      var _a;
+      if (((_a = input[filter]) === null || _a === void 0 ? void 0 : _a.length) && capabilities[filter]) {
+        if (filter === 'type') {
+          //get the intersection of types (Open AND Discussion)
+          input['type'].forEach(type => {
+            var _a, _b;
+            return matchGroups.push((_b = (_a = (0,_helpers__WEBPACK_IMPORTED_MODULE_2__.getIndexByKey)(indexes[filter], type)) === null || _a === void 0 ? void 0 : _a.slugs) !== null && _b !== void 0 ? _b : []);
+          });
+        } else {
+          //get the union of other filters (Monday OR Tuesday)
+          matchGroups.push([].concat.apply([],
+          // @ts-expect-error TODO
+          input[filter].map(key => {
+            var _a, _b;
+            return (_b = (_a = (0,_helpers__WEBPACK_IMPORTED_MODULE_2__.getIndexByKey)(indexes[filter], key)) === null || _a === void 0 ? void 0 : _a.slugs) !== null && _b !== void 0 ? _b : [];
+          })));
+        }
+      }
+    });
+    //handle keyword search or geolocation
+    if (input.mode === 'search') {
+      if (input.search) {
+        const orTerms = input.search.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replaceAll(' OR ', '|').toLowerCase().split('|').map(phrase => phrase.split('"')).map(phrase => [...new Set(phrase.filter((_e, index) => index % 2).concat(phrase.filter((_e, index) => !(index % 2)).join(' ').split(' ')).filter(e => e))]).filter(e => e.length);
+        const matches = slugs.filter(slug => orTerms.some(andTerm => andTerm.every(term => {
+          var _a;
+          return ((_a = meetings[slug].search) === null || _a === void 0 ? void 0 : _a.search(term)) !== -1;
+        })));
+        // @ts-expect-error TODO
+        matchGroups.push([].concat.apply([], matches));
+      }
+    } else if (['me', 'location'].includes(input.mode)) {
+      //only show meetings with physical locations
+      matchGroups.push(slugs.filter(slug => meetings[slug].latitude && meetings[slug].latitude));
+      if (!coordinates.latitude || !coordinates.longitude) {
+        if (input.mode === 'location' && input.search && coordinates.waiting) {
+          const url = window.location.host === 'tsml-ui.test' ? 'geo.test' : 'geo.code4recovery.org';
+          fetch(`https://${url}/api/geocode?${new URLSearchParams({
+            application: 'tsml-ui',
+            language: settings.language,
+            referrer: window.location.href,
+            search: input.search
+          })}`).then(result => result.json()).then(({
+            results
+          }) => {
+            if (results === null || results === void 0 ? void 0 : results.length) {
+              (0,_helpers__WEBPACK_IMPORTED_MODULE_2__.calculateDistances)({
+                latitude: results[0].geometry.location.lat,
+                longitude: results[0].geometry.location.lng,
+                setCoordinates,
+                settings,
+                slugs,
+                strings
+              });
+            } else {
+              setCoordinates({
+                latitude: undefined,
+                longitude: undefined,
+                waiting: false
+              });
+              setAlert((0,_helpers__WEBPACK_IMPORTED_MODULE_2__.formatString)(strings.errors.geocoding, {
+                address: input.search
+              }));
+            }
+          });
+        } else if (input.mode === 'me' && coordinates.waiting) {
+          navigator.geolocation.getCurrentPosition(position => {
+            (0,_helpers__WEBPACK_IMPORTED_MODULE_2__.calculateDistances)({
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude,
+              setCoordinates,
+              settings,
+              slugs,
+              strings
+            });
+          }, error => {
+            console.warn(`TSML UI geolocation error: ${error.message}`);
+            // setState(state => ({
+            //   ...state,
+            //   error: strings.errors.geolocation,
+            //   filtering: false,
+            // }));
+          }, {
+            timeout: 5000
+          });
+        }
+      }
+    }
+    //do the filtering, if necessary
+    const filteredSlugs = matchGroups.length ?
+    // @ts-expect-error TODO
+    matchGroups.shift().filter(v => matchGroups.every(a => a.includes(v))) //get intersection of slug arrays
+    : slugs; //get everything
+    //build lookup for meeting times based on now
+    slugs.forEach(slug => {
+      var _a, _b;
+      timeDiff[slug] = (_b = (_a = meetings[slug].start) === null || _a === void 0 ? void 0 : _a.diff(now, 'minutes').minutes) !== null && _b !== void 0 ? _b : -9999;
+      //if time is earlier than X minutes ago, increment diff by a week
+      if (timeDiff[slug] < settings.now_offset) {
+        timeDiff[slug] += 10080;
+      }
+    });
+    //sort slugs
+    filteredSlugs.sort((a, b) => {
+      const meetingA = meetings[a];
+      const meetingB = meetings[b];
+      //sort appointment meetings to the end
+      if (meetingA.start && !meetingB.start) return -1;
+      if (!meetingA.start && meetingB.start) return 1;
+      //sort by time
+      if (!input.weekday.length) {
+        if (timeDiff[a] !== timeDiff[b]) {
+          return timeDiff[a] - timeDiff[b];
+        }
+      } else {
+        if (meetingA.minutes_week !== meetingB.minutes_week) {
+          if (!meetingA.minutes_week) return -1;
+          if (!meetingB.minutes_week) return 1;
+          return meetingA.minutes_week - meetingB.minutes_week;
+        }
+      }
+      //then by distance
+      if (meetingA.distance !== meetingB.distance) {
+        if (!meetingA.distance) return -1;
+        if (!meetingB.distance) return 1;
+        return meetingA.distance - meetingB.distance;
+      }
+      //then by meeting name
+      if (meetingA.name !== meetingB.name) {
+        if (!meetingA.name) return -1;
+        if (!meetingB.name) return 1;
+        return meetingA.name.localeCompare(meetingB.name);
+      }
+      //then by location name
+      if (meetingA.location !== meetingB.location) {
+        if (!meetingA.location) return -1;
+        if (!meetingB.location) return 1;
+        return meetingA.location.localeCompare(meetingB.location);
+      }
+      return 0;
+    });
+    //find in-progress meetings
+    const inProgress = ((_a = input.weekday) === null || _a === void 0 ? void 0 : _a.length) ? [] : filteredSlugs.filter(slug => {
+      const {
+        start,
+        end,
+        types
+      } = meetings[slug];
+      if (!start || !end) return false;
+      return start < now_offset && end > now && !(types === null || types === void 0 ? void 0 : types.includes('inactive'));
+    });
+    setFilter({
+      filteredSlugs,
+      inProgress
+    });
+  }, [meetings, input]);
+  return (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(FilterContext.Provider, {
+    value: Object.assign(Object.assign(Object.assign({}, filter), coordinates), {
+      alert
+    }),
+    children: children
+  });
+};
+const useFilter = () => (0,react__WEBPACK_IMPORTED_MODULE_1__.useContext)(FilterContext);
+
+/***/ }),
+
 /***/ "./src/hooks/index.ts":
 /*!****************************!*\
   !*** ./src/hooks/index.ts ***!
@@ -6633,16 +6603,20 @@ const DataProvider = ({
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   DataProvider: () => (/* reexport safe */ _data__WEBPACK_IMPORTED_MODULE_0__.DataProvider),
-/* harmony export */   InputProvider: () => (/* reexport safe */ _input__WEBPACK_IMPORTED_MODULE_1__.InputProvider),
-/* harmony export */   SettingsProvider: () => (/* reexport safe */ _settings__WEBPACK_IMPORTED_MODULE_2__.SettingsProvider),
-/* harmony export */   defaults: () => (/* reexport safe */ _settings__WEBPACK_IMPORTED_MODULE_2__.defaults),
+/* harmony export */   FilterProvider: () => (/* reexport safe */ _filter__WEBPACK_IMPORTED_MODULE_1__.FilterProvider),
+/* harmony export */   InputProvider: () => (/* reexport safe */ _input__WEBPACK_IMPORTED_MODULE_2__.InputProvider),
+/* harmony export */   SettingsProvider: () => (/* reexport safe */ _settings__WEBPACK_IMPORTED_MODULE_3__.SettingsProvider),
+/* harmony export */   defaults: () => (/* reexport safe */ _settings__WEBPACK_IMPORTED_MODULE_3__.defaults),
 /* harmony export */   useData: () => (/* reexport safe */ _data__WEBPACK_IMPORTED_MODULE_0__.useData),
-/* harmony export */   useInput: () => (/* reexport safe */ _input__WEBPACK_IMPORTED_MODULE_1__.useInput),
-/* harmony export */   useSettings: () => (/* reexport safe */ _settings__WEBPACK_IMPORTED_MODULE_2__.useSettings)
+/* harmony export */   useFilter: () => (/* reexport safe */ _filter__WEBPACK_IMPORTED_MODULE_1__.useFilter),
+/* harmony export */   useInput: () => (/* reexport safe */ _input__WEBPACK_IMPORTED_MODULE_2__.useInput),
+/* harmony export */   useSettings: () => (/* reexport safe */ _settings__WEBPACK_IMPORTED_MODULE_3__.useSettings)
 /* harmony export */ });
 /* harmony import */ var _data__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./data */ "./src/hooks/data.tsx");
-/* harmony import */ var _input__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./input */ "./src/hooks/input.tsx");
-/* harmony import */ var _settings__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./settings */ "./src/hooks/settings.tsx");
+/* harmony import */ var _filter__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./filter */ "./src/hooks/filter.tsx");
+/* harmony import */ var _input__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./input */ "./src/hooks/input.tsx");
+/* harmony import */ var _settings__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./settings */ "./src/hooks/settings.tsx");
+
 
 
 
@@ -6661,10 +6635,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   InputProvider: () => (/* binding */ InputProvider),
 /* harmony export */   useInput: () => (/* binding */ useInput)
 /* harmony export */ });
-/* harmony import */ var _emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @emotion/react/jsx-runtime */ "./node_modules/@emotion/react/jsx-runtime/dist/emotion-react-jsx-runtime.browser.esm.js");
+/* harmony import */ var _emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @emotion/react/jsx-runtime */ "./node_modules/@emotion/react/jsx-runtime/dist/emotion-react-jsx-runtime.browser.esm.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/development/chunk-AYJ5UCUI.mjs");
 /* harmony import */ var _settings__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./settings */ "./src/hooks/settings.tsx");
+
 
 
 
@@ -6672,13 +6648,33 @@ const InputContext = /*#__PURE__*/(0,react__WEBPACK_IMPORTED_MODULE_0__.createCo
 const InputProvider = ({
   children
 }) => {
+  const [searchParams] = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_2__.useSearchParams)();
   const [input, setInput] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_settings__WEBPACK_IMPORTED_MODULE_1__.defaults.defaults);
-  return (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(InputContext.Provider, {
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    var _a, _b;
+    const mode = searchParams.get('mode') === 'location' ? 'location' : searchParams.get('me') ? 'me' : 'search';
+    const view = searchParams.get('view') === 'map' ? 'map' : 'table';
+    const search = (_b = (_a = searchParams.get('search')) === null || _a === void 0 ? void 0 : _a.toString()) !== null && _b !== void 0 ? _b : '';
+    const region = searchParams.has('region') ? `${searchParams.get('region')}`.split('/') : [];
+    const time = searchParams.has('time') ? `${searchParams.get('time')}`.split('/') : [];
+    const weekday = searchParams.has('weekday') ? `${searchParams.get('weekday')}`.split('/') : [];
+    const type = searchParams.has('type') ? `${searchParams.get('type')}`.split('/') : [];
+    setInput(input => Object.assign(Object.assign({}, input), {
+      mode,
+      region,
+      search,
+      time,
+      type,
+      view,
+      weekday
+    }));
+  }, [searchParams]);
+  return (0,_emotion_react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(InputContext.Provider, {
     value: input,
     children: children
   });
 };
-const useInput = (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(InputContext);
+const useInput = () => (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(InputContext);
 
 /***/ }),
 

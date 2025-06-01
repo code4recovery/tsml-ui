@@ -1,11 +1,9 @@
-import React from 'react';
-import { screen, render, fireEvent } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 
-import { Meeting } from '../../src/types';
 import Link from '../../src/components/Link';
-import { SettingsContext, mergeSettings } from '../../src/helpers/settings';
-import { mockState } from '../__fixtures__';
+import { SettingsProvider } from '../../src/hooks';
+import { Meeting } from '../../src/types';
 
 const mockMeeting: Meeting = {
   name: 'Foo',
@@ -16,25 +14,25 @@ const mockMeeting: Meeting = {
 
 describe('<Link />', () => {
   it('works without flags', () => {
-    const mockSettings = mergeSettings({
+    const mockSettings = {
       flags: [],
-    });
+    };
 
     render(
-      <SettingsContext.Provider value={mockSettings}>
-        <Link meeting={mockMeeting} state={undefined} setState={undefined} />
-      </SettingsContext.Provider>
+      <SettingsProvider userSettings={mockSettings}>
+        <Link meeting={mockMeeting} />
+      </SettingsProvider>
     );
 
     expect(screen.queryByText(/men/i)).toBeNull();
   });
 
   it('works without props', () => {
-    const mockSettings = mergeSettings();
+    const mockSettings = {};
     render(
-      <SettingsContext.Provider value={mockSettings}>
-        <Link meeting={mockMeeting} state={undefined} setState={undefined} />
-      </SettingsContext.Provider>
+      <SettingsProvider userSettings={mockSettings}>
+        <Link meeting={mockMeeting} />
+      </SettingsProvider>
     );
 
     expect(screen.getByText(mockMeeting.name)).toBeInTheDocument();
@@ -43,14 +41,14 @@ describe('<Link />', () => {
   });
 
   it('works with flags', () => {
-    const mockSettings = mergeSettings({
+    const mockSettings = {
       flags: ['M'],
-    });
+    };
 
     render(
-      <SettingsContext.Provider value={mockSettings}>
-        <Link meeting={mockMeeting} state={undefined} setState={undefined} />
-      </SettingsContext.Provider>
+      <SettingsProvider userSettings={mockSettings}>
+        <Link meeting={mockMeeting} />
+      </SettingsProvider>
     );
 
     expect(screen.getByText(/men/i)).toBeInTheDocument();
@@ -61,13 +59,9 @@ describe('<Link />', () => {
 
     render(
       <MemoryRouter>
-        <SettingsContext.Provider value={mergeSettings()}>
-          <Link
-            meeting={mockMeeting}
-            state={mockState}
-            setState={mockSetState}
-          />
-        </SettingsContext.Provider>
+        <SettingsProvider userSettings={{}}>
+          <Link meeting={mockMeeting} />
+        </SettingsProvider>
       </MemoryRouter>
     );
 

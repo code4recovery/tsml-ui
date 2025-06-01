@@ -2,7 +2,7 @@ import {
   flattenDays,
   loadMeetingData,
 } from '../../src/helpers/load-meeting-data';
-import { defaults } from '../../src/helpers/settings';
+import { defaults } from '../../src/hooks';
 
 import type { JSONData } from '../../src/types';
 

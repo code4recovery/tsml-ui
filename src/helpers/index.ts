@@ -1,6 +1,5 @@
 export * from './analytics';
 export * from './calculate-distances';
-export * from './filter-meeting-data';
 export * from './flatten-and-sort-indexes';
 export * from './format-address';
 export * from './format-array';
@@ -14,7 +13,5 @@ export * from './format-string';
 export * from './format-url';
 export * from './get-index-by-key';
 export * from './load-meeting-data';
-export * from './query-string';
-export * from './settings';
 export * from './translate-google-sheet';
 export * from './user-agent';
