@@ -1,16 +1,9 @@
-import {
-  Dispatch,
-  SetStateAction,
-  FormEvent,
-  useEffect,
-  useRef,
-  useState,
-  MouseEvent,
-} from 'react';
+import { FormEvent, MouseEvent, useEffect, useRef, useState } from 'react';
 
 import { useSearchParams } from 'react-router-dom';
 
-import { analyticsEvent, useSettings } from '../helpers';
+import { analyticsEvent } from '../helpers';
+import { useData, useFilter, useSettings } from '../hooks';
 import {
   controlsCss,
   controlsGroupFirstCss,
@@ -25,47 +18,42 @@ import {
 
 import Dropdown from './Dropdown';
 
-import type { State } from '../types';
-
-export default function Controls({
-  state,
-  setState,
-}: {
-  state: State;
-  setState: Dispatch<SetStateAction<State>>;
-}) {
+export default function Controls() {
+  const { capabilities, meetings } = useData();
+  const { latitude } = useFilter();
   const { settings, strings } = useSettings();
   const [dropdown, setDropdown] = useState<string>();
-  const [search, setSearch] = useState(
-    state.input.mode === 'location' ? state.input.search : ''
-  );
   const [searchParams, setSearchParams] = useSearchParams();
+  const [search, setSearch] = useState(
+    searchParams.get('mode') === 'location' ? searchParams.get('search') : ''
+  );
   const searchInput = useRef<HTMLInputElement>(null);
 
   //get available search options based on capabilities
   const allModes = ['search', 'location', 'me'] as const;
   const modes = allModes
-    .filter(mode => mode !== 'location' || state.capabilities.coordinates)
+    .filter(mode => mode !== 'location' || capabilities.coordinates)
     .filter(
       mode =>
-        mode !== 'me' ||
-        (state.capabilities.coordinates && state.capabilities.geolocation)
+        mode !== 'me' || (capabilities.coordinates && capabilities.geolocation)
     );
 
   //get available filters
   const filters = settings.filters
-    .filter(filter => state.capabilities[filter])
-    .filter(filter => filter !== 'region' || state.input.mode === 'search')
+    .filter(filter => capabilities[filter])
+    .filter(
+      filter => filter !== 'region' || searchParams.get('mode') === 'search'
+    )
     .filter(
       filter =>
         filter !== 'distance' ||
-        (state.input.mode !== 'search' && state.input.latitude)
+        (searchParams.get('mode') !== 'search' && latitude)
     );
 
   //get available views
   const allViews = ['table', 'map'] as const;
   const views = allViews.filter(
-    view => view !== 'map' || state.capabilities.coordinates
+    view => view !== 'map' || capabilities.coordinates
   );
 
   //whether to show the views segmented button
@@ -82,15 +70,15 @@ export default function Controls({
   //search effect
   useEffect(() => {
     const timer = setTimeout(() => {
-      if (!state.input.search) return;
+      if (!searchParams.get('search')) return;
       analyticsEvent({
         category: 'search',
-        action: state.input.mode,
-        label: state.input.search,
+        action: `${searchParams.get('mode')}`,
+        label: `${searchParams.get('search')}`,
       });
     }, 2000);
     return () => clearTimeout(timer);
-  }, [state.input.search]);
+  }, [searchParams.get('search')]);
 
   // update url params when search changes
   useEffect(() => {
@@ -118,47 +106,47 @@ export default function Controls({
   const locationSearch = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (state.input.mode !== 'location') return;
+    if (searchParams.get('mode') !== 'location') return;
 
     if (search) {
       searchParams.set('search', search);
     } else {
       searchParams.delete('search');
-      Object.keys(state.meetings).forEach(slug => {
-        state.meetings[slug].distance = undefined;
+      Object.keys(meetings).forEach(slug => {
+        meetings[slug].distance = undefined;
       });
     }
 
     const distance =
-      !state.input.distance.length && search
+      !searchParams.has('distance') && search
         ? settings.default_distance
-        : state.input.distance;
-    if (distance.length) {
+        : `${searchParams.get('distance')}`.split('/');
+    if (searchParams.has('distance')) {
       searchParams.set('distance', distance.join('/'));
     } else {
       searchParams.delete('distance');
     }
 
-    setState(state => ({
-      ...state,
-      capabilities: {
-        ...state.capabilities,
-        distance: false,
-      },
-      error: undefined,
-      filtering: !!search,
-      indexes: {
-        ...state.indexes,
-        distance: [],
-      },
-      input: {
-        ...state.input,
-        distance,
-        latitude: undefined,
-        longitude: undefined,
-        search,
-      },
-    }));
+    // setState(state => ({
+    //   ...state,
+    //   capabilities: {
+    //     ...state.capabilities,
+    //     distance: false,
+    //   },
+    //   error: undefined,
+    //   filtering: !!search,
+    //   indexes: {
+    //     ...state.indexes,
+    //     distance: [],
+    //   },
+    //   input: {
+    //     ...state.input,
+    //     distance,
+    //     latitude: undefined,
+    //     longitude: undefined,
+    //     search,
+    //   },
+    // }));
 
     setSearchParams(searchParams);
   };
@@ -167,8 +155,8 @@ export default function Controls({
   const setMode = (e: MouseEvent, mode: 'search' | 'location' | 'me') => {
     e.preventDefault();
 
-    Object.keys(state.meetings).forEach(slug => {
-      state.meetings[slug].distance = undefined;
+    Object.keys(meetings).forEach(slug => {
+      meetings[slug].distance = undefined;
     });
 
     if (mode === 'me') {
@@ -176,7 +164,7 @@ export default function Controls({
       searchParams.delete('search');
     } else if (mode === 'location') {
       // sync local with state
-      setSearch(state.input.search);
+      setSearch(searchParams.get('search'));
     }
 
     if (mode !== settings.defaults.mode) {
@@ -188,33 +176,33 @@ export default function Controls({
     // focus after waiting for disabled to clear
     setTimeout(() => searchInput.current?.focus(), 100);
 
-    const distance = state.input.distance.length
-      ? state.input.distance
+    const distance = searchParams.has('distance')
+      ? `${searchParams.get('distance')}`.split('/')
       : settings.default_distance;
 
     searchParams.set('distance', settings.default_distance.join('/'));
 
-    setState(state => ({
-      ...state,
-      capabilities: {
-        ...state.capabilities,
-        distance: false,
-      },
-      error: undefined,
-      filtering: mode === 'me' || (mode === 'location' && !!state.input.search),
-      indexes: {
-        ...state.indexes,
-        distance: [],
-      },
-      input: {
-        ...state.input,
-        distance,
-        latitude: undefined,
-        longitude: undefined,
-        mode,
-        search,
-      },
-    }));
+    // setState(state => ({
+    //   ...state,
+    //   capabilities: {
+    //     ...state.capabilities,
+    //     distance: false,
+    //   },
+    //   error: undefined,
+    //   filtering: mode === 'me' || (mode === 'location' && !!state.input.search),
+    //   indexes: {
+    //     ...state.indexes,
+    //     distance: [],
+    //   },
+    //   input: {
+    //     ...state.input,
+    //     distance,
+    //     latitude: undefined,
+    //     longitude: undefined,
+    //     mode,
+    //     search,
+    //   },
+    // }));
 
     setSearchParams(searchParams);
   };
@@ -229,12 +217,12 @@ export default function Controls({
       searchParams.delete('view');
     }
 
-    setState({ ...state, input: { ...state.input, view } });
+    // setState({ ...state, input: { ...state.input, view } });
 
     setSearchParams(searchParams);
   };
 
-  return !Object.keys(state.meetings).length ? null : (
+  return !Object.keys(meetings).length ? null : (
     <div css={controlsCss}>
       <form onSubmit={locationSearch} css={dropdownCss}>
         <fieldset role="group">
