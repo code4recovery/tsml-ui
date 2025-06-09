@@ -7,10 +7,22 @@ import {
   FilterProvider,
   InputProvider,
   SettingsProvider,
+  useData,
+  useFilter,
+  useInput,
 } from '../hooks';
 import { globalCss } from '../styles';
 
-import { Alert, Controls, DynamicHeight, Map, Meeting, Table, Title } from './';
+import {
+  Alert,
+  Controls,
+  DynamicHeight,
+  Loading,
+  Map,
+  Meeting,
+  Table,
+  Title,
+} from './';
 
 export default function TsmlUI({
   google,
@@ -42,12 +54,7 @@ export default function TsmlUI({
           <FilterProvider>
             <Global styles={globalCss} />
             <DynamicHeight>
-              <Meeting />
-              <Title />
-              <Controls />
-              <Alert />
-              <Table />
-              <Map />
+              <Content />
             </DynamicHeight>
           </FilterProvider>
         </DataProvider>
@@ -55,3 +62,21 @@ export default function TsmlUI({
     </SettingsProvider>
   );
 }
+
+const Content = () => {
+  const { loading } = useData();
+  const { meeting } = useFilter();
+  const { view } = useInput();
+  return loading ? (
+    <Loading />
+  ) : meeting ? (
+    <Meeting meeting={meeting} />
+  ) : (
+    <>
+      <Title />
+      <Controls />
+      <Alert />
+      {view === 'table' ? <Table /> : <Map />}
+    </>
+  );
+};

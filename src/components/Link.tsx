@@ -1,10 +1,10 @@
 import { NavLink, useSearchParams } from 'react-router-dom';
 
-import { useData, useSettings } from '../hooks';
+import { useFilter, useSettings } from '../hooks';
 import type { Meeting } from '../types';
 
 export default function Link({ meeting }: { meeting: Meeting }) {
-  const { meeting: thisMeeting } = useData();
+  const { meeting: thisMeeting } = useFilter();
   const { settings, strings } = useSettings();
   const [searchParams] = useSearchParams();
 
@@ -26,16 +26,11 @@ export default function Link({ meeting }: { meeting: Meeting }) {
     );
   }
 
+  searchParams.set('meeting', meeting.slug);
+
   return (
     <>
-      <NavLink
-        to={`${new URLSearchParams(searchParams).set('meeting', meeting.slug)}`}
-        onClick={e => {
-          e.stopPropagation();
-        }}
-      >
-        {meeting.name}
-      </NavLink>
+      <NavLink to={`?${searchParams}`}>{meeting.name}</NavLink>
       {flags && <small>{flags}</small>}
     </>
   );

@@ -4,7 +4,7 @@ import InfiniteScroll from 'react-infinite-scroller';
 import { useSearchParams } from 'react-router-dom';
 
 import { formatString as i18n } from '../helpers';
-import { useData, useFilter, useInput, useSettings } from '../hooks';
+import { useData, useFilter, useSettings } from '../hooks';
 import {
   tableChicletCss,
   tableChicletsCss,
@@ -17,10 +17,9 @@ import Icon, { icons } from './Icon';
 import Link from './Link';
 
 export default function Table() {
-  const { capabilities, meeting, meetings } = useData();
+  const { capabilities, meetings } = useData();
   const { filteredSlugs, inProgress } = useFilter();
   const { settings, strings } = useSettings();
-  const input = useInput();
   const [_, setSearchParams] = useSearchParams();
   const meetingsPerPage = 10;
   const supported_columns = [
@@ -34,10 +33,6 @@ export default function Table() {
   ];
   const [limit, setLimit] = useState(meetingsPerPage);
   const [showInProgress, setShowInProgress] = useState(false);
-
-  if (meeting || input.view !== 'table') {
-    return null;
-  }
 
   const { distance, location, region } = capabilities;
 

@@ -6,10 +6,9 @@ import {
   useState,
 } from 'react';
 
-import { useSearchParams } from 'react-router-dom';
-
 import { loadMeetingData, translateGoogleSheet } from '../helpers';
 import { Index, Meeting } from '../types';
+import { useInput } from './input';
 import { useSettings } from './settings';
 
 export type Data = {
@@ -26,7 +25,6 @@ export type Data = {
     weekday: boolean;
   };
   loading: boolean;
-  meeting?: Meeting;
   meetings: { [index: string]: Meeting };
   indexes: {
     distance: Index[];
@@ -73,7 +71,7 @@ export const DataProvider = ({
 }: PropsWithChildren<{ google?: string; src?: string; timezone?: string }>) => {
   const [error, setError] = useState<string>();
   const [data, setData] = useState<Data>(defaultData);
-  const [searchParams] = useSearchParams();
+  const input = useInput();
   const { settings, strings } = useSettings();
 
   useEffect(() => {
@@ -93,7 +91,7 @@ export const DataProvider = ({
       }
 
       // cache busting
-      if (src.endsWith('.json') && searchParams.has('meeting')) {
+      if (src.endsWith('.json') && input.meeting) {
         src = `${src}?${new Date().getTime()}`;
       }
 

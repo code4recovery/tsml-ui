@@ -43,8 +43,10 @@ export const InputProvider = ({ children }: PropsWithChildren) => {
     const type = searchParams.has('type')
       ? `${searchParams.get('type')}`.split('/')
       : [];
+    const meeting = searchParams.get('meeting') ?? undefined;
     setInput(input => ({
       ...input,
+      meeting,
       mode,
       region,
       search,

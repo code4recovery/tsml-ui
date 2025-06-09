@@ -1,4 +1,4 @@
-import { useData } from '../hooks';
+import { useFilter } from '../hooks';
 import { formatArray } from './format-array';
 import { formatString as i18n } from './format-string';
 import { formatUrl } from './format-url';
@@ -18,7 +18,7 @@ export function formatFeedbackEmail({
   strings: Translation;
 }) {
   // remove extra query params from meeting URL
-  const { meeting } = useData();
+  const { meeting } = useFilter();
   const meetingUrl = formatUrl({ meeting: meeting?.slug }, settings);
 
   // build message

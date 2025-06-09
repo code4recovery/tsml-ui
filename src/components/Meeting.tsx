@@ -26,16 +26,51 @@ import Map from './Map';
 import { useData, useSettings } from '../hooks';
 import type { Meeting as MeetingType } from '../types';
 
-export default function Meeting() {
+export default function Meeting({ meeting }: { meeting: MeetingType }) {
   const { settings, strings } = useSettings();
   const [searchParams] = useSearchParams();
 
   // open types
   const [define, setDefine] = useState<string | undefined>();
 
-  const { capabilities, meeting, meetings } = useData();
+  const { capabilities, meetings } = useData();
 
-  if (!meeting) return null;
+  // scroll to top when you navigate to this page
+  useEffect(() => {
+    const el = document.getElementById('tsml-ui');
+    if (el) {
+      const headerHeight = Math.max(
+        0,
+        ...[
+          ...Array.prototype.slice.call(
+            document.body.getElementsByTagName('*')
+          ),
+        ]
+          .filter(
+            x =>
+              getComputedStyle(x, null).getPropertyValue('position') ===
+                'fixed' && x.offsetTop < 100
+          )
+          .map(x => x.offsetTop + x.offsetHeight)
+      );
+      if (headerHeight) {
+        el.style.scrollMarginTop = `${headerHeight}px`;
+      }
+      el.scrollIntoView();
+    }
+
+    document.getElementById('tsml-title')?.focus();
+
+    // log edit_url
+    if (meeting.edit_url) {
+      console.log(`TSML UI edit ${meeting.name}: ${meeting.edit_url}`);
+      wordPressEditLink(meeting.edit_url);
+    }
+
+    return () => {
+      wordPressEditLink();
+    };
+  }, [meeting]);
 
   const sharePayload = {
     title: meeting.name,
@@ -81,43 +116,6 @@ export default function Meeting() {
 
     return start.toFormat('cccc t ZZZZ');
   };
-
-  // scroll to top when you navigate to this page
-  useEffect(() => {
-    const el = document.getElementById('tsml-ui');
-    if (el) {
-      const headerHeight = Math.max(
-        0,
-        ...[
-          ...Array.prototype.slice.call(
-            document.body.getElementsByTagName('*')
-          ),
-        ]
-          .filter(
-            x =>
-              getComputedStyle(x, null).getPropertyValue('position') ===
-                'fixed' && x.offsetTop < 100
-          )
-          .map(x => x.offsetTop + x.offsetHeight)
-      );
-      if (headerHeight) {
-        el.style.scrollMarginTop = `${headerHeight}px`;
-      }
-      el.scrollIntoView();
-    }
-
-    document.getElementById('tsml-title')?.focus();
-
-    // log edit_url
-    if (meeting.edit_url) {
-      console.log(`TSML UI edit ${meeting.name}: ${meeting.edit_url}`);
-      wordPressEditLink(meeting.edit_url);
-    }
-
-    return () => {
-      wordPressEditLink();
-    };
-  }, [meeting]);
 
   // directions URL link
   const directionsUrl = meeting.isInPerson
@@ -470,7 +468,7 @@ export default function Meeting() {
               : undefined
           }
         >
-          <Map />
+          {meeting.isInPerson && <Map />}
         </div>
       </div>
     </div>

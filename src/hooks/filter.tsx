@@ -11,6 +11,7 @@ import {
   getIndexByKey,
   formatString as i18n,
 } from '../helpers';
+import { Meeting } from '../types';
 import { useData } from './data';
 import { useInput } from './input';
 import { useSettings } from './settings';
@@ -21,6 +22,7 @@ const FilterContext = createContext<{
   longitude?: number;
   filteredSlugs: string[];
   inProgress: string[];
+  meeting?: Meeting;
 }>({
   filteredSlugs: [],
   inProgress: [],
@@ -31,6 +33,7 @@ export const FilterProvider = ({ children }: PropsWithChildren) => {
   const [filter, setFilter] = useState<{
     filteredSlugs: string[];
     inProgress: string[];
+    meeting?: Meeting;
   }>({
     filteredSlugs: [],
     inProgress: [],
@@ -41,7 +44,7 @@ export const FilterProvider = ({ children }: PropsWithChildren) => {
     waiting: boolean;
   }>({ waiting: false });
   const { settings, strings } = useSettings();
-  const { capabilities, indexes, loading, meetings } = useData();
+  const { capabilities, indexes, meetings } = useData();
   const input = useInput();
 
   useEffect(() => {
@@ -248,7 +251,12 @@ export const FilterProvider = ({ children }: PropsWithChildren) => {
           );
         });
 
-    setFilter({ filteredSlugs, inProgress });
+    const meeting =
+      input.meeting && input.meeting in meetings
+        ? meetings[input.meeting]
+        : undefined;
+
+    setFilter({ filteredSlugs, inProgress, meeting });
   }, [meetings, input]);
 
   return (

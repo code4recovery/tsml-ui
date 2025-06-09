@@ -5,7 +5,7 @@ import {
   createBrowserRouter,
 } from 'react-router-dom';
 
-import { TsmlUI } from './components';
+import { ErrorBoundary, TsmlUI } from './components';
 
 // locate element
 const element = document.getElementById('tsml-ui');
@@ -30,9 +30,9 @@ if (element) {
           timezone={element.getAttribute('data-timezone') || undefined}
         />
       ),
+      errorElement: <ErrorBoundary />,
     },
   ]);
-
   createRoot(element).render(<RouterProvider router={router} />);
 } else {
   console.warn('TSML UI could not find a div#tsml-ui element');

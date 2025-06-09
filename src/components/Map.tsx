@@ -3,7 +3,6 @@ import { useEffect, useRef, useState } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet';
-import { useSearchParams } from 'react-router-dom';
 
 import { formatDirectionsUrl } from '../helpers';
 import { useData, useFilter, useInput, useSettings } from '../hooks';
@@ -18,9 +17,8 @@ export default function Map() {
   const [darkMode, setDarkMode] = useState(
     window.matchMedia('(prefers-color-scheme: dark)').matches
   );
+  const { meetings } = useData();
   const { filteredSlugs, latitude, longitude } = useFilter();
-  const { meeting, meetings } = useData();
-  const [searchParams] = useSearchParams();
   const input = useInput();
 
   useEffect(() => {
@@ -67,10 +65,6 @@ export default function Map() {
     );
   }, [filteredSlugs]);
 
-  if (meeting || input.view !== 'map') {
-    return null;
-  }
-
   return (
     <div aria-hidden={true} css={mapCss}>
       {!!locations.length && (
@@ -84,13 +78,13 @@ export default function Map() {
               : settings.map.tiles)}
           />
           <Markers locations={locations} />
-          {latitude && longitude && searchParams.get('mode') === 'location' && (
+          {latitude && longitude && input.mode === 'location' && (
             <Marker
               icon={mapMarkerIcon(settings.map.markers.geocode)}
               position={[latitude, longitude]}
             />
           )}
-          {latitude && longitude && searchParams.get('mode') === 'me' && (
+          {latitude && longitude && input.mode === 'me' && (
             <Marker
               icon={mapMarkerIcon(settings.map.markers.geolocation)}
               position={[latitude, longitude]}
@@ -104,7 +98,7 @@ export default function Map() {
 
 const Markers = ({ locations }: { locations: MapLocation[] }) => {
   const map = useMap();
-  const { meeting } = useData();
+  const { meeting } = useFilter();
   const { settings, strings } = useSettings();
   const markerRef = useRef<L.Marker>(null);
   const markerIcon = mapMarkerIcon(settings.map.markers.location);

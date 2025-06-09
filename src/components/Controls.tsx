@@ -162,7 +162,7 @@ export default function Controls() {
     setSearchParams(searchParams);
   };
 
-  return !Object.keys(meetings).length ? null : (
+  return (
     <div css={controlsCss}>
       <form onSubmit={locationSearch} css={dropdownCss}>
         <fieldset role="group">
