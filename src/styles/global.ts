@@ -38,6 +38,7 @@ export const globalCss = css`
 
     a {
       color: var(--link);
+      cursor: pointer;
       text-decoration: underline;
     }
 

@@ -1,10 +1,8 @@
-import React from 'react';
-
 import { fireEvent, render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 
 import Controls from '../../src/components/Controls';
-import { mergeSettings, SettingsContext } from '../../src/helpers';
+import { defaults, SettingsProvider } from '../../src/hooks';
 import { mockMeeting, mockState } from '../__fixtures__';
 
 describe('<Controls />', () => {
@@ -32,15 +30,15 @@ describe('<Controls />', () => {
 
   const mockSetState = jest.fn();
 
-  const settings = mergeSettings();
+  const settings = defaults;
   const { region_any, modes, views } = settings.strings;
 
   it('is empty with no meetings', () => {
     const { container } = render(
       <MemoryRouter>
-        <SettingsContext.Provider value={settings}>
-          <Controls state={mockState} setState={mockSetState} />
-        </SettingsContext.Provider>
+        <SettingsProvider userSettings={settings}>
+          <Controls />
+        </SettingsProvider>
       </MemoryRouter>
     );
     expect(container.firstChild).toBeNull();
@@ -49,7 +47,7 @@ describe('<Controls />', () => {
   it('has clickable dropdowns', () => {
     render(
       <MemoryRouter>
-        <Controls state={mockStateWithControls} setState={mockSetState} />
+        <Controls />
       </MemoryRouter>
     );
 
@@ -78,7 +76,7 @@ describe('<Controls />', () => {
   it('has working text search', () => {
     render(
       <MemoryRouter>
-        <Controls state={mockStateWithControls} setState={mockSetState} />
+        <Controls />
       </MemoryRouter>
     );
 
@@ -100,17 +98,7 @@ describe('<Controls />', () => {
   it('has working location search', () => {
     render(
       <MemoryRouter>
-        <Controls
-          state={{
-            ...mockStateWithControls,
-            input: {
-              ...mockStateWithControls.input,
-              mode: 'location',
-              view: 'map',
-            },
-          }}
-          setState={mockSetState}
-        />
+        <Controls />
       </MemoryRouter>
     );
 

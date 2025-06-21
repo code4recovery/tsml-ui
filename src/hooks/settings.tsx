@@ -1,4 +1,4 @@
-import { createContext, useContext } from 'react';
+import { createContext, PropsWithChildren, useContext, useMemo } from 'react';
 
 import merge from 'deepmerge';
 import { Settings } from 'luxon';
@@ -114,49 +114,60 @@ export const defaults: TSMLReactConfig = {
   ],
 };
 
-export function mergeSettings(userSettings?: Partial<TSMLReactConfig>) {
-  const settings = userSettings ? merge(defaults, userSettings) : defaults;
-
-  // flags can be specified to override the default. also [] means unset
-  if (!Array.isArray(settings.flags)) {
-    settings.flags = ['M', 'W'];
-  }
-
-  // columns can be specified to override the default
-  if (userSettings) {
-    if (Array.isArray(userSettings.columns)) {
-      settings.columns = userSettings.columns;
-    }
-    if (Array.isArray(userSettings.filters)) {
-      settings.filters = userSettings.filters;
-    }
-    if (Array.isArray(userSettings.params)) {
-      settings.params = userSettings.params;
-    }
-    if (Array.isArray(userSettings.times)) {
-      settings.times = userSettings.times;
-    }
-    if (Array.isArray(userSettings.weekdays)) {
-      settings.weekdays = userSettings.weekdays;
-    }
-  }
-
-  const preferredLanguage = navigator.language.substring(0, 2);
-
-  if (preferredLanguage in settings.strings) {
-    settings.language = preferredLanguage as Lang;
-  }
-
-  const strings = settings.strings[settings.language];
-
-  Settings.defaultLocale = navigator.language;
-
-  return { settings, strings };
-}
-
-export const SettingsContext = createContext<{
+const SettingsContext = createContext<{
   settings: TSMLReactConfig;
   strings: Translation;
 }>({ settings: defaults, strings: en });
 
 export const useSettings = () => useContext(SettingsContext);
+
+export const SettingsProvider = ({
+  children,
+  userSettings,
+}: PropsWithChildren<{ userSettings?: TSMLReactConfig }>) => {
+  const value = useMemo(() => {
+    const settings = userSettings ? merge(defaults, userSettings) : defaults;
+
+    // flags can be specified to override the default. also [] means unset
+    if (!Array.isArray(settings.flags)) {
+      settings.flags = ['M', 'W'];
+    }
+
+    // columns can be specified to override the default
+    if (userSettings) {
+      if (Array.isArray(userSettings.columns)) {
+        settings.columns = userSettings.columns;
+      }
+      if (Array.isArray(userSettings.filters)) {
+        settings.filters = userSettings.filters;
+      }
+      if (Array.isArray(userSettings.params)) {
+        settings.params = userSettings.params;
+      }
+      if (Array.isArray(userSettings.times)) {
+        settings.times = userSettings.times;
+      }
+      if (Array.isArray(userSettings.weekdays)) {
+        settings.weekdays = userSettings.weekdays;
+      }
+    }
+
+    const preferredLanguage = navigator.language.substring(0, 2);
+
+    if (preferredLanguage in settings.strings) {
+      settings.language = preferredLanguage as Lang;
+    }
+
+    const strings = settings.strings[settings.language];
+
+    Settings.defaultLocale = navigator.language;
+
+    return { settings, strings };
+  }, [userSettings]);
+
+  return (
+    <SettingsContext.Provider value={value}>
+      {children}
+    </SettingsContext.Provider>
+  );
+};
