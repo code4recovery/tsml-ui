@@ -24,7 +24,7 @@ export function calculateDistances({
   slugs: string[];
   strings: Translation;
 }) {
-  const input = useInput();
+  const { input } = useInput();
   const { meetings } = useData();
 
   //build new index and meetings array

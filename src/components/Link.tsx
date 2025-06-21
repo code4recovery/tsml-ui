@@ -1,12 +1,10 @@
-import { NavLink, useSearchParams } from 'react-router-dom';
-
-import { useFilter, useSettings } from '../hooks';
+import { useFilter, useInput, useSettings } from '../hooks';
 import type { Meeting } from '../types';
 
 export default function Link({ meeting }: { meeting: Meeting }) {
   const { meeting: thisMeeting } = useFilter();
   const { settings, strings } = useSettings();
-  const [searchParams] = useSearchParams();
+  const { setInput } = useInput();
 
   const flags =
     settings.flags
@@ -26,11 +24,13 @@ export default function Link({ meeting }: { meeting: Meeting }) {
     );
   }
 
-  searchParams.set('meeting', meeting.slug);
-
   return (
     <>
-      <NavLink to={`?${searchParams}`}>{meeting.name}</NavLink>
+      <a
+        onClick={() => setInput(input => ({ ...input, meeting: meeting.slug }))}
+      >
+        {meeting.name}
+      </a>
       {flags && <small>{flags}</small>}
     </>
   );

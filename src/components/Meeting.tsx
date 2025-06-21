@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 
 import { DateTime, Info } from 'luxon';
-import { Link as RouterLink, useSearchParams } from 'react-router-dom';
 
 import {
   formatDirectionsUrl,
@@ -23,12 +22,12 @@ import Icon, { icons } from './Icon';
 import Link from './Link';
 import Map from './Map';
 
-import { useData, useSettings } from '../hooks';
+import { useData, useInput, useSettings } from '../hooks';
 import type { Meeting as MeetingType } from '../types';
 
 export default function Meeting({ meeting }: { meeting: MeetingType }) {
   const { settings, strings } = useSettings();
-  const [searchParams] = useSearchParams();
+  const { setInput } = useInput();
 
   // open types
   const [define, setDefine] = useState<string | undefined>();
@@ -258,11 +257,11 @@ export default function Meeting({ meeting }: { meeting: MeetingType }) {
       </h1>
       <div css={meetingBackCss}>
         <Icon icon="back" />
-        <RouterLink
-          to={`${new URLSearchParams(searchParams).delete('meeting')}`}
+        <a
+          onClick={() => setInput(input => ({ ...input, meeting: undefined }))}
         >
           {strings.back_to_meetings}
-        </RouterLink>
+        </a>
       </div>
       <div css={meetingColumnsCss}>
         <div>

@@ -1,10 +1,9 @@
-import { useSearchParams } from 'react-router-dom';
 import { getIndexByKey, formatString as i18n } from '../helpers';
-import { useData, useSettings } from '../hooks';
+import { useData, useInput, useSettings } from '../hooks';
 
 export default function Title() {
   const { indexes } = useData();
-  const [searchParams] = useSearchParams();
+  const { input } = useInput();
   const { strings } = useSettings();
 
   // build title from strings.title
@@ -15,28 +14,29 @@ export default function Title() {
       parts.push(strings.meetings);
     } else if (
       key === 'search_with' &&
-      searchParams.get('mode') === 'search' &&
-      searchParams.has('search')
+      input.mode === 'search' &&
+      input.search
     ) {
       parts.push(
         i18n(strings.title.search_with, {
-          search: `‘${searchParams.get('search')}’`,
+          search: input.search,
         })
       );
     } else if (
       key === 'search_near' &&
-      searchParams.get('mode') === 'location' &&
-      searchParams.has('search')
+      input.mode === 'location' &&
+      input.search
     ) {
       parts.push(
         i18n(strings.title.search_near, {
-          search: `‘${searchParams.get('search')}’`,
+          search: input.search,
         })
       );
-    } else if (searchParams.has(key) && indexes[key as keyof typeof indexes]) {
-      const value = searchParams
-        .get(key)
-        ?.split('/')
+    } else if (
+      input[key as keyof typeof input] &&
+      indexes[key as keyof typeof indexes]
+    ) {
+      const value = (input[key as keyof typeof input] as string[])
         .map(
           value =>
             getIndexByKey(indexes[key as keyof typeof indexes], value)?.name

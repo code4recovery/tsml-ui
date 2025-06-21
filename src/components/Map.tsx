@@ -19,7 +19,7 @@ export default function Map() {
   );
   const { meetings } = useData();
   const { filteredSlugs, latitude, longitude } = useFilter();
-  const input = useInput();
+  const { input } = useInput();
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');

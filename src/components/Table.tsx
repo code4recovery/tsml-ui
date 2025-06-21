@@ -1,10 +1,9 @@
 import { useState } from 'react';
 
 import InfiniteScroll from 'react-infinite-scroller';
-import { useSearchParams } from 'react-router-dom';
 
 import { formatString as i18n } from '../helpers';
-import { useData, useFilter, useSettings } from '../hooks';
+import { useData, useFilter, useInput, useSettings } from '../hooks';
 import {
   tableChicletCss,
   tableChicletsCss,
@@ -20,7 +19,7 @@ export default function Table() {
   const { capabilities, meetings } = useData();
   const { filteredSlugs, inProgress } = useFilter();
   const { settings, strings } = useSettings();
-  const [_, setSearchParams] = useSearchParams();
+  const { setInput } = useInput();
   const meetingsPerPage = 10;
   const supported_columns = [
     'address',
@@ -126,11 +125,7 @@ export default function Table() {
     const meeting = meetings[slug];
     return (
       <tr
-        onClick={() =>
-          setSearchParams({
-            meeting: meeting.slug,
-          })
-        }
+        onClick={() => setInput(input => ({ ...input, meeting: meeting.slug }))}
       >
         {columns.map((column, index) => (
           <td className={`tsml-${column}`} key={index}>

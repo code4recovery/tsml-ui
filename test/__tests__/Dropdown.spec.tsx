@@ -3,8 +3,6 @@ import { MemoryRouter } from 'react-router-dom';
 
 import Dropdown from '../../src/components/Dropdown';
 import { defaults, SettingsProvider } from '../../src/hooks';
-import { State } from '../../src/types';
-import { mockState } from '../__fixtures__';
 
 const mockSetParams = jest.fn();
 
@@ -17,27 +15,6 @@ describe('<Dropdown />', () => {
   const filter = 'type';
   const settings = defaults;
   const defaultValue = settings.strings[`${filter}_any`];
-  const mockStateWithFilter: State = {
-    ...mockState,
-    input: {
-      ...mockState.input,
-      [filter]: [],
-    },
-    indexes: {
-      ...mockState.indexes,
-      [filter]: [
-        { key: 'foo', name: 'Foo', slugs: [] },
-        {
-          key: 'bar',
-          name: 'Bar',
-          slugs: [],
-          children: [{ key: 'baz', name: 'Baz', slugs: [] }],
-        },
-        { key: 'online', name: 'Online', slugs: [] },
-        { key: 'in-person', name: 'In-Person', slugs: [] },
-      ],
-    },
-  };
 
   it('renders', () => {
     render(
@@ -95,16 +72,6 @@ describe('<Dropdown />', () => {
         </SettingsProvider>
       </MemoryRouter>
     );
-
-    function modify<
-      K extends keyof (typeof mockStateWithFilter)['input'],
-      T extends (typeof mockStateWithFilter)['input'][K]
-    >(key: K, value: T) {
-      return {
-        ...mockStateWithFilter,
-        input: { ...mockStateWithFilter.input, [key]: value },
-      };
-    }
 
     //dropdown starts open
     const dropdown = screen.getByLabelText(defaultValue);

@@ -45,7 +45,7 @@ export const FilterProvider = ({ children }: PropsWithChildren) => {
   }>({ waiting: false });
   const { settings, strings } = useSettings();
   const { capabilities, indexes, meetings } = useData();
-  const input = useInput();
+  const { input } = useInput();
 
   useEffect(() => {
     const matchGroups: string[][] = [];
@@ -255,6 +255,12 @@ export const FilterProvider = ({ children }: PropsWithChildren) => {
       input.meeting && input.meeting in meetings
         ? meetings[input.meeting]
         : undefined;
+
+    setAlert(
+      !filteredSlugs.length && !inProgress.length
+        ? strings.no_results
+        : undefined
+    );
 
     setFilter({ filteredSlugs, inProgress, meeting });
   }, [meetings, input]);

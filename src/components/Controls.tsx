@@ -1,7 +1,5 @@
 import { FormEvent, MouseEvent, useEffect, useRef, useState } from 'react';
 
-import { useSearchParams } from 'react-router-dom';
-
 import { analyticsEvent } from '../helpers';
 import { useData, useFilter, useInput, useSettings } from '../hooks';
 import {
@@ -23,11 +21,8 @@ export default function Controls() {
   const { latitude } = useFilter();
   const { settings, strings } = useSettings();
   const [dropdown, setDropdown] = useState<string>();
-  const [searchParams, setSearchParams] = useSearchParams();
-  const input = useInput();
-  const [search, setSearch] = useState(
-    input.mode === 'location' ? input.search : ''
-  );
+  const { input, setInput } = useInput();
+  const [search, setSearch] = useState(input.search);
   const searchInput = useRef<HTMLInputElement>(null);
 
   // get available search options based on capabilities
@@ -81,17 +76,13 @@ export default function Controls() {
   useEffect(() => {
     if (!searchInput.current) return;
 
+    if (input.mode !== 'search') return;
+
     const { value } = searchInput.current;
 
-    if (value === search) return;
-    if (input.search === value) return;
-    if (value) {
-      searchParams.set('search', value);
-    } else {
-      searchParams.delete('search');
-    }
+    if (value === input.search) return;
 
-    setSearchParams(searchParams);
+    setInput(input => ({ ...input, search: value }));
   }, [searchInput.current?.value]);
 
   // close current dropdown (on body click)
@@ -105,16 +96,13 @@ export default function Controls() {
 
     if (input.mode !== 'location') return;
 
-    if (search) {
-      searchParams.set('search', search);
-    } else {
-      searchParams.delete('search');
+    if (!search) {
       Object.keys(meetings).forEach(slug => {
         meetings[slug].distance = undefined;
       });
     }
 
-    setSearchParams(searchParams);
+    setInput(input => ({ ...input, search }));
   };
 
   // set search mode dropdown and reset distances
@@ -127,39 +115,31 @@ export default function Controls() {
 
     if (mode === 'me') {
       setSearch('');
-      searchParams.delete('search');
     } else if (mode === 'location') {
       // sync local with state
       setSearch(input.search);
     }
 
-    if (mode !== settings.defaults.mode) {
-      searchParams.set('mode', mode);
-    } else {
-      searchParams.delete('mode');
-    }
-
     // focus after waiting for disabled to clear
     setTimeout(() => searchInput.current?.focus(), 100);
 
-    searchParams.set('distance', settings.default_distance.join('/'));
+    const distance =
+      mode !== 'search' && !input.distance.length
+        ? settings.default_distance
+        : input.distance;
 
-    setSearchParams(searchParams);
+    setInput(input => ({
+      ...input,
+      mode,
+      search,
+      distance,
+    }));
   };
 
-  //toggle list/map view
+  // toggle list/map view
   const setView = (e: MouseEvent, view: 'table' | 'map') => {
     e.preventDefault();
-
-    if (view !== 'table') {
-      searchParams.set('view', view);
-    } else {
-      searchParams.delete('view');
-    }
-
-    // setState({ ...state, input: { ...state.input, view } });
-
-    setSearchParams(searchParams);
+    setInput(input => ({ ...input, view }));
   };
 
   return (
@@ -170,21 +150,12 @@ export default function Controls() {
             aria-label={strings.modes[input.mode]}
             css={modes.length > 1 ? controlsInputFirstCss : controlsInputCss}
             disabled={input.mode === 'me'}
-            onChange={e => {
-              if (input.mode === 'search') {
-                // setState(state => ({
-                //   ...state,
-                //   input: { ...state.input, search: e.target.value },
-                // }));
-              } else {
-                setSearch(e.target.value);
-              }
-            }}
+            onChange={e => setSearch(e.target.value)}
             placeholder={strings.modes[input.mode]}
             ref={searchInput}
             spellCheck="false"
             type="search"
-            value={input.mode === 'location' ? search : input.search}
+            value={search}
           />
           <input type="submit" hidden css={controlsInputSearchSubmitCss} />
           {modes.length > 1 && (

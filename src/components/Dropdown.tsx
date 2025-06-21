@@ -6,8 +6,6 @@ import {
   useState,
 } from 'react';
 
-import { useSearchParams } from 'react-router-dom';
-
 import { getIndexByKey, formatString as i18n } from '../helpers';
 import { type Data, useData, useInput, useSettings } from '../hooks';
 import { dropdownButtonCss, dropdownCss } from '../styles';
@@ -25,14 +23,13 @@ export default function Dropdown({
   setDropdown: Dispatch<SetStateAction<string | undefined>>;
 }) {
   const { indexes } = useData();
-  const [searchParams, setSearchParams] = useSearchParams();
   const { strings } = useSettings();
-  const input = useInput();
+  const { input, setInput } = useInput();
   const options = indexes[filter];
   const values = input[filter as keyof typeof input] as string[];
   const [expanded, setExpanded] = useState<string[]>([]);
 
-  //handle expand toggle
+  // handle expand toggle
   const toggleExpanded = (e: MouseEvent<HTMLButtonElement>, key: string) => {
     e.preventDefault();
     e.stopPropagation();
@@ -52,39 +49,28 @@ export default function Dropdown({
     e.preventDefault();
 
     // add or remove from filters
-    let currentValues = `${searchParams.get(filter)}`.split('/');
+    let currentValues = input[filter] as string[];
 
     if (value) {
       const index = currentValues.indexOf(value);
       if (e.metaKey || e.ctrlKey) {
         if (index === -1) {
           currentValues.push(value);
+          currentValues.sort();
         } else {
           // Remove the value
           currentValues.splice(index, 1);
         }
-        // sort values
-        if (currentValues.length) {
-          currentValues.sort();
-
-          // TODO: this is a hack to get around unable to use %2F in search params
-          // currently this will break if filter values are seperated by escaping / with  %2F
-          const newValues = currentValues.join('/');
-          searchParams.set(filter, newValues);
-        } else {
-          searchParams.delete(filter);
-        }
       } else {
         // Single value, directly set the value
-        searchParams.set(filter, value);
+        currentValues = [value];
       }
     } else {
       // Remove the filter from search params if no value is provided
-      searchParams.delete(filter);
+      currentValues = [];
     }
 
-    // Update search params state
-    setSearchParams(searchParams);
+    setInput(input => ({ ...input, [filter]: currentValues }));
   };
 
   const renderDropdownItem = (
@@ -135,7 +121,7 @@ export default function Dropdown({
     </Fragment>
   );
 
-  //separate section above the other items
+  // separate section above the other items
   const special = {
     type: ['active', 'in-person', 'online'],
   };

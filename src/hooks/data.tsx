@@ -71,7 +71,7 @@ export const DataProvider = ({
 }: PropsWithChildren<{ google?: string; src?: string; timezone?: string }>) => {
   const [error, setError] = useState<string>();
   const [data, setData] = useState<Data>(defaultData);
-  const input = useInput();
+  const { input } = useInput();
   const { settings, strings } = useSettings();
 
   useEffect(() => {
