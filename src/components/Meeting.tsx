@@ -34,43 +34,6 @@ export default function Meeting({ meeting }: { meeting: MeetingType }) {
 
   const { capabilities, meetings } = useData();
 
-  // scroll to top when you navigate to this page
-  useEffect(() => {
-    const el = document.getElementById('tsml-ui');
-    if (el) {
-      const headerHeight = Math.max(
-        0,
-        ...[
-          ...Array.prototype.slice.call(
-            document.body.getElementsByTagName('*')
-          ),
-        ]
-          .filter(
-            x =>
-              getComputedStyle(x, null).getPropertyValue('position') ===
-                'fixed' && x.offsetTop < 100
-          )
-          .map(x => x.offsetTop + x.offsetHeight)
-      );
-      if (headerHeight) {
-        el.style.scrollMarginTop = `${headerHeight}px`;
-      }
-      el.scrollIntoView();
-    }
-
-    document.getElementById('tsml-title')?.focus();
-
-    // log edit_url
-    if (meeting.edit_url) {
-      console.log(`TSML UI edit ${meeting.name}: ${meeting.edit_url}`);
-      wordPressEditLink(meeting.edit_url);
-    }
-
-    return () => {
-      wordPressEditLink();
-    };
-  }, [meeting]);
-
   const sharePayload = {
     title: meeting.name,
     url: meeting.url ?? location.href,
@@ -115,6 +78,43 @@ export default function Meeting({ meeting }: { meeting: MeetingType }) {
 
     return start.toFormat('cccc t ZZZZ');
   };
+
+  // scroll to top when you navigate to this page
+  useEffect(() => {
+    const el = document.getElementById('tsml-ui');
+    if (el) {
+      const headerHeight = Math.max(
+        0,
+        ...[
+          ...Array.prototype.slice.call(
+            document.body.getElementsByTagName('*')
+          ),
+        ]
+          .filter(
+            x =>
+              getComputedStyle(x, null).getPropertyValue('position') ===
+                'fixed' && x.offsetTop < 100
+          )
+          .map(x => x.offsetTop + x.offsetHeight)
+      );
+      if (headerHeight) {
+        el.style.scrollMarginTop = `${headerHeight}px`;
+      }
+      el.scrollIntoView();
+    }
+
+    document.getElementById('tsml-title')?.focus();
+
+    // log edit_url
+    if (meeting.edit_url) {
+      console.log(`TSML UI edit ${meeting.name}: ${meeting.edit_url}`);
+      wordPressEditLink(meeting.edit_url);
+    }
+
+    return () => {
+      wordPressEditLink();
+    };
+  }, [meeting]);
 
   // directions URL link
   const directionsUrl = meeting.isInPerson

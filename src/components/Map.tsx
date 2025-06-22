@@ -18,7 +18,7 @@ export default function Map() {
     window.matchMedia('(prefers-color-scheme: dark)').matches
   );
   const { meetings } = useData();
-  const { filteredSlugs, latitude, longitude } = useFilter();
+  const { filteredSlugs, latitude, longitude, meeting } = useFilter();
   const { input } = useInput();
 
   useEffect(() => {
@@ -35,7 +35,8 @@ export default function Map() {
   // reset locations when filteredSlugs changes
   useEffect(() => {
     const locations: { [index: string]: MapLocation } = {};
-    filteredSlugs?.forEach(slug => {
+
+    (meeting?.slug ? [meeting.slug] : filteredSlugs)?.forEach(slug => {
       const meeting = meetings[slug];
 
       if (meeting?.latitude && meeting?.longitude && meeting?.isInPerson) {

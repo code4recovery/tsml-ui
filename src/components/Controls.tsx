@@ -180,7 +180,7 @@ export default function Controls() {
             {modes.map(mode => (
               <div
                 className="tsml-dropdown__item"
-                data-active={mode === input.mode}
+                data-active={input.mode === mode}
                 key={mode}
               >
                 <button
@@ -211,7 +211,7 @@ export default function Controls() {
           {views.map((view, index) => (
             <button
               css={index ? controlsGroupLastCss : controlsGroupFirstCss}
-              data-active={view === input.view}
+              data-active={input.view === view}
               key={view}
               onClick={e => setView(e, view)}
               type="button"

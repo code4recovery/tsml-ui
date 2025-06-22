@@ -106,8 +106,8 @@ export function calculateDistances({
   // }));
 }
 
-// Calculate the distance as the crow flies between two geometric points
-// Adapted from: https://www.geodatasource.com/developers/javascript
+// calculate the distance between two geometric points
+// adapted from: https://www.geodatasource.com/developers/javascript
 export function getDistance(
   a: { latitude: number; longitude: number },
   b: Meeting,
