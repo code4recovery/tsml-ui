@@ -66,7 +66,7 @@ export default function TsmlUI({
 const Content = () => {
   const { loading } = useData();
   const { meeting } = useFilter();
-  const { input } = useInput();
+  const { input, waiting } = useInput();
   return loading ? (
     <Loading />
   ) : meeting ? (
@@ -75,8 +75,14 @@ const Content = () => {
     <>
       <Title />
       <Controls />
-      <Alert />
-      {input.view === 'map' ? <Map /> : <Table />}
+      {waiting ? (
+        <Loading />
+      ) : (
+        <>
+          <Alert />
+          {input.view === 'map' ? <Map /> : <Table />}
+        </>
+      )}
     </>
   );
 };

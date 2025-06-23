@@ -18,8 +18,8 @@ export default function Map() {
     window.matchMedia('(prefers-color-scheme: dark)').matches
   );
   const { meetings } = useData();
-  const { filteredSlugs, latitude, longitude, meeting } = useFilter();
-  const { input } = useInput();
+  const { filteredSlugs, meeting } = useFilter();
+  const { input, latitude, longitude } = useInput();
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');

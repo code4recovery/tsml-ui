@@ -1,7 +1,7 @@
 import { FormEvent, MouseEvent, useEffect, useRef, useState } from 'react';
 
 import { analyticsEvent } from '../helpers';
-import { useData, useFilter, useInput, useSettings } from '../hooks';
+import { useData, useInput, useSettings } from '../hooks';
 import {
   controlsCss,
   controlsGroupFirstCss,
@@ -18,7 +18,6 @@ import Dropdown from './Dropdown';
 
 export default function Controls() {
   const { capabilities, meetings } = useData();
-  const { latitude } = useFilter();
   const { settings, strings } = useSettings();
   const [dropdown, setDropdown] = useState<string>();
   const { input, setInput } = useInput();
@@ -34,13 +33,11 @@ export default function Controls() {
         mode !== 'me' || (capabilities.coordinates && capabilities.geolocation)
     );
 
-  // get available filters
-  const filters = settings.filters
+  // get available dropdowns
+  const dropdowns = settings.filters
     .filter(filter => capabilities[filter])
     .filter(filter => filter !== 'region' || input.mode === 'search')
-    .filter(
-      filter => filter !== 'distance' || (input.mode !== 'search' && latitude)
-    );
+    .filter(filter => filter !== 'distance' || input.mode !== 'search');
 
   // get available views
   const allViews = ['table', 'map'] as const;
@@ -194,7 +191,7 @@ export default function Controls() {
           </div>
         )}
       </form>
-      {filters.map(filter => (
+      {dropdowns.map(filter => (
         <div key={filter}>
           <Dropdown
             defaultValue={

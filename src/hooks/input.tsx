@@ -7,12 +7,22 @@ import React, {
 } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
-import { defaults } from './settings';
+import { defaults, useSettings } from './settings';
 
-const InputContext = createContext<{
-  input: TSMLReactConfig['defaults'];
-  setInput: React.Dispatch<React.SetStateAction<TSMLReactConfig['defaults']>>;
-}>({ input: defaults.defaults, setInput: () => {} });
+type Coordinates = {
+  latitude?: number;
+  longitude?: number;
+  waiting: boolean;
+};
+
+const InputContext = createContext<
+  {
+    input: TSMLReactConfig['defaults'];
+    latitude?: number;
+    longitude?: number;
+    setInput: React.Dispatch<React.SetStateAction<TSMLReactConfig['defaults']>>;
+  } & Coordinates
+>({ input: defaults.defaults, setInput: () => {}, waiting: false });
 
 export const InputProvider = ({ children }: PropsWithChildren) => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -21,12 +31,18 @@ export const InputProvider = ({ children }: PropsWithChildren) => {
     defaults.defaults
   );
 
+  const [coordinates, setCoordinates] = useState<Coordinates>({
+    waiting: input.mode !== 'search',
+  });
+
+  const { settings } = useSettings();
+
   // detect initial input from URL search params
   useEffect(() => {
     const mode =
       searchParams.get('mode') === 'location'
         ? 'location'
-        : searchParams.get('me')
+        : searchParams.get('mode') === 'me'
         ? 'me'
         : 'search';
     const view = searchParams.get('view') === 'map' ? 'map' : 'table';
@@ -84,8 +100,80 @@ export const InputProvider = ({ children }: PropsWithChildren) => {
     setSearchParams(filteredParams);
   }, [input]);
 
+  // handle geocoding or geolocation requests
+  useEffect(() => {
+    if (coordinates.waiting) {
+      console.debug('TSML UI coordinates request already in progress');
+      return;
+    }
+    if (input.mode === 'location' && input.search) {
+      console.debug('TSML UI geocoding request');
+      setCoordinates({ waiting: true });
+      const url =
+        window.location.host === 'tsml-ui.test'
+          ? 'geo.test'
+          : 'geo.code4recovery.org';
+      fetch(
+        `https:// ${url}/api/geocode?${new URLSearchParams({
+          application: 'tsml-ui',
+          language: settings.language,
+          referrer: window.location.href,
+          search: input.search,
+        })}`
+      )
+        .then(result => result.json())
+        .then(({ results }) => {
+          if (results?.length) {
+            const { latitude, longitude } = results[0];
+            console.debug(
+              `TSML UI geocoding success: ${latitude}, ${longitude}`
+            );
+            setCoordinates({
+              latitude,
+              longitude,
+              waiting: false,
+            });
+          } else {
+            setCoordinates({
+              waiting: false,
+            });
+            console.warn(
+              `TSML UI geocoding error: no results for "${input.search}"`
+            );
+          }
+        });
+    } else if (input.mode === 'me') {
+      console.debug('TSML UI geolocation request');
+      setCoordinates({ waiting: true });
+      navigator.geolocation.getCurrentPosition(
+        position => {
+          console.debug(
+            `TSML UI geolocation success: ${position.coords.latitude}, ${position.coords.longitude}`
+          );
+          setCoordinates({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+            waiting: false,
+          });
+        },
+        error => {
+          console.warn(`TSML UI geolocation error: ${error.message}`);
+          // setState(state => ({
+          //   ...state,
+          //   error: strings.errors.geolocation,
+          //   filtering: false,
+          // }));
+        },
+        { timeout: 5000 }
+      );
+    } else {
+      console.debug('TSML UI no geocoding or geolocation request');
+      setCoordinates({ waiting: false });
+    }
+  }, [input.mode, input.search]);
+
   return (
-    <InputContext.Provider value={{ input, setInput }}>
+    <InputContext.Provider value={{ input, setInput, ...coordinates }}>
       {children}
     </InputContext.Provider>
   );
