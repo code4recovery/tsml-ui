@@ -32,7 +32,7 @@ export const FilterProvider = ({ children }: PropsWithChildren) => {
     filteredSlugs: [],
     inProgress: [],
   });
-  const { input } = useInput();
+  const { input, latitude, longitude } = useInput();
 
   const { settings, strings } = useSettings();
   const { capabilities, indexes, loading, meetings } = useData();
@@ -105,13 +105,28 @@ export const FilterProvider = ({ children }: PropsWithChildren) => {
       matchGroups.push(
         slugs.filter(slug => meetings[slug].latitude && meetings[slug].latitude)
       );
+
+      if (input.distance && latitude && longitude) {
+        // filter by distance
+        matchGroups.push(
+          slugs.filter(slug => {
+            const meeting = meetings[slug];
+            if (!meeting.latitude || !meeting.longitude) return false;
+            const distance = meeting.distance ?? 0;
+            return (
+              distance <= input.distance! &&
+              meeting.latitude !== latitude &&
+              meeting.longitude !== longitude
+            );
+          })
+        );
+      }
     }
 
     // do the filtering, if necessary
     const filteredSlugs = matchGroups.length
-      ? // @ts-expect-error TODO
-        matchGroups.shift().filter(v => matchGroups.every(a => a.includes(v))) // get intersection of slug arrays
-      : slugs; // get everything
+      ? matchGroups.reduce((acc, cur) => acc.filter(item => cur.includes(item)))
+      : slugs;
 
     // build lookup for meeting times based on now
     slugs.forEach(slug => {

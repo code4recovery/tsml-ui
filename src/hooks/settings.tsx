@@ -33,9 +33,8 @@ export const defaults: TSMLReactConfig = {
     'zoho.com': 'Zoho',
     'zoom.us': 'Zoom',
   },
-  default_distance: ['5'],
   defaults: {
-    distance: [],
+    distance: undefined,
     mode: 'search',
     region: [],
     search: '',
@@ -44,11 +43,12 @@ export const defaults: TSMLReactConfig = {
     view: 'table',
     weekday: [],
   },
+  distance_default: 5,
   distance_options: [1, 2, 5, 10, 15, 25, 50, 100],
-  distance_unit: 'mi', //mi or km
+  distance_unit: 'mi', // mi or km
   duration: 60,
-  feedback_emails: [], //email addresses for update meeting info button
-  filters: ['region', 'distance', 'weekday', 'time', 'type'],
+  feedback_emails: [], // email addresses for update meeting info button
+  filters: ['region', 'weekday', 'time', 'type'],
   in_person_types: [
     'BA',
     'BRK',

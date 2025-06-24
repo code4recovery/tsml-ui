@@ -3,7 +3,7 @@ import { useData, useInput, useSettings } from '../hooks';
 
 export default function Title() {
   const { indexes } = useData();
-  const { input } = useInput();
+  const { input, latitude, longitude } = useInput();
   const { strings } = useSettings();
 
   // build title from strings.title
@@ -34,7 +34,8 @@ export default function Title() {
       );
     } else if (
       input[key as keyof typeof input] &&
-      indexes[key as keyof typeof indexes]
+      indexes[key as keyof typeof indexes] &&
+      key !== 'distance'
     ) {
       const value = (input[key as keyof typeof input] as string[])
         .map(
@@ -49,6 +50,13 @@ export default function Title() {
           })
         );
       }
+    } else if (key === 'distance' && latitude && longitude) {
+      // todo
+      parts.push(
+        i18n(strings.title.distance, {
+          distance: `${input.distance}`,
+        })
+      );
     }
   });
 

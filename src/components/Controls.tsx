@@ -36,8 +36,7 @@ export default function Controls() {
   // get available dropdowns
   const dropdowns = settings.filters
     .filter(filter => capabilities[filter])
-    .filter(filter => filter !== 'region' || input.mode === 'search')
-    .filter(filter => filter !== 'distance' || input.mode !== 'search');
+    .filter(filter => filter !== 'region' || input.mode === 'search');
 
   // get available views
   const allViews = ['table', 'map'] as const;
@@ -120,16 +119,15 @@ export default function Controls() {
     // focus after waiting for disabled to clear
     setTimeout(() => searchInput.current?.focus(), 100);
 
-    const distance =
-      mode !== 'search' && !input.distance.length
-        ? settings.default_distance
-        : input.distance;
-
     setInput(input => ({
       ...input,
+      distance:
+        mode === 'search'
+          ? undefined
+          : input.distance ?? settings.distance_default,
       mode,
+      region: mode === 'search' ? input.region : [],
       search,
-      distance,
     }));
   };
 
@@ -191,6 +189,14 @@ export default function Controls() {
           </div>
         )}
       </form>
+      {input.mode !== 'search' && (
+        <Dropdown
+          defaultValue={`${input.distance} ${settings.distance_unit}`}
+          filter="distance"
+          open={dropdown === 'distance'}
+          setDropdown={setDropdown}
+        />
+      )}
       {dropdowns.map(filter => (
         <div key={filter}>
           <Dropdown

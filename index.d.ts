@@ -11,9 +11,8 @@ interface TSMLReactConfig {
   calendar_enabled: boolean;
   columns: string[];
   conference_providers: Record<string, string>;
-  default_distance: string[];
   defaults: {
-    distance: string[];
+    distance?: number;
     meeting?: string;
     mode: 'search' | 'location' | 'me';
     region: string[];
@@ -23,11 +22,12 @@ interface TSMLReactConfig {
     view: 'table' | 'map';
     weekday: TSMLReactConfig['weekdays'];
   };
+  distance_default: number;
   distance_options: number[];
   distance_unit: 'mi' | 'km';
   duration: number;
   feedback_emails: string[];
-  filters: Array<'region' | 'distance' | 'weekday' | 'time' | 'type'>;
+  filters: Array<'region' | 'weekday' | 'time' | 'type'>;
   flags?: string[];
   in_person_types: string[];
   language: Lang;

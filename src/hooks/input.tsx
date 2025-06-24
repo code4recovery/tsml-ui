@@ -63,8 +63,10 @@ export const InputProvider = ({ children }: PropsWithChildren) => {
       : [];
     const meeting = searchParams.get('meeting') ?? undefined;
     const distance = searchParams.has('distance')
-      ? `${searchParams.get('distance')}`.split('/')
-      : [];
+      ? parseInt(searchParams.get('distance') ?? '')
+      : mode !== 'search'
+      ? settings.distance_default
+      : undefined;
 
     setInput(input => ({
       ...input,
@@ -84,7 +86,7 @@ export const InputProvider = ({ children }: PropsWithChildren) => {
   useEffect(() => {
     if (input === defaults.defaults) return;
     const params = {
-      distance: input.distance.join('/'),
+      distance: input.distance,
       meeting: input.meeting,
       mode: input.mode == defaults.defaults.mode ? '' : input.mode,
       region: input.region.join('/'),

@@ -10,7 +10,6 @@ describe('formatUrl', () => {
     expect(
       formatUrl(
         {
-          distance: ['1'],
           region: ['foo'],
           time: ['night'],
           type: ['online'],
