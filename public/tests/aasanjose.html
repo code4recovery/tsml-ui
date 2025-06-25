@@ -38,9 +38,13 @@
       var tsml_react_config = {
         feedback_emails: ['meetings@aasanjose.org'],
         map: {
+          tiles: {
+            attribution: `Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>`,
+            url: 'https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token=pk.eyJ1Ijoiam9zaHJlaXNuZXIiLCJhIjoiY2tvYXA0YnZxMGRldDJxbzdta25uNGphdiJ9.eay-UKgIT99ALmdw08xBPw',
+          },
           tiles_dark: {
-            attribution: `&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors`,
-            url: 'https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png',
+            attribution: `Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>`,
+            url: 'https://api.mapbox.com/styles/v1/mapbox/dark-v10/tiles/{z}/{x}/{y}?access_token=pk.eyJ1Ijoiam9zaHJlaXNuZXIiLCJhIjoiY2tvYXA0YnZxMGRldDJxbzdta25uNGphdiJ9.eay-UKgIT99ALmdw08xBPw',
           },
         },
       };

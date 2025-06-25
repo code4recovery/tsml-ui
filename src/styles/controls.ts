@@ -58,11 +58,15 @@ export const controlsGroupLastCss = css`
   margin-left: -1px !important;
 `;
 
-// todo figure out how to color the cancel button - then we can re-enable
 export const controlsInputCss = css`
   &[type='search'] {
     ${formControlCss}
     border: 1px solid ${color.medium};
+    cursor: text;
+    &[disabled] {
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
     &:focus {
       border: 1px solid ${color.dark};
       outline: none;
