@@ -3,8 +3,8 @@ import { useData, useInput, useSettings } from '../hooks';
 
 export default function Title() {
   const { indexes } = useData();
-  const { input, latitude, longitude } = useInput();
-  const { strings } = useSettings();
+  const { input } = useInput();
+  const { settings, strings } = useSettings();
 
   // build title from strings.title
   const parts: string[] = [];
@@ -50,11 +50,11 @@ export default function Title() {
           })
         );
       }
-    } else if (key === 'distance' && latitude && longitude) {
+    } else if (key === 'distance' && input.distance) {
       // todo
       parts.push(
         i18n(strings.title.distance, {
-          distance: `${input.distance}`,
+          distance: `${input.distance} ${settings.distance_unit}`,
         })
       );
     }

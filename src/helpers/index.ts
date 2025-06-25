@@ -1,5 +1,4 @@
 export * from './analytics';
-export * from './calculate-distances';
 export * from './flatten-and-sort-indexes';
 export * from './format-address';
 export * from './format-array';
@@ -10,6 +9,7 @@ export * from './format-ics';
 export * from './format-slug';
 export * from './format-string';
 export * from './format-url';
+export * from './get-distance';
 export * from './get-index-by-key';
 export * from './load-meeting-data';
 export * from './translate-google-sheet';

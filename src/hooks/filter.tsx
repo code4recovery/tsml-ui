@@ -6,7 +6,7 @@ import {
   useEffect,
   useState,
 } from 'react';
-import { getIndexByKey } from '../helpers';
+import { getDistance, getIndexByKey } from '../helpers';
 import { Meeting } from '../types';
 import { useData } from './data';
 import { useInput } from './input';
@@ -112,7 +112,12 @@ export const FilterProvider = ({ children }: PropsWithChildren) => {
           slugs.filter(slug => {
             const meeting = meetings[slug];
             if (!meeting.latitude || !meeting.longitude) return false;
-            const distance = meeting.distance ?? 0;
+            const distance = getDistance(
+              { latitude, longitude },
+              meeting,
+              settings
+            );
+            if (distance === undefined) return false;
             return (
               distance <= input.distance! &&
               meeting.latitude !== latitude &&

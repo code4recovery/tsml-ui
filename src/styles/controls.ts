@@ -63,6 +63,10 @@ export const controlsInputCss = css`
     ${formControlCss}
     border: 1px solid ${color.medium};
     cursor: text;
+    &[disabled] {
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
     &:focus {
       border: 1px solid ${color.dark};
       outline: none;

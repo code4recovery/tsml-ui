@@ -26,8 +26,13 @@ export default function Dropdown({
   const { strings } = useSettings();
   const { input, setInput } = useInput();
   const options = indexes[filter];
-  const values = input[filter as keyof typeof input] as string[];
+  const values =
+    filter === 'distance'
+      ? [`${input.distance}`]
+      : (input[filter as keyof typeof input] as string[]);
   const [expanded, setExpanded] = useState<string[]>([]);
+
+  console.debug('Dropdown', { filter, open, values, options });
 
   // handle expand toggle
   const toggleExpanded = (e: MouseEvent<HTMLButtonElement>, key: string) => {

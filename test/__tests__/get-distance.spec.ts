@@ -1,4 +1,4 @@
-import { getDistance } from '../../src/helpers/calculate-distances';
+import { getDistance } from '../../src/helpers/get-distance';
 import { defaults as settings } from '../../src/hooks';
 
 import type { Meeting } from '../../src/types';

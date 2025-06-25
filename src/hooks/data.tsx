@@ -6,7 +6,7 @@ import {
   useState,
 } from 'react';
 
-import { loadMeetingData, translateGoogleSheet } from '../helpers';
+import { getDistance, loadMeetingData, translateGoogleSheet } from '../helpers';
 import { Index, Meeting } from '../types';
 import { useInput } from './input';
 import { useSettings } from './settings';
@@ -71,7 +71,7 @@ export const DataProvider = ({
 }: PropsWithChildren<{ google?: string; src?: string; timezone?: string }>) => {
   const [error, setError] = useState<string>();
   const [data, setData] = useState<Data>(defaultData);
-  const { input } = useInput();
+  const { input, latitude, longitude } = useInput();
   const { settings, strings } = useSettings();
 
   useEffect(() => {
@@ -158,6 +158,53 @@ export const DataProvider = ({
         });
     }
   }, []);
+
+  // calculate distance if coordinates are available
+  useEffect(() => {
+    if (!latitude || !longitude || !data.meetings || data.loading) return;
+
+    const distances = Object.fromEntries(
+      settings.distance_options.map(option => [option, []])
+    );
+
+    Object.keys(data.meetings).forEach(slug => {
+      const meeting = data.meetings[slug];
+      if (meeting.latitude && meeting.longitude) {
+        meeting.distance = getDistance(
+          { latitude, longitude },
+          meeting,
+          settings
+        );
+      }
+
+      for (const option of settings.distance_options) {
+        if (meeting.distance && meeting.distance <= option) {
+          (distances[option] as string[]).push(meeting.slug);
+        }
+      }
+
+      data.meetings[slug] = meeting;
+    });
+
+    const distance: Index[] = Object.entries(distances).map(([key, slugs]) => ({
+      key,
+      name: `${key} ${settings.distance_unit}`,
+      slugs,
+    }));
+
+    setData(prevData => ({
+      ...prevData,
+      capabilities: {
+        ...prevData.capabilities,
+        distance: true,
+      },
+      indexes: {
+        ...prevData.indexes,
+        distance,
+      },
+      meetings: data.meetings,
+    }));
+  }, [latitude, longitude, data.meetings, settings.distance_unit]);
 
   return (
     <DataContext.Provider value={{ ...data, error }}>
