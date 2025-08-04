@@ -107,12 +107,11 @@ export const InputProvider = ({ children }: PropsWithChildren) => {
     if (coordinates.waiting) return;
     if (input.mode === 'location' && input.search) {
       setCoordinates({ waiting: true });
-      const url =
-        window.location.host === 'tsml-ui.test'
-          ? 'geo.test'
-          : 'geo.code4recovery.org';
+      const url = window.location.hostname.endsWith('.test')
+        ? 'geo.test'
+        : 'geo.code4recovery.org';
       fetch(
-        `https:// ${url}/api/geocode?${new URLSearchParams({
+        `https://${url}/api/geocode?${new URLSearchParams({
           application: 'tsml-ui',
           language: settings.language,
           referrer: window.location.href,

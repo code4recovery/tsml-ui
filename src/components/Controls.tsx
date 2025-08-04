@@ -68,7 +68,7 @@ export default function Controls() {
     return () => clearTimeout(timer);
   }, [input.search]);
 
-  // update url params when search changes
+  // update global state when search changes
   useEffect(() => {
     if (!searchInput.current) return;
 
@@ -80,6 +80,14 @@ export default function Controls() {
 
     setInput(input => ({ ...input, search: value }));
   }, [searchInput.current?.value]);
+
+  // update search when global state changes
+  useEffect(() => {
+    if (!searchInput.current || searchInput.current.value === input.search)
+      return;
+
+    setSearch(input.search);
+  }, [input.search]);
 
   // close current dropdown (on body click)
   const closeDropdown = () => {
