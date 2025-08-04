@@ -1,13 +1,9 @@
-import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 
-import {
-  SettingsContext,
-  formatString as i18n,
-  mergeSettings,
-} from '../../src/helpers';
 import Table from '../../src/components/Table';
+import { formatString as i18n } from '../../src/helpers';
+import { defaults, SettingsProvider } from '../../src/hooks/settings';
 import { mockMeeting, mockState } from '../__fixtures__';
 
 describe('<Table />', () => {
@@ -18,21 +14,15 @@ describe('<Table />', () => {
     },
   };
   const filteredSlugs = Object.keys(mockStateWithMeeting.meetings);
-  const { strings } = mergeSettings();
-  const settings = mergeSettings();
+  const strings = defaults.strings.en;
 
   it('renders with clickable rows', () => {
     const mockSetState = jest.fn();
     render(
       <MemoryRouter>
-        <SettingsContext.Provider value={settings}>
-          <Table
-            filteredSlugs={filteredSlugs}
-            inProgress={[]}
-            setState={mockSetState}
-            state={mockStateWithMeeting}
-          />
-        </SettingsContext.Provider>
+        <SettingsProvider>
+          <Table />
+        </SettingsProvider>
       </MemoryRouter>
     );
 
@@ -49,14 +39,9 @@ describe('<Table />', () => {
 
     render(
       <MemoryRouter>
-        <SettingsContext.Provider value={settings}>
-          <Table
-            filteredSlugs={filteredSlugs}
-            inProgress={['foo']}
-            setState={mockSetState}
-            state={mockStateWithMeeting}
-          />
-        </SettingsContext.Provider>
+        <SettingsProvider>
+          <Table />
+        </SettingsProvider>
       </MemoryRouter>
     );
 
@@ -93,14 +78,9 @@ describe('<Table />', () => {
 
     render(
       <MemoryRouter>
-        <SettingsContext.Provider value={settings}>
-          <Table
-            filteredSlugs={multiFilteredSlugs}
-            inProgress={inProgress}
-            setState={mockSetState}
-            state={mockStateWithMeetings}
-          />
-        </SettingsContext.Provider>
+        <SettingsProvider>
+          <Table />
+        </SettingsProvider>
       </MemoryRouter>
     );
 

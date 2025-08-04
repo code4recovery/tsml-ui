@@ -1,6 +1,5 @@
 import { formatFeedbackEmail } from '../../src/helpers/format-feedback-email';
-import { getQueryString } from '../../src/helpers/query-string';
-import { defaults } from '../../src/helpers/settings';
+import { defaults } from '../../src/hooks';
 import { Meeting } from '../../src/types';
 
 jest.mock('../../src/helpers/format-url', () => ({
@@ -9,7 +8,7 @@ jest.mock('../../src/helpers/format-url', () => ({
 
 jest.mock('../../src/helpers/query-string');
 
-const mockedGetQueryString = jest.mocked(getQueryString);
+const mockedGetQueryString = jest.fn();
 
 //can't use mock factories with outside scoped variables
 mockedGetQueryString.mockReturnValue(defaults.defaults);

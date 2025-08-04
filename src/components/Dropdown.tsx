@@ -6,33 +6,35 @@ import {
   useState,
 } from 'react';
 
-import { useSearchParams } from 'react-router-dom';
-
-import { getIndexByKey, formatString as i18n, useSettings } from '../helpers';
+import { getIndexByKey, formatString as i18n } from '../helpers';
+import { type Data, useData, useInput, useSettings } from '../hooks';
 import { dropdownButtonCss, dropdownCss } from '../styles';
-
-import type { Index, State } from '../types';
+import type { Index } from '../types';
 
 export default function Dropdown({
   defaultValue,
   filter,
   open,
   setDropdown,
-  state,
 }: {
   defaultValue: string;
-  filter: keyof State['indexes'];
+  filter: keyof Data['indexes'];
   open: boolean;
   setDropdown: Dispatch<SetStateAction<string | undefined>>;
-  state: State;
 }) {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const { indexes } = useData();
   const { strings } = useSettings();
-  const options = state.indexes[filter];
-  const values = state.input[filter];
+  const { input, setInput } = useInput();
+  const options = indexes[filter];
+  const values =
+    filter === 'distance'
+      ? [`${input.distance}`]
+      : (input[filter as keyof typeof input] as string[]);
   const [expanded, setExpanded] = useState<string[]>([]);
 
-  //handle expand toggle
+  console.debug('Dropdown', { filter, open, values, options });
+
+  // handle expand toggle
   const toggleExpanded = (e: MouseEvent<HTMLButtonElement>, key: string) => {
     e.preventDefault();
     e.stopPropagation();
@@ -46,45 +48,34 @@ export default function Dropdown({
   //set filter: pass it up to parent
   const setFilter = (
     e: MouseEvent<HTMLButtonElement>,
-    filter: keyof typeof state.indexes,
+    filter: keyof typeof indexes,
     value?: string
   ) => {
     e.preventDefault();
 
     // add or remove from filters
-    let currentValues = searchParams.get(filter)?.split('/') ?? [];
+    let currentValues = input[filter] as string[];
 
     if (value) {
       const index = currentValues.indexOf(value);
       if (e.metaKey || e.ctrlKey) {
         if (index === -1) {
           currentValues.push(value);
+          currentValues.sort();
         } else {
           // Remove the value
           currentValues.splice(index, 1);
         }
-        // sort values
-        if (currentValues.length) {
-          currentValues.sort();
-
-          // TODO: this is a hack to get around unable to use %2F in search params
-          // currently this will break if filter values are seperated by escaping / with  %2F
-          const newValues = currentValues.join('/');
-          searchParams.set(filter, newValues);
-        } else {
-          searchParams.delete(filter);
-        }
       } else {
         // Single value, directly set the value
-        searchParams.set(filter, value);
+        currentValues = [value];
       }
     } else {
       // Remove the filter from search params if no value is provided
-      searchParams.delete(filter);
+      currentValues = [];
     }
 
-    // Update search params state
-    setSearchParams(searchParams);
+    setInput(input => ({ ...input, [filter]: currentValues }));
   };
 
   const renderDropdownItem = (
@@ -92,11 +83,7 @@ export default function Dropdown({
     parentExpanded: boolean = true
   ) => (
     <Fragment key={key}>
-      <div
-        className="tsml-dropdown__item"
-        // @ts-expect-error TODO
-        data-active={values.includes(key)}
-      >
+      <div className="tsml-dropdown__item" data-active={values.includes(key)}>
         <button
           className="tsml-dropdown__button"
           onClick={e => setFilter(e, filter, key)}
@@ -123,7 +110,7 @@ export default function Dropdown({
             aria-label={
               expanded.includes(key) ? strings.collapse : strings.expand
             }
-          ></button>
+          />
         )}
       </div>
       {!!children?.length && (
@@ -139,7 +126,7 @@ export default function Dropdown({
     </Fragment>
   );
 
-  //separate section above the other items
+  // separate section above the other items
   const special = {
     type: ['active', 'in-person', 'online'],
   };
