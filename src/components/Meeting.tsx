@@ -14,6 +14,7 @@ import {
   meetingColumnsCss,
   meetingCss,
   meetingOnlineCss,
+  paragraphsCss,
   tableChicletCss,
 } from '../styles';
 
@@ -477,7 +478,7 @@ export default function Meeting({ meeting }: { meeting: MeetingType }) {
 // return paragraphs from possibly-multiline string
 function Paragraphs({ text }: { text: string }) {
   return (
-    <div>
+    <div css={paragraphsCss}>
       {text
         .split('\n')
         .filter(e => e)
