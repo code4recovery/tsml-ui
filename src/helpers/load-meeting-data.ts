@@ -5,6 +5,7 @@ import { formatAddress } from './format-address';
 import { formatConferenceProvider } from './format-conference-provider';
 import { formatSlug } from './format-slug';
 import { states } from './states';
+import { streamlineRegionIndex } from './streamline-regions-index';
 
 import type { Index, JSONData, JSONDataFlat, Meeting, State } from '../types';
 
@@ -495,6 +496,8 @@ export function loadMeetingData(
   indexes.region = flattenAndSortIndexes(indexes.region, (a, b) =>
     a.name?.localeCompare(b.name)
   );
+
+  indexes.region = streamlineRegionIndex(indexes.region);
 
   // convert weekday to array and sort by ordinal
   indexes.weekday = flattenAndSortIndexes(
