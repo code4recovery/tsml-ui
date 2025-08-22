@@ -1,24 +1,22 @@
 import type { Index } from '../types';
 
-// recursively hoist single-child nodes
-export const streamlineRegionIndex = (indexes: Index[]): Index[] => {
-  const streamlined = indexes.map(item => {
-    if (item.children?.length === 1) {
+// clean up nodes that apply to all the parent's children
+export const streamlineRegionsIndex = (
+  indexes: Index[],
+  meetingsCount: number
+): Index[] =>
+  indexes
+    .filter(index => index.children || index.slugs.length < meetingsCount)
+    .flatMap(index => {
+      if (index.slugs.length === meetingsCount) {
+        // recursively process children, flattening the result
+        return streamlineRegionsIndex(index.children ?? [], index.slugs.length);
+      }
+      // return a new object with streamlined children if present
       return {
-        ...item.children[0],
-        children: streamlineRegionIndex(item.children[0].children || []),
+        ...index,
+        children: index.children
+          ? streamlineRegionsIndex(index.children, index.slugs.length)
+          : undefined,
       };
-    }
-    if (item.children?.length) {
-      return {
-        ...item,
-        children: streamlineRegionIndex(item.children),
-      };
-    }
-    return item;
-  });
-  if (streamlined.length === 1) {
-    return streamlined[0].children || [];
-  }
-  return streamlined;
-};
+    });
