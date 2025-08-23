@@ -12,5 +12,6 @@ export * from './format-url';
 export * from './get-distance';
 export * from './get-index-by-key';
 export * from './load-meeting-data';
+export * from './streamline-regions-index';
 export * from './translate-google-sheet';
 export * from './user-agent';
