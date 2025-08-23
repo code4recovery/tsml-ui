@@ -1,21 +1,10 @@
-import { Dispatch, SetStateAction } from 'react';
+import { useFilter, useInput, useSettings } from '../hooks';
+import type { Meeting } from '../types';
 
-import { NavLink } from 'react-router-dom';
-
-import { formatUrl, useSettings } from '../helpers';
-
-import type { State, Meeting } from '../types';
-
-export default function Link({
-  meeting,
-  setState,
-  state,
-}: {
-  meeting: Meeting;
-  setState?: Dispatch<SetStateAction<State>>;
-  state?: State;
-}) {
+export default function Link({ meeting }: { meeting: Meeting }) {
+  const { meeting: thisMeeting } = useFilter();
   const { settings, strings } = useSettings();
+  const { setInput } = useInput();
 
   const flags =
     settings.flags
@@ -24,7 +13,7 @@ export default function Link({
       .sort()
       .join(', ') ?? [];
 
-  if (!state || !setState) {
+  if (thisMeeting?.slug === meeting.slug) {
     return !flags.length ? (
       <>{meeting.name}</>
     ) : (
@@ -37,14 +26,11 @@ export default function Link({
 
   return (
     <>
-      <NavLink
-        to={formatUrl({ ...state.input, meeting: meeting.slug }, settings)}
-        onClick={e => {
-          e.stopPropagation();
-        }}
+      <a
+        onClick={() => setInput(input => ({ ...input, meeting: meeting.slug }))}
       >
         {meeting.name}
-      </NavLink>
+      </a>
       {flags && <small>{flags}</small>}
     </>
   );
