@@ -78,9 +78,9 @@ describe('translateGoogleSheet', () => {
     );
   });
 
-  it('returns undefined when sheet is empty', () => {
+  it('returns empty when sheet is empty', () => {
     expect(
       translateGoogleSheet({ values: [] }, sheetId, defaults)
-    ).toStrictEqual(undefined);
+    ).toStrictEqual([]);
   });
 });
