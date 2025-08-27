@@ -6,6 +6,7 @@ import { useSearchParams } from 'react-router-dom';
 import {
   filterMeetingData,
   getQueryString,
+  isGoogleSheetData,
   loadMeetingData,
   mergeSettings,
   SettingsContext,
@@ -24,7 +25,7 @@ import {
   Title,
 } from './';
 
-import type { State } from '../types';
+import type { JSONData, State } from '../types';
 
 export default function TsmlUI({
   google,
@@ -104,6 +105,20 @@ export default function TsmlUI({
 
       const input = getQueryString(settings);
 
+      if (timezone) {
+        // check if timezone is valid
+        try {
+          Intl.DateTimeFormat(undefined, { timeZone: timezone });
+        } catch (e) {
+          return setState(state => ({
+            ...state,
+            error: `Timezone ${timezone} is not valid. Please use one like Europe/Rome.`,
+            filtering: false,
+            loading: false,
+          }));
+        }
+      }
+
       if (!src) {
         setState(state => ({
           ...state,
@@ -112,60 +127,59 @@ export default function TsmlUI({
           loading: false,
         }));
       } else {
-        const sheetId = src.startsWith(
-          'https://docs.google.com/spreadsheets/d/'
-        )
-          ? src.split('/')[5]
-          : undefined;
+        const sheets: (string | undefined)[] = [];
+        Promise.all(
+          src.split(',').map(src => {
+            const sheetId = src.startsWith(
+              'https://docs.google.com/spreadsheets/d/'
+            )
+              ? src.split('/')[5]
+              : undefined;
+            sheets.push(sheetId);
 
-        // google sheet
-        if (sheetId) {
-          if (!google) {
-            setState(state => ({
-              ...state,
-              error: 'Configuration error: a Google API key is required.',
-              filtering: false,
-              loading: false,
-            }));
-          }
-          src = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/A1:ZZ?key=${google}`;
-        }
-
-        // cache busting
-        if (src.endsWith('.json') && input.meeting) {
-          src = `${src}?${new Date().getTime()}`;
-        }
-
-        // fetch json data file and build indexes
-        fetch(src)
-          .then(res => (res.ok ? res.json() : Promise.reject(res.status)))
-          .then(data => {
+            // google sheet
             if (sheetId) {
-              data = translateGoogleSheet(data, sheetId, settings);
-            }
-
-            if (!Array.isArray(data) || !data.length) {
-              return setState(state => ({
-                ...state,
-                error:
-                  'Configuration error: data is not in the correct format.',
-                filtering: false,
-                loading: false,
-              }));
-            }
-
-            if (timezone) {
-              try {
-                // check if timezone is valid
-                Intl.DateTimeFormat(undefined, { timeZone: timezone });
-              } catch (e) {
-                return setState(state => ({
+              if (!google) {
+                setState(state => ({
                   ...state,
-                  error: `Timezone ${timezone} is not valid. Please use one like Europe/Rome.`,
+                  error: 'Configuration error: a Google API key is required.',
                   filtering: false,
                   loading: false,
                 }));
               }
+              src = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/A1:ZZ?key=${google}`;
+            }
+
+            // cache busting
+            if (src.endsWith('.json') && input.meeting) {
+              src = `${src}?${new Date().getTime()}`;
+            }
+
+            // fetch json data file and build indexes
+            return fetch(src);
+          })
+        )
+          .then(responses =>
+            Promise.all(
+              responses.map(res =>
+                res.ok ? res.json() : Promise.reject(res.status)
+              )
+            )
+          )
+          .then((responses: JSONData[][]) => {
+            const data = responses
+              .map((data, index) => {
+                const sheetId = sheets[index];
+                return isGoogleSheetData(data) && sheetId
+                  ? translateGoogleSheet(data, sheetId, settings)
+                  : data;
+              })
+              .flat();
+
+            if (!Array.isArray(data) || !data.length) {
+              throw new Error(
+                'Configuration error: data is not in the correct format.'
+              );
             }
 
             const [meetings, indexes, capabilities] = loadMeetingData(
@@ -177,12 +191,7 @@ export default function TsmlUI({
             );
 
             if (!timezone && !Object.keys(meetings).length) {
-              return setState(state => ({
-                ...state,
-                error: 'Configuration error: time zone is not set.',
-                filtering: false,
-                loading: false,
-              }));
+              throw new Error('Configuration error: time zone is not set.');
             }
 
             const waitingForGeo =
@@ -200,27 +209,10 @@ export default function TsmlUI({
               meetings,
             }));
           })
-          .catch(error => {
-            const errors = {
-              400: 'bad request',
-              401: 'unauthorized',
-              403: 'forbidden',
-              404: 'not found',
-              429: 'too many requests',
-              500: 'internal server',
-              502: 'bad gateway',
-              503: 'service unavailable',
-              504: 'gateway timeout',
-            };
+          .catch((error: string | TypeError) => {
             setState(state => ({
               ...state,
-              error: errors[error as keyof typeof errors]
-                ? `Error: ${
-                    errors[error as keyof typeof errors]
-                  } (${error}) when ${
-                    sheetId ? 'contacting Google' : 'loading data'
-                  }.`
-                : error.toString(),
+              error: String(error),
               filtering: false,
               loading: false,
             }));

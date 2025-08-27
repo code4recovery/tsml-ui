@@ -16,5 +16,6 @@ export * from './get-index-by-key';
 export * from './load-meeting-data';
 export * from './query-string';
 export * from './settings';
+export * from './streamline-regions-index';
 export * from './translate-google-sheet';
 export * from './user-agent';

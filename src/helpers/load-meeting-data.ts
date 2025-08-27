@@ -5,6 +5,7 @@ import { formatAddress } from './format-address';
 import { formatConferenceProvider } from './format-conference-provider';
 import { formatSlug } from './format-slug';
 import { states } from './states';
+import { streamlineRegionsIndex } from './streamline-regions-index';
 
 import type { Index, JSONData, JSONDataFlat, Meeting, State } from '../types';
 
@@ -517,6 +518,8 @@ export function loadMeetingData(
 
   // determine capabilities (filter out options that apply to every meeting)
   const meetingsCount = Object.keys(meetings).length;
+  indexes.region = streamlineRegionsIndex(indexes.region, meetingsCount);
+
   ['region', 'weekday', 'time', 'type'].forEach(indexKey => {
     capabilities[indexKey as keyof typeof capabilities] = !!indexes[
       indexKey as keyof typeof indexes

@@ -158,3 +158,8 @@ export const meetingCss = css`
     }
   }
 `;
+
+export const paragraphsCss = css`
+  display: grid;
+  gap: ${size.gutter}px;
+`;
