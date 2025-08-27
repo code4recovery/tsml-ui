@@ -22,6 +22,10 @@ export function translateGoogleSheet(
 ) {
   const meetings: JSONData[] = [];
 
+  if (!data.values.length) {
+    return [];
+  }
+
   // @ts-expect-error TODO
   const headers = data.values
     .shift()
