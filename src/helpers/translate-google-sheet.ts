@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon';
 
-import { en, es, fr, ja, sv, sk } from '../i18n';
+import { en, es, fr, ja, sk, sv } from '../i18n';
 
 import { formatSlug } from './format-slug';
 
@@ -10,15 +10,21 @@ export type GoogleSheetData = {
   values: string[][];
 };
 
+export const isGoogleSheetData = (data: any): data is GoogleSheetData => {
+  return data && Array.isArray(data.values);
+};
+
 // translates Google Sheet JSON into Meeting Guide format (example puget-sound.html)
 export function translateGoogleSheet(
   data: GoogleSheetData,
   sheetId: string,
   settings: TSMLReactConfig
 ) {
-  if (!data.values || !data.values.length) return;
-
   const meetings: JSONData[] = [];
+
+  if (!data.values.length) {
+    return [];
+  }
 
   // @ts-expect-error TODO
   const headers = data.values
