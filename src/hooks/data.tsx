@@ -6,8 +6,13 @@ import {
   useState,
 } from 'react';
 
-import { getDistance, loadMeetingData, translateGoogleSheet } from '../helpers';
-import { Index, Meeting } from '../types';
+import {
+  getDistance,
+  isGoogleSheetData,
+  loadMeetingData,
+  translateGoogleSheet,
+} from '../helpers';
+import { Index, JSONData, Meeting } from '../types';
 import { useInput } from './input';
 import { useSettings } from './settings';
 
@@ -75,88 +80,90 @@ export const DataProvider = ({
   const { settings, strings } = useSettings();
 
   useEffect(() => {
-    if (!src) {
-      setError('Configuration error: a data source must be specified.');
-    } else {
-      const sheetId = src.startsWith('https://docs.google.com/spreadsheets/d/')
-        ? src.split('/')[5]
-        : undefined;
-
-      // google sheet
-      if (sheetId) {
-        if (!google) {
-          setError('Configuration error: a Google API key is required.');
-        }
-        src = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/A1:ZZ?key=${google}`;
+    if (timezone) {
+      try {
+        // check if timezone is valid
+        Intl.DateTimeFormat(undefined, { timeZone: timezone });
+      } catch (e) {
+        throw new Error(
+          `Timezone ${timezone} is not valid. Please use one like Europe/Rome.`
+        );
       }
+    }
 
-      // cache busting
-      if (src.endsWith('.json') && input.meeting) {
-        src = `${src}?${new Date().getTime()}`;
-      }
+    const sources = src?.split(',').filter(Boolean) || [];
 
-      // fetch json data file and build indexes
-      fetch(src)
-        .then(res => (res.ok ? res.json() : Promise.reject(res.status)))
-        .then(json => {
-          if (sheetId) {
-            json = translateGoogleSheet(json, sheetId, settings);
-          }
+    if (!sources.length) {
+      throw new Error('Configuration error: a data source must be specified.');
+    }
 
-          if (!Array.isArray(json) || !json.length) {
-            return setError(
-              'Configuration error: data is not in the correct format.'
+    const sheets: (string | undefined)[] = [];
+
+    Promise.all(
+      sources.map(src => {
+        const sheetId = src.startsWith(
+          'https://docs.google.com/spreadsheets/d/'
+        )
+          ? src.split('/')[5]
+          : undefined;
+        sheets.push(sheetId);
+
+        // google sheet
+        if (sheetId) {
+          if (!google) {
+            throw new Error(
+              'Configuration error: a Google API key is required.'
             );
           }
+          src = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/A1:ZZ?key=${google}`;
+        }
 
-          if (timezone) {
-            try {
-              // check if timezone is valid
-              Intl.DateTimeFormat(undefined, { timeZone: timezone });
-            } catch (e) {
-              return setError(
-                `Timezone ${timezone} is not valid. Please use one like Europe/Rome.`
-              );
-            }
-          }
+        // cache busting
+        if (src.endsWith('.json') && input.meeting) {
+          src = `${src}?${new Date().getTime()}`;
+        }
 
-          const [meetings, indexes, capabilities] = loadMeetingData(
-            json,
-            data.capabilities,
-            settings,
-            strings,
-            timezone
+        return fetch(src);
+      })
+    )
+      .then(responses =>
+        Promise.all(
+          responses.map(res =>
+            res.ok ? res.json() : Promise.reject(res.status)
+          )
+        )
+      )
+      .then((responses: JSONData[][]) => {
+        const json = responses
+          .map((json, index) => {
+            const sheetId = sheets[index];
+            return isGoogleSheetData(json) && sheetId
+              ? translateGoogleSheet(json, sheetId, settings)
+              : json;
+          })
+          .flat();
+
+        if (!Array.isArray(json) || !json.length) {
+          throw new Error(
+            'Configuration error: data is not in the correct format.'
           );
+        }
 
-          if (!timezone && !Object.keys(meetings).length) {
-            return setError('Configuration error: time zone is not set.');
-          }
+        const [meetings, indexes, capabilities] = loadMeetingData(
+          json,
+          data.capabilities,
+          settings,
+          strings,
+          timezone
+        );
 
-          setData({ capabilities, indexes, meetings, loading: false });
-        })
-        .catch(error => {
-          const errors = {
-            400: 'bad request',
-            401: 'unauthorized',
-            403: 'forbidden',
-            404: 'not found',
-            429: 'too many requests',
-            500: 'internal server',
-            502: 'bad gateway',
-            503: 'service unavailable',
-            504: 'gateway timeout',
-          };
-          setError(
-            errors[error as keyof typeof errors]
-              ? `Error: ${
-                  errors[error as keyof typeof errors]
-                } (${error}) when ${
-                  sheetId ? 'contacting Google' : 'loading data'
-                }.`
-              : error.toString()
-          );
-        });
-    }
+        if (!timezone && !Object.keys(meetings).length) {
+          throw new Error('Configuration error: time zone is not set.');
+        }
+
+        setData({ capabilities, indexes, meetings, loading: false });
+      })
+      .catch(error => setError(String(error)));
   }, []);
 
   // calculate distance if coordinates are available

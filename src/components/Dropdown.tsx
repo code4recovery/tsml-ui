@@ -32,8 +32,6 @@ export default function Dropdown({
       : (input[filter as keyof typeof input] as string[]);
   const [expanded, setExpanded] = useState<string[]>([]);
 
-  console.debug('Dropdown', { filter, open, values, options });
-
   // handle expand toggle
   const toggleExpanded = (e: MouseEvent<HTMLButtonElement>, key: string) => {
     e.preventDefault();
