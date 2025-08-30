@@ -4,10 +4,12 @@ import { Global } from '@emotion/react';
 
 import {
   DataProvider,
+  ErrorProvider,
   FilterProvider,
   InputProvider,
   SettingsProvider,
   useData,
+  useError,
   useFilter,
   useInput,
 } from '../hooks';
@@ -48,26 +50,29 @@ export default function TsmlUI({
   }, []);
 
   return (
-    <SettingsProvider userSettings={userSettings}>
-      <InputProvider>
-        <DataProvider google={google} src={src} timezone={timezone}>
-          <FilterProvider>
-            <Global styles={globalCss} />
-            <DynamicHeight>
-              <Content />
-            </DynamicHeight>
-          </FilterProvider>
-        </DataProvider>
-      </InputProvider>
-    </SettingsProvider>
+    <ErrorProvider>
+      <SettingsProvider userSettings={userSettings}>
+        <InputProvider>
+          <DataProvider google={google} src={src} timezone={timezone}>
+            <FilterProvider>
+              <Global styles={globalCss} />
+              <DynamicHeight>
+                <Content />
+              </DynamicHeight>
+            </FilterProvider>
+          </DataProvider>
+        </InputProvider>
+      </SettingsProvider>
+    </ErrorProvider>
   );
 }
 
 const Content = () => {
   const { loading } = useData();
+  const { error } = useError();
   const { meeting } = useFilter();
   const { input, waiting } = useInput();
-  return loading ? (
+  return loading && !error ? (
     <Loading />
   ) : meeting ? (
     <Meeting meeting={meeting} />
@@ -75,7 +80,7 @@ const Content = () => {
     <>
       <Title />
       <Controls />
-      {waiting ? (
+      {waiting && !error ? (
         <Loading />
       ) : (
         <>

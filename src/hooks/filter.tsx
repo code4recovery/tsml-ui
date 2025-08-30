@@ -32,10 +32,9 @@ export const FilterProvider = ({ children }: PropsWithChildren) => {
     filteredSlugs: [],
     inProgress: [],
   });
-  const { input, latitude, longitude } = useInput();
-
-  const { settings, strings } = useSettings();
   const { capabilities, indexes, loading, meetings } = useData();
+  const { input, latitude, longitude } = useInput();
+  const { settings, strings } = useSettings();
 
   useEffect(() => {
     if (loading) return;
@@ -212,7 +211,7 @@ export const FilterProvider = ({ children }: PropsWithChildren) => {
     );
 
     setFilter({ filteredSlugs, inProgress, meeting });
-  }, [meetings, input]);
+  }, [meetings, input, latitude, longitude]);
 
   return (
     <FilterContext.Provider value={{ ...filter, alert }}>

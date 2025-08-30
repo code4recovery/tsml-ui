@@ -32,6 +32,11 @@ export const mapCss = css`
     }
   }
 
+  .leaflet-control-attribution {
+    background-color: var(--background);
+    color: ${color.dark};
+  }
+
   .leaflet-popup {
     margin-bottom: 20px !important;
 

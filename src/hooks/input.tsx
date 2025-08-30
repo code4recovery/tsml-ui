@@ -7,6 +7,8 @@ import React, {
 } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
+import { formatString } from '../helpers';
+import { useError } from './error';
 import { defaults, useSettings } from './settings';
 
 type Coordinates = {
@@ -25,7 +27,9 @@ const InputContext = createContext<
 >({ input: defaults.defaults, setInput: () => {}, waiting: false });
 
 export const InputProvider = ({ children }: PropsWithChildren) => {
+  const { setError } = useError();
   const [searchParams, setSearchParams] = useSearchParams();
+  const { settings, strings } = useSettings();
 
   const [input, setInput] = useState<TSMLReactConfig['defaults']>(
     defaults.defaults
@@ -34,8 +38,6 @@ export const InputProvider = ({ children }: PropsWithChildren) => {
   const [coordinates, setCoordinates] = useState<Coordinates>({
     waiting: input.mode !== 'search',
   });
-
-  const { settings } = useSettings();
 
   // detect initial input from URL search params
   useEffect(() => {
@@ -105,6 +107,7 @@ export const InputProvider = ({ children }: PropsWithChildren) => {
   // handle geocoding or geolocation requests
   useEffect(() => {
     if (coordinates.waiting) return;
+    setError();
     if (input.mode === 'location' && input.search) {
       setCoordinates({ waiting: true });
       const url = window.location.hostname.endsWith('.test')
@@ -120,22 +123,29 @@ export const InputProvider = ({ children }: PropsWithChildren) => {
       )
         .then(result => result.json())
         .then(({ results }) => {
-          if (results?.length) {
-            const { latitude, longitude } = results[0];
-            setCoordinates({
-              latitude,
-              longitude,
-              waiting: false,
-            });
-          } else {
-            // todo show error message
-            setCoordinates({
-              waiting: false,
-            });
+          if (!results?.length) {
+            throw new Error(
+              formatString(strings.errors.geocoding, { address: input.search })
+            );
           }
+          const { geometry } = results[0];
+          setCoordinates({
+            latitude: geometry.location.lat,
+            longitude: geometry.location.lng,
+            waiting: false,
+          });
+        })
+        .catch(e => {
+          setError(String(e));
+          setCoordinates({
+            latitude: undefined,
+            longitude: undefined,
+            waiting: false,
+          });
         });
     } else if (input.mode === 'me') {
       setCoordinates({ waiting: true });
+      setError();
       navigator.geolocation.getCurrentPosition(
         position => {
           setCoordinates({
@@ -144,8 +154,8 @@ export const InputProvider = ({ children }: PropsWithChildren) => {
             waiting: false,
           });
         },
-        error => {
-          // todo show error message
+        () => {
+          setError(strings.errors.geolocation);
           setCoordinates({
             waiting: false,
           });

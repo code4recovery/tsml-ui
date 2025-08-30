@@ -13,6 +13,7 @@ import {
   translateGoogleSheet,
 } from '../helpers';
 import { Index, JSONData, Meeting } from '../types';
+import { useError } from './error';
 import { useInput } from './input';
 import { useSettings } from './settings';
 
@@ -64,7 +65,7 @@ const defaultData: Data = {
   },
 };
 
-const DataContext = createContext<Data & { error?: string }>(defaultData);
+const DataContext = createContext<Data>(defaultData);
 
 export const useData = () => useContext(DataContext);
 
@@ -74,8 +75,8 @@ export const DataProvider = ({
   src,
   timezone,
 }: PropsWithChildren<{ google?: string; src?: string; timezone?: string }>) => {
-  const [error, setError] = useState<string>();
   const [data, setData] = useState<Data>(defaultData);
+  const { setError } = useError();
   const { input, latitude, longitude } = useInput();
   const { settings, strings } = useSettings();
 
@@ -213,9 +214,5 @@ export const DataProvider = ({
     }));
   }, [latitude, longitude, data.meetings, settings.distance_unit]);
 
-  return (
-    <DataContext.Provider value={{ ...data, error }}>
-      {children}
-    </DataContext.Provider>
-  );
+  return <DataContext.Provider value={data}>{children}</DataContext.Provider>;
 };

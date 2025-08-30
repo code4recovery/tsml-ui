@@ -1,11 +1,12 @@
 import { getIndexByKey, formatString as i18n } from '../helpers';
-import { useData, useFilter, useInput, useSettings } from '../hooks';
+import { useData, useError, useFilter, useInput, useSettings } from '../hooks';
 import { alertCss, errorCss } from '../styles';
 
 import Button from './Button';
 
 export default function Alert() {
-  const { error, indexes } = useData();
+  const { indexes } = useData();
+  const { error } = useError();
   const { alert } = useFilter();
   const { input, setInput } = useInput();
   const { settings, strings } = useSettings();

@@ -5,13 +5,14 @@ import 'leaflet/dist/leaflet.css';
 import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet';
 
 import { formatDirectionsUrl } from '../helpers';
-import { useData, useFilter, useInput, useSettings } from '../hooks';
+import { useData, useError, useFilter, useInput, useSettings } from '../hooks';
 import { mapCss, mapPopupMeetingsCss } from '../styles';
 import type { MapLocation } from '../types';
 import Button from './Button';
 import Link from './Link';
 
 export default function Map() {
+  const { error } = useError();
   const [locations, setLocations] = useState<MapLocation[]>([]);
   const { settings } = useSettings();
   const [darkMode, setDarkMode] = useState(
@@ -65,6 +66,10 @@ export default function Map() {
       Object.values(locations).sort((a, b) => a.latitude - b.latitude)
     );
   }, [filteredSlugs]);
+
+  if (error) {
+    return null;
+  }
 
   return (
     <div aria-hidden={true} css={mapCss}>

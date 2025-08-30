@@ -3,7 +3,7 @@ import { useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
 
 import { formatString as i18n } from '../helpers';
-import { useData, useFilter, useInput, useSettings } from '../hooks';
+import { useData, useError, useFilter, useInput, useSettings } from '../hooks';
 import {
   tableChicletCss,
   tableChicletsCss,
@@ -17,6 +17,7 @@ import Link from './Link';
 
 export default function Table() {
   const { capabilities, meetings } = useData();
+  const { error } = useError();
   const { filteredSlugs, inProgress } = useFilter();
   const { settings, strings } = useSettings();
   const { setInput } = useInput();
@@ -32,6 +33,10 @@ export default function Table() {
   ];
   const [limit, setLimit] = useState(meetingsPerPage);
   const [showInProgress, setShowInProgress] = useState(false);
+
+  if (error) {
+    return null;
+  }
 
   const { distance, location, region } = capabilities;
 
