@@ -30,8 +30,6 @@ export type Data = {
     type: boolean;
     weekday: boolean;
   };
-  loading: boolean;
-  meetings: { [index: string]: Meeting };
   indexes: {
     distance: Index[];
     region: Index[];
@@ -39,6 +37,9 @@ export type Data = {
     type: Index[];
     weekday: Index[];
   };
+  meetings: { [index: string]: Meeting };
+  slugs: string[];
+  waitingForData: boolean;
 };
 
 const defaultData: Data = {
@@ -54,8 +55,6 @@ const defaultData: Data = {
     type: false,
     weekday: false,
   },
-  loading: true,
-  meetings: {},
   indexes: {
     distance: [],
     region: [],
@@ -63,6 +62,9 @@ const defaultData: Data = {
     type: [],
     weekday: [],
   },
+  meetings: {},
+  slugs: [],
+  waitingForData: true,
 };
 
 const DataContext = createContext<Data>(defaultData);
@@ -150,7 +152,7 @@ export const DataProvider = ({
           );
         }
 
-        const [meetings, indexes, capabilities] = loadMeetingData(
+        const { meetings, indexes, capabilities, slugs } = loadMeetingData(
           json,
           data.capabilities,
           settings,
@@ -158,18 +160,29 @@ export const DataProvider = ({
           timezone
         );
 
-        if (!timezone && !Object.keys(meetings).length) {
+        if (!timezone && !slugs.length) {
           throw new Error('Configuration error: time zone is not set.');
         }
 
-        setData({ capabilities, indexes, meetings, loading: false });
+        setData({
+          capabilities,
+          indexes,
+          meetings,
+          slugs,
+          waitingForData: false,
+        });
       })
-      .catch(error => setError(String(error)));
+      .catch(error => {
+        setError(String(error));
+        setData(prevData => ({ ...prevData, waitingForData: false }));
+      });
   }, []);
 
   // calculate distance if coordinates are available
   useEffect(() => {
-    if (!latitude || !longitude || !data.meetings || data.loading) return;
+    if (!latitude || !longitude || !data.meetings || data.waitingForData) {
+      return;
+    }
 
     const distances = Object.fromEntries(
       settings.distance_options.map(option => [option, []])

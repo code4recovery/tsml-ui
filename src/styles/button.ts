@@ -93,4 +93,9 @@ export const dropdownButtonCss = css`
     display: inline-block;
     vertical-align: 0.255em;
   }
+  &[disabled] {
+    color: var(--background) !important;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
 `;

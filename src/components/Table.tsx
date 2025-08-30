@@ -20,7 +20,7 @@ export default function Table() {
   const { error } = useError();
   const { filteredSlugs, inProgress } = useFilter();
   const { settings, strings } = useSettings();
-  const { setInput } = useInput();
+  const { latitude, longitude, setInput } = useInput();
   const meetingsPerPage = 10;
   const supported_columns = [
     'address',
@@ -44,7 +44,7 @@ export default function Table() {
   const columns = settings.columns
     .filter(col => supported_columns.includes(col))
     .filter(col => region || col !== 'region')
-    .filter(col => distance || col !== 'distance')
+    .filter(col => (distance && latitude && longitude) || col !== 'distance')
     .filter(col => location || !['location', 'location_group'].includes(col));
 
   const getValue = (meeting: Meeting, key: string) => {

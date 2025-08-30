@@ -96,7 +96,7 @@ export const dropdownCss = css`
           color: var(--background);
         }
         span {
-          color: ${color.light};
+          color: ${color.light} !important;
         }
         .tsml-dropdown__expand::after {
           border-top: 0.4em solid ${color.light};

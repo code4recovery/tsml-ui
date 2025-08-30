@@ -32,17 +32,22 @@ export const FilterProvider = ({ children }: PropsWithChildren) => {
     filteredSlugs: [],
     inProgress: [],
   });
-  const { capabilities, indexes, loading, meetings } = useData();
-  const { input, latitude, longitude } = useInput();
+  const { capabilities, indexes, meetings, slugs, waitingForData } = useData();
+  const { input, latitude, longitude, waitingForInput } = useInput();
   const { settings, strings } = useSettings();
 
   useEffect(() => {
-    if (loading) return;
+    if (waitingForData || waitingForInput) return;
+
+    setFilter({
+      filteredSlugs: [],
+      inProgress: [],
+      meeting: undefined,
+    });
 
     const matchGroups: string[][] = [];
     const now = DateTime.now();
     const now_offset = now.plus({ minute: settings.now_offset });
-    const slugs = Object.keys(meetings);
     const timeDiff: { [index: string]: number } = {};
 
     // filter by distance, region, time, type, and weekday
@@ -210,7 +215,11 @@ export const FilterProvider = ({ children }: PropsWithChildren) => {
         : undefined
     );
 
-    setFilter({ filteredSlugs, inProgress, meeting });
+    setFilter({
+      filteredSlugs,
+      inProgress,
+      meeting,
+    });
   }, [meetings, input, latitude, longitude]);
 
   return (

@@ -25,7 +25,7 @@ describe('loadMeetingData', () => {
         formatted_address: 'Anytown, OK, USA',
       },
     ];
-    const [meetings, indexes, capabilities] = loadMeetingData(
+    const { meetings, indexes, capabilities, slugs } = loadMeetingData(
       data,
       {
         coordinates: false,
@@ -120,6 +120,7 @@ describe('loadMeetingData', () => {
       type: true,
       weekday: false,
     });
+    expect(slugs).toStrictEqual(['test-meeting', 'inactive-meeting']);
   });
 });
 

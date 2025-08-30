@@ -9,7 +9,6 @@ import {
   InputProvider,
   SettingsProvider,
   useData,
-  useError,
   useFilter,
   useInput,
 } from '../hooks';
@@ -68,11 +67,10 @@ export default function TsmlUI({
 }
 
 const Content = () => {
-  const { loading } = useData();
-  const { error } = useError();
+  const { waitingForData } = useData();
   const { meeting } = useFilter();
-  const { input, waiting } = useInput();
-  return loading && !error ? (
+  const { input, waitingForInput } = useInput();
+  return waitingForData ? (
     <Loading />
   ) : meeting ? (
     <Meeting meeting={meeting} />
@@ -80,7 +78,7 @@ const Content = () => {
     <>
       <Title />
       <Controls />
-      {waiting && !error ? (
+      {waitingForInput ? (
         <Loading />
       ) : (
         <>

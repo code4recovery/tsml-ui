@@ -18,7 +18,12 @@ export function loadMeetingData(
   settings: TSMLReactConfig,
   strings: Translation,
   timezone?: string
-): [Data['meetings'], Data['indexes'], Data['capabilities']] {
+): {
+  capabilities: Data['capabilities'];
+  indexes: Data['indexes'];
+  meetings: Data['meetings'];
+  slugs: string[];
+} {
   // meetings is a lookup
   const meetings: { [index: string]: Meeting } = {};
 
@@ -518,8 +523,10 @@ export function loadMeetingData(
     a.name?.localeCompare(b.name)
   );
 
+  const slugs = Object.keys(meetings);
+
   // determine capabilities (filter out options that apply to every meeting)
-  const meetingsCount = Object.keys(meetings).length;
+  const meetingsCount = slugs.length;
   indexes.region = streamlineRegionsIndex(indexes.region, meetingsCount);
 
   ['region', 'weekday', 'time', 'type'].forEach(indexKey => {
@@ -534,7 +541,7 @@ export function loadMeetingData(
     indexes.type = indexes.type.filter(type => type.key !== 'active');
 
     // ...from each meeting
-    Object.keys(meetings).forEach(slug => {
+    slugs.forEach(slug => {
       meetings[slug] = {
         ...meetings[slug],
         types: meetings[slug].types?.filter(
@@ -554,7 +561,7 @@ export function loadMeetingData(
   // determine sharing
   capabilities.sharing = typeof navigator.canShare === 'function';
 
-  return [meetings, indexes, capabilities];
+  return { meetings, indexes, capabilities, slugs };
 }
 
 // look for data with multiple days and make them all single

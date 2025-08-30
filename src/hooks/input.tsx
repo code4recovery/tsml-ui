@@ -14,7 +14,7 @@ import { defaults, useSettings } from './settings';
 type Coordinates = {
   latitude?: number;
   longitude?: number;
-  waiting: boolean;
+  waitingForInput: boolean;
 };
 
 const InputContext = createContext<
@@ -24,7 +24,7 @@ const InputContext = createContext<
     longitude?: number;
     setInput: React.Dispatch<React.SetStateAction<TSMLReactConfig['defaults']>>;
   } & Coordinates
->({ input: defaults.defaults, setInput: () => {}, waiting: false });
+>({ input: defaults.defaults, setInput: () => {}, waitingForInput: false });
 
 export const InputProvider = ({ children }: PropsWithChildren) => {
   const { setError } = useError();
@@ -36,7 +36,7 @@ export const InputProvider = ({ children }: PropsWithChildren) => {
   );
 
   const [coordinates, setCoordinates] = useState<Coordinates>({
-    waiting: input.mode !== 'search',
+    waitingForInput: input.mode !== 'search',
   });
 
   // detect initial input from URL search params
@@ -66,8 +66,6 @@ export const InputProvider = ({ children }: PropsWithChildren) => {
     const meeting = searchParams.get('meeting') ?? undefined;
     const distance = searchParams.has('distance')
       ? parseInt(searchParams.get('distance') ?? '')
-      : mode !== 'search'
-      ? settings.distance_default
       : undefined;
 
     setInput(input => ({
@@ -106,10 +104,10 @@ export const InputProvider = ({ children }: PropsWithChildren) => {
 
   // handle geocoding or geolocation requests
   useEffect(() => {
-    if (coordinates.waiting) return;
+    if (coordinates.waitingForInput) return;
     setError();
     if (input.mode === 'location' && input.search) {
-      setCoordinates({ waiting: true });
+      setCoordinates({ waitingForInput: true });
       const url = window.location.hostname.endsWith('.test')
         ? 'geo.test'
         : 'geo.code4recovery.org';
@@ -132,7 +130,7 @@ export const InputProvider = ({ children }: PropsWithChildren) => {
           setCoordinates({
             latitude: geometry.location.lat,
             longitude: geometry.location.lng,
-            waiting: false,
+            waitingForInput: false,
           });
         })
         .catch(e => {
@@ -140,30 +138,30 @@ export const InputProvider = ({ children }: PropsWithChildren) => {
           setCoordinates({
             latitude: undefined,
             longitude: undefined,
-            waiting: false,
+            waitingForInput: false,
           });
         });
     } else if (input.mode === 'me') {
-      setCoordinates({ waiting: true });
+      setCoordinates({ waitingForInput: true });
       setError();
       navigator.geolocation.getCurrentPosition(
         position => {
           setCoordinates({
             latitude: position.coords.latitude,
             longitude: position.coords.longitude,
-            waiting: false,
+            waitingForInput: false,
           });
         },
         () => {
           setError(strings.errors.geolocation);
           setCoordinates({
-            waiting: false,
+            waitingForInput: false,
           });
         },
         { timeout: 5000 }
       );
     } else {
-      setCoordinates({ waiting: false });
+      setCoordinates({ waitingForInput: false });
     }
   }, [input.mode, input.search]);
 

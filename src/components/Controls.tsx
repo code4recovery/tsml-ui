@@ -17,7 +17,7 @@ import {
 import Dropdown from './Dropdown';
 
 export default function Controls() {
-  const { capabilities, meetings } = useData();
+  const { capabilities, meetings, slugs } = useData();
   const { settings, strings } = useSettings();
   const [dropdown, setDropdown] = useState<string>();
   const { input, setInput } = useInput();
@@ -101,7 +101,7 @@ export default function Controls() {
     if (input.mode !== 'location') return;
 
     if (!search) {
-      Object.keys(meetings).forEach(slug => {
+      slugs.forEach(slug => {
         meetings[slug].distance = undefined;
       });
     }
@@ -113,7 +113,7 @@ export default function Controls() {
   const setMode = (e: MouseEvent, mode: 'search' | 'location' | 'me') => {
     e.preventDefault();
 
-    Object.keys(meetings).forEach(slug => {
+    slugs.forEach(slug => {
       meetings[slug].distance = undefined;
     });
 
@@ -145,7 +145,7 @@ export default function Controls() {
     setInput(input => ({ ...input, view }));
   };
 
-  return (
+  return !slugs.length ? null : (
     <div css={controlsCss}>
       <form onSubmit={locationSearch} css={dropdownCss}>
         <fieldset role="group">
@@ -199,7 +199,7 @@ export default function Controls() {
       </form>
       {input.mode !== 'search' && (
         <Dropdown
-          defaultValue={`${input.distance} ${settings.distance_unit}`}
+          defaultValue={strings.distance_any}
           filter="distance"
           open={dropdown === 'distance'}
           setDropdown={setDropdown}

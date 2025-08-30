@@ -24,11 +24,13 @@ export default function Dropdown({
 }) {
   const { indexes } = useData();
   const { strings } = useSettings();
-  const { input, setInput } = useInput();
+  const { input, setInput, waitingForInput } = useInput();
   const options = indexes[filter];
   const values =
     filter === 'distance'
-      ? [`${input.distance}`]
+      ? input.distance
+        ? [`${input.distance}`]
+        : []
       : (input[filter as keyof typeof input] as string[]);
   const [expanded, setExpanded] = useState<string[]>([]);
 
@@ -43,7 +45,7 @@ export default function Dropdown({
     }
   };
 
-  //set filter: pass it up to parent
+  // set filter: pass it up to parent
   const setFilter = (
     e: MouseEvent<HTMLButtonElement>,
     filter: keyof typeof indexes,
@@ -51,78 +53,86 @@ export default function Dropdown({
   ) => {
     e.preventDefault();
 
-    // add or remove from filters
-    let currentValues = input[filter] as string[];
+    if (filter === 'distance') {
+      setInput(input => ({
+        ...input,
+        distance: value ? parseInt(value) : undefined,
+      }));
+    } else {
+      // add or remove from filters
+      let currentValues = input[filter] as string[];
 
-    if (value) {
-      const index = currentValues.indexOf(value);
-      if (e.metaKey || e.ctrlKey) {
-        if (index === -1) {
-          currentValues.push(value);
-          currentValues.sort();
+      if (value) {
+        const index = currentValues.indexOf(value);
+        if (e.metaKey || e.ctrlKey) {
+          if (index === -1) {
+            currentValues.push(value);
+            currentValues.sort();
+          } else {
+            // Remove the value
+            currentValues.splice(index, 1);
+          }
         } else {
-          // Remove the value
-          currentValues.splice(index, 1);
+          // Single value, directly set the value
+          currentValues = [value];
         }
       } else {
-        // Single value, directly set the value
-        currentValues = [value];
+        // Remove the filter from search params if no value is provided
+        currentValues = [];
       }
-    } else {
-      // Remove the filter from search params if no value is provided
-      currentValues = [];
+      setInput(input => ({ ...input, [filter]: currentValues }));
     }
-
-    setInput(input => ({ ...input, [filter]: currentValues }));
   };
 
   const renderDropdownItem = (
     { key, name, slugs, children }: Index,
     parentExpanded: boolean = true
-  ) => (
-    <Fragment key={key}>
-      <div className="tsml-dropdown__item" data-active={values.includes(key)}>
-        <button
-          className="tsml-dropdown__button"
-          onClick={e => setFilter(e, filter, key)}
-          tabIndex={parentExpanded ? 0 : -1}
-        >
-          <span>{name}</span>
-          <span
-            aria-label={
-              slugs.length === 1
-                ? strings.match_single
-                : i18n(strings.match_multiple, {
-                    count: slugs.length,
-                  })
-            }
-          >
-            {slugs.length}
-          </span>
-        </button>
-        {!!children?.length && (
+  ) => {
+    return !slugs.length ? null : (
+      <Fragment key={key}>
+        <div className="tsml-dropdown__item" data-active={values.includes(key)}>
           <button
-            className="tsml-dropdown__expand"
-            data-expanded={expanded.includes(key)}
-            onClick={e => toggleExpanded(e, key)}
-            aria-label={
-              expanded.includes(key) ? strings.collapse : strings.expand
-            }
-          />
-        )}
-      </div>
-      {!!children?.length && (
-        <div
-          className="tsml-dropdown__children"
-          data-expanded={expanded.includes(key)}
-        >
-          {children.map(child =>
-            renderDropdownItem(child, expanded.includes(key))
+            className="tsml-dropdown__button"
+            onClick={e => setFilter(e, filter, key)}
+            tabIndex={parentExpanded ? 0 : -1}
+          >
+            <span>{name}</span>
+            <span
+              aria-label={
+                slugs.length === 1
+                  ? strings.match_single
+                  : i18n(strings.match_multiple, {
+                      count: slugs.length,
+                    })
+              }
+            >
+              {slugs.length}
+            </span>
+          </button>
+          {!!children?.length && (
+            <button
+              className="tsml-dropdown__expand"
+              data-expanded={expanded.includes(key)}
+              onClick={e => toggleExpanded(e, key)}
+              aria-label={
+                expanded.includes(key) ? strings.collapse : strings.expand
+              }
+            />
           )}
         </div>
-      )}
-    </Fragment>
-  );
+        {!!children?.length && (
+          <div
+            className="tsml-dropdown__children"
+            data-expanded={expanded.includes(key)}
+          >
+            {children.map(child =>
+              renderDropdownItem(child, expanded.includes(key))
+            )}
+          </div>
+        )}
+      </Fragment>
+    );
+  };
 
   // separate section above the other items
   const special = {
@@ -134,6 +144,7 @@ export default function Dropdown({
       <button
         aria-expanded={open}
         css={dropdownButtonCss}
+        disabled={filter === 'distance' && waitingForInput}
         id={filter}
         onClick={e => {
           setDropdown(open ? undefined : filter);
