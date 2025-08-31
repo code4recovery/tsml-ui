@@ -1,7 +1,7 @@
 import { act, render } from '@testing-library/react';
 
 import { MemoryRouter } from 'react-router-dom';
-import TsmlUI from '../../src/components/TsmlUi';
+import TsmlUI from '../../src/components/TsmlUI';
 
 describe('TsmlUI', () => {
   // mock fetch
