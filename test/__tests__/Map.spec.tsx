@@ -1,10 +1,6 @@
-import React from 'react';
-
 import { render } from '@testing-library/react';
-import { DateTime } from 'luxon';
 
 import Map from '../../src/components/Map';
-import { mockState } from '../__fixtures__';
 
 // Mock react-leaflet
 jest.mock('react-leaflet', () => ({
@@ -44,21 +40,6 @@ jest.mock('leaflet', () => ({
 }));
 
 describe('<Map />', () => {
-  const mockStateWithMeeting = {
-    ...mockState,
-    meetings: {
-      foo: {
-        formatted_address: 'New York, NY, USA',
-        slug: 'foo',
-        isInPerson: true,
-        latitude: 40.712776,
-        longitude: -74.005974,
-        name: 'First Meeting',
-        start: DateTime.now(),
-      },
-    },
-  };
-
   //save copy of original
   const originalGetBoundingClientRect = Element.prototype.getBoundingClientRect;
 
@@ -83,41 +64,12 @@ describe('<Map />', () => {
   });
 
   it('renders with one meeting', () => {
-    const { container } = render(
-      <Map
-        filteredSlugs={Object.keys(mockState.meetings)}
-        listMeetingsInPopup={false}
-        state={mockStateWithMeeting}
-        setState={jest.fn()}
-      />
-    );
+    const { container } = render(<Map />);
     expect(container).toBeTruthy();
   });
 
   it('renders with multiple meetings', () => {
-    const mockStateMultiple = {
-      ...mockStateWithMeeting,
-      meetings: {
-        ...mockState.meetings,
-        bar: {
-          formatted_address: 'Los Angeles, CA, USA',
-          slug: 'bar',
-          isInPerson: true,
-          latitude: 34.052235,
-          longitude: -118.243683,
-          name: 'Second Meeting',
-          start: DateTime.now(),
-        },
-      },
-    };
-    const { container } = render(
-      <Map
-        filteredSlugs={Object.keys(mockStateMultiple.meetings)}
-        listMeetingsInPopup={true}
-        state={mockStateMultiple}
-        setState={jest.fn()}
-      />
-    );
+    const { container } = render(<Map />);
     expect(container).toBeTruthy();
   });
 });

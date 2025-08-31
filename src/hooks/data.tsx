@@ -89,7 +89,7 @@ export const DataProvider = ({
         Intl.DateTimeFormat(undefined, { timeZone: timezone });
       } catch (e) {
         throw new Error(
-          `Timezone ${timezone} is not valid. Please use one like Europe/Rome.`
+          `Timezone ${timezone} is not valid. Please use one like America/New_York.`
         );
       }
     }
@@ -97,7 +97,7 @@ export const DataProvider = ({
     const sources = src?.split(',').filter(Boolean) || [];
 
     if (!sources.length) {
-      throw new Error('Configuration error: a data source must be specified.');
+      throw new Error('a data source must be specified');
     }
 
     const sheets: (string | undefined)[] = [];
@@ -114,9 +114,7 @@ export const DataProvider = ({
         // google sheet
         if (sheetId) {
           if (!google) {
-            throw new Error(
-              'Configuration error: a Google API key is required.'
-            );
+            throw new Error('a Google API key is required');
           }
           src = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/A1:ZZ?key=${google}`;
         }
@@ -147,9 +145,7 @@ export const DataProvider = ({
           .flat();
 
         if (!Array.isArray(json) || !json.length) {
-          throw new Error(
-            'Configuration error: data is not in the correct format.'
-          );
+          throw new Error('data is not in the correct format');
         }
 
         const { meetings, indexes, capabilities, slugs } = loadMeetingData(
@@ -161,7 +157,7 @@ export const DataProvider = ({
         );
 
         if (!timezone && !slugs.length) {
-          throw new Error('Configuration error: time zone is not set.');
+          throw new Error('time zone is not set');
         }
 
         setData({
@@ -173,7 +169,7 @@ export const DataProvider = ({
         });
       })
       .catch(error => {
-        setError(String(error));
+        setError(`Loading error: ${error}`);
         setData(prevData => ({ ...prevData, waitingForData: false }));
       });
   }, []);
