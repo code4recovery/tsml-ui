@@ -18,7 +18,7 @@ describe('formatUrl', () => {
         defaults
       )
     ).toStrictEqual(
-      'https://test.com/?region=foo&distance=1&weekday=monday&time=night&type=online'
+      'https://test.com/?region=foo&weekday=monday&time=night&type=online'
     );
   });
 

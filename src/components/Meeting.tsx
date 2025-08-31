@@ -56,8 +56,7 @@ export default function Meeting({ meeting }: { meeting: MeetingType }) {
     : feedback_emails.length
     ? formatFeedbackEmail({
         feedback_emails,
-        name: meeting.name,
-        edit_url: meeting.edit_url,
+        meeting,
         settings,
         strings,
       })
@@ -278,7 +277,6 @@ export default function Meeting({ meeting }: { meeting: MeetingType }) {
             <div>
               <h2>{strings.meeting_information}</h2>
               <p>{formatTime(meeting.start, meeting.end)}</p>
-
               {meeting.start && meeting.start.zoneName !== meeting.timezone && (
                 <p>
                   (

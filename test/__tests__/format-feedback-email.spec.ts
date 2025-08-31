@@ -6,8 +6,6 @@ jest.mock('../../src/helpers/format-url', () => ({
   formatUrl: jest.fn().mockReturnValue('https://foo.com'),
 }));
 
-jest.mock('../../src/helpers/query-string');
-
 const mockedGetQueryString = jest.fn();
 
 //can't use mock factories with outside scoped variables
@@ -27,8 +25,7 @@ describe('formatFeedbackEmail', () => {
     expect(
       formatFeedbackEmail({
         feedback_emails: [mockEmails[0]],
-        name: mockMeeting.name,
-        edit_url: mockMeeting.edit_url,
+        meeting: mockMeeting,
         settings: defaults,
         strings: defaults.strings[defaults.language],
       })
@@ -38,8 +35,7 @@ describe('formatFeedbackEmail', () => {
     expect(
       formatFeedbackEmail({
         feedback_emails: mockEmails,
-        name: mockMeeting.name,
-        edit_url: mockMeeting.edit_url,
+        meeting: mockMeeting,
         settings: defaults,
         strings: defaults.strings[defaults.language],
       })

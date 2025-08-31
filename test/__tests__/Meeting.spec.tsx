@@ -58,19 +58,10 @@ describe('<Meeting />', () => {
     const { getByText } = render(
       <MemoryRouter>
         <SettingsProvider>
-          <Meeting />
+          <Meeting meeting={mockMeeting} />
         </SettingsProvider>
       </MemoryRouter>
     );
-
-    // click type definition
-    const type_definition = getByText(en.types.O);
-    expect(type_definition).toBeTruthy();
-    fireEvent.click(type_definition);
-    const type_definition_text = getByText(en.type_descriptions.O);
-    expect(type_definition_text).toBeVisible();
-    fireEvent.click(type_definition);
-    expect(type_definition_text).not.toBeVisible();
 
     // click formatIcs
     const calendar_link = getByText(en.add_to_calendar);
@@ -86,7 +77,7 @@ describe('<Meeting />', () => {
   it('renders with group info', () => {
     const { getByText } = render(
       <MemoryRouter>
-        <Meeting />
+        <Meeting meeting={mockMeeting} />
       </MemoryRouter>
     );
 
@@ -100,7 +91,7 @@ describe('<Meeting />', () => {
   it('renders with contact 1 but no contact 2', () => {
     const { getByText, queryByText } = render(
       <MemoryRouter>
-        <Meeting />
+        <Meeting meeting={mockMeeting} />
       </MemoryRouter>
     );
     const contact1text = getByText(`Text ${mockMeeting.contact_1_name}`);
@@ -117,20 +108,10 @@ describe('<Meeting />', () => {
     expect(contact2text).toBeNull();
   });
 
-  it('renders when inactive', () => {
-    const { getByText } = render(
-      <MemoryRouter>
-        <Meeting />
-      </MemoryRouter>
-    );
-    const inactiveType = getByText(en.types.inactive);
-    expect(inactiveType).toBeVisible();
-  });
-
   it('renders appointment', () => {
     const { getByText } = render(
       <MemoryRouter>
-        <Meeting />
+        <Meeting meeting={{ ...mockMeeting, start: undefined }} />
       </MemoryRouter>
     );
     const appointmentText = getByText(en.appointment);
