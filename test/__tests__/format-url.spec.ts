@@ -3,7 +3,7 @@ import { defaults } from '../../src/hooks';
 
 describe('formatUrl', () => {
   it('works with no params', () => {
-    expect(formatUrl({}, defaults)).toStrictEqual('https://test.com/');
+    expect(formatUrl({}, defaults, true)).toStrictEqual('https://test.com/');
   });
 
   it('works with filters', () => {
@@ -15,7 +15,8 @@ describe('formatUrl', () => {
           type: ['online'],
           weekday: ['monday'],
         },
-        defaults
+        defaults,
+        true
       )
     ).toStrictEqual(
       'https://test.com/?region=foo&weekday=monday&time=night&type=online'
@@ -33,8 +34,6 @@ describe('formatUrl', () => {
         },
         defaults
       )
-    ).toStrictEqual(
-      'https://test.com/?search=bar&mode=location&view=map&meeting=foo'
-    );
+    ).toStrictEqual('/?search=bar&mode=location&view=map&meeting=foo');
   });
 });

@@ -16,7 +16,7 @@ export function formatFeedbackEmail({
   strings: Translation;
 }) {
   // remove extra query params from meeting URL
-  const meetingUrl = formatUrl({ meeting: meeting.slug }, settings);
+  const meetingUrl = formatUrl({ meeting: meeting.slug }, settings, true);
 
   // build message
   const lines = [

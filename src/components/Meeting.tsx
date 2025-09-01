@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import { DateTime, Info } from 'luxon';
+import { Link as RouterLink } from 'react-router-dom';
 
 import {
   formatDirectionsUrl,
@@ -29,7 +30,7 @@ import type { Meeting as MeetingType } from '../types';
 
 export default function Meeting({ meeting }: { meeting: MeetingType }) {
   const { settings, strings } = useSettings();
-  const { input, setInput } = useInput();
+  const { input } = useInput();
 
   // open types
   const [define, setDefine] = useState<string | undefined>();
@@ -258,15 +259,9 @@ export default function Meeting({ meeting }: { meeting: MeetingType }) {
       </h1>
       <div css={meetingBackCss}>
         <Icon icon="back" />
-        <a
-          href={formatUrl({ ...input, meeting: undefined }, settings)}
-          onClick={e => {
-            e.preventDefault();
-            setInput(input => ({ ...input, meeting: undefined }));
-          }}
-        >
+        <RouterLink to={formatUrl({ ...input, meeting: undefined }, settings)}>
           {strings.back_to_meetings}
-        </a>
+        </RouterLink>
       </div>
       <div css={meetingColumnsCss}>
         <div>

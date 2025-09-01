@@ -1,4 +1,4 @@
-import React, {
+import {
   createContext,
   PropsWithChildren,
   useContext,
@@ -22,13 +22,12 @@ const InputContext = createContext<
     input: TSMLReactConfig['defaults'];
     latitude?: number;
     longitude?: number;
-    setInput: React.Dispatch<React.SetStateAction<TSMLReactConfig['defaults']>>;
   } & Coordinates
->({ input: defaults.defaults, setInput: () => {}, waitingForInput: false });
+>({ input: defaults.defaults, waitingForInput: false });
 
 export const InputProvider = ({ children }: PropsWithChildren) => {
   const { setError } = useError();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const { settings, strings } = useSettings();
 
   const [input, setInput] = useState<TSMLReactConfig['defaults']>(
@@ -39,7 +38,7 @@ export const InputProvider = ({ children }: PropsWithChildren) => {
     waitingForInput: input.mode !== 'search',
   });
 
-  // detect initial input from URL search params
+  // detect input from URL search params
   useEffect(() => {
     const mode =
       searchParams.get('mode') === 'location'
@@ -80,27 +79,7 @@ export const InputProvider = ({ children }: PropsWithChildren) => {
       view,
       weekday,
     }));
-  }, []);
-
-  // update URL search params when input changes
-  useEffect(() => {
-    if (input === defaults.defaults) return;
-    const params = {
-      distance: input.distance,
-      meeting: input.meeting,
-      mode: input.mode == defaults.defaults.mode ? '' : input.mode,
-      region: input.region.join('/'),
-      search: input.search,
-      time: input.time.join('/'),
-      type: input.type.join('/'),
-      view: input.view === defaults.defaults.view ? '' : input.view,
-      weekday: input.weekday.join('/'),
-    };
-    const filteredParams = Object.fromEntries(
-      Object.entries(params).filter(([, value]) => value)
-    ) as { [key: string]: string };
-    setSearchParams(filteredParams);
-  }, [input]);
+  }, [searchParams]);
 
   // handle geocoding or geolocation requests
   useEffect(() => {
@@ -166,7 +145,7 @@ export const InputProvider = ({ children }: PropsWithChildren) => {
   }, [input.mode, input.search]);
 
   return (
-    <InputContext.Provider value={{ input, setInput, ...coordinates }}>
+    <InputContext.Provider value={{ input, ...coordinates }}>
       {children}
     </InputContext.Provider>
   );

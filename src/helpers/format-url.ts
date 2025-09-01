@@ -1,11 +1,12 @@
 // format an internal link with correct query params
 export function formatUrl(
   input: Partial<TSMLReactConfig['defaults']>,
-  settings: TSMLReactConfig
+  settings: TSMLReactConfig,
+  includeDomain = false
 ) {
   const query = {};
 
-  // distance, region, time, type, and weekday
+  // region, time, type, and weekday
   settings.filters
     .filter(filter => typeof input[filter] !== 'undefined')
     .filter(filter => input[filter]?.length)
@@ -13,6 +14,12 @@ export function formatUrl(
       // @ts-expect-error TODO
       query[filter] = input[filter].join('/');
     });
+
+  // distance
+  if (typeof input.distance !== 'undefined') {
+    // @ts-expect-error TODO
+    query.distance = input.distance.toString();
+  }
 
   // meeting, mode, search, view
   settings.params
@@ -30,7 +37,9 @@ export function formatUrl(
     .replace(/%20/g, '+')
     .replace(/%2C/g, ',');
 
-  const [path] = window.location.href.split('?');
+  const base = includeDomain ? `${window.location.origin}` : '';
 
-  return `${path}${queryString.length ? `?${queryString}` : ''}`;
+  const [path] = window.location.pathname.split('?');
+
+  return `${base}${path}${queryString.length ? `?${queryString}` : ''}`;
 }
