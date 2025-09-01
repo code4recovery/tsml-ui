@@ -6,6 +6,7 @@ import {
   formatDirectionsUrl,
   formatFeedbackEmail,
   formatIcs,
+  formatUrl,
   formatString as i18n,
 } from '../helpers';
 import {
@@ -28,7 +29,7 @@ import type { Meeting as MeetingType } from '../types';
 
 export default function Meeting({ meeting }: { meeting: MeetingType }) {
   const { settings, strings } = useSettings();
-  const { setInput } = useInput();
+  const { input, setInput } = useInput();
 
   // open types
   const [define, setDefine] = useState<string | undefined>();
@@ -258,7 +259,11 @@ export default function Meeting({ meeting }: { meeting: MeetingType }) {
       <div css={meetingBackCss}>
         <Icon icon="back" />
         <a
-          onClick={() => setInput(input => ({ ...input, meeting: undefined }))}
+          href={formatUrl({ ...input, meeting: undefined }, settings)}
+          onClick={e => {
+            e.preventDefault();
+            setInput(input => ({ ...input, meeting: undefined }));
+          }}
         >
           {strings.back_to_meetings}
         </a>
