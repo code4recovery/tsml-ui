@@ -1,33 +1,26 @@
-import { Dispatch, SetStateAction, useState } from 'react';
+import { useState } from 'react';
 
 import InfiniteScroll from 'react-infinite-scroller';
-import { useSearchParams } from 'react-router-dom';
 
-import { formatString as i18n, useSettings } from '../helpers';
+import { formatString as i18n } from '../helpers';
+import { useData, useError, useFilter, useInput, useSettings } from '../hooks';
 import {
   tableChicletCss,
   tableChicletsCss,
   tableInProgressCss,
   tableWrapperCss,
 } from '../styles';
-import { Meeting, State } from '../types';
+import { Meeting } from '../types';
 
 import Icon, { icons } from './Icon';
 import Link from './Link';
 
-export default function Table({
-  filteredSlugs = [],
-  inProgress = [],
-  setState,
-  state,
-}: {
-  filteredSlugs: string[];
-  inProgress: string[];
-  setState: Dispatch<SetStateAction<State>>;
-  state: State;
-}) {
+export default function Table() {
+  const { capabilities, meetings } = useData();
+  const { error } = useError();
+  const { filteredSlugs, inProgress } = useFilter();
   const { settings, strings } = useSettings();
-  const [_, setSearchParams] = useSearchParams();
+  const { latitude, longitude, setInput } = useInput();
   const meetingsPerPage = 10;
   const supported_columns = [
     'address',
@@ -40,13 +33,18 @@ export default function Table({
   ];
   const [limit, setLimit] = useState(meetingsPerPage);
   const [showInProgress, setShowInProgress] = useState(false);
-  const { distance, location, region } = state.capabilities;
+
+  if (error) {
+    return null;
+  }
+
+  const { distance, location, region } = capabilities;
 
   //show columns based on capabilities
   const columns = settings.columns
     .filter(col => supported_columns.includes(col))
     .filter(col => region || col !== 'region')
-    .filter(col => distance || col !== 'distance')
+    .filter(col => (distance && latitude && longitude) || col !== 'distance')
     .filter(col => location || !['location', 'location_group'].includes(col));
 
   const getValue = (meeting: Meeting, key: string) => {
@@ -112,7 +110,7 @@ export default function Table({
     } else if (key === 'location_group') {
       return meeting.isInPerson ? meeting.location : meeting.group;
     } else if (key === 'name' && meeting.slug) {
-      return <Link meeting={meeting} state={state} setState={setState} />;
+      return <Link meeting={meeting} />;
     } else if (key === 'region' && meeting.regions) {
       return meeting.regions[meeting.regions.length - 1];
     } else if (key === 'time') {
@@ -128,15 +126,11 @@ export default function Table({
     return null;
   };
 
-  const Row = ({ slug }: { slug: keyof typeof state.meetings }) => {
-    const meeting = state.meetings[slug];
+  const Row = ({ slug }: { slug: keyof typeof meetings }) => {
+    const meeting = meetings[slug];
     return (
       <tr
-        onClick={() =>
-          setSearchParams({
-            meeting: meeting.slug,
-          })
-        }
+        onClick={() => setInput(input => ({ ...input, meeting: meeting.slug }))}
       >
         {columns.map((column, index) => (
           <td className={`tsml-${column}`} key={index}>
@@ -147,7 +141,7 @@ export default function Table({
     );
   };
 
-  return !filteredSlugs.length ? null : (
+  return !filteredSlugs?.length ? null : (
     <div css={tableWrapperCss}>
       <table>
         <thead>
@@ -159,7 +153,7 @@ export default function Table({
             ))}
           </tr>
         </thead>
-        {!!inProgress.length && (
+        {!!inProgress?.length && (
           <tbody css={tableInProgressCss}>
             {showInProgress ? (
               inProgress.map((slug, index) => <Row slug={slug} key={index} />)

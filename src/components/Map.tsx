@@ -1,34 +1,26 @@
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
-import { formatDirectionsUrl, useSettings } from '../helpers';
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
+import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet';
+
+import { formatDirectionsUrl } from '../helpers';
+import { useData, useError, useFilter, useInput, useSettings } from '../hooks';
 import { mapCss, mapPopupMeetingsCss } from '../styles';
-
+import type { MapLocation } from '../types';
 import Button from './Button';
 import Link from './Link';
 
-import type { MapLocation, State } from '../types';
-
-import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
-import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
-
-export default function Map({
-  filteredSlugs,
-  listMeetingsInPopup = true,
-  setState,
-  state,
-}: {
-  filteredSlugs: string[];
-  listMeetingsInPopup: boolean;
-  setState: Dispatch<SetStateAction<State>>;
-  state: State;
-}) {
+export default function Map() {
+  const { error } = useError();
   const [locations, setLocations] = useState<MapLocation[]>([]);
   const { settings } = useSettings();
   const [darkMode, setDarkMode] = useState(
     window.matchMedia('(prefers-color-scheme: dark)').matches
   );
-  const { latitude, longitude, mode } = state.input;
+  const { meetings } = useData();
+  const { filteredSlugs, meeting } = useFilter();
+  const { input, latitude, longitude } = useInput();
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
@@ -44,8 +36,9 @@ export default function Map({
   // reset locations when filteredSlugs changes
   useEffect(() => {
     const locations: { [index: string]: MapLocation } = {};
-    filteredSlugs.forEach(slug => {
-      const meeting = state.meetings[slug];
+
+    (meeting?.slug ? [meeting.slug] : filteredSlugs)?.forEach(slug => {
+      const meeting = meetings[slug];
 
       if (meeting?.latitude && meeting?.longitude && meeting?.isInPerson) {
         const coords = meeting.latitude + ',' + meeting.longitude;
@@ -74,11 +67,15 @@ export default function Map({
     );
   }, [filteredSlugs]);
 
+  if (error) {
+    return null;
+  }
+
   return (
     <div aria-hidden={true} css={mapCss}>
       {!!locations.length && (
         <MapContainer
-          style={{ height: '100%', width: '100%' }}
+          style={{ height: '100%', width: '100%', position: 'absolute' }}
           zoomControl={!('ontouchstart' in window || !!window.TouchEvent)}
         >
           <TileLayer
@@ -86,19 +83,14 @@ export default function Map({
               ? settings.map.tiles_dark
               : settings.map.tiles)}
           />
-          <Markers
-            listMeetingsInPopup={listMeetingsInPopup}
-            locations={locations}
-            state={state}
-            setState={setState}
-          />
-          {latitude && longitude && mode === 'location' && (
+          <Markers locations={locations} />
+          {latitude && longitude && input.mode === 'location' && (
             <Marker
               icon={mapMarkerIcon(settings.map.markers.geocode)}
               position={[latitude, longitude]}
             />
           )}
-          {latitude && longitude && mode === 'me' && (
+          {latitude && longitude && input.mode === 'me' && (
             <Marker
               icon={mapMarkerIcon(settings.map.markers.geolocation)}
               position={[latitude, longitude]}
@@ -110,18 +102,9 @@ export default function Map({
   );
 }
 
-const Markers = ({
-  listMeetingsInPopup,
-  locations,
-  state,
-  setState,
-}: {
-  listMeetingsInPopup: boolean;
-  locations: MapLocation[];
-  setState: Dispatch<SetStateAction<State>>;
-  state: State;
-}) => {
+const Markers = ({ locations }: { locations: MapLocation[] }) => {
   const map = useMap();
+  const { meeting } = useFilter();
   const { settings, strings } = useSettings();
   const markerRef = useRef<L.Marker>(null);
   const markerIcon = mapMarkerIcon(settings.map.markers.location);
@@ -153,7 +136,7 @@ const Markers = ({
       <Popup>
         <h2>{location.name}</h2>
         <p className="notranslate">{location.formatted_address}</p>
-        {listMeetingsInPopup && (
+        {!meeting && (
           <div css={mapPopupMeetingsCss}>
             {location.meetings
               .sort((a, b) => (a.start && b.start && a.start > b.start ? 1 : 0))
@@ -163,7 +146,7 @@ const Markers = ({
                     {meeting.start?.toFormat('t')}
                     <span>{meeting.start?.toFormat('cccc')}</span>
                   </time>
-                  <Link meeting={meeting} setState={setState} state={state} />
+                  <Link meeting={meeting} />
                 </div>
               ))}
           </div>

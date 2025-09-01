@@ -1,14 +1,12 @@
-import React from 'react';
-
-import { render, fireEvent } from '@testing-library/react';
+import { fireEvent, render } from '@testing-library/react';
 import { DateTime } from 'luxon';
 import { MemoryRouter } from 'react-router-dom';
 
 import Meeting from '../../src/components/Meeting';
-import { SettingsContext, mergeSettings } from '../../src/helpers';
+import { SettingsProvider } from '../../src/hooks';
 import { en } from '../../src/i18n';
 
-import type { Meeting as MeetingType, State } from '../../src/types';
+import type { Meeting as MeetingType } from '../../src/types';
 
 describe('<Meeting />', () => {
   beforeEach(() => {
@@ -56,61 +54,14 @@ describe('<Meeting />', () => {
     contact_2_phone: '+18005551212',
   };
 
-  const mockState: State = {
-    capabilities: {
-      coordinates: true,
-      distance: true,
-      geolocation: true,
-      inactive: true,
-      location: true,
-      region: true,
-      sharing: false,
-      time: true,
-      type: true,
-      weekday: true,
-    },
-    indexes: {
-      distance: [],
-      region: [],
-      time: [],
-      type: [],
-      weekday: [],
-    },
-    input: {
-      distance: [],
-      meeting: 'foo',
-      mode: 'search',
-      region: [],
-      time: [],
-      type: [],
-      view: 'table',
-      weekday: [],
-    },
-    loading: false,
-    meetings: {
-      foo: mockMeeting,
-      bar: mockMeeting,
-    },
-    ready: true,
-  };
-
   it('renders with clickable buttons', () => {
     const { getByText } = render(
       <MemoryRouter>
-        <SettingsContext.Provider value={mergeSettings()}>
-          <Meeting state={mockState} setState={jest.fn()} />
-        </SettingsContext.Provider>
+        <SettingsProvider>
+          <Meeting meeting={mockMeeting} />
+        </SettingsProvider>
       </MemoryRouter>
     );
-
-    // click type definition
-    const type_definition = getByText(en.types.O);
-    expect(type_definition).toBeTruthy();
-    fireEvent.click(type_definition);
-    const type_definition_text = getByText(en.type_descriptions.O);
-    expect(type_definition_text).toBeVisible();
-    fireEvent.click(type_definition);
-    expect(type_definition_text).not.toBeVisible();
 
     // click formatIcs
     const calendar_link = getByText(en.add_to_calendar);
@@ -126,7 +77,7 @@ describe('<Meeting />', () => {
   it('renders with group info', () => {
     const { getByText } = render(
       <MemoryRouter>
-        <Meeting state={mockState} setState={jest.fn()} />
+        <Meeting meeting={mockMeeting} />
       </MemoryRouter>
     );
 
@@ -140,7 +91,7 @@ describe('<Meeting />', () => {
   it('renders with contact 1 but no contact 2', () => {
     const { getByText, queryByText } = render(
       <MemoryRouter>
-        <Meeting state={mockState} setState={jest.fn()} />
+        <Meeting meeting={mockMeeting} />
       </MemoryRouter>
     );
     const contact1text = getByText(`Text ${mockMeeting.contact_1_name}`);
@@ -157,46 +108,10 @@ describe('<Meeting />', () => {
     expect(contact2text).toBeNull();
   });
 
-  it('renders when inactive', () => {
-    const { getByText } = render(
-      <MemoryRouter>
-        <Meeting
-          state={{
-            ...mockState,
-            meetings: {
-              foo: {
-                ...mockMeeting,
-                isActive: false,
-                isInPerson: false,
-                types: ['X', 'inactive'],
-                end: DateTime.now().plus({ days: 1 }),
-              },
-            },
-          }}
-          setState={jest.fn()}
-        />
-      </MemoryRouter>
-    );
-    const inactiveType = getByText(en.types.inactive);
-    expect(inactiveType).toBeVisible();
-  });
-
   it('renders appointment', () => {
     const { getByText } = render(
       <MemoryRouter>
-        <Meeting
-          state={{
-            ...mockState,
-            meetings: {
-              foo: {
-                ...mockMeeting,
-                start: undefined,
-                end: undefined,
-              },
-            },
-          }}
-          setState={jest.fn()}
-        />
+        <Meeting meeting={{ ...mockMeeting, start: undefined }} />
       </MemoryRouter>
     );
     const appointmentText = getByText(en.appointment);

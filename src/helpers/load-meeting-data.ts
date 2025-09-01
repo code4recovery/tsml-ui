@@ -7,21 +7,28 @@ import { formatSlug } from './format-slug';
 import { states } from './states';
 import { streamlineRegionsIndex } from './streamline-regions-index';
 
-import type { Index, JSONData, JSONDataFlat, Meeting, State } from '../types';
+import { type Data } from '../hooks';
+
+import type { Index, JSONData, JSONDataFlat, Meeting } from '../types';
 
 // set up meeting data; this is only run once when the app loads
 export function loadMeetingData(
   data: JSONData[],
-  capabilities: State['capabilities'],
+  capabilities: Data['capabilities'],
   settings: TSMLReactConfig,
   strings: Translation,
   timezone?: string
-): [State['meetings'], State['indexes'], State['capabilities']] {
+): {
+  capabilities: Data['capabilities'];
+  indexes: Data['indexes'];
+  meetings: Data['meetings'];
+  slugs: string[];
+} {
   // meetings is a lookup
   const meetings: { [index: string]: Meeting } = {};
 
   // indexes start as objects, will be converted to arrays
-  const indexes: State['indexes'] = {
+  const indexes: Data['indexes'] = {
     region: [],
     time: [],
     type: [],
@@ -516,8 +523,10 @@ export function loadMeetingData(
     a.name?.localeCompare(b.name)
   );
 
+  const slugs = Object.keys(meetings);
+
   // determine capabilities (filter out options that apply to every meeting)
-  const meetingsCount = Object.keys(meetings).length;
+  const meetingsCount = slugs.length;
   indexes.region = streamlineRegionsIndex(indexes.region, meetingsCount);
 
   ['region', 'weekday', 'time', 'type'].forEach(indexKey => {
@@ -532,7 +541,7 @@ export function loadMeetingData(
     indexes.type = indexes.type.filter(type => type.key !== 'active');
 
     // ...from each meeting
-    Object.keys(meetings).forEach(slug => {
+    slugs.forEach(slug => {
       meetings[slug] = {
         ...meetings[slug],
         types: meetings[slug].types?.filter(
@@ -552,7 +561,7 @@ export function loadMeetingData(
   // determine sharing
   capabilities.sharing = typeof navigator.canShare === 'function';
 
-  return [meetings, indexes, capabilities];
+  return { meetings, indexes, capabilities, slugs };
 }
 
 // look for data with multiple days and make them all single

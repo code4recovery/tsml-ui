@@ -1,17 +1,17 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect } from 'react';
 
 import { Global } from '@emotion/react';
-import { useSearchParams } from 'react-router-dom';
 
 import {
-  filterMeetingData,
-  getQueryString,
-  isGoogleSheetData,
-  loadMeetingData,
-  mergeSettings,
-  SettingsContext,
-  translateGoogleSheet,
-} from '../helpers';
+  DataProvider,
+  ErrorProvider,
+  FilterProvider,
+  InputProvider,
+  SettingsProvider,
+  useData,
+  useFilter,
+  useInput,
+} from '../hooks';
 import { globalCss } from '../styles';
 
 import {
@@ -25,8 +25,6 @@ import {
   Title,
 } from './';
 
-import type { JSONData, State } from '../types';
-
 export default function TsmlUI({
   google,
   settings: userSettings,
@@ -38,250 +36,56 @@ export default function TsmlUI({
   src?: string;
   timezone?: string;
 }) {
-  const { settings, strings } = mergeSettings(userSettings);
-  const [searchParams] = useSearchParams();
-  const [state, setState] = useState<State>({
-    capabilities: {
-      coordinates: false,
-      distance: false,
-      geolocation: false,
-      inactive: false,
-      location: false,
-      region: false,
-      sharing: false,
-      time: false,
-      type: false,
-      weekday: false,
-    },
-    filtering: true,
-    input: settings.defaults,
-    indexes: {
-      distance: [],
-      region: [],
-      time: [],
-      type: [],
-      weekday: [],
-    },
-    loading: true,
-    meetings: {},
-  });
-
-  //   // update canonical
-  //   let canonical = document.querySelector('link[rel="canonical"]');
-  //   if (!canonical) {
-  //     canonical = document.createElement('link');
-  //     canonical.setAttribute('rel', 'canonical');
-  //     document.getElementsByTagName('head')[0]?.appendChild(canonical);
-  //   }
-  //   canonical.setAttribute(
-  //     'href',
-  //     formatUrl(
-  //       state.input.meeting ? { meeting: state.input.meeting } : state.input,
-  //       settings
-  //     )
-  //   );
-
-  // update input when search params change
   useEffect(() => {
-    const input = getQueryString(settings);
-    if (input !== state.input) {
-      setState(state => ({
-        ...state,
-        input: {
-          ...input,
-          latitude: state.input.latitude,
-          longitude: state.input.longitude,
-        },
-      }));
-    }
-  }, [searchParams]);
+    console.log(
+      'TSML UI meeting finder: https://github.com/code4recovery/tsml-ui'
+    );
 
-  useEffect(() => {
-    // load data once
-    if (state.loading) {
-      console.log(
-        'TSML UI meeting finder: https://github.com/code4recovery/tsml-ui'
-      );
-
-      const input = getQueryString(settings);
-
-      if (timezone) {
-        // check if timezone is valid
-        try {
-          Intl.DateTimeFormat(undefined, { timeZone: timezone });
-        } catch (e) {
-          return setState(state => ({
-            ...state,
-            error: `Timezone ${timezone} is not valid. Please use one like Europe/Rome.`,
-            filtering: false,
-            loading: false,
-          }));
-        }
-      }
-
-      if (!src) {
-        setState(state => ({
-          ...state,
-          error: 'Configuration error: a data source must be specified.',
-          filtering: false,
-          loading: false,
-        }));
-      } else {
-        const sheets: (string | undefined)[] = [];
-        Promise.all(
-          src.split(',').map(src => {
-            const sheetId = src.startsWith(
-              'https://docs.google.com/spreadsheets/d/'
-            )
-              ? src.split('/')[5]
-              : undefined;
-            sheets.push(sheetId);
-
-            // google sheet
-            if (sheetId) {
-              if (!google) {
-                setState(state => ({
-                  ...state,
-                  error: 'Configuration error: a Google API key is required.',
-                  filtering: false,
-                  loading: false,
-                }));
-              }
-              src = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/A1:ZZ?key=${google}`;
-            }
-
-            // cache busting
-            if (src.endsWith('.json') && input.meeting) {
-              src = `${src}?${new Date().getTime()}`;
-            }
-
-            // fetch json data file and build indexes
-            return fetch(src);
-          })
-        )
-          .then(responses =>
-            Promise.all(
-              responses.map(res =>
-                res.ok ? res.json() : Promise.reject(res.status)
-              )
-            )
-          )
-          .then((responses: JSONData[][]) => {
-            const data = responses
-              .map((data, index) => {
-                const sheetId = sheets[index];
-                return isGoogleSheetData(data) && sheetId
-                  ? translateGoogleSheet(data, sheetId, settings)
-                  : data;
-              })
-              .flat();
-
-            if (!Array.isArray(data) || !data.length) {
-              throw new Error(
-                'Configuration error: data is not in the correct format.'
-              );
-            }
-
-            const [meetings, indexes, capabilities] = loadMeetingData(
-              data,
-              state.capabilities,
-              settings,
-              strings,
-              timezone
-            );
-
-            if (!timezone && !Object.keys(meetings).length) {
-              throw new Error('Configuration error: time zone is not set.');
-            }
-
-            const waitingForGeo =
-              (!input.latitude || !input.longitude) &&
-              ((input.mode === 'location' && input.search) ||
-                input.mode === 'me');
-
-            setState(state => ({
-              ...state,
-              capabilities,
-              filtering: !!waitingForGeo,
-              indexes,
-              input,
-              loading: false,
-              meetings,
-            }));
-          })
-          .catch((error: string | TypeError) => {
-            setState(state => ({
-              ...state,
-              error: String(error),
-              filtering: false,
-              loading: false,
-            }));
-          });
-      }
-    }
-
-    // manage classes
+    // add body class to help people style their pages
     document.body.classList.add('tsml-ui');
     return () => {
       document.body.classList.remove('tsml-ui');
     };
   }, []);
 
-  // filter data
-  const [filteredSlugs, inProgress] = useMemo(
-    () => filterMeetingData(state, setState, settings, strings),
-    [state.loading, state.filtering, JSON.stringify(state.input)]
-  );
-
-  // show alert?
-  state.alert = !filteredSlugs.length ? strings.no_results : undefined;
-
-  // show error?
-  if (
-    state.input.meeting &&
-    !state.loading &&
-    !state.meetings[state.input.meeting]
-  ) {
-    state.error = strings.not_found;
-  }
-
   return (
-    <SettingsContext.Provider value={{ settings, strings }}>
-      <Global styles={globalCss} />
-      <DynamicHeight>
-        {state.loading ? (
-          <Loading />
-        ) : state.input.meeting && state.input.meeting in state.meetings ? (
-          <Meeting setState={setState} state={state} />
-        ) : (
-          <>
-            {settings.show.title && <Title state={state} />}
-            {settings.show.controls && (
-              <Controls state={state} setState={setState} />
-            )}
-            {(state.alert || state.error) && <Alert state={state} />}
-            {state.filtering ? (
-              <Loading />
-            ) : state.input.view === 'table' ? (
-              <Table
-                filteredSlugs={filteredSlugs}
-                inProgress={inProgress}
-                setState={setState}
-                state={state}
-              />
-            ) : (
-              <div style={{ display: 'flex', flexGrow: 1 }}>
-                <Map
-                  filteredSlugs={filteredSlugs}
-                  listMeetingsInPopup={true}
-                  setState={setState}
-                  state={state}
-                />
-              </div>
-            )}
-          </>
-        )}
-      </DynamicHeight>
-    </SettingsContext.Provider>
+    <ErrorProvider>
+      <SettingsProvider userSettings={userSettings}>
+        <InputProvider>
+          <DataProvider google={google} src={src} timezone={timezone}>
+            <FilterProvider>
+              <Global styles={globalCss} />
+              <DynamicHeight>
+                <Content />
+              </DynamicHeight>
+            </FilterProvider>
+          </DataProvider>
+        </InputProvider>
+      </SettingsProvider>
+    </ErrorProvider>
   );
 }
+
+const Content = () => {
+  const { waitingForData } = useData();
+  const { meeting } = useFilter();
+  const { input, waitingForInput } = useInput();
+  return waitingForData ? (
+    <Loading />
+  ) : meeting ? (
+    <Meeting meeting={meeting} />
+  ) : (
+    <>
+      <Title />
+      <Controls />
+      {waitingForInput ? (
+        <Loading />
+      ) : (
+        <>
+          <Alert />
+          {input.view === 'map' ? <Map /> : <Table />}
+        </>
+      )}
+    </>
+  );
+};

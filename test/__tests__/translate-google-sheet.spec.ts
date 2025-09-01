@@ -1,8 +1,8 @@
-import { defaults } from '../../src/helpers/settings';
 import {
   GoogleSheetData,
   translateGoogleSheet,
 } from '../../src/helpers/translate-google-sheet';
+import { defaults } from '../../src/hooks/settings';
 import { JSONData } from '../../src/types';
 
 describe('translateGoogleSheet', () => {

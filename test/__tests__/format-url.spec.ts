@@ -1,5 +1,5 @@
 import { formatUrl } from '../../src/helpers/format-url';
-import { defaults } from '../../src/helpers/settings';
+import { defaults } from '../../src/hooks';
 
 describe('formatUrl', () => {
   it('works with no params', () => {
@@ -10,7 +10,6 @@ describe('formatUrl', () => {
     expect(
       formatUrl(
         {
-          distance: ['1'],
           region: ['foo'],
           time: ['night'],
           type: ['online'],
@@ -19,7 +18,7 @@ describe('formatUrl', () => {
         defaults
       )
     ).toStrictEqual(
-      'https://test.com/?region=foo&distance=1&weekday=monday&time=night&type=online'
+      'https://test.com/?region=foo&weekday=monday&time=night&type=online'
     );
   });
 

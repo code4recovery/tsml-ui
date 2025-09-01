@@ -1,15 +1,12 @@
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { DateTime, Info } from 'luxon';
-import { Link as RouterLink } from 'react-router-dom';
 
 import {
   formatDirectionsUrl,
   formatFeedbackEmail,
   formatIcs,
-  formatUrl,
   formatString as i18n,
-  useSettings,
 } from '../helpers';
 import {
   buttonHelpCss,
@@ -26,23 +23,17 @@ import Icon, { icons } from './Icon';
 import Link from './Link';
 import Map from './Map';
 
-import type { Meeting as MeetingType, State } from '../types';
+import { useData, useInput, useSettings } from '../hooks';
+import type { Meeting as MeetingType } from '../types';
 
-export default function Meeting({
-  setState,
-  state,
-}: {
-  setState: Dispatch<SetStateAction<State>>;
-  state: State;
-}) {
+export default function Meeting({ meeting }: { meeting: MeetingType }) {
   const { settings, strings } = useSettings();
+  const { setInput } = useInput();
 
   // open types
   const [define, setDefine] = useState<string | undefined>();
 
-  // existence checked in the parent component
-  const meeting =
-    state.meetings[state.input.meeting as keyof typeof state.meetings];
+  const { capabilities, meetings } = useData();
 
   const sharePayload = {
     title: meeting.name,
@@ -65,8 +56,7 @@ export default function Meeting({
     : feedback_emails.length
     ? formatFeedbackEmail({
         feedback_emails,
-        name: meeting.name,
-        edit_url: meeting.edit_url,
+        meeting,
         settings,
         strings,
       })
@@ -124,7 +114,7 @@ export default function Meeting({
     return () => {
       wordPressEditLink();
     };
-  }, [state.input.meeting]);
+  }, [meeting]);
 
   // directions URL link
   const directionsUrl = meeting.isInPerson
@@ -216,7 +206,7 @@ export default function Meeting({
   const locationWeekdays = Info.weekdays()
     .map((weekday, index) => ({
       name: weekday,
-      meetings: Object.values(state.meetings)
+      meetings: Object.values(meetings)
         .filter(m => m.start?.weekday === index + 1)
         .filter(
           m =>
@@ -241,7 +231,7 @@ export default function Meeting({
   const groupWeekdays = Info.weekdays()
     .map((weekday, index) => ({
       name: weekday,
-      meetings: Object.values(state.meetings)
+      meetings: Object.values(meetings)
         .filter(m => m.start?.weekday === index + 1)
         .filter(
           m =>
@@ -267,26 +257,11 @@ export default function Meeting({
       </h1>
       <div css={meetingBackCss}>
         <Icon icon="back" />
-        <RouterLink
-          to={formatUrl(
-            {
-              ...state.input,
-              meeting: undefined,
-            },
-            settings
-          )}
-          onClick={() => {
-            setState({
-              ...state,
-              input: {
-                ...state.input,
-                meeting: undefined,
-              },
-            });
-          }}
+        <a
+          onClick={() => setInput(input => ({ ...input, meeting: undefined }))}
         >
           {strings.back_to_meetings}
-        </RouterLink>
+        </a>
       </div>
       <div css={meetingColumnsCss}>
         <div>
@@ -302,7 +277,6 @@ export default function Meeting({
             <div>
               <h2>{strings.meeting_information}</h2>
               <p>{formatTime(meeting.start, meeting.end)}</p>
-
               {meeting.start && meeting.start.zoneName !== meeting.timezone && (
                 <p>
                   (
@@ -313,7 +287,7 @@ export default function Meeting({
                   )
                 </p>
               )}
-              {state.capabilities.type && meeting.types && (
+              {capabilities.type && meeting.types && (
                 <ul>
                   {meeting.types
                     .filter(type => type !== 'active')
@@ -381,16 +355,15 @@ export default function Meeting({
                       )}
                     </div>
                   )}
-                  {state.capabilities.sharing &&
-                    navigator.canShare(sharePayload) && (
-                      <Button
-                        icon="share"
-                        onClick={() =>
-                          navigator.share(sharePayload).catch(() => {})
-                        }
-                        text={strings.share}
-                      />
-                    )}
+                  {capabilities.sharing && navigator.canShare(sharePayload) && (
+                    <Button
+                      icon="share"
+                      onClick={() =>
+                        navigator.share(sharePayload).catch(() => {})
+                      }
+                      text={strings.share}
+                    />
+                  )}
                   {meeting.start &&
                     meeting.isActive &&
                     settings.calendar_enabled && (
@@ -419,12 +392,7 @@ export default function Meeting({
                 {meeting.location_notes && (
                   <Paragraphs text={meeting.location_notes} />
                 )}
-                {formatWeekdays(
-                  locationWeekdays,
-                  meeting.slug,
-                  state,
-                  setState
-                )}
+                {formatWeekdays(locationWeekdays, meeting.slug)}
               </div>
             )}
             {meeting.group &&
@@ -442,7 +410,7 @@ export default function Meeting({
                     <Button {...button} key={index} />
                   ))}
 
-                  {formatWeekdays(groupWeekdays, meeting.slug, state, setState)}
+                  {formatWeekdays(groupWeekdays, meeting.slug)}
                 </div>
               )}
             {(meeting.updated || feedback_url || meeting.entity) && (
@@ -498,12 +466,7 @@ export default function Meeting({
               : undefined
           }
         >
-          <Map
-            filteredSlugs={[meeting.slug]}
-            listMeetingsInPopup={false}
-            state={state}
-            setState={setState}
-          />
+          {meeting.isInPerson && <Map />}
         </div>
       </div>
     </div>
@@ -526,9 +489,7 @@ function Paragraphs({ text }: { text: string }) {
 
 function formatWeekdays(
   weekday: { name: string; meetings: MeetingType[] }[],
-  slug: string,
-  state: State,
-  setState: Dispatch<SetStateAction<State>>
+  slug: string
 ) {
   return weekday.map(({ meetings, name }, index) => (
     <div key={index}>
@@ -538,11 +499,7 @@ function formatWeekdays(
           <li key={index}>
             <div>{m.start?.toFormat('t')}</div>
             <div>
-              {m.slug === slug ? (
-                <Link meeting={m} />
-              ) : (
-                <Link meeting={m} setState={setState} state={state} />
-              )}
+              {m.slug === slug ? <Link meeting={m} /> : <Link meeting={m} />}
             </div>
             <div>
               {m.isInPerson && (

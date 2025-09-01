@@ -1,42 +1,41 @@
-import { useSearchParams } from 'react-router-dom';
-
-import { formatString as i18n, getIndexByKey, useSettings } from '../helpers';
+import { getIndexByKey, formatString as i18n } from '../helpers';
+import { useData, useError, useFilter, useInput, useSettings } from '../hooks';
 import { alertCss, errorCss } from '../styles';
 
 import Button from './Button';
 
-import type { State } from '../types';
-
-export default function Alert({ state }: { state: State }) {
-  const [searchParams, setSearchParams] = useSearchParams();
+export default function Alert() {
+  const { indexes } = useData();
+  const { error } = useError();
+  const { alert } = useFilter();
+  const { input, setInput } = useInput();
   const { settings, strings } = useSettings();
-  return state.error ? (
-    <div css={errorCss}>{state.error}</div>
-  ) : state.alert ? (
+  return error ? (
+    <div css={errorCss}>{error}</div>
+  ) : alert ? (
     <>
-      <div css={alertCss}>{state.alert}</div>
-      {state.alert === strings.no_results && state.input.search && (
+      <div css={alertCss}>{alert}</div>
+      {alert === strings.no_results && input.search && (
         <Button
-          onClick={() => {
-            searchParams.delete('search');
-            setSearchParams(searchParams);
-          }}
-          text={i18n(strings.remove, { filter: `‘${state.input.search}’` })}
+          onClick={() => setInput(input => ({ ...input, search: '' }))}
+          text={i18n(strings.remove, { filter: input.search })}
           icon="close"
         />
       )}
-      {state.alert === strings.no_results &&
+      {alert === strings.no_results &&
         settings.filters.map(filter =>
-          state.input[filter].map(value => (
+          input[filter].map(value => (
             <Button
               key={value}
               icon="close"
               onClick={() => {
-                searchParams.delete(filter);
-                setSearchParams(searchParams);
+                setInput(input => ({
+                  ...input,
+                  [filter]: input[filter].filter(item => item !== value),
+                }));
               }}
               text={i18n(strings.remove, {
-                filter: getIndexByKey(state.indexes[filter], value)?.name,
+                filter: getIndexByKey(indexes[filter], value)?.name,
               })}
             />
           ))

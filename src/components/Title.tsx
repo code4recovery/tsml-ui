@@ -1,9 +1,10 @@
-import { formatString as i18n, getIndexByKey, useSettings } from '../helpers';
+import { getIndexByKey, formatString as i18n } from '../helpers';
+import { useData, useInput, useSettings } from '../hooks';
 
-import type { State } from '../types';
-
-export default function Title({ state: { indexes, input } }: { state: State }) {
-  const { strings } = useSettings();
+export default function Title() {
+  const { indexes } = useData();
+  const { input } = useInput();
+  const { settings, strings } = useSettings();
 
   // build title from strings.title
   const parts: string[] = [];
@@ -17,7 +18,9 @@ export default function Title({ state: { indexes, input } }: { state: State }) {
       input.search
     ) {
       parts.push(
-        i18n(strings.title.search_with, { search: `‘${input.search}’` })
+        i18n(strings.title.search_with, {
+          search: input.search,
+        })
       );
     } else if (
       key === 'search_near' &&
@@ -25,22 +28,35 @@ export default function Title({ state: { indexes, input } }: { state: State }) {
       input.search
     ) {
       parts.push(
-        i18n(strings.title.search_near, { search: `‘${input.search}’` })
+        i18n(strings.title.search_near, {
+          search: input.search,
+        })
       );
-    } else if (indexes[key as keyof typeof indexes]) {
-      const value = input[key as keyof typeof indexes]
+    } else if (
+      input[key as keyof typeof input] &&
+      indexes[key as keyof typeof indexes] &&
+      key !== 'distance'
+    ) {
+      const value = (input[key as keyof typeof input] as string[])
         .map(
           value =>
             getIndexByKey(indexes[key as keyof typeof indexes], value)?.name
         )
         .join(' + ');
-      if (value.length) {
+      if (value?.length) {
         parts.push(
           i18n(strings.title[key as keyof typeof strings.title], {
             [key]: value,
           })
         );
       }
+    } else if (key === 'distance' && input.distance) {
+      // todo
+      parts.push(
+        i18n(strings.title.distance, {
+          distance: `${input.distance} ${settings.distance_unit}`,
+        })
+      );
     }
   });
 
