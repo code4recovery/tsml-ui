@@ -1,4 +1,5 @@
-import { getIndexByKey, formatString as i18n } from '../helpers';
+import { useNavigate } from 'react-router-dom';
+import { formatUrl, getIndexByKey, formatString as i18n } from '../helpers';
 import { useData, useError, useFilter, useInput, useSettings } from '../hooks';
 import { alertCss, errorCss } from '../styles';
 
@@ -8,7 +9,8 @@ export default function Alert() {
   const { indexes } = useData();
   const { error } = useError();
   const { alert } = useFilter();
-  const { input, setInput } = useInput();
+  const { input } = useInput();
+  const navigate = useNavigate();
   const { settings, strings } = useSettings();
   return error ? (
     <div css={errorCss}>{error}</div>
@@ -17,7 +19,9 @@ export default function Alert() {
       <div css={alertCss}>{alert}</div>
       {alert === strings.no_results && input.search && (
         <Button
-          onClick={() => setInput(input => ({ ...input, search: '' }))}
+          onClick={() =>
+            navigate(formatUrl({ ...input, search: '' }, settings))
+          }
           text={i18n(strings.remove, { filter: input.search })}
           icon="close"
         />
@@ -29,10 +33,15 @@ export default function Alert() {
               key={value}
               icon="close"
               onClick={() => {
-                setInput(input => ({
-                  ...input,
-                  [filter]: input[filter].filter(item => item !== value),
-                }));
+                navigate(
+                  formatUrl(
+                    {
+                      ...input,
+                      [filter]: input[filter].filter(item => item !== value),
+                    },
+                    settings
+                  )
+                );
               }}
               text={i18n(strings.remove, {
                 filter: getIndexByKey(indexes[filter], value)?.name,

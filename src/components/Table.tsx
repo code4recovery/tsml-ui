@@ -2,7 +2,9 @@ import { useState } from 'react';
 
 import InfiniteScroll from 'react-infinite-scroller';
 
-import { formatString as i18n } from '../helpers';
+import { useNavigate } from 'react-router-dom';
+
+import { formatUrl, formatString as i18n } from '../helpers';
 import { useData, useError, useFilter, useInput, useSettings } from '../hooks';
 import {
   tableChicletCss,
@@ -20,7 +22,8 @@ export default function Table() {
   const { error } = useError();
   const { filteredSlugs, inProgress } = useFilter();
   const { settings, strings } = useSettings();
-  const { latitude, longitude, setInput } = useInput();
+  const { input, latitude, longitude } = useInput();
+  const navigate = useNavigate();
   const meetingsPerPage = 10;
   const supported_columns = [
     'address',
@@ -130,7 +133,9 @@ export default function Table() {
     const meeting = meetings[slug];
     return (
       <tr
-        onClick={() => setInput(input => ({ ...input, meeting: meeting.slug }))}
+        onClick={() =>
+          navigate(formatUrl({ ...input, meeting: meeting.slug }, settings))
+        }
       >
         {columns.map((column, index) => (
           <td className={`tsml-${column}`} key={index}>

@@ -2,10 +2,12 @@ import { formatUrl } from '../helpers';
 import { useFilter, useInput, useSettings } from '../hooks';
 import type { Meeting } from '../types';
 
+import { Link as RouterLink } from 'react-router-dom';
+
 export default function Link({ meeting }: { meeting: Meeting }) {
   const { meeting: thisMeeting } = useFilter();
   const { settings, strings } = useSettings();
-  const { input, setInput } = useInput();
+  const { input } = useInput();
 
   const flags =
     settings.flags
@@ -27,15 +29,9 @@ export default function Link({ meeting }: { meeting: Meeting }) {
 
   return (
     <>
-      <a
-        href={formatUrl({ ...input, meeting: meeting.slug }, settings)}
-        onClick={e => {
-          e.preventDefault();
-          setInput(input => ({ ...input, meeting: meeting.slug }));
-        }}
-      >
+      <RouterLink to={formatUrl({ ...input, meeting: meeting.slug }, settings)}>
         {meeting.name}
-      </a>
+      </RouterLink>
       {flags && <small>{flags}</small>}
     </>
   );

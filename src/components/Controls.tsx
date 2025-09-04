@@ -1,6 +1,8 @@
 import { FormEvent, MouseEvent, useEffect, useRef, useState } from 'react';
 
-import { analyticsEvent } from '../helpers';
+import { useNavigate } from 'react-router-dom';
+
+import { analyticsEvent, formatUrl } from '../helpers';
 import { useData, useInput, useSettings } from '../hooks';
 import {
   controlsCss,
@@ -18,9 +20,10 @@ import Dropdown from './Dropdown';
 
 export default function Controls() {
   const { capabilities, meetings, slugs } = useData();
+  const navigate = useNavigate();
   const { settings, strings } = useSettings();
   const [dropdown, setDropdown] = useState<string>();
-  const { input, setInput } = useInput();
+  const { input } = useInput();
   const [search, setSearch] = useState(input.search);
   const searchInput = useRef<HTMLInputElement>(null);
 
@@ -78,7 +81,7 @@ export default function Controls() {
 
     if (value === input.search) return;
 
-    setInput(input => ({ ...input, search: value }));
+    navigate(formatUrl({ ...input, search: value }, settings));
   }, [searchInput.current?.value]);
 
   // update search when global state changes
@@ -106,7 +109,7 @@ export default function Controls() {
       });
     }
 
-    setInput(input => ({ ...input, search }));
+    navigate(formatUrl({ ...input, search }, settings));
   };
 
   // set search mode dropdown and reset distances
@@ -127,7 +130,7 @@ export default function Controls() {
     // focus after waiting for disabled to clear
     setTimeout(() => searchInput.current?.focus(), 100);
 
-    setInput(input => ({
+    const newInput = {
       ...input,
       distance:
         mode === 'search'
@@ -136,13 +139,9 @@ export default function Controls() {
       mode,
       region: mode === 'search' ? input.region : [],
       search,
-    }));
-  };
+    };
 
-  // toggle list/map view
-  const setView = (e: MouseEvent, view: 'table' | 'map') => {
-    e.preventDefault();
-    setInput(input => ({ ...input, view }));
+    navigate(formatUrl(newInput, settings));
   };
 
   return !slugs.length ? null : (
@@ -224,7 +223,7 @@ export default function Controls() {
               css={index ? controlsGroupLastCss : controlsGroupFirstCss}
               data-active={input.view === view}
               key={view}
-              onClick={e => setView(e, view)}
+              onClick={() => navigate(formatUrl({ ...input, view }, settings))}
               type="button"
             >
               {strings.views[view]}

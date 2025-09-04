@@ -6,7 +6,8 @@ import {
   useState,
 } from 'react';
 
-import { getIndexByKey, formatString as i18n } from '../helpers';
+import { useNavigate } from 'react-router-dom';
+import { formatUrl, getIndexByKey, formatString as i18n } from '../helpers';
 import { type Data, useData, useInput, useSettings } from '../hooks';
 import { dropdownButtonCss, dropdownCss } from '../styles';
 import type { Index } from '../types';
@@ -23,8 +24,9 @@ export default function Dropdown({
   setDropdown: Dispatch<SetStateAction<string | undefined>>;
 }) {
   const { indexes } = useData();
-  const { strings } = useSettings();
-  const { input, setInput, waitingForInput } = useInput();
+  const navigate = useNavigate();
+  const { settings, strings } = useSettings();
+  const { input, waitingForInput } = useInput();
   const options = indexes[filter];
   const values =
     filter === 'distance'
@@ -54,10 +56,12 @@ export default function Dropdown({
     e.preventDefault();
 
     if (filter === 'distance') {
-      setInput(input => ({
-        ...input,
-        distance: value ? parseInt(value) : undefined,
-      }));
+      navigate(
+        formatUrl(
+          { ...input, distance: value ? parseInt(value) : undefined },
+          settings
+        )
+      );
     } else {
       // add or remove from filters
       let currentValues = input[filter] as string[];
@@ -80,7 +84,7 @@ export default function Dropdown({
         // Remove the filter from search params if no value is provided
         currentValues = [];
       }
-      setInput(input => ({ ...input, [filter]: currentValues }));
+      navigate(formatUrl({ ...input, [filter]: currentValues }, settings));
     }
   };
 
