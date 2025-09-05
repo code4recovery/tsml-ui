@@ -79,7 +79,7 @@ export const DataProvider = ({
 }: PropsWithChildren<{ google?: string; src?: string; timezone?: string }>) => {
   const [data, setData] = useState<Data>(defaultData);
   const { setError } = useError();
-  const { input, latitude, longitude } = useInput();
+  const { input, latitude, longitude, setBounds } = useInput();
   const { settings, strings } = useSettings();
 
   useEffect(() => {
@@ -148,16 +148,15 @@ export const DataProvider = ({
           throw new Error('data is not in the correct format');
         }
 
-        const { meetings, indexes, capabilities, slugs } = loadMeetingData(
-          json,
-          data.capabilities,
-          settings,
-          strings,
-          timezone
-        );
+        const { bounds, capabilities, indexes, meetings, slugs } =
+          loadMeetingData(json, data.capabilities, settings, strings, timezone);
 
         if (!timezone && !slugs.length) {
           throw new Error('time zone is not set');
+        }
+
+        if (bounds) {
+          setBounds(bounds);
         }
 
         setData({

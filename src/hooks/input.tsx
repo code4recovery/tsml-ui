@@ -22,13 +22,25 @@ const InputContext = createContext<
     input: TSMLReactConfig['defaults'];
     latitude?: number;
     longitude?: number;
+    setBounds: (bounds: {
+      north: string;
+      south: string;
+      east: string;
+      west: string;
+    }) => void;
   } & Coordinates
->({ input: defaults.defaults, waitingForInput: false });
+>({ input: defaults.defaults, waitingForInput: false, setBounds: () => {} });
 
 export const InputProvider = ({ children }: PropsWithChildren) => {
   const { setError } = useError();
   const [searchParams] = useSearchParams();
   const { settings, strings } = useSettings();
+  const [bounds, setBounds] = useState({
+    north: '',
+    south: '',
+    east: '',
+    west: '',
+  });
 
   const [input, setInput] = useState<TSMLReactConfig['defaults']>(
     defaults.defaults
@@ -96,6 +108,7 @@ export const InputProvider = ({ children }: PropsWithChildren) => {
           language: settings.language,
           referrer: window.location.href,
           search: input.search,
+          ...bounds,
         })}`
       )
         .then(result => result.json())
@@ -145,7 +158,7 @@ export const InputProvider = ({ children }: PropsWithChildren) => {
   }, [input.mode, input.search]);
 
   return (
-    <InputContext.Provider value={{ input, ...coordinates }}>
+    <InputContext.Provider value={{ input, setBounds, ...coordinates }}>
       {children}
     </InputContext.Provider>
   );
