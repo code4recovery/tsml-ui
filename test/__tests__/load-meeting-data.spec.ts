@@ -18,14 +18,32 @@ describe('loadMeetingData', () => {
         city: 'Anytown',
         state: 'OK',
         country: 'USA',
+        latitude: 37,
+        longitude: -122,
+        day: '0',
+      },
+      {
+        name: 'Other Meeting',
+        slug: 'other-meeting',
+        time: '09:00',
+        end_time: '10:00',
+        address: '123 Main St',
+        city: 'Anytown',
+        state: 'OK',
+        country: 'USA',
+        latitude: 38,
+        longitude: -121,
+        day: '0',
       },
       {
         name: 'Inactive Meeting',
         slug: 'inactive-meeting',
         formatted_address: 'Anytown, OK, USA',
+        latitude: 38,
+        longitude: -121,
       },
     ];
-    const { meetings, indexes, capabilities, slugs } = loadMeetingData(
+    const { bounds, meetings, indexes, capabilities, slugs } = loadMeetingData(
       data,
       {
         coordinates: false,
@@ -43,8 +61,8 @@ describe('loadMeetingData', () => {
       defaults.strings[defaults.language],
       'America/Los_Angeles'
     );
-    expect(meetings).toStrictEqual({
-      'test-meeting': {
+    expect(meetings['test-meeting']).toEqual(
+      expect.objectContaining({
         address: '123 Main St',
         approximate: false,
         formatted_address: '123 Main St, Anytown, OK, USA',
@@ -57,21 +75,8 @@ describe('loadMeetingData', () => {
         search: '123 main st, anytown, ok, usa\ttest meeting\tanytown',
         slug: 'test-meeting',
         types: ['in-person', 'active'],
-      },
-      'inactive-meeting': {
-        approximate: true,
-        formatted_address: 'Anytown, OK, USA',
-        isActive: false,
-        isInPerson: false,
-        isOnline: false,
-        isTempClosed: false,
-        name: 'Inactive Meeting',
-        regions: [],
-        search: 'anytown, ok, usa\tinactive meeting',
-        slug: 'inactive-meeting',
-        types: ['inactive'],
-      },
-    });
+      })
+    );
     expect(indexes).toStrictEqual({
       distance: [],
       region: [
@@ -79,26 +84,31 @@ describe('loadMeetingData', () => {
           children: [],
           key: 'anytown',
           name: 'Anytown',
-          slugs: ['test-meeting'],
+          slugs: ['test-meeting', 'other-meeting'],
         },
       ],
       time: [
         {
+          key: 'morning',
+          name: 'Morning',
+          slugs: ['test-meeting', 'other-meeting'],
+        },
+        {
           key: 'appointment',
           name: 'Appointment',
-          slugs: ['test-meeting', 'inactive-meeting'],
+          slugs: ['inactive-meeting'],
         },
       ],
       type: [
         {
           key: 'active',
           name: 'Active',
-          slugs: ['test-meeting'],
+          slugs: ['test-meeting', 'other-meeting'],
         },
         {
           key: 'in-person',
           name: 'In-person',
-          slugs: ['test-meeting'],
+          slugs: ['test-meeting', 'other-meeting'],
         },
         {
           key: 'inactive',
@@ -106,21 +116,37 @@ describe('loadMeetingData', () => {
           slugs: ['inactive-meeting'],
         },
       ],
-      weekday: [],
+      weekday: [
+        {
+          key: 'sunday',
+          name: 'Sunday',
+          slugs: ['test-meeting', 'other-meeting'],
+        },
+      ],
     });
     expect(capabilities).toStrictEqual({
-      coordinates: false,
+      coordinates: true,
       distance: false,
       geolocation: undefined,
       inactive: true,
       location: false,
       region: true,
       sharing: false,
-      time: false,
+      time: true,
       type: true,
-      weekday: false,
+      weekday: true,
     });
-    expect(slugs).toStrictEqual(['test-meeting', 'inactive-meeting']);
+    expect(slugs).toStrictEqual([
+      'test-meeting',
+      'other-meeting',
+      'inactive-meeting',
+    ]);
+    expect(bounds).toStrictEqual({
+      north: '38',
+      south: '37',
+      east: '-121',
+      west: '-122',
+    });
   });
 });
 

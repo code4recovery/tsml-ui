@@ -19,6 +19,7 @@ export function loadMeetingData(
   strings: Translation,
   timezone?: string
 ): {
+  bounds?: { north: string; south: string; east: string; west: string };
   capabilities: Data['capabilities'];
   indexes: Data['indexes'];
   meetings: Data['meetings'];
@@ -35,6 +36,9 @@ export function loadMeetingData(
     weekday: [],
     distance: [],
   };
+
+  const latitudes: number[] = [];
+  const longitudes: number[] = [];
 
   // loop through each entry
   flattenDays(data).forEach(meeting => {
@@ -219,6 +223,8 @@ export function loadMeetingData(
           typeof meeting.longitude === 'string'
             ? parseFloat(meeting.longitude)
             : meeting.longitude;
+        latitudes.push(latitude);
+        longitudes.push(longitude);
       }
     }
 
@@ -561,7 +567,18 @@ export function loadMeetingData(
   // determine sharing
   capabilities.sharing = typeof navigator.canShare === 'function';
 
-  return { meetings, indexes, capabilities, slugs };
+  // bounds to bias the geocoder
+  const bounds =
+    latitudes.length && longitudes.length
+      ? {
+          north: Math.max(...latitudes).toString(),
+          south: Math.min(...latitudes).toString(),
+          east: Math.max(...longitudes).toString(),
+          west: Math.min(...longitudes).toString(),
+        }
+      : undefined;
+
+  return { bounds, capabilities, indexes, meetings, slugs };
 }
 
 // look for data with multiple days and make them all single
