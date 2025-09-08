@@ -95,7 +95,7 @@ export const InputProvider = ({ children }: PropsWithChildren) => {
 
   // handle geocoding or geolocation requests
   useEffect(() => {
-    if (coordinates.waitingForInput) return;
+    if (coordinates.waitingForInput || !bounds.north) return;
     setError();
     if (input.mode === 'location' && input.search) {
       setCoordinates({ waitingForInput: true });
@@ -155,7 +155,7 @@ export const InputProvider = ({ children }: PropsWithChildren) => {
     } else {
       setCoordinates({ waitingForInput: false });
     }
-  }, [input.mode, input.search]);
+  }, [input.mode, input.search, bounds.north]);
 
   return (
     <InputContext.Provider value={{ input, setBounds, ...coordinates }}>
