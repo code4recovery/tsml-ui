@@ -3,9 +3,12 @@ import {
   RouteObject,
   RouterProvider,
   createBrowserRouter,
+  useRouteError,
 } from 'react-router-dom';
 
+import { Global } from '@emotion/react';
 import { TsmlUI } from './components';
+import { errorCss, globalCss } from './styles';
 
 // locate element
 const element = document.getElementById('tsml-ui');
@@ -30,10 +33,24 @@ if (element) {
           timezone={element.getAttribute('data-timezone') || undefined}
         />
       ),
+      errorElement: <ErrorBoundary />,
     },
   ]);
 
   createRoot(element).render(<RouterProvider router={router} />);
 } else {
   console.warn('TSML UI could not find a div#tsml-ui element');
+}
+
+function ErrorBoundary() {
+  const error = useRouteError();
+  const message = error instanceof Error ? error.message : 'Unknown error';
+  return (
+    <>
+      <Global styles={globalCss} />
+      <div>
+        <div css={errorCss}>{message}</div>
+      </div>
+    </>
+  );
 }

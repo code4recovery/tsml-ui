@@ -7,7 +7,7 @@ import {
 } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
-import { formatString } from '../helpers';
+import { formatSearch, formatString } from '../helpers';
 import { useError } from './error';
 import { defaults, useSettings } from './settings';
 
@@ -59,7 +59,7 @@ export const InputProvider = ({ children }: PropsWithChildren) => {
         ? 'me'
         : 'search';
     const view = searchParams.get('view') === 'map' ? 'map' : 'table';
-    const search = searchParams.get('search')?.toString() ?? '';
+    const search = formatSearch(searchParams.get('search')?.toString() ?? '');
     const region = searchParams.has('region')
       ? `${searchParams.get('region')}`.split('/')
       : [];
