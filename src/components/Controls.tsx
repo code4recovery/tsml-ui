@@ -2,7 +2,7 @@ import { FormEvent, MouseEvent, useEffect, useRef, useState } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 
-import { analyticsEvent, formatUrl } from '../helpers';
+import { analyticsEvent, formatSearch, formatUrl } from '../helpers';
 import { useData, useInput, useSettings } from '../hooks';
 import {
   controlsCss,
@@ -152,7 +152,7 @@ export default function Controls() {
             aria-label={strings.modes[input.mode]}
             css={modes.length > 1 ? controlsInputFirstCss : controlsInputCss}
             disabled={input.mode === 'me'}
-            onChange={e => setSearch(e.target.value)}
+            onChange={e => setSearch(formatSearch(e.target.value))}
             placeholder={strings.modes[input.mode]}
             ref={searchInput}
             spellCheck="false"

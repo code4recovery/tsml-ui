@@ -77,7 +77,6 @@ export const FilterProvider = ({ children }: PropsWithChildren) => {
     if (input.mode === 'search') {
       if (input.search) {
         const orTerms = input.search
-          .replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
           .replaceAll(' OR ', '|')
           .toLowerCase()
           .split('|')

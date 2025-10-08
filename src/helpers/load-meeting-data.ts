@@ -3,6 +3,7 @@ import { DateTime, WeekdayNumbers } from 'luxon';
 import { flattenAndSortIndexes } from './flatten-and-sort-indexes';
 import { formatAddress } from './format-address';
 import { formatConferenceProvider } from './format-conference-provider';
+import { formatSearch } from './format-search';
 import { formatSlug } from './format-slug';
 import { states } from './states';
 import { streamlineRegionsIndex } from './streamline-regions-index';
@@ -425,21 +426,23 @@ export function loadMeetingData(
         : undefined;
 
     // build search string
-    const search = [
-      district,
-      formatted_address,
-      group,
-      group_notes,
-      location,
-      location_notes,
-      name,
-      notes,
-      regions,
-    ]
-      .flat()
-      .filter(e => e)
-      .join('\t')
-      .toLowerCase();
+    const search = formatSearch(
+      [
+        district,
+        formatted_address,
+        group,
+        group_notes,
+        location,
+        location_notes,
+        name,
+        notes,
+        regions,
+      ]
+        .flat()
+        .filter(e => e)
+        .join('\t')
+        .toLowerCase()
+    );
 
     meetings[slug] = {
       address,
