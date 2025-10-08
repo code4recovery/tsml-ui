@@ -7,7 +7,7 @@ import {
 } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
-import { formatSearch, formatString } from '../helpers';
+import { formatString, validateInput } from '../helpers';
 import { useError } from './error';
 import { defaults, useSettings } from './settings';
 
@@ -43,7 +43,7 @@ export const InputProvider = ({ children }: PropsWithChildren) => {
   });
 
   const [input, setInput] = useState<TSMLReactConfig['defaults']>(
-    defaults.defaults
+    validateInput(searchParams)
   );
 
   const [coordinates, setCoordinates] = useState<Coordinates>({
@@ -52,45 +52,7 @@ export const InputProvider = ({ children }: PropsWithChildren) => {
 
   // detect input from URL search params
   useEffect(() => {
-    const mode =
-      searchParams.get('mode') === 'location'
-        ? 'location'
-        : searchParams.get('mode') === 'me'
-        ? 'me'
-        : 'search';
-    const view = searchParams.get('view') === 'map' ? 'map' : 'table';
-    const search = formatSearch(searchParams.get('search')?.toString() ?? '');
-    const region = searchParams.has('region')
-      ? `${searchParams.get('region')}`.split('/')
-      : [];
-    const time = searchParams.has('time')
-      ? (`${searchParams.get('time')}`.split('/') as Array<
-          'morning' | 'midday' | 'evening' | 'night' | 'appointment'
-        >)
-      : [];
-    const weekday = searchParams.has('weekday')
-      ? `${searchParams.get('weekday')}`.split('/')
-      : [];
-    const type = searchParams.has('type')
-      ? `${searchParams.get('type')}`.split('/')
-      : [];
-    const meeting = searchParams.get('meeting') ?? undefined;
-    const distance = searchParams.has('distance')
-      ? parseInt(searchParams.get('distance') ?? '')
-      : undefined;
-
-    setInput(input => ({
-      ...input,
-      distance,
-      meeting,
-      mode,
-      region,
-      search,
-      time,
-      type,
-      view,
-      weekday,
-    }));
+    setInput(validateInput(searchParams));
   }, [searchParams]);
 
   // handle geocoding or geolocation requests

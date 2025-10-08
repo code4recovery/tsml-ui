@@ -5,6 +5,8 @@ type MapMarker = {
   height: number;
   width: number;
 };
+type Mode = 'search' | 'location' | 'me';
+type View = 'table' | 'map';
 
 interface TSMLReactConfig {
   cache: boolean;
@@ -14,12 +16,12 @@ interface TSMLReactConfig {
   defaults: {
     distance?: number;
     meeting?: string;
-    mode: 'search' | 'location' | 'me';
+    mode: Mode;
     region: string[];
     search: string;
     time: TSMLReactConfig['times'];
     type: string[];
-    view: 'table' | 'map';
+    view: View;
     weekday: TSMLReactConfig['weekdays'];
   };
   distance_default: number;
@@ -46,6 +48,7 @@ interface TSMLReactConfig {
       url: string;
     };
   };
+  modes: Array<Mode>;
   now_offset: number;
   params: Array<'search' | 'mode' | 'view' | 'meeting'>;
   show: {
@@ -56,6 +59,7 @@ interface TSMLReactConfig {
     [lang in Lang]: Translation;
   };
   times: Array<'morning' | 'midday' | 'evening' | 'night' | 'appointment'>;
+  views: Array<View>;
   weekdays: string[];
 }
 
