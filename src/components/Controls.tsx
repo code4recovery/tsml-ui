@@ -28,8 +28,7 @@ export default function Controls() {
   const searchInput = useRef<HTMLInputElement>(null);
 
   // get available search options based on capabilities
-  const allModes = ['search', 'location', 'me'] as const;
-  const modes = allModes
+  const modes = settings.modes
     .filter(mode => mode !== 'location' || capabilities.coordinates)
     .filter(
       mode =>
@@ -42,8 +41,7 @@ export default function Controls() {
     .filter(filter => filter !== 'region' || input.mode === 'search');
 
   // get available views
-  const allViews = ['table', 'map'] as const;
-  const views = allViews.filter(
+  const views = settings.views.filter(
     view => view !== 'map' || capabilities.coordinates
   );
 

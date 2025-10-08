@@ -35,6 +35,7 @@ export const defaults: TSMLReactConfig = {
   },
   defaults: {
     distance: undefined,
+    meeting: undefined,
     mode: 'search',
     region: [],
     search: '',
@@ -86,6 +87,7 @@ export const defaults: TSMLReactConfig = {
       url: 'https://{s}s.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
     },
   },
+  modes: ['search', 'location', 'me'],
   now_offset: -10, // "now" includes meetings that started in the last 10 minutes
   params: ['search', 'mode', 'view', 'meeting'], //input other than filters
   show: {
@@ -103,6 +105,7 @@ export const defaults: TSMLReactConfig = {
     sv,
   },
   times: ['morning', 'midday', 'evening', 'night', 'appointment'],
+  views: ['table', 'map'],
   weekdays: [
     'sunday',
     'monday',
