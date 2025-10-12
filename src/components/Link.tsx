@@ -1,4 +1,4 @@
-import { formatQueryString } from '../helpers';
+import { formatUrl } from '../helpers';
 import { useFilter, useInput, useSettings } from '../hooks';
 import type { Meeting } from '../types';
 
@@ -30,7 +30,7 @@ export default function Link({ meeting }: { meeting: Meeting }) {
   return (
     <>
       <RouterLink
-        to={`/${meeting.slug}${formatQueryString(input, settings)}`}
+        to={formatUrl({ ...input, meeting: meeting.slug }, settings)}
         onClick={e => e.stopPropagation()}
       >
         {meeting.name}

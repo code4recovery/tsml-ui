@@ -4,21 +4,10 @@ export function formatUrl(
   settings: TSMLReactConfig,
   includeDomain = false
 ) {
-  const queryString = formatQueryString(input, settings);
-
-  const base = includeDomain ? `${window.location.origin}` : '';
-
-  const [path] = window.location.pathname.split('?');
-
-  return `${base}${path}${queryString}`;
-}
-
-// create a query string with only values in use
-export function formatQueryString(
-  input: Partial<TSMLReactConfig['defaults']>,
-  settings: TSMLReactConfig
-) {
   const query = {};
+
+  const path = input.meeting ?? '';
+  delete input.meeting;
 
   // region, time, type, and weekday
   settings.filters
@@ -49,12 +38,9 @@ export function formatQueryString(
     .toString()
     .replace(/%2F/g, '/')
     .replace(/%20/g, '+')
-    .replace(/%2C/g, ',')
-    .toString();
+    .replace(/%2C/g, ',');
 
-  if (!queryString.length) {
-    return '';
-  }
+  const base = includeDomain ? `${window.location.origin}` : '';
 
-  return `?${queryString}`;
+  return `${base}/${path}${queryString.length ? `?${queryString}` : ''}`;
 }

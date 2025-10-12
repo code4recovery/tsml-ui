@@ -7,7 +7,7 @@ import {
   formatDirectionsUrl,
   formatFeedbackEmail,
   formatIcs,
-  formatQueryString,
+  formatUrl,
   formatString as i18n,
 } from '../helpers';
 import {
@@ -270,7 +270,7 @@ export default function Meeting() {
       </h1>
       <div css={meetingBackCss}>
         <Icon icon="back" />
-        <RouterLink to={`/${formatQueryString(input, settings)}`}>
+        <RouterLink to={formatUrl({ ...input, meeting: undefined }, settings)}>
           {strings.back_to_meetings}
         </RouterLink>
       </div>

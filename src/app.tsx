@@ -24,6 +24,8 @@ if (element) {
       element: (
         <TsmlUI
           google={element.getAttribute('data-google') || undefined}
+          hashRouting={!!element.getAttribute('data-path')}
+          // eslint-disable-next-line no-undef
           settings={
             typeof tsml_react_config === 'undefined'
               ? undefined

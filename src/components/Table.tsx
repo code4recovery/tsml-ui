@@ -4,7 +4,7 @@ import InfiniteScroll from 'react-infinite-scroller';
 
 import { useNavigate } from 'react-router-dom';
 
-import { formatQueryString, formatString as i18n } from '../helpers';
+import { formatUrl, formatString as i18n } from '../helpers';
 import { useData, useError, useFilter, useInput, useSettings } from '../hooks';
 import {
   tableChicletCss,
@@ -134,7 +134,7 @@ export default function Table() {
     return (
       <tr
         onClick={() =>
-          navigate(`${meeting.slug}${formatQueryString(input, settings)}`)
+          navigate(formatUrl({ ...input, meeting: meeting.slug }, settings))
         }
       >
         {columns.map((column, index) => (
