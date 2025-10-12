@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 
 import { Global } from '@emotion/react';
+import { Outlet } from 'react-router-dom';
 
 import {
   DataProvider,
@@ -9,21 +10,11 @@ import {
   InputProvider,
   SettingsProvider,
   useData,
-  useFilter,
   useInput,
 } from '../hooks';
 import { globalCss } from '../styles';
 
-import {
-  Alert,
-  Controls,
-  DynamicHeight,
-  Loading,
-  Map,
-  Meeting,
-  Table,
-  Title,
-} from './';
+import { Alert, Controls, DynamicHeight, Loading, Map, Table, Title } from './';
 
 export default function TsmlUI({
   google,
@@ -56,7 +47,7 @@ export default function TsmlUI({
             <FilterProvider>
               <Global styles={globalCss} />
               <DynamicHeight>
-                <Content />
+                <Outlet />
               </DynamicHeight>
             </FilterProvider>
           </DataProvider>
@@ -66,14 +57,11 @@ export default function TsmlUI({
   );
 }
 
-const Content = () => {
+export const Index = () => {
   const { waitingForData } = useData();
-  const { meeting } = useFilter();
   const { input, waitingForInput } = useInput();
   return waitingForData ? (
     <Loading />
-  ) : meeting ? (
-    <Meeting meeting={meeting} />
   ) : (
     <>
       <Title />
