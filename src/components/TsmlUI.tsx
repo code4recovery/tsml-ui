@@ -18,13 +18,11 @@ import { Alert, Controls, DynamicHeight, Loading, Map, Table, Title } from './';
 
 export default function TsmlUI({
   google,
-  hashRouting,
   settings: userSettings,
   src,
   timezone,
 }: {
   google?: string;
-  hashRouting: boolean;
   settings?: TSMLReactConfig;
   src?: string;
   timezone?: string;
@@ -43,7 +41,7 @@ export default function TsmlUI({
 
   return (
     <ErrorProvider>
-      <SettingsProvider hashRouting={hashRouting} userSettings={userSettings}>
+      <SettingsProvider userSettings={userSettings}>
         <InputProvider>
           <DataProvider google={google} src={src} timezone={timezone}>
             <FilterProvider>

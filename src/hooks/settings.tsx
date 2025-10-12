@@ -126,16 +126,10 @@ export const useSettings = () => useContext(SettingsContext);
 
 export const SettingsProvider = ({
   children,
-  hashRouting,
   userSettings,
-}: PropsWithChildren<{
-  hashRouting: boolean;
-  userSettings?: TSMLReactConfig;
-}>) => {
+}: PropsWithChildren<{ userSettings?: TSMLReactConfig }>) => {
   const value = useMemo(() => {
     const settings = userSettings ? merge(defaults, userSettings) : defaults;
-
-    settings.hashRouting = hashRouting;
 
     // flags can be specified to override the default. also [] means unset
     if (!Array.isArray(settings.flags)) {
