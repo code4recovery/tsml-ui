@@ -29,7 +29,10 @@ export default function Link({ meeting }: { meeting: Meeting }) {
 
   return (
     <>
-      <RouterLink to={formatUrl({ ...input, meeting: meeting.slug }, settings)}>
+      <RouterLink
+        to={formatUrl({ ...input, meeting: meeting.slug }, settings)}
+        onClick={e => e.stopPropagation()}
+      >
         {meeting.name}
       </RouterLink>
       {flags && <small>{flags}</small>}

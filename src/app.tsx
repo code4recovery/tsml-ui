@@ -3,11 +3,12 @@ import {
   RouteObject,
   RouterProvider,
   createBrowserRouter,
+  createHashRouter,
   useRouteError,
 } from 'react-router-dom';
 
 import { Global } from '@emotion/react';
-import { TsmlUI } from './components';
+import { Index, Meeting, TsmlUI } from './components';
 import { errorCss, globalCss } from './styles';
 
 // locate element
@@ -17,12 +18,13 @@ export let routes: RouteObject[] = [];
 export let router: ReturnType<typeof createBrowserRouter>;
 
 if (element) {
-  const router = createBrowserRouter([
+  const routes = [
     {
       path: '/*',
       element: (
         <TsmlUI
           google={element.getAttribute('data-google') || undefined}
+          // eslint-disable-next-line no-undef
           settings={
             typeof tsml_react_config === 'undefined'
               ? undefined
@@ -34,8 +36,40 @@ if (element) {
         />
       ),
       errorElement: <ErrorBoundary />,
+      children: [
+        {
+          index: true,
+          element: <Index />,
+        },
+        {
+          path: ':slug',
+          element: <Meeting />,
+        },
+      ],
     },
-  ]);
+  ];
+
+  const basename = element.getAttribute('data-path');
+
+  // if landing on the page with the meeting param, redirect to that meeting
+  const params = new URLSearchParams(window.location.search);
+  const meeting = params.get('meeting');
+  if (meeting) {
+    params.delete('meeting');
+    const query = params.toString();
+
+    const path = basename
+      ? `/${basename.replace(/^\//, '').replace(/\/$/, '')}/${meeting}${
+          query ? `?${query}` : ''
+        }`
+      : `${window.location.pathname}#/${meeting}${query ? `?${query}` : ''}`;
+
+    window.history.replaceState({}, '', path);
+  }
+
+  const router = basename
+    ? createBrowserRouter(routes, { basename })
+    : createHashRouter(routes);
 
   createRoot(element).render(<RouterProvider router={router} />);
 } else {

@@ -6,6 +6,9 @@ export function formatUrl(
 ) {
   const query = {};
 
+  const path = input.meeting ?? '';
+  delete input.meeting;
+
   // region, time, type, and weekday
   settings.filters
     .filter(filter => typeof input[filter] !== 'undefined')
@@ -39,7 +42,5 @@ export function formatUrl(
 
   const base = includeDomain ? `${window.location.origin}` : '';
 
-  const [path] = window.location.pathname.split('?');
-
-  return `${base}${path}${queryString.length ? `?${queryString}` : ''}`;
+  return `${base}/${path}${queryString.length ? `?${queryString}` : ''}`;
 }

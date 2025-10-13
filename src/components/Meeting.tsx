@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import { DateTime, Info } from 'luxon';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useParams } from 'react-router-dom';
 
 import {
   formatDirectionsUrl,
@@ -27,15 +27,63 @@ import Map from './Map';
 
 import { useData, useInput, useSettings } from '../hooks';
 import type { Meeting as MeetingType } from '../types';
+import Loading from './Loading';
 
-export default function Meeting({ meeting }: { meeting: MeetingType }) {
+export default function Meeting() {
+  const { slug } = useParams();
+
+  const { capabilities, meetings, waitingForData } = useData();
+
+  const meeting = meetings[slug as string];
+
   const { settings, strings } = useSettings();
   const { input } = useInput();
 
   // open types
   const [define, setDefine] = useState<string | undefined>();
 
-  const { capabilities, meetings } = useData();
+  // scroll to top when you navigate to this page
+  useEffect(() => {
+    const el = document.getElementById('tsml-ui');
+    if (el) {
+      const headerHeight = Math.max(
+        0,
+        ...[
+          ...Array.prototype.slice.call(
+            document.body.getElementsByTagName('*')
+          ),
+        ]
+          .filter(
+            x =>
+              getComputedStyle(x, null).getPropertyValue('position') ===
+                'fixed' && x.offsetTop < 100
+          )
+          .map(x => x.offsetTop + x.offsetHeight)
+      );
+      if (headerHeight) {
+        el.style.scrollMarginTop = `${headerHeight}px`;
+      }
+      el.scrollIntoView();
+    }
+
+    document.getElementById('tsml-title')?.focus();
+
+    // log edit_url
+    if (meeting?.edit_url) {
+      console.log(`TSML UI edit ${meeting.name}: ${meeting.edit_url}`);
+      wordPressEditLink(meeting.edit_url);
+    }
+
+    return () => {
+      wordPressEditLink();
+    };
+  }, [meeting]);
+
+  if (waitingForData) {
+    return <Loading />;
+  } else if (!meeting) {
+    throw new Error('Meeting not found');
+  }
 
   const sharePayload = {
     title: meeting.name,
@@ -80,43 +128,6 @@ export default function Meeting({ meeting }: { meeting: MeetingType }) {
 
     return start.toFormat('cccc t ZZZZ');
   };
-
-  // scroll to top when you navigate to this page
-  useEffect(() => {
-    const el = document.getElementById('tsml-ui');
-    if (el) {
-      const headerHeight = Math.max(
-        0,
-        ...[
-          ...Array.prototype.slice.call(
-            document.body.getElementsByTagName('*')
-          ),
-        ]
-          .filter(
-            x =>
-              getComputedStyle(x, null).getPropertyValue('position') ===
-                'fixed' && x.offsetTop < 100
-          )
-          .map(x => x.offsetTop + x.offsetHeight)
-      );
-      if (headerHeight) {
-        el.style.scrollMarginTop = `${headerHeight}px`;
-      }
-      el.scrollIntoView();
-    }
-
-    document.getElementById('tsml-title')?.focus();
-
-    // log edit_url
-    if (meeting.edit_url) {
-      console.log(`TSML UI edit ${meeting.name}: ${meeting.edit_url}`);
-      wordPressEditLink(meeting.edit_url);
-    }
-
-    return () => {
-      wordPressEditLink();
-    };
-  }, [meeting]);
 
   // directions URL link
   const directionsUrl = meeting.isInPerson
@@ -255,7 +266,7 @@ export default function Meeting({ meeting }: { meeting: MeetingType }) {
   return (
     <div css={meetingCss}>
       <h1 id="tsml-title" tabIndex={-1}>
-        <Link meeting={meeting} />
+        {meeting.name}
       </h1>
       <div css={meetingBackCss}>
         <Icon icon="back" />

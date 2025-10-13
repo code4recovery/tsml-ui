@@ -34,6 +34,6 @@ describe('formatUrl', () => {
         },
         defaults
       )
-    ).toStrictEqual('/?search=bar&mode=location&view=map&meeting=foo');
+    ).toStrictEqual('/foo?search=bar&mode=location&view=map');
   });
 });

@@ -16,6 +16,18 @@ To use TSML UI on your website you only need to add some HTML to your web page. 
 
 You don't need to do anything other than enable HTTPS on your website. To ensure all users see this functionality, make sure that anyone who enters a `http://` address for your site is redirected to the `https://` address.
 
+### Enable "pretty" permalinks
+
+12 Step Meeting List sites have this enabled by default when they have a permalink structure like `/%postname%`. If you are not using 12 Step Meeting List and still want this functionality, this can be achieved by resolving your meeting detail pages to the index page. On a WordPress website this can be achieved by adding this PHP code to your theme's functions.php:
+
+```php
+add_action('init', function () {
+    add_rewrite_rule('^meetings/(.*)?', 'index.php?pagename=meetings', 'top');
+});
+```
+
+Then add this parameter to your embed code: `data-path="/meetings"`.
+
 ### Add custom types
 
 Here is an example of extending the `tsml_react_config` object to include a definition for an additional meeting type.

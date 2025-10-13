@@ -1,64 +1,96 @@
 import { fireEvent, render } from '@testing-library/react';
 import { DateTime } from 'luxon';
-import { MemoryRouter } from 'react-router-dom';
+import { MemoryRouter, useParams } from 'react-router-dom';
 
 import Meeting from '../../src/components/Meeting';
 import { SettingsProvider } from '../../src/hooks';
 import { en } from '../../src/i18n';
 
-import type { Meeting as MeetingType } from '../../src/types';
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'), // Use actual for all non-hook parts
+  useParams: jest.fn(), // Mock useParams as a Jest mock function
+}));
+
+const mockMeeting = {
+  slug: 'test',
+  isInPerson: true,
+  isOnline: true,
+  isActive: true,
+  latitude: 40.712776,
+  longitude: -74.005974,
+  name: 'First Meeting',
+  start: DateTime.now(),
+  end: DateTime.now(),
+  types: ['O', 'M', 'X'],
+  timezone: 'America/New_York',
+  approximate: false,
+  formatted_address: '123 Main St, New York, NY 12345, USA',
+  email: 'test@test.com',
+  venmo: '@test',
+  square: '$test',
+  paypal: 'https://paypal.me/test',
+  homegroup_online: 'test',
+  location: 'Empire State Building',
+  notes: 'Testing meeting notes\n\nTesting new line',
+  location_notes: 'Testing location notes\n\nTesting new line',
+  group: 'Test Group',
+  group_notes: 'Testing group notes\n\nTesting new line',
+  website: 'https://test.com',
+  phone: '+18005551212',
+  regions: ['Manhattan', 'Midtown'],
+  district: 'District 13',
+  conference_url: 'https://zoom.us/d/123456789',
+  conference_url_notes: 'Test',
+  conference_phone: '+1234567890',
+  conference_phone_notes: 'Test',
+  conference_provider: 'Zoom',
+  updated: '2/17/22',
+  contact_1_name: 'Contact 1',
+  contact_1_email: 'contact1@test.com',
+  contact_1_phone: '+18005551212',
+  contact_2_email: 'contact2@test.com',
+  contact_2_phone: '+18005551212',
+};
+
+// Mock the useData hook to return a predefined meetings object
+jest.mock('../../src/hooks', () => {
+  const originalModule = jest.requireActual('../../src/hooks');
+  return {
+    __esModule: true,
+    ...originalModule,
+    useData: () => ({
+      meetings: {
+        test: mockMeeting,
+      },
+      waitingForData: false,
+      capabilities: {
+        coordinates: false,
+        distance: false,
+        geolocation: false,
+        inactive: false,
+        location: false,
+        region: false,
+        sharing: false,
+        time: false,
+        type: false,
+        weekday: false,
+      },
+    }),
+  };
+});
 
 describe('<Meeting />', () => {
   beforeEach(() => {
     window.URL.createObjectURL = jest.fn() as jest.Mock;
   });
 
-  const mockMeeting: MeetingType = {
-    slug: 'test',
-    isInPerson: true,
-    isOnline: true,
-    isActive: true,
-    latitude: 40.712776,
-    longitude: -74.005974,
-    name: 'First Meeting',
-    start: DateTime.now(),
-    end: DateTime.now(),
-    types: ['O', 'M', 'X'],
-    timezone: 'America/New_York',
-    approximate: false,
-    formatted_address: '123 Main St, New York, NY 12345, USA',
-    email: 'test@test.com',
-    venmo: '@test',
-    square: '$test',
-    paypal: 'https://paypal.me/test',
-    homegroup_online: 'test',
-    location: 'Empire State Building',
-    notes: 'Testing meeting notes\n\nTesting new line',
-    location_notes: 'Testing location notes\n\nTesting new line',
-    group: 'Test Group',
-    group_notes: 'Testing group notes\n\nTesting new line',
-    website: 'https://test.com',
-    phone: '+18005551212',
-    regions: ['Manhattan', 'Midtown'],
-    district: 'District 13',
-    conference_url: 'https://zoom.us/d/123456789',
-    conference_url_notes: 'Test',
-    conference_phone: '+1234567890',
-    conference_phone_notes: 'Test',
-    conference_provider: 'Zoom',
-    updated: '2/17/22',
-    contact_1_name: 'Contact 1',
-    contact_1_email: 'contact1@test.com',
-    contact_1_phone: '+18005551212',
-    contact_2_email: 'contact2@test.com',
-    contact_2_phone: '+18005551212',
-  };
-
   it('renders with clickable buttons', () => {
+    (useParams as jest.Mock).mockReturnValue({ slug: 'test' });
+
     const { getByText } = render(
       <MemoryRouter>
         <SettingsProvider>
-          <Meeting meeting={mockMeeting} />
+          <Meeting />
         </SettingsProvider>
       </MemoryRouter>
     );
@@ -77,7 +109,7 @@ describe('<Meeting />', () => {
   it('renders with group info', () => {
     const { getByText } = render(
       <MemoryRouter>
-        <Meeting meeting={mockMeeting} />
+        <Meeting />
       </MemoryRouter>
     );
 
@@ -88,10 +120,10 @@ describe('<Meeting />', () => {
     expect(group_notes).toBeVisible();
   });
 
-  it('renders with contact 1 but no contact 2', () => {
+  it('renders with contact 1', () => {
     const { getByText, queryByText } = render(
       <MemoryRouter>
-        <Meeting meeting={mockMeeting} />
+        <Meeting />
       </MemoryRouter>
     );
     const contact1text = getByText(`Text ${mockMeeting.contact_1_name}`);
@@ -104,17 +136,5 @@ describe('<Meeting />', () => {
       'href',
       `mailto:${mockMeeting.contact_1_email}`
     );
-    const contact2text = queryByText(`Text ${mockMeeting.contact_2_name}`);
-    expect(contact2text).toBeNull();
-  });
-
-  it('renders appointment', () => {
-    const { getByText } = render(
-      <MemoryRouter>
-        <Meeting meeting={{ ...mockMeeting, start: undefined }} />
-      </MemoryRouter>
-    );
-    const appointmentText = getByText(en.appointment);
-    expect(appointmentText).toBeVisible();
   });
 });

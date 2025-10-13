@@ -10,4 +10,4 @@ export { default as Map } from './Map';
 export { default as Meeting } from './Meeting';
 export { default as Table } from './Table';
 export { default as Title } from './Title';
-export { default as TsmlUI } from './TsmlUI';
+export { Index, default as TsmlUI } from './TsmlUI';
