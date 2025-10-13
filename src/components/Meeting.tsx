@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import { DateTime, Info } from 'luxon';
-import { Link as RouterLink, useParams } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 
 import {
   formatDirectionsUrl,
@@ -25,19 +25,16 @@ import Icon, { icons } from './Icon';
 import Link from './Link';
 import Map from './Map';
 
-import { useData, useInput, useSettings } from '../hooks';
+import { useData, useFilter, useInput, useSettings } from '../hooks';
 import type { Meeting as MeetingType } from '../types';
 import Loading from './Loading';
 
 export default function Meeting() {
-  const { slug } = useParams();
-
-  const { capabilities, meetings, waitingForData } = useData();
-
-  const meeting = meetings[slug as string];
+  const { capabilities, meetings } = useData();
 
   const { settings, strings } = useSettings();
   const { input } = useInput();
+  const { meeting, waitingForFilter } = useFilter();
 
   // open types
   const [define, setDefine] = useState<string | undefined>();
@@ -79,10 +76,10 @@ export default function Meeting() {
     };
   }, [meeting]);
 
-  if (waitingForData) {
+  if (waitingForFilter) {
     return <Loading />;
   } else if (!meeting) {
-    throw new Error('Meeting not found');
+    return <></>;
   }
 
   const sharePayload = {

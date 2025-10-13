@@ -6,6 +6,8 @@ import {
   useEffect,
   useState,
 } from 'react';
+import { useParams } from 'react-router-dom';
+
 import { getDistance, getIndexByKey } from '../helpers';
 import { Meeting } from '../types';
 import { useData } from './data';
@@ -17,9 +19,11 @@ const FilterContext = createContext<{
   filteredSlugs: string[];
   inProgress: string[];
   meeting?: Meeting;
+  waitingForFilter: boolean;
 }>({
   filteredSlugs: [],
   inProgress: [],
+  waitingForFilter: false,
 });
 
 export const FilterProvider = ({ children }: PropsWithChildren) => {
@@ -28,13 +32,16 @@ export const FilterProvider = ({ children }: PropsWithChildren) => {
     filteredSlugs: string[];
     inProgress: string[];
     meeting?: Meeting;
+    waitingForFilter: boolean;
   }>({
     filteredSlugs: [],
     inProgress: [],
+    waitingForFilter: true,
   });
   const { capabilities, indexes, meetings, slugs, waitingForData } = useData();
   const { input, latitude, longitude, waitingForInput } = useInput();
   const { settings, strings } = useSettings();
+  const { slug } = useParams();
 
   useEffect(() => {
     if (waitingForData || waitingForInput) return;
@@ -43,6 +50,7 @@ export const FilterProvider = ({ children }: PropsWithChildren) => {
       filteredSlugs: [],
       inProgress: [],
       meeting: undefined,
+      waitingForFilter: true,
     });
 
     const matchGroups: string[][] = [];
@@ -203,10 +211,7 @@ export const FilterProvider = ({ children }: PropsWithChildren) => {
           );
         });
 
-    const meeting =
-      input.meeting && input.meeting in meetings
-        ? meetings[input.meeting]
-        : undefined;
+    const meeting = slug && slug in meetings ? meetings[slug] : undefined;
 
     setAlert(
       !filteredSlugs.length && !inProgress.length
@@ -218,8 +223,9 @@ export const FilterProvider = ({ children }: PropsWithChildren) => {
       filteredSlugs,
       inProgress,
       meeting,
+      waitingForFilter: false,
     });
-  }, [meetings, input, latitude, longitude]);
+  }, [meetings, input, latitude, longitude, slug]);
 
   return (
     <FilterContext.Provider value={{ ...filter, alert }}>
