@@ -79,7 +79,7 @@ export default function Meeting() {
   if (waitingForFilter) {
     return <Loading />;
   } else if (!meeting) {
-    return <></>;
+    throw new Error(strings.not_found);
   }
 
   const sharePayload = {
