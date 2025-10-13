@@ -26,10 +26,12 @@ import Link from './Link';
 import Map from './Map';
 
 import { useData, useFilter, useInput, useSettings } from '../hooks';
+import { useParams } from 'react-router-dom';
 import type { Meeting as MeetingType } from '../types';
 import Loading from './Loading';
 
 export default function Meeting() {
+  const { slug } = useParams();
   const { capabilities, meetings } = useData();
 
   const { settings, strings } = useSettings();
@@ -77,6 +79,16 @@ export default function Meeting() {
   }, [meeting]);
 
   if (waitingForFilter) {
+    return <Loading />;
+  }
+
+  // check if we have a slug but no meeting from FilterProvider
+  if (slug && !meeting && Object.keys(meetings).length > 0) {
+    // Check directly if meeting exists
+    if (!(slug in meetings)) {
+      throw new Error(strings.not_found);
+    }
+    // Meeting exists in data but FilterProvider hasn't found it yet - keep waiting
     return <Loading />;
   } else if (!meeting) {
     return <></>;
