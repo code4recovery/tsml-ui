@@ -58,23 +58,9 @@ jest.mock('../../src/hooks', () => {
   return {
     __esModule: true,
     ...originalModule,
-    useData: () => ({
-      meetings: {
-        test: mockMeeting,
-      },
-      waitingForData: false,
-      capabilities: {
-        coordinates: false,
-        distance: false,
-        geolocation: false,
-        inactive: false,
-        location: false,
-        region: false,
-        sharing: false,
-        time: false,
-        type: false,
-        weekday: false,
-      },
+    useFilter: () => ({
+      meeting: mockMeeting,
+      waitingForFilter: false,
     }),
   };
 });
