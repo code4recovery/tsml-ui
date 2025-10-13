@@ -44,14 +44,15 @@ export const FilterProvider = ({ children }: PropsWithChildren) => {
   const { slug } = useParams();
 
   useEffect(() => {
-    if (waitingForData || waitingForInput) return;
-
-    setFilter({
-      filteredSlugs: [],
-      inProgress: [],
-      meeting: undefined,
-      waitingForFilter: true,
-    });
+    if (waitingForData || waitingForInput) {
+      setFilter({
+        filteredSlugs: [],
+        inProgress: [],
+        meeting: undefined,
+        waitingForFilter: true,
+      });
+      return;
+    }
 
     const matchGroups: string[][] = [];
     const now = DateTime.now();
@@ -225,7 +226,7 @@ export const FilterProvider = ({ children }: PropsWithChildren) => {
       meeting,
       waitingForFilter: false,
     });
-  }, [meetings, input, latitude, longitude, slug]);
+  }, [meetings, input, latitude, longitude, slug, waitingForData, waitingForInput]);
 
   return (
     <FilterContext.Provider value={{ ...filter, alert }}>
