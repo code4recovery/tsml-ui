@@ -1,6 +1,7 @@
 import {
   createContext,
   PropsWithChildren,
+  useCallback,
   useContext,
   useEffect,
   useState,
@@ -145,7 +146,7 @@ export const LocationProvider = ({ children }: PropsWithChildren) => {
     }
   }, [input.mode, input.search, bounds.north]);
 
-  const calculateDistances = (meetings: { [index: string]: Meeting }) => {
+  const calculateDistances = useCallback((meetings: { [index: string]: Meeting }) => {
     const { latitude, longitude } = locationState;
     
     if (!latitude || !longitude) {
@@ -186,7 +187,7 @@ export const LocationProvider = ({ children }: PropsWithChildren) => {
       distanceIndex,
       hasDistance: true,
     };
-  };
+  }, [locationState.latitude, locationState.longitude, settings.distance_options, settings.distance_unit]);
 
   const contextValue: LocationContextType = {
     ...locationState,
