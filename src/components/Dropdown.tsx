@@ -8,7 +8,7 @@ import {
 
 import { useNavigate } from 'react-router-dom';
 import { formatUrl, getIndexByKey, formatString as i18n } from '../helpers';
-import { type Data, useData, useInput, useSettings } from '../hooks';
+import { type Data, useData, useInput, useLocation, useSettings } from '../hooks';
 import { dropdownButtonCss, dropdownCss } from '../styles';
 import type { Index } from '../types';
 
@@ -26,7 +26,8 @@ export default function Dropdown({
   const { indexes } = useData();
   const navigate = useNavigate();
   const { settings, strings } = useSettings();
-  const { input, waitingForInput } = useInput();
+  const { input } = useInput();
+  const { waitingForLocation } = useLocation();
   const options = indexes[filter];
   const values =
     filter === 'distance'
@@ -148,7 +149,7 @@ export default function Dropdown({
       <button
         aria-expanded={open}
         css={dropdownButtonCss}
-        disabled={filter === 'distance' && waitingForInput}
+        disabled={filter === 'distance' && waitingForLocation}
         id={filter}
         onClick={e => {
           setDropdown(open ? undefined : filter);

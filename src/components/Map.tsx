@@ -5,7 +5,7 @@ import 'leaflet/dist/leaflet.css';
 import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet';
 
 import { formatDirectionsUrl } from '../helpers';
-import { useData, useError, useFilter, useInput, useSettings } from '../hooks';
+import { useData, useError, useFilter, useInput, useLocation, useSettings } from '../hooks';
 import { mapCss, mapPopupMeetingsCss } from '../styles';
 import type { MapLocation } from '../types';
 import Button from './Button';
@@ -20,7 +20,8 @@ export default function Map() {
   );
   const { meetings } = useData();
   const { filteredSlugs, meeting } = useFilter();
-  const { input, latitude, longitude } = useInput();
+  const { input } = useInput();
+  const { latitude, longitude } = useLocation();
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');

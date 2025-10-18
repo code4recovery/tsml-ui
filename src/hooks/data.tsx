@@ -7,7 +7,6 @@ import {
 } from 'react';
 
 import {
-  getDistance,
   isGoogleSheetData,
   loadMeetingData,
   translateGoogleSheet,
@@ -15,6 +14,7 @@ import {
 import { Index, JSONData, Meeting } from '../types';
 import { useError } from './error';
 import { useInput } from './input';
+import { LocationProvider, useLocation } from './location';
 import { useSettings } from './settings';
 
 export type Data = {
@@ -71,7 +71,7 @@ const DataContext = createContext<Data>(defaultData);
 
 export const useData = () => useContext(DataContext);
 
-export const DataProvider = ({
+const DataContent = ({
   children,
   google,
   src,
@@ -79,7 +79,8 @@ export const DataProvider = ({
 }: PropsWithChildren<{ google?: string; src?: string; timezone?: string }>) => {
   const [data, setData] = useState<Data>(defaultData);
   const { setError } = useError();
-  const { input, latitude, longitude, setBounds } = useInput();
+  const { input } = useInput();
+  const { setBounds, calculateDistances } = useLocation();
   const { settings, strings } = useSettings();
 
   useEffect(() => {
@@ -173,54 +174,35 @@ export const DataProvider = ({
       });
   }, []);
 
-  // calculate distance if coordinates are available
+  // Update data when location changes to recalculate distances
   useEffect(() => {
-    if (!latitude || !longitude || !data.meetings || data.waitingForData) {
+    if (data.waitingForData || !Object.keys(data.meetings).length) {
       return;
     }
 
-    const distances = Object.fromEntries(
-      settings.distance_options.map(option => [option, []])
-    );
-
-    Object.keys(data.meetings).forEach(slug => {
-      const meeting = data.meetings[slug];
-      if (meeting.latitude && meeting.longitude) {
-        meeting.distance = getDistance(
-          { latitude, longitude },
-          meeting,
-          settings
-        );
-      }
-
-      for (const option of settings.distance_options) {
-        if (meeting.distance && meeting.distance <= option) {
-          (distances[option] as string[]).push(meeting.slug);
-        }
-      }
-
-      data.meetings[slug] = meeting;
-    });
-
-    const distance: Index[] = Object.entries(distances).map(([key, slugs]) => ({
-      key,
-      name: `${key} ${settings.distance_unit}`,
-      slugs,
-    }));
+    const { meetings: meetingsWithDistances, distanceIndex, hasDistance } = calculateDistances(data.meetings);
 
     setData(prevData => ({
       ...prevData,
       capabilities: {
         ...prevData.capabilities,
-        distance: true,
+        distance: hasDistance,
       },
       indexes: {
         ...prevData.indexes,
-        distance,
+        distance: distanceIndex,
       },
-      meetings: data.meetings,
+      meetings: meetingsWithDistances,
     }));
-  }, [latitude, longitude, data.meetings, settings.distance_unit]);
+  }, [calculateDistances, data.waitingForData]);
 
   return <DataContext.Provider value={data}>{children}</DataContext.Provider>;
+};
+
+export const DataProvider = (props: PropsWithChildren<{ google?: string; src?: string; timezone?: string }>) => {
+  return (
+    <LocationProvider>
+      <DataContent {...props} />
+    </LocationProvider>
+  );
 };
