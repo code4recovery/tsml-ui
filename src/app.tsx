@@ -49,7 +49,11 @@ if (element) {
     },
   ];
 
-  const basename = element.getAttribute('data-path');
+  // sanitize basename
+  let basename = element.getAttribute('data-path') ?? '';
+  if (!window.location.pathname.startsWith(basename)) {
+    basename = '';
+  }
 
   // if landing on the page with the meeting param, redirect to that meeting
   const params = new URLSearchParams(window.location.search);
