@@ -14,7 +14,7 @@ import {
 import { Index, JSONData, Meeting } from '../types';
 import { useError } from './error';
 import { useInput } from './input';
-import { LocationProvider, useLocation } from './location';
+import { useLocation } from './location';
 import { useSettings } from './settings';
 
 export type Data = {
@@ -71,7 +71,7 @@ const DataContext = createContext<Data>(defaultData);
 
 export const useData = () => useContext(DataContext);
 
-const DataContent = ({
+export const DataProvider = ({
   children,
   google,
   src,
@@ -180,7 +180,11 @@ const DataContent = ({
       return;
     }
 
-    const { meetings: meetingsWithDistances, distanceIndex, hasDistance } = calculateDistances(data.meetings);
+    const {
+      meetings: meetingsWithDistances,
+      distanceIndex,
+      hasDistance,
+    } = calculateDistances(data.meetings);
 
     setData(prevData => ({
       ...prevData,
@@ -197,12 +201,4 @@ const DataContent = ({
   }, [calculateDistances, data.waitingForData]);
 
   return <DataContext.Provider value={data}>{children}</DataContext.Provider>;
-};
-
-export const DataProvider = (props: PropsWithChildren<{ google?: string; src?: string; timezone?: string }>) => {
-  return (
-    <LocationProvider>
-      <DataContent {...props} />
-    </LocationProvider>
-  );
 };

@@ -8,6 +8,7 @@ import {
   ErrorProvider,
   FilterProvider,
   InputProvider,
+  LocationProvider,
   SettingsProvider,
   useData,
   useInput,
@@ -44,14 +45,16 @@ export default function TsmlUI({
     <ErrorProvider>
       <SettingsProvider userSettings={userSettings}>
         <InputProvider>
-          <DataProvider google={google} src={src} timezone={timezone}>
-            <FilterProvider>
-              <Global styles={globalCss} />
-              <DynamicHeight>
-                <Outlet />
-              </DynamicHeight>
-            </FilterProvider>
-          </DataProvider>
+          <LocationProvider>
+            <DataProvider google={google} src={src} timezone={timezone}>
+              <FilterProvider>
+                <Global styles={globalCss} />
+                <DynamicHeight>
+                  <Outlet />
+                </DynamicHeight>
+              </FilterProvider>
+            </DataProvider>
+          </LocationProvider>
         </InputProvider>
       </SettingsProvider>
     </ErrorProvider>
