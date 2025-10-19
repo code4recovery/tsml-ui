@@ -12,6 +12,7 @@ import { getDistance, getIndexByKey } from '../helpers';
 import { Meeting } from '../types';
 import { useData } from './data';
 import { useInput } from './input';
+import { useLocation } from './location';
 import { useSettings } from './settings';
 
 const FilterContext = createContext<{
@@ -39,12 +40,13 @@ export const FilterProvider = ({ children }: PropsWithChildren) => {
     waitingForFilter: true,
   });
   const { capabilities, indexes, meetings, slugs, waitingForData } = useData();
-  const { input, latitude, longitude, waitingForInput } = useInput();
+  const { input } = useInput();
+  const { latitude, longitude, waitingForLocation } = useLocation();
   const { settings, strings } = useSettings();
   const { slug } = useParams();
 
   useEffect(() => {
-    if (waitingForData || waitingForInput) return;
+    if (waitingForData || waitingForLocation) return;
 
     setFilter({
       filteredSlugs: [],

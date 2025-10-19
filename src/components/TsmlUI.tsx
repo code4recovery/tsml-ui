@@ -11,6 +11,7 @@ import {
   SettingsProvider,
   useData,
   useInput,
+  useLocation,
 } from '../hooks';
 import { globalCss } from '../styles';
 
@@ -59,14 +60,15 @@ export default function TsmlUI({
 
 export const Index = () => {
   const { waitingForData } = useData();
-  const { input, waitingForInput } = useInput();
+  const { input } = useInput();
+  const { waitingForLocation } = useLocation();
   return waitingForData ? (
     <Loading />
   ) : (
     <>
       <Title />
       <Controls />
-      {waitingForInput ? (
+      {waitingForLocation ? (
         <Loading />
       ) : (
         <>

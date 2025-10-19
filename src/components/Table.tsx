@@ -5,7 +5,7 @@ import InfiniteScroll from 'react-infinite-scroller';
 import { useNavigate } from 'react-router-dom';
 
 import { formatUrl, formatString as i18n } from '../helpers';
-import { useData, useError, useFilter, useInput, useSettings } from '../hooks';
+import { useData, useError, useFilter, useInput, useLocation, useSettings } from '../hooks';
 import {
   tableChicletCss,
   tableChicletsCss,
@@ -22,7 +22,8 @@ export default function Table() {
   const { error } = useError();
   const { filteredSlugs, inProgress } = useFilter();
   const { settings, strings } = useSettings();
-  const { input, latitude, longitude } = useInput();
+  const { input } = useInput();
+  const { latitude, longitude } = useLocation();
   const navigate = useNavigate();
   const meetingsPerPage = 10;
   const supported_columns = [
