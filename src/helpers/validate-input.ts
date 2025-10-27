@@ -2,9 +2,10 @@ import { defaults } from '../hooks/settings';
 import { formatSearch } from './format-search';
 
 export const validateInput = (
-  params: URLSearchParams
+  params: URLSearchParams,
+  settings: TSMLReactConfig
 ): TSMLReactConfig['defaults'] => {
-  const { defaults: defaultInput } = defaults;
+  const { defaults: defaultInput } = settings;
 
   const modeParam = params.get('mode');
   const mode = isMode(modeParam) ? modeParam : defaultInput.mode;

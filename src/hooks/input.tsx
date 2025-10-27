@@ -8,7 +8,7 @@ import {
 import { useSearchParams } from 'react-router-dom';
 
 import { validateInput } from '../helpers';
-import { defaults } from './settings';
+import { defaults, useSettings } from './settings';
 
 const InputContext = createContext<{
   input: TSMLReactConfig['defaults'];
@@ -17,19 +17,19 @@ const InputContext = createContext<{
 export const InputProvider = ({ children }: PropsWithChildren) => {
   const [searchParams] = useSearchParams();
 
+  const { settings } = useSettings();
+
   const [input, setInput] = useState<TSMLReactConfig['defaults']>(
-    validateInput(searchParams)
+    validateInput(searchParams, settings)
   );
 
   // detect input from URL search params
   useEffect(() => {
-    setInput(validateInput(searchParams));
+    setInput(validateInput(searchParams, settings));
   }, [searchParams]);
 
   return (
-    <InputContext.Provider value={{ input }}>
-      {children}
-    </InputContext.Provider>
+    <InputContext.Provider value={{ input }}>{children}</InputContext.Provider>
   );
 };
 
