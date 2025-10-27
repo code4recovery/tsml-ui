@@ -6,7 +6,7 @@ type MapMarker = {
   width: number;
 };
 type Mode = 'search' | 'location' | 'me';
-type View = 'table' | 'map';
+type View = 'table' | 'map' | 'groups';
 
 interface TSMLReactConfig {
   cache: boolean;

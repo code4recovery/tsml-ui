@@ -89,8 +89,9 @@ export const sv: Translation = {
   unnamed_meeting: 'Icke namngivet möte',
   updated: 'Uppdaterat %updated%',
   views: {
-    table: 'Lista',
+    groups: 'Grupper',
     map: 'Karta',
+    table: 'Lista',
   },
   weekday_any: 'Alla Dagar',
 };

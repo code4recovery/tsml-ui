@@ -90,8 +90,9 @@ export const sk: Translation = {
   unnamed_meeting: 'Nepomenované stretnutie',
   updated: 'Aktualizované %updated%',
   views: {
-    table: 'Zoznam',
+    groups: 'Skupiny',
     map: 'Mapa',
+    table: 'Zoznam',
   },
   weekday_any: 'Ktorýkoľvek deň',
 };

@@ -89,8 +89,9 @@ export const es: Translation = {
   unnamed_meeting: 'Reunión sin nombre',
   updated: 'Actualizado el %updated%',
   views: {
-    table: 'Lista',
+    groups: 'Grupos',
     map: 'Mapa',
+    table: 'Lista',
   },
   weekday_any: 'Cualquier día',
 };

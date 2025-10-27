@@ -50,12 +50,13 @@ export const icons = {
   ],
 };
 
-type IconProps = {
+export default function Icon({
+  icon,
+  size = 20,
+}: {
   icon: keyof typeof icons;
   size?: number;
-};
-
-export default function Icon({ icon, size = 20 }: IconProps) {
+}) {
   const paths = icons[icon as keyof typeof icons];
 
   return (

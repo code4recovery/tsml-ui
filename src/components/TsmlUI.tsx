@@ -16,7 +16,16 @@ import {
 } from '../hooks';
 import { globalCss } from '../styles';
 
-import { Alert, Controls, DynamicHeight, Loading, Map, Table, Title } from './';
+import {
+  Alert,
+  Controls,
+  DynamicHeight,
+  Groups,
+  Loading,
+  Map,
+  Table,
+  Title,
+} from './';
 
 export default function TsmlUI({
   google,
@@ -76,7 +85,13 @@ export const Index = () => {
       ) : (
         <>
           <Alert />
-          {input.view === 'map' ? <Map /> : <Table />}
+          {input.view === 'map' ? (
+            <Map />
+          ) : input.view === 'groups' ? (
+            <Groups />
+          ) : (
+            <Table />
+          )}
         </>
       )}
     </>

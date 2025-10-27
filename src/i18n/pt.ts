@@ -90,8 +90,9 @@ export const pt: Translation = {
   unnamed_meeting: 'Reunião sem nome',
   updated: 'Atualizado %updated%',
   views: {
-    table: 'Lista',
+    groups: 'Grupos',
     map: 'Mapa',
+    table: 'Lista',
   },
   weekday_any: 'Qualquer Dia',
 };

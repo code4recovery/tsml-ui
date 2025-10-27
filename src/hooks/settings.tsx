@@ -105,7 +105,7 @@ export const defaults: TSMLReactConfig = {
     sv,
   },
   times: ['morning', 'midday', 'evening', 'night', 'appointment'],
-  views: ['table', 'map'],
+  views: ['table', 'map', 'groups'],
   weekdays: [
     'sunday',
     'monday',

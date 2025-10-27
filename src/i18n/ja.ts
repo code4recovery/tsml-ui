@@ -89,8 +89,9 @@ export const ja: Translation = {
   unnamed_meeting: '名前のないミーティング',
   updated: '更新 %updated%',
   views: {
-    table: 'リスト',
+    groups: 'グループ',
     map: '地図',
+    table: 'リスト',
   },
   weekday_any: '曜日指定無し',
 };

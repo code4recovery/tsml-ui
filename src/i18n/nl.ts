@@ -90,8 +90,9 @@ export const nl: Translation = {
   unnamed_meeting: 'Naamloze meeting',
   updated: 'Bijgewerkt %updated%',
   views: {
-    table: 'Lijst',
+    groups: 'Groepen',
     map: 'Kaart',
+    table: 'Lijst',
   },
   weekday_any: 'Elke Dag',
 };
