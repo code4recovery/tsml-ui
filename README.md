@@ -77,6 +77,16 @@ var tsml_react_config = {
 };
 ```
 
+### Filter to current day
+
+You can link directly to today's meetings using the special `today` keyword:
+
+```
+https://tsml-ui.code4recovery.org/tests/aasanjose.html#/?weekday=today
+```
+
+This automatically filters to the current day of the week.
+
 ### Use kilometers
 
 Distances can be calculated in miles (`mi`) or kilometers (`km`).

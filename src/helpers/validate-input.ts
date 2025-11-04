@@ -27,9 +27,15 @@ export const validateInput = (
       >)
     : defaultInput.time;
 
-  const weekday = params.has('weekday')
+  let weekday = params.has('weekday')
     ? `${params.get('weekday')}`.split('/')
     : defaultInput.weekday;
+
+  if (weekday.includes('today')) {
+    const weekdays = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+    const today = weekdays[new Date().getDay()];
+    weekday = weekday.map(day => day === 'today' ? today : day);
+  }
 
   const type = params.has('type')
     ? `${params.get('type')}`.split('/')
