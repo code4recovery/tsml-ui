@@ -32,8 +32,7 @@ export const validateInput = (
     : defaultInput.weekday;
 
   if (weekday.includes('today')) {
-    const weekdays = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
-    const today = weekdays[new Date().getDay()];
+    const today = settings.weekdays[new Date().getDay()];
     weekday = weekday.map(day => day === 'today' ? today : day);
   }
 
