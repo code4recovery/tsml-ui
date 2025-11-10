@@ -2,6 +2,9 @@
 module.exports = {
   testEnvironment: 'jsdom',
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
+  transform: {
+    '^.+\\.(js|jsx|ts|tsx)$': 'babel-jest',
+  },
   collectCoverageFrom: [
     '<rootDir>/src/**/*.(j|t)s*',
     '!<rootDir>/src/(types|i18n)/*',

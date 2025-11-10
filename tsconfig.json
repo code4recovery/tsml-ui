@@ -4,20 +4,24 @@
     "esModuleInterop": true,
     "jsx": "react-jsx",
     "jsxImportSource": "@emotion/react",
-    "lib": ["ES2021.String", "DOM"],
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "module": "esnext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "noImplicitAny": true,
     "outDir": "public",
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
     "strict": true,
     "strictNullChecks": true,
-    "target": "ES2015"
+    "target": "ES2020",
+    "types": ["vite/client"]
   },
   "include": [
     "index.d.ts",
     "src/app.tsx",
     "src/**/*.ts",
     "src/**/*.tsx",
-    "test/__tests__/*.ts"
+    "test/__tests__/*.ts",
+    "vite.config.ts"
   ]
 }
