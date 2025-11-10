@@ -16,6 +16,17 @@ export default defineConfig({
   ],
   publicDir: false, // Disable public folder copying to avoid conflicts
   build: {
+    minify: 'terser',
+    terserOptions: {
+      mangle: {
+        // Mangle top-level variables to avoid conflicts with page globals
+        toplevel: true,
+      },
+      compress: {
+        // Preserve function names for debugging
+        keep_fnames: false,
+      },
+    },
     outDir: 'public',
     chunkSizeWarningLimit: 600,
     emptyOutDir: false, // Don't clear public dir (contains HTML files)
