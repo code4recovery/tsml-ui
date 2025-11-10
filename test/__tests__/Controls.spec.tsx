@@ -1,5 +1,6 @@
 import { render } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
+import { describe, expect, it } from 'vitest';
 
 import Controls from '../../src/components/Controls';
 import { defaults, SettingsProvider } from '../../src/hooks';

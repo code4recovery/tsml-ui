@@ -1,3 +1,4 @@
+import { describe, expect, it } from 'vitest';
 import { getDistance } from '../../src/helpers/get-distance';
 import { defaults as settings } from '../../src/hooks';
 

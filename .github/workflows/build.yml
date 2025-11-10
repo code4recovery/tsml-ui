@@ -20,7 +20,7 @@ jobs:
           cache: 'npm'
       - run: npm install
       - run: npm run test-coverage
-      - run: npx mix --production
+      - run: npm run build
 
       - name: Coveralls
         uses: coverallsapp/github-action@master

@@ -1,7 +1,8 @@
-// vite.config.js
+/// <reference types="vitest/config" />
+
+import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 import cssInjectedByJsPlugin from 'vite-plugin-css-injected-by-js';
-import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [
@@ -28,6 +29,20 @@ export default defineConfig({
         manualChunks: undefined, // Single file output
         inlineDynamicImports: true, // Inline all imports
       },
+    },
+  },
+  test: {
+    environment: 'jsdom',
+    setupFiles: ['./test/setup.ts'],
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'lcov', 'html'],
+      include: ['src/**/*.(j|t)s*'],
+      exclude: [
+        'src/(types|i18n)/*',
+        '**/__snapshots__/*',
+        'src/**/index.ts',
+      ],
     },
   },
 });

@@ -1,3 +1,4 @@
+import { describe, expect, it } from 'vitest';
 import { validateInput } from '../../src/helpers/validate-input';
 import { defaults } from '../../src/hooks/settings';
 

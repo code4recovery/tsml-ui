@@ -1,3 +1,5 @@
+import { describe, expect, it } from 'vitest';
+
 import {
   flattenDays,
   loadMeetingData,
@@ -150,7 +152,7 @@ describe('loadMeetingData', () => {
   });
 });
 
-test('flattenDays', () => {
+it('flattenDays', () => {
   const input: Array<Partial<JSONData>> = [
     { slug: 'bar', day: '0' },
     { slug: 'foo', day: ['0', '1'] },

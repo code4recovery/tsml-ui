@@ -1,8 +1,10 @@
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
 describe('settings', () => {
-  let languageGetter: jest.SpyInstance<string, []>;
+  let languageGetter: ReturnType<typeof vi.spyOn>;
 
   beforeEach(() => {
-    languageGetter = jest.spyOn(window.navigator, 'language', 'get');
+    languageGetter = vi.spyOn(window.navigator, 'language', 'get');
   });
 
   it('should import flags', () => {

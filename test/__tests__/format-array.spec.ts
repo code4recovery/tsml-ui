@@ -1,3 +1,4 @@
+import { describe, expect, it } from 'vitest';
 import { formatArray } from '../../src/helpers/format-array';
 
 describe('formatArray', () => {

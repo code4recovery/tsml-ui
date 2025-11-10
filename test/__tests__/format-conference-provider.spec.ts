@@ -1,3 +1,4 @@
+import { describe, expect, it } from 'vitest';
 import { formatConferenceProvider } from '../../src/helpers/format-conference-provider';
 import { defaults } from '../../src/hooks';
 

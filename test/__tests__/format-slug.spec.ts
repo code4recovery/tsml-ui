@@ -1,3 +1,4 @@
+import { describe, expect, it } from 'vitest';
 import { formatSlug } from '../../src/helpers/format-slug';
 
 describe('formatSlug', () => {

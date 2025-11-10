@@ -1,9 +1,10 @@
 import { render } from '@testing-library/react';
+import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 
 import Map from '../../src/components/Map';
 
 // Mock react-leaflet
-jest.mock('react-leaflet', () => ({
+vi.mock('react-leaflet', () => ({
   MapContainer: ({ children }: { children: React.ReactNode }) => (
     <div data-testid="map-container">{children}</div>
   ),
@@ -11,31 +12,31 @@ jest.mock('react-leaflet', () => ({
   Marker: () => <div data-testid="marker" />,
   Popup: () => <div data-testid="popup" />,
   useMap: () => ({
-    setView: jest.fn(),
+    setView: vi.fn(),
   }),
 }));
 
 // Mock leaflet
-jest.mock('leaflet', () => ({
+vi.mock('leaflet', () => ({
   Icon: {
     Default: {
-      mergeOptions: jest.fn(),
+      mergeOptions: vi.fn(),
     },
   },
-  divIcon: jest.fn(),
-  Point: jest.fn().mockImplementation((x, y) => ({
+  divIcon: vi.fn(),
+  Point: vi.fn().mockImplementation((x, y) => ({
     x,
     y,
-    add: jest.fn().mockImplementation(otherPoint => ({
+    add: vi.fn().mockImplementation(otherPoint => ({
       x: x + otherPoint.x,
       y: y + otherPoint.y,
     })),
-    equals: jest
+    equals: vi
       .fn()
       .mockImplementation(
         otherPoint => x === otherPoint.x && y === otherPoint.y
       ),
-    toString: jest.fn().mockImplementation(() => `Point(${x}, ${y})`),
+    toString: vi.fn().mockImplementation(() => `Point(${x}, ${y})`),
   })),
 }));
 
@@ -45,7 +46,7 @@ describe('<Map />', () => {
 
   //override getboundingclientrect
   beforeAll(() => {
-    Element.prototype.getBoundingClientRect = jest.fn(
+    Element.prototype.getBoundingClientRect = vi.fn(
       () =>
         ({
           width: 120,

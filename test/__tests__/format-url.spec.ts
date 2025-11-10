@@ -1,3 +1,4 @@
+import { describe, expect, it } from 'vitest';
 import { formatUrl } from '../../src/helpers/format-url';
 import { defaults } from '../../src/hooks';
 
