@@ -17,16 +17,6 @@ export default defineConfig({
   publicDir: false, // Disable public folder copying to avoid conflicts
   build: {
     minify: 'terser',
-    terserOptions: {
-      mangle: {
-        // Mangle top-level variables to avoid conflicts with page globals
-        toplevel: true,
-      },
-      compress: {
-        // Preserve function names for debugging
-        keep_fnames: false,
-      },
-    },
     outDir: 'public',
     chunkSizeWarningLimit: 600,
     emptyOutDir: false, // Don't clear public dir (contains HTML files)
@@ -35,10 +25,10 @@ export default defineConfig({
       input: 'src/app.tsx',
       output: {
         entryFileNames: 'app.js',
-        chunkFileNames: 'app.js',
-        assetFileNames: 'app.[ext]',
-        manualChunks: undefined, // Single file output
+        manualChunks: undefined,    // Single file output
         inlineDynamicImports: true, // Inline all imports
+        format: 'iife',             // Use IIFE to isolate from globals
+        name: 'TsmlUI',             // Name for the IIFE
       },
     },
   },
@@ -49,11 +39,7 @@ export default defineConfig({
       provider: 'v8',
       reporter: ['text', 'lcov', 'html'],
       include: ['src/**/*.(j|t)s*'],
-      exclude: [
-        'src/(types|i18n)/*',
-        '**/__snapshots__/*',
-        'src/**/index.ts',
-      ],
+      exclude: ['src/(types|i18n)/*', '**/__snapshots__/*', 'src/**/index.ts'],
     },
   },
 });
