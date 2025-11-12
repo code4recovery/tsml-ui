@@ -113,13 +113,13 @@ export default function Meeting() {
   const feedback_url = meeting.feedback_url
     ? meeting.feedback_url
     : feedback_emails.length
-    ? formatFeedbackEmail({
-        feedback_emails,
-        meeting,
-        settings,
-        strings,
-      })
-    : undefined;
+      ? formatFeedbackEmail({
+          feedback_emails,
+          meeting,
+          settings,
+          strings,
+        })
+      : undefined;
 
   // format time string (duration? or appointment?)
   const formatTime = (start?: DateTime, end?: DateTime) => {

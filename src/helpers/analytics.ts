@@ -11,7 +11,6 @@ export function analyticsEvent({
 }) {
   if (typeof gtag === 'function') {
     //https://developers.google.com/analytics/devguides/collection/gtagjs/events
-    // eslint-disable-next-line no-undef
     gtag('event', action, {
       event_category: category,
       event_label: label,
@@ -19,7 +18,6 @@ export function analyticsEvent({
     //console.log(`TSML UI recorded gtag event for "${label}"`);
   } else if (typeof ga === 'function') {
     //https://developers.google.com/analytics/devguides/collection/analyticsjs/events
-    // eslint-disable-next-line no-undef
     ga('send', {
       hitType: 'event',
       eventCategory: category,

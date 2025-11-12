@@ -1,9 +1,7 @@
-name: Build & Test
+name: Build
 
 on:
   push:
-    branches: [main]
-  pull_request:
     branches: [main]
 
 jobs:
@@ -19,21 +17,4 @@ jobs:
           node-version: '22'
           cache: 'npm'
       - run: npm install
-
-      - name: Check Prettier formatting
-        run: npx prettier --check src/
-        # Let fail for now
-        continue-on-error: true
-
-      - name: Run ESLint
-        run: npx eslint src/
-        # Let fail for now
-        continue-on-error: true
-
-      - run: npm run test-coverage
       - run: npm run build
-
-      - name: Coveralls
-        uses: coverallsapp/github-action@master
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}

@@ -22,8 +22,8 @@ export default function Button({
         type === 'in-person'
           ? buttonDirectionsCss
           : type === 'online'
-          ? buttonJoinCss
-          : buttonCss
+            ? buttonJoinCss
+            : buttonCss
       }
       href={href}
       onClick={onClick}

@@ -71,12 +71,8 @@ export const FilterProvider = ({ children }: PropsWithChildren) => {
         } else {
           // get the union of other filters (Monday OR Tuesday)
           matchGroups.push(
-            [].concat.apply(
-              [],
-              // @ts-expect-error TODO
-              input[filter].map(
-                key => getIndexByKey(indexes[filter], key)?.slugs ?? []
-              )
+            input[filter].flatMap(
+              key => getIndexByKey(indexes[filter], key)?.slugs ?? []
             )
           );
         }
@@ -110,8 +106,7 @@ export const FilterProvider = ({ children }: PropsWithChildren) => {
             andTerm.every(term => meetings[slug].search?.search(term) !== -1)
           )
         );
-        // @ts-expect-error TODO
-        matchGroups.push([].concat.apply([], matches));
+        matchGroups.push(matches);
       }
     } else if (['me', 'location'].includes(input.mode)) {
       // only show meetings with physical locations

@@ -15,14 +15,14 @@ export const tableChicletCss = (
   background-color: ${type === 'in-person'
     ? 'color-mix(in srgb, var(--in-person), var(--background) 82%);'
     : type === 'online'
-    ? 'color-mix(in srgb, var(--online), var(--background) 82%);'
-    : 'color-mix(in srgb, var(--inactive), var(--background) 82%);'};
+      ? 'color-mix(in srgb, var(--online), var(--background) 82%);'
+      : 'color-mix(in srgb, var(--inactive), var(--background) 82%);'};
   border-radius: var(--border-radius);
   color: ${type === 'in-person'
     ? 'var(--in-person)'
     : type === 'online'
-    ? 'var(--online)'
-    : 'var(--inactive)'};
+      ? 'var(--online)'
+      : 'var(--inactive)'};
   display: inline-flex;
   font-size: calc(var(--font-size) * 0.875);
   gap: 4px;

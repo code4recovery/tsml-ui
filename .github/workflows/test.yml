@@ -1,0 +1,33 @@
+name: Test & Lint
+
+on:
+  pull_request:
+    branches: ['main']
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - run: npm install
+
+      - name: Check Prettier formatting
+        run: npx prettier --check vite.config.ts src/
+
+      - name: Run ESLint
+        run: npx eslint vite.config.ts src/
+
+      - run: npm run test-coverage
+      - run: npm run build
+      - name: Coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}

@@ -5,7 +5,14 @@ import InfiniteScroll from 'react-infinite-scroller';
 import { useNavigate } from 'react-router-dom';
 
 import { formatUrl, formatString as i18n } from '../helpers';
-import { useData, useError, useFilter, useInput, useLocation, useSettings } from '../hooks';
+import {
+  useData,
+  useError,
+  useFilter,
+  useInput,
+  useLocation,
+  useSettings,
+} from '../hooks';
 import {
   tableChicletCss,
   tableChicletsCss,

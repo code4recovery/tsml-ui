@@ -133,7 +133,7 @@ export default function Controls() {
       distance:
         mode === 'search'
           ? undefined
-          : input.distance ?? settings.distance_default,
+          : (input.distance ?? settings.distance_default),
       mode,
       region: mode === 'search' ? input.region : [],
       search,
