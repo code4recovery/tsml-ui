@@ -2,16 +2,18 @@
   "compilerOptions": {
     "allowJs": false,
     "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
     "jsx": "react-jsx",
     "jsxImportSource": "@emotion/react",
-    "lib": ["ES2021.String", "DOM"],
+    "lib": ["ES2021", "DOM", "DOM.Iterable"],
     "module": "esnext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "noImplicitAny": true,
     "outDir": "public",
     "strict": true,
     "strictNullChecks": true,
-    "target": "ES2015"
+    "target": "ES2020"
   },
   "include": [
     "index.d.ts",

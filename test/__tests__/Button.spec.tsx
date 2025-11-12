@@ -1,12 +1,17 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, cleanup } from '@testing-library/react';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import Button from '../../src/components/Button';
 
 describe('<Button />', () => {
-  it('passes props correctly', () => {
-    const mockOnClick = jest.fn();
+  afterEach(() => {
+    cleanup();
+  });
 
-    render(
+  it('passes props correctly', () => {
+    const mockOnClick = vi.fn();
+
+    const { getByTestId, getByRole } = render(
       <Button
         href="https://bar.com"
         icon="back"
@@ -15,8 +20,8 @@ describe('<Button />', () => {
       />
     );
 
-    const icon = screen.getByTestId('icon-back');
-    const button = screen.getByRole('link');
+    const icon = getByTestId('icon-back');
+    const button = getByRole('link');
 
     expect(icon).toBeInTheDocument();
     expect(button).toHaveAttribute('href', 'https://bar.com');
@@ -28,9 +33,9 @@ describe('<Button />', () => {
   });
 
   it('responds to small prop correctly', () => {
-    render(<Button href="https://bar.com" icon="back" />);
+    const { getByTestId } = render(<Button href="https://bar.com" icon="back" />);
 
-    const icon = screen.getByTestId('icon-back');
+    const icon = getByTestId('icon-back');
 
     expect(icon).toHaveAttribute('height', '20');
     expect(icon).toHaveAttribute('width', '20');

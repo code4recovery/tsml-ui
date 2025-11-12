@@ -1,12 +1,14 @@
+import { describe, expect, it, vi } from 'vitest';
+
 import { formatFeedbackEmail } from '../../src/helpers/format-feedback-email';
 import { defaults } from '../../src/hooks';
 import { Meeting } from '../../src/types';
 
-jest.mock('../../src/helpers/format-url', () => ({
-  formatUrl: jest.fn().mockReturnValue('https://foo.com'),
+vi.mock('../../src/helpers/format-url', () => ({
+  formatUrl: vi.fn().mockReturnValue('https://foo.com'),
 }));
 
-const mockedGetQueryString = jest.fn();
+const mockedGetQueryString = vi.fn();
 
 //can't use mock factories with outside scoped variables
 mockedGetQueryString.mockReturnValue(defaults.defaults);

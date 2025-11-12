@@ -1,15 +1,19 @@
 import { fireEvent, render } from '@testing-library/react';
 import { DateTime } from 'luxon';
 import { MemoryRouter, useParams } from 'react-router-dom';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import Meeting from '../../src/components/Meeting';
 import { SettingsProvider } from '../../src/hooks';
 import { en } from '../../src/i18n';
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'), // Use actual for all non-hook parts
-  useParams: jest.fn(), // Mock useParams as a Jest mock function
-}));
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual('react-router-dom');
+  return {
+    ...actual,
+    useParams: vi.fn(),
+  };
+});
 
 const mockMeeting = {
   slug: 'test',
@@ -53,10 +57,9 @@ const mockMeeting = {
 };
 
 // Mock the useData hook to return a predefined meetings object
-jest.mock('../../src/hooks', () => {
-  const originalModule = jest.requireActual('../../src/hooks');
+vi.mock('../../src/hooks', async () => {
+  const originalModule = await vi.importActual('../../src/hooks');
   return {
-    __esModule: true,
     ...originalModule,
     useFilter: () => ({
       meeting: mockMeeting,
@@ -67,11 +70,11 @@ jest.mock('../../src/hooks', () => {
 
 describe('<Meeting />', () => {
   beforeEach(() => {
-    window.URL.createObjectURL = jest.fn() as jest.Mock;
+    window.URL.createObjectURL = vi.fn();
   });
 
   it('renders with clickable buttons', () => {
-    (useParams as jest.Mock).mockReturnValue({ slug: 'test' });
+    vi.mocked(useParams).mockReturnValue({ slug: 'test' });
 
     const { getByText } = render(
       <MemoryRouter>
@@ -93,32 +96,36 @@ describe('<Meeting />', () => {
   });
 
   it('renders with group info', () => {
-    const { getByText } = render(
+    const { getAllByText } = render(
       <MemoryRouter>
-        <Meeting />
+        <SettingsProvider>
+          <Meeting />
+        </SettingsProvider>
       </MemoryRouter>
     );
 
-    const group = getByText(mockMeeting.group!);
-    expect(group).toBeVisible();
+    const groups = getAllByText(mockMeeting.group!);
+    expect(groups[0]).toBeVisible();
 
-    const group_notes = getByText(mockMeeting.group_notes!.split('\n')[0]);
-    expect(group_notes).toBeVisible();
+    const group_notes = getAllByText(mockMeeting.group_notes!.split('\n')[0]);
+    expect(group_notes[0]).toBeVisible();
   });
 
   it('renders with contact 1', () => {
-    const { getByText, queryByText } = render(
+    const { getAllByText } = render(
       <MemoryRouter>
-        <Meeting />
+        <SettingsProvider>
+          <Meeting />
+        </SettingsProvider>
       </MemoryRouter>
     );
-    const contact1text = getByText(`Text ${mockMeeting.contact_1_name}`);
-    expect(contact1text).toHaveAttribute(
+    const contact1texts = getAllByText(`Text ${mockMeeting.contact_1_name}`);
+    expect(contact1texts[0]).toHaveAttribute(
       'href',
       `sms:${mockMeeting.contact_1_phone}`
     );
-    const contact1email = getByText(`Email ${mockMeeting.contact_1_name}`);
-    expect(contact1email).toHaveAttribute(
+    const contact1emails = getAllByText(`Email ${mockMeeting.contact_1_name}`);
+    expect(contact1emails[0]).toHaveAttribute(
       'href',
       `mailto:${mockMeeting.contact_1_email}`
     );

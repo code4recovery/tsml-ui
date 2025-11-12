@@ -268,15 +268,14 @@ Contributions are welcome. Ideally, please join [Code for Recovery](https://code
 Here are the steps to follow when developing:
 
 1. clone (or, if you are not a member, fork and clone) this repository
-1. create a branch for your changes
-1. run `npm i` in the project folder (install NPM if it is not installed)
-1. run `npm run serve` in one terminal window (or use another solution to serve files locally)
-1. run `npx mix watch` in another terminal window (this updates files in development as you change them)
-1. confirm your changes at, for example, `http://localhost:3000/tests/aasanjose` (there are a number of examples in that folder)
+2. create a branch for your changes
+3. run `npm i` in the project folder (install NPM if it is not installed)
+4. run `npm run dev` to start the Vite dev server with HMR at `index.html`
+5. to test other examples in `public/tests/`, run `npm run preview` after building
 
 When you are ready to make a PR:
 
 1. clean up your diff, try to change as few lines as possible
-1. run prettier locally to autoformat your files
-1. alphabetize things like component props and CSS rules (if applicable)
-1. run `npx mix --production` to minify files
+2. run prettier locally to autoformat your files
+3. alphabetize things like component props and CSS rules (if applicable)
+4. run `npm run build` to create the production bundle

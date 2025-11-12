@@ -1,3 +1,4 @@
+import { describe, expect, it } from 'vitest';
 import { formatSearch } from '../../src/helpers/format-search';
 
 describe('formatSearch', () => {

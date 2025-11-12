@@ -1,3 +1,4 @@
+import { describe, expect, it } from 'vitest';
 import { formatDirectionsUrl } from '../../src/helpers/format-directions-url';
 
 describe('formatDirectionsUrl', () => {

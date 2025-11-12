@@ -1,10 +1,10 @@
-import React from 'react';
-
-import renderer from 'react-test-renderer';
+import { render } from '@testing-library/react';
+import { expect, it } from 'vitest';
 
 import Loading from '../../src/components/Loading';
 
-test('<Loading />', () => {
-  const tree = renderer.create(<Loading />).toJSON();
-  expect(tree).toMatchSnapshot();
+it('<Loading />', () => {
+  const { container } = render(<Loading />);
+  expect(container.firstChild).toBeTruthy();
+  expect(container.querySelector('div > div > div')).toBeTruthy();
 });

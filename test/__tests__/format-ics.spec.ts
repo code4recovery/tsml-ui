@@ -1,4 +1,5 @@
 import { DateTime } from 'luxon';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { formatIcs } from '../../src/helpers/format-ics';
 import { Meeting } from '../../src/types';
@@ -14,7 +15,7 @@ const mockMeeting = {
 
 describe('formatIcs', () => {
   beforeEach(() => {
-    window.URL.createObjectURL = jest.fn() as jest.Mock;
+    window.URL.createObjectURL = vi.fn();
   });
 
   it('works with minimal data', () => {

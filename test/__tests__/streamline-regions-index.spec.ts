@@ -1,3 +1,4 @@
+import { describe, expect, it } from 'vitest';
 import { streamlineRegionsIndex } from '../../src/helpers';
 import type { Index } from '../../src/types';
 

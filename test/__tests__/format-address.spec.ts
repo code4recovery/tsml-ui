@@ -1,3 +1,4 @@
+import { describe, expect, it } from 'vitest';
 import { formatAddress } from '../../src/helpers/format-address';
 
 describe('formatAddress', () => {

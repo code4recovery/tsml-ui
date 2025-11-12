@@ -1,7 +1,9 @@
+import { describe, expect, it, vi } from 'vitest';
+
 import { analyticsEvent } from '../../src/helpers/analytics';
 
-window.gtag = jest.fn();
-window.ga = jest.fn();
+window.gtag = vi.fn();
+window.ga = vi.fn();
 
 describe('analytics', () => {
   it('calls gtag if defined', () => {
