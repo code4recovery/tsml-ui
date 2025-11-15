@@ -43,12 +43,12 @@ export default defineConfig([
             'react/jsx-uses-react': 'off',
             'react/react-in-jsx-scope': 'off',
             'react/no-unknown-property': ['error', { ignore: ['css'] }],
-            'no-unused-vars': [
+            '@typescript-eslint/no-unused-vars': [
                 'error',
                 {
-                    argsIgnorePattern: '^_',
-                    varsIgnorePattern: '^_',
-                    caughtErrorsIgnorePattern: '^_',
+                    argsIgnorePattern: '^_|^e$',
+                    varsIgnorePattern: '^_|^e$',
+                    caughtErrorsIgnorePattern: '^_|^e$',
                 },
             ],
             // Turning these off for now to clean up warnings

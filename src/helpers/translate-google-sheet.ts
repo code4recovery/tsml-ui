@@ -10,6 +10,7 @@ export type GoogleSheetData = {
   values: string[][];
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const isGoogleSheetData = (data: any): data is GoogleSheetData => {
   return data && Array.isArray(data.values);
 };

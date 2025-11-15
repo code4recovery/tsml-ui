@@ -18,18 +18,16 @@ export let routes: RouteObject[] = [];
 export let router: ReturnType<typeof createBrowserRouter>;
 
 if (element) {
-  const routes = [
+  routes = [
     {
       path: '/*',
       element: (
         <TsmlUI
           google={element.getAttribute('data-google') || undefined}
-          // eslint-disable-next-line no-undef
           settings={
             typeof tsml_react_config === 'undefined'
               ? undefined
-              : // eslint-disable-next-line no-undef
-                tsml_react_config
+              : tsml_react_config
           }
           src={element.getAttribute('data-src') || undefined}
           timezone={element.getAttribute('data-timezone') || undefined}

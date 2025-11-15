@@ -40,7 +40,11 @@ const defaultLocationState: LocationState = {
 
 const LocationContext = createContext<LocationContextType>({
   ...defaultLocationState,
-  calculateDistances: () => ({ meetings: {}, distanceIndex: [], hasDistance: false }),
+  calculateDistances: () => ({
+    meetings: {},
+    distanceIndex: [],
+    hasDistance: false,
+  }),
   setBounds: () => {},
 });
 
@@ -57,9 +61,9 @@ export const LocationProvider = ({ children }: PropsWithChildren) => {
     west: '',
   });
 
-  const [locationState, setLocationState] = useState<LocationState>(defaultLocationState);
+  const [locationState, setLocationState] =
+    useState<LocationState>(defaultLocationState);
   const [geocodedSearch, setGeocodedSearch] = useState<string>();
-
 
   // Handle geocoding or geolocation requests
   useEffect(() => {
@@ -69,16 +73,16 @@ export const LocationProvider = ({ children }: PropsWithChildren) => {
       setGeocodedSearch(undefined);
       return;
     }
-    
+
     // Don't re-trigger if we already have coordinates or are already waiting
     if (locationState.waitingForLocation) return;
-    
+
     setError();
-    
+
     if (input.mode === 'location' && input.search) {
       // Don't geocode the same search again
       if (geocodedSearch === input.search) return;
-      
+
       // Wait for bounds to be available before geocoding
       // bounds will be set by DataProvider after meeting data is loaded
       if (!bounds.north && !bounds.south && !bounds.east && !bounds.west) {
@@ -146,48 +150,58 @@ export const LocationProvider = ({ children }: PropsWithChildren) => {
     }
   }, [input.mode, input.search, bounds.north]);
 
-  const calculateDistances = useCallback((meetings: { [index: string]: Meeting }) => {
-    const { latitude, longitude } = locationState;
-    
-    if (!latitude || !longitude) {
-      return { meetings, distanceIndex: [], hasDistance: false };
-    }
+  const calculateDistances = useCallback(
+    (meetings: { [index: string]: Meeting }) => {
+      const { latitude, longitude } = locationState;
 
-    const distances = Object.fromEntries(
-      settings.distance_options.map(option => [option, []])
-    );
-
-    const updatedMeetings = { ...meetings };
-
-    Object.keys(updatedMeetings).forEach(slug => {
-      const meeting = updatedMeetings[slug];
-      if (meeting.latitude && meeting.longitude) {
-        meeting.distance = getDistance(
-          { latitude, longitude },
-          meeting,
-          settings
-        );
+      if (!latitude || !longitude) {
+        return { meetings, distanceIndex: [], hasDistance: false };
       }
 
-      for (const option of settings.distance_options) {
-        if (meeting.distance && meeting.distance <= option) {
-          (distances[option] as string[]).push(meeting.slug);
+      const distances = Object.fromEntries(
+        settings.distance_options.map(option => [option, []])
+      );
+
+      const updatedMeetings = { ...meetings };
+
+      Object.keys(updatedMeetings).forEach(slug => {
+        const meeting = updatedMeetings[slug];
+        if (meeting.latitude && meeting.longitude) {
+          meeting.distance = getDistance(
+            { latitude, longitude },
+            meeting,
+            settings
+          );
         }
-      }
-    });
 
-    const distanceIndex: Index[] = Object.entries(distances).map(([key, slugs]) => ({
-      key,
-      name: `${key} ${settings.distance_unit}`,
-      slugs,
-    }));
+        for (const option of settings.distance_options) {
+          if (meeting.distance && meeting.distance <= option) {
+            (distances[option] as string[]).push(meeting.slug);
+          }
+        }
+      });
 
-    return {
-      meetings: updatedMeetings,
-      distanceIndex,
-      hasDistance: true,
-    };
-  }, [locationState.latitude, locationState.longitude, settings.distance_options, settings.distance_unit]);
+      const distanceIndex: Index[] = Object.entries(distances).map(
+        ([key, slugs]) => ({
+          key,
+          name: `${key} ${settings.distance_unit}`,
+          slugs,
+        })
+      );
+
+      return {
+        meetings: updatedMeetings,
+        distanceIndex,
+        hasDistance: true,
+      };
+    },
+    [
+      locationState.latitude,
+      locationState.longitude,
+      settings.distance_options,
+      settings.distance_unit,
+    ]
+  );
 
   const contextValue: LocationContextType = {
     ...locationState,

@@ -5,7 +5,14 @@ import 'leaflet/dist/leaflet.css';
 import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet';
 
 import { formatDirectionsUrl } from '../helpers';
-import { useData, useError, useFilter, useInput, useLocation, useSettings } from '../hooks';
+import {
+  useData,
+  useError,
+  useFilter,
+  useInput,
+  useLocation,
+  useSettings,
+} from '../hooks';
 import { mapCss, mapPopupMeetingsCss } from '../styles';
 import type { MapLocation } from '../types';
 import Button from './Button';

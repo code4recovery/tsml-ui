@@ -8,7 +8,13 @@ import {
 
 import { useNavigate } from 'react-router-dom';
 import { formatUrl, getIndexByKey, formatString as i18n } from '../helpers';
-import { type Data, useData, useInput, useLocation, useSettings } from '../hooks';
+import {
+  type Data,
+  useData,
+  useInput,
+  useLocation,
+  useSettings,
+} from '../hooks';
 import { dropdownButtonCss, dropdownCss } from '../styles';
 import type { Index } from '../types';
 

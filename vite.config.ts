@@ -25,10 +25,10 @@ export default defineConfig({
       input: 'src/app.tsx',
       output: {
         entryFileNames: 'app.js',
-        manualChunks: undefined,    // Single file output
+        manualChunks: undefined, // Single file output
         inlineDynamicImports: true, // Inline all imports
-        format: 'iife',             // Use IIFE to isolate from globals
-        name: 'TsmlUI',             // Name for the IIFE
+        format: 'iife', // Use IIFE to isolate from globals
+        name: 'TsmlUI', // Name for the IIFE
       },
     },
   },
