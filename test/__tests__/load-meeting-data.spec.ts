@@ -95,11 +95,6 @@ describe('loadMeetingData', () => {
           name: 'Morning',
           slugs: ['test-meeting', 'other-meeting'],
         },
-        {
-          key: 'appointment',
-          name: 'Appointment',
-          slugs: ['inactive-meeting'],
-        },
       ],
       type: [
         {
