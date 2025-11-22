@@ -292,60 +292,58 @@ export function loadMeetingData(
       }
 
       // day & time indexes
-      if (isActive) {
-        const weekday = settings.weekdays[
-          start?.weekday === 7
-            ? 0
-            : (start?.weekday as keyof typeof settings.weekdays)
-        ] as keyof typeof strings.days;
+      const weekdayKey = settings.weekdays[
+        start?.weekday === 7
+          ? 0
+          : (start?.weekday as keyof typeof settings.weekdays)
+      ] as keyof typeof strings.days;
 
-        // day index
-        const dayIndex = indexes.weekday.findIndex(
-          ({ key }) => key === weekday
+      // day index
+      const dayIndex = indexes.weekday.findIndex(
+        ({ key }) => key === weekdayKey
+      );
+      if (dayIndex === -1) {
+        indexes.weekday.push({
+          key: weekdayKey,
+          name: strings.days[weekdayKey],
+          slugs: [slug],
+        });
+      } else {
+        indexes.weekday[dayIndex].slugs.push(slug);
+      }
+
+      // time differences for sorting
+      const minutes_midnight = start.hour * 60 + start.minute;
+      minutes_week = minutes_midnight + meeting.day * 1440;
+
+      // time index (can be multiple)
+      const times = [];
+      if (minutes_midnight >= 240 && minutes_midnight < 720) {
+        times.push(0); // morning (4am–11:59pm)
+      }
+      if (minutes_midnight >= 660 && minutes_midnight < 1020) {
+        times.push(1); // midday (11am–4:59pm)
+      }
+      if (minutes_midnight >= 960 && minutes_midnight < 1260) {
+        times.push(2); // evening (4pm–8:59pm)
+      }
+      if (minutes_midnight >= 1200 || minutes_midnight < 300) {
+        times.push(3); // night (8pm–4:59am)
+      }
+      times.forEach(time => {
+        const timeIndex = indexes.time.findIndex(
+          ({ key }) => key === settings.times[time]
         );
-        if (dayIndex === -1) {
-          indexes.weekday.push({
-            key: weekday,
-            name: strings.days[weekday],
+        if (timeIndex === -1) {
+          indexes.time.push({
+            key: settings.times[time],
+            name: strings[settings.times[time]],
             slugs: [slug],
           });
         } else {
-          indexes.weekday[dayIndex].slugs.push(slug);
+          indexes.time[timeIndex].slugs.push(slug);
         }
-
-        // time differences for sorting
-        const minutes_midnight = start.hour * 60 + start.minute;
-        minutes_week = minutes_midnight + meeting.day * 1440;
-
-        // time index (can be multiple)
-        const times = [];
-        if (minutes_midnight >= 240 && minutes_midnight < 720) {
-          times.push(0); // morning (4am–11:59pm)
-        }
-        if (minutes_midnight >= 660 && minutes_midnight < 1020) {
-          times.push(1); // midday (11am–4:59pm)
-        }
-        if (minutes_midnight >= 960 && minutes_midnight < 1260) {
-          times.push(2); // evening (4pm–8:59pm)
-        }
-        if (minutes_midnight >= 1200 || minutes_midnight < 300) {
-          times.push(3); // night (8pm–4:59am)
-        }
-        times.forEach(time => {
-          const timeIndex = indexes.time.findIndex(
-            ({ key }) => key === settings.times[time]
-          );
-          if (timeIndex === -1) {
-            indexes.time.push({
-              key: settings.times[time],
-              name: strings[settings.times[time]],
-              slugs: [slug],
-            });
-          } else {
-            indexes.time[timeIndex].slugs.push(slug);
-          }
-        });
-      }
+      });
     } else {
       const timeIndex = indexes.time.findIndex(
         ({ key }) => key === 'appointment'
@@ -384,13 +382,12 @@ export function loadMeetingData(
     }
 
     // build region index
-    if (isActive && !!regions.length) {
+    if (regions.length) {
       indexes.region = populateRegionsIndex(regions, 0, indexes.region, slug);
     }
 
-    // build type index (can be multiple) -- if inactive, only index the 'inactive' type
-    const typesToIndex: string[] = isActive ? types : ['inactive'];
-    typesToIndex
+    // build type index (can be multiple)
+    types
       .filter(type => type in strings.types)
       .forEach(type => {
         const typeSlug = formatSlug(
@@ -534,6 +531,54 @@ export function loadMeetingData(
   );
 
   const slugs = Object.keys(meetings);
+
+  // Helper function to recursively filter out options where all meetings are inactive
+  const filterInactiveOnlyOptions = (indexArray: Index[]): Index[] => {
+    return indexArray
+      .map(index => {
+        // Check if at least one meeting in this index is active
+        const hasActiveMeeting = index.slugs.some(
+          slug => meetings[slug]?.isActive
+        );
+
+        // If no active meetings, filter out this option
+        if (!hasActiveMeeting) {
+          return null;
+        }
+
+        // Recursively filter children if they exist
+        if (index.children?.length) {
+          return {
+            ...index,
+            children: filterInactiveOnlyOptions(index.children),
+          };
+        }
+
+        return index;
+      })
+      .filter((index): index is Index => index !== null);
+  };
+
+  // Metatypes that should always be visible regardless of active status
+  const specialMetaTypes = ['active', 'inactive', 'online', 'in-person'];
+
+  // Filter out inactive-only options from all indexes except special metatypes
+  indexes.region = filterInactiveOnlyOptions(indexes.region);
+  indexes.weekday = filterInactiveOnlyOptions(indexes.weekday);
+  indexes.time = filterInactiveOnlyOptions(indexes.time);
+  indexes.type = indexes.type
+    .map(index => {
+      // Preserve special metatypes
+      if (specialMetaTypes.includes(index.key)) {
+        return index;
+      }
+      // Check if at least one meeting in this index is active
+      const hasActiveMeeting = index.slugs.some(
+        slug => meetings[slug]?.isActive
+      );
+      return hasActiveMeeting ? index : null;
+    })
+    .filter((index): index is Index => index !== null);
 
   // determine capabilities (filter out options that apply to every meeting)
   const meetingsCount = slugs.length;
