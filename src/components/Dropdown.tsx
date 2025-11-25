@@ -75,7 +75,11 @@ export default function Dropdown({
 
       if (value) {
         const index = currentValues.indexOf(value);
-        if (e.metaKey || e.ctrlKey) {
+        // Multi-select behavior:
+        // - With modifier key (cmd/ctrl): toggle multi-select
+        // - When items already selected: toggle (allows mobile multi-select)
+        // - Otherwise: single select
+        if (e.metaKey || e.ctrlKey || currentValues.length > 0) {
           if (index === -1) {
             currentValues.push(value);
             currentValues.sort();
