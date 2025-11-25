@@ -15,4 +15,22 @@ describe('formatConferenceProvider', () => {
       name
     );
   });
+
+  it('supports Zoom meeting URLs with /j/ format', () => {
+    expect(
+      formatConferenceProvider('https://zoom.us/j/1234567890', defaults)
+    ).toStrictEqual('Zoom');
+    expect(
+      formatConferenceProvider('https://us02web.zoom.us/j/388499177', defaults)
+    ).toStrictEqual('Zoom');
+  });
+
+  it('supports Zoom registration URLs', () => {
+    expect(
+      formatConferenceProvider(
+        'https://us02web.zoom.us/meeting/register/tZAucu2pqjIpHtCNCNQ_R3OM7r6m6poOxArr#/registration',
+        defaults
+      )
+    ).toStrictEqual('Zoom');
+  });
 });

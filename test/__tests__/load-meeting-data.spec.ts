@@ -145,6 +145,63 @@ describe('loadMeetingData', () => {
       west: '-122',
     });
   });
+
+  it('loads meetings with Zoom registration URLs correctly', () => {
+    const data: JSONData[] = [
+      {
+        name: 'Zoom Registration Meeting',
+        slug: 'zoom-reg-meeting',
+        formatted_address: 'Online, USA',
+        conference_url:
+          'https://us02web.zoom.us/meeting/register/tZAucu2pqjIpHtCNCNQ_R3OM7r6m6poOxArr#/registration',
+        day: '1',
+      },
+      {
+        name: 'Zoom Join Meeting',
+        slug: 'zoom-join-meeting',
+        formatted_address: 'Online, USA',
+        conference_url: 'https://us02web.zoom.us/j/388499177',
+        day: '1',
+      },
+    ];
+    const { meetings } = loadMeetingData(
+      data,
+      {
+        coordinates: false,
+        distance: false,
+        geolocation: false,
+        inactive: false,
+        location: false,
+        region: false,
+        sharing: false,
+        time: false,
+        type: false,
+        weekday: false,
+      },
+      defaults,
+      defaults.strings[defaults.language],
+      'America/New_York'
+    );
+    expect(meetings['zoom-reg-meeting']).toEqual(
+      expect.objectContaining({
+        conference_provider: 'Zoom',
+        conference_url:
+          'https://us02web.zoom.us/meeting/register/tZAucu2pqjIpHtCNCNQ_R3OM7r6m6poOxArr#/registration',
+        isOnline: true,
+        isActive: true,
+        types: expect.arrayContaining(['online', 'active']),
+      })
+    );
+    expect(meetings['zoom-join-meeting']).toEqual(
+      expect.objectContaining({
+        conference_provider: 'Zoom',
+        conference_url: 'https://us02web.zoom.us/j/388499177',
+        isOnline: true,
+        isActive: true,
+        types: expect.arrayContaining(['online', 'active']),
+      })
+    );
+  });
 });
 
 it('flattenDays', () => {
