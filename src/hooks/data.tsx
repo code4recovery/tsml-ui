@@ -6,6 +6,8 @@ import {
   useState,
 } from 'react';
 
+import { useParams } from 'react-router-dom';
+
 import {
   isGoogleSheetData,
   loadMeetingData,
@@ -13,7 +15,6 @@ import {
 } from '../helpers';
 import { Index, JSONData, Meeting } from '../types';
 import { useError } from './error';
-import { useInput } from './input';
 import { useLocation } from './location';
 import { useSettings } from './settings';
 
@@ -79,7 +80,7 @@ export const DataProvider = ({
 }: PropsWithChildren<{ google?: string; src?: string; timezone?: string }>) => {
   const [data, setData] = useState<Data>(defaultData);
   const { setError } = useError();
-  const { input } = useInput();
+  const { slug } = useParams();
   const { setBounds, calculateDistances } = useLocation();
   const { settings, strings } = useSettings();
 
@@ -121,7 +122,7 @@ export const DataProvider = ({
         }
 
         // cache busting
-        if (src.endsWith('.json') && input.meeting) {
+        if (src.endsWith('.json') && slug) {
           src = `${src}?${new Date().getTime()}`;
         }
 
