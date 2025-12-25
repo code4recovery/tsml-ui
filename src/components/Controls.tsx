@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { analyticsEvent, formatSearch, formatUrl } from '../helpers';
 import { useData, useInput, useSettings } from '../hooks';
 import {
+  buttonCss,
   controlsCss,
   controlsGroupFirstCss,
   controlsGroupLastCss,
@@ -142,6 +143,35 @@ export default function Controls() {
     navigate(formatUrl(newInput, settings));
   };
 
+  // clear all filter selections
+  const clearAllFilters = (e: MouseEvent) => {
+    e.preventDefault();
+
+    // reset all filter arrays to empty
+    const clearedFilters: Record<string, string[] | undefined> = {};
+    settings.filters.forEach(filter => {
+      clearedFilters[filter] = [];
+    });
+
+    // reset distance
+    const clearedInput = {
+      ...input,
+      ...clearedFilters,
+      distance: undefined,
+    };
+
+    navigate(formatUrl(clearedInput, settings));
+  };
+
+  // check if any filters are active
+  const hasActiveFilters =
+    (settings.filters?.length > 0 &&
+      settings.filters.some(filter => {
+        const value = input[filter as keyof typeof input];
+        return Array.isArray(value) && value.length > 0;
+      })) ||
+    input.distance !== undefined;
+
   return !slugs.length ? null : (
     <div css={controlsCss}>
       <form onSubmit={locationSearch} css={dropdownCss}>
@@ -214,6 +244,11 @@ export default function Controls() {
           />
         </div>
       ))}
+      {hasActiveFilters && (
+        <button css={buttonCss} onClick={clearAllFilters} type="button">
+          {strings.clear_all}
+        </button>
+      )}
       {canShowViews && (
         <div role="group">
           {views.map((view, index) => (

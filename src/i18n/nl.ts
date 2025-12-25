@@ -5,6 +5,7 @@ export const nl: Translation = {
   address: 'Addres',
   appointment: 'Afspraak',
   back_to_meetings: 'Terug naar Meetings',
+  clear_all: 'Alles Wissen',
   collapse: 'Instorting',
   contact_email: 'E-mail %contact%',
   contact_text: 'Tekst %contact%',
