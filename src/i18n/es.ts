@@ -5,6 +5,7 @@ export const es: Translation = {
   address: 'Dirección',
   appointment: 'Cita',
   back_to_meetings: 'Volver a las reuniones',
+  clear_all: 'Limpiar Todo',
   collapse: 'Colapso',
   contact_email: 'Correo a %contact%',
   contact_text: 'Texto %contact%',

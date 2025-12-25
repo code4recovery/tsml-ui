@@ -3,6 +3,7 @@ export interface Translation {
   address: string;
   appointment: string;
   back_to_meetings: string;
+  clear_all: string;
   collapse: string;
   contact_email: string;
   contact_text: string;

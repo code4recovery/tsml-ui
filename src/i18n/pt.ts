@@ -5,6 +5,7 @@ export const pt: Translation = {
   address: 'Endereço / Plataforma',
   appointment: 'Marcação',
   back_to_meetings: 'Voltar às Reuniões',
+  clear_all: 'Limpar Tudo',
   collapse: 'Colapso',
   contact_email: 'Email %contact%',
   contact_text: 'Texto %contact%',

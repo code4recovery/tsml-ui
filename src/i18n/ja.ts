@@ -5,6 +5,7 @@ export const ja: Translation = {
   address: '住所・プラットフォーム',
   appointment: '予定',
   back_to_meetings: 'ミーティング一覧へ戻る',
+  clear_all: 'すべてクリア',
   collapse: '膨らむ',
   contact_email: '%contact%にメール',
   contact_text: '%contact%にテキスト',

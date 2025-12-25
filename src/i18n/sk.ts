@@ -5,6 +5,7 @@ export const sk: Translation = {
   address: 'Adresa / Platforma',
   appointment: 'Stretnutie',
   back_to_meetings: 'Späť na Stretnutia',
+  clear_all: 'Vymazať Všetko',
   collapse: 'Kolaps',
   contact_email: 'Emailovať %contact%',
   contact_text: 'Text %contact%',

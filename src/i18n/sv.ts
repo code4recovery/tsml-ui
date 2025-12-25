@@ -5,6 +5,7 @@ export const sv: Translation = {
   address: 'Adress / Plattform',
   appointment: 'Tidsbeställning',
   back_to_meetings: 'Tillbaka till möten',
+  clear_all: 'Rensa Allt',
   collapse: 'Kollaps',
   contact_email: 'Maila %contact%',
   contact_text: 'Sms:a %contact%',
