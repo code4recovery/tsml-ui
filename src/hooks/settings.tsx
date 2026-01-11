@@ -3,7 +3,7 @@ import { createContext, PropsWithChildren, useContext, useMemo } from 'react';
 import merge from 'deepmerge';
 import { Settings } from 'luxon';
 
-import { en, es, fr, ja, nl, pt, sk, sv } from '../i18n';
+import { en, es, fr, ja, nl, pt, sk, sv, th } from '../i18n';
 
 // override these on your page with tsml_react_config
 export const defaults: TSMLReactConfig = {
@@ -103,6 +103,7 @@ export const defaults: TSMLReactConfig = {
     pt,
     sk,
     sv,
+    th,
   },
   times: ['morning', 'midday', 'evening', 'night', 'appointment'],
   views: ['table', 'map'],
