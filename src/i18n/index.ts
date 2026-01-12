@@ -6,3 +6,4 @@ export * from './nl';
 export * from './pt';
 export * from './sk';
 export * from './sv';
+export * from './th';
