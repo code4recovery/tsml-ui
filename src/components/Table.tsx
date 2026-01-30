@@ -1,6 +1,4 @@
-import { useState } from 'react';
-
-import InfiniteScroll from 'react-infinite-scroller';
+import { useEffect, useState } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 
@@ -44,6 +42,22 @@ export default function Table() {
   ];
   const [limit, setLimit] = useState(meetingsPerPage);
   const [showInProgress, setShowInProgress] = useState(false);
+
+  useEffect(() => {
+    if (!filteredSlugs || filteredSlugs.length <= limit) return;
+
+    const handleScroll = () => {
+      if (
+        window.innerHeight + window.scrollY >=
+        document.documentElement.scrollHeight - 250
+      ) {
+        setLimit(prev => prev + meetingsPerPage);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [filteredSlugs, limit]);
 
   if (error) {
     return null;
@@ -185,15 +199,11 @@ export default function Table() {
             )}
           </tbody>
         )}
-        <InfiniteScroll
-          element="tbody"
-          hasMore={filteredSlugs.length > limit}
-          loadMore={() => setLimit(limit + meetingsPerPage)}
-        >
+        <tbody>
           {filteredSlugs.slice(0, limit).map((slug, index) => (
             <Row slug={slug} key={index} />
           ))}
-        </InfiniteScroll>
+        </tbody>
       </table>
     </div>
   );
