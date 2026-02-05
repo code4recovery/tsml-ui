@@ -25,8 +25,8 @@ import Icon, { icons } from './Icon';
 import Link from './Link';
 import Map from './Map';
 
-import { useData, useFilter, useInput, useSettings } from '../hooks';
 import { useParams } from 'react-router-dom';
+import { useData, useFilter, useInput, useSettings } from '../hooks';
 import type { Meeting as MeetingType } from '../types';
 import Loading from './Loading';
 
@@ -416,7 +416,10 @@ export default function Meeting() {
               </div>
             )}
             {meeting.group &&
-              (meeting.district ||
+              (meeting.group
+                .toLocaleLowerCase()
+                .localeCompare(meeting.name.toLocaleLowerCase()) ||
+                meeting.district ||
                 meeting.group_notes ||
                 !!groupWeekdays.length ||
                 !!contactButtons.length) && (
