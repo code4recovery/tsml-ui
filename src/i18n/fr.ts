@@ -5,7 +5,7 @@ export const fr: Translation = {
   address: 'Adresse',
   appointment: 'Rendez-vous',
   back_to_meetings: 'Retour aux réunions',
-  calendar_download: 'Télécharger .ics',
+  calendar_ical: 'iCalendar',
   calendar_google: 'Google Agenda',
   collapse: 'Développer',
   contact_email: 'E-mail à %contact%',

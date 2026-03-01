@@ -5,7 +5,7 @@ export const sv: Translation = {
   address: 'Adress / Plattform',
   appointment: 'Tidsbeställning',
   back_to_meetings: 'Tillbaka till möten',
-  calendar_download: 'Ladda ner .ics',
+  calendar_ical: 'iCalendar',
   calendar_google: 'Google Kalender',
   collapse: 'Kollaps',
   contact_email: 'Maila %contact%',

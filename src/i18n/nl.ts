@@ -5,7 +5,7 @@ export const nl: Translation = {
   address: 'Addres',
   appointment: 'Afspraak',
   back_to_meetings: 'Terug naar Meetings',
-  calendar_download: '.ics downloaden',
+  calendar_ical: 'iCalendar',
   calendar_google: 'Google Agenda',
   collapse: 'Instorting',
   contact_email: 'E-mail %contact%',
