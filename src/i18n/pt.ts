@@ -5,6 +5,8 @@ export const pt: Translation = {
   address: 'Endereço / Plataforma',
   appointment: 'Marcação',
   back_to_meetings: 'Voltar às Reuniões',
+  calendar_download: 'Baixar .ics',
+  calendar_google: 'Google Agenda',
   collapse: 'Colapso',
   contact_email: 'Email %contact%',
   contact_text: 'Texto %contact%',

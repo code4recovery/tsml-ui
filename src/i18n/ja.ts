@@ -5,6 +5,8 @@ export const ja: Translation = {
   address: '住所・プラットフォーム',
   appointment: '予定',
   back_to_meetings: 'ミーティング一覧へ戻る',
+  calendar_download: '.icsをダウンロード',
+  calendar_google: 'Googleカレンダー',
   collapse: '膨らむ',
   contact_email: '%contact%にメール',
   contact_text: '%contact%にテキスト',
