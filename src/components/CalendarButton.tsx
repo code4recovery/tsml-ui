@@ -2,7 +2,11 @@ import { useEffect, useState } from 'react';
 
 import { formatGoogleUrl, formatIcs } from '../helpers';
 import { useSettings } from '../hooks';
-import { calendarDropdownCss, calendarMenuCss, dropdownButtonCss } from '../styles';
+import {
+  calendarDropdownCss,
+  calendarMenuCss,
+  dropdownButtonCss,
+} from '../styles';
 import type { Meeting } from '../types';
 
 import Icon from './Icon';
