@@ -82,6 +82,41 @@ export const buttonJoinCss = css`
   }
 `;
 
+export const calendarMenuCss = css`
+  position: relative;
+  display: inline-block;
+  width: 100%;
+`;
+
+export const calendarDropdownCss = css`
+  background: var(--background);
+  border-radius: var(--border-radius);
+  border: 1px solid ${color.dark};
+  display: none;
+  left: 0;
+  min-width: 100%;
+  position: absolute;
+  top: calc(100% + 2px);
+  z-index: 10;
+
+  &[data-open='true'] {
+    display: block;
+  }
+
+  a,
+  button {
+    ${formControlCss}
+    border: none !important;
+    border-radius: 0 !important;
+    justify-content: flex-start;
+    text-align: left;
+
+    &:hover {
+      background-color: ${color.light} !important;
+    }
+  }
+`;
+
 export const dropdownButtonCss = css`
   ${buttonCss}
   ::after {

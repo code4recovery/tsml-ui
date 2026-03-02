@@ -5,6 +5,7 @@ export * from './format-array';
 export * from './format-conference-provider';
 export * from './format-directions-url';
 export * from './format-feedback-email';
+export * from './format-google-url';
 export * from './format-ics';
 export * from './format-search';
 export * from './format-slug';

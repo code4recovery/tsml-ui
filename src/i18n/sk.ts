@@ -5,6 +5,8 @@ export const sk: Translation = {
   address: 'Adresa / Platforma',
   appointment: 'Stretnutie',
   back_to_meetings: 'Späť na Stretnutia',
+  calendar_ical: 'iCalendar',
+  calendar_google: 'Kalendár Google',
   collapse: 'Kolaps',
   contact_email: 'Emailovať %contact%',
   contact_text: 'Text %contact%',

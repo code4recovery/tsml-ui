@@ -5,6 +5,8 @@ export const th: Translation = {
   address: 'ที่อยู่ / แพลตฟอร์ม',
   appointment: 'การนัดหมาย',
   back_to_meetings: 'กลับไปที่การประชุม',
+  calendar_ical: 'iCalendar',
+  calendar_google: 'Google ปฏิทิน',
   collapse: 'ย่อ',
   contact_email: 'อีเมล %contact%',
   contact_text: 'ส่งข้อความ %contact%',

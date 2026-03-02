@@ -6,7 +6,6 @@ import { Link as RouterLink } from 'react-router-dom';
 import {
   formatDirectionsUrl,
   formatFeedbackEmail,
-  formatIcs,
   formatUrl,
   formatString as i18n,
 } from '../helpers';
@@ -21,6 +20,7 @@ import {
 } from '../styles';
 
 import Button from './Button';
+import CalendarButton from './CalendarButton';
 import Icon, { icons } from './Icon';
 import Link from './Link';
 import Map from './Map';
@@ -387,11 +387,7 @@ export default function Meeting() {
                   {meeting.start &&
                     meeting.isActive &&
                     settings.calendar_enabled && (
-                      <Button
-                        icon="calendar"
-                        onClick={() => formatIcs(meeting)}
-                        text={strings.add_to_calendar}
-                      />
+                      <CalendarButton meeting={meeting} />
                     )}
                   {!meeting.group &&
                     contactButtons.map((button, index) => (
