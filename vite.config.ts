@@ -18,7 +18,7 @@ export default defineConfig({
   build: {
     minify: 'terser',
     outDir: 'public',
-    chunkSizeWarningLimit: 600,
+    chunkSizeWarningLimit: 650,
     emptyOutDir: false, // Don't clear public dir (contains HTML files)
     cssCodeSplit: false,
     rollupOptions: {

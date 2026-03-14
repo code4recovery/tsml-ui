@@ -82,6 +82,7 @@ export const mapCss = css`
       border-radius: calc(var(--border-radius) * 2) !important;
       background: var(--background);
       color: var(--text);
+      min-width: 200px;
 
       .leaflet-popup-content {
         display: grid;
