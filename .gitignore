@@ -5,7 +5,6 @@ coverage
 test-results/
 playwright-report/
 public/custom
-bundle-stats.html
 .vscode
 .DS_Store
 .idea

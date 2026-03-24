@@ -3,39 +3,32 @@
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 import cssInjectedByJsPlugin from 'vite-plugin-css-injected-by-js';
-import { visualizer } from 'rollup-plugin-visualizer';
 
 export default defineConfig({
   plugins: [
     react({
       jsxImportSource: '@emotion/react',
-      babel: {
-        plugins: ['@emotion/babel-plugin'],
-      },
     }),
     cssInjectedByJsPlugin(),
-    visualizer({
-      open: false,
-      filename: 'bundle-stats.html',
-      gzipSize: true,
-      brotliSize: true,
-    }),
   ],
   publicDir: false, // Disable public folder copying to avoid conflicts
   build: {
     minify: 'terser',
     outDir: 'public',
-    chunkSizeWarningLimit: 650,
+    chunkSizeWarningLimit: 700,
     emptyOutDir: false, // Don't clear public dir (contains HTML files)
     cssCodeSplit: false,
-    rollupOptions: {
+    rolldownOptions: {
       input: 'src/app.tsx',
       output: {
         entryFileNames: 'app.js',
-        manualChunks: undefined, // Single file output
-        inlineDynamicImports: true, // Inline all imports
+        codeSplitting: false, // Single file output
         format: 'iife', // Use IIFE to isolate from globals
         name: 'TsmlUI', // Name for the IIFE
+      },
+      checks: {
+        // Removes warning that builds take long :) https://rolldown.rs/options/checks#plugintimings
+        pluginTimings: false,
       },
     },
   },
