@@ -49,7 +49,7 @@ export default function Table() {
   const rowVirtualizer = useWindowVirtualizer({
     count: filteredSlugs?.length ?? 0,
     estimateSize: () => 48,
-    overscan: 10,
+    overscan: 25,
     scrollMargin,
   });
 
