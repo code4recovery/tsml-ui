@@ -8,9 +8,6 @@ export default defineConfig({
   plugins: [
     react({
       jsxImportSource: '@emotion/react',
-      babel: {
-        plugins: ['@emotion/babel-plugin'],
-      },
     }),
     cssInjectedByJsPlugin(),
   ],
@@ -18,17 +15,20 @@ export default defineConfig({
   build: {
     minify: 'terser',
     outDir: 'public',
-    chunkSizeWarningLimit: 650,
+    chunkSizeWarningLimit: 700,
     emptyOutDir: false, // Don't clear public dir (contains HTML files)
     cssCodeSplit: false,
-    rollupOptions: {
+    rolldownOptions: {
       input: 'src/app.tsx',
       output: {
         entryFileNames: 'app.js',
-        manualChunks: undefined, // Single file output
-        inlineDynamicImports: true, // Inline all imports
+        codeSplitting: false, // Single file output
         format: 'iife', // Use IIFE to isolate from globals
         name: 'TsmlUI', // Name for the IIFE
+      },
+      checks: {
+        // Removes warning that builds take long :) https://rolldown.rs/options/checks#plugintimings
+        pluginTimings: false,
       },
     },
   },
