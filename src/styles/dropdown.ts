@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 
-import { dropdownButtonCss } from './button';
-import { color, size } from './variables';
+import { dropdownButtonCss, dropdownItemCss } from './button';
+import { color } from './variables';
 
 export const dropdownCss = css`
   *:focus-visible {
@@ -61,20 +61,7 @@ export const dropdownCss = css`
       flex-wrap: none;
 
       .tsml-dropdown__button {
-        align-items: center;
-        background-color: transparent;
-        border-radius: 0;
-        border: 0;
-        color: var(--text);
-        cursor: pointer;
-        display: flex;
-        flex: auto;
-        font-size: var(--font-size);
-        gap: 16px;
-        justify-content: space-between;
-        margin: 0;
-        padding: ${size.gutter / 2}px ${size.gutter}px;
-        text-align: left;
+        ${dropdownItemCss}
 
         span {
           white-space: nowrap;
@@ -93,7 +80,7 @@ export const dropdownCss = css`
         background-color: ${color.dark};
         button {
           background: transparent;
-          color: var(--background);
+          color: var(--background) !important;
         }
         span {
           color: ${color.light} !important;
