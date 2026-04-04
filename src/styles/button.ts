@@ -127,7 +127,7 @@ export const calendarDropdownCss = css`
   button {
     ${dropdownItemCss}
     &:hover {
-      background-color: ${color.light} !important;
+      background-color: ${color.medium} !important;
     }
   }
 `;

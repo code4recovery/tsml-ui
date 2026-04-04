@@ -121,7 +121,7 @@
   button {
     ${Zc}
     &:hover {
-      background-color: ${Pc} !important;
+      background-color: ${Lc} !important;
     }
   }
 `,Uc=Ki`
