@@ -1,4 +1,8 @@
+import { renderHook } from '@testing-library/react';
+import { createElement } from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+
+import { SettingsProvider, useSettings } from '../../src/hooks';
 
 describe('settings', () => {
   let languageGetter: ReturnType<typeof vi.spyOn>;
@@ -6,6 +10,17 @@ describe('settings', () => {
   beforeEach(() => {
     languageGetter = vi.spyOn(window.navigator, 'language', 'get');
   });
+
+  const renderSettings = (userSettings?: Partial<TSMLReactConfig>) => {
+    return renderHook(() => useSettings(), {
+      wrapper: ({ children }) =>
+        createElement(
+          SettingsProvider,
+          { userSettings: userSettings as TSMLReactConfig },
+          children
+        ),
+    });
+  };
 
   it('should import flags', () => {
     const flags = ['O', 'C'];
@@ -65,9 +80,21 @@ describe('settings', () => {
     //   expect(settings.weekdays).toEqual(weekdays);
   });
 
-  it('should fall back to english', () => {
+  it('falls back to english when navigator.language is unsupported', () => {
     languageGetter.mockReturnValue('de');
-    // const { settings } = mergeSettings();
-    // expect(settings.language).toEqual('en');
+    const { result } = renderSettings();
+    expect(result.current.settings.language).toBe('en');
+  });
+
+  it('uses navigator.language when no language is configured', () => {
+    languageGetter.mockReturnValue('es-MX');
+    const { result } = renderSettings();
+    expect(result.current.settings.language).toBe('es');
+  });
+
+  it('uses tsml_react_config language when set, ignoring navigator.language', () => {
+    languageGetter.mockReturnValue('en-US');
+    const { result } = renderSettings({ language: 'fr' });
+    expect(result.current.settings.language).toBe('fr');
   });
 });
