@@ -97,6 +97,18 @@ var tsml_react_config = {
 };
 ```
 
+### Override language
+
+By default, the UI language is determined by the visitor's browser setting (`navigator.language`). You can force a specific language for all visitors:
+
+```js
+var tsml_react_config = {
+  language: 'es',
+};
+```
+
+Supported values: `en`, `es`, `fr`, `ja`, `nl`, `pt`, `sk`, `sv`, `th`.
+
 ### Disable Add to Calendar button
 
 You can disable the add to calendar button if needed.
