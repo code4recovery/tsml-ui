@@ -156,15 +156,16 @@ export const SettingsProvider = ({
       }
     }
 
-    const preferredLanguage = navigator.language.substring(0, 2);
-
-    if (preferredLanguage in settings.strings) {
-      settings.language = preferredLanguage as Lang;
+    if (!userSettings?.language) {
+      const preferredLanguage = navigator.language.substring(0, 2);
+      if (preferredLanguage in settings.strings) {
+        settings.language = preferredLanguage as Lang;
+      }
     }
 
     const strings = settings.strings[settings.language];
 
-    Settings.defaultLocale = navigator.language;
+    Settings.defaultLocale = userSettings?.language ?? navigator.language;
 
     return { settings, strings };
   }, [userSettings]);
