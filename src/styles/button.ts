@@ -88,10 +88,30 @@ export const calendarMenuCss = css`
   width: 100%;
 `;
 
+export const dropdownItemCss = css`
+  align-items: center;
+  background-color: transparent;
+  border-radius: 0;
+  border: 0;
+  color: var(--text) !important;
+  cursor: pointer !important;
+  display: flex;
+  flex: auto;
+  font-size: var(--font-size);
+  gap: 16px;
+  justify-content: space-between;
+  line-height: 1.5;
+  margin: 0;
+  padding: ${size.gutter / 2}px ${size.gutter}px;
+  text-align: left;
+  text-decoration: none !important;
+  width: 100%;
+`;
+
 export const calendarDropdownCss = css`
   background: var(--background);
   border-radius: var(--border-radius);
-  border: 1px solid ${color.dark};
+  border: 1px solid ${color.medium};
   display: none;
   left: 0;
   min-width: 100%;
@@ -105,14 +125,9 @@ export const calendarDropdownCss = css`
 
   a,
   button {
-    ${formControlCss}
-    border: none !important;
-    border-radius: 0 !important;
-    justify-content: flex-start;
-    text-align: left;
-
+    ${dropdownItemCss}
     &:hover {
-      background-color: ${color.light} !important;
+      background-color: ${color.medium} !important;
     }
   }
 `;
