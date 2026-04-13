@@ -54,7 +54,7 @@ export default function Table() {
           setPage(prev => prev + 1);
         }
       },
-      { rootMargin: '250px 0' }
+      { rootMargin: '250px 0px' }
     );
 
     observer.observe(loaderRef.current);

@@ -89,9 +89,13 @@ const renderTable = () =>
     </MemoryRouter>
   );
 
+let lastObserverOptions: IntersectionObserverInit | undefined;
+
 // @ts-ignore
 global.IntersectionObserver = class IntersectionObserver {
-  constructor() {}
+  constructor(_cb: IntersectionObserverCallback, options?: IntersectionObserverInit) {
+    lastObserverOptions = options;
+  }
   disconnect() {
     return null;
   }
@@ -165,5 +169,15 @@ describe('<Table />', () => {
     renderTable();
     const button = document.querySelector('tbody button');
     expect(button).toBeInTheDocument();
+  });
+
+  it('passes a valid rootMargin to IntersectionObserver (all tokens must have units)', () => {
+    renderTable();
+    const rootMargin = lastObserverOptions?.rootMargin ?? '';
+    const tokens = rootMargin.trim().split(/\s+/);
+    const validToken = /^-?\d+(\.\d+)?(px|%)$/;
+    tokens.forEach(token => {
+      expect(token).toMatch(validToken);
+    });
   });
 });
