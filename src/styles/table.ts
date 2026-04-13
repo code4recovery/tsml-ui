@@ -170,6 +170,9 @@ export const tableInProgressCss = css`
 `;
 
 export const tableWrapperCss = css`
+  display: flex;
+  flex-direction: column;
+  flex: 1;
   margin: 0 ${size.gutter * -1}px ${size.gutter * -1}px;
   width: calc(100% + ${size.gutter * 2}px);
 `;

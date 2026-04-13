@@ -1,6 +1,5 @@
-import { useCallback, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
-import { useWindowVirtualizer } from '@tanstack/react-virtual';
 import { useNavigate } from 'react-router-dom';
 
 import { formatUrl, formatString as i18n } from '../helpers';
@@ -41,28 +40,31 @@ export default function Table() {
     'time',
   ];
   const [showInProgress, setShowInProgress] = useState(false);
-  const [scrollMargin, setScrollMargin] = useState(0);
-  const tbodyRef = useCallback((node: HTMLTableSectionElement | null) => {
-    if (node) setScrollMargin(node.offsetTop);
-  }, []);
+  const [page, setPage] = useState(1);
+  const [visibleSlugs, setVisibleSlugs] = useState<string[]>([]);
+  const loaderRef = useRef<HTMLDivElement>(null);
 
-  const rowVirtualizer = useWindowVirtualizer({
-    count: filteredSlugs?.length ?? 0,
-    estimateSize: () => 48,
-    overscan: 25,
-    scrollMargin,
-  });
+  // add rows to table as user scrolls
+  useEffect(() => {
+    if (!loaderRef.current || !filteredSlugs.length) return;
 
-  const virtualItems = rowVirtualizer.getVirtualItems();
-  const totalSize = rowVirtualizer.getTotalSize();
-  const paddingTop =
-    virtualItems.length > 0
-      ? virtualItems[0].start - rowVirtualizer.options.scrollMargin
-      : 0;
-  const paddingBottom =
-    virtualItems.length > 0
-      ? totalSize - virtualItems[virtualItems.length - 1].end
-      : 0;
+    const observer = new IntersectionObserver(
+      ([{ isIntersecting }]) => {
+        if (isIntersecting && visibleSlugs.length < filteredSlugs.length) {
+          setPage(prev => prev + 1);
+        }
+      },
+      { rootMargin: '250px 0' }
+    );
+
+    observer.observe(loaderRef.current);
+
+    return () => observer.disconnect();
+  }, [filteredSlugs.length, visibleSlugs.length]);
+
+  useEffect(() => {
+    setVisibleSlugs(filteredSlugs.slice(0, page * 25));
+  }, [page, filteredSlugs]);
 
   if (error) {
     return null;
@@ -204,25 +206,13 @@ export default function Table() {
             )}
           </tbody>
         )}
-        <tbody ref={tbodyRef}>
-          {paddingTop > 0 && (
-            <tr>
-              <td colSpan={columns.length} style={{ height: paddingTop }} />
-            </tr>
-          )}
-          {virtualItems.map(virtualRow => (
-            <Row
-              slug={filteredSlugs[virtualRow.index]}
-              key={virtualRow.index}
-            />
+        <tbody>
+          {visibleSlugs.map((slug, index) => (
+            <Row slug={slug} key={index} />
           ))}
-          {paddingBottom > 0 && (
-            <tr>
-              <td colSpan={columns.length} style={{ height: paddingBottom }} />
-            </tr>
-          )}
         </tbody>
       </table>
+      <div ref={loaderRef} />
     </div>
   );
 }

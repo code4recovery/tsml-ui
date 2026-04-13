@@ -58,7 +58,13 @@ vi.mock('../../src/hooks', async () => {
 });
 
 // Mock @tanstack/react-virtual using vi.fn() so tests can override with mockImplementationOnce.
-const defaultVirtualizer = ({ count, scrollMargin }: { count: number; scrollMargin: number }) => {
+const defaultVirtualizer = ({
+  count,
+  scrollMargin,
+}: {
+  count: number;
+  scrollMargin: number;
+}) => {
   const items = Array.from({ length: count }, (_, i) => ({
     index: i,
     start: i * 48,
@@ -74,13 +80,6 @@ const defaultVirtualizer = ({ count, scrollMargin }: { count: number; scrollMarg
   };
 };
 
-const mockUseWindowVirtualizer = vi.fn(defaultVirtualizer);
-
-vi.mock('@tanstack/react-virtual', () => ({
-  useWindowVirtualizer: (...args: Parameters<typeof defaultVirtualizer>) =>
-    mockUseWindowVirtualizer(...args),
-}));
-
 const renderTable = () =>
   render(
     <MemoryRouter>
@@ -89,6 +88,23 @@ const renderTable = () =>
       </SettingsProvider>
     </MemoryRouter>
   );
+
+// @ts-ignore
+global.IntersectionObserver = class IntersectionObserver {
+  constructor() {}
+  disconnect() {
+    return null;
+  }
+  observe() {
+    return null;
+  }
+  takeRecords() {
+    return [];
+  }
+  unobserve() {
+    return null;
+  }
+};
 
 describe('<Table />', () => {
   afterEach(() => {
@@ -149,48 +165,5 @@ describe('<Table />', () => {
     renderTable();
     const button = document.querySelector('tbody button');
     expect(button).toBeInTheDocument();
-  });
-});
-
-describe('<Table /> virtualizer padding rows', () => {
-  afterEach(() => {
-    cleanup();
-    mockUseWindowVirtualizer.mockImplementation(defaultVirtualizer);
-  });
-
-  it('renders a top padding row when paddingTop > 0', () => {
-    // start=96, scrollMargin=0 -> paddingTop = 96 - 0 = 96
-    mockUseWindowVirtualizer.mockImplementationOnce(({ count }: { count: number }) => ({
-      getVirtualItems: () => [
-        { index: 0, start: 96, end: 144, key: 0, size: 48, lane: 0 },
-        { index: 1, start: 144, end: 192, key: 1, size: 48, lane: 0 },
-      ],
-      getTotalSize: () => count * 48,
-      options: { scrollMargin: 0 },
-    }));
-
-    renderTable();
-    // A spacer <td> with a non-empty height style is rendered for paddingTop
-    const spacers = Array.from(document.querySelectorAll('tbody tr td')).filter(
-      td => (td as HTMLElement).style.height !== ''
-    );
-    expect(spacers.length).toBeGreaterThan(0);
-  });
-
-  it('renders a bottom padding row when paddingBottom > 0', () => {
-    // Only 1 item rendered but totalSize > item end -> paddingBottom > 0
-    mockUseWindowVirtualizer.mockImplementationOnce(({ count }: { count: number }) => ({
-      getVirtualItems: () => [
-        { index: 0, start: 0, end: 48, key: 0, size: 48, lane: 0 },
-      ],
-      getTotalSize: () => count * 48,
-      options: { scrollMargin: 0 },
-    }));
-
-    renderTable();
-    const spacers = Array.from(document.querySelectorAll('tbody tr td')).filter(
-      td => (td as HTMLElement).style.height !== ''
-    );
-    expect(spacers.length).toBeGreaterThan(0);
   });
 });
