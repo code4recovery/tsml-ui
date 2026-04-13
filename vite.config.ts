@@ -33,8 +33,9 @@ export default defineConfig({
     },
   },
   test: {
+    include: ['tests/unit/**/*.spec.{ts,tsx}'],
     environment: 'jsdom',
-    setupFiles: ['./test/setup.ts'],
+    setupFiles: ['./tests/unit/setup.ts'],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'lcov', 'html'],
