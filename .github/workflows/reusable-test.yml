@@ -1,0 +1,55 @@
+name: Reusable Tests
+
+on:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  test-unit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout 🛒
+        uses: actions/checkout@v6
+      - name: node 22 ❇️
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: 'npm'
+      - name: install dependencies 📦
+        run: npm ci
+      - name: lint 🧹
+        run: npm run lint
+      - name: unit tests 🧪
+        run: npm run test-coverage
+      - name: build 🏗️
+        run: npm run build
+      - name: Coveralls
+        uses: coverallsapp/github-action@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+  test-e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout 🛒
+        uses: actions/checkout@v6
+      - name: node 22 ❇️
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: 'npm'
+      - name: install dependencies 📦
+        run: npm ci
+      - name: install Playwright browsers 🎭
+        run: npx playwright install --with-deps chromium firefox webkit
+      - name: e2e tests 🌐
+        run: npm run test:e2e
+      - name: upload Playwright report 📋
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
