@@ -161,6 +161,9 @@ export const SettingsProvider = ({
       if (preferredLanguage in settings.strings) {
         settings.language = preferredLanguage as Lang;
       }
+    } else if (!(settings.language in settings.strings)) {
+      console.warn(`TSML UI language "${settings.language}" not found`);
+      settings.language = defaults.language;
     }
 
     const strings = settings.strings[settings.language];
