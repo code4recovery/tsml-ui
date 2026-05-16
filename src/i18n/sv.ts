@@ -29,7 +29,11 @@ export const sv: Translation = {
   email_subject: 'Mötes Feedback: %name%',
   errors: {
     geocoding: `Kunde inte hitta ‘%address%’, vänligen välj en annan plats.`,
-    geolocation: `Kunde inte hitta din plats, kontrollera dina webbläsarinställningar.`,
+    geolocation: {
+      denied: `Åtkomst till plats nekades. Tillåt platsdelning för att hitta möten nära dig.`,
+      unavailable: `Din plats kunde inte fastställas. Försök igen eller sök efter adress.`,
+      timeout: `Det tog för lång tid att hitta din plats. Försök igen eller sök efter adress.`,
+    },
   },
   evening: 'Kväll',
   expand: 'Expandera',

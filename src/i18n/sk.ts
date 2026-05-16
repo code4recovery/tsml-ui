@@ -29,7 +29,11 @@ export const sk: Translation = {
   email_subject: 'Spätná väzba na stretnutie: %name%',
   errors: {
     geocoding: `Nepodarilo sa nájsť „%address%“, vyberte si iné miesto.`,
-    geolocation: `Nepodarilo sa nájsť vašu polohu, skontrolujte nastavenia prehliadača.`,
+    geolocation: {
+      denied: `Prístup k polohe bol zamietnutý. Povoľte zdieľanie polohy na vyhľadanie stretnutí vo vašom okolí.`,
+      unavailable: `Vašu polohu sa nepodarilo určiť. Skúste to znova alebo vyhľadajte podľa adresy.`,
+      timeout: `Určenie vašej polohy trvalo príliš dlho. Skúste to znova alebo vyhľadajte podľa adresy.`,
+    },
   },
   evening: 'Večer',
   expand: 'Rozšíriť',

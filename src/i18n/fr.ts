@@ -29,7 +29,11 @@ export const fr: Translation = {
   email_subject: 'Commentaires sur la réunion: %name%',
   errors: {
     geocoding: `Impossible de trouver «%address%», veuillez choisir un autre emplacement.`,
-    geolocation: `Impossible de trouver votre emplacement, veuillez vérifier les paramètres de votre navigateur.`,
+    geolocation: {
+      denied: `L'accès à la localisation a été refusé. Veuillez autoriser le partage de localisation pour trouver des réunions près de vous.`,
+      unavailable: `Votre emplacement n'a pas pu être déterminé. Veuillez réessayer ou rechercher par adresse.`,
+      timeout: `La recherche de votre emplacement a pris trop de temps. Veuillez réessayer ou rechercher par adresse.`,
+    },
   },
   evening: 'Soir',
   expand: 'Effondrement',

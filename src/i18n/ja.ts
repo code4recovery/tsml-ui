@@ -29,7 +29,11 @@ export const ja: Translation = {
   email_subject: 'メールする: %name%',
   errors: {
     geocoding: `「%address%」が見つかりませんでした。別の場所を選択してください。`,
-    geolocation: `現在地が見つかりません。ブラウザの設定を確認してください。`,
+    geolocation: {
+      denied: `位置情報へのアクセスが拒否されました。お近くのミーティングを見つけるには、位置情報の共有を許可してください。`,
+      unavailable: `現在地を特定できませんでした。もう一度お試しいただくか、住所で検索してください。`,
+      timeout: `現在地の取得に時間がかかりすぎました。もう一度お試しいただくか、住所で検索してください。`,
+    },
   },
   evening: '夕方',
   expand: '倒れる',

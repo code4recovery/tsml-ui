@@ -27,7 +27,11 @@ export interface Translation {
   email_subject: string;
   errors: {
     geocoding: string;
-    geolocation: string;
+    geolocation: {
+      denied: string;
+      unavailable: string;
+      timeout: string;
+    };
   };
   evening: string;
   expand: string;

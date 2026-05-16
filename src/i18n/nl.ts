@@ -29,7 +29,11 @@ export const nl: Translation = {
   email_subject: 'Meeting Feedback: %name%',
   errors: {
     geocoding: `Kon ‘%address%’ niet vinden, kies een andere locatie.`,
-    geolocation: `Kon uw locatie niet vinden. Controleer uw browserinstellingen.`,
+    geolocation: {
+      denied: `Toegang tot locatie is geweigerd. Sta het delen van locatie toe om vergaderingen bij u in de buurt te vinden.`,
+      unavailable: `Uw locatie kon niet worden bepaald. Probeer het opnieuw of zoek op adres.`,
+      timeout: `Het zoeken naar uw locatie duurde te lang. Probeer het opnieuw of zoek op adres.`,
+    },
   },
   evening: 'Avond',
   expand: 'Uitbreiden',
