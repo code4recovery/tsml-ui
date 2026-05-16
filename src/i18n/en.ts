@@ -29,7 +29,11 @@ export const en: Translation = {
   email_subject: 'Meeting Feedback: %name%',
   errors: {
     geocoding: `Could not find ‘%address%’, please pick another location.`,
-    geolocation: `Could not find your location, please check your browser settings.`,
+    geolocation: {
+      denied: `Location access was denied. Please allow location sharing to find meetings near you.`,
+      unavailable: `Your location could not be determined. Please try again or search by address instead.`,
+      timeout: `Finding your location took too long. Please try again or search by address instead.`,
+    },
   },
   evening: 'Evening',
   expand: 'Expand',

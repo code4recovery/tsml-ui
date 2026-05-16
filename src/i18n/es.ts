@@ -29,7 +29,11 @@ export const es: Translation = {
   email_subject: 'Comentarios de la reunión: %name%',
   errors: {
     geocoding: `No se pudo encontrar ‘%address%,’ seleccione otra ubicación.`,
-    geolocation: `No se pudo encontrar su ubicación, por favor verifique la configuración de su navegador.`,
+    geolocation: {
+      denied: `Se denegó el acceso a la ubicación. Permita compartir la ubicación para encontrar reuniones cerca de usted.`,
+      unavailable: `No se pudo determinar su ubicación. Inténtelo de nuevo o busque por dirección.`,
+      timeout: `La búsqueda de su ubicación tardó demasiado. Inténtelo de nuevo o busque por dirección.`,
+    },
   },
   evening: 'Noche',
   expand: 'Expandir',

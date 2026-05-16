@@ -137,8 +137,15 @@ export const LocationProvider = ({ children }: PropsWithChildren) => {
             waitingForLocation: false,
           });
         },
-        () => {
-          setError(strings.errors.geolocation);
+        err => {
+          const { denied, timeout, unavailable } = strings.errors.geolocation;
+          setError(
+            err.code === err.PERMISSION_DENIED
+              ? denied
+              : err.code === err.TIMEOUT
+                ? timeout
+                : unavailable
+          );
           setLocationState({
             waitingForLocation: false,
           });
