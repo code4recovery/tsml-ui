@@ -156,18 +156,25 @@ export const SettingsProvider = ({
       }
     }
 
+    // try to use browser language if not set
     if (!userSettings?.language) {
       const preferredLanguage = navigator.language.substring(0, 2);
-      if (preferredLanguage in settings.strings) {
-        settings.language = preferredLanguage as Lang;
-      }
-    } else if (!(settings.language in settings.strings)) {
+      settings.language = preferredLanguage as Lang;
+    }
+
+    // fall back to default
+    if (!(settings.language in settings.strings)) {
       console.warn(`TSML UI language "${settings.language}" not found`);
       settings.language = defaults.language;
     }
 
-    const strings = settings.strings[settings.language];
+    // fill in any missing strings
+    const strings = merge(
+      settings.strings[defaults.language],
+      settings.strings[settings.language]
+    );
 
+    // set Luxon's locale for time formatting
     Settings.defaultLocale = userSettings?.language ?? navigator.language;
 
     return { settings, strings };

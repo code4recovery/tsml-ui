@@ -24,11 +24,7 @@ if (element) {
       element: (
         <TsmlUI
           google={element.getAttribute('data-google') || undefined}
-          settings={
-            typeof tsml_react_config === 'undefined'
-              ? undefined
-              : tsml_react_config
-          }
+          settings={tsml_react_config || undefined}
           src={element.getAttribute('data-src') || undefined}
           timezone={element.getAttribute('data-timezone') || undefined}
         />
