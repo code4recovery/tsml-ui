@@ -130,7 +130,9 @@ export const SettingsProvider = ({
   userSettings,
 }: PropsWithChildren<{ userSettings?: TSMLReactConfig }>) => {
   const value = useMemo(() => {
-    const settings = userSettings ? merge(defaults, userSettings) : defaults;
+    const settings = userSettings
+      ? merge(defaults, userSettings)
+      : { ...defaults };
 
     // flags can be specified to override the default. also [] means unset
     if (!Array.isArray(settings.flags)) {
