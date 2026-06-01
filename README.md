@@ -77,6 +77,41 @@ var tsml_react_config = {
 };
 ```
 
+### Flag types inline next to meeting names
+
+Certain special-interest types are flagged inline next to the meeting name in the list view (and on the meeting detail page). By default, this is set to Men (`M`) and Women (`W`):
+
+```js
+var tsml_react_config = {
+  flags: ['M', 'W'],
+};
+```
+
+You can override this with any meeting type codes. For example, to also flag LGBTQ meetings:
+
+```js
+var tsml_react_config = {
+  flags: ['LGBTQ', 'M', 'W'],
+};
+```
+
+The labels are pulled from the translated type strings, so they work across languages out of the box. To relabel a flag, override `strings.types` (not `type_descriptions`, which only affects the meeting detail page):
+
+```js
+var tsml_react_config = {
+  flags: ['LGBTQ', 'M', 'W'],
+  strings: {
+    en: {
+      types: {
+        LGBTQ: 'LGBTQi',
+      },
+    },
+  },
+};
+```
+
+Set `flags: []` to disable inline flagging entirely. This option works with any data source, including Google Sheet feeds.
+
 ### Filter to current day
 
 You can link directly to today's meetings using the special `today` keyword:
