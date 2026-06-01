@@ -3,6 +3,8 @@ import { createElement } from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { SettingsProvider, useSettings } from '../../../src/hooks';
+import { defaults } from '../../../src/hooks/settings';
+import { en } from '../../../src/i18n';
 
 describe('settings', () => {
   let languageGetter: ReturnType<typeof vi.spyOn>;
@@ -96,5 +98,27 @@ describe('settings', () => {
     languageGetter.mockReturnValue('en-US');
     const { result } = renderSettings({ language: 'fr' });
     expect(result.current.settings.language).toBe('fr');
+  });
+
+  it('fills missing keys from english for a partial translation', () => {
+    // reproduces #526: a partial strings object (e.g. injected by the
+    // WordPress plugin) omits required keys like title, which crashed the UI
+    languageGetter.mockReturnValue('af-ZA');
+    const { result } = renderSettings({
+      strings: { af: { modes: { search: 'Soek' } } },
+    } as unknown as Partial<TSMLReactConfig>);
+    expect(result.current.settings.language).toBe('af');
+    // provided key overrides english
+    expect(result.current.strings.modes.search).toBe('Soek');
+    // sibling within the same partial object still falls back
+    expect(result.current.strings.modes.location).toBe(en.modes.location);
+    // top-level key absent from the partial object falls back instead of crashing
+    expect(result.current.strings.title).toEqual(en.title);
+  });
+
+  it('does not mutate the shared defaults when resolving the language', () => {
+    languageGetter.mockReturnValue('es-MX');
+    renderSettings();
+    expect(defaults.language).toBe('en');
   });
 });
