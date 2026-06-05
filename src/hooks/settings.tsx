@@ -177,7 +177,7 @@ export const SettingsProvider = ({
     );
 
     // set Luxon's locale for time formatting
-    Settings.defaultLocale = userSettings?.language ?? navigator.language;
+    Settings.defaultLocale = settings.language;
 
     return { settings, strings };
   }, [userSettings]);
