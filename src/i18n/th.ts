@@ -45,6 +45,7 @@ export const th: Translation = {
   in_progress_single: 'กำลังประชุมอยู่ 1 รายการ',
   in_progress_multiple: 'กำลังประชุมอยู่ %count% รายการ',
   km: 'กม.',
+  local_time: 'เวลาท้องถิ่น',
   location: 'สถานที่',
   location_group: 'สถานที่ / กลุ่ม',
   match_single: 'พบ 1 รายการ',
@@ -102,4 +103,5 @@ export const th: Translation = {
     map: 'แผนที่',
   },
   weekday_any: 'ทุกวัน',
+  your_time: 'เวลาของคุณ',
 };

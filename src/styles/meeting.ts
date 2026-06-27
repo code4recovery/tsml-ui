@@ -22,6 +22,12 @@ export const meetingColumnsCss = css`
     margin: 0;
   }
 
+  dl {
+    display: grid;
+    gap: ${size.gutter / 2}px;
+    grid-template-columns: 1fr 1fr;
+  }
+
   ul {
     padding: 0 0 0 ${size.gutter * 1.5}px;
     button {

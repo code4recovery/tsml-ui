@@ -42,6 +42,7 @@ export const pt: Translation = {
   in_progress_single: '1 reunião em progresso',
   in_progress_multiple: '%count% reuniões em progresso',
   km: 'km',
+  local_time: 'Hora Local',
   location: 'Localização',
   location_group: 'Local / Grupo',
   match_single: '1 resultado',
@@ -100,4 +101,5 @@ export const pt: Translation = {
     map: 'Mapa',
   },
   weekday_any: 'Qualquer Dia',
+  your_time: 'Sua Hora',
 };

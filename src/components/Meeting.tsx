@@ -296,17 +296,22 @@ export default function Meeting() {
           <div>
             <div>
               <h2>{strings.meeting_information}</h2>
-              <p>{formatTime(meeting.start, meeting.end)}</p>
-              {meeting.start && meeting.start.zoneName !== meeting.timezone && (
-                <p>
-                  (
-                  {formatTime(
-                    meeting.start.setZone(meeting.timezone),
-                    meeting.end?.setZone(meeting.timezone)
-                  )}
-                  )
-                </p>
-              )}
+              {meeting.start &&
+                (meeting.start.zoneName === meeting.timezone ? (
+                  <p>{formatTime(meeting.start, meeting.end)}</p>
+                ) : (
+                  <dl>
+                    <dt>{strings.your_time}</dt>
+                    <dd>{formatTime(meeting.start, meeting.end)}</dd>
+                    <dt>{strings.local_time}</dt>
+                    <dd>
+                      {formatTime(
+                        meeting.start.setZone(meeting.timezone),
+                        meeting.end?.setZone(meeting.timezone)
+                      )}
+                    </dd>
+                  </dl>
+                ))}
               {capabilities.type && meeting.types && (
                 <ul>
                   {meeting.types
