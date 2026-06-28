@@ -42,6 +42,7 @@ export const ja: Translation = {
   in_progress_single: '1件のミーティングが進行中です',
   in_progress_multiple: '%count% ミーティングが進行中です',
   km: 'キロ',
+  local_time: '現地時間',
   location: '位置',
   location_group: '場所・グループ',
   match_single: '1件の結果',
@@ -99,4 +100,5 @@ export const ja: Translation = {
     map: '地図',
   },
   weekday_any: '曜日指定無し',
+  your_time: 'あなたの時間',
 };

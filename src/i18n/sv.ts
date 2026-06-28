@@ -42,6 +42,7 @@ export const sv: Translation = {
   in_progress_single: '1 möte pågår',
   in_progress_multiple: '%count% möten pågår',
   km: 'km',
+  local_time: 'Lokal Tid',
   location: 'Plats',
   location_group: 'Plats / Grupp',
   match_single: '1 resultat',
@@ -99,4 +100,5 @@ export const sv: Translation = {
     map: 'Karta',
   },
   weekday_any: 'Alla Dagar',
+  your_time: 'Din Tid',
 };

@@ -42,6 +42,7 @@ export const nl: Translation = {
   in_progress_single: '1 meeting bezig',
   in_progress_multiple: '%count% meetings bezig',
   km: 'km',
+  local_time: 'Lokale Tijd',
   location: 'Locatie',
   location_group: 'Locatie / Groep',
   match_single: '1 resultaat',
@@ -50,7 +51,7 @@ export const nl: Translation = {
   meetings: 'Meetings',
   mi: 'mi',
   midday: 'Middag',
-  'modes': {
+  modes: {
     location: 'Vlakbij Locatie',
     me: 'Vlakbij Me',
     search: 'Zoeken',
@@ -100,4 +101,5 @@ export const nl: Translation = {
     map: 'Kaart',
   },
   weekday_any: 'Elke Dag',
+  your_time: 'Uw Tijd',
 };

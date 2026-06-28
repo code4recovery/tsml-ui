@@ -42,6 +42,7 @@ export const sk: Translation = {
   in_progress_single: '1 stretnutie práve prebieha',
   in_progress_multiple: '%count% práve prebiehajúce stretnutia',
   km: 'km',
+  local_time: 'Miesta Čas',
   location: 'Poloha',
   location_group: 'Poloha / Skupina',
   match_single: '1 výsledok',
@@ -100,4 +101,5 @@ export const sk: Translation = {
     map: 'Mapa',
   },
   weekday_any: 'Ktorýkoľvek deň',
+  your_time: 'Váš čas',
 };
