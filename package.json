@@ -36,7 +36,7 @@
     "@typescript-eslint/parser": "^8.51.0",
     "@vitejs/plugin-react": "^6.0.1",
     "@vitest/coverage-v8": "^4.0.16",
-    "baseline-browser-mapping": "^2.9.19",
+    "baseline-browser-mapping": "^2.11.21",
     "eslint": "^9.39.2",
     "eslint-config-love": "^151.0.0",
     "eslint-config-prettier": "^10.1.8",
