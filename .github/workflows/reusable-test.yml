@@ -11,9 +11,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: checkout 🛒
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: node 22 ❇️
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: '22'
           cache: 'npm'
@@ -34,9 +34,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: checkout 🛒
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: node 22 ❇️
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: '22'
           cache: 'npm'

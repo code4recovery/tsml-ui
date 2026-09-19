@@ -80,6 +80,7 @@ export default function Controls() {
     if (value === input.search) return;
 
     navigate(formatUrl({ ...input, search: value }, settings));
+    // eslint-disable-next-line react-hooks/refs
   }, [searchInput.current?.value]);
 
   // update search when global state changes

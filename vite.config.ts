@@ -35,6 +35,8 @@ export default defineConfig({
   test: {
     include: ['tests/unit/**/*.spec.{ts,tsx}'],
     environment: 'jsdom',
+    environmentOptions: { jsdom: { url: 'https://test.com' } },
+    pool: 'vmThreads', // create jsdom once per worker instead of once per file
     setupFiles: ['./tests/unit/setup.ts'],
     coverage: {
       provider: 'v8',
