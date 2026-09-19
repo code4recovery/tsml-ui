@@ -64,6 +64,9 @@ interface TSMLReactConfig {
   weekdays: string[];
 }
 
+//side-effect css imports (required by typescript 6)
+declare module '*.css';
+
 declare var tsml_react_config: TSMLReactConfig | undefined;
 
 //google analytics globals

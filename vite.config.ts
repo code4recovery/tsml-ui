@@ -29,12 +29,19 @@ export default defineConfig({
       checks: {
         // Removes warning that builds take long :) https://rolldown.rs/options/checks#plugintimings
         pluginTimings: false,
+        // react-router's unused framework-mode dynamic imports pull in vite's preload helper,
+        // whose `import.meta` is harmlessly replaced with `{}` in the IIFE output
+        emptyImportMeta: false,
       },
     },
   },
   test: {
     include: ['tests/unit/**/*.spec.{ts,tsx}'],
     environment: 'jsdom',
+    environmentOptions: { jsdom: { url: 'https://test.com' } },
+    pool: 'vmThreads', // create jsdom once per worker instead of once per file
+    environmentOptions: { jsdom: { url: 'https://test.com' } },
+    pool: 'vmThreads', // create jsdom once per worker instead of once per file
     setupFiles: ['./tests/unit/setup.ts'],
     coverage: {
       provider: 'v8',

@@ -40,22 +40,12 @@ Object.defineProperty(window, 'matchMedia', {
 
 globalThis.React = React;
 
-const savedLocation = window.location;
-const savedHistory = window.history;
+let pushState: ReturnType<typeof vi.spyOn>;
 
 beforeEach(() => {
-  delete window.location;
-  delete window.history;
-
-  window.history = {
-    pushState: vi.fn(),
-  };
-
-  window.location = new URL('https://test.com');
-  window.location.reload = vi.fn();
+  pushState = vi.spyOn(window.history, 'pushState').mockImplementation(() => {});
 });
 
 afterEach(() => {
-  window.location = savedLocation;
-  window.history = savedHistory;
+  pushState.mockRestore();
 });
