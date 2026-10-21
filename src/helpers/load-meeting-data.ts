@@ -269,6 +269,11 @@ export function loadMeetingData(
           { weekday, hour: endTimeParts[0], minute: endTimeParts[1] },
           { zone: meeting.timezone }
         );
+        if (end < start) {
+          end = end
+            .plus({ days: 1 })
+            .set({ hour: endTimeParts[0], minute: endTimeParts[1] });
+        }
       } else {
         end = start.plus({
           minutes: settings.duration,
