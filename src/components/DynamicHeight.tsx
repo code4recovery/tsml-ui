@@ -32,7 +32,7 @@ export default function DynamicHeight({ children }: PropsWithChildren) {
   };
 
   const timeoutId = useRef<ReturnType<typeof setTimeout> | undefined>(
-    undefined,
+    undefined
   );
 
   const debouncedGetOccludedHeight = () => {
