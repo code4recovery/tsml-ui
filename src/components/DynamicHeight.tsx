@@ -11,6 +11,7 @@ export default function DynamicHeight({ children }: PropsWithChildren) {
     return () => {
       window.removeEventListener('resize', debouncedGetOccludedHeight);
       window.removeEventListener('scroll', debouncedGetOccludedHeight);
+      clearTimeout(timeoutId.current);
     };
   }, []);
 
@@ -30,7 +31,9 @@ export default function DynamicHeight({ children }: PropsWithChildren) {
     setOccludedHeight(occludedHeight);
   };
 
-  const timeoutId = useRef<ReturnType<typeof setTimeout>>();
+  const timeoutId = useRef<ReturnType<typeof setTimeout> | undefined>(
+    undefined,
+  );
 
   const debouncedGetOccludedHeight = () => {
     clearTimeout(timeoutId.current);
