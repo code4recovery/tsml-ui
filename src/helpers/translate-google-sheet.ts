@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon';
 
-import { en, es, fr, ja, sk, sv } from '../i18n';
+import { en, de, es, fr, ja, sk, sv } from '../i18n';
 
 import { formatSlug } from './format-slug';
 
@@ -38,6 +38,7 @@ export function translateGoogleSheet(
   const validCodes = Object.keys(en.types);
   validCodes.forEach(key => {
     validTypes[en.types[key as keyof Translation['types']]] = key;
+    validTypes[de.types[key as keyof Translation['types']]] = key;
     validTypes[es.types[key as keyof Translation['types']]] = key;
     validTypes[fr.types[key as keyof Translation['types']]] = key;
     validTypes[ja.types[key as keyof Translation['types']]] = key;
@@ -47,6 +48,7 @@ export function translateGoogleSheet(
   const validDays: { [index: string]: number } = {};
   settings.weekdays.forEach((key, index) => {
     validDays[en.days[key as keyof Translation['days']]] = index;
+    validDays[de.days[key as keyof Translation['days']]] = index;
     validDays[es.days[key as keyof Translation['days']]] = index;
     validDays[fr.days[key as keyof Translation['days']]] = index;
     validDays[ja.days[key as keyof Translation['days']]] = index;
