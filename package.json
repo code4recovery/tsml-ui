@@ -60,7 +60,7 @@
     "vitest": "^5.0.1"
   },
   "dependencies": {
-    "@code4recovery/spec": "1.1.9",
+    "@code4recovery/spec": "^1.1.10",
     "@emotion/react": "^11.14.0",
     "deepmerge": "^4.3.1",
     "leaflet": "^1.9.4",
