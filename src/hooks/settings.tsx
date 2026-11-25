@@ -3,7 +3,7 @@ import { createContext, PropsWithChildren, useContext, useMemo } from 'react';
 import merge from 'deepmerge';
 import { Settings } from 'luxon';
 
-import { en, es, fr, ja, nl, pt, sk, sv, th } from '../i18n';
+import { de, en, es, fr, ja, nl, pt, sk, sv, th } from '../i18n';
 
 // override these on your page with tsml_react_config
 export const defaults: TSMLReactConfig = {
@@ -95,6 +95,7 @@ export const defaults: TSMLReactConfig = {
     title: true, // whether to display the title h1
   },
   strings: {
+    de,
     en,
     es,
     fr,
