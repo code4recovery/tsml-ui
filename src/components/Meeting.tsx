@@ -11,6 +11,7 @@ import {
 } from '../helpers';
 import {
   buttonHelpCss,
+  groupIdCss,
   meetingBackCss,
   meetingColumnsCss,
   meetingCss,
@@ -118,6 +119,13 @@ export default function Meeting() {
           meeting,
           settings,
           strings,
+        })
+      : undefined;
+
+  const group_id_url =
+    meeting.group_id !== undefined && settings.group_id_link_pattern
+      ? i18n(settings.group_id_link_pattern, {
+          group_id: encodeURIComponent(String(meeting.group_id)),
         })
       : undefined;
 
@@ -425,10 +433,29 @@ export default function Meeting() {
                 .localeCompare(meeting.name.toLocaleLowerCase()) ||
                 meeting.district ||
                 meeting.group_notes ||
+                meeting.group_id !== undefined ||
                 !!groupWeekdays.length ||
                 !!contactButtons.length) && (
                 <div>
                   <h2>{meeting.group}</h2>
+                  {meeting.group_id !== undefined && (
+                    <p css={groupIdCss}>
+                      {group_id_url ? (
+                        <Button
+                          href={group_id_url}
+                          icon="badge"
+                          text={`${strings.group_id}: ${meeting.group_id}`}
+                        />
+                      ) : (
+                        <>
+                          <Icon icon="badge" />
+                          <span>
+                            {strings.group_id}: {meeting.group_id}
+                          </span>
+                        </>
+                      )}
+                    </p>
+                  )}
                   {meeting.district && <p>{meeting.district}</p>}
                   {meeting.group_notes && (
                     <Paragraphs text={meeting.group_notes} />

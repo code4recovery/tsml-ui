@@ -39,6 +39,7 @@ export const sk: Translation = {
   expand: 'Rozšíriť',
   feedback: 'Aktualizovať informácie o stretnutí',
   get_directions: 'Zobraziť trasu',
+  group_id: 'ID skupiny',
   in_progress_single: '1 stretnutie práve prebieha',
   in_progress_multiple: '%count% práve prebiehajúce stretnutia',
   km: 'km',

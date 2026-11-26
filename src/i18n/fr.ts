@@ -39,6 +39,7 @@ export const fr: Translation = {
   expand: 'Effondrement',
   feedback: 'Mettre à jour les informations sur la réunion',
   get_directions: 'Obtenir des itinéraires',
+  group_id: 'ID du groupe',
   in_progress_single: '1 réunion en cours',
   in_progress_multiple: '%count% rendez-vous en cours',
   km: 'km',

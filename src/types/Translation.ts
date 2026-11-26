@@ -37,6 +37,7 @@ export interface Translation {
   expand: string;
   feedback: string;
   get_directions: string;
+  group_id: string;
   in_progress_single: string;
   in_progress_multiple: string;
   km: string;

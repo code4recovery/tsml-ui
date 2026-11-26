@@ -39,6 +39,7 @@ export const sv: Translation = {
   expand: 'Expandera',
   feedback: 'Uppdatera Mötesinformation',
   get_directions: 'Få Vägbeskrivning',
+  group_id: 'Grupp-ID',
   in_progress_single: '1 möte pågår',
   in_progress_multiple: '%count% möten pågår',
   km: 'km',

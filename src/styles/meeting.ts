@@ -8,6 +8,14 @@ export const meetingBackCss = css`
   margin-bottom: ${size.gutter}px;
 `;
 
+export const groupIdCss = css`
+  align-items: center;
+  display: flex;
+  gap: ${size.gutter / 4}px;
+  justify-content: center;
+  text-align: center;
+`;
+
 export const meetingColumnsCss = css`
   display: flex;
   flex-direction: column;

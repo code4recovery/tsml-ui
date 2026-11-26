@@ -39,6 +39,7 @@ export const nl: Translation = {
   expand: 'Uitbreiden',
   feedback: 'Update Meeting Info',
   get_directions: 'Krijg Routebeschrijving',
+  group_id: 'Groeps-ID',
   in_progress_single: '1 meeting bezig',
   in_progress_multiple: '%count% meetings bezig',
   km: 'km',
