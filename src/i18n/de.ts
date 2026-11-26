@@ -39,6 +39,7 @@ export const de: Translation = {
   expand: 'Ausklappen',
   feedback: 'Meeting-Infos aktualisieren',
   get_directions: 'Route anzeigen',
+  group_id: 'Gruppen-ID',
   in_progress_single: 'Ein Meeting läuft gerade',
   in_progress_multiple: '%count% Meetings laufen gerade',
   km: 'km',

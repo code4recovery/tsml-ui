@@ -39,6 +39,7 @@ export const es: Translation = {
   expand: 'Expandir',
   feedback: 'Actualizar la información de la reunión',
   get_directions: 'Obtener las direcciones',
+  group_id: 'ID del grupo',
   in_progress_single: '1 reunión en curso',
   in_progress_multiple: '%count% reuniones en curso',
   km: 'km',

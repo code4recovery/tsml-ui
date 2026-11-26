@@ -39,6 +39,7 @@ export const en: Translation = {
   expand: 'Expand',
   feedback: 'Update Meeting Info',
   get_directions: 'Get Directions',
+  group_id: 'Group ID',
   in_progress_single: '1 meeting in progress',
   in_progress_multiple: '%count% meetings in progress',
   km: 'km',

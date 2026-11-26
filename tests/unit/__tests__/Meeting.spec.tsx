@@ -1,10 +1,12 @@
+/// <reference types="@testing-library/jest-dom/vitest" />
+
 import { fireEvent, render } from '@testing-library/react';
 import { DateTime } from 'luxon';
 import { MemoryRouter, useParams } from 'react-router-dom';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import Meeting from '../../../src/components/Meeting';
-import { SettingsProvider } from '../../../src/hooks';
+import { defaults, SettingsProvider } from '../../../src/hooks';
 import { en } from '../../../src/i18n';
 
 vi.mock('react-router-dom', async () => {
@@ -38,6 +40,7 @@ const mockMeeting = {
   notes: 'Testing meeting notes\n\nTesting new line',
   location_notes: 'Testing location notes\n\nTesting new line',
   group: 'Test Group',
+  group_id: 123,
   group_notes: 'Testing group notes\n\nTesting new line',
   website: 'https://test.com',
   phone: '+18005551212',
@@ -106,9 +109,36 @@ describe('<Meeting />', () => {
 
     const groups = getAllByText(mockMeeting.group!);
     expect(groups[0]).toBeVisible();
+    const groupId = groups[0].nextElementSibling;
+    expect(groupId?.textContent).toBe(
+      `${en.group_id}: ${mockMeeting.group_id}`
+    );
+    expect(groupId?.querySelector('[data-testid="icon-badge"]')).not.toBeNull();
 
     const group_notes = getAllByText(mockMeeting.group_notes!.split('\n')[0]);
     expect(group_notes[0]).toBeVisible();
+  });
+
+  it('links the group ID when a link pattern is configured', () => {
+    const { getByRole } = render(
+      <MemoryRouter>
+        <SettingsProvider
+          userSettings={{
+            ...defaults,
+            group_id_link_pattern: 'https://example.test/group/%group_id%',
+          }}
+        >
+          <Meeting />
+        </SettingsProvider>
+      </MemoryRouter>
+    );
+
+    const groupIdLink = getByRole('link', {
+      name: `${en.group_id}: ${mockMeeting.group_id}`,
+    });
+    expect(groupIdLink.getAttribute('href')).toBe(
+      `https://example.test/group/${mockMeeting.group_id}`
+    );
   });
 
   it('renders with contact 1', () => {

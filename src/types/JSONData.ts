@@ -30,6 +30,7 @@ export type JSONData = {
   feedback_url?: string;
   formatted_address?: string;
   group?: string;
+  group_id?: number | string;
   group_notes?: string;
   homegroup_online?: string;
   latitude?: string | number;

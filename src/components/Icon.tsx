@@ -3,6 +3,9 @@ export const icons = {
     'M7.854 4.646a.5.5 0 0 1 0 .708L5.207 8l2.647 2.646a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 0 1 .708 0z',
     'M4.5 8a.5.5 0 0 1 .5-.5h6.5a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5z',
   ],
+  badge: [
+    'M9 12.75 11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 0 1-1.043 3.296 3.745 3.745 0 0 1-3.296 1.043A3.745 3.745 0 0 1 12 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 0 1-3.296-1.043 3.745 3.745 0 0 1-1.043-3.296A3.745 3.745 0 0 1 3 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 0 1 1.043-3.296 3.746 3.746 0 0 1 3.296-1.043A3.746 3.746 0 0 1 12 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 0 1 3.296 1.043 3.746 3.746 0 0 1 1.043 3.296A3.745 3.745 0 0 1 21 12Z',
+  ],
   calendar: [
     'M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM2 2a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1H2z',
     'M2.5 4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H3a.5.5 0 0 1-.5-.5V4zM8 8a.5.5 0 0 1 .5.5V10H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V11H6a.5.5 0 0 1 0-1h1.5V8.5A.5.5 0 0 1 8 8z',
@@ -57,18 +60,25 @@ type IconProps = {
 
 export default function Icon({ icon, size = 20 }: IconProps) {
   const paths = icons[icon as keyof typeof icons];
+  const isBadge = icon === 'badge';
 
   return (
     <svg
       data-testid={`icon-${icon}`}
-      fill="currentColor"
+      fill={isBadge ? 'none' : 'currentColor'}
       height={size}
-      viewBox="0 0 16 16"
+      stroke={isBadge ? 'currentColor' : undefined}
+      strokeWidth={isBadge ? 1.5 : undefined}
+      viewBox={isBadge ? '0 0 24 24' : '0 0 16 16'}
       width={size}
     >
-      {paths.map((path, index) => (
-        <path key={index} fillRule="evenodd" d={path} />
-      ))}
+      {isBadge ? (
+        <path d={paths[0]} strokeLinecap="round" strokeLinejoin="round" />
+      ) : (
+        paths.map((path, index) => (
+          <path key={index} fillRule="evenodd" d={path} />
+        ))
+      )}
     </svg>
   );
 }

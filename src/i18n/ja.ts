@@ -39,6 +39,7 @@ export const ja: Translation = {
   expand: '倒れる',
   feedback: 'ミーティング情報の更新',
   get_directions: '行き方を調べる',
+  group_id: 'グループ ID',
   in_progress_single: '1件のミーティングが進行中です',
   in_progress_multiple: '%count% ミーティングが進行中です',
   km: 'キロ',

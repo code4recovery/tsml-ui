@@ -42,6 +42,7 @@ export const th: Translation = {
   expand: 'ขยาย',
   feedback: 'อัปเดตข้อมูลการประชุม',
   get_directions: 'ขอเส้นทาง',
+  group_id: 'รหัสกลุ่ม',
   in_progress_single: 'กำลังประชุมอยู่ 1 รายการ',
   in_progress_multiple: 'กำลังประชุมอยู่ %count% รายการ',
   km: 'กม.',

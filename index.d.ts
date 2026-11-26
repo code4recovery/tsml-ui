@@ -31,6 +31,7 @@ interface TSMLReactConfig {
   feedback_emails: string[];
   filters: Array<'region' | 'weekday' | 'time' | 'type'>;
   flags?: string[];
+  group_id_link_pattern?: string;
   in_person_types: string[];
   language: Lang;
   map: {
